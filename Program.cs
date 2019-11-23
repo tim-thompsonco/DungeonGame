@@ -8,29 +8,40 @@ namespace DungeonGame {
       Helper.GameIntro();
       var player = new NewPlayer(Helper.FetchPlayerName());
       while (true) {
-        player.DisplayPlayerStatsAll();
-        var outcome = MonsterEncounter(player);
-        if (outcome == true) {
-          continue;
-        }
-        else {
-          Helper.PlayerDeath();
-          break;
+        player.DisplayPlayerStats();
+        Console.WriteLine("There is a zombie in the room. What do you want to do?");
+        Console.WriteLine("Available Commands: '[F]ight' or '[C]heck Inventory'.");
+        var input = Helper.GetFormattedInput();
+        switch(input) {
+          case "f":
+            var outcome = MonsterEncounter(player);
+            if (outcome == true) {
+              break;
+            }
+            else {
+              Helper.PlayerDeath();
+              return;
+            }
+          case "c":
+            Console.WriteLine("Your inventory contains:\n");
+            foreach (var element in player.ShowInventory()) {
+              Console.WriteLine(element);
+            }
+            break;
+          default:
+            break;
         }
       }
     }
     static bool MonsterEncounter(NewPlayer player) {
       var zombie = new Monster();
-      Console.WriteLine("You encountered a monster. What do you do? '[F]ight' would be a good idea.");
-      Helper.RequestCommand();
-      var input = Helper.GetFormattedInput();
-      var outcome = false;
-      if (input == "f") {
-        outcome = player.Combat(zombie);
-      }
+      Console.WriteLine("{0}, you have encountered a monster. Time to fight!",
+        player.GetName());
+      var outcome = player.Combat(zombie);
       if (outcome == true) {
         Console.WriteLine("You have defeated the monster!");
         player.GainExperience(zombie.GiveExperience());
+        player.LevelUpCheck();
         return true;
       }
       else {

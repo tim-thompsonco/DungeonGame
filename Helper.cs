@@ -24,7 +24,7 @@ namespace DungeonGame {
 				RequestCommand();
 				var input = GetFormattedInput();
 				if(input == "y") {
-					return input;
+					return playerName;
 				}
 			}
 		}

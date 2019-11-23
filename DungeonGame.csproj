@@ -37,6 +37,8 @@
     <Compile Include="Weapons\AxeWeapon.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Armor\Chest_Armor.cs" />
+    <Compile Include="Armor\Head_Armor.cs" />
+    <Compile Include="Armor\Leg_Armor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Weapons\" />
