@@ -36,9 +36,11 @@
     <Compile Include="NewPlayer.cs" />
     <Compile Include="Weapons\AxeWeapon.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="Armor\Chest_Armor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Weapons\" />
+    <Folder Include="Armor\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

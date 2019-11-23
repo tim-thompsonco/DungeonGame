@@ -1,15 +1,19 @@
-﻿using System;
+using System;
 
-namespace DungeonGame {
-	class AxeWeapon {
-		private int SwingDamage { get; } = 25;
+namespace DungeonGame
+{
+	class AxeWeapon
+	{
+    private readonly Random rndUse = new Random();
+    private int SwingDamage { get; } = 25;
 		private int SlashDamage { get; } = 35;
 
-		public int Attack() {
-			var rnd = new Random();
+		public int Attack()
+		{
 			var attackDamage = 0;
-			var attackType = rnd.Next(1, 12); // Creates a random number to determine attack type
-			if (attackType < 6) {
+			var attackType = rndUse.Next(1, 12); // Creates a random number to determine attack type
+			if (attackType < 6)
+			{
 				attackDamage = this.SwingAxe();
 			}
 			else if (attackType < 10) {

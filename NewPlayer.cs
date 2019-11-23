@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace DungeonGame {
 	class NewPlayer {
@@ -10,7 +10,8 @@ namespace DungeonGame {
 		private int ManaPoints { get; set; } = 100;
 		private int Experience {get; set; } = 0;
 		private int Level {get; set; } = 1;
-		private readonly AxeWeapon Weapon = new AxeWeapon();
+    private Chest_Armor Player_Chest_Armor = new Chest_Armor(); 
+		private AxeWeapon Player_Weapon = new AxeWeapon();
 
 		// Constructor for new player creation
 		public NewPlayer (string name) {
@@ -39,8 +40,12 @@ namespace DungeonGame {
 		public int CheckHealth() {
 			return this.HitPoints;
 		}
+    public int ArmorRating() {
+      var totalArmorRating = Player_Chest_Armor.GetArmorRating();
+      return totalArmorRating;
+    }
 		public int Attack() {
-			return Weapon.Attack();
+			return Player_Weapon.Attack();
 		}
 		public bool Combat(Monster opponent) {
 			while(true) {
@@ -68,11 +73,11 @@ namespace DungeonGame {
 						  Console.WriteLine("They missed!");
             }
 					  else {
-						  Console.WriteLine("The monster hits you for {0} damage.", attackDamageM);
-						  this.TakeDamage(attackDamageM);
-							if (this.CheckHealth() <= 0) {
+              Console.WriteLine("The monster hits you for {0} damage.", attackDamageM - this.ArmorRating());
+              this.TakeDamage(attackDamageM - this.ArmorRating());
+              if (this.CheckHealth() <= 0) {
 								return false;
-							}
+						  }
             }
 					  Console.WriteLine(); // To add a blank space between the command and fight sequence
 					  break;
