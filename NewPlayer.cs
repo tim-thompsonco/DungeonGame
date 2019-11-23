@@ -1,15 +1,38 @@
 ﻿using System;
 
-namespace DungeonGame
-{
-	class NewPlayer
-	{
+namespace DungeonGame {
+	class NewPlayer {
+		// Attributes for new player
+		private readonly string Name;
 		private int MaxHitPoints {get; set; } = 100;
 		private int MaxManaPoints {get; set; } = 100;
 		private int HitPoints { get; set; } = 100;
 		private int ManaPoints { get; set; } = 100;
+		private int Experience {get; set; } = 0;
+		private int Level {get; set; } = 1;
 		private readonly AxeWeapon Weapon = new AxeWeapon();
 
+		// Constructor for new player creation
+		public NewPlayer (string name) {
+			this.Name = name;
+		}
+
+		// Methods for new player
+		public void DisplayPlayerStats() {
+			Console.WriteLine("HP: {0} / {1}", this.HitPoints, this.MaxHitPoints);
+			Console.WriteLine("MP: {0} / {1}", this.ManaPoints, this.MaxManaPoints);
+		}
+		public void DisplayPlayerExpLevel() {
+			Console.WriteLine("Experience: {0}", this.Experience);
+			Console.WriteLine("Level: {0}", this.Level);
+		}
+		public void DisplayPlayerStatsAll() {
+			DisplayPlayerStats();
+			DisplayPlayerExpLevel();
+		}
+		public void GainExperience(int experience) {
+			this.Experience += experience;
+		}
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;
 		}
@@ -19,10 +42,9 @@ namespace DungeonGame
 		public int Attack() {
 			return Weapon.Attack();
 		}
-		public void Combat(Monster opponent) {
-			do {
-				Console.WriteLine("HP: {0} / {1} - MP: {2} / {3}",
-					this.HitPoints, this.MaxHitPoints, this.ManaPoints, this.MaxManaPoints);
+		public bool Combat(Monster opponent) {
+			while(true) {
+				DisplayPlayerStats();
 				Console.WriteLine("Opponent HP: {0} / {1}", opponent.CheckHealth(), opponent.CheckMaxHealth());
 				Console.WriteLine("Commands: '[A]ttack'");
         Helper.RequestCommand();
@@ -39,8 +61,7 @@ namespace DungeonGame
 						  opponent.TakeDamage(attackDamage);
 					  }
 					  if (opponent.CheckHealth() <= 0) {
-						  Console.WriteLine("You have defeated the monster!");
-						  return;
+						  return true;
             }
 					  var attackDamageM = opponent.Attack();
 					  if (attackDamageM == 0) {
@@ -49,6 +70,9 @@ namespace DungeonGame
 					  else {
 						  Console.WriteLine("The monster hits you for {0} damage.", attackDamageM);
 						  this.TakeDamage(attackDamageM);
+							if (this.CheckHealth() <= 0) {
+								return false;
+							}
             }
 					  Console.WriteLine(); // To add a blank space between the command and fight sequence
 					  break;
@@ -56,7 +80,7 @@ namespace DungeonGame
 					  Console.WriteLine("Not a valid command.");
 					  break;
 				}
-			} while (this.HitPoints > 0 || opponent.CheckHealth() > 0);
+			}
 		}
 	}
 }

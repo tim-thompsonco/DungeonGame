@@ -1,8 +1,8 @@
-﻿namespace DungeonGame
-{
+﻿namespace DungeonGame {
   class Monster {
     private int MaxHitPoints { get; set; } = 100;
     private int HitPoints { get; set; } = 100;
+		private int ExperienceProvided { get; } = 500;
     private readonly AxeWeapon Weapon = new AxeWeapon();
 
     public void TakeDamage(int weaponDamage) {
@@ -17,5 +17,8 @@
     public int Attack() {
       return Weapon.Attack();
     }
+		public int GiveExperience() {
+			return this.ExperienceProvided;
+		}
   }
 }
