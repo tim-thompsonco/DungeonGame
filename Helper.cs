@@ -28,5 +28,9 @@ namespace DungeonGame {
 				}
 			}
 		}
+    public static void InvalidCommand() {
+      Console.ForegroundColor = ConsoleColor.DarkCyan;
+      Console.WriteLine("Not a valid command.");
+    } 
   }
 }

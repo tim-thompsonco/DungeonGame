@@ -8,6 +8,7 @@ namespace DungeonGame {
       Console.ForegroundColor = ConsoleColor.Gray;
       Helper.GameIntro();
       var player = new NewPlayer(Helper.FetchPlayerName());
+      var monster = new Monster();
       while (true) {
         player.DisplayPlayerStats();
         Console.WriteLine("There is a zombie in the room. What do you want to do?");
@@ -15,8 +16,10 @@ namespace DungeonGame {
         var input = Helper.GetFormattedInput();
         switch(input) {
           case "f":
-            var outcome = MonsterEncounter(player);
+            var fightEvent = new CombatHelper();
+            var outcome = fightEvent.SingleCombat(monster, player);
             if (outcome == true) {
+
               break;
             }
             else {
@@ -33,23 +36,6 @@ namespace DungeonGame {
           default:
             break;
         }
-      }
-    }
-    static bool MonsterEncounter(NewPlayer player) {
-      var zombie = new Monster();
-      Console.ForegroundColor = ConsoleColor.Green;
-      Console.WriteLine("{0}, you have encountered a monster. Time to fight!",
-        player.GetName());
-      var outcome = player.Combat(zombie);
-      if (outcome == true) {
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("You have defeated the monster!");
-        player.GainExperience(zombie.GiveExperience());
-        player.LevelUpCheck();
-        return true;
-      }
-      else {
-        return false;
       }
     }
   }

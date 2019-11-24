@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 namespace DungeonGame {
-	class NewPlayer {
+	public class NewPlayer {
 		// Attributes for new player
 		private readonly string Name;
 		private int MaxHitPoints { get; set; } = 100;
@@ -79,57 +79,6 @@ namespace DungeonGame {
     }
 		public int Attack() {
 			return Player_Weapon.Attack();
-		}
-    // Note: Take combat method out and make a combat helper class file, should compartmentalize this that way
-    // Will have combat class that accepts two arguments, monster opponent and player file, for constructor
-    // Then have methods for player miss, monster miss, player hit, and monster hit
-		public bool Combat(Monster opponent) {
-			while(true) {
-				DisplayPlayerStats();
-        // Make method on monster to display monster stats, compartmentalize this too
-				Console.WriteLine("Opponent HP: {0} / {1}", opponent.CheckHealth(), opponent.CheckMaxHealth());
-        Console.WriteLine("==================================================");
-        // Two CW's above to that monster method
-        Console.WriteLine("Commands: '[A]ttack'");
-        Helper.RequestCommand();
-				var input = Helper.GetFormattedInput();
-				Console.WriteLine(); // To add a blank space between the command and fight sequence
-				switch(input) {
-					case "a":
-					  var attackDamage = this.Attack();
-					  if (attackDamage == 0) {
-              Console.ForegroundColor = ConsoleColor.DarkRed;
-						  Console.WriteLine("You missed!");
-					  }
-					  else {
-              Console.ForegroundColor = ConsoleColor.Red;
-						  Console.WriteLine("You hit the monster for {0} damage.", attackDamage);
-						  opponent.TakeDamage(attackDamage);
-					  }
-					  if (opponent.CheckHealth() <= 0) {
-						  return true;
-            }
-					  var attackDamageM = opponent.Attack();
-					  if (attackDamageM == 0) {
-              Console.ForegroundColor = ConsoleColor.DarkRed;
-              Console.WriteLine("They missed!");
-            }
-					  else {
-              Console.ForegroundColor = ConsoleColor.Red;
-              Console.WriteLine("The monster hits you for {0} damage.", attackDamageM - this.ArmorRating());
-              this.TakeDamage(attackDamageM - this.ArmorRating());
-              if (this.CheckHealth() <= 0) {
-								return false;
-						  }
-            }
-					  Console.WriteLine(); // To add a blank space between the command and fight sequence
-					  break;
-				  default:
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-					  Console.WriteLine("Not a valid command.");
-					  break;
-				}
-			}
 		}
 	}
 }
