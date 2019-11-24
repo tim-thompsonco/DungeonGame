@@ -2,12 +2,12 @@ using System;
 
 namespace DungeonGame
 {
-	class AxeWeapon
+	class MainWeapon
 	{
     private readonly Random rndUse = new Random();
-    private string Name { get; } = "An axe.";
-    private int SwingDamage { get; } = 25;
-		private int SlashDamage { get; } = 35;
+    public string Name { get; } = "An axe.";
+    public int SwingDamage { get; } = 25;
+		public int SlashDamage { get; } = 35;
 
 		public int Attack()
 		{
@@ -16,20 +16,14 @@ namespace DungeonGame
       // Main attack
 			if (attackType < 6)
 			{
-				attackDamage = this.SwingAxe();
+				attackDamage = this.SwingDamage;
 			}
       // Stronger attack
 			else if (attackType < 11) {
-				attackDamage = this.SlashAxe();
+				attackDamage = this.SlashDamage;
 			}
       // If RNG didn't cause main or stronger attack, it's a miss
 			return attackDamage;
-		}
-		private int SwingAxe() {
-			return this.SwingDamage;
-		}
-		private int SlashAxe() {
-			return this.SlashDamage;
 		}
 	}
 }

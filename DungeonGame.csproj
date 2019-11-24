@@ -34,8 +34,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="NewPlayer.cs" />
-    <Compile Include="Weapons\AxeWeapon.cs" />
+    <Compile Include="Weapons\MainWeapon.cs" />
     <Compile Include="Helper.cs" />
+		<Compile Include="Spells\Spell.cs" />
     <Compile Include="Armor\Chest_Armor.cs" />
     <Compile Include="Armor\Head_Armor.cs" />
     <Compile Include="Armor\Leg_Armor.cs" />
@@ -44,6 +45,7 @@
   <ItemGroup>
     <Folder Include="Weapons\" />
     <Folder Include="Armor\" />
+		<Folder Include="Spells\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

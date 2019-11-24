@@ -4,19 +4,22 @@ using System.Collections.Generic;
 namespace DungeonGame {
 	public class NewPlayer {
 		// Attributes for new player
-		private readonly string Name;
-		private int MaxHitPoints { get; set; } = 100;
-		private int MaxManaPoints { get; set; } = 100;
-		private int HitPoints { get; set; } = 100;
-		private int ManaPoints { get; set; } = 100;
-		private int Experience { get; set; } = 0;
-		private int Level { get; set; } = 1;
+		public string Name { get; }
+		public int MaxHitPoints { get; set; } = 100;
+		public int MaxManaPoints { get; set; } = 100;
+		public int HitPoints { get; set; } = 100;
+		public int ManaPoints { get; set; } = 100;
+		public int Experience { get; set; } = 0;
+		public int Level { get; set; } = 1;
     // Initial items created for player
-    private Chest_Armor Player_Chest_Armor { get; set; } = new Chest_Armor();
-    private Head_Armor Player_Head_Armor { get; set; } = new Head_Armor();
-    private Leg_Armor Player_Leg_Armor { get; set; } = new Leg_Armor();
-		private AxeWeapon Player_Weapon { get; set; } = new AxeWeapon();
-    private List<object> Inventory { get; set; } = new List<object>();
+    private Chest_Armor Player_Chest_Armor = new Chest_Armor();
+    private Head_Armor Player_Head_Armor = new Head_Armor();
+    private Leg_Armor Player_Leg_Armor = new Leg_Armor();
+		private MainWeapon Player_Weapon = new MainWeapon();
+		// Initial spells for player
+		private Spell Player_Spell = new Spell();
+		// Inventory
+    public List<object> Inventory { get; set; } = new List<object>();
 
     // Constructor for new player creation
     public NewPlayer (string name) {
@@ -32,12 +35,6 @@ namespace DungeonGame {
       Inventory.Add(Player_Head_Armor);
       Inventory.Add(Player_Leg_Armor);
       Inventory.Add(Player_Weapon);
-    }
-    public string GetName() {
-      return this.Name;
-    }
-    public List<object> ShowInventory() {
-      return this.Inventory;
     }
     public void LevelUpCheck() {
       if (this.Experience >= 500) {
@@ -67,18 +64,21 @@ namespace DungeonGame {
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;
 		}
-		public int CheckHealth() {
-			return this.HitPoints;
-		}
     public int ArmorRating() {
       var totalArmorRating =
-        Player_Chest_Armor.GetArmorRating() +
-        Player_Head_Armor.GetArmorRating() +
-        Player_Leg_Armor.GetArmorRating();
+        Player_Chest_Armor.ArmorRating +
+        Player_Head_Armor.ArmorRating +
+        Player_Leg_Armor.ArmorRating;
       return totalArmorRating;
     }
 		public int Attack() {
 			return Player_Weapon.Attack();
+		}
+		public int CastFireball() {
+			return Player_Spell.BlastDamage;
+		}
+		public int FireballBurnDamage() {
+			return Player_Spell.BurnDamage;
 		}
 	}
 }

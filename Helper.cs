@@ -2,6 +2,8 @@
 
 namespace DungeonGame {
   public static class Helper {
+		public static String[] Commands { get; set; } = new String[3] { "Check [I]nventory", "[F]ight", "[Q]uit" };
+
     public static string GetFormattedInput() {
       var input = Console.ReadLine();
       var inputFormatted = input.ToLower();
@@ -14,7 +16,11 @@ namespace DungeonGame {
       Console.WriteLine("You have died. Game over.");
     }
 		public static void GameIntro() {
-			Console.WriteLine("Welcome to Dungeon Game! Please enter player details: ");
+			Console.WriteLine(
+				"Welcome to Dungeon Game v0.1! This is a text-based combat simulator where you fight one zombie in a room. " +
+				"Over time, the game will be updated to allow you to move around, fight monsters, get loot and do all of " +
+				"the typical stuff you can do in an RPG game.\n");
+			Console.WriteLine("For now, please enter a player name.\n");
 		}
 		public static string FetchPlayerName() {
 			while(true) {
