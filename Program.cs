@@ -5,6 +5,7 @@ using System.Linq;
 namespace DungeonGame {
   class MainClass {
     public static void Main(string[] args) {
+      Console.ForegroundColor = ConsoleColor.Gray;
       Helper.GameIntro();
       var player = new NewPlayer(Helper.FetchPlayerName());
       while (true) {
@@ -23,6 +24,7 @@ namespace DungeonGame {
               return;
             }
           case "c":
+            Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("Your inventory contains:\n");
             foreach (var element in player.ShowInventory()) {
               Console.WriteLine(element);
@@ -35,10 +37,12 @@ namespace DungeonGame {
     }
     static bool MonsterEncounter(NewPlayer player) {
       var zombie = new Monster();
+      Console.ForegroundColor = ConsoleColor.Green;
       Console.WriteLine("{0}, you have encountered a monster. Time to fight!",
         player.GetName());
       var outcome = player.Combat(zombie);
       if (outcome == true) {
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("You have defeated the monster!");
         player.GainExperience(zombie.GiveExperience());
         player.LevelUpCheck();

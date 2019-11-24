@@ -49,10 +49,12 @@ namespace DungeonGame {
         // Leveling sets player back to max HP/MP
         this.HitPoints = this.MaxHitPoints;
         this.ManaPoints = this.MaxManaPoints;
+        Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("You have leveled! You are now level {0}.", this.Level);
       }
     }
 		public void DisplayPlayerStats() {
+      Console.ForegroundColor = ConsoleColor.DarkGreen;
       Console.WriteLine("==================================================");
 			Console.WriteLine("HP: {0}/{1} MP: {2}/{3} EXP: {4} LVL: {5}",
         this.HitPoints, this.MaxHitPoints, this.ManaPoints, this.MaxManaPoints,
@@ -78,11 +80,16 @@ namespace DungeonGame {
 		public int Attack() {
 			return Player_Weapon.Attack();
 		}
+    // Note: Take combat method out and make a combat helper class file, should compartmentalize this that way
+    // Will have combat class that accepts two arguments, monster opponent and player file, for constructor
+    // Then have methods for player miss, monster miss, player hit, and monster hit
 		public bool Combat(Monster opponent) {
 			while(true) {
 				DisplayPlayerStats();
+        // Make method on monster to display monster stats, compartmentalize this too
 				Console.WriteLine("Opponent HP: {0} / {1}", opponent.CheckHealth(), opponent.CheckMaxHealth());
         Console.WriteLine("==================================================");
+        // Two CW's above to that monster method
         Console.WriteLine("Commands: '[A]ttack'");
         Helper.RequestCommand();
 				var input = Helper.GetFormattedInput();
@@ -91,9 +98,11 @@ namespace DungeonGame {
 					case "a":
 					  var attackDamage = this.Attack();
 					  if (attackDamage == 0) {
+              Console.ForegroundColor = ConsoleColor.DarkRed;
 						  Console.WriteLine("You missed!");
 					  }
 					  else {
+              Console.ForegroundColor = ConsoleColor.Red;
 						  Console.WriteLine("You hit the monster for {0} damage.", attackDamage);
 						  opponent.TakeDamage(attackDamage);
 					  }
@@ -102,9 +111,11 @@ namespace DungeonGame {
             }
 					  var attackDamageM = opponent.Attack();
 					  if (attackDamageM == 0) {
-						  Console.WriteLine("They missed!");
+              Console.ForegroundColor = ConsoleColor.DarkRed;
+              Console.WriteLine("They missed!");
             }
 					  else {
+              Console.ForegroundColor = ConsoleColor.Red;
               Console.WriteLine("The monster hits you for {0} damage.", attackDamageM - this.ArmorRating());
               this.TakeDamage(attackDamageM - this.ArmorRating());
               if (this.CheckHealth() <= 0) {
@@ -114,6 +125,7 @@ namespace DungeonGame {
 					  Console.WriteLine(); // To add a blank space between the command and fight sequence
 					  break;
 				  default:
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
 					  Console.WriteLine("Not a valid command.");
 					  break;
 				}
