@@ -8,4 +8,4 @@ C#, Visual Studio
 
 Programming skills used:
 
-Loops, conditionals, variables, logic, encapsulation, classes, methods
+Loops, conditionals, variables, logic, encapsulation, classes, methods, inheritance, polymorphism, interfaces
