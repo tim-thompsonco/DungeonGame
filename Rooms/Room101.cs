@@ -8,6 +8,13 @@ namespace DungeonGame {
       : base(Name, Desc) {
       base.LocationKey = 101;
       base._monster = monster;
+			base.GoSouth = true;
+    }
+		public override void ShowDirections() {
+      Console.ForegroundColor = ConsoleColor.DarkCyan;
+      Console.Write("Available Directions: ");
+      Console.ForegroundColor = ConsoleColor.White;
+      Console.WriteLine("South");
     }
   }
 }

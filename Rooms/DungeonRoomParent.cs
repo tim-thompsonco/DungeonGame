@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 
 namespace DungeonGame {
-  public abstract class DungeonRoom : IRoom {
+  public class DungeonRoom : IRoom {
+		public bool GoEast { get; set; }
+    public bool GoWest { get; set; }
     public bool GoNorth { get; set; }
     public bool GoSouth { get; set; }
     public string Name { get; set; }
@@ -44,15 +46,15 @@ namespace DungeonGame {
         player.Gold += _monster.Gold;
         _monster.Gold = 0;
         _monster.WasLooted = true;
-        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("You looted {0} gold coins from the {1}!", goldLooted, this._monster.Name);
       }
       else if (_monster.WasLooted) {
-        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("You already looted {0}!", this._monster.Name);
       }
       else {
-        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("You cannot loot something that isn't dead!");
       }
     }
@@ -63,6 +65,7 @@ namespace DungeonGame {
     }
     // Implement method from IRoom
     public virtual void ShowCommands() {
+			Console.ForegroundColor = ConsoleColor.DarkGreen;
       Console.Write("Available Commands: ");
       Console.WriteLine(String.Join(", ", this.Commands));
     }

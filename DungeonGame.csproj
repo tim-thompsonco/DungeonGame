@@ -44,7 +44,6 @@
     <Compile Include="Interfaces\IMonster.cs" />
     <Compile Include="Interfaces\IRoom.cs" />
     <Compile Include="Monsters\Zombie.cs" />
-    <Compile Include="Monsters\Skeleton.cs" />
     <Compile Include="Monsters\MonsterParent.cs" />
     <Compile Include="Rooms\Room100.cs" />
     <Compile Include="Rooms\Room101.cs" />

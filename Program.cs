@@ -12,11 +12,11 @@ namespace DungeonGame {
       var room100 = new Room100(
         "The Pit",
         "A starting room and you werrrreee in the pit!",
-        new Skeleton("skeleton warrior", 15, 80, 400, new MainWeapon())); // Starting room
+        new Skeleton("rotting skeleton", 10, 80, 400, new MainWeapon())); // Starting room
       var room101 = new Room101(
         "Another pit",
         "Some other room innnn the piiiiiiit!",
-        new Zombie("rotting zombie", 30, 150, 1200, new MainWeapon())); // Second room
+        new Zombie("rotting zombie", 25, 160, 1000, new MainWeapon())); // Second room
       var SpawnedRooms = new List<IRoom> {
         room100,
         room101
@@ -47,8 +47,34 @@ namespace DungeonGame {
           case "lc":
             SpawnedRooms[roomIndex].LootCorpse(player);
             break;
-          //case "n":
-          //  SpawnedRooms[roomIndex]
+          case "n":
+            if(SpawnedRooms[roomIndex].GoNorth) {
+							try {
+								roomIndex += 1;
+								SpawnedRooms[roomIndex].LookRoom();
+							}
+							catch(ArgumentOutOfRangeException) {
+								Console.WriteLine("You can't go that way!");
+							}
+						}
+						else {
+							Console.WriteLine("You can't go that way!");
+						}
+						break;
+					case "s":
+						if(SpawnedRooms[roomIndex].GoSouth) {
+							try {
+								roomIndex -= 1;
+								SpawnedRooms[roomIndex].LookRoom();
+							}
+							catch(ArgumentOutOfRangeException) {
+								Console.WriteLine("You can't go that way!");
+							}
+						}
+						else {
+							Console.WriteLine("You can't go that way!");
+						}
+						break;
           default:
             break;
         }

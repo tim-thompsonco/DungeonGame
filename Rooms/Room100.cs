@@ -5,9 +5,9 @@ namespace DungeonGame {
     //Constructor
     public Room100(string Name, string Desc, IMonster monster)
       : base(Name, Desc) {
-      base.LocationKey = 100;
-      base._monster = monster;
-      base.GoNorth = true;
+      this.LocationKey = 100;
+      this._monster = monster;
+			this.GoNorth = true;
     }
     public override void ShowDirections() {
       Console.ForegroundColor = ConsoleColor.DarkCyan;
