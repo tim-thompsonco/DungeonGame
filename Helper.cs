@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DungeonGame {
   public static class Helper {
@@ -35,6 +36,12 @@ namespace DungeonGame {
     public static void InvalidCommand() {
       Console.ForegroundColor = ConsoleColor.DarkCyan;
       Console.WriteLine("Not a valid command.");
+    }
+    public static int ChangeRoom(List<IRoom> roomList, NewPlayer player, int playerLocChange) {
+      player.location += playerLocChange;
+      var roomName = roomList.Find(x => x.locationKey == player.location);
+      var roomIndex = roomList.IndexOf(roomName);
+      return roomIndex;
     }
   }
 }

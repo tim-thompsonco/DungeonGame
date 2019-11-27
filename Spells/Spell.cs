@@ -1,7 +1,7 @@
 namespace DungeonGame {
 	public class Spell {
-		public string Name { get; } = "Fireball";
-		public int BlastDamage { get; } = 30;
-		public int BurnDamage { get; } = 5;
+		public string name { get; } = "Fireball";
+		public int blastDamage { get; } = 30;
+		public int burnDamage { get; } = 5;
 	}
 }

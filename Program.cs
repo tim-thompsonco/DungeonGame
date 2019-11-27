@@ -9,31 +9,38 @@ namespace DungeonGame {
       Helper.GameIntro();
       // Game loading commands
       var player = new NewPlayer(Helper.FetchPlayerName());
-      var room100 = new Room100(
+      var room100 = new DungeonRoom(
         "The Pit",
         "A starting room and you werrrreee in the pit!",
-        new Skeleton("rotting skeleton", 10, 80, 400, new MainWeapon())); // Starting room
-      var room101 = new Room101(
+        100100100,
+        new Monster("rotting skeleton", 10, 80, 400, new Weapon()),
+        true,
+        false); // Starting room
+      var room101 = new DungeonRoom(
         "Another pit",
         "Some other room innnn the piiiiiiit!",
-        new Zombie("rotting zombie", 25, 160, 1000, new MainWeapon())); // Second room
-      var SpawnedRooms = new List<IRoom> {
+        100101100,
+        new Monster("rotting zombie", 25, 160, 1000, new Weapon()),
+        false,
+        true); // Second room
+      var spawnedRooms = new List<IRoom> {
         room100,
         room101
       };
-      var roomIndex = SpawnedRooms.IndexOf(room100);
-      SpawnedRooms[roomIndex].LookRoom();
+      // Set initial room condition
+      var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0);
+      spawnedRooms[roomIndex].LookRoom();
       // While loop to continue obtaining input from player
       while (true) {
         player.DisplayPlayerStats();
-        SpawnedRooms[roomIndex].ShowCommands();
+        spawnedRooms[roomIndex].ShowCommands();
         // On loading game, display room that player starts in
         // Begin game by putting player in room 100
         var input = Helper.GetFormattedInput();
         // Obtain player command and process command
         switch (input) {
           case "f":
-            SpawnedRooms[roomIndex].MonsterFight(player);
+            spawnedRooms[roomIndex].MonsterFight(player);
             break;
           case "i":
             player.ShowInventory(player);
@@ -42,17 +49,17 @@ namespace DungeonGame {
             Console.WriteLine("Game over.");
             return;
           case "l":
-            SpawnedRooms[roomIndex].LookRoom();
+            spawnedRooms[roomIndex].LookRoom();
             break;
           case "lc":
-            SpawnedRooms[roomIndex].LootCorpse(player);
+            spawnedRooms[roomIndex].LootCorpse(player);
             break;
           case "n":
-            if(SpawnedRooms[roomIndex].GoNorth) {
+            if(spawnedRooms[roomIndex].goNorth) {
 							try {
-								roomIndex += 1;
-								SpawnedRooms[roomIndex].LookRoom();
-							}
+                roomIndex = Helper.ChangeRoom(spawnedRooms, player, 1000);
+                spawnedRooms[roomIndex].LookRoom();
+              }
 							catch(ArgumentOutOfRangeException) {
 								Console.WriteLine("You can't go that way!");
 							}
@@ -62,11 +69,11 @@ namespace DungeonGame {
 						}
 						break;
 					case "s":
-						if(SpawnedRooms[roomIndex].GoSouth) {
+						if(spawnedRooms[roomIndex].goSouth) {
 							try {
-								roomIndex -= 1;
-								SpawnedRooms[roomIndex].LookRoom();
-							}
+                roomIndex = Helper.ChangeRoom(spawnedRooms, player, -1000);
+                spawnedRooms[roomIndex].LookRoom();
+              }
 							catch(ArgumentOutOfRangeException) {
 								Console.WriteLine("You can't go that way!");
 							}

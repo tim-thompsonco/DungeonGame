@@ -1,12 +1,12 @@
 ﻿namespace DungeonGame {
   public interface IMonster {
-    string Name { get; set; }
-    int MaxHitPoints { get; set; }
-    int HitPoints { get; set; }
-    int ExperienceProvided { get; set; }
-    int Gold { get; set; }
-    bool OnFire { get; set; }
-    bool WasLooted { get; set; }
+    string name { get; set; }
+    int maxHitPoints { get; set; }
+    int hitPoints { get; set; }
+    int experienceProvided { get; set; }
+    int gold { get; set; }
+    bool onFire { get; set; }
+    bool wasLooted { get; set; }
 
     void TakeDamage(int weaponDamage);
     void DisplayStats();

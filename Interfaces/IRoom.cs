@@ -1,12 +1,10 @@
 ﻿namespace DungeonGame {
   public interface IRoom {
-		bool GoEast { get; set; }
-    bool GoWest { get; set; }
-		bool GoNorth { get; set; }
-    bool GoSouth { get; set; }
-    string Name { get; set; }
-    string Desc { get; set; }
-    int LocationKey { get; set; }
+		bool goNorth { get; set; }
+    bool goSouth { get; set; }
+    string name { get; set; }
+    string desc { get; set; }
+    int locationKey { get; set; }
 
     void LootCorpse(NewPlayer player);
     void MonsterFight(NewPlayer player);

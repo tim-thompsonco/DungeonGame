@@ -1,11 +1,11 @@
 using System;
 
 namespace DungeonGame {
-	public class MainWeapon : IRoomInteraction {
+	public class Weapon : IRoomInteraction {
     private readonly Random rndUse = new Random();
-    public string Name { get; } = "An axe.";
-    public int SwingDamage { get; } = 25;
-		public int SlashDamage { get; } = 35;
+    public string name { get; } = "An axe.";
+    public int swingDamage { get; } = 25;
+		public int slashDamage { get; } = 35;
 
 		public int Attack() {
 			var attackDamage = 0;
@@ -13,17 +13,17 @@ namespace DungeonGame {
       // Main attack
 			if (attackType < 6)
 			{
-				attackDamage = this.SwingDamage;
+				attackDamage = this.swingDamage;
 			}
       // Stronger attack
 			else if (attackType < 11) {
-				attackDamage = this.SlashDamage;
+				attackDamage = this.slashDamage;
 			}
       // If RNG didn't cause main or stronger attack, it's a miss
 			return attackDamage;
 		}
     public string GetName() {
-      return this.Name;
+      return this.name;
     }
   }
 }

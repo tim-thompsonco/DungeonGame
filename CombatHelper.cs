@@ -7,7 +7,7 @@ namespace DungeonGame {
 		public bool SingleCombat(IMonster opponent, NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.Green;
       Console.WriteLine("{0}, you have encountered a {1}. Time to fight!",
-        player.Name, opponent.Name);
+        player.name, opponent.name);
       while (true) {
         player.DisplayPlayerStats();
         opponent.DisplayStats();
@@ -26,10 +26,10 @@ namespace DungeonGame {
             }
             else {
               Console.ForegroundColor = ConsoleColor.Red;
-              Console.WriteLine("You hit the {0} for {1} physical damage.", opponent.Name, attackDamage);
+              Console.WriteLine("You hit the {0} for {1} physical damage.", opponent.name, attackDamage);
               opponent.TakeDamage(attackDamage);
             }
-            if (opponent.HitPoints <= 0) {
+            if (opponent.hitPoints <= 0) {
               this.SingleCombatWin(opponent, player);
               return true;
             }
@@ -42,13 +42,13 @@ namespace DungeonGame {
             }
             else {
               Console.ForegroundColor = ConsoleColor.Red;
-              Console.WriteLine("You hit the {0} for {1} fire damage.", opponent.Name, attackDamage);
+              Console.WriteLine("You hit the {0} for {1} fire damage.", opponent.name, attackDamage);
               opponent.TakeDamage(attackDamage);
 							Console.ForegroundColor = ConsoleColor.Yellow;
-							Console.WriteLine("The {0} bursts into flame!", opponent.Name);
-							opponent.OnFire = true;
+							Console.WriteLine("The {0} bursts into flame!", opponent.name);
+							opponent.onFire = true;
             }
-            if (opponent.HitPoints <= 0) {
+            if (opponent.hitPoints <= 0) {
               this.SingleCombatWin(opponent, player);
               return true;
             }
@@ -57,23 +57,23 @@ namespace DungeonGame {
             Helper.InvalidCommand();
             break;
         }
-				if (opponent.OnFire) {
+				if (opponent.onFire) {
 					var burnDamage = player.FireballBurnDamage();
 					Console.ForegroundColor = ConsoleColor.Yellow;
-					Console.WriteLine("The {0} burns for {1} fire damage.", opponent.Name, burnDamage);
+					Console.WriteLine("The {0} burns for {1} fire damage.", opponent.name, burnDamage);
 					opponent.TakeDamage(burnDamage);
 				}
 				var attackDamageM = opponent.Attack();
         if (attackDamageM == 0) {
           Console.ForegroundColor = ConsoleColor.DarkRed;
-          Console.WriteLine("The {0} missed you!", opponent.Name);
+          Console.WriteLine("The {0} missed you!", opponent.name);
         }
         else {
           Console.ForegroundColor = ConsoleColor.Red;
           Console.WriteLine("The {0} hits you for {1} physical damage.",
-            opponent.Name, attackDamageM - player.ArmorRating());
+            opponent.name, attackDamageM - player.ArmorRating());
           player.TakeDamage(attackDamageM - player.ArmorRating());
-          if (player.HitPoints <= 0) {
+          if (player.hitPoints <= 0) {
             return false;
           }
         }
@@ -81,8 +81,8 @@ namespace DungeonGame {
     }
     public void SingleCombatWin(IMonster opponent, NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.Green;
-      Console.WriteLine("You have defeated the {0}!", opponent.Name);
-			player.GainExperience(opponent.ExperienceProvided);
+      Console.WriteLine("You have defeated the {0}!", opponent.name);
+			player.GainExperience(opponent.experienceProvided);
       // opponent.Name = "dead " + opponent.Name;
       player.LevelUpCheck();
 		}
