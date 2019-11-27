@@ -1,54 +1,54 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DungeonGame {
   class MainClass {
     public static void Main(string[] args) {
+      // Establish game objects and game intro
       Console.ForegroundColor = ConsoleColor.Gray;
       Helper.GameIntro();
+      // Game loading commands
       var player = new NewPlayer(Helper.FetchPlayerName());
-      var monster = new Monster();
+      var room100 = new Room100(
+        "The Pit",
+        "A starting room and you werrrreee in the pit!",
+        new Skeleton("skeleton warrior", 15, 80, 400, new MainWeapon())); // Starting room
+      var room101 = new Room101(
+        "Another pit",
+        "Some other room innnn the piiiiiiit!",
+        new Zombie("rotting zombie", 30, 150, 1200, new MainWeapon())); // Second room
+      var SpawnedRooms = new List<IRoom> {
+        room100,
+        room101
+      };
+      var roomIndex = SpawnedRooms.IndexOf(room100);
+      SpawnedRooms[roomIndex].LookRoom();
+      // While loop to continue obtaining input from player
       while (true) {
         player.DisplayPlayerStats();
-				if (monster.IsAlive()) {
-					Console.WriteLine("There is a zombie in the room. What do you want to do?");
-				}
-        else {
-					Console.WriteLine("There's a dead zombie in the room (yeah that's kind of repetitive)" +
-						". What do you want to do?");
-				}
-        Console.Write("Available Commands: ");
-				Console.WriteLine(String.Join(", ", Helper.Commands));
+        SpawnedRooms[roomIndex].ShowCommands();
+        // On loading game, display room that player starts in
+        // Begin game by putting player in room 100
         var input = Helper.GetFormattedInput();
-        switch(input) {
+        // Obtain player command and process command
+        switch (input) {
           case "f":
-						if (monster.IsAlive()) {
-							var fightEvent = new CombatHelper();
-							var outcome = fightEvent.SingleCombat(monster, player);
-							if (outcome == true) {
-								break;
-							}
-							else {
-								Helper.PlayerDeath();
-								return;
-							}
-						}
-						else {
-							Console.WriteLine("The monster is already dead.");
-							break;
-						}
-          case "i":
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine("Your inventory contains:\n");
-            foreach (var element in player.Inventory) {
-              Console.WriteLine(element);
-            }
-						Console.WriteLine(); // Add extra blank line after inventory display for formatting
+            SpawnedRooms[roomIndex].MonsterFight(player);
             break;
-					case "q":
-						Console.WriteLine("Game over. You win!");
-						return;
+          case "i":
+            player.ShowInventory(player);
+            break;
+          case "q":
+            Console.WriteLine("Game over.");
+            return;
+          case "l":
+            SpawnedRooms[roomIndex].LookRoom();
+            break;
+          case "lc":
+            SpawnedRooms[roomIndex].LootCorpse(player);
+            break;
+          //case "n":
+          //  SpawnedRooms[roomIndex]
           default:
             break;
         }

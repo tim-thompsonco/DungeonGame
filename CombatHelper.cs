@@ -4,12 +4,11 @@ namespace DungeonGame {
   public class CombatHelper {
 		public String[] Commands { get; set; } = new String[2] { "[A]ttack", "[C]ast [F]ireball" };
 
-		public bool SingleCombat(Monster opponent, NewPlayer player) {
+		public bool SingleCombat(IMonster opponent, NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.Green;
-      Console.WriteLine("{0}, you have encountered a monster. Time to fight!",
-        player.Name);
+      Console.WriteLine("{0}, you have encountered a {1}. Time to fight!",
+        player.Name, opponent.Name);
       while (true) {
-				var attackDamage = 0;
         player.DisplayPlayerStats();
         opponent.DisplayStats();
 				Console.Write("Available Commands: ");
@@ -19,6 +18,7 @@ namespace DungeonGame {
         Console.WriteLine(); // To add a blank space between the command and fight sequence
         switch (input) {
           case "a":
+            var attackDamage = 0;
             attackDamage = player.Attack();
             if (attackDamage == 0) {
               Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -70,7 +70,8 @@ namespace DungeonGame {
         }
         else {
           Console.ForegroundColor = ConsoleColor.Red;
-          Console.WriteLine("The {0} hits you for {1} physical damage.", opponent.Name, attackDamageM - player.ArmorRating());
+          Console.WriteLine("The {0} hits you for {1} physical damage.",
+            opponent.Name, attackDamageM - player.ArmorRating());
           player.TakeDamage(attackDamageM - player.ArmorRating());
           if (player.HitPoints <= 0) {
             return false;
@@ -78,10 +79,11 @@ namespace DungeonGame {
         }
       }
     }
-    public void SingleCombatWin(Monster opponent, NewPlayer player) {
+    public void SingleCombatWin(IMonster opponent, NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.Green;
       Console.WriteLine("You have defeated the {0}!", opponent.Name);
 			player.GainExperience(opponent.ExperienceProvided);
+      // opponent.Name = "dead " + opponent.Name;
       player.LevelUpCheck();
 		}
   }

@@ -2,8 +2,6 @@
 
 namespace DungeonGame {
   public static class Helper {
-		public static String[] Commands { get; set; } = new String[3] { "Check [I]nventory", "[F]ight", "[Q]uit" };
-
     public static string GetFormattedInput() {
       var input = Console.ReadLine();
       var inputFormatted = input.ToLower();
@@ -37,6 +35,6 @@ namespace DungeonGame {
     public static void InvalidCommand() {
       Console.ForegroundColor = ConsoleColor.DarkCyan;
       Console.WriteLine("Not a valid command.");
-    } 
+    }
   }
 }

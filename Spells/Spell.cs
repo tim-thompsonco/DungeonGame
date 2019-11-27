@@ -1,5 +1,3 @@
-using System;
-
 namespace DungeonGame {
 	public class Spell {
 		public string Name { get; } = "Fireball";

@@ -9,8 +9,10 @@ namespace DungeonGame {
 		public int MaxManaPoints { get; set; } = 100;
 		public int HitPoints { get; set; } = 100;
 		public int ManaPoints { get; set; } = 100;
-		public int Experience { get; set; } = 0;
+    public int Gold { get; set; } = 0;
+    public int Experience { get; set; } = 0;
 		public int Level { get; set; } = 1;
+    public string Location { get; set; }
     // Initial items created for player
     private Chest_Armor Player_Chest_Armor = new Chest_Armor();
     private Head_Armor Player_Head_Armor = new Head_Armor();
@@ -19,7 +21,7 @@ namespace DungeonGame {
 		// Initial spells for player
 		private Spell Player_Spell = new Spell();
 		// Inventory
-    public List<object> Inventory { get; set; } = new List<object>();
+    public List<IRoomInteraction> Inventory { get; set; } = new List<IRoomInteraction>();
 
     // Constructor for new player creation
     public NewPlayer (string name) {
@@ -27,14 +29,23 @@ namespace DungeonGame {
 			this.Name = name;
       // Build inventory for player based on initial items provided
       this.RebuildInventory();
+      this.Location = "Room100";
 		}
 
 		// Methods for new player
     public void RebuildInventory() {
-      Inventory.Add(Player_Chest_Armor);
-      Inventory.Add(Player_Head_Armor);
-      Inventory.Add(Player_Leg_Armor);
-      Inventory.Add(Player_Weapon);
+      Inventory.Add((DungeonGame.IRoomInteraction)Player_Chest_Armor);
+      Inventory.Add((DungeonGame.IRoomInteraction)Player_Head_Armor);
+      Inventory.Add((DungeonGame.IRoomInteraction)Player_Leg_Armor);
+      Inventory.Add((DungeonGame.IRoomInteraction)Player_Weapon);
+    }
+    public void ShowInventory(NewPlayer player) {
+      Console.ForegroundColor = ConsoleColor.DarkGray;
+      Console.WriteLine("Your inventory contains:\n");
+      foreach (IRoomInteraction item in Inventory) {
+        Console.WriteLine(string.Join(", ", item.GetName()));
+      }
+      Console.WriteLine("Gold: " + this.Gold + " coins.");
     }
     public void LevelUpCheck() {
       if (this.Experience >= 500) {
