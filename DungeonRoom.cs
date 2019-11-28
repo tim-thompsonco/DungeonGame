@@ -7,7 +7,9 @@ namespace DungeonGame {
     public bool goSouth { get; set; }
     public string name { get; set; }
     public string desc { get; set; }
-    public int locationKey { get; set; }
+    public int x { get; set; }
+		public int y { get; set; }
+		public int z { get; set; }
     public String[] commands { get; set; } = new string[5] {
       "Check [I]nventory",
       "[L]ook",
@@ -22,13 +24,17 @@ namespace DungeonGame {
     public DungeonRoom (
       string name,
       string desc,
-      int locationKey,
+			int x,
+			int y,
+			int z,
       bool goNorth,
       bool goSouth
       ) {
       this.name = name;
       this.desc = desc;
-      this.locationKey = locationKey;
+      this.x = x;
+			this.y = y;
+			this.z = z;
       this.goNorth = goNorth;
       this.goSouth = goSouth;
     }
@@ -36,14 +42,18 @@ namespace DungeonGame {
 		public DungeonRoom(
 			string name,
 			string desc,
-			int locationKey,
+			int x,
+			int y,
+			int z,
 			IMonster monster,
 			bool goNorth,
 			bool goSouth
 			) {
 			this.name = name;
 			this.desc = desc;
-			this.locationKey = locationKey;
+			this.x = x;
+			this.y = y;
+			this.z = z;
 			this._monster = monster;
 			this.goNorth = goNorth;
 			this.goSouth = goSouth;

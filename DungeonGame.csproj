@@ -45,9 +45,7 @@
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
-		<Folder Include="Spells\" />
 		<Folder Include="Interfaces\" />
-		<Folder Include="Rooms\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

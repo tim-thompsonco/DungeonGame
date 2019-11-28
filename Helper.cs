@@ -37,9 +37,11 @@ namespace DungeonGame {
       Console.ForegroundColor = ConsoleColor.DarkCyan;
       Console.WriteLine("Not a valid command.");
     }
-    public static int ChangeRoom(List<IRoom> roomList, NewPlayer player, int playerLocChange) {
-      player.location += playerLocChange;
-      var roomName = roomList.Find(x => x.locationKey == player.location);
+    public static int ChangeRoom(List<IRoom> roomList, NewPlayer player, int x, int y, int z) {
+			player.x += x;
+			player.y += y;
+			player.z += z;
+      var roomName = roomList.Find(f => f.x == player.x && f.y == player.y && f.z == player.z);
       var roomIndex = roomList.IndexOf(roomName);
       return roomIndex;
     }

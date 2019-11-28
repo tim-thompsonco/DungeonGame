@@ -12,7 +12,9 @@ namespace DungeonGame {
     public int gold { get; set; } = 0;
     public int experience { get; set; } = 0;
 		public int level { get; set; } = 1;
-    public int location { get; set; }
+    public int x { get; set; } = 0;
+		public int y { get; set; } = 0;
+		public int z { get; set; } = 0;
     // Initial items created for player
     private Armor player_Chest_Armor;
     private Armor player_Head_Armor;
@@ -27,13 +29,14 @@ namespace DungeonGame {
     public NewPlayer (string name) {
       // Set player name
 			this.name = name;
-      this.location = 100100100;
+			// Set player initial weapon and armor
 			this.player_Weapon = new Weapon("Sword", 25, 1.2);
 			this.player_Chest_Armor = new Armor("Chestplate", 5, 15);
 			this.player_Head_Armor = new Armor("Helmet", 1, 5);
 			this.player_Leg_Armor = new Armor("Legplates", 3, 8);
 			// Build inventory for player based on initial items provided
 			this.RebuildInventory();
+			// Assign player fireball spell
 			this.Player_Spell = new Spell();
 		}
 

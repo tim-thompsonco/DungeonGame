@@ -16,22 +16,26 @@ namespace DungeonGame {
 				"dungeon. A moaning wail echoes in the distance through an open doorway in front of you. Glinting " +
 				"red eyes seem to be visible in the distance. There is an unsettling sound of a heavy metal object " +
 				"being dragged on the ground by a faint shape beyond the doorway. You can't make out what it is.",
-        100100100,
-        true,
-        false); // Starting room
+        0, // X coordinate
+				0, // Y coordinate
+				0, // Z coordinate
+        true, // goNorth bool
+        false); // goSouth bool
       var room101 = new DungeonRoom(
         "Dimly lit platform",
         "Some other room...to be continued",
-        100101100,
+        0, // X coordinate
+				1, // Y coordinate
+				0, // Z coordinate
         new Monster("A rotting zombie", 25, 160, 1000, new Weapon("A notched axe", 10, 1.2)),
-        false,
-        true); // Second room
+        false, // goNorth bool
+        true); // goSouth bool
       var spawnedRooms = new List<IRoom> {
         room100,
         room101
       };
       // Set initial room condition
-      var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0);
+      var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0);
       spawnedRooms[roomIndex].LookRoom();
       // While loop to continue obtaining input from player
       while (true) {
@@ -60,7 +64,7 @@ namespace DungeonGame {
           case "n":
             if(spawnedRooms[roomIndex].goNorth) {
 							try {
-                roomIndex = Helper.ChangeRoom(spawnedRooms, player, 1000);
+                roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 1, 0);
                 spawnedRooms[roomIndex].LookRoom();
               }
 							catch(ArgumentOutOfRangeException) {
@@ -74,7 +78,7 @@ namespace DungeonGame {
 					case "s":
 						if(spawnedRooms[roomIndex].goSouth) {
 							try {
-                roomIndex = Helper.ChangeRoom(spawnedRooms, player, -1000);
+                roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, -1, 0);
                 spawnedRooms[roomIndex].LookRoom();
               }
 							catch(ArgumentOutOfRangeException) {
