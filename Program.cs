@@ -10,17 +10,20 @@ namespace DungeonGame {
       // Game loading commands
       var player = new NewPlayer(Helper.FetchPlayerName());
       var room100 = new DungeonRoom(
-        "The Pit",
-        "A starting room and you werrrreee in the pit!",
+        "A dark room",
+        "You are in a dimly lit room. There is a lantern burning on a hook on the opposite wall. Water drips " +
+				"from a few stalagmites hanging from the ceiling, which is about 12 feet high. You appear to be in a " +
+				"dungeon. A moaning wail echoes in the distance through an open doorway in front of you. Glinting " +
+				"red eyes seem to be visible in the distance. There is an unsettling sound of a heavy metal object " +
+				"being dragged on the ground by a faint shape beyond the doorway. You can't make out what it is.",
         100100100,
-        new Monster("rotting skeleton", 10, 80, 400, new Weapon()),
         true,
         false); // Starting room
       var room101 = new DungeonRoom(
-        "Another pit",
-        "Some other room innnn the piiiiiiit!",
+        "Dimly lit platform",
+        "Some other room...to be continued",
         100101100,
-        new Monster("rotting zombie", 25, 160, 1000, new Weapon()),
+        new Monster("A rotting zombie", 25, 160, 1000, new Weapon("A notched axe", 10, 1.2)),
         false,
         true); // Second room
       var spawnedRooms = new List<IRoom> {
@@ -46,7 +49,7 @@ namespace DungeonGame {
             player.ShowInventory(player);
             break;
           case "q":
-            Console.WriteLine("Game over.");
+            Helper.GameOver();
             return;
           case "l":
             spawnedRooms[roomIndex].LookRoom();
@@ -61,11 +64,11 @@ namespace DungeonGame {
                 spawnedRooms[roomIndex].LookRoom();
               }
 							catch(ArgumentOutOfRangeException) {
-								Console.WriteLine("You can't go that way!");
+								Helper.InvalidDirection();
 							}
 						}
 						else {
-							Console.WriteLine("You can't go that way!");
+							Helper.InvalidDirection();
 						}
 						break;
 					case "s":
@@ -75,11 +78,11 @@ namespace DungeonGame {
                 spawnedRooms[roomIndex].LookRoom();
               }
 							catch(ArgumentOutOfRangeException) {
-								Console.WriteLine("You can't go that way!");
+								Helper.InvalidDirection();
 							}
 						}
 						else {
-							Console.WriteLine("You can't go that way!");
+							Helper.InvalidDirection();
 						}
 						break;
           default:

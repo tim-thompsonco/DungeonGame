@@ -43,5 +43,11 @@ namespace DungeonGame {
       var roomIndex = roomList.IndexOf(roomName);
       return roomIndex;
     }
+		public static void InvalidDirection() {
+			Console.WriteLine("You can't go that way!");
+		}
+		public static void GameOver() {
+			Console.WriteLine("Game over.");
+		}
   }
 }

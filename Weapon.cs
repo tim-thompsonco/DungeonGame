@@ -3,9 +3,15 @@ using System;
 namespace DungeonGame {
 	public class Weapon : IRoomInteraction {
     private readonly Random rndUse = new Random();
-    public string name { get; } = "An axe.";
-    public int swingDamage { get; } = 25;
-		public int slashDamage { get; } = 35;
+    public string name { get; }
+    public int regDamage { get; }
+		public double critMultiplier { get; }
+
+		public Weapon(string name, int regDamage, double critMultiplier) {
+			this.name = name;
+			this.regDamage = regDamage;
+			this.critMultiplier = critMultiplier;
+		}
 
 		public int Attack() {
 			var attackDamage = 0;
@@ -13,11 +19,11 @@ namespace DungeonGame {
       // Main attack
 			if (attackType < 6)
 			{
-				attackDamage = this.swingDamage;
+				attackDamage = this.regDamage;
 			}
       // Stronger attack
 			else if (attackType < 11) {
-				attackDamage = this.slashDamage;
+				attackDamage = (int)((double)this.regDamage * this.critMultiplier);
 			}
       // If RNG didn't cause main or stronger attack, it's a miss
 			return attackDamage;

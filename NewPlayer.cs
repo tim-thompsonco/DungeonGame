@@ -14,12 +14,12 @@ namespace DungeonGame {
 		public int level { get; set; } = 1;
     public int location { get; set; }
     // Initial items created for player
-    private Chest_Armor player_Chest_Armor = new Chest_Armor();
-    private Head_Armor player_Head_Armor = new Head_Armor();
-    private Leg_Armor player_Leg_Armor = new Leg_Armor();
-		private Weapon player_Weapon = new Weapon();
+    private Armor player_Chest_Armor;
+    private Armor player_Head_Armor;
+    private Armor player_Leg_Armor;
+		private Weapon player_Weapon;
 		// Initial spells for player
-		private Spell Player_Spell = new Spell();
+		private Spell Player_Spell;
 		// Inventory
     public List<IRoomInteraction> Inventory { get; set; } = new List<IRoomInteraction>();
 
@@ -27,9 +27,14 @@ namespace DungeonGame {
     public NewPlayer (string name) {
       // Set player name
 			this.name = name;
-      // Build inventory for player based on initial items provided
-      this.RebuildInventory();
       this.location = 100100100;
+			this.player_Weapon = new Weapon("Sword", 25, 1.2);
+			this.player_Chest_Armor = new Armor("Chestplate", 5, 15);
+			this.player_Head_Armor = new Armor("Helmet", 1, 5);
+			this.player_Leg_Armor = new Armor("Legplates", 3, 8);
+			// Build inventory for player based on initial items provided
+			this.RebuildInventory();
+			this.Player_Spell = new Spell();
 		}
 
 		// Methods for new player

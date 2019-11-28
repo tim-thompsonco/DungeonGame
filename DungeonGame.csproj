@@ -35,9 +35,7 @@
     <Compile Include="NewPlayer.cs" />
     <Compile Include="Helper.cs" />
 		<Compile Include="Spells\Spell.cs" />
-    <Compile Include="Armor\Chest_Armor.cs" />
-    <Compile Include="Armor\Head_Armor.cs" />
-    <Compile Include="Armor\Leg_Armor.cs" />
+    <Compile Include="Armor.cs" />
     <Compile Include="CombatHelper.cs" />
     <Compile Include="Rooms\DungeonRoom.cs" />
     <Compile Include="Interfaces\IMonster.cs" />
@@ -47,7 +45,6 @@
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Armor\" />
 		<Folder Include="Spells\" />
 		<Folder Include="Interfaces\" />
 		<Folder Include="Rooms\" />

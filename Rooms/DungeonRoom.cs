@@ -18,25 +18,39 @@ namespace DungeonGame {
     private readonly List<IRoomInteraction> _roomObjects = new List<IRoomInteraction>();
     public IMonster _monster;
 
-    //Constructor
+    //Constructor without monster
     public DungeonRoom (
       string name,
       string desc,
       int locationKey,
-      IMonster monster,
       bool goNorth,
       bool goSouth
       ) {
       this.name = name;
       this.desc = desc;
       this.locationKey = locationKey;
-      this._monster = monster;
       this.goNorth = goNorth;
       this.goSouth = goSouth;
     }
+		//Constructor with monster
+		public DungeonRoom(
+			string name,
+			string desc,
+			int locationKey,
+			IMonster monster,
+			bool goNorth,
+			bool goSouth
+			) {
+			this.name = name;
+			this.desc = desc;
+			this.locationKey = locationKey;
+			this._monster = monster;
+			this.goNorth = goNorth;
+			this.goSouth = goSouth;
+			}
 
-    // Implement method from IRoom
-    public virtual void MonsterFight(NewPlayer player) {
+		// Implement method from IRoom
+		public virtual void MonsterFight(NewPlayer player) {
       if (this._monster.hitPoints > 0) {
         var fightEvent = new CombatHelper();
         var outcome = fightEvent.SingleCombat(_monster, player);
@@ -105,14 +119,18 @@ namespace DungeonGame {
       Console.ForegroundColor = ConsoleColor.DarkGreen;
       Console.WriteLine("==================================================");
       Console.ForegroundColor = ConsoleColor.DarkCyan;
-      foreach (IRoomInteraction item in _roomObjects) {
-        Console.Write("Room Contents: ");
-        Console.ForegroundColor = ConsoleColor.White;
-        Console.Write("A ");
-        Console.Write(string.Join(", ", item.GetName()));
-      }
+			try {
+				foreach (IRoomInteraction item in _roomObjects) {
+					Console.Write("Room Contents: ");
+					Console.ForegroundColor = ConsoleColor.White;
+					Console.Write(string.Join(", ", item.GetName()));
+					}
+			}
+			catch(NullReferenceException) {
+				Console.Write("There is nothing in the room");
+			}
       Console.WriteLine("."); // Add period at end of list of objects in room
       this.ShowDirections();
     }
-  }
+	}
 }

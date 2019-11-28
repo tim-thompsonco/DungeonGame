@@ -64,7 +64,12 @@ namespace DungeonGame {
 					opponent.TakeDamage(burnDamage);
 				}
 				var attackDamageM = opponent.Attack();
-        if (attackDamageM == 0) {
+				if (attackDamageM - player.ArmorRating() < 0) {
+					Console.ForegroundColor = ConsoleColor.DarkRed;
+					Console.WriteLine("Your armor absorbed all of {0}'s attack!", opponent.name);
+					attackDamageM = 0;
+				}
+        else if (attackDamageM == 0) {
           Console.ForegroundColor = ConsoleColor.DarkRed;
           Console.WriteLine("The {0} missed you!", opponent.name);
         }
