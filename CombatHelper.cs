@@ -62,6 +62,11 @@ namespace DungeonGame {
 					Console.ForegroundColor = ConsoleColor.Yellow;
 					Console.WriteLine("The {0} burns for {1} fire damage.", opponent.name, burnDamage);
 					opponent.TakeDamage(burnDamage);
+					player._player_Spell.burnCurRounds += 1;
+				}
+				if (player._player_Spell.burnCurRounds > player._player_Spell.burnMaxRounds) {
+					opponent.onFire = false;
+					player._player_Spell.burnCurRounds = 1;
 				}
 				var attackDamageM = opponent.Attack();
 				if (attackDamageM - player.ArmorRating() < 0) {

@@ -16,41 +16,41 @@ namespace DungeonGame {
 		public int y { get; set; } = 0;
 		public int z { get; set; } = 0;
     // Initial items created for player
-    private Armor player_Chest_Armor;
-    private Armor player_Head_Armor;
-    private Armor player_Leg_Armor;
-		private Weapon player_Weapon;
+    private Armor _player_Chest_Armor;
+    private Armor _player_Head_Armor;
+    private Armor _player_Leg_Armor;
+		private Weapon _player_Weapon;
 		// Initial spells for player
-		private Spell Player_Spell;
+		public Spell _player_Spell;
 		// Inventory
-    public List<IRoomInteraction> Inventory { get; set; } = new List<IRoomInteraction>();
+    public List<IRoomInteraction> _inventory { get; set; } = new List<IRoomInteraction>();
 
     // Constructor for new player creation
     public NewPlayer (string name) {
       // Set player name
 			this.name = name;
 			// Set player initial weapon and armor
-			this.player_Weapon = new Weapon("Sword", 25, 1.2);
-			this.player_Chest_Armor = new Armor("Chestplate", 5, 15);
-			this.player_Head_Armor = new Armor("Helmet", 1, 5);
-			this.player_Leg_Armor = new Armor("Legplates", 3, 8);
+			this._player_Weapon = new Weapon("Sword", 25, 1.2);
+			this._player_Chest_Armor = new Armor("Chestplate", 5, 15);
+			this._player_Head_Armor = new Armor("Helmet", 1, 5);
+			this._player_Leg_Armor = new Armor("Legplates", 3, 8);
 			// Build inventory for player based on initial items provided
 			this.RebuildInventory();
 			// Assign player fireball spell
-			this.Player_Spell = new Spell();
+			this._player_Spell = new Spell("Fireball", 30, 5, 1, 3, 1);
 		}
 
 		// Methods for new player
     public void RebuildInventory() {
-      Inventory.Add((DungeonGame.IRoomInteraction)player_Chest_Armor);
-      Inventory.Add((DungeonGame.IRoomInteraction)player_Head_Armor);
-      Inventory.Add((DungeonGame.IRoomInteraction)player_Leg_Armor);
-      Inventory.Add((DungeonGame.IRoomInteraction)player_Weapon);
+      this._inventory.Add((DungeonGame.IRoomInteraction)this._player_Chest_Armor);
+      this._inventory.Add((DungeonGame.IRoomInteraction)this._player_Head_Armor);
+      this._inventory.Add((DungeonGame.IRoomInteraction)this._player_Leg_Armor);
+      this._inventory.Add((DungeonGame.IRoomInteraction)this._player_Weapon);
     }
     public void ShowInventory(NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.DarkGray;
       Console.WriteLine("Your inventory contains:\n");
-      foreach (IRoomInteraction item in Inventory) {
+      foreach (IRoomInteraction item in this._inventory) {
         Console.WriteLine(string.Join(", ", item.GetName()));
       }
       Console.WriteLine("Gold: " + this.gold + " coins.");
@@ -85,19 +85,19 @@ namespace DungeonGame {
 		}
     public int ArmorRating() {
       var totalArmorRating =
-        player_Chest_Armor.armorRating +
-        player_Head_Armor.armorRating +
-        player_Leg_Armor.armorRating;
+        this._player_Chest_Armor.armorRating +
+        this._player_Head_Armor.armorRating +
+        this._player_Leg_Armor.armorRating;
       return totalArmorRating;
     }
 		public int Attack() {
-			return player_Weapon.Attack();
+			return this._player_Weapon.Attack();
 		}
 		public int CastFireball() {
-			return Player_Spell.blastDamage;
+			return this._player_Spell.blastDamage;
 		}
 		public int FireballBurnDamage() {
-			return Player_Spell.burnDamage;
+			return this._player_Spell.burnDamage;
 		}
 	}
 }
