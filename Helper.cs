@@ -38,10 +38,10 @@ namespace DungeonGame {
       Console.WriteLine("Not a valid command.");
     }
     public static int ChangeRoom(List<IRoom> roomList, NewPlayer player, int x, int y, int z) {
-			player.x += x;
-			player.y += y;
-			player.z += z;
-      var roomName = roomList.Find(f => f.x == player.x && f.y == player.y && f.z == player.z);
+			player.X += x;
+			player.Y += y;
+			player.Z += z;
+      var roomName = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
       var roomIndex = roomList.IndexOf(roomName);
       return roomIndex;
     }

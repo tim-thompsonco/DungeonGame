@@ -7,7 +7,7 @@ namespace DungeonGame {
 		public bool SingleCombat(IMonster opponent, NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.Green;
       Console.WriteLine("{0}, you have encountered a {1}. Time to fight!",
-        player.name, opponent.name);
+        player.Name, opponent.Name);
       while (true) {
         player.DisplayPlayerStats();
         opponent.DisplayStats();
@@ -26,40 +26,46 @@ namespace DungeonGame {
             }
             else {
               Console.ForegroundColor = ConsoleColor.Red;
-              Console.WriteLine("You hit the {0} for {1} physical damage.", opponent.name, attackDamage);
+              Console.WriteLine("You hit the {0} for {1} physical damage.", opponent.Name, attackDamage);
               opponent.TakeDamage(attackDamage);
             }
-            if (opponent.hitPoints <= 0) {
+            if (opponent.HitPoints <= 0) {
               this.SingleCombatWin(opponent, player);
               return true;
             }
             break;
 					case "cf":
-            attackDamage = player.CastFireball();
-            if (attackDamage == 0) {
-              Console.ForegroundColor = ConsoleColor.DarkRed;
-              Console.WriteLine("You missed!");
-            }
-            else {
-              Console.ForegroundColor = ConsoleColor.Red;
-              Console.WriteLine("You hit the {0} for {1} fire damage.", opponent.name, attackDamage);
-              opponent.TakeDamage(attackDamage);
-							Console.ForegroundColor = ConsoleColor.Yellow;
-							Console.WriteLine("The {0} bursts into flame!", opponent.name);
-							opponent.onFire = true;
-            }
-            if (opponent.hitPoints <= 0) {
-              this.SingleCombatWin(opponent, player);
-              return true;
-            }
+						if(player.ManaPoints >= player.Player_Spell.ManaCost) {
+							player.ManaPoints -= player.Player_Spell.ManaCost;
+							attackDamage = player.Player_Spell.FireOffense.BlastDamage;
+							if (attackDamage == 0) {
+								Console.ForegroundColor = ConsoleColor.DarkRed;
+								Console.WriteLine("You missed!");
+							}
+							else {
+								Console.ForegroundColor = ConsoleColor.Red;
+								Console.WriteLine("You hit the {0} for {1} fire damage.", opponent.Name, attackDamage);
+								opponent.TakeDamage(attackDamage);
+								Console.ForegroundColor = ConsoleColor.Yellow;
+								Console.WriteLine("The {0} bursts into flame!", opponent.Name);
+								opponent.OnFire = true;
+							}
+							if (opponent.HitPoints <= 0) {
+								this.SingleCombatWin(opponent, player);
+								return true;
+							}
+						}
+						else {
+							Console.WriteLine("You do not have enough mana to cast that spell!");
+						}
             break;
 					case "dhp":
-						if(player._healthPotion.quantity >= 1) {
-							player._healthPotion._restoreHealth.RestoreHealthPlayer(player);
+						if(player.HealthPotion.Quantity >= 1) {
+							player.HealthPotion.RestoreHealth.RestoreHealthPlayer(player);
 							Console.ForegroundColor = ConsoleColor.Red;
-							Console.WriteLine("You drank a potion and replenished {0} health.", player._healthPotion._restoreHealth.restoreHealthAmt);
-							player._healthPotion.quantity -= 1;
-							player._inventory.Remove((DungeonGame.IRoomInteraction)player._healthPotion);
+							Console.WriteLine("You drank a potion and replenished {0} health.", player.HealthPotion.RestoreHealth.restoreHealthAmt);
+							player.HealthPotion.Quantity -= 1;
+							player.Inventory.Remove((DungeonGame.IRoomInteraction)player.HealthPotion);
 						}
 						else {
 							Console.WriteLine("You don't have any health potions!");
@@ -69,33 +75,33 @@ namespace DungeonGame {
             Helper.InvalidCommand();
             break;
         }
-				if (opponent.onFire) {
-					var burnDamage = player.FireballBurnDamage();
+				if (opponent.OnFire) {
+					var burnDamage = player.Player_Spell.FireOffense.BurnDamage;
 					Console.ForegroundColor = ConsoleColor.Yellow;
-					Console.WriteLine("The {0} burns for {1} fire damage.", opponent.name, burnDamage);
+					Console.WriteLine("The {0} burns for {1} fire damage.", opponent.Name, burnDamage);
 					opponent.TakeDamage(burnDamage);
-					player._player_Spell.burnCurRounds += 1;
+					player.Player_Spell.FireOffense.BurnCurRounds += 1;
 				}
-				if (player._player_Spell.burnCurRounds > player._player_Spell.burnMaxRounds) {
-					opponent.onFire = false;
-					player._player_Spell.burnCurRounds = 1;
+				if (player.Player_Spell.FireOffense.BurnCurRounds > player.Player_Spell.FireOffense.BurnMaxRounds) {
+					opponent.OnFire = false;
+					player.Player_Spell.FireOffense.BurnCurRounds = 1;
 				}
 				var attackDamageM = opponent.Attack();
 				if (attackDamageM - player.ArmorRating() < 0) {
 					Console.ForegroundColor = ConsoleColor.DarkRed;
-					Console.WriteLine("Your armor absorbed all of {0}'s attack!", opponent.name);
+					Console.WriteLine("Your armor absorbed all of {0}'s attack!", opponent.Name);
 					attackDamageM = 0;
 				}
         else if (attackDamageM == 0) {
           Console.ForegroundColor = ConsoleColor.DarkRed;
-          Console.WriteLine("The {0} missed you!", opponent.name);
+          Console.WriteLine("The {0} missed you!", opponent.Name);
         }
         else {
           Console.ForegroundColor = ConsoleColor.Red;
           Console.WriteLine("The {0} hits you for {1} physical damage.",
-            opponent.name, attackDamageM - player.ArmorRating());
+            opponent.Name, attackDamageM - player.ArmorRating());
           player.TakeDamage(attackDamageM - player.ArmorRating());
-          if (player.hitPoints <= 0) {
+          if (player.HitPoints <= 0) {
             return false;
           }
         }
@@ -103,8 +109,8 @@ namespace DungeonGame {
     }
     public void SingleCombatWin(IMonster opponent, NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.Green;
-      Console.WriteLine("You have defeated the {0}!", opponent.name);
-			player.GainExperience(opponent.experienceProvided);
+      Console.WriteLine("You have defeated the {0}!", opponent.Name);
+			player.GainExperience(opponent.ExperienceProvided);
 			player.LevelUpCheck();
 		}
   }

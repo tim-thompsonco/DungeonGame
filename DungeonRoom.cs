@@ -3,22 +3,22 @@ using System.Collections.Generic;
 
 namespace DungeonGame {
   public class DungeonRoom : IRoom {
-    public bool goNorth { get; set; }
-    public bool goSouth { get; set; }
-    public string name { get; set; }
-    public string desc { get; set; }
-    public int x { get; set; }
-		public int y { get; set; }
-		public int z { get; set; }
-    public String[] commands { get; set; } = new string[5] {
+    public bool GoNorth { get; set; }
+    public bool GoSouth { get; set; }
+    public string Name { get; set; }
+    public string Desc { get; set; }
+    public int X { get; set; }
+		public int Y { get; set; }
+		public int Z { get; set; }
+    public String[] Commands { get; set; } = new string[5] {
       "Check [I]nventory",
       "[L]ook",
       "[L]oot [C]orpse",
       "[F]ight",
       "[Q]uit"};
     // List of objects in room (including monsters)
-    private readonly List<IRoomInteraction> _roomObjects = new List<IRoomInteraction>();
-    public IMonster _monster;
+    private readonly List<IRoomInteraction> RoomObjects = new List<IRoomInteraction>();
+    public IMonster Monster;
 
     //Constructor without monster
     public DungeonRoom (
@@ -30,13 +30,13 @@ namespace DungeonGame {
       bool goNorth,
       bool goSouth
       ) {
-      this.name = name;
-      this.desc = desc;
-      this.x = x;
-			this.y = y;
-			this.z = z;
-      this.goNorth = goNorth;
-      this.goSouth = goSouth;
+      this.Name = name;
+      this.Desc = desc;
+      this.X = x;
+			this.Y = y;
+			this.Z = z;
+      this.GoNorth = goNorth;
+      this.GoSouth = goSouth;
     }
 		//Constructor with monster
 		public DungeonRoom(
@@ -49,54 +49,35 @@ namespace DungeonGame {
 			bool goNorth,
 			bool goSouth
 			) {
-			this.name = name;
-			this.desc = desc;
-			this.x = x;
-			this.y = y;
-			this.z = z;
-			this._monster = monster;
-			this.goNorth = goNorth;
-			this.goSouth = goSouth;
+			this.Name = name;
+			this.Desc = desc;
+			this.X = x;
+			this.Y = y;
+			this.Z = z;
+			this.Monster = monster;
+			this.GoNorth = goNorth;
+			this.GoSouth = goSouth;
 			}
 
 		// Implement method from IRoom
 		public void MonsterFight(NewPlayer player) {
-      if (this._monster.hitPoints > 0) {
+      if (this.Monster.HitPoints > 0) {
         var fightEvent = new CombatHelper();
-        var outcome = fightEvent.SingleCombat(_monster, player);
+        var outcome = fightEvent.SingleCombat(Monster, player);
         if (outcome == false) {
           Helper.PlayerDeath();
         }
       }
       else {
-        Console.WriteLine("The {0} is already dead.", this._monster.name);
-      }
-    }
-    // Implement method from IRoom
-    public void LootCorpse(NewPlayer player) {
-      if (_monster.hitPoints <= 0 && _monster.wasLooted == false) {
-        var goldLooted = _monster.gold;
-        player.gold += _monster.gold;
-        _monster.gold = 0;
-        _monster.wasLooted = true;
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("You looted {0} gold coins from the {1}!", goldLooted, this._monster.name);
-      }
-      else if (_monster.wasLooted) {
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("You already looted {0}!", this._monster.name);
-      }
-      else {
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("You cannot loot something that isn't dead!");
+        Console.WriteLine("The {0} is already dead.", this.Monster.Name);
       }
     }
     // Implement method from IRoom
     public void RebuildRoomObjects() {
 			try {
-				_roomObjects.Clear();
-				if (this._monster.hitPoints > 0) {
-					_roomObjects.Add((DungeonGame.IRoomInteraction)_monster);
+				RoomObjects.Clear();
+				if (this.Monster.HitPoints > 0) {
+					RoomObjects.Add((DungeonGame.IRoomInteraction)Monster);
 				}
 			}
 			catch(NullReferenceException) {
@@ -106,17 +87,17 @@ namespace DungeonGame {
     public void ShowCommands() {
 			Console.ForegroundColor = ConsoleColor.DarkGreen;
       Console.Write("Available Commands: ");
-      Console.WriteLine(String.Join(", ", this.commands));
+      Console.WriteLine(String.Join(", ", this.Commands));
     }
     // Implement method from IRoom
     public void ShowDirections() {
       Console.ForegroundColor = ConsoleColor.DarkCyan;
       Console.Write("Available Directions: ");
       Console.ForegroundColor = ConsoleColor.White;
-      if (this.goNorth) {
+      if (this.GoNorth) {
         Console.Write("North");
       }
-      if (this.goSouth) {
+      if (this.GoSouth) {
         Console.Write("South");
       }
       Console.WriteLine();
@@ -126,19 +107,19 @@ namespace DungeonGame {
       Console.ForegroundColor = ConsoleColor.DarkGreen;
       Console.WriteLine("==================================================");
       Console.ForegroundColor = ConsoleColor.DarkCyan;
-      Console.WriteLine(this.name);
+      Console.WriteLine(this.Name);
       Console.ForegroundColor = ConsoleColor.DarkGreen;
       Console.WriteLine("==================================================");
       Console.ForegroundColor = ConsoleColor.DarkCyan;
-      Console.WriteLine(this.desc);
+      Console.WriteLine(this.Desc);
       Console.ForegroundColor = ConsoleColor.DarkGreen;
       Console.WriteLine("==================================================");
       Console.ForegroundColor = ConsoleColor.DarkCyan;
 			Console.Write("Room Contents: ");
 			Console.ForegroundColor = ConsoleColor.White;
 			this.RebuildRoomObjects();
-			if(_roomObjects.Count > 0) {
-				foreach (IRoomInteraction item in _roomObjects) {
+			if(RoomObjects.Count > 0) {
+				foreach (IRoomInteraction item in RoomObjects) {
 					Console.Write(string.Join(", ", item.GetName()));
 				}
 			}
@@ -148,5 +129,24 @@ namespace DungeonGame {
 			Console.WriteLine("."); // Add period at end of list of objects in room
       this.ShowDirections();
     }
+		// Implement method from IRoom
+		public void LootCorpse(NewPlayer player) {
+			if (Monster.HitPoints <= 0 && Monster.WasLooted == false) {
+				var goldLooted = Monster.Gold;
+				player.Gold += Monster.Gold;
+				Monster.Gold = 0;
+				Monster.WasLooted = true;
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.WriteLine("You looted {0} gold coins from the {1}!", goldLooted, this.Monster.Name);
+			}
+			else if (Monster.WasLooted) {
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.WriteLine("You already looted {0}!", this.Monster.Name);
+			}
+			else {
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.WriteLine("You cannot loot something that isn't dead!");
+			}
+		}
 	}
 }

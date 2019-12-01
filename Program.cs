@@ -37,7 +37,7 @@ namespace DungeonGame {
             spawnedRooms[roomIndex].LootCorpse(player);
             break;
           case "n":
-            if(spawnedRooms[roomIndex].goNorth) {
+            if(spawnedRooms[roomIndex].GoNorth) {
 							try {
                 roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 1, 0);
                 spawnedRooms[roomIndex].LookRoom();
@@ -51,7 +51,7 @@ namespace DungeonGame {
 						}
 						break;
 					case "s":
-						if(spawnedRooms[roomIndex].goSouth) {
+						if(spawnedRooms[roomIndex].GoSouth) {
 							try {
                 roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, -1, 0);
                 spawnedRooms[roomIndex].LookRoom();

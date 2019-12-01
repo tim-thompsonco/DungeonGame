@@ -2,17 +2,17 @@
 
 namespace DungeonGame {
   public class Armor : IRoomInteraction {
-    private static readonly Random rndGenerate = new Random();
-    public string name { get; }
-    public int armorRating { get; }
+    private static readonly Random RndGenerate = new Random();
+    public string Name { get; }
+    public int ArmorRating { get; }
 
 		public Armor(string name, int armorRatingLow, int armorRatingHigh) {
-			this.name = name;
-			this.armorRating = rndGenerate.Next(armorRatingLow, armorRatingHigh);
+			this.Name = name;
+			this.ArmorRating = RndGenerate.Next(armorRatingLow, armorRatingHigh);
 		}
 
     public string GetName() {
-      return this.name;
+      return this.Name;
     }
   }
 }

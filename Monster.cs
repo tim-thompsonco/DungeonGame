@@ -1,43 +1,46 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DungeonGame {
   public class Monster : IMonster, IRoomInteraction {
-    public string name { get; set; }
-    public int maxHitPoints { get; set; }
-    public int hitPoints { get; set; }
-    public int experienceProvided { get; set; }
-    public int gold { get; set; }
-    public bool onFire { get; set; } = false;
-    public bool wasLooted { get; set; } = false;
-    private readonly Weapon _weapon;
+    public string Name { get; set; }
+    public int MaxHitPoints { get; set; }
+    public int HitPoints { get; set; }
+    public int ExperienceProvided { get; set; }
+    public int Gold { get; set; }
+    public bool OnFire { get; set; } = false;
+    public bool WasLooted { get; set; } = false;
+		public List<IRoomInteraction> MonsterItems { get; set; } = new List<IRoomInteraction>();
+		public Weapon Weapon;
 
     // Constructor
     public Monster(string name, int GoldCoins, int MaxHP, int ExpProvided, Weapon weapon) {
-      this.name = name;
-      this.gold = GoldCoins;
-      this.hitPoints = MaxHP;
-      this.maxHitPoints = MaxHP;
-      this.experienceProvided = ExpProvided;
-      this._weapon = weapon;
+      this.Name = name;
+      this.Gold = GoldCoins;
+      this.HitPoints = MaxHP;
+      this.MaxHitPoints = MaxHP;
+      this.ExperienceProvided = ExpProvided;
+      this.Weapon = weapon;
+			this.MonsterItems.Add((DungeonGame.IRoomInteraction)this.Weapon);
     }
 
     // Implement method from IMonster
     public virtual void TakeDamage(int weaponDamage) {
-      hitPoints -= weaponDamage;
+      HitPoints -= weaponDamage;
     }
     // Implement method from IMonster
     public virtual void DisplayStats() {
-      Console.WriteLine("Opponent HP: {0} / {1}", hitPoints, maxHitPoints);
+      Console.WriteLine("Opponent HP: {0} / {1}", HitPoints, MaxHitPoints);
       Console.WriteLine("==================================================");
     }
     
     // Implement method from IMonster
     public virtual int Attack() {
-      return _weapon.Attack();
+      return Weapon.Attack();
     }
-    // Implement method from IRoomInteraction
-    public string GetName() {
-      return this.name.ToString();
+		// Implement method from IRoomInteraction
+		public string GetName() {
+      return this.Name.ToString();
     }
-  }
+	}
 }

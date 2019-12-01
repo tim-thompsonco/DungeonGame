@@ -1,25 +1,43 @@
 namespace DungeonGame {
 	public class Spell {
-		public string name { get; }
-		public int blastDamage { get; set; }
-		public int burnDamage { get; set; }
-		public int burnCurRounds { get; set; }
-		public int burnMaxRounds { get; set; }
-		public int level { get; set; }
+		public enum SpellType {
+			FireOffense,
+			FrostOffense,
+			ArcaneOffense,
+			Healing,
+			Defense
+		}
+		public string Name { get; }
+		public int ManaCost { get; set; }
+		public int Level { get; set; }
+		public SpellType SpellCategory { get; set; }
+		public FireOffense FireOffense { get; set; }
 
 		public Spell(
 			string name,
-			int blastDamage,
-			int burnDamage,
-			int burnCurRounds,
-			int burnMaxRounds,
+			int manaCost,
+			SpellType spellType,
 			int level) {
-			this.name = name;
-			this.blastDamage = blastDamage;
-			this.burnDamage = burnDamage;
-			this.burnCurRounds = burnCurRounds;
-			this.burnMaxRounds = burnMaxRounds;
-			this.level = level;
+			this.Name = name;
+			this.ManaCost = manaCost;
+			this.SpellCategory = spellType;
+			this.Level = level;
+			if (this.SpellCategory == SpellType.FireOffense) {
+				this.FireOffense = new FireOffense(30, 5, 1, 3);
+			}
+		}
+	}
+	public class FireOffense {
+		public int BlastDamage { get; }
+		public int BurnDamage { get; }
+		public int BurnCurRounds { get; set; }
+		public int BurnMaxRounds { get; }
+
+		public FireOffense(int blastDmg, int burnDmg, int burnCurRounds, int burnMaxRounds) {
+			this.BlastDamage = blastDmg;
+			this.BurnDamage = burnDmg;
+			this.BurnCurRounds = burnCurRounds;
+			this.BurnMaxRounds = burnMaxRounds;
 		}
 	}
 }

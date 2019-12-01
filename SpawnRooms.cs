@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 
 namespace DungeonGame {
 	public class SpawnRooms {
-		public List<IRoom> _spawnedRooms { get; set; } = new List<IRoom>();
+		public List<IRoom> SpawnedRooms { get; set; } = new List<IRoom>();
 
-		// Constructor
 		public SpawnRooms() {
 			var room100 = new DungeonRoom(
 				"A dark room",
@@ -19,7 +17,7 @@ namespace DungeonGame {
 				0, // Z coordinate
 				true, // goNorth bool
 				false); // goSouth bool
-			this._spawnedRooms.Add(room100);
+			this.SpawnedRooms.Add(room100);
 			var room101 = new DungeonRoom(
 				"Dimly lit platform",
 				"Some other room...to be continued",
@@ -29,11 +27,11 @@ namespace DungeonGame {
 				new Monster("rotting zombie", 25, 160, 1000, new Weapon("A notched axe", 25, 1.2)),
 				false, // goNorth bool
 				true); // goSouth bool
-			this._spawnedRooms.Add(room101);
+			this.SpawnedRooms.Add(room101);
 			}
 		// Method to retrieve room list
 		public List<IRoom> RetrieveSpawnRooms() {
-			return this._spawnedRooms;
+			return this.SpawnedRooms;
 			}
 		}
 	}

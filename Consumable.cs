@@ -6,35 +6,33 @@ namespace DungeonGame {
 			Health,
 			Mana
 		}
-		public string name { get; set; }
-		public int quantity { get; set; }
-		public PotionType _potionType { get; set; }
-		public RestoreHealth _restoreHealth { get; set; }
+		public string Name { get; set; }
+		public int Quantity { get; set; }
+		public PotionType PotionCategory { get; set; }
+		public RestoreHealth RestoreHealth { get; set; }
 
-		// Constructor
 		public Consumable(string name, PotionType potionType, int amount) {
-			this.quantity = 1;
-			this.name = name + " (" + this.quantity + ")";
-			this._potionType = potionType;
-			if (this._potionType == PotionType.Health) {
-				this._restoreHealth = new RestoreHealth(amount);
+			this.Quantity = 1;
+			this.Name = name + " (" + this.Quantity + ")";
+			this.PotionCategory = potionType;
+			if (this.PotionCategory == PotionType.Health) {
+				this.RestoreHealth = new RestoreHealth(amount);
 			}
 		}
 		public string GetName() {
-			return this.name;
+			return this.Name;
 		}
 	}
 	public class RestoreHealth {
 		public int restoreHealthAmt { get; }
 
-		// Constructor
 		public RestoreHealth(int amount) {
 			this.restoreHealthAmt = amount;
 		}
 		public void RestoreHealthPlayer(NewPlayer player) {
-			player.hitPoints += restoreHealthAmt;
-			if(player.hitPoints > player.maxHitPoints) {
-				player.hitPoints = player.maxHitPoints;
+			player.HitPoints += restoreHealthAmt;
+			if(player.HitPoints > player.MaxHitPoints) {
+				player.HitPoints = player.MaxHitPoints;
 			}
 		}
 	}
