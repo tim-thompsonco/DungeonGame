@@ -11,7 +11,7 @@ namespace DungeonGame {
     public bool OnFire { get; set; } = false;
     public bool WasLooted { get; set; } = false;
 		public List<IRoomInteraction> MonsterItems { get; set; } = new List<IRoomInteraction>();
-		public Weapon Weapon;
+		public Weapon Weapon { get; set; }
 
     // Constructor
     public Monster(string name, int GoldCoins, int MaxHP, int ExpProvided, Weapon weapon) {
@@ -42,5 +42,8 @@ namespace DungeonGame {
 		public string GetName() {
       return this.Name.ToString();
     }
+		public List<IRoomInteraction> GetMonsterLoot() {
+			return this.MonsterItems;
+		}
 	}
 }

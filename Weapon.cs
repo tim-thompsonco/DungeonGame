@@ -5,11 +5,13 @@ namespace DungeonGame {
     private readonly Random RndGenerate = new Random();
     public string Name { get; }
     public int RegDamage { get; }
+		public int ItemValue { get; }
 		public double CritMultiplier { get; }
 
-		public Weapon(string name, int regDamage, double critMultiplier) {
+		public Weapon(string name, int regDamage, int itemValue, double critMultiplier) {
 			this.Name = name;
 			this.RegDamage = regDamage;
+			this.ItemValue = itemValue;
 			this.CritMultiplier = critMultiplier;
 		}
 

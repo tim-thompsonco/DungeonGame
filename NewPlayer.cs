@@ -32,12 +32,12 @@ namespace DungeonGame {
       // Set player name
 			this.Name = name;
 			// Set player initial weapon and armor
-			this.Player_Weapon = new Weapon("Sword", 25, 1.2);
-			this.Player_Chest_Armor = new Armor("Chestplate", 5, 15);
-			this.Player_Head_Armor = new Armor("Helmet", 1, 5);
-			this.Player_Leg_Armor = new Armor("Legplates", 3, 8);
+			this.Player_Weapon = new Weapon("Bronze sword", 25, 25, 1.2);
+			this.Player_Chest_Armor = new Armor("Bronze chestplate", 35, 5, 15);
+			this.Player_Head_Armor = new Armor("Bronze helmet", 12, 1, 5);
+			this.Player_Leg_Armor = new Armor("Bronze legplates", 20, 3, 8);
 			// Set initial consumables for player
-			this.HealthPotion = new Consumable("Minor health potion", 0, 50);
+			this.HealthPotion = new Consumable("Minor health potion", 3, 0, 50);
 			// Build inventory for player based on initial items provided
 			this.BuildInventory();
 			// Assign player fireball spell

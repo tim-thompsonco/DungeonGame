@@ -41,7 +41,7 @@ namespace DungeonGame {
 							if (attackDamage == 0) {
 								Console.ForegroundColor = ConsoleColor.DarkRed;
 								Console.WriteLine("You missed!");
-							}
+								}
 							else {
 								Console.ForegroundColor = ConsoleColor.Red;
 								Console.WriteLine("You hit the {0} for {1} fire damage.", opponent.Name, attackDamage);
@@ -49,12 +49,12 @@ namespace DungeonGame {
 								Console.ForegroundColor = ConsoleColor.Yellow;
 								Console.WriteLine("The {0} bursts into flame!", opponent.Name);
 								opponent.OnFire = true;
-							}
+								}
 							if (opponent.HitPoints <= 0) {
 								this.SingleCombatWin(opponent, player);
 								return true;
+								}
 							}
-						}
 						else {
 							Console.WriteLine("You do not have enough mana to cast that spell!");
 						}

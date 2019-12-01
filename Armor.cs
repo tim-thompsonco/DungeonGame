@@ -4,10 +4,12 @@ namespace DungeonGame {
   public class Armor : IRoomInteraction {
     private static readonly Random RndGenerate = new Random();
     public string Name { get; }
-    public int ArmorRating { get; }
+		public int ItemValue { get; }
+		public int ArmorRating { get; }
 
-		public Armor(string name, int armorRatingLow, int armorRatingHigh) {
+		public Armor(string name, int itemValue, int armorRatingLow, int armorRatingHigh) {
 			this.Name = name;
+			this.ItemValue = itemValue;
 			this.ArmorRating = RndGenerate.Next(armorRatingLow, armorRatingHigh);
 		}
 

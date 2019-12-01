@@ -24,7 +24,7 @@ namespace DungeonGame {
 				0, // X coordinate
 				1, // Y coordinate
 				0, // Z coordinate
-				new Monster("rotting zombie", 25, 160, 1000, new Weapon("A notched axe", 25, 1.2)),
+				new Monster("rotting zombie", 25, 160, 1000, new Weapon("A notched axe", 25, 15, 1.2)),
 				false, // goNorth bool
 				true); // goSouth bool
 			this.SpawnedRooms.Add(room101);

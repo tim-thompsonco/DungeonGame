@@ -8,12 +8,14 @@ namespace DungeonGame {
 		}
 		public string Name { get; set; }
 		public int Quantity { get; set; }
+		public int ItemValue { get; }
 		public PotionType PotionCategory { get; set; }
 		public RestoreHealth RestoreHealth { get; set; }
 
-		public Consumable(string name, PotionType potionType, int amount) {
+		public Consumable(string name, int itemValue, PotionType potionType, int amount) {
 			this.Quantity = 1;
 			this.Name = name + " (" + this.Quantity + ")";
+			this.ItemValue = ItemValue;
 			this.PotionCategory = potionType;
 			if (this.PotionCategory == PotionType.Health) {
 				this.RestoreHealth = new RestoreHealth(amount);

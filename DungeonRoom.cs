@@ -135,8 +135,17 @@ namespace DungeonGame {
 				var goldLooted = Monster.Gold;
 				player.Gold += Monster.Gold;
 				Monster.Gold = 0;
-				Monster.WasLooted = true;
 				Console.ForegroundColor = ConsoleColor.Green;
+				try {
+					foreach (var item in Monster.MonsterItems) {
+						player.Inventory.Add(item);
+						Monster.MonsterItems.Remove(item);
+						Console.WriteLine("You looted {0} from the {1}!", item.GetName(), this.Monster.Name);
+					}
+				}
+				catch(InvalidOperationException) {
+				}
+				Monster.WasLooted = true;
 				Console.WriteLine("You looted {0} gold coins from the {1}!", goldLooted, this.Monster.Name);
 			}
 			else if (Monster.WasLooted) {
