@@ -2,7 +2,7 @@
 
 namespace DungeonGame {
   public class CombatHelper {
-		public String[] Commands { get; set; } = new String[2] { "[A]ttack", "[C]ast [F]ireball" };
+		public String[] Commands { get; set; } = new String[3] { "[A]ttack", "[C]ast [F]ireball", "[D]rink [H]ealth [P]otion" };
 
 		public bool SingleCombat(IMonster opponent, NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.Green;
@@ -53,6 +53,18 @@ namespace DungeonGame {
               return true;
             }
             break;
+					case "dhp":
+						if(player._healthPotion.quantity >= 1) {
+							player._healthPotion._restoreHealth.RestoreHealthPlayer(player);
+							Console.ForegroundColor = ConsoleColor.Red;
+							Console.WriteLine("You drank a potion and replenished {0} health.", player._healthPotion._restoreHealth.restoreHealthAmt);
+							player._healthPotion.quantity -= 1;
+							player._inventory.Remove((DungeonGame.IRoomInteraction)player._healthPotion);
+						}
+						else {
+							Console.WriteLine("You don't have any health potions!");
+						}
+						break;
           default:
             Helper.InvalidCommand();
             break;

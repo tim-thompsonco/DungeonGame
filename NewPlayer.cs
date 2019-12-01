@@ -22,8 +22,10 @@ namespace DungeonGame {
 		private Weapon _player_Weapon;
 		// Initial spells for player
 		public Spell _player_Spell;
+		// Initial consumables for player
+		public Consumable _healthPotion;
 		// Inventory
-    public List<IRoomInteraction> _inventory { get; set; } = new List<IRoomInteraction>();
+		public List<IRoomInteraction> _inventory { get; set; } = new List<IRoomInteraction>();
 
     // Constructor for new player creation
     public NewPlayer (string name) {
@@ -34,19 +36,24 @@ namespace DungeonGame {
 			this._player_Chest_Armor = new Armor("Chestplate", 5, 15);
 			this._player_Head_Armor = new Armor("Helmet", 1, 5);
 			this._player_Leg_Armor = new Armor("Legplates", 3, 8);
+			// Set initial consumables for player
+			this._healthPotion = new Consumable("Minor health potion", 0, 50);
 			// Build inventory for player based on initial items provided
-			this.RebuildInventory();
+			this.BuildInventory();
 			// Assign player fireball spell
 			this._player_Spell = new Spell("Fireball", 30, 5, 1, 3, 1);
 		}
 
 		// Methods for new player
-    public void RebuildInventory() {
+    public void BuildInventory() {
       this._inventory.Add((DungeonGame.IRoomInteraction)this._player_Chest_Armor);
       this._inventory.Add((DungeonGame.IRoomInteraction)this._player_Head_Armor);
       this._inventory.Add((DungeonGame.IRoomInteraction)this._player_Leg_Armor);
       this._inventory.Add((DungeonGame.IRoomInteraction)this._player_Weapon);
-    }
+			if(this._healthPotion.quantity >= 1) {
+				this._inventory.Add((DungeonGame.IRoomInteraction)this._healthPotion);
+			}
+		}
     public void ShowInventory(NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.DarkGray;
       Console.WriteLine("Your inventory contains:\n");
