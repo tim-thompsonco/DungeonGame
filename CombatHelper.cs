@@ -105,8 +105,7 @@ namespace DungeonGame {
       Console.ForegroundColor = ConsoleColor.Green;
       Console.WriteLine("You have defeated the {0}!", opponent.name);
 			player.GainExperience(opponent.experienceProvided);
-      // opponent.Name = "dead " + opponent.Name;
-      player.LevelUpCheck();
+			player.LevelUpCheck();
 		}
   }
 }

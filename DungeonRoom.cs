@@ -60,7 +60,7 @@ namespace DungeonGame {
 			}
 
 		// Implement method from IRoom
-		public virtual void MonsterFight(NewPlayer player) {
+		public void MonsterFight(NewPlayer player) {
       if (this._monster.hitPoints > 0) {
         var fightEvent = new CombatHelper();
         var outcome = fightEvent.SingleCombat(_monster, player);
@@ -73,7 +73,7 @@ namespace DungeonGame {
       }
     }
     // Implement method from IRoom
-    public virtual void LootCorpse(NewPlayer player) {
+    public void LootCorpse(NewPlayer player) {
       if (_monster.hitPoints <= 0 && _monster.wasLooted == false) {
         var goldLooted = _monster.gold;
         player.gold += _monster.gold;
@@ -92,18 +92,24 @@ namespace DungeonGame {
       }
     }
     // Implement method from IRoom
-    public virtual void RebuildRoomObjects() {
-      _roomObjects.Clear();
-      _roomObjects.Add((DungeonGame.IRoomInteraction)_monster);
+    public void RebuildRoomObjects() {
+			try {
+				_roomObjects.Clear();
+				if (this._monster.hitPoints > 0) {
+					_roomObjects.Add((DungeonGame.IRoomInteraction)_monster);
+				}
+			}
+			catch(NullReferenceException) {
+			}
     }
     // Implement method from IRoom
-    public virtual void ShowCommands() {
+    public void ShowCommands() {
 			Console.ForegroundColor = ConsoleColor.DarkGreen;
       Console.Write("Available Commands: ");
       Console.WriteLine(String.Join(", ", this.commands));
     }
     // Implement method from IRoom
-    public virtual void ShowDirections() {
+    public void ShowDirections() {
       Console.ForegroundColor = ConsoleColor.DarkCyan;
       Console.Write("Available Directions: ");
       Console.ForegroundColor = ConsoleColor.White;
@@ -116,8 +122,7 @@ namespace DungeonGame {
       Console.WriteLine();
     }
     // Implement method from IRoom
-    public virtual void LookRoom() {
-      this.RebuildRoomObjects();
+    public void LookRoom() {
       Console.ForegroundColor = ConsoleColor.DarkGreen;
       Console.WriteLine("==================================================");
       Console.ForegroundColor = ConsoleColor.DarkCyan;
@@ -129,17 +134,18 @@ namespace DungeonGame {
       Console.ForegroundColor = ConsoleColor.DarkGreen;
       Console.WriteLine("==================================================");
       Console.ForegroundColor = ConsoleColor.DarkCyan;
-			try {
+			Console.Write("Room Contents: ");
+			Console.ForegroundColor = ConsoleColor.White;
+			this.RebuildRoomObjects();
+			if(_roomObjects.Count > 0) {
 				foreach (IRoomInteraction item in _roomObjects) {
-					Console.Write("Room Contents: ");
-					Console.ForegroundColor = ConsoleColor.White;
 					Console.Write(string.Join(", ", item.GetName()));
-					}
+				}
 			}
-			catch(NullReferenceException) {
+			else {
 				Console.Write("There is nothing in the room");
 			}
-      Console.WriteLine("."); // Add period at end of list of objects in room
+			Console.WriteLine("."); // Add period at end of list of objects in room
       this.ShowDirections();
     }
 	}
