@@ -14,5 +14,6 @@
     void ShowDirections();
     void ShowCommands();
     void LookRoom();
+		void LookMonster();
   }
 }

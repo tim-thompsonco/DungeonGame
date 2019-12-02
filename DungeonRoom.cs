@@ -10,11 +10,9 @@ namespace DungeonGame {
     public int X { get; set; }
 		public int Y { get; set; }
 		public int Z { get; set; }
-    public String[] Commands { get; set; } = new string[5] {
+    public List<string> Commands { get; set; } = new List<string>() {
       "Check [I]nventory",
       "[L]ook",
-      "[L]oot [C]orpse",
-      "[F]ight",
       "[Q]uit"};
     // List of objects in room (including monsters)
     private readonly List<IRoomInteraction> RoomObjects = new List<IRoomInteraction>();
@@ -57,6 +55,8 @@ namespace DungeonGame {
 			this.Monster = monster;
 			this.GoNorth = goNorth;
 			this.GoSouth = goSouth;
+			this.Commands.Add("[F]ight");
+			this.Commands.Add("[L]ook [M]onster");
 			}
 
 		// Implement method from IRoom
@@ -67,7 +67,10 @@ namespace DungeonGame {
         if (outcome == false) {
           Helper.PlayerDeath();
         }
-      }
+				this.Commands.Remove("[F]ight");
+				this.Commands.Remove("[L]ook [M]onster");
+				this.Commands.Add("[L]oot [C]orpse");
+			}
       else {
         Console.WriteLine("The {0} is already dead.", this.Monster.Name);
       }
@@ -141,6 +144,7 @@ namespace DungeonGame {
 						player.Inventory.Add(item);
 						Monster.MonsterItems.Remove(item);
 						Console.WriteLine("You looted {0} from the {1}!", item.GetName(), this.Monster.Name);
+						this.Commands.Remove("[L]oot [C]orpse");
 					}
 				}
 				catch(InvalidOperationException) {
@@ -155,6 +159,14 @@ namespace DungeonGame {
 			else {
 				Console.ForegroundColor = ConsoleColor.Green;
 				Console.WriteLine("You cannot loot something that isn't dead!");
+			}
+		}
+		public void LookMonster() {
+			Console.ForegroundColor = ConsoleColor.DarkCyan;
+			Console.WriteLine(Monster.Desc);
+			Console.Write("\nHe is carrying: ");
+			foreach (var item in Monster.MonsterItems) {
+				Console.WriteLine(string.Join(", ", item.GetName()));
 			}
 		}
 	}

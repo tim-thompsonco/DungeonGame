@@ -36,6 +36,9 @@ namespace DungeonGame {
           case "lc":
             spawnedRooms[roomIndex].LootCorpse(player);
             break;
+					case "lm":
+						spawnedRooms[roomIndex].LookMonster();
+						break;
           case "n":
             if(spawnedRooms[roomIndex].GoNorth) {
 							try {
@@ -65,6 +68,7 @@ namespace DungeonGame {
 						}
 						break;
           default:
+						Helper.InvalidCommand();
             break;
         }
       }

@@ -24,7 +24,16 @@ namespace DungeonGame {
 				0, // X coordinate
 				1, // Y coordinate
 				0, // Z coordinate
-				new Monster("rotting zombie", 25, 160, 1000, new Weapon("A notched axe", 25, 15, 1.2)),
+				new Monster(
+					"A rotting zombie", // Name
+					"A rotting corpse stares at you, it's face frozen in a look of indifference to the fact a bug is crawling out of it's empty eye sockets. " +
+					"In one hand, it drags a weapon against the ground, as it stares at you menacingly. Bones, muscle and tendons are visible through many " +
+					"gashes and tears in it's rotting skin.", // Description
+					1, // Level
+					25, // Gold
+					160, // Max HP
+					1000, // Experience provided
+					new Weapon("A notched axe", 25, 15, 1.2)), // Weapon for monster
 				false, // goNorth bool
 				true); // goSouth bool
 			this.SpawnedRooms.Add(room101);

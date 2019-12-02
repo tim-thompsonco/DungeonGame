@@ -4,7 +4,9 @@ using System.Collections.Generic;
 namespace DungeonGame {
   public class Monster : IMonster, IRoomInteraction {
     public string Name { get; set; }
-    public int MaxHitPoints { get; set; }
+		public string Desc { get; set; }
+		public int Level { get; set; }
+		public int MaxHitPoints { get; set; }
     public int HitPoints { get; set; }
     public int ExperienceProvided { get; set; }
     public int Gold { get; set; }
@@ -14,8 +16,10 @@ namespace DungeonGame {
 		public Weapon Weapon { get; set; }
 
     // Constructor
-    public Monster(string name, int GoldCoins, int MaxHP, int ExpProvided, Weapon weapon) {
+    public Monster(string name, string desc, int level, int GoldCoins, int MaxHP, int ExpProvided, Weapon weapon) {
       this.Name = name;
+			this.Desc = desc;
+			this.Level = level;
       this.Gold = GoldCoins;
       this.HitPoints = MaxHP;
       this.MaxHitPoints = MaxHP;
@@ -33,7 +37,6 @@ namespace DungeonGame {
       Console.WriteLine("Opponent HP: {0} / {1}", HitPoints, MaxHitPoints);
       Console.WriteLine("==================================================");
     }
-    
     // Implement method from IMonster
     public virtual int Attack() {
       return Weapon.Attack();
