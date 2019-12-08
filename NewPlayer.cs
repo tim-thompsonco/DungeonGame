@@ -25,19 +25,14 @@ namespace DungeonGame {
 		public List<IEquipment> Inventory { get; set; } = new List<IEquipment>();
 
     public NewPlayer (string name) {
-      // Set player name
 			this.Name = name;
-			// Set player initial weapon and armor
 			this.Player_Weapon = new Weapon("bronze sword", 25, 25, 1.2, true);
-			this.Player_Chest_Armor = new Armor("bronze chestplate", 1, 35, 5, 15, true);
-			this.Player_Head_Armor = new Armor("bronze helmet", 0, 12, 1, 5, true);
-			this.Player_Leg_Armor = new Armor("bronze legplates", 2, 20, 3, 8, true);
-			// Set initial consumables for player
-			this.HealthPotion = new Consumable("minor health potion", 3, 0, 50);
-			this.ManaPotion = new Consumable("minor mana potion", 3, 1, 50);
-			// Build inventory for player based on initial items provided
+			this.Player_Chest_Armor = new Armor("bronze chestplate", Armor.ArmorSlot.Chest, 35, 5, 15, true);
+			this.Player_Head_Armor = new Armor("bronze helmet", Armor.ArmorSlot.Head, 12, 1, 5, true);
+			this.Player_Leg_Armor = new Armor("bronze legplates", Armor.ArmorSlot.Legs, 20, 3, 8, true);
+			this.HealthPotion = new Consumable("minor health potion", 3, Consumable.PotionType.Health, 50);
+			this.ManaPotion = new Consumable("minor mana potion", 3, Consumable.PotionType.Mana, 50);
 			this.BuildInventory();
-			// Assign player fireball spell
 			this.Player_Spell = new Spell("Fireball", 50, 0, 1);
 		}
 

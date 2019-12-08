@@ -16,14 +16,14 @@ namespace DungeonGame {
 
 		public Armor(
 			string name,
-			int armorSlot,
+			ArmorSlot armorSlot,
 			int itemValue,
 			int armorRatingLow,
 			int armorRatingHigh,
 			bool equipped
 			) {
 			this.Name = name;
-			this.ArmorCategory = (ArmorSlot)armorSlot;
+			this.ArmorCategory = armorSlot;
 			this.ItemValue = itemValue;
 			this.ArmorRating = RndGenerate.Next(armorRatingLow, armorRatingHigh);
 			this.Equipped = equipped;

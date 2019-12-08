@@ -12,11 +12,16 @@
 		public RestoreHealth RestoreHealth { get; set; }
 		public RestoreMana RestoreMana { get; set; }
 
-		public Consumable(string name, int itemValue, int potionType, int amount) {
+		public Consumable(
+			string name,
+			int itemValue, 
+			PotionType potionType,
+			int amount
+			) {
 			this.Quantity = 1;
 			this.Name = name;
 			this.ItemValue = itemValue;
-			this.PotionCategory = (PotionType)potionType;
+			this.PotionCategory = potionType;
 			switch(this.PotionCategory) {
 				case PotionType.Health:
 					this.RestoreHealth = new RestoreHealth(amount);

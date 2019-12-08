@@ -16,5 +16,7 @@ namespace DungeonGame {
 		void TakeDamage(int weaponDamage);
 		void DisplayStats();
     int Attack();
-  }
+		int CheckArmorRating();
+		int ArmorRating(NewPlayer player);
+	}
 }

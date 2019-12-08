@@ -19,22 +19,25 @@ namespace DungeonGame {
         Console.WriteLine(); // To add a blank space between the command and fight sequence
         switch (input) {
           case "a":
-            var attackDamage = 0;
-            attackDamage = player.Attack();
-            if (attackDamage == 0) {
+            var attackDamage = player.Attack();
+						if (attackDamage - opponent.ArmorRating(player) < 0) {
+							Console.ForegroundColor = ConsoleColor.DarkRed;
+							Console.WriteLine("The {0}'s armor absorbed all of your attack!", opponent.Name);
+						}
+            else if (attackDamage == 0) {
               Console.ForegroundColor = ConsoleColor.DarkRed;
-              Console.WriteLine("You missed!");
+              Console.WriteLine("You missed {0}!", opponent.Name);
             }
             else {
               Console.ForegroundColor = ConsoleColor.Red;
-              Console.WriteLine("You hit the {0} for {1} physical damage.", opponent.Name, attackDamage);
-              opponent.TakeDamage(attackDamage);
+              Console.WriteLine("You hit the {0} for {1} physical damage.", opponent.Name, attackDamage - opponent.ArmorRating(player));
+              opponent.TakeDamage(attackDamage - opponent.ArmorRating(player));
             }
             if (opponent.HitPoints <= 0) {
               this.SingleCombatWin(opponent, player);
               return true;
             }
-            break;
+						break;
 					case "cf":
 						if(player.ManaPoints >= player.Player_Spell.ManaCost) {
 							player.ManaPoints -= player.Player_Spell.ManaCost;
@@ -42,7 +45,7 @@ namespace DungeonGame {
 							if (attackDamage == 0) {
 								Console.ForegroundColor = ConsoleColor.DarkRed;
 								Console.WriteLine("You missed!");
-								}
+							}
 							else {
 								Console.ForegroundColor = ConsoleColor.Red;
 								Console.WriteLine("You hit the {0} for {1} fire damage.", opponent.Name, attackDamage);
@@ -50,16 +53,17 @@ namespace DungeonGame {
 								Console.ForegroundColor = ConsoleColor.Yellow;
 								Console.WriteLine("The {0} bursts into flame!", opponent.Name);
 								opponent.OnFire = true;
-								}
+							}
 							if (opponent.HitPoints <= 0) {
 								this.SingleCombatWin(opponent, player);
 								return true;
-								}
 							}
+							break;
+						}
 						else {
 							Console.WriteLine("You do not have enough mana to cast that spell!");
+							continue;
 						}
-            break;
 					case "dhp":
 						if(player.HealthPotion.Quantity >= 1) {
 							player.HealthPotion.RestoreHealth.RestoreHealthPlayer(player);
@@ -71,7 +75,7 @@ namespace DungeonGame {
 						else {
 							Console.WriteLine("You don't have any health potions!");
 						}
-						break;
+						continue;
 					case "dmp":
 						if (player.ManaPotion.Quantity >= 1) {
 							player.ManaPotion.RestoreMana.RestoreManaPlayer(player);
@@ -79,11 +83,11 @@ namespace DungeonGame {
 							Console.WriteLine("You drank a potion and replenished {0} mana.", player.ManaPotion.RestoreMana.RestoreManaAmt);
 							player.ManaPotion.Quantity -= 1;
 							player.Inventory.Remove((DungeonGame.IEquipment)player.ManaPotion);
-							}
+						}
 						else {
 							Console.WriteLine("You don't have any mana potions!");
-							}
-						break;
+						}
+						continue;
 					default:
             Helper.InvalidCommand();
             break;
