@@ -87,7 +87,7 @@ namespace DungeonGame {
 					player.Player_Spell.FireOffense.BurnCurRounds = 1;
 				}
 				var attackDamageM = opponent.Attack();
-				if (attackDamageM - player.ArmorRating() < 0) {
+				if (attackDamageM - player.ArmorRating(opponent) < 0) {
 					Console.ForegroundColor = ConsoleColor.DarkRed;
 					Console.WriteLine("Your armor absorbed all of {0}'s attack!", opponent.Name);
 					attackDamageM = 0;
@@ -99,8 +99,8 @@ namespace DungeonGame {
         else {
           Console.ForegroundColor = ConsoleColor.Red;
           Console.WriteLine("The {0} hits you for {1} physical damage.",
-            opponent.Name, attackDamageM - player.ArmorRating());
-          player.TakeDamage(attackDamageM - player.ArmorRating());
+            opponent.Name, attackDamageM - player.ArmorRating(opponent));
+          player.TakeDamage(attackDamageM - player.ArmorRating(opponent));
           if (player.HitPoints <= 0) {
             return false;
           }

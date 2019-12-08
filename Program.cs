@@ -67,7 +67,119 @@ namespace DungeonGame {
 							Helper.InvalidDirection();
 						}
 						break;
-          default:
+					case "e":
+						if (spawnedRooms[roomIndex].GoEast) {
+							try {
+								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 1, 0, 0);
+								spawnedRooms[roomIndex].LookRoom();
+							}
+							catch (ArgumentOutOfRangeException) {
+								Helper.InvalidDirection();
+							}
+						}
+						else {
+							Helper.InvalidDirection();
+						}
+						break;
+					case "w":
+						if (spawnedRooms[roomIndex].GoWest) {
+							try {
+								roomIndex = Helper.ChangeRoom(spawnedRooms, player, -1, 0, 0);
+								spawnedRooms[roomIndex].LookRoom();
+							}
+							catch (ArgumentOutOfRangeException) {
+								Helper.InvalidDirection();
+							}
+						}
+						else {
+							Helper.InvalidDirection();
+						}
+						break;
+					case "ne":
+						if (spawnedRooms[roomIndex].GoNorthEast) {
+							try {
+								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 1, 1, 0);
+								spawnedRooms[roomIndex].LookRoom();
+							}
+							catch (ArgumentOutOfRangeException) {
+								Helper.InvalidDirection();
+							}
+						}
+						else {
+							Helper.InvalidDirection();
+						}
+						break;
+					case "nw":
+						if (spawnedRooms[roomIndex].GoNorthWest) {
+							try {
+								roomIndex = Helper.ChangeRoom(spawnedRooms, player, -1, 1, 0);
+								spawnedRooms[roomIndex].LookRoom();
+							}
+							catch (ArgumentOutOfRangeException) {
+								Helper.InvalidDirection();
+							}
+						}
+						else {
+							Helper.InvalidDirection();
+						}
+						break;
+					case "se":
+						if (spawnedRooms[roomIndex].GoSouthEast) {
+							try {
+								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 1, -1, 0);
+								spawnedRooms[roomIndex].LookRoom();
+							}
+							catch (ArgumentOutOfRangeException) {
+								Helper.InvalidDirection();
+							}
+						}
+						else {
+							Helper.InvalidDirection();
+						}
+						break;
+					case "sw":
+						if (spawnedRooms[roomIndex].GoSouthWest) {
+							try {
+								roomIndex = Helper.ChangeRoom(spawnedRooms, player, -1, -1, 0);
+								spawnedRooms[roomIndex].LookRoom();
+							}
+							catch (ArgumentOutOfRangeException) {
+								Helper.InvalidDirection();
+							}
+						}
+						else {
+							Helper.InvalidDirection();
+						}
+						break;
+					case "u":
+						if (spawnedRooms[roomIndex].GoUp) {
+							try {
+								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 1);
+								spawnedRooms[roomIndex].LookRoom();
+							}
+							catch (ArgumentOutOfRangeException) {
+								Helper.InvalidDirection();
+							}
+						}
+						else {
+							Helper.InvalidDirection();
+						}
+						break;
+					case "d":
+						if (spawnedRooms[roomIndex].GoDown) {
+							try {
+								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, -1);
+								spawnedRooms[roomIndex].LookRoom();
+							}
+							catch (ArgumentOutOfRangeException) {
+								Helper.InvalidDirection();
+							}
+						}
+						else {
+							Helper.InvalidDirection();
+						}
+						break;
+					default:
 						Helper.InvalidCommand();
             break;
         }

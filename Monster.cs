@@ -13,23 +13,38 @@ namespace DungeonGame {
     public bool OnFire { get; set; } = false;
     public bool WasLooted { get; set; } = false;
 		public List<IRoomInteraction> MonsterItems { get; set; } = new List<IRoomInteraction>();
+		public Item Item { get; set; }
 		public Weapon Weapon { get; set; }
 
-    // Constructor
+    // Constructor with weapon
     public Monster(string name, string desc, int level, int GoldCoins, int MaxHP, int ExpProvided, Weapon weapon) {
       this.Name = name;
 			this.Desc = desc;
 			this.Level = level;
       this.Gold = GoldCoins;
-      this.HitPoints = MaxHP;
-      this.MaxHitPoints = MaxHP;
+			this.MaxHitPoints = MaxHP;
+			this.HitPoints = MaxHP;
       this.ExperienceProvided = ExpProvided;
       this.Weapon = weapon;
 			this.MonsterItems.Add((DungeonGame.IRoomInteraction)this.Weapon);
-    }
+		}
+		// Constructor with weapon and loot
+		public Monster(string name, string desc, int level, int GoldCoins, int MaxHP, int ExpProvided, Weapon weapon, Item item) {
+			this.Name = name;
+			this.Desc = desc;
+			this.Level = level;
+			this.Gold = GoldCoins;
+			this.MaxHitPoints = MaxHP;
+			this.HitPoints = MaxHP;
+			this.ExperienceProvided = ExpProvided;
+			this.Weapon = weapon;
+			this.Item = item;
+			this.MonsterItems.Add((DungeonGame.IRoomInteraction)this.Weapon);
+			this.MonsterItems.Add((DungeonGame.IRoomInteraction)this.Item);
+		}
 
-    // Implement method from IMonster
-    public virtual void TakeDamage(int weaponDamage) {
+		// Implement method from IMonster
+		public virtual void TakeDamage(int weaponDamage) {
       HitPoints -= weaponDamage;
     }
     // Implement method from IMonster
@@ -45,8 +60,5 @@ namespace DungeonGame {
 		public string GetName() {
       return this.Name.ToString();
     }
-		public List<IRoomInteraction> GetMonsterLoot() {
-			return this.MonsterItems;
-		}
 	}
 }

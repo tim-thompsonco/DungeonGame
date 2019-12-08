@@ -90,12 +90,15 @@ namespace DungeonGame {
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;
 		}
-    public int ArmorRating() {
+    public int ArmorRating(IMonster opponent) {
       var totalArmorRating =
         this.Player_Chest_Armor.ArmorRating +
         this.Player_Head_Armor.ArmorRating +
         this.Player_Leg_Armor.ArmorRating;
-      return totalArmorRating;
+			var levelDiff = opponent.Level - this.Level;
+			var armorMultiplier = 1.00 + (-(double)levelDiff / 10);
+			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
+			return (int)adjArmorRating;
     }
 		public int Attack() {
 			return this.Player_Weapon.Attack();

@@ -3,9 +3,17 @@ using System.Collections.Generic;
 
 namespace DungeonGame {
   public class DungeonRoom : IRoom {
-    public bool GoNorth { get; set; }
-    public bool GoSouth { get; set; }
-    public string Name { get; set; }
+		public bool GoNorth { get; set; }
+		public bool GoSouth { get; set; }
+		public bool GoEast { get; set; }
+		public bool GoWest { get; set; }
+		public bool GoNorthWest { get; set; }
+		public bool GoSouthWest { get; set; }
+		public bool GoNorthEast { get; set; }
+		public bool GoSouthEast { get; set; }
+		public bool GoUp { get; set; }
+		public bool GoDown { get; set; }
+		public string Name { get; set; }
     public string Desc { get; set; }
     public int X { get; set; }
 		public int Y { get; set; }
@@ -25,8 +33,16 @@ namespace DungeonGame {
 			int x,
 			int y,
 			int z,
-      bool goNorth,
-      bool goSouth
+			bool goNorth,
+			bool goSouth,
+			bool goEast,
+			bool goWest,
+			bool goNorthWest,
+			bool goSouthWest,
+			bool goNorthEast,
+			bool goSouthEast,
+			bool goUp,
+			bool goDown
       ) {
       this.Name = name;
       this.Desc = desc;
@@ -35,6 +51,14 @@ namespace DungeonGame {
 			this.Z = z;
       this.GoNorth = goNorth;
       this.GoSouth = goSouth;
+			this.GoEast = goEast;
+			this.GoWest = goWest;
+			this.GoNorthWest = goNorthWest;
+			this.GoSouthWest = goSouthWest;
+			this.GoNorthEast = goNorthEast;
+			this.GoSouthEast = goSouthEast;
+			this.GoUp = goUp;
+			this.GoDown = goDown;
     }
 		//Constructor with monster
 		public DungeonRoom(
@@ -45,7 +69,15 @@ namespace DungeonGame {
 			int z,
 			IMonster monster,
 			bool goNorth,
-			bool goSouth
+			bool goSouth,
+			bool goEast,
+			bool goWest,
+			bool goNorthWest,
+			bool goSouthWest,
+			bool goNorthEast,
+			bool goSouthEast,
+			bool goUp,
+			bool goDown
 			) {
 			this.Name = name;
 			this.Desc = desc;
@@ -55,6 +87,14 @@ namespace DungeonGame {
 			this.Monster = monster;
 			this.GoNorth = goNorth;
 			this.GoSouth = goSouth;
+			this.GoEast = goEast;
+			this.GoWest = goWest;
+			this.GoNorthWest = goNorthWest;
+			this.GoSouthWest = goSouthWest;
+			this.GoNorthEast = goNorthEast;
+			this.GoSouthEast = goSouthEast;
+			this.GoUp = goUp;
+			this.GoDown = goDown;
 			this.Commands.Add("[F]ight");
 			this.Commands.Add("[L]ook [M]onster");
 			}
@@ -98,12 +138,36 @@ namespace DungeonGame {
       Console.Write("Available Directions: ");
       Console.ForegroundColor = ConsoleColor.White;
       if (this.GoNorth) {
-        Console.Write("North");
+        Console.Write("[N]orth ");
       }
       if (this.GoSouth) {
-        Console.Write("South");
+        Console.Write("[S]outh ");
       }
-      Console.WriteLine();
+			if (this.GoEast) {
+				Console.Write("[E]ast ");
+			}
+			if (this.GoWest) {
+				Console.Write("[W]est ");
+			}
+			if (this.GoNorthWest) {
+				Console.Write("[N]orth[W]est ");
+			}
+			if (this.GoSouthWest) {
+				Console.Write("[S]outh[W]est ");
+			}
+			if (this.GoNorthEast) {
+				Console.Write("[N]orth[E]ast ");
+			}
+			if (this.GoSouthEast) {
+				Console.Write("[S]outh[E]ast ");
+			}
+			if (this.GoUp) {
+				Console.Write("[U]p ");
+			}
+			if (this.GoDown) {
+				Console.Write("[D]own ");
+			}
+			Console.WriteLine();
     }
     // Implement method from IRoom
     public void LookRoom() {
@@ -137,18 +201,16 @@ namespace DungeonGame {
 			if (Monster.HitPoints <= 0 && Monster.WasLooted == false) {
 				var goldLooted = Monster.Gold;
 				player.Gold += Monster.Gold;
-				Monster.Gold = 0;
 				Console.ForegroundColor = ConsoleColor.Green;
 				try {
-					foreach (var item in Monster.MonsterItems) {
-						player.Inventory.Add(item);
-						Monster.MonsterItems.Remove(item);
-						Console.WriteLine("You looted {0} from the {1}!", item.GetName(), this.Monster.Name);
-						this.Commands.Remove("[L]oot [C]orpse");
+					foreach (var loot in Monster.MonsterItems) {
+						player.Inventory.Add(loot);
+						Console.WriteLine("You looted {0} from the {1}!", loot.GetName(), this.Monster.Name);
 					}
 				}
 				catch(InvalidOperationException) {
 				}
+				this.Commands.Remove("[L]oot [C]orpse");
 				Monster.WasLooted = true;
 				Console.WriteLine("You looted {0} gold coins from the {1}!", goldLooted, this.Monster.Name);
 			}
@@ -165,8 +227,8 @@ namespace DungeonGame {
 			Console.ForegroundColor = ConsoleColor.DarkCyan;
 			Console.WriteLine(Monster.Desc);
 			Console.Write("\nHe is carrying: ");
-			foreach (var item in Monster.MonsterItems) {
-				Console.WriteLine(string.Join(", ", item.GetName()));
+			foreach (var loot in Monster.MonsterItems) {
+				Console.WriteLine(string.Join(", ", loot.GetName()));
 			}
 		}
 	}
