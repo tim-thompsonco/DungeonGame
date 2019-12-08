@@ -39,7 +39,31 @@ namespace DungeonGame {
 					case "lm":
 						spawnedRooms[roomIndex].LookMonster();
 						break;
-          case "n":
+					case "dhp":
+						if (player.HealthPotion.Quantity >= 1) {
+							player.HealthPotion.RestoreHealth.RestoreHealthPlayer(player);
+							Console.ForegroundColor = ConsoleColor.Red;
+							Console.WriteLine("You drank a potion and replenished {0} health.", player.HealthPotion.RestoreHealth.RestoreHealthAmt);
+							player.HealthPotion.Quantity -= 1;
+							player.Inventory.Remove((DungeonGame.IEquipment)player.HealthPotion);
+						}
+						else {
+							Console.WriteLine("You don't have any health potions!");
+						}
+						break;
+					case "dmp":
+						if (player.ManaPotion.Quantity >= 1) {
+							player.ManaPotion.RestoreMana.RestoreManaPlayer(player);
+							Console.ForegroundColor = ConsoleColor.Red;
+							Console.WriteLine("You drank a potion and replenished {0} mana.", player.ManaPotion.RestoreMana.RestoreManaAmt);
+							player.ManaPotion.Quantity -= 1;
+							player.Inventory.Remove((DungeonGame.IEquipment)player.ManaPotion);
+						}
+						else {
+							Console.WriteLine("You don't have any mana potions!");
+						}
+						break;
+					case "n":
             if(spawnedRooms[roomIndex].GoNorth) {
 							try {
                 roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 1, 0);

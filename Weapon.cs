@@ -1,18 +1,20 @@
 using System;
 
 namespace DungeonGame {
-	public class Weapon : IRoomInteraction {
+	public class Weapon : IEquipment {
     private readonly Random RndGenerate = new Random();
     public string Name { get; }
     public int RegDamage { get; }
 		public int ItemValue { get; }
 		public double CritMultiplier { get; }
+		public bool Equipped { get; set; }
 
-		public Weapon(string name, int regDamage, int itemValue, double critMultiplier) {
+		public Weapon(string name, int regDamage, int itemValue, double critMultiplier, bool equipped) {
 			this.Name = name;
 			this.RegDamage = regDamage;
 			this.ItemValue = itemValue;
 			this.CritMultiplier = critMultiplier;
+			this.Equipped = equipped;
 		}
 
 		public int Attack() {
@@ -33,5 +35,8 @@ namespace DungeonGame {
     public string GetName() {
       return this.Name;
     }
-  }
+		public bool IsEquipped() {
+			return this.Equipped;
+		}
+	}
 }

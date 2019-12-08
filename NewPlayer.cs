@@ -4,7 +4,6 @@ using System.Globalization;
 
 namespace DungeonGame {
 	public class NewPlayer {
-		// Attributes for new player
 		public string Name { get; }
 		public int MaxHitPoints { get; set; } = 100;
 		public int MaxManaPoints { get; set; } = 100;
@@ -16,53 +15,57 @@ namespace DungeonGame {
     public int X { get; set; } = 0;
 		public int Y { get; set; } = 0;
 		public int Z { get; set; } = 0;
-    // Initial items created for player
     private Armor Player_Chest_Armor;
     private Armor Player_Head_Armor;
     private Armor Player_Leg_Armor;
 		private Weapon Player_Weapon;
-		// Initial spells for player
 		public Spell Player_Spell;
-		// Initial consumables for player
 		public Consumable HealthPotion;
-		// Inventory
-		public List<IRoomInteraction> Inventory { get; set; } = new List<IRoomInteraction>();
+		public Consumable ManaPotion;
+		public List<IEquipment> Inventory { get; set; } = new List<IEquipment>();
 
-    // Constructor for new player creation
     public NewPlayer (string name) {
       // Set player name
 			this.Name = name;
 			// Set player initial weapon and armor
-			this.Player_Weapon = new Weapon("bronze sword", 25, 25, 1.2);
-			this.Player_Chest_Armor = new Armor("bronze chestplate", 35, 5, 15);
-			this.Player_Head_Armor = new Armor("bronze helmet", 12, 1, 5);
-			this.Player_Leg_Armor = new Armor("bronze legplates", 20, 3, 8);
+			this.Player_Weapon = new Weapon("bronze sword", 25, 25, 1.2, true);
+			this.Player_Chest_Armor = new Armor("bronze chestplate", 1, 35, 5, 15, true);
+			this.Player_Head_Armor = new Armor("bronze helmet", 0, 12, 1, 5, true);
+			this.Player_Leg_Armor = new Armor("bronze legplates", 2, 20, 3, 8, true);
 			// Set initial consumables for player
 			this.HealthPotion = new Consumable("minor health potion", 3, 0, 50);
+			this.ManaPotion = new Consumable("minor mana potion", 3, 1, 50);
 			// Build inventory for player based on initial items provided
 			this.BuildInventory();
 			// Assign player fireball spell
 			this.Player_Spell = new Spell("Fireball", 50, 0, 1);
 		}
 
-		// Methods for new player
     public void BuildInventory() {
-      this.Inventory.Add((DungeonGame.IRoomInteraction)this.Player_Chest_Armor);
-      this.Inventory.Add((DungeonGame.IRoomInteraction)this.Player_Head_Armor);
-      this.Inventory.Add((DungeonGame.IRoomInteraction)this.Player_Leg_Armor);
-      this.Inventory.Add((DungeonGame.IRoomInteraction)this.Player_Weapon);
-			if(this.HealthPotion.Quantity >= 1) {
-				this.Inventory.Add((DungeonGame.IRoomInteraction)this.HealthPotion);
+      this.Inventory.Add((DungeonGame.IEquipment)this.Player_Chest_Armor);
+      this.Inventory.Add((DungeonGame.IEquipment)this.Player_Head_Armor);
+      this.Inventory.Add((DungeonGame.IEquipment)this.Player_Leg_Armor);
+      this.Inventory.Add((DungeonGame.IEquipment)this.Player_Weapon);
+			this.Inventory.Add((DungeonGame.IEquipment)this.HealthPotion);
+			this.Inventory.Add((DungeonGame.IEquipment)this.ManaPotion);
 			}
-		}
     public void ShowInventory(NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.DarkGray;
       Console.WriteLine("Your inventory contains:\n");
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (IRoomInteraction item in this.Inventory) {
-				var itemTitle = item.GetName().ToString();
-				itemTitle = textInfo.ToTitleCase(itemTitle);
-				Console.WriteLine(itemTitle);
+			foreach (IEquipment item in this.Inventory) {
+				try {
+					var itemTitle = item.GetName().ToString();
+					if (item.IsEquipped()) {
+						itemTitle = textInfo.ToTitleCase(itemTitle) + " <Equipped>";
+					}
+					else {
+						itemTitle = textInfo.ToTitleCase(itemTitle);
+					}
+					Console.WriteLine(itemTitle);
+				}
+				catch(NullReferenceException) {
+				}
       }
       Console.WriteLine("Gold: " + this.Gold + " coins.");
     }
@@ -94,18 +97,46 @@ namespace DungeonGame {
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;
 		}
+		public int CheckArmorRating() {
+			var totalArmorRating = 0;
+			try {
+				if (this.Player_Chest_Armor.IsEquipped()) {
+					totalArmorRating += this.Player_Chest_Armor.ArmorRating;
+				}
+			}
+			catch(NullReferenceException) {
+			}
+			try {
+				if (this.Player_Head_Armor.IsEquipped()) {
+					totalArmorRating += this.Player_Head_Armor.ArmorRating;
+				}
+			}
+			catch(NullReferenceException) {
+			}
+			try {
+				if (this.Player_Leg_Armor.IsEquipped()) {
+					totalArmorRating += this.Player_Leg_Armor.ArmorRating;
+				}
+			}
+			catch(NullReferenceException) {
+			}
+			return totalArmorRating;
+		}
     public int ArmorRating(IMonster opponent) {
-      var totalArmorRating =
-        this.Player_Chest_Armor.ArmorRating +
-        this.Player_Head_Armor.ArmorRating +
-        this.Player_Leg_Armor.ArmorRating;
+			var totalArmorRating = CheckArmorRating();
 			var levelDiff = opponent.Level - this.Level;
 			var armorMultiplier = 1.00 + (-(double)levelDiff / 10);
 			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
     }
 		public int Attack() {
-			return this.Player_Weapon.Attack();
+			if(this.Player_Weapon.IsEquipped()) {
+				return this.Player_Weapon.Attack();
+			}
+			else {
+				Console.WriteLine("Your weapon is not equipped!");
+				return 0;
+			}
 		}
 	}
 }

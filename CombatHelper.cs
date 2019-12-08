@@ -2,7 +2,8 @@
 
 namespace DungeonGame {
   public class CombatHelper {
-		public String[] Commands { get; set; } = new String[3] { "[A]ttack", "[C]ast [F]ireball", "[D]rink [H]ealth [P]otion" };
+		public String[] Commands { get; set; } = new String[4] {
+		"[A]ttack", "[C]ast [F]ireball", "[D]rink [H]ealth [P]otion", "[D]rink [M]ana [P]otion" };
 
 		public bool SingleCombat(IMonster opponent, NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.Green;
@@ -63,15 +64,27 @@ namespace DungeonGame {
 						if(player.HealthPotion.Quantity >= 1) {
 							player.HealthPotion.RestoreHealth.RestoreHealthPlayer(player);
 							Console.ForegroundColor = ConsoleColor.Red;
-							Console.WriteLine("You drank a potion and replenished {0} health.", player.HealthPotion.RestoreHealth.restoreHealthAmt);
+							Console.WriteLine("You drank a potion and replenished {0} health.", player.HealthPotion.RestoreHealth.RestoreHealthAmt);
 							player.HealthPotion.Quantity -= 1;
-							player.Inventory.Remove((DungeonGame.IRoomInteraction)player.HealthPotion);
+							player.Inventory.Remove((DungeonGame.IEquipment)player.HealthPotion);
 						}
 						else {
 							Console.WriteLine("You don't have any health potions!");
 						}
 						break;
-          default:
+					case "dmp":
+						if (player.ManaPotion.Quantity >= 1) {
+							player.ManaPotion.RestoreMana.RestoreManaPlayer(player);
+							Console.ForegroundColor = ConsoleColor.Red;
+							Console.WriteLine("You drank a potion and replenished {0} mana.", player.ManaPotion.RestoreMana.RestoreManaAmt);
+							player.ManaPotion.Quantity -= 1;
+							player.Inventory.Remove((DungeonGame.IEquipment)player.ManaPotion);
+							}
+						else {
+							Console.WriteLine("You don't have any mana potions!");
+							}
+						break;
+					default:
             Helper.InvalidCommand();
             break;
         }
@@ -110,6 +123,9 @@ namespace DungeonGame {
     public void SingleCombatWin(IMonster opponent, NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.Green;
       Console.WriteLine("You have defeated the {0}!", opponent.Name);
+			foreach(var loot in opponent.MonsterItems) {
+				loot.Equipped = false;
+			}
 			player.GainExperience(opponent.ExperienceProvided);
 			player.LevelUpCheck();
 		}

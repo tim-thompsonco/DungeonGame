@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace DungeonGame {
-  public class Monster : IMonster, IRoomInteraction {
+  public class Monster : IMonster {
     public string Name { get; set; }
 		public string Desc { get; set; }
 		public int Level { get; set; }
@@ -12,7 +12,7 @@ namespace DungeonGame {
     public int Gold { get; set; }
     public bool OnFire { get; set; } = false;
     public bool WasLooted { get; set; } = false;
-		public List<IRoomInteraction> MonsterItems { get; set; } = new List<IRoomInteraction>();
+		public List<IEquipment> MonsterItems { get; set; } = new List<IEquipment>();
 		public Item Item { get; set; }
 		public Weapon Weapon { get; set; }
 
@@ -26,7 +26,7 @@ namespace DungeonGame {
 			this.HitPoints = MaxHP;
       this.ExperienceProvided = ExpProvided;
       this.Weapon = weapon;
-			this.MonsterItems.Add((DungeonGame.IRoomInteraction)this.Weapon);
+			this.MonsterItems.Add((DungeonGame.IEquipment)this.Weapon);
 		}
 		// Constructor with weapon and loot
 		public Monster(string name, string desc, int level, int GoldCoins, int MaxHP, int ExpProvided, Weapon weapon, Item item) {
@@ -39,8 +39,8 @@ namespace DungeonGame {
 			this.ExperienceProvided = ExpProvided;
 			this.Weapon = weapon;
 			this.Item = item;
-			this.MonsterItems.Add((DungeonGame.IRoomInteraction)this.Weapon);
-			this.MonsterItems.Add((DungeonGame.IRoomInteraction)this.Item);
+			this.MonsterItems.Add((DungeonGame.IEquipment)this.Weapon);
+			this.MonsterItems.Add((DungeonGame.IEquipment)this.Item);
 		}
 
 		// Implement method from IMonster
@@ -60,5 +60,8 @@ namespace DungeonGame {
 		public string GetName() {
       return this.Name.ToString();
     }
+		public bool IsEquipped() {
+			return false;
+		}
 	}
 }

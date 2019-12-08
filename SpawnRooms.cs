@@ -46,7 +46,7 @@ namespace DungeonGame {
 					10, // Gold
 					80, // Max HP
 					500, // Experience provided
-					new Weapon("notched axe", 25, 10, 1.2)), // Weapon for monster
+					new Weapon("notched axe", 25, 10, 1.2, true)), // Weapon for monster
 				false, // goNorth bool
 				true, // goSouth bool
 				false, // goEast bool
@@ -77,7 +77,7 @@ namespace DungeonGame {
 					0, // Gold
 					160, // Max HP
 					1000, // Experience provided
-					new Weapon("venomous fang", 35, 25, 1.2), // Weapon for monster
+					new Weapon("venomous fang", 35, 25, 1.2, true), // Weapon for monster
 					new Item("large venom sac", 15) // Loot item
 					), 
 				false, // goNorth bool

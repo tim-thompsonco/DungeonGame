@@ -1,7 +1,5 @@
-﻿using System;
-
-namespace DungeonGame {
-	public class Consumable : IRoomInteraction {
+﻿namespace DungeonGame {
+	public class Consumable : IEquipment {
 		public enum PotionType {
 			Health,
 			Mana
@@ -9,33 +7,32 @@ namespace DungeonGame {
 		public string Name { get; set; }
 		public int Quantity { get; set; }
 		public int ItemValue { get; }
+		public bool Equipped { get; set; }
 		public PotionType PotionCategory { get; set; }
 		public RestoreHealth RestoreHealth { get; set; }
+		public RestoreMana RestoreMana { get; set; }
 
-		public Consumable(string name, int itemValue, PotionType potionType, int amount) {
+		public Consumable(string name, int itemValue, int potionType, int amount) {
 			this.Quantity = 1;
-			this.Name = name + " (" + this.Quantity + ")";
-			this.ItemValue = ItemValue;
-			this.PotionCategory = potionType;
-			if (this.PotionCategory == PotionType.Health) {
-				this.RestoreHealth = new RestoreHealth(amount);
+			this.Name = name;
+			this.ItemValue = itemValue;
+			this.PotionCategory = (PotionType)potionType;
+			switch(this.PotionCategory) {
+				case PotionType.Health:
+					this.RestoreHealth = new RestoreHealth(amount);
+					break;
+				case PotionType.Mana:
+					this.RestoreMana = new RestoreMana(amount);
+					break;
+				default:
+					break;
 			}
 		}
 		public string GetName() {
 			return this.Name;
 		}
-	}
-	public class RestoreHealth {
-		public int restoreHealthAmt { get; }
-
-		public RestoreHealth(int amount) {
-			this.restoreHealthAmt = amount;
-		}
-		public void RestoreHealthPlayer(NewPlayer player) {
-			player.HitPoints += restoreHealthAmt;
-			if(player.HitPoints > player.MaxHitPoints) {
-				player.HitPoints = player.MaxHitPoints;
-			}
+		public bool IsEquipped() {
+			return this.Equipped;
 		}
 	}
 }
