@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace DungeonGame {
 	public class NewPlayer {
@@ -32,12 +33,12 @@ namespace DungeonGame {
       // Set player name
 			this.Name = name;
 			// Set player initial weapon and armor
-			this.Player_Weapon = new Weapon("Bronze sword", 25, 25, 1.2);
-			this.Player_Chest_Armor = new Armor("Bronze chestplate", 35, 5, 15);
-			this.Player_Head_Armor = new Armor("Bronze helmet", 12, 1, 5);
-			this.Player_Leg_Armor = new Armor("Bronze legplates", 20, 3, 8);
+			this.Player_Weapon = new Weapon("bronze sword", 25, 25, 1.2);
+			this.Player_Chest_Armor = new Armor("bronze chestplate", 35, 5, 15);
+			this.Player_Head_Armor = new Armor("bronze helmet", 12, 1, 5);
+			this.Player_Leg_Armor = new Armor("bronze legplates", 20, 3, 8);
 			// Set initial consumables for player
-			this.HealthPotion = new Consumable("Minor health potion", 3, 0, 50);
+			this.HealthPotion = new Consumable("minor health potion", 3, 0, 50);
 			// Build inventory for player based on initial items provided
 			this.BuildInventory();
 			// Assign player fireball spell
@@ -57,8 +58,11 @@ namespace DungeonGame {
     public void ShowInventory(NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.DarkGray;
       Console.WriteLine("Your inventory contains:\n");
-      foreach (IRoomInteraction item in this.Inventory) {
-        Console.WriteLine(string.Join(", ", item.GetName()));
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			foreach (IRoomInteraction item in this.Inventory) {
+				var itemTitle = item.GetName().ToString();
+				itemTitle = textInfo.ToTitleCase(itemTitle);
+				Console.WriteLine(itemTitle);
       }
       Console.WriteLine("Gold: " + this.Gold + " coins.");
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace DungeonGame {
   public class DungeonRoom : IRoom {
@@ -186,8 +187,11 @@ namespace DungeonGame {
 			Console.ForegroundColor = ConsoleColor.White;
 			this.RebuildRoomObjects();
 			if(RoomObjects.Count > 0) {
+				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (IRoomInteraction item in RoomObjects) {
-					Console.Write(string.Join(", ", item.GetName()));
+					var itemTitle = item.GetName().ToString();
+					itemTitle = textInfo.ToTitleCase(itemTitle);
+					Console.Write(string.Join(", ", itemTitle));
 				}
 			}
 			else {
@@ -210,6 +214,8 @@ namespace DungeonGame {
 				}
 				catch(InvalidOperationException) {
 				}
+				Monster.MonsterItems.Clear();
+				Monster.Gold = 0;
 				this.Commands.Remove("[L]oot [C]orpse");
 				Monster.WasLooted = true;
 				Console.WriteLine("You looted {0} gold coins from the {1}!", goldLooted, this.Monster.Name);

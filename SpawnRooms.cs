@@ -38,7 +38,7 @@ namespace DungeonGame {
 				1, // Y coordinate
 				0, // Z coordinate
 				new Monster(
-					"A rotting zombie", // Name
+					"rotting zombie", // Name
 					"A rotting corpse stares at you, it's face frozen in a look of indifference to the fact a bug is crawling out of it's empty eye sockets. " +
 					"In one hand, it drags a weapon against the ground, as it stares at you menacingly. Bones, muscle and tendons are visible through many " +
 					"gashes and tears in it's rotting skin.", // Description
@@ -46,7 +46,7 @@ namespace DungeonGame {
 					10, // Gold
 					80, // Max HP
 					500, // Experience provided
-					new Weapon("A notched axe", 25, 10, 1.2)), // Weapon for monster
+					new Weapon("notched axe", 25, 10, 1.2)), // Weapon for monster
 				false, // goNorth bool
 				true, // goSouth bool
 				false, // goEast bool
@@ -69,7 +69,7 @@ namespace DungeonGame {
 				2, // Y coordinate
 				0, // Z coordinate
 				new Monster(
-					"A huge spider", // Name
+					"huge spider", // Name
 					"A huge black spider about the size of a large bear skitters down the corridor towards you. " +
 					"Coarse hair sticks out from every direction on it's thorax and legs. It's many eyes stare at " +
 					"you, legs ending in sharp claws carrying it closer as it hisses hungrily.", // Description
@@ -77,8 +77,8 @@ namespace DungeonGame {
 					0, // Gold
 					160, // Max HP
 					1000, // Experience provided
-					new Weapon("Venomous fang", 35, 25, 1.2), // Weapon for monster
-					new Item("Large venom sac", 15) // Loot item
+					new Weapon("venomous fang", 35, 25, 1.2), // Weapon for monster
+					new Item("large venom sac", 15) // Loot item
 					), 
 				false, // goNorth bool
 				false, // goSouth bool
