@@ -30,7 +30,7 @@ namespace DungeonGame {
 									spawnedRooms[roomIndex].AttackMonster(player, inputParse);
 								}
 								catch (Exception) {
-								Console.WriteLine("An error has occurred.");
+									Console.WriteLine("An error has occurred.");
 								}
 							}
 						}
@@ -71,15 +71,15 @@ namespace DungeonGame {
 							if (inputParse[1] != null) {
 								try {
 									spawnedRooms[roomIndex].LootCorpse(player, inputParse);
-									}
+								}
 								catch (Exception) {
 									Console.WriteLine("An error has occurred.");
-									}
 								}
 							}
+						}
 						catch (IndexOutOfRangeException) {
 							Console.WriteLine("Loot what?");
-							}
+						}
 						break;
 					case "drink":
 						if (inputParse.Last() == "potion") {
