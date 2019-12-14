@@ -7,7 +7,7 @@ namespace DungeonGame {
       // Game loading commands
 			Console.ForegroundColor = ConsoleColor.Gray;
       Helper.GameIntro();
-      var player = new NewPlayer(Helper.FetchPlayerName());
+      var player = new Player(Helper.FetchPlayerName());
 			var spawnedRooms = new SpawnRooms().RetrieveSpawnRooms();
       // Set initial room condition
 			// On loading game, display room that player starts in
@@ -22,21 +22,26 @@ namespace DungeonGame {
 				var inputParse = input.Split(' ');
         // Obtain player command and process command
         switch (inputParse[0]) {
+					case "a":
           case "attack":
 						try {
 							if (inputParse[1] != null) {
-								try {
+/*								try {*/
 									spawnedRooms[roomIndex].AttackMonster(player, inputParse);
-								}
+/*								}
 								catch (Exception) {
 									Console.WriteLine("An error has occurred.");
-								}
+								}*/
 							}
 						}
 						catch (IndexOutOfRangeException) {
 							Console.WriteLine("You can't attack that.");
 						}
             break;
+					case "equip":
+					case "unequip":
+						player.EquipItem(inputParse);
+						break;
           case "i":
 					case "inventory":
 						player.ShowInventory(player);

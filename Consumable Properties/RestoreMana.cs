@@ -5,7 +5,7 @@
 		public RestoreMana(int amount) {
 			this.RestoreManaAmt = amount;
 		}
-		public void RestoreManaPlayer(NewPlayer player) {
+		public void RestoreManaPlayer(Player player) {
 			player.ManaPoints += RestoreManaAmt;
 			if (player.ManaPoints > player.MaxManaPoints) {
 				player.ManaPoints = player.MaxManaPoints;

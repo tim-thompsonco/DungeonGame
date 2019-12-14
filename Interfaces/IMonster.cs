@@ -17,6 +17,6 @@ namespace DungeonGame {
 		void DisplayStats();
     int Attack();
 		int CheckArmorRating();
-		int ArmorRating(NewPlayer player);
+		int ArmorRating(Player player);
 	}
 }

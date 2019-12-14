@@ -13,7 +13,7 @@ namespace DungeonGame {
     public bool OnFire { get; set; } = false;
     public bool WasLooted { get; set; } = false;
 		public List<IEquipment> MonsterItems { get; set; } = new List<IEquipment>();
-		public Item Item;
+		public Loot Item;
 		public Weapon Monster_Weapon;
 		public Armor Monster_Chest_Armor;
 		public Armor Monster_Head_Armor;
@@ -30,7 +30,7 @@ namespace DungeonGame {
       this.Monster_Weapon = weapon;
 			this.MonsterItems.Add((DungeonGame.IEquipment)this.Monster_Weapon);
 		}
-		public Monster(string name, string desc, int level, int GoldCoins, int MaxHP, int ExpProvided, Weapon weapon, Item item) {
+		public Monster(string name, string desc, int level, int GoldCoins, int MaxHP, int ExpProvided, Weapon weapon, Loot item) {
 			this.Name = name;
 			this.Desc = desc;
 			this.Level = level;
@@ -57,14 +57,14 @@ namespace DungeonGame {
 			this.MonsterItems.Add((DungeonGame.IEquipment)this.Monster_Chest_Armor);
 		}
 
-		public virtual void TakeDamage(int weaponDamage) {
+		public void TakeDamage(int weaponDamage) {
       HitPoints -= weaponDamage;
     }
-    public virtual void DisplayStats() {
+    public void DisplayStats() {
       Console.WriteLine("Opponent HP: {0} / {1}", HitPoints, MaxHitPoints);
       Console.WriteLine("==================================================");
     }
-    public virtual int Attack() {
+    public int Attack() {
       return Monster_Weapon.Attack();
     }
 		public int CheckArmorRating() {
@@ -92,7 +92,7 @@ namespace DungeonGame {
 			}
 			return totalArmorRating;
 		}
-		public int ArmorRating(NewPlayer player) {
+		public int ArmorRating(Player player) {
 			var totalArmorRating = CheckArmorRating();
 			var levelDiff = player.Level - this.Level;
 			var armorMultiplier = 1.00 + (-(double)levelDiff / 10);

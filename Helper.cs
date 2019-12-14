@@ -16,7 +16,7 @@ namespace DungeonGame {
     }
 		public static void GameIntro() {
 			Console.WriteLine(
-				"Welcome to Dungeon Game! This is a text-based dungeon crawler game where you can fight monsters, get loot " +
+				"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot " +
 				"and explore dungeons. Stuff you've probably done a million times already across various RPG games.\n");
 			Console.WriteLine(
 				"Commands: Players may move in any direction of the game using a shortkey or the full direction name. " +
@@ -44,7 +44,7 @@ namespace DungeonGame {
       Console.ForegroundColor = ConsoleColor.DarkCyan;
       Console.WriteLine("Not a valid command.");
     }
-    public static int ChangeRoom(List<IRoom> roomList, NewPlayer player, int x, int y, int z) {
+    public static int ChangeRoom(List<IRoom> roomList, Player player, int x, int y, int z) {
 			player.X += x;
 			player.Y += y;
 			player.Z += z;
@@ -58,6 +58,12 @@ namespace DungeonGame {
 		}
 		public static void GameOver() {
 			Console.WriteLine("Game over.");
+		}
+		public static bool IsWearable(IEquipment item) {
+			if (item.GetType().Name == "Armor" || item.GetType().Name == "Weapon") {
+				return true;
+			}
+			return false;
 		}
   }
 }

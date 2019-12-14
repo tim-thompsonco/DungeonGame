@@ -46,7 +46,8 @@ namespace DungeonGame {
 					10, // Gold
 					80, // Max HP
 					100, // Experience provided
-					new Weapon("notched axe", 25, 10, 1.2, true)),
+					new Weapon("notched axe", 25, 10, 1.2, true),
+					new Armor("shiny boneplate", Armor.ArmorSlot.Chest, 15, 10, 20, true)),
 				false, // goNorth bool
 				true, // goSouth bool
 				false, // goEast bool
@@ -77,7 +78,7 @@ namespace DungeonGame {
 					100, // Max HP
 					120, // Experience provided
 					new Weapon("venomous fang", 30, 25, 1.2, true),
-					new Item("large venom sac", 15) // Loot item
+					new Loot("large venom sac", 15) // Loot item
 					), 
 				true, // goNorth bool
 				false, // goSouth bool

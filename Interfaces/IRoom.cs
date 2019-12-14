@@ -16,8 +16,8 @@
 		int Y { get; set; }
 		int Z { get; set; }
 
-    void AttackMonster(NewPlayer player, string[] input);
-		void LootCorpse(NewPlayer player, string[] input);
+    void AttackMonster(Player player, string[] input);
+		void LootCorpse(Player player, string[] input);
 		void RebuildRoomObjects();
     void ShowDirections();
     void ShowCommands();
