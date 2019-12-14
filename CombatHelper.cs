@@ -6,7 +6,7 @@ namespace DungeonGame {
 		public String[] Commands { get; set; } = new String[2] {
 		"[F]ight", "[C]ast [F]ireball" };
 
-		public bool SingleCombat(IMonster opponent, NewPlayer player) {
+		public bool SingleCombat(IMonster opponent, Player player) {
       Console.ForegroundColor = ConsoleColor.Green;
       Console.WriteLine("{0}, you have encountered a {1}. Time to fight!",
         player.Name, opponent.Name);
@@ -111,7 +111,7 @@ namespace DungeonGame {
         }
       }
     }
-    public void SingleCombatWin(IMonster opponent, NewPlayer player) {
+    public void SingleCombatWin(IMonster opponent, Player player) {
       Console.ForegroundColor = ConsoleColor.Green;
       Console.WriteLine("You have defeated the {0}!", opponent.Name);
 			foreach(var loot in opponent.MonsterItems) {

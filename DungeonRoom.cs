@@ -99,7 +99,7 @@ namespace DungeonGame {
 			this.GoDown = goDown;
 			}
 
-		public void AttackMonster(NewPlayer player, string[] input) {
+		public void AttackMonster(Player player, string[] input) {
 			var inputString = new StringBuilder();
 			for (int i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
@@ -203,7 +203,7 @@ namespace DungeonGame {
 			Console.WriteLine("."); // Add period at end of list of objects in room
       this.ShowDirections();
     }
-		public void LootCorpse(NewPlayer player, string[] input) {
+		public void LootCorpse(Player player, string[] input) {
 			var inputString = new StringBuilder();
 			for (int i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);

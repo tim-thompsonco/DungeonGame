@@ -1,10 +1,10 @@
 ﻿namespace DungeonGame {
-	public class Item : IEquipment {
+	public class Loot : IEquipment {
 		public string Name { get; }
 		public bool Equipped { get; set; }
 		public int ItemValue { get; }
 
-		public Item(string name, int itemValue) {
+		public Loot(string name, int itemValue) {
 			this.Name = name;
 			this.ItemValue = itemValue;
 		}

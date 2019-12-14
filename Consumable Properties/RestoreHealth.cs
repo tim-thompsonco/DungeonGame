@@ -5,7 +5,7 @@
 		public RestoreHealth(int amount) {
 			this.RestoreHealthAmt = amount;
 		}
-		public void RestoreHealthPlayer(NewPlayer player) {
+		public void RestoreHealthPlayer(Player player) {
 			player.HitPoints += RestoreHealthAmt;
 			if (player.HitPoints > player.MaxHitPoints) {
 				player.HitPoints = player.MaxHitPoints;
