@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace DungeonGame {
   class MainClass {
@@ -19,51 +19,73 @@ namespace DungeonGame {
         player.DisplayPlayerStats();
         spawnedRooms[roomIndex].ShowCommands();
         var input = Helper.GetFormattedInput();
+				var inputParse = input.Split(' ');
         // Obtain player command and process command
-        switch (input) {
-          case "f":
-            spawnedRooms[roomIndex].MonsterFight(player);
+        switch (inputParse[0]) {
+          case "attack":
+						try {
+							if (inputParse[1] != null) {
+								try {
+									spawnedRooms[roomIndex].AttackMonster(player, inputParse);
+								}
+								catch (Exception) {
+									Console.WriteLine("An error has occurred.");
+								}
+							}
+						}
+						catch (IndexOutOfRangeException) {
+							Console.WriteLine("You can't attack that.");
+						}
             break;
           case "i":
-            player.ShowInventory(player);
-            break;
-          case "q":
-            Helper.GameOver();
-            return;
-          case "l":
-            spawnedRooms[roomIndex].LookRoom();
-            break;
-          case "lc":
-            spawnedRooms[roomIndex].LootCorpse(player);
-            break;
-					case "lm":
-						spawnedRooms[roomIndex].LookMonster();
+					case "inventory":
+						player.ShowInventory(player);
 						break;
-					case "dhp":
-						if (player.HealthPotion.Quantity >= 1) {
-							player.HealthPotion.RestoreHealth.RestoreHealthPlayer(player);
-							Console.ForegroundColor = ConsoleColor.Red;
-							Console.WriteLine("You drank a potion and replenished {0} health.", player.HealthPotion.RestoreHealth.RestoreHealthAmt);
-							player.HealthPotion.Quantity -= 1;
-							player.Inventory.Remove((DungeonGame.IEquipment)player.HealthPotion);
+					case "q":
+					case "quit":
+						Helper.GameOver();
+						return;
+					case "l":
+					case "look":
+						try {
+							if (inputParse[1] != null) {
+								try {
+									spawnedRooms[roomIndex].LookMonster(inputParse);
+								}
+								catch (Exception) {
+									Console.WriteLine("An error has occurred.");
+								}
+							}
+						}
+						catch(IndexOutOfRangeException) {
+							spawnedRooms[roomIndex].LookRoom();
+						}
+            break;
+          case "loot":
+						try {
+							if (inputParse[1] != null) {
+								try {
+									spawnedRooms[roomIndex].LootCorpse(player, inputParse);
+									}
+								catch (Exception) {
+									Console.WriteLine("An error has occurred.");
+									}
+								}
+							}
+						catch (IndexOutOfRangeException) {
+							Console.WriteLine("Loot what?");
+							}
+						break;
+					case "drink":
+						if (inputParse.Last() == "potion") {
+							player.DrinkPotion(inputParse);
 						}
 						else {
-							Console.WriteLine("You don't have any health potions!");
-						}
-						break;
-					case "dmp":
-						if (player.ManaPotion.Quantity >= 1) {
-							player.ManaPotion.RestoreMana.RestoreManaPlayer(player);
-							Console.ForegroundColor = ConsoleColor.Red;
-							Console.WriteLine("You drank a potion and replenished {0} mana.", player.ManaPotion.RestoreMana.RestoreManaAmt);
-							player.ManaPotion.Quantity -= 1;
-							player.Inventory.Remove((DungeonGame.IEquipment)player.ManaPotion);
-						}
-						else {
-							Console.WriteLine("You don't have any mana potions!");
+							Console.WriteLine("You can't drink that!");
 						}
 						break;
 					case "n":
+					case "north":
             if(spawnedRooms[roomIndex].GoNorth) {
 							try {
                 roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 1, 0);
@@ -78,6 +100,7 @@ namespace DungeonGame {
 						}
 						break;
 					case "s":
+					case "south":
 						if(spawnedRooms[roomIndex].GoSouth) {
 							try {
                 roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, -1, 0);
@@ -92,6 +115,7 @@ namespace DungeonGame {
 						}
 						break;
 					case "e":
+					case "east":
 						if (spawnedRooms[roomIndex].GoEast) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 1, 0, 0);
@@ -106,6 +130,7 @@ namespace DungeonGame {
 						}
 						break;
 					case "w":
+					case "west":
 						if (spawnedRooms[roomIndex].GoWest) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, -1, 0, 0);
@@ -120,6 +145,7 @@ namespace DungeonGame {
 						}
 						break;
 					case "ne":
+					case "northeast":
 						if (spawnedRooms[roomIndex].GoNorthEast) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 1, 1, 0);
@@ -134,6 +160,7 @@ namespace DungeonGame {
 						}
 						break;
 					case "nw":
+					case "northwest":
 						if (spawnedRooms[roomIndex].GoNorthWest) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, -1, 1, 0);
@@ -148,6 +175,7 @@ namespace DungeonGame {
 						}
 						break;
 					case "se":
+					case "southeast":
 						if (spawnedRooms[roomIndex].GoSouthEast) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 1, -1, 0);
@@ -162,6 +190,7 @@ namespace DungeonGame {
 						}
 						break;
 					case "sw":
+					case "southwest":
 						if (spawnedRooms[roomIndex].GoSouthWest) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, -1, -1, 0);
@@ -176,6 +205,7 @@ namespace DungeonGame {
 						}
 						break;
 					case "u":
+					case "up":
 						if (spawnedRooms[roomIndex].GoUp) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 1);
@@ -190,6 +220,7 @@ namespace DungeonGame {
 						}
 						break;
 					case "d":
+					case "down":
 						if (spawnedRooms[roomIndex].GoDown) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, -1);

@@ -133,5 +133,36 @@ namespace DungeonGame {
 				return 0;
 			}
 		}
+		public void DrinkPotion(string[] userInput) {
+			switch(userInput[1]) {
+				case "health":
+					if (this.HealthPotion.Quantity >= 1) {
+						this.HealthPotion.RestoreHealth.RestoreHealthPlayer(this);
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine("You drank a potion and replenished {0} health.", this.HealthPotion.RestoreHealth.RestoreHealthAmt);
+						this.HealthPotion.Quantity -= 1;
+						this.Inventory.Remove((DungeonGame.IEquipment)this.HealthPotion);
+					}
+					else {
+						Console.WriteLine("You don't have any health potions!");
+					}
+					break;
+				case "mana":
+					if (this.ManaPotion.Quantity >= 1) {
+						this.ManaPotion.RestoreMana.RestoreManaPlayer(this);
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine("You drank a potion and replenished {0} mana.", this.ManaPotion.RestoreMana.RestoreManaAmt);
+						this.ManaPotion.Quantity -= 1;
+						this.Inventory.Remove((DungeonGame.IEquipment)this.ManaPotion);
+					}
+					else {
+						Console.WriteLine("You don't have any mana potions!");
+					}
+					break;
+				default:
+					Console.WriteLine("What potion did you want to drink?");
+					break;
+			}
+		}
 	}
 }

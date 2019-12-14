@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Linq;
 
 namespace DungeonGame {
   public class CombatHelper {
-		public String[] Commands { get; set; } = new String[4] {
-		"[A]ttack", "[C]ast [F]ireball", "[D]rink [H]ealth [P]otion", "[D]rink [M]ana [P]otion" };
+		public String[] Commands { get; set; } = new String[2] {
+		"[F]ight", "[C]ast [F]ireball" };
 
 		public bool SingleCombat(IMonster opponent, NewPlayer player) {
       Console.ForegroundColor = ConsoleColor.Green;
@@ -15,10 +16,12 @@ namespace DungeonGame {
 				Console.Write("Available Commands: ");
 				Console.WriteLine(String.Join(", ", this.Commands));
 				Helper.RequestCommand();
-        var input = Helper.GetFormattedInput();
-        Console.WriteLine(); // To add a blank space between the command and fight sequence
-        switch (input) {
-          case "a":
+				var input = Helper.GetFormattedInput();
+				var inputParse = input.Split(' ');
+				Console.WriteLine(); // To add a blank space between the command and fight sequence
+        switch (inputParse[0]) {
+          case "f":
+					case "fight":
             var attackDamage = player.Attack();
 						if (attackDamage - opponent.ArmorRating(player) < 0) {
 							Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -39,6 +42,7 @@ namespace DungeonGame {
             }
 						break;
 					case "cf":
+					case "cast fireball":
 						if(player.ManaPoints >= player.Player_Spell.ManaCost) {
 							player.ManaPoints -= player.Player_Spell.ManaCost;
 							attackDamage = player.Player_Spell.FireOffense.BlastDamage;
@@ -64,33 +68,17 @@ namespace DungeonGame {
 							Console.WriteLine("You do not have enough mana to cast that spell!");
 							continue;
 						}
-					case "dhp":
-						if(player.HealthPotion.Quantity >= 1) {
-							player.HealthPotion.RestoreHealth.RestoreHealthPlayer(player);
-							Console.ForegroundColor = ConsoleColor.Red;
-							Console.WriteLine("You drank a potion and replenished {0} health.", player.HealthPotion.RestoreHealth.RestoreHealthAmt);
-							player.HealthPotion.Quantity -= 1;
-							player.Inventory.Remove((DungeonGame.IEquipment)player.HealthPotion);
+					case "drink":
+						if (inputParse.Last() == "potion") {
+							player.DrinkPotion(inputParse);
 						}
 						else {
-							Console.WriteLine("You don't have any health potions!");
-						}
-						continue;
-					case "dmp":
-						if (player.ManaPotion.Quantity >= 1) {
-							player.ManaPotion.RestoreMana.RestoreManaPlayer(player);
-							Console.ForegroundColor = ConsoleColor.Red;
-							Console.WriteLine("You drank a potion and replenished {0} mana.", player.ManaPotion.RestoreMana.RestoreManaAmt);
-							player.ManaPotion.Quantity -= 1;
-							player.Inventory.Remove((DungeonGame.IEquipment)player.ManaPotion);
-						}
-						else {
-							Console.WriteLine("You don't have any mana potions!");
+							Console.WriteLine("You can't drink that!");
 						}
 						continue;
 					default:
             Helper.InvalidCommand();
-            break;
+						continue;
         }
 				if (opponent.OnFire) {
 					var burnDamage = player.Player_Spell.FireOffense.BurnDamage;
@@ -107,7 +95,6 @@ namespace DungeonGame {
 				if (attackDamageM - player.ArmorRating(opponent) < 0) {
 					Console.ForegroundColor = ConsoleColor.DarkRed;
 					Console.WriteLine("Your armor absorbed all of {0}'s attack!", opponent.Name);
-					attackDamageM = 0;
 				}
         else if (attackDamageM == 0) {
           Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -130,6 +117,8 @@ namespace DungeonGame {
 			foreach(var loot in opponent.MonsterItems) {
 				loot.Equipped = false;
 			}
+			opponent.Name = "Dead " + opponent.GetName();
+			opponent.Desc = "A corpse of a monster you killed.";
 			player.GainExperience(opponent.ExperienceProvided);
 			player.LevelUpCheck();
 		}

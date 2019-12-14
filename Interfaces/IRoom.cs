@@ -16,12 +16,12 @@
 		int Y { get; set; }
 		int Z { get; set; }
 
-    void MonsterFight(NewPlayer player);
-		void LootCorpse(NewPlayer player);
+    void AttackMonster(NewPlayer player, string[] input);
+		void LootCorpse(NewPlayer player, string[] input);
 		void RebuildRoomObjects();
     void ShowDirections();
     void ShowCommands();
     void LookRoom();
-		void LookMonster();
+		void LookMonster(string[] input);
   }
 }
