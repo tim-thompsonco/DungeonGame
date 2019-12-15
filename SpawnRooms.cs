@@ -58,7 +58,7 @@ namespace DungeonGame {
 				true, // goSouth bool
 				false, // goEast bool
 				false, // goWest bool
-				false, // goNorthWest bool
+				true, // goNorthWest bool
 				false, // goSouthWest bool
 				true, // goNorthEast bool
 				false, // goSouthEast bool
@@ -205,14 +205,167 @@ namespace DungeonGame {
 				false, // goEast bool
 				false, // goWest bool
 				false, // goNorthWest bool
+				true, // goSouthWest bool
+				false, // goNorthEast bool
+				true, // goSouthEast bool
+				false, // goUp bool
+				true); // goDown bool
+			this.SpawnedRooms.Add(room104);
+			var room105 = new DungeonRoom(
+				"Corridor", // Name
+				"You are at the end of a corridor carved out of smooth rock approximately 6 feet wide and 10 feet high. " +
+				"Torches in holders along the wall illuminate the hallway. The corridor ends in a pathway leading to the " +
+				"west, where the other smooth rock platform that you saw previously is.", // Description
+				-1, // X coordinate
+				3, // Y coordinate
+				0, // Z coordinate
+				new Monster(
+					"skeleton warrior", // Name
+					"A skeleton stands in front of you. His bones look worn and damaged from years of fighting. A ghastly " +
+					"yellow glow surrounds him, which is the only indication of the magic that must exist to reanimate this " +
+					"undead warrior. His chest and ribcage are fused together in a single, solid piece of armor and he raises " +
+					"a sword menacingly towards you.", // Description
+					2, // Level
+					15, // Gold
+					100, // Max HP
+					120, // Experience provided
+					new Weapon(
+						"dull sword", // Name
+						25, // Regular damage
+						25, // Item value
+						1.2, // Crit multiplier
+						true // Equipped bool
+						),
+					new Armor(
+						"bony chestplate", // Name
+						Armor.ArmorSlot.Chest, // Armor slot
+						10, // Item value
+						5, // Low end of armor value range
+						10, // High end of armor value range
+						true // Equipped bool
+						),
+					new Consumable(
+						"minor health potion", // Name
+						3, // Item value
+						Consumable.PotionType.Health, // Consumable type
+						50 // Amount that consumable affects, IE restores 50 health if health potion
+						)
+					),
+				false, // goNorth bool
+				true, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				true, // goNorthEast bool
+				false, // goSouthEast bool
+				false, // goUp bool
+				false); // goDown bool
+			this.SpawnedRooms.Add(room105);
+			var room106 = new DungeonRoom(
+				"Corridor", // Name
+				"You are at the start of a corridor carved out of smooth rock approximately 6 feet wide and 10 feet high. " +
+				"Torches in holders along the wall illuminate the hallway. The corridor stretches on for an unknown distance, " +
+				"as the light from the torches cannot penetrate further than about 20 feet ahead. A dark shape skitters from " +
+				"the end of the hallway towards you.", // Description
+				-1, // X coordinate
+				2, // Y coordinate
+				0, // Z coordinate
+				new Monster(
+					"huge spider", // Name
+					"A huge black spider about the size of a large bear skitters down the corridor towards you. " +
+					"Coarse hair sticks out from every direction on it's thorax and legs. It's many eyes stare at " +
+					"you, legs ending in sharp claws carrying it closer as it hisses hungrily.", // Description
+					2, // Level
+					0, // Gold
+					100, // Max HP
+					120, // Experience provided
+					new Weapon(
+						"venomous fang", // Name
+						30, // Regular damage
+						25, // Item value
+						1.2, // Crit multiplier
+						true // Equipped bool
+						),
+					new Loot(
+						"large venom sac", // Name
+						15 // Item value
+						)
+					),
+				true, // goNorth bool
+				false, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
 				false, // goSouthWest bool
 				false, // goNorthEast bool
 				true, // goSouthEast bool
 				false, // goUp bool
 				false); // goDown bool
-			this.SpawnedRooms.Add(room104);
+			this.SpawnedRooms.Add(room106);
+			var room107 = new DungeonRoom(
+				"Pathway to Sunken Pit", // Name
+				"You walk down an incline of smooth rock down a pathway to arrive at a sunken pit. You can see the other platform " +
+				"above you on the other side of the cavern. There is almost complete darkness in front of you, with no toches  " +
+				"lighting the way as before. A large shape seems to be pacing back and forth in the shadows but you can't make " +
+				"out many details unless you walk closer.", // Description
+				0, // X coordinate
+				4, // Y coordinate
+				-1, // Z coordinate
+				false, // goNorth bool
+				true, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				false, // goNorthEast bool
+				false, // goSouthEast bool
+				true, // goUp bool
+				false); // goDown bool
+			this.SpawnedRooms.Add(room107);
+			var room108 = new DungeonRoom(
+				"Sunken Pit", // Name
+				"You are at the bottom of the downward inclined pathway and are standing in a pit below the cavern pathways to " +
+				"either side above you. Bones and skulls adorn the pit, as you carefully pick your way in between them to avoid " +
+				"making a crunching sound. There is a red hue around the room yet it's not created by any torches or natural " +
+				"light. A deep growl emanates from somewhere in front of you, the sound vibrating the ground with it's force.", // Description
+				0, // X coordinate
+				3, // Y coordinate
+				-1, // Z coordinate
+				new Monster(
+					"horned demon", // Name
+					"A massive red demon stands before you with two horns sticking out of it's head. It's eyes glint " +
+					"yellow and a look of pure hatred adorns its face. Leathery wings spread out on either side of its " +
+					"back as it rises up to its full height of 8 feet and growls at you.", // Description
+					4, // Level
+					50, // Gold
+					200, // Max HP
+					250, // Experience provided
+					new Weapon(
+						"obsidian axe", // Name
+						35, // Regular damage
+						50, // Item value
+						1.2, // Crit multiplier
+						true // Equipped bool
+						),
+					new Loot(
+						"ruby", // Name
+						50 // Item value
+						)
+					),
+				true, // goNorth bool
+				false, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				false, // goNorthEast bool
+				false, // goSouthEast bool
+				false, // goUp bool
+				false); // goDown bool
+			this.SpawnedRooms.Add(room108);
 		}
-		// Method to retrieve room list
+
 		public List<IRoom> RetrieveSpawnRooms() {
 			return this.SpawnedRooms;
 		}

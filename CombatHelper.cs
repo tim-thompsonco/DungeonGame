@@ -3,8 +3,8 @@ using System.Linq;
 
 namespace DungeonGame {
   public class CombatHelper {
-		public String[] Commands { get; set; } = new String[2] {
-		"[F]ight", "[C]ast [F]ireball" };
+		public String[] Commands { get; set; } = new String[3] {
+		"[F]ight", "[I]nventory", "[C]ast [F]ireball" };
 
 		public bool SingleCombat(IMonster opponent, Player player) {
       Console.ForegroundColor = ConsoleColor.Green;
@@ -75,6 +75,10 @@ namespace DungeonGame {
 						else {
 							Console.WriteLine("You can't drink that!");
 						}
+						continue;
+					case "i":
+					case "inventory":
+						player.ShowInventory(player);
 						continue;
 					default:
             Helper.InvalidCommand();

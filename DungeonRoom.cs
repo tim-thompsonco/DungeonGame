@@ -23,6 +23,7 @@ namespace DungeonGame {
 		public int Z { get; set; }
     public List<string> Commands { get; set; } = new List<string>() {
       "[I]nventory",
+			"Save",
       "[Q]uit"};
     // List of objects in room (including monsters)
     private readonly List<IRoomInteraction> RoomObjects = new List<IRoomInteraction>();
