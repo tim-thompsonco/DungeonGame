@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace DungeonGame {
@@ -56,14 +58,33 @@ namespace DungeonGame {
 		public static void InvalidDirection() {
 			Console.WriteLine("You can't go that way!");
 		}
-		public static void GameOver() {
-			Console.WriteLine("Game over.");
+		public static bool QuitGame(Player player) {
+			Console.WriteLine("Are you sure you want to quit?");
+			var input = Helper.GetFormattedInput();
+			if (input == "yes" || input == "y") {
+				Console.WriteLine("Quitting the game.");
+				Helper.SaveGame(player);
+				return true;
+			}
+			return false;
 		}
 		public static bool IsWearable(IEquipment item) {
 			if (item.GetType().Name == "Armor" || item.GetType().Name == "Weapon") {
 				return true;
 			}
 			return false;
+		}
+		public static void SaveGame(Player player) {
+			var serializer = new Newtonsoft.Json.JsonSerializer();
+			serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
+			serializer.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+			serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
+			serializer.Formatting = Newtonsoft.Json.Formatting.Indented;
+			using (StreamWriter sw = new StreamWriter("savegame.json"))
+			using (var writer = new Newtonsoft.Json.JsonTextWriter(sw)) {
+				serializer.Serialize(writer, player, typeof(Player));
+			}
+			Console.WriteLine("Your game has been saved.");
 		}
   }
 }

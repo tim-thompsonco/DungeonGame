@@ -61,8 +61,11 @@ namespace DungeonGame {
 						break;
 					case "q":
 					case "quit":
-						Helper.GameOver();
-						return;
+						var quitConfirm = Helper.QuitGame(player);
+						if (quitConfirm == true) {
+							return;
+						}
+						break;
 					case "l":
 					case "look":
 						try {
@@ -103,16 +106,7 @@ namespace DungeonGame {
 						}
 						break;
 					case "save":
-						var serializer = new Newtonsoft.Json.JsonSerializer();
-						serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
-						serializer.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-						serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
-						serializer.Formatting = Newtonsoft.Json.Formatting.Indented;
-						using (StreamWriter sw = new StreamWriter("savegame.json"))
-						using (var writer = new Newtonsoft.Json.JsonTextWriter(sw)) {
-							serializer.Serialize(writer, player, typeof(Player));
-						}
-						Console.WriteLine("Your game has been saved.");
+						Helper.SaveGame(player);
 						break;
 					case "n":
 					case "north":
