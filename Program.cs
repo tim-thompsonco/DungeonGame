@@ -24,13 +24,14 @@ namespace DungeonGame {
         switch (inputParse[0]) {
 					case "a":
           case "attack":
+					case "kill":
 						try {
 							if (inputParse[1] != null) {
 								try {
 									spawnedRooms[roomIndex].AttackMonster(player, inputParse);
 								}
 								catch (Exception) {
-									Console.WriteLine("An error has occurred.");
+									Console.WriteLine("An error has occurred while attacking.");
 								}
 							}
 						}
@@ -58,7 +59,7 @@ namespace DungeonGame {
 									spawnedRooms[roomIndex].LookMonster(inputParse);
 								}
 								catch (Exception) {
-									Console.WriteLine("An error has occurred.");
+									Console.WriteLine("An error has occurred while looking.");
 								}
 							}
 						}
@@ -73,7 +74,7 @@ namespace DungeonGame {
 									spawnedRooms[roomIndex].LootCorpse(player, inputParse);
 								}
 								catch (Exception) {
-									Console.WriteLine("An error has occurred.");
+									Console.WriteLine("An error has occurred while looting.");
 								}
 							}
 						}

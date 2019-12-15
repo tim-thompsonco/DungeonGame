@@ -14,6 +14,7 @@ namespace DungeonGame {
     public bool WasLooted { get; set; } = false;
 		public List<IEquipment> MonsterItems { get; set; } = new List<IEquipment>();
 		public Loot Item;
+		public Consumable Consumable;
 		public Weapon Monster_Weapon;
 		public Armor Monster_Chest_Armor;
 		public Armor Monster_Head_Armor;
@@ -55,6 +56,21 @@ namespace DungeonGame {
 			this.Monster_Chest_Armor = armor;
 			this.MonsterItems.Add((DungeonGame.IEquipment)this.Monster_Weapon);
 			this.MonsterItems.Add((DungeonGame.IEquipment)this.Monster_Chest_Armor);
+		}
+		public Monster(string name, string desc, int level, int GoldCoins, int MaxHP, int ExpProvided, Weapon weapon, Armor armor, Consumable consumable) {
+			this.Name = name;
+			this.Desc = desc;
+			this.Level = level;
+			this.Gold = GoldCoins;
+			this.MaxHitPoints = MaxHP;
+			this.HitPoints = MaxHP;
+			this.ExperienceProvided = ExpProvided;
+			this.Monster_Weapon = weapon;
+			this.Monster_Chest_Armor = armor;
+			this.Consumable = consumable;
+			this.MonsterItems.Add((DungeonGame.IEquipment)this.Monster_Weapon);
+			this.MonsterItems.Add((DungeonGame.IEquipment)this.Monster_Chest_Armor);
+			this.MonsterItems.Add((DungeonGame.IEquipment)this.Consumable);
 		}
 
 		public void TakeDamage(int weaponDamage) {

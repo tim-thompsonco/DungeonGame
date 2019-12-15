@@ -22,18 +22,17 @@ namespace DungeonGame {
     private Armor Player_Legs_Armor;
 		private Weapon Player_Weapon;
 		public Spell Player_Spell;
-		public Consumable HealthPotion;
-		public Consumable ManaPotion;
+		public List<Consumable> Consumables { get; set; } = new List<Consumable>();
 		public List<IEquipment> Inventory { get; set; } = new List<IEquipment>();
 
     public Player (string name) {
 			this.Name = name;
 			this.Player_Weapon = new Weapon("bronze sword", 25, 25, 1.2, true);
-			this.Player_Chest_Armor = new Armor("bronze chestplate", Armor.ArmorSlot.Chest, 35, 5, 15, true);
-			this.Player_Head_Armor = new Armor("bronze helmet", Armor.ArmorSlot.Head, 12, 1, 5, true);
-			this.Player_Legs_Armor = new Armor("bronze legplates", Armor.ArmorSlot.Legs, 20, 3, 8, true);
-			this.HealthPotion = new Consumable("minor health potion", 3, Consumable.PotionType.Health, 50);
-			this.ManaPotion = new Consumable("minor mana potion", 3, Consumable.PotionType.Mana, 50);
+			this.Player_Chest_Armor = new Armor("bronze chestplate", Armor.ArmorSlot.Chest, 35, 10, 20, true);
+			this.Player_Head_Armor = new Armor("bronze helmet", Armor.ArmorSlot.Head, 12, 3, 7, true);
+			this.Player_Legs_Armor = new Armor("bronze legplates", Armor.ArmorSlot.Legs, 20, 5, 10, true);
+			this.Consumables.Add(new Consumable("minor health potion", 3, Consumable.PotionType.Health, 50));
+			this.Consumables.Add(new Consumable("minor mana potion", 3, Consumable.PotionType.Mana, 50));
 			this.BuildInventory();
 			this.Player_Spell = new Spell("Fireball", 50, 0, 1);
 		}
@@ -43,10 +42,11 @@ namespace DungeonGame {
       this.Inventory.Add((DungeonGame.IEquipment)this.Player_Head_Armor);
       this.Inventory.Add((DungeonGame.IEquipment)this.Player_Legs_Armor);
       this.Inventory.Add((DungeonGame.IEquipment)this.Player_Weapon);
-			this.Inventory.Add((DungeonGame.IEquipment)this.HealthPotion);
-			this.Inventory.Add((DungeonGame.IEquipment)this.ManaPotion);
-			}
+			this.Inventory.AddRange(this.Consumables);
+		}
     public void ShowInventory(Player player) {
+			this.Inventory.Clear();
+			this.BuildInventory();
       Console.ForegroundColor = ConsoleColor.DarkGray;
       Console.WriteLine("Your inventory contains:\n");
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
@@ -134,26 +134,27 @@ namespace DungeonGame {
 			return 5;
 		}
 		public void DrinkPotion(string[] userInput) {
-			switch(userInput[1]) {
+			var index = 0;
+			switch (userInput[1]) {
 				case "health":
-					if (this.HealthPotion.Quantity >= 1) {
-						this.HealthPotion.RestoreHealth.RestoreHealthPlayer(this);
+					index = Consumables.FindIndex(f => f.PotionCategory.ToString() == "Health");
+					if (index != -1) {
+						Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
 						Console.ForegroundColor = ConsoleColor.Red;
-						Console.WriteLine("You drank a potion and replenished {0} health.", this.HealthPotion.RestoreHealth.RestoreHealthAmt);
-						this.HealthPotion.Quantity -= 1;
-						this.Inventory.Remove((DungeonGame.IEquipment)this.HealthPotion);
+						Console.WriteLine("You drank a potion and replenished {0} health.", Consumables[index].RestoreHealth.RestoreHealthAmt);
+						Consumables.RemoveAt(index);
 					}
 					else {
 						Console.WriteLine("You don't have any health potions!");
 					}
 					break;
 				case "mana":
-					if (this.ManaPotion.Quantity >= 1) {
-						this.ManaPotion.RestoreMana.RestoreManaPlayer(this);
+					index = Consumables.FindIndex(f => f.PotionCategory.ToString() == "Mana");
+					if (index != -1) {
+						Consumables[index].RestoreMana.RestoreManaPlayer(this);
 						Console.ForegroundColor = ConsoleColor.Red;
-						Console.WriteLine("You drank a potion and replenished {0} mana.", this.ManaPotion.RestoreMana.RestoreManaAmt);
-						this.ManaPotion.Quantity -= 1;
-						this.Inventory.Remove((DungeonGame.IEquipment)this.ManaPotion);
+						Console.WriteLine("You drank a potion and replenished {0} mana.", Consumables[index].RestoreMana.RestoreManaAmt);
+						Consumables.RemoveAt(index);
 					}
 					else {
 						Console.WriteLine("You don't have any mana potions!");

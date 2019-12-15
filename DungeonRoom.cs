@@ -28,7 +28,6 @@ namespace DungeonGame {
     private readonly List<IRoomInteraction> RoomObjects = new List<IRoomInteraction>();
     public IMonster Monster;
 
-    //Constructor without monster
     public DungeonRoom (
       string name,
       string desc,
@@ -62,7 +61,6 @@ namespace DungeonGame {
 			this.GoUp = goUp;
 			this.GoDown = goDown;
     }
-		//Constructor with monster
 		public DungeonRoom(
 			string name,
 			string desc,
@@ -97,7 +95,7 @@ namespace DungeonGame {
 			this.GoSouthEast = goSouthEast;
 			this.GoUp = goUp;
 			this.GoDown = goDown;
-			}
+		}
 
 		public void AttackMonster(Player player, string[] input) {
 			var inputString = new StringBuilder();
@@ -218,6 +216,10 @@ namespace DungeonGame {
 					Console.ForegroundColor = ConsoleColor.Green;
 					try {
 						foreach (var loot in Monster.MonsterItems) {
+							var itemType = loot.GetType().Name;
+							if (itemType == "Consumable") {
+								player.Consumables.Add((DungeonGame.Consumable)loot);
+							}
 							player.Inventory.Add(loot);
 							Console.WriteLine("You looted {0} from the {1}!", loot.GetName(), this.Monster.Name);
 						}
