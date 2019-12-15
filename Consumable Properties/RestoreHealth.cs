@@ -1,6 +1,6 @@
 ﻿namespace DungeonGame {
 	public class RestoreHealth {
-		public int RestoreHealthAmt { get; }
+		public int RestoreHealthAmt { get; set; }
 
 		public RestoreHealth(int amount) {
 			this.RestoreHealthAmt = amount;

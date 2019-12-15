@@ -216,11 +216,13 @@ namespace DungeonGame {
 					Console.ForegroundColor = ConsoleColor.Green;
 					try {
 						foreach (var loot in Monster.MonsterItems) {
-							var itemType = loot.GetType().Name;
-							if (itemType == "Consumable") {
+							var itemType = loot.GetType().FullName;
+							if (itemType == "DungeonGame.Consumable") {
 								player.Consumables.Add((DungeonGame.Consumable)loot);
 							}
-							player.Inventory.Add(loot);
+							else {
+								player.Inventory.Add(loot);
+							}
 							Console.WriteLine("You looted {0} from the {1}!", loot.GetName(), this.Monster.Name);
 						}
 					}

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace DungeonGame {
 	public class Player {
-		public string Name { get; }
+		public string Name { get; set; }
 		public int MaxHitPoints { get; set; } = 100;
 		public int MaxManaPoints { get; set; } = 100;
 		public int HitPoints { get; set; } = 100;
@@ -17,36 +18,35 @@ namespace DungeonGame {
     public int X { get; set; } = 0;
 		public int Y { get; set; } = 0;
 		public int Z { get; set; } = 0;
-    private Armor Player_Chest_Armor;
-    private Armor Player_Head_Armor;
-    private Armor Player_Legs_Armor;
-		private Weapon Player_Weapon;
-		public Spell Player_Spell;
-		public List<Consumable> Consumables { get; set; } = new List<Consumable>();
-		public List<IEquipment> Inventory { get; set; } = new List<IEquipment>();
+    private Armor Player_Chest_Armor { get; set; }
+    private Armor Player_Head_Armor { get; set; }
+    private Armor Player_Legs_Armor { get; set; }
+		private Weapon Player_Weapon { get; set; }
+		public Spell Player_Spell { get; set; }
+		public List<Consumable> Consumables { get; set; }
+		public List<IEquipment> Inventory { get; set; }
 
+		[JsonConstructor]
     public Player (string name) {
 			this.Name = name;
+			this.Consumables = new List<Consumable>();
+			this.Inventory = new List<IEquipment>();
 			this.Player_Weapon = new Weapon("bronze sword", 25, 25, 1.2, true);
 			this.Player_Chest_Armor = new Armor("bronze chestplate", Armor.ArmorSlot.Chest, 35, 10, 20, true);
 			this.Player_Head_Armor = new Armor("bronze helmet", Armor.ArmorSlot.Head, 12, 3, 7, true);
 			this.Player_Legs_Armor = new Armor("bronze legplates", Armor.ArmorSlot.Legs, 20, 5, 10, true);
 			this.Consumables.Add(new Consumable("minor health potion", 3, Consumable.PotionType.Health, 50));
 			this.Consumables.Add(new Consumable("minor mana potion", 3, Consumable.PotionType.Mana, 50));
-			this.BuildInventory();
 			this.Player_Spell = new Spell("Fireball", 50, 0, 1);
+			this.BuildInventory();
 		}
-
     public void BuildInventory() {
-      this.Inventory.Add((DungeonGame.IEquipment)this.Player_Chest_Armor);
-      this.Inventory.Add((DungeonGame.IEquipment)this.Player_Head_Armor);
-      this.Inventory.Add((DungeonGame.IEquipment)this.Player_Legs_Armor);
-      this.Inventory.Add((DungeonGame.IEquipment)this.Player_Weapon);
-			this.Inventory.AddRange(this.Consumables);
+			this.Inventory.Add(this.Player_Chest_Armor);
+			this.Inventory.Add(this.Player_Head_Armor);
+			this.Inventory.Add(this.Player_Legs_Armor);
+			this.Inventory.Add(this.Player_Weapon);
 		}
     public void ShowInventory(Player player) {
-			this.Inventory.Clear();
-			this.BuildInventory();
       Console.ForegroundColor = ConsoleColor.DarkGray;
       Console.WriteLine("Your inventory contains:\n");
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
@@ -63,7 +63,15 @@ namespace DungeonGame {
 				}
 				catch(NullReferenceException) {}
       }
-      Console.WriteLine("Gold: " + this.Gold + " coins.");
+			foreach (Consumable item in this.Consumables) {
+				try {
+					var itemTitle = item.GetName().ToString();
+					itemTitle = textInfo.ToTitleCase(itemTitle);
+					Console.WriteLine(itemTitle);
+				}
+				catch (NullReferenceException) { }
+			}
+			Console.WriteLine("Gold: " + this.Gold + " coins.");
     }
     public void LevelUpCheck() {
       if (this.Experience >= 500) {
@@ -118,7 +126,7 @@ namespace DungeonGame {
     public int ArmorRating(IMonster opponent) {
 			var totalArmorRating = CheckArmorRating();
 			var levelDiff = opponent.Level - this.Level;
-			var armorMultiplier = 1.00 + (-(double)levelDiff / 10);
+			var armorMultiplier = 1.00 + (-(double)levelDiff / 20);
 			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
     }
@@ -137,24 +145,24 @@ namespace DungeonGame {
 			var index = 0;
 			switch (userInput[1]) {
 				case "health":
-					index = Consumables.FindIndex(f => f.PotionCategory.ToString() == "Health");
+					index = this.Consumables.FindIndex(f => f.PotionCategory.ToString() == "Health");
 					if (index != -1) {
-						Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
+						this.Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
 						Console.ForegroundColor = ConsoleColor.Red;
-						Console.WriteLine("You drank a potion and replenished {0} health.", Consumables[index].RestoreHealth.RestoreHealthAmt);
-						Consumables.RemoveAt(index);
+						Console.WriteLine("You drank a potion and replenished {0} health.", this.Consumables[index].RestoreHealth.RestoreHealthAmt);
+						this.Consumables.RemoveAt(index);
 					}
 					else {
 						Console.WriteLine("You don't have any health potions!");
 					}
 					break;
 				case "mana":
-					index = Consumables.FindIndex(f => f.PotionCategory.ToString() == "Mana");
+					index = this.Consumables.FindIndex(f => f.PotionCategory.ToString() == "Mana");
 					if (index != -1) {
-						Consumables[index].RestoreMana.RestoreManaPlayer(this);
+						this.Consumables[index].RestoreMana.RestoreManaPlayer(this);
 						Console.ForegroundColor = ConsoleColor.Red;
-						Console.WriteLine("You drank a potion and replenished {0} mana.", Consumables[index].RestoreMana.RestoreManaAmt);
-						Consumables.RemoveAt(index);
+						Console.WriteLine("You drank a potion and replenished {0} mana.", this.Consumables[index].RestoreMana.RestoreManaAmt);
+						this.Consumables.RemoveAt(index);
 					}
 					else {
 						Console.WriteLine("You don't have any mana potions!");

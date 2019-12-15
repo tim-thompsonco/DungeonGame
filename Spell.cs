@@ -7,7 +7,7 @@ namespace DungeonGame {
 			Healing,
 			Defense
 		}
-		public string Name { get; }
+		public string Name { get; set; }
 		public int ManaCost { get; set; }
 		public int Level { get; set; }
 		public SpellType SpellCategory { get; set; }

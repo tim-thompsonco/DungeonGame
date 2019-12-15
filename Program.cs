@@ -1,4 +1,6 @@
+using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace DungeonGame {
@@ -7,12 +9,22 @@ namespace DungeonGame {
       // Game loading commands
 			Console.ForegroundColor = ConsoleColor.Gray;
       Helper.GameIntro();
-      var player = new Player(Helper.FetchPlayerName());
+			var player = new Player("placeholder");
+			try {
+				player = Newtonsoft.Json.JsonConvert.DeserializeObject<Player>(File.ReadAllText("savegame.json"), new Newtonsoft.Json.JsonSerializerSettings {
+					TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
+					NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
+				});
+			}
+			catch(FileNotFoundException) {
+				var playerName = Helper.FetchPlayerName();
+				player.Name = playerName;
+			}
 			var spawnedRooms = new SpawnRooms().RetrieveSpawnRooms();
-      // Set initial room condition
+			// Set initial room condition
 			// On loading game, display room that player starts in
-      // Begin game by putting player in room 100
-      var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0);
+			// Begin game by putting player in room 100
+			var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0);
       spawnedRooms[roomIndex].LookRoom();
       // While loop to continue obtaining input from player
       while (true) {
@@ -89,6 +101,18 @@ namespace DungeonGame {
 						else {
 							Console.WriteLine("You can't drink that!");
 						}
+						break;
+					case "save":
+						var serializer = new Newtonsoft.Json.JsonSerializer();
+						serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
+						serializer.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+						serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
+						serializer.Formatting = Newtonsoft.Json.Formatting.Indented;
+						using (StreamWriter sw = new StreamWriter("savegame.json"))
+						using (var writer = new Newtonsoft.Json.JsonTextWriter(sw)) {
+							serializer.Serialize(writer, player, typeof(Player));
+						}
+						Console.WriteLine("Your game has been saved.");
 						break;
 					case "n":
 					case "north":

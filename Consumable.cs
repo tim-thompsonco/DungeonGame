@@ -6,7 +6,7 @@
 		}
 		public string Name { get; set; }
 		public int Quantity { get; set; }
-		public int ItemValue { get; }
+		public int ItemValue { get; set;  }
 		public bool Equipped { get; set; }
 		public PotionType PotionCategory { get; set; }
 		public RestoreHealth RestoreHealth { get; set; }

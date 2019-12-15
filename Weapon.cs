@@ -3,10 +3,10 @@ using System;
 namespace DungeonGame {
 	public class Weapon : IEquipment {
     private readonly Random RndGenerate = new Random();
-    public string Name { get; }
-    public int RegDamage { get; }
-		public int ItemValue { get; }
-		public double CritMultiplier { get; }
+    public string Name { get; set; }
+    public int RegDamage { get; set; }
+		public int ItemValue { get; set; }
+		public double CritMultiplier { get; set; }
 		public bool Equipped { get; set; }
 
 		public Weapon(string name, int regDamage, int itemValue, double critMultiplier, bool equipped) {

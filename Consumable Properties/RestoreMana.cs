@@ -1,6 +1,6 @@
 ﻿namespace DungeonGame {
 	public class RestoreMana {
-		public int RestoreManaAmt { get; }
+		public int RestoreManaAmt { get; set; }
 
 		public RestoreMana(int amount) {
 			this.RestoreManaAmt = amount;

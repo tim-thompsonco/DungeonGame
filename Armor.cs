@@ -8,10 +8,10 @@ namespace DungeonGame {
 			Legs
 		}
 		private static readonly Random RndGenerate = new Random();
-    public string Name { get; }
+    public string Name { get; set; }
 		public ArmorSlot ArmorCategory { get; set; }
-		public int ItemValue { get; }
-		public int ArmorRating { get; }
+		public int ItemValue { get; set; }
+		public int ArmorRating { get; set; }
 		public bool Equipped { get; set; }
 
 		public Armor(
