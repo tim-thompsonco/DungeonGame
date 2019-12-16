@@ -48,7 +48,8 @@ namespace DungeonGame {
 					100, // Experience provided
 					new Weapon(
 						"notched axe", // Name
-						25, // Regular damage
+						15, // Low end of damage value range
+						25, // High end of damage value range
 						10, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
@@ -85,7 +86,8 @@ namespace DungeonGame {
 					120, // Experience provided
 					new Weapon(
 						"venomous fang", // Name
-						30, // Regular damage
+						20, // Low end of damage value range
+						30, // High end of damage value range
 						25, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
@@ -126,7 +128,8 @@ namespace DungeonGame {
 					120, // Experience provided
 					new Weapon(
 						"dull sword", // Name
-						25, // Regular damage
+						16, // Low end of damage value range
+						23, // High end of damage value range
 						25, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
@@ -180,14 +183,15 @@ namespace DungeonGame {
 					160, // Experience provided
 					new Weapon(
 						"iron longsword", // Name
-						28, // Regular damage
+						22, // Low end of damage value range
+						28, // High end of damage value range
 						30, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
 						),
 					new Armor(
 						"iron helmet", // Name
-						Armor.ArmorSlot.Chest, // Armor slot
+						Armor.ArmorSlot.Head, // Armor slot
 						15, // Item value
 						8, // Low end of armor value range
 						12, // High end of armor value range
@@ -231,7 +235,8 @@ namespace DungeonGame {
 					120, // Experience provided
 					new Weapon(
 						"dull sword", // Name
-						25, // Regular damage
+						16, // Low end of damage value range
+						23, // High end of damage value range
 						25, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
@@ -282,7 +287,8 @@ namespace DungeonGame {
 					120, // Experience provided
 					new Weapon(
 						"venomous fang", // Name
-						30, // Regular damage
+						20,  // Low end of damage value range
+						30, // High end of damage value range
 						25, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
@@ -343,7 +349,8 @@ namespace DungeonGame {
 					250, // Experience provided
 					new Weapon(
 						"obsidian axe", // Name
-						35, // Regular damage
+						30, // Low end of damage value range
+						36, // High end of damage value range
 						50, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool

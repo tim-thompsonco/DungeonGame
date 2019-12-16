@@ -31,7 +31,7 @@ namespace DungeonGame {
 			this.Name = name;
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();
-			this.Player_Weapon = new Weapon("bronze sword", 25, 25, 1.2, true);
+			this.Player_Weapon = new Weapon("bronze sword", 22, 28, 25, 1.2, true);
 			this.Player_Chest_Armor = new Armor("bronze chestplate", Armor.ArmorSlot.Chest, 35, 10, 20, true);
 			this.Player_Head_Armor = new Armor("bronze helmet", Armor.ArmorSlot.Head, 12, 3, 7, true);
 			this.Player_Legs_Armor = new Armor("bronze legplates", Armor.ArmorSlot.Legs, 20, 5, 10, true);
@@ -51,25 +51,43 @@ namespace DungeonGame {
       Console.WriteLine("Your inventory contains:\n");
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (IEquipment item in this.Inventory) {
+				var itemInfo = new StringBuilder();
 				try {
-					var itemTitle = item.GetName().ToString();
+					itemInfo.Append(item.GetName().ToString());
 					if (item.IsEquipped()) {
-						itemTitle = textInfo.ToTitleCase(itemTitle) + " <Equipped>";
+						itemInfo.Append(" <Equipped>");
 					}
-					else {
-						itemTitle = textInfo.ToTitleCase(itemTitle);
-					}
-					Console.WriteLine(itemTitle);
 				}
 				catch(NullReferenceException) {}
-      }
+				var isItemArmor = item as Armor;
+				if (isItemArmor != null) {
+					itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + ")");
+				}
+				var isItemWeapon = item as Weapon;
+				if (isItemWeapon != null) {
+					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + ")");
+				}
+				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
+				Console.WriteLine(itemName);
+			}
 			foreach (Consumable item in this.Consumables) {
+				var itemInfo = new StringBuilder();
 				try {
-					var itemTitle = item.GetName().ToString();
-					itemTitle = textInfo.ToTitleCase(itemTitle);
-					Console.WriteLine(itemTitle);
+					itemInfo.Append(item.GetName().ToString());
 				}
 				catch (NullReferenceException) { }
+				switch(item.PotionCategory.ToString()) {
+					case "Health":
+						itemInfo.Append(" (" + item.RestoreHealth.RestoreHealthAmt + ")");
+						break;
+					case "Mana":
+						itemInfo.Append(" (" + item.RestoreMana.RestoreManaAmt + ")");
+						break;
+					default:
+						break;
+				}
+				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
+				Console.WriteLine(itemName);
 			}
 			Console.WriteLine("Gold: " + this.Gold + " coins.");
     }

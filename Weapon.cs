@@ -9,9 +9,9 @@ namespace DungeonGame {
 		public double CritMultiplier { get; set; }
 		public bool Equipped { get; set; }
 
-		public Weapon(string name, int regDamage, int itemValue, double critMultiplier, bool equipped) {
+		public Weapon(string name, int regDamageLow, int regDamageHigh, int itemValue, double critMultiplier, bool equipped) {
 			this.Name = name;
-			this.RegDamage = regDamage;
+			this.RegDamage = RndGenerate.Next(regDamageLow, regDamageHigh);
 			this.ItemValue = itemValue;
 			this.CritMultiplier = critMultiplier;
 			this.Equipped = equipped;
