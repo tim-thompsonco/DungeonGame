@@ -36,7 +36,7 @@ namespace DungeonGame {
 				var playerName = Console.ReadLine();
 				Console.WriteLine("Your player name is {0}, is that correct? [Y] or [N].", playerName);
 				RequestCommand();
-				var input = GetFormattedInput();
+				string input = GetFormattedInput();
 				if(input == "y") {
 					return playerName;
 				}
@@ -51,16 +51,24 @@ namespace DungeonGame {
 			player.Y += y;
 			player.Z += z;
 			// Set player location to location of room found in search
-      var roomName = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
+      IRoom roomName = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
       var roomIndex = roomList.IndexOf(roomName);
-      return roomIndex;
-    }
+			roomList[roomIndex].LookRoom();
+			var roomType = roomList[roomIndex].GetType().Name;
+			if (roomType == "DungeonRoom") {
+				player.CanSave = false;
+			}
+			else {
+				player.CanSave = true;
+			}
+			return roomIndex;
+		}
 		public static void InvalidDirection() {
 			Console.WriteLine("You can't go that way!");
 		}
 		public static bool QuitGame(Player player) {
 			Console.WriteLine("Are you sure you want to quit?");
-			var input = Helper.GetFormattedInput();
+			string input = Helper.GetFormattedInput();
 			if (input == "yes" || input == "y") {
 				Console.WriteLine("Quitting the game.");
 				Helper.SaveGame(player);
@@ -75,16 +83,21 @@ namespace DungeonGame {
 			return false;
 		}
 		public static void SaveGame(Player player) {
-			var serializer = new Newtonsoft.Json.JsonSerializer();
-			serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
-			serializer.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-			serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
-			serializer.Formatting = Newtonsoft.Json.Formatting.Indented;
-			using (StreamWriter sw = new StreamWriter("savegame.json"))
-			using (var writer = new Newtonsoft.Json.JsonTextWriter(sw)) {
-				serializer.Serialize(writer, player, typeof(Player));
+			if (player.CanSave == true) {
+				var serializer = new Newtonsoft.Json.JsonSerializer();
+				serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
+				serializer.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+				serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
+				serializer.Formatting = Newtonsoft.Json.Formatting.Indented;
+				using (StreamWriter sw = new StreamWriter("savegame.json"))
+				using (var writer = new Newtonsoft.Json.JsonTextWriter(sw)) {
+					serializer.Serialize(writer, player, typeof(Player));
+				}
+				Console.WriteLine("Your game has been saved.");
 			}
-			Console.WriteLine("Your game has been saved.");
+			else {
+				Console.WriteLine("You can't save inside a dungeon! Go outside first.");
+			}
 		}
   }
 }

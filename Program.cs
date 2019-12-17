@@ -17,20 +17,20 @@ namespace DungeonGame {
 				});
 			}
 			catch(FileNotFoundException) {
-				var playerName = Helper.FetchPlayerName();
+				string playerName = Helper.FetchPlayerName();
 				player.Name = playerName;
 			}
 			var spawnedRooms = new SpawnRooms().RetrieveSpawnRooms();
 			// Set initial room condition
 			// On loading game, display room that player starts in
 			// Begin game by putting player in room 100
-			var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0);
+			int roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0);
       spawnedRooms[roomIndex].LookRoom();
       // While loop to continue obtaining input from player
       while (true) {
         player.DisplayPlayerStats();
         spawnedRooms[roomIndex].ShowCommands();
-        var input = Helper.GetFormattedInput();
+        string input = Helper.GetFormattedInput();
 				var inputParse = input.Split(' ');
         // Obtain player command and process command
         switch (inputParse[0]) {
@@ -61,7 +61,7 @@ namespace DungeonGame {
 						break;
 					case "q":
 					case "quit":
-						var quitConfirm = Helper.QuitGame(player);
+						bool quitConfirm = Helper.QuitGame(player);
 						if (quitConfirm == true) {
 							return;
 						}
@@ -71,7 +71,7 @@ namespace DungeonGame {
 						try {
 							if (inputParse[1] != null) {
 								try {
-									spawnedRooms[roomIndex].LookMonster(inputParse);
+									spawnedRooms[roomIndex].LookNpc(inputParse);
 								}
 								catch (Exception) {
 									Console.WriteLine("An error has occurred while looking.");
@@ -113,8 +113,7 @@ namespace DungeonGame {
             if(spawnedRooms[roomIndex].GoNorth) {
 							try {
                 roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 1, 0);
-                spawnedRooms[roomIndex].LookRoom();
-              }
+							}
 							catch(ArgumentOutOfRangeException) {
 								Helper.InvalidDirection();
 							}
@@ -128,7 +127,6 @@ namespace DungeonGame {
 						if(spawnedRooms[roomIndex].GoSouth) {
 							try {
                 roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, -1, 0);
-                spawnedRooms[roomIndex].LookRoom();
               }
 							catch(ArgumentOutOfRangeException) {
 								Helper.InvalidDirection();
@@ -143,7 +141,6 @@ namespace DungeonGame {
 						if (spawnedRooms[roomIndex].GoEast) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 1, 0, 0);
-								spawnedRooms[roomIndex].LookRoom();
 							}
 							catch (ArgumentOutOfRangeException) {
 								Helper.InvalidDirection();
@@ -158,7 +155,6 @@ namespace DungeonGame {
 						if (spawnedRooms[roomIndex].GoWest) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, -1, 0, 0);
-								spawnedRooms[roomIndex].LookRoom();
 							}
 							catch (ArgumentOutOfRangeException) {
 								Helper.InvalidDirection();
@@ -173,7 +169,6 @@ namespace DungeonGame {
 						if (spawnedRooms[roomIndex].GoNorthEast) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 1, 1, 0);
-								spawnedRooms[roomIndex].LookRoom();
 							}
 							catch (ArgumentOutOfRangeException) {
 								Helper.InvalidDirection();
@@ -188,7 +183,6 @@ namespace DungeonGame {
 						if (spawnedRooms[roomIndex].GoNorthWest) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, -1, 1, 0);
-								spawnedRooms[roomIndex].LookRoom();
 							}
 							catch (ArgumentOutOfRangeException) {
 								Helper.InvalidDirection();
@@ -203,7 +197,6 @@ namespace DungeonGame {
 						if (spawnedRooms[roomIndex].GoSouthEast) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 1, -1, 0);
-								spawnedRooms[roomIndex].LookRoom();
 							}
 							catch (ArgumentOutOfRangeException) {
 								Helper.InvalidDirection();
@@ -218,7 +211,6 @@ namespace DungeonGame {
 						if (spawnedRooms[roomIndex].GoSouthWest) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, -1, -1, 0);
-								spawnedRooms[roomIndex].LookRoom();
 							}
 							catch (ArgumentOutOfRangeException) {
 								Helper.InvalidDirection();
@@ -233,7 +225,6 @@ namespace DungeonGame {
 						if (spawnedRooms[roomIndex].GoUp) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 1);
-								spawnedRooms[roomIndex].LookRoom();
 							}
 							catch (ArgumentOutOfRangeException) {
 								Helper.InvalidDirection();
@@ -248,7 +239,6 @@ namespace DungeonGame {
 						if (spawnedRooms[roomIndex].GoDown) {
 							try {
 								roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, -1);
-								spawnedRooms[roomIndex].LookRoom();
 							}
 							catch (ArgumentOutOfRangeException) {
 								Helper.InvalidDirection();

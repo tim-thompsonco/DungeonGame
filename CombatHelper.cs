@@ -16,13 +16,13 @@ namespace DungeonGame {
 				Console.Write("Available Commands: ");
 				Console.WriteLine(String.Join(", ", this.Commands));
 				Helper.RequestCommand();
-				var input = Helper.GetFormattedInput();
+				string input = Helper.GetFormattedInput();
 				var inputParse = input.Split(' ');
 				Console.WriteLine(); // To add a blank space between the command and fight sequence
         switch (inputParse[0]) {
           case "f":
 					case "fight":
-            var attackDamage = player.Attack();
+            int attackDamage = player.Attack();
 						if (attackDamage - opponent.ArmorRating(player) < 0) {
 							Console.ForegroundColor = ConsoleColor.DarkRed;
 							Console.WriteLine("The {0}'s armor absorbed all of your attack!", opponent.Name);
@@ -85,7 +85,7 @@ namespace DungeonGame {
 						continue;
         }
 				if (opponent.OnFire) {
-					var burnDamage = player.Player_Spell.FireOffense.BurnDamage;
+					int burnDamage = player.Player_Spell.FireOffense.BurnDamage;
 					Console.ForegroundColor = ConsoleColor.Yellow;
 					Console.WriteLine("The {0} burns for {1} fire damage.", opponent.Name, burnDamage);
 					opponent.TakeDamage(burnDamage);
@@ -95,7 +95,7 @@ namespace DungeonGame {
 					opponent.OnFire = false;
 					player.Player_Spell.FireOffense.BurnCurRounds = 1;
 				}
-				var attackDamageM = opponent.Attack();
+				int attackDamageM = opponent.Attack();
 				if (attackDamageM - player.ArmorRating(opponent) < 0) {
 					Console.ForegroundColor = ConsoleColor.DarkRed;
 					Console.WriteLine("Your armor absorbed all of {0}'s attack!", opponent.Name);
@@ -118,7 +118,7 @@ namespace DungeonGame {
     public void SingleCombatWin(IMonster opponent, Player player) {
       Console.ForegroundColor = ConsoleColor.Green;
       Console.WriteLine("You have defeated the {0}!", opponent.Name);
-			foreach(var loot in opponent.MonsterItems) {
+			foreach(IEquipment loot in opponent.MonsterItems) {
 				loot.Equipped = false;
 			}
 			opponent.Name = "Dead " + opponent.GetName();

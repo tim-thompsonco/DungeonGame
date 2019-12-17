@@ -109,10 +109,10 @@ namespace DungeonGame {
 			return totalArmorRating;
 		}
 		public int ArmorRating(Player player) {
-			var totalArmorRating = CheckArmorRating();
-			var levelDiff = player.Level - this.Level;
-			var armorMultiplier = 1.00 + (-(double)levelDiff / 10);
-			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
+			int totalArmorRating = CheckArmorRating();
+			int levelDiff = player.Level - this.Level;
+			double armorMultiplier = 1.00 + (-(double)levelDiff / 10);
+			double adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
 		public string GetName() {

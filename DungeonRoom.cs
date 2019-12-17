@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 
 namespace DungeonGame {
-  public class DungeonRoom : IRoom {
+	public class DungeonRoom : IRoom {
 		public bool GoNorth { get; set; }
 		public bool GoSouth { get; set; }
 		public bool GoEast { get; set; }
@@ -109,7 +109,7 @@ namespace DungeonGame {
 			if (monsterName.Last() == inputName || Monster.GetName() == inputName) {
 				if (this.Monster.HitPoints > 0) {
 					var fightEvent = new CombatHelper();
-					var outcome = fightEvent.SingleCombat(Monster, player);
+					bool outcome = fightEvent.SingleCombat(Monster, player);
 					if (outcome == false) {
 						Helper.PlayerDeath();
 					}
@@ -247,7 +247,7 @@ namespace DungeonGame {
 				Console.WriteLine("There is no {0} in the room!", inputName);
 			}
 		}
-		public void LookMonster(string[] input) {
+		public void LookNpc(string[] input) {
 			var inputString = new StringBuilder();
 			for(int i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
@@ -259,7 +259,7 @@ namespace DungeonGame {
 				Console.ForegroundColor = ConsoleColor.DarkCyan;
 				Console.WriteLine(Monster.Desc);
 				Console.Write("\nHe is carrying: ");
-				foreach (var loot in Monster.MonsterItems) {
+				foreach (IEquipment loot in Monster.MonsterItems) {
 					Console.WriteLine(string.Join(", ", loot.GetName()));
 				}
 			}

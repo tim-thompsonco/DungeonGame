@@ -22,6 +22,6 @@
     void ShowDirections();
     void ShowCommands();
     void LookRoom();
-		void LookMonster(string[] input);
+		void LookNpc(string[] input);
   }
 }

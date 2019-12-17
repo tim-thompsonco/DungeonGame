@@ -53,6 +53,7 @@
     <Compile Include="Interfaces\IRoom.cs" />
     <Compile Include="Interfaces\IRoomInteraction.cs" />
     <Compile Include="Monster.cs" />
+    <Compile Include="TownRoom.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>

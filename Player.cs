@@ -18,6 +18,7 @@ namespace DungeonGame {
     public int X { get; set; } = 0;
 		public int Y { get; set; } = 0;
 		public int Z { get; set; } = 0;
+		public bool CanSave { get; set; }
     private Armor Player_Chest_Armor { get; set; }
     private Armor Player_Head_Armor { get; set; }
     private Armor Player_Legs_Armor { get; set; }
@@ -59,11 +60,11 @@ namespace DungeonGame {
 					}
 				}
 				catch(NullReferenceException) {}
-				var isItemArmor = item as Armor;
+				Armor isItemArmor = item as Armor;
 				if (isItemArmor != null) {
 					itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + ")");
 				}
-				var isItemWeapon = item as Weapon;
+				Weapon isItemWeapon = item as Weapon;
 				if (isItemWeapon != null) {
 					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + ")");
 				}
@@ -142,10 +143,10 @@ namespace DungeonGame {
 			return totalArmorRating;
 		}
     public int ArmorRating(IMonster opponent) {
-			var totalArmorRating = CheckArmorRating();
-			var levelDiff = opponent.Level - this.Level;
-			var armorMultiplier = 1.00 + (-(double)levelDiff / 20);
-			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
+			int totalArmorRating = CheckArmorRating();
+			int levelDiff = opponent.Level - this.Level;
+			double armorMultiplier = 1.00 + (-(double)levelDiff / 20);
+			double adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
     }
 		public int Attack() {
