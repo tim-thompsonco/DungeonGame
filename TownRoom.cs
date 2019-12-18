@@ -79,22 +79,8 @@ namespace DungeonGame {
 			bool goUp,
 			bool goDown,
 			IVendor vendor
-			) {
-			this.Name = name;
-			this.Desc = desc;
-			this.X = x;
-			this.Y = y;
-			this.Z = z;
-			this.GoNorth = goNorth;
-			this.GoSouth = goSouth;
-			this.GoEast = goEast;
-			this.GoWest = goWest;
-			this.GoNorthWest = goNorthWest;
-			this.GoSouthWest = goSouthWest;
-			this.GoNorthEast = goNorthEast;
-			this.GoSouthEast = goSouthEast;
-			this.GoUp = goUp;
-			this.GoDown = goDown;
+			)
+			: this(name, desc, x, y, z, goNorth, goSouth, goEast, goWest, goNorthWest, goSouthWest, goNorthEast, goSouthEast, goUp, goDown) {
 			this.Vendor = vendor;
 		}
 

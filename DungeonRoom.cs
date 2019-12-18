@@ -68,7 +68,6 @@ namespace DungeonGame {
 			int x,
 			int y,
 			int z,
-			IMonster monster,
 			bool goNorth,
 			bool goSouth,
 			bool goEast,
@@ -78,24 +77,11 @@ namespace DungeonGame {
 			bool goNorthEast,
 			bool goSouthEast,
 			bool goUp,
-			bool goDown
-			) {
-			this.Name = name;
-			this.Desc = desc;
-			this.X = x;
-			this.Y = y;
-			this.Z = z;
+			bool goDown,
+			IMonster monster
+			)
+			: this(name, desc, x, y, z, goNorth, goSouth, goEast, goWest, goNorthWest, goSouthWest, goNorthEast, goSouthEast, goUp, goDown) {
 			this.Monster = monster;
-			this.GoNorth = goNorth;
-			this.GoSouth = goSouth;
-			this.GoEast = goEast;
-			this.GoWest = goWest;
-			this.GoNorthWest = goNorthWest;
-			this.GoSouthWest = goSouthWest;
-			this.GoNorthEast = goNorthEast;
-			this.GoSouthEast = goSouthEast;
-			this.GoUp = goUp;
-			this.GoDown = goDown;
 		}
 
 		public void AttackOpponent(Player player, string[] input) {

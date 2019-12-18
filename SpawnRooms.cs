@@ -37,24 +37,6 @@ namespace DungeonGame {
 				0, // X coordinate
 				1, // Y coordinate
 				0, // Z coordinate
-				new Monster(
-					"rotting zombie", // Name
-					"A rotting corpse stares at you, it's face frozen in a look of indifference to the fact a bug is crawling out of it's empty eye sockets. " +
-					"In one hand, it drags a weapon against the ground, as it stares at you menacingly. Bones, muscle and tendons are visible through many " +
-					"gashes and tears in it's rotting skin.", // Description
-					1, // Level
-					10, // Gold
-					80, // Max HP
-					100, // Experience provided
-					new Weapon(
-						"notched axe", // Name
-						15, // Low end of damage value range
-						25, // High end of damage value range
-						10, // Item value
-						1.2, // Crit multiplier
-						true // Equipped bool
-						)
-					),
 				false, // goNorth bool
 				true, // goSouth bool
 				false, // goEast bool
@@ -64,7 +46,25 @@ namespace DungeonGame {
 				true, // goNorthEast bool
 				false, // goSouthEast bool
 				false, // goUp bool
-				false); // goDown bool
+				false,
+				new Monster(
+				"rotting zombie", // Name
+				"A rotting corpse stares at you, it's face frozen in a look of indifference to the fact a bug is crawling out of it's empty eye sockets. " +
+				"In one hand, it drags a weapon against the ground, as it stares at you menacingly. Bones, muscle and tendons are visible through many " +
+				"gashes and tears in it's rotting skin.", // Description
+				1, // Level
+				10, // Gold
+				80, // Max HP
+				100, // Experience provided
+					new Weapon(
+						"notched axe", // Name
+						15, // Low end of damage value range
+						25, // High end of damage value range
+						10, // Item value
+						1.2, // Crit multiplier
+						true // Equipped bool
+						)
+				)); // goDown bool
 			this.SpawnedRooms.Add(room101);
 			var room102 = new DungeonRoom(
 				"Corridor", // Name
@@ -75,15 +75,25 @@ namespace DungeonGame {
 				1, // X coordinate
 				2, // Y coordinate
 				0, // Z coordinate
+				true, // goNorth bool
+				false, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				true, // goSouthWest bool
+				false, // goNorthEast bool
+				false, // goSouthEast bool
+				false, // goUp bool
+				false,
 				new Monster(
-					"huge spider", // Name
-					"A huge black spider about the size of a large bear skitters down the corridor towards you. " +
-					"Coarse hair sticks out from every direction on it's thorax and legs. It's many eyes stare at " +
-					"you, legs ending in sharp claws carrying it closer as it hisses hungrily.", // Description
-					2, // Level
-					0, // Gold
-					100, // Max HP
-					120, // Experience provided
+				"huge spider", // Name
+				"A huge black spider about the size of a large bear skitters down the corridor towards you. " +
+				"Coarse hair sticks out from every direction on it's thorax and legs. It's many eyes stare at " +
+				"you, legs ending in sharp claws carrying it closer as it hisses hungrily.", // Description
+				2, // Level
+				0, // Gold
+				100, // Max HP
+				120, // Experience provided
 					new Weapon(
 						"venomous fang", // Name
 						20, // Low end of damage value range
@@ -96,17 +106,7 @@ namespace DungeonGame {
 						"large venom sac", // Name
 						15 // Item value
 						)
-					), 
-				true, // goNorth bool
-				false, // goSouth bool
-				false, // goEast bool
-				false, // goWest bool
-				false, // goNorthWest bool
-				true, // goSouthWest bool
-				false, // goNorthEast bool
-				false, // goSouthEast bool
-				false, // goUp bool
-				false); // goDown bool
+				)); // goDown bool
 			this.SpawnedRooms.Add(room102);
 			var room103 = new DungeonRoom(
 				"Corridor", // Name
@@ -116,16 +116,26 @@ namespace DungeonGame {
 				1, // X coordinate
 				3, // Y coordinate
 				0, // Z coordinate
+				false, // goNorth bool
+				true, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				true, // goNorthWest bool
+				false, // goSouthWest bool
+				false, // goNorthEast bool
+				false, // goSouthEast bool
+				false, // goUp bool
+				false,
 				new Monster(
-					"skeleton warrior", // Name
-					"A skeleton stands in front of you. His bones look worn and damaged from years of fighting. A ghastly " +
-					"yellow glow surrounds him, which is the only indication of the magic that must exist to reanimate this " +
-					"undead warrior. His chest and ribcage are fused together in a single, solid piece of armor and he raises " +
-					"a sword menacingly towards you.", // Description
-					2, // Level
-					15, // Gold
-					100, // Max HP
-					120, // Experience provided
+				"skeleton warrior", // Name
+				"A skeleton stands in front of you. His bones look worn and damaged from years of fighting. A ghastly " +
+				"yellow glow surrounds him, which is the only indication of the magic that must exist to reanimate this " +
+				"undead warrior. His chest and ribcage are fused together in a single, solid piece of armor and he raises " +
+				"a sword menacingly towards you.", // Description
+				2, // Level
+				15, // Gold
+				100, // Max HP
+				120, // Experience provided
 					new Weapon(
 						"dull sword", // Name
 						16, // Low end of damage value range
@@ -148,17 +158,7 @@ namespace DungeonGame {
 						Consumable.PotionType.Health, // Consumable type
 						50 // Amount that consumable affects, IE restores 50 health if health potion
 						)
-					),
-				false, // goNorth bool
-				true, // goSouth bool
-				false, // goEast bool
-				false, // goWest bool
-				true, // goNorthWest bool
-				false, // goSouthWest bool
-				false, // goNorthEast bool
-				false, // goSouthEast bool
-				false, // goUp bool
-				false); // goDown bool
+				)); // goDown bool
 			this.SpawnedRooms.Add(room103);
 			var room104 = new DungeonRoom(
 				"Dimly Lit Platform", // Name
@@ -171,16 +171,26 @@ namespace DungeonGame {
 				0, // X coordinate
 				4, // Y coordinate
 				0, // Z coordinate
+				false, // goNorth bool
+				false, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				true, // goSouthWest bool
+				false, // goNorthEast bool
+				true, // goSouthEast bool
+				true, // goUp bool
+				true,
 				new Monster(
-					"skeleton guardian", // Name
-					"A skeleton stands in front of you. His bones look stronger than that of a normal skeleton. A ghastly " +
-					"yellow glow surrounds him, which is the only indication of the magic that must exist to reanimate this " +
-					"undead warrior. A shoddy, iron helmet adorns his head and a well-crafted iron longsword is clutched by " +
-					"his skeletal fingers, which tighten their grip as he shuffles towards you and grunts.", // Description
-					2, // Level
-					20, // Gold
-					120, // Max HP
-					160, // Experience provided
+				"skeleton guardian", // Name
+				"A skeleton stands in front of you. His bones look stronger than that of a normal skeleton. A ghastly " +
+				"yellow glow surrounds him, which is the only indication of the magic that must exist to reanimate this " +
+				"undead warrior. A shoddy, iron helmet adorns his head and a well-crafted iron longsword is clutched by " +
+				"his skeletal fingers, which tighten their grip as he shuffles towards you and grunts.", // Description
+				2, // Level
+				20, // Gold
+				120, // Max HP
+				160, // Experience provided
 					new Weapon(
 						"iron longsword", // Name
 						22, // Low end of damage value range
@@ -203,17 +213,7 @@ namespace DungeonGame {
 						Consumable.PotionType.Mana, // Consumable type
 						50 // Amount that consumable affects, IE restores 50 health if health potion
 						)
-					),
-				false, // goNorth bool
-				false, // goSouth bool
-				false, // goEast bool
-				false, // goWest bool
-				false, // goNorthWest bool
-				true, // goSouthWest bool
-				false, // goNorthEast bool
-				true, // goSouthEast bool
-				true, // goUp bool
-				true); // goDown bool
+				)); // goDown bool
 			this.SpawnedRooms.Add(room104);
 			var room105 = new DungeonRoom(
 				"Corridor", // Name
@@ -223,16 +223,26 @@ namespace DungeonGame {
 				-1, // X coordinate
 				3, // Y coordinate
 				0, // Z coordinate
+				false, // goNorth bool
+				true, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				true, // goNorthEast bool
+				false, // goSouthEast bool
+				false, // goUp bool
+				false,
 				new Monster(
-					"skeleton warrior", // Name
-					"A skeleton stands in front of you. His bones look worn and damaged from years of fighting. A ghastly " +
-					"yellow glow surrounds him, which is the only indication of the magic that must exist to reanimate this " +
-					"undead warrior. His chest and ribcage are fused together in a single, solid piece of armor and he raises " +
-					"a sword menacingly towards you.", // Description
-					2, // Level
-					15, // Gold
-					100, // Max HP
-					120, // Experience provided
+				"skeleton warrior", // Name
+				"A skeleton stands in front of you. His bones look worn and damaged from years of fighting. A ghastly " +
+				"yellow glow surrounds him, which is the only indication of the magic that must exist to reanimate this " +
+				"undead warrior. His chest and ribcage are fused together in a single, solid piece of armor and he raises " +
+				"a sword menacingly towards you.", // Description
+				2, // Level
+				15, // Gold
+				100, // Max HP
+				120, // Experience provided
 					new Weapon(
 						"dull sword", // Name
 						16, // Low end of damage value range
@@ -255,17 +265,7 @@ namespace DungeonGame {
 						Consumable.PotionType.Health, // Consumable type
 						50 // Amount that consumable affects, IE restores 50 health if health potion
 						)
-					),
-				false, // goNorth bool
-				true, // goSouth bool
-				false, // goEast bool
-				false, // goWest bool
-				false, // goNorthWest bool
-				false, // goSouthWest bool
-				true, // goNorthEast bool
-				false, // goSouthEast bool
-				false, // goUp bool
-				false); // goDown bool
+				)); // goDown bool
 			this.SpawnedRooms.Add(room105);
 			var room106 = new DungeonRoom(
 				"Corridor", // Name
@@ -276,15 +276,25 @@ namespace DungeonGame {
 				-1, // X coordinate
 				2, // Y coordinate
 				0, // Z coordinate
+				true, // goNorth bool
+				false, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				false, // goNorthEast bool
+				true, // goSouthEast bool
+				false, // goUp bool
+				false,
 				new Monster(
-					"huge spider", // Name
-					"A huge black spider about the size of a large bear skitters down the corridor towards you. " +
-					"Coarse hair sticks out from every direction on it's thorax and legs. It's many eyes stare at " +
-					"you, legs ending in sharp claws carrying it closer as it hisses hungrily.", // Description
-					2, // Level
-					0, // Gold
-					100, // Max HP
-					120, // Experience provided
+				"huge spider", // Name
+				"A huge black spider about the size of a large bear skitters down the corridor towards you. " +
+				"Coarse hair sticks out from every direction on it's thorax and legs. It's many eyes stare at " +
+				"you, legs ending in sharp claws carrying it closer as it hisses hungrily.", // Description
+				2, // Level
+				0, // Gold
+				100, // Max HP
+				120, // Experience provided
 					new Weapon(
 						"venomous fang", // Name
 						20,  // Low end of damage value range
@@ -297,17 +307,7 @@ namespace DungeonGame {
 						"large venom sac", // Name
 						15 // Item value
 						)
-					),
-				true, // goNorth bool
-				false, // goSouth bool
-				false, // goEast bool
-				false, // goWest bool
-				false, // goNorthWest bool
-				false, // goSouthWest bool
-				false, // goNorthEast bool
-				true, // goSouthEast bool
-				false, // goUp bool
-				false); // goDown bool
+				)); // goDown bool
 			this.SpawnedRooms.Add(room106);
 			var room107 = new DungeonRoom(
 				"Pathway to Sunken Pit", // Name
@@ -338,15 +338,25 @@ namespace DungeonGame {
 				0, // X coordinate
 				3, // Y coordinate
 				-1, // Z coordinate
+				true, // goNorth bool
+				false, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				false, // goNorthEast bool
+				false, // goSouthEast bool
+				false, // goUp bool
+				false,
 				new Monster(
-					"horned demon", // Name
-					"A massive red demon stands before you with two horns sticking out of it's head. It's eyes glint " +
-					"yellow and a look of pure hatred adorns its face. Leathery wings spread out on either side of its " +
-					"back as it rises up to its full height of 8 feet and growls at you.", // Description
-					4, // Level
-					50, // Gold
-					200, // Max HP
-					250, // Experience provided
+				"horned demon", // Name
+				"A massive red demon stands before you with two horns sticking out of it's head. It's eyes glint " +
+				"yellow and a look of pure hatred adorns its face. Leathery wings spread out on either side of its " +
+				"back as it rises up to its full height of 8 feet and growls at you.", // Description
+				4, // Level
+				50, // Gold
+				200, // Max HP
+				250, // Experience provided
 					new Weapon(
 						"obsidian axe", // Name
 						30, // Low end of damage value range
@@ -359,17 +369,7 @@ namespace DungeonGame {
 						"ruby", // Name
 						50 // Item value
 						)
-					),
-				true, // goNorth bool
-				false, // goSouth bool
-				false, // goEast bool
-				false, // goWest bool
-				false, // goNorthWest bool
-				false, // goSouthWest bool
-				false, // goNorthEast bool
-				false, // goSouthEast bool
-				false, // goUp bool
-				false); // goDown bool
+				)); // goDown bool
 			this.SpawnedRooms.Add(room108);
 			var room109 = new DungeonRoom(
 				"Stairway Leading Up", // Name
