@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace DungeonGame {
-  public class Monster : IMonster {
+	public class Monster : IMonster {
     public string Name { get; set; }
 		public string Desc { get; set; }
 		public int Level { get; set; }

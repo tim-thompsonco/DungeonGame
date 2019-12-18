@@ -98,7 +98,7 @@ namespace DungeonGame {
 			this.GoDown = goDown;
 		}
 
-		public void AttackMonster(Player player, string[] input) {
+		public void AttackOpponent(Player player, string[] input) {
 			var inputString = new StringBuilder();
 			for (int i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
@@ -188,7 +188,7 @@ namespace DungeonGame {
 			Console.Write("Room Contents: ");
 			Console.ForegroundColor = ConsoleColor.White;
 			this.RebuildRoomObjects();
-			if(RoomObjects.Count > 0) {
+			if(RoomObjects.Count > 0 && RoomObjects[0] != null) {
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (IRoomInteraction item in RoomObjects) {
 					var itemTitle = item.GetName().ToString();
@@ -258,7 +258,7 @@ namespace DungeonGame {
 			if(monsterName.Last() == inputName || Monster.GetName() == inputName) {
 				Console.ForegroundColor = ConsoleColor.DarkCyan;
 				Console.WriteLine(Monster.Desc);
-				Console.Write("\nHe is carrying: ");
+				Console.Write("\nHe is carrying:\n");
 				foreach (IEquipment loot in Monster.MonsterItems) {
 					Console.WriteLine(string.Join(", ", loot.GetName()));
 				}

@@ -27,6 +27,7 @@ namespace DungeonGame {
 			"[Q]uit"};
 		// List of objects in room (including monsters)
 		private readonly List<IRoomInteraction> RoomObjects = new List<IRoomInteraction>();
+		public IVendor Vendor;
 
 		public TownRoom(
 			string name,
@@ -61,10 +62,52 @@ namespace DungeonGame {
 			this.GoUp = goUp;
 			this.GoDown = goDown;
 		}
+		public TownRoom(
+			string name,
+			string desc,
+			int x,
+			int y,
+			int z,
+			bool goNorth,
+			bool goSouth,
+			bool goEast,
+			bool goWest,
+			bool goNorthWest,
+			bool goSouthWest,
+			bool goNorthEast,
+			bool goSouthEast,
+			bool goUp,
+			bool goDown,
+			IVendor vendor
+			) {
+			this.Name = name;
+			this.Desc = desc;
+			this.X = x;
+			this.Y = y;
+			this.Z = z;
+			this.GoNorth = goNorth;
+			this.GoSouth = goSouth;
+			this.GoEast = goEast;
+			this.GoWest = goWest;
+			this.GoNorthWest = goNorthWest;
+			this.GoSouthWest = goSouthWest;
+			this.GoNorthEast = goNorthEast;
+			this.GoSouthEast = goSouthEast;
+			this.GoUp = goUp;
+			this.GoDown = goDown;
+			this.Vendor = vendor;
+		}
 
-		public void AttackMonster(Player player, string[] input) { }
+		public void AttackOpponent(Player player, string[] input) { }
 		public void LootCorpse(Player player, string[] input) { }
-		public void RebuildRoomObjects() { }
+		public void RebuildRoomObjects() {
+			try {
+				RoomObjects.Clear();
+				RoomObjects.Add((DungeonGame.IRoomInteraction)Vendor);
+			}
+			catch (NullReferenceException) {
+			}
+		}
 		public void ShowCommands() {
 			Console.ForegroundColor = ConsoleColor.DarkGreen;
 			Console.Write("Available Commands: ");
@@ -121,7 +164,7 @@ namespace DungeonGame {
 			Console.Write("Room Contents: ");
 			Console.ForegroundColor = ConsoleColor.White;
 			this.RebuildRoomObjects();
-			if (RoomObjects.Count > 0) {
+			if (RoomObjects.Count > 0 && RoomObjects[0] != null) {
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (IRoomInteraction item in RoomObjects) {
 					var itemTitle = item.GetName().ToString();
@@ -135,6 +178,25 @@ namespace DungeonGame {
 			Console.WriteLine("."); // Add period at end of list of objects in room
 			this.ShowDirections();
 		}
-		public void LookNpc(string[] input) { }
+		public void LookNpc(string[] input) {
+			var inputString = new StringBuilder();
+			for (int i = 1; i < input.Length; i++) {
+				inputString.Append(input[i]);
+				inputString.Append(' ');
+			}
+			var inputName = inputString.ToString().Trim();
+			var vendorName = Vendor.GetName().Split(' ');
+			if (vendorName.Last() == inputName || Vendor.GetName() == inputName) {
+				Console.ForegroundColor = ConsoleColor.DarkCyan;
+				Console.WriteLine(Vendor.Desc);
+				Console.Write("\nHe is carrying:\n");
+				foreach (IEquipment itemForSale in Vendor.VendorItems) {
+					Console.WriteLine(string.Join(", ", itemForSale.GetName()));
+				}
+			}
+			else {
+				Console.WriteLine("There is no {0} in the room!", inputName);
+			}
+		}
 	}
 }

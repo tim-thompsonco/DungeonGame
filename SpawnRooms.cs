@@ -6,7 +6,7 @@ namespace DungeonGame {
 
 		public SpawnRooms() {
 			var room100 = new DungeonRoom(
-				"A dark room",
+				"A Dark Room",
 				"You are in a dimly lit room. There is a lantern burning on a hook on the opposite wall. Water drips " +
 				"from a few stalactites hanging from the ceiling, which is about 12 feet high. You appear to be in a " +
 				"dungeon. A moaning wail echoes in the distance through an open doorway in front of you. Glinting " +
@@ -27,7 +27,7 @@ namespace DungeonGame {
 				false); // goDown bool
 			this.SpawnedRooms.Add(room100);
 			var room101 = new DungeonRoom(
-				"Dimly lit platform", // Name
+				"Dimly Lit Platform", // Name
 				"You are standing on a platform of smooth rock in a cavern. The ceiling is roughly 40 feet high, with " +
 				"stalactites hanging from the ceiling as in the room behind you that you just left. To your northwest " +
 				"and northeast are pathways leading down corridors. Torches in holders along the corridors illuminate " +
@@ -161,7 +161,7 @@ namespace DungeonGame {
 				false); // goDown bool
 			this.SpawnedRooms.Add(room103);
 			var room104 = new DungeonRoom(
-				"Dimly lit platform", // Name
+				"Dimly Lit Platform", // Name
 				"You are standing on a platform of smooth rock in a cavern. The ceiling is roughly 40 feet high, with " +
 				"stalactites hanging from the ceiling as in the room behind you that you just left. To your southwest " +
 				"and southeast are pathways leading down corridors. Torches in holders along the corridors illuminate " +
@@ -212,7 +212,7 @@ namespace DungeonGame {
 				true, // goSouthWest bool
 				false, // goNorthEast bool
 				true, // goSouthEast bool
-				false, // goUp bool
+				true, // goUp bool
 				true); // goDown bool
 			this.SpawnedRooms.Add(room104);
 			var room105 = new DungeonRoom(
@@ -371,6 +371,125 @@ namespace DungeonGame {
 				false, // goUp bool
 				false); // goDown bool
 			this.SpawnedRooms.Add(room108);
+			var room109 = new DungeonRoom(
+				"Stairway Leading Up", // Name
+				"You are at the base of a long stairway leading up towards an old, wooden door. Torches line the walls to either " +
+				"side and a few drops of blood stain some of the steps. There appears to be a skeleton stretched out before the " +
+				"steps, one hand reaching out and it's wrist bones crushed by a large object, as if someone was trying to flee " +
+				"and didn't make it.", // Description
+				0, // X coordinate
+				4, // Y coordinate
+				1, // Z coordinate
+				false, // goNorth bool
+				false, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				false, // goNorthEast bool
+				false, // goSouthEast bool
+				true, // goUp bool
+				true); // goDown bool
+			this.SpawnedRooms.Add(room109);
+			var room110 = new TownRoom(
+				"Outside Dungeon Entrance", // Name
+				"You are outside a rocky outcropping with a wooden door laid into the rock. It has a simple metal handle with no " +
+				"lock. It almost seems like it locks from the inside though. There is a bloody handprint on the door. Around you " +
+				"is a grassy meadow with a cobblestone path leading away from the rocky outcropping towards what looks like a " +
+				"town. Smoke rises from a few chimneys in the distance.", // Description
+				0, // X coordinate
+				4, // Y coordinate
+				2, // Z coordinate
+				true, // goNorth bool
+				false, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				false, // goNorthEast bool
+				false, // goSouthEast bool
+				false, // goUp bool
+				true); // goDown bool
+			this.SpawnedRooms.Add(room110);
+			var room111 = new TownRoom(
+				"Cobblestone Path", // Name
+				"You are walking on a cobblestone path north towards a town in the distance. Smoke rises from a few chimneys. " +
+				"Around you is a grassy meadow and behind you is a rocky outcropping with a wooden door set into the rock. ", // Description
+				0, // X coordinate
+				5, // Y coordinate
+				2, // Z coordinate
+				true, // goNorth bool
+				true, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				false, // goNorthEast bool
+				false, // goSouthEast bool
+				false, // goUp bool
+				false); // goDown bool
+			this.SpawnedRooms.Add(room111);
+			var room112 = new TownRoom(
+				"Cobblestone Path", // Name
+				"You are walking on a cobblestone path north towards a nearby town. Smoke rises from a few chimneys. " +
+				"Around you is a grassy meadow and behind you is a rocky outcropping with a wooden door set into the rock. ", // Description
+				0, // X coordinate
+				6, // Y coordinate
+				2, // Z coordinate
+				true, // goNorth bool
+				true, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				false, // goNorthEast bool
+				false, // goSouthEast bool
+				false, // goUp bool
+				false); // goDown bool
+			this.SpawnedRooms.Add(room112);
+			var room113 = new TownRoom(
+				"Town Entrance", // Name
+				"You are at the entrance to a small town. To the northeast you hear the clanking of metal on metal from what " +
+				"sounds like a blacksmith or armorer. There is a large fountain in the middle of the courtyard and off to the " +
+				"northwest are a few buildings with signs outside that you can't read from this distance.", // Description
+				0, // X coordinate
+				7, // Y coordinate
+				2, // Z coordinate
+				false, // goNorth bool
+				true, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				true, // goNorthEast bool
+				false, // goSouthEast bool
+				false, // goUp bool
+				false); // goDown bool
+			this.SpawnedRooms.Add(room113);
+			var room114 = new TownRoom(
+				"Town - East", // Name
+				"You are in the east part of your town. In front of you is a small building with a forge and furnace outside " +
+				"and a large man pounding away at a chestplate with a hammer. One building over you can see another large man " +
+				"running a sword against a grindstone to sharpen it.", // Description
+				1, // X coordinate
+				8, // Y coordinate
+				2, // Z coordinate
+				false, // goNorth bool
+				false, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				true, // goSouthWest bool
+				false, // goNorthEast bool
+				false, // goSouthEast bool
+				false, // goUp bool
+				false,
+				new Vendor(
+					"armorer", // Name
+					"A large man covered in sweat beating away at a chestplate with a hammer. He wipes his brow as " +
+					"you approach and wonders whether you're going to make him a little bit richer or not." // Description
+				)); // goDown bool
+			this.SpawnedRooms.Add(room114);
 		}
 
 		public List<IRoom> RetrieveSpawnRooms() {

@@ -40,7 +40,7 @@ namespace DungeonGame {
 						try {
 							if (inputParse[1] != null) {
 								try {
-									spawnedRooms[roomIndex].AttackMonster(player, inputParse);
+									spawnedRooms[roomIndex].AttackOpponent(player, inputParse);
 								}
 								catch (Exception) {
 									Console.WriteLine("An error has occurred while attacking.");
