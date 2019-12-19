@@ -36,6 +36,24 @@ namespace DungeonGame {
         switch (inputParse[0]) {
 					case "a":
           case "attack":
+					case "buy":
+						try {
+							if (inputParse[1] != null) {
+								try {
+									TownRoom isTownRoom = spawnedRooms[roomIndex] as TownRoom;
+									if (isTownRoom != null) {
+										isTownRoom.Vendor.BuyItemCheck(player, inputParse);
+									}
+								}
+								catch (NullReferenceException) {
+									Console.WriteLine("There is no vendor in the room to buy an item from.");
+								}
+							}
+						}
+						catch (IndexOutOfRangeException) {
+							Console.WriteLine("Buy what?");
+						}
+						break;
 					case "kill":
 						try {
 							if (inputParse[1] != null) {
@@ -107,6 +125,42 @@ namespace DungeonGame {
 						break;
 					case "save":
 						Helper.SaveGame(player);
+						break;
+					case "sell":
+						try {
+							if (inputParse[1] != null) {
+								try {
+									TownRoom isTownRoom = spawnedRooms[roomIndex] as TownRoom;
+									if (isTownRoom != null) {
+										isTownRoom.Vendor.SellItemCheck(player, inputParse);
+									}
+								}
+								catch (NullReferenceException) {
+									Console.WriteLine("The vendor doesn't want that.");
+								}
+							}
+						}
+						catch (IndexOutOfRangeException) {
+							Console.WriteLine("Sell what?");
+						}
+						break;
+					case "show":
+						try {
+							if (inputParse[1] == "forsale") {
+								try {
+									TownRoom isTownRoom = spawnedRooms[roomIndex] as TownRoom;
+									if (isTownRoom != null) {
+										isTownRoom.Vendor.DisplayGearForSale(player);
+									}
+								}
+								catch (NullReferenceException) {
+									Console.WriteLine("There is no vendor in the room to show inventory available for sale.");
+								}
+							}
+						}
+						catch (IndexOutOfRangeException) {
+							Console.WriteLine("Show what?");
+						}
 						break;
 					case "n":
 					case "north":

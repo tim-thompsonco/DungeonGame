@@ -487,7 +487,9 @@ namespace DungeonGame {
 				new Vendor(
 					"armorer", // Name
 					"A large man covered in sweat beating away at a chestplate with a hammer. He wipes his brow as " +
-					"you approach and wonders whether you're going to make him a little bit richer or not." // Description
+					"you approach and wonders whether you're going to make him a little bit richer or not. You can: " +
+					"buy <item>, sell <item>, or <show forsale> to see what he has for sale.", // Description
+					"Armor"
 				)); // goDown bool
 			this.SpawnedRooms.Add(room114);
 		}
