@@ -19,13 +19,13 @@ namespace DungeonGame {
 			catch(FileNotFoundException) {
 				string playerName = Helper.FetchPlayerName();
 				player.Name = playerName;
+				player.EquipInitialGear();
 			}
 			var spawnedRooms = new SpawnRooms().RetrieveSpawnRooms();
 			// Set initial room condition
 			// On loading game, display room that player starts in
 			// Begin game by putting player in room 100
 			int roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0);
-      spawnedRooms[roomIndex].LookRoom();
       // While loop to continue obtaining input from player
       while (true) {
         player.DisplayPlayerStats();
@@ -81,6 +81,8 @@ namespace DungeonGame {
 					case "quit":
 						bool quitConfirm = Helper.QuitGame(player);
 						if (quitConfirm == true) {
+							player.CanSave = true;
+							Helper.SaveGame(player);
 							return;
 						}
 						break;
@@ -142,6 +144,24 @@ namespace DungeonGame {
 						}
 						catch (IndexOutOfRangeException) {
 							Console.WriteLine("Sell what?");
+						}
+						break;
+					case "repair":
+						try {
+							if (inputParse[1] != null) {
+								try {
+									TownRoom isTownRoom = spawnedRooms[roomIndex] as TownRoom;
+									if (isTownRoom != null) {
+										isTownRoom.Vendor.RepairItem(player, inputParse);
+									}
+								}
+								catch (NullReferenceException) {
+									Console.WriteLine("The vendor doesn't repair that type of equipment.");
+								}
+							}
+						}
+						catch (IndexOutOfRangeException) {
+							Console.WriteLine("Repair what?");
 						}
 						break;
 					case "show":

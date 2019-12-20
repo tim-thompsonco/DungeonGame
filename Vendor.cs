@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace DungeonGame {
@@ -78,7 +79,7 @@ namespace DungeonGame {
 			}
 			var inputName = inputString.ToString().Trim();
 			var index = 0;
-			index = this.VendorItems.FindIndex(f => f.GetName() == inputName);
+			index = this.VendorItems.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()));
 			if (index != -1) {
 				switch(this.BuySellType) {
 					case "Armor":
@@ -113,7 +114,7 @@ namespace DungeonGame {
 			}
 			var inputName = inputString.ToString().Trim();
 			var index = 0;
-			index = player.Inventory.FindIndex(f => f.GetName() == inputName);
+			index = player.Inventory.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()));
 			if (index != -1) {
 				switch (this.BuySellType) {
 					case "Armor":
@@ -141,6 +142,46 @@ namespace DungeonGame {
 				return;
 			}
 			Console.WriteLine("You have to unequip that first!");
+		}
+		public void RepairItem(Player player, string[] userInput) {
+			var inputString = new StringBuilder();
+			for (int i = 1; i < userInput.Length; i++) {
+				inputString.Append(userInput[i]);
+				inputString.Append(' ');
+			}
+			var inputName = inputString.ToString().Trim();
+			var index = 0;
+			index = player.Inventory.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()));
+			if (index != -1) {
+				switch (this.BuySellType) {
+					case "Armor":
+						Armor repairArmor = player.Inventory[index] as Armor;
+						var durabilityRepairArmor = 100 - repairArmor.Durability;
+						var repairCostArmor = repairArmor.ItemValue * (durabilityRepairArmor / 100f);
+						if(player.Gold >= (int)repairCostArmor) {
+							player.Gold -= (int)repairCostArmor;
+							repairArmor.Durability = 100;
+							Console.WriteLine("Your {0} has been repaired for {1} gold.", repairArmor.Name, (int)repairCostArmor);
+							break;
+						}
+						Console.WriteLine("You can't afford to repair {0}", repairArmor.Name);
+						break;
+					case "Weapon":
+						Weapon repairWeapon = player.Inventory[index] as Weapon;
+						var durabilityRepairWeapon = 100 - repairWeapon.Durability;
+						var repairCostWeapon = repairWeapon.ItemValue * (durabilityRepairWeapon / 100f);
+						if (player.Gold >= repairCostWeapon) {
+							player.Gold -= (int)repairCostWeapon;
+							repairWeapon.Durability = 100;
+							Console.WriteLine("Your {0} has been repaired for {1} gold.", repairWeapon.Name, (int)repairCostWeapon);
+							break;
+						}
+						Console.WriteLine("You can't afford to repair {0}", repairWeapon.Name);
+						break;
+					default:
+						break;
+				}
+			}
 		}
 		public string GetName() {
 			return this.Name.ToString();

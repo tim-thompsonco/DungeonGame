@@ -12,5 +12,6 @@ namespace DungeonGame {
     void BuyItemCheck(Player player, string[] userInput);
     void SellItem(Player player, string[] userInput, IEquipment sellItem, int index);
     void SellItemCheck(Player player, string[] userInput);
+    void RepairItem(Player player, string[] userInput);
   }
 }
