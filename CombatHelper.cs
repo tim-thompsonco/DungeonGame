@@ -99,6 +99,7 @@ namespace DungeonGame {
 				if (attackDamageM - player.ArmorRating(opponent) < 0) {
 					Console.ForegroundColor = ConsoleColor.DarkRed;
 					Console.WriteLine("Your armor absorbed all of {0}'s attack!", opponent.Name);
+					player.DecreaseArmorDurability();
 				}
         else if (attackDamageM == 0) {
           Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -109,7 +110,8 @@ namespace DungeonGame {
           Console.WriteLine("The {0} hits you for {1} physical damage.",
             opponent.Name, attackDamageM - player.ArmorRating(opponent));
           player.TakeDamage(attackDamageM - player.ArmorRating(opponent));
-          if (player.HitPoints <= 0) {
+					player.DecreaseArmorDurability();
+					if (player.HitPoints <= 0) {
             return false;
           }
         }

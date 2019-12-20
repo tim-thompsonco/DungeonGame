@@ -14,15 +14,16 @@ namespace DungeonGame {
 		public int ManaPoints { get; set; } = 100;
     public int Gold { get; set; } = 0;
     public int Experience { get; set; } = 0;
+		public int ExperienceToLevel { get; set; } = 500;
 		public int Level { get; set; } = 1;
     public int X { get; set; } = 0;
 		public int Y { get; set; } = 0;
 		public int Z { get; set; } = 0;
 		public bool CanSave { get; set; }
-    private Armor Player_Chest_Armor { get; set; }
-    private Armor Player_Head_Armor { get; set; }
-    private Armor Player_Legs_Armor { get; set; }
-		private Weapon Player_Weapon { get; set; }
+    public Armor Player_Chest_Armor { get; set; }
+    public Armor Player_Head_Armor { get; set; }
+    public Armor Player_Legs_Armor { get; set; }
+		public Weapon Player_Weapon { get; set; }
 		public Spell Player_Spell { get; set; }
 		public List<Consumable> Consumables { get; set; }
 		public List<IEquipment> Inventory { get; set; }
@@ -32,44 +33,52 @@ namespace DungeonGame {
 			this.Name = name;
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();
-			this.Player_Weapon = new Weapon("bronze sword", 22, 28, 25, 1.2, true);
-			this.Player_Chest_Armor = new Armor("bronze chestplate", Armor.ArmorSlot.Chest, 35, 10, 20, true);
-			this.Player_Head_Armor = new Armor("bronze helmet", Armor.ArmorSlot.Head, 12, 3, 7, true);
-			this.Player_Legs_Armor = new Armor("bronze legplates", Armor.ArmorSlot.Legs, 20, 5, 10, true);
+			this.Inventory.Add(new Weapon("bronze sword", 22, 28, 25, 1.2, false));
+			this.Inventory.Add(new Armor("bronze chestplate", Armor.ArmorSlot.Chest, 35, 10, 20, false));
+			this.Inventory.Add(new Armor("bronze helmet", Armor.ArmorSlot.Head, 12, 3, 7, false));
+			this.Inventory.Add(new Armor("bronze legplates", Armor.ArmorSlot.Legs, 20, 5, 10, false));
 			this.Consumables.Add(new Consumable("minor health potion", 3, Consumable.PotionType.Health, 50));
 			this.Consumables.Add(new Consumable("minor mana potion", 3, Consumable.PotionType.Mana, 50));
 			this.Player_Spell = new Spell("Fireball", 50, 0, 1);
-			this.BuildInventory();
 		}
-    public void BuildInventory() {
-			this.Inventory.Add(this.Player_Chest_Armor);
-			this.Inventory.Add(this.Player_Head_Armor);
-			this.Inventory.Add(this.Player_Legs_Armor);
-			this.Inventory.Add(this.Player_Weapon);
+
+		public void DecreaseArmorDurability() {
+			try {
+				this.Player_Chest_Armor.DecreaseDurability();
+			}
+			catch (NullReferenceException) { }
+			try {
+				this.Player_Head_Armor.DecreaseDurability();
+			}
+			catch (NullReferenceException) { }
+			try {
+				this.Player_Legs_Armor.DecreaseDurability();
+			}
+			catch (NullReferenceException) { }
+		}
+		public void EquipInitialGear() {
+			this.EquipWeapon(this.Inventory[0] as Weapon);
+			this.EquipArmor(this.Inventory[1] as Armor);
+			this.EquipArmor(this.Inventory[2] as Armor);
+			this.EquipArmor(this.Inventory[3] as Armor);
 		}
     public void ShowInventory(Player player) {
       Console.ForegroundColor = ConsoleColor.DarkGray;
       Console.WriteLine("Your inventory contains:\n");
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (IEquipment item in this.Inventory) {
-				var itemInfo = new StringBuilder();
-				try {
-					itemInfo.Append(item.GetName().ToString());
-					if (item.IsEquipped()) {
-						itemInfo.Append(" <Equipped>");
-					}
+				if (item.IsEquipped()) {
+					string itemName = this.GetInventoryName(item);
+					var itemInfo = new StringBuilder(itemName);
+					itemInfo.Append(" <Equipped>");
+					Console.WriteLine(itemInfo);
 				}
-				catch(NullReferenceException) {}
-				Armor isItemArmor = item as Armor;
-				if (isItemArmor != null) {
-					itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + ")");
+			}
+			foreach (IEquipment item in this.Inventory) {
+				if (!item.IsEquipped()) {
+					string itemName = this.GetInventoryName(item);
+					Console.WriteLine(itemName);
 				}
-				Weapon isItemWeapon = item as Weapon;
-				if (isItemWeapon != null) {
-					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + ")");
-				}
-				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
-				Console.WriteLine(itemName);
 			}
 			foreach (Consumable item in this.Consumables) {
 				var itemInfo = new StringBuilder();
@@ -92,10 +101,29 @@ namespace DungeonGame {
 			}
 			Console.WriteLine("Gold: " + this.Gold + " coins.");
     }
+		public string GetInventoryName(IEquipment item) {
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			var itemInfo = new StringBuilder();
+			try {
+				itemInfo.Append(item.GetName().ToString());
+				}
+			catch (NullReferenceException) { }
+			Armor isItemArmor = item as Armor;
+			if (isItemArmor != null) {
+				itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + ")");
+				}
+			Weapon isItemWeapon = item as Weapon;
+			if (isItemWeapon != null) {
+				itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + ")");
+				}
+			var itemName = textInfo.ToTitleCase(itemInfo.ToString());
+			return itemName;
+		}
     public void LevelUpCheck() {
-      if (this.Experience >= 500) {
+      if (this.Experience >= this.ExperienceToLevel) {
         this.Level += 1;
-        this.Experience -= 500;
+        this.Experience -= this.ExperienceToLevel;
+				this.ExperienceToLevel *= 2;
         // Increase HP and MP from level
         this.MaxHitPoints += 20;
         this.MaxManaPoints += 20;
@@ -124,19 +152,19 @@ namespace DungeonGame {
 			var totalArmorRating = 0;
 			try {
 				if (this.Player_Chest_Armor.IsEquipped()) {
-					totalArmorRating += this.Player_Chest_Armor.ArmorRating;
+					totalArmorRating += (int)this.Player_Chest_Armor.GetArmorRating();
 				}
 			}
 			catch(NullReferenceException) {}
 			try {
 				if (this.Player_Head_Armor.IsEquipped()) {
-					totalArmorRating += this.Player_Head_Armor.ArmorRating;
+					totalArmorRating += (int)this.Player_Head_Armor.GetArmorRating();
 				}
 			}
 			catch(NullReferenceException) {}
 			try {
 				if (this.Player_Legs_Armor.IsEquipped()) {
-					totalArmorRating += this.Player_Legs_Armor.ArmorRating;
+					totalArmorRating += (int)this.Player_Legs_Armor.GetArmorRating();
 				}
 			}
 			catch(NullReferenceException) {}
@@ -197,7 +225,7 @@ namespace DungeonGame {
 			for (int i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
 				inputString.Append(' ');
-				}
+			}
 			var inputName = inputString.ToString().Trim();
 			foreach (var item in Inventory) {
 				var itemName = item.GetName().Split(' ');
@@ -254,13 +282,12 @@ namespace DungeonGame {
 			}
 			try {
 				if (this.Player_Weapon.Equipped == true) {
-					this.Player_Weapon.Equipped = false;
-					Console.WriteLine("You have unequipped {0}.", this.Player_Weapon.GetName());
+					this.UnequipWeapon(this.Player_Weapon);
 				}
 			}
 			catch(NullReferenceException) {}
-			weapon.Equipped = true;
 			this.Player_Weapon = weapon;
+			weapon.Equipped = true;
 			Console.WriteLine("You have equipped {0}.", this.Player_Weapon.GetName());
 		}
 		public void UnequipArmor(Armor armor) {
@@ -272,17 +299,14 @@ namespace DungeonGame {
 			var itemSlot = armor.ArmorCategory.ToString();
 			switch (itemSlot) {
 				case "Head":
-					this.Player_Head_Armor.Equipped = false;
 					Console.WriteLine("You have unequipped {0}.", this.Player_Head_Armor.GetName());
 					this.Player_Head_Armor = null;
 					break;
 				case "Chest":
-					this.Player_Chest_Armor.Equipped = false;
 					Console.WriteLine("You have unequipped {0}.", this.Player_Chest_Armor.GetName());
 					this.Player_Chest_Armor = null;
 					break;
 				case "Legs":
-					this.Player_Legs_Armor.Equipped = false;
 					Console.WriteLine("You have unequipped {0}.", this.Player_Legs_Armor.GetName());
 					this.Player_Legs_Armor = null;
 					break;
@@ -295,40 +319,39 @@ namespace DungeonGame {
 				Console.WriteLine("You have already equipped {0}.", armor.GetName());
 				return;
 			}
-			armor.Equipped = true;
 			var itemSlot = armor.ArmorCategory.ToString();
 			switch(itemSlot) {
 				case "Head":
 					try {
 						if (this.Player_Head_Armor.Equipped == true) {
-							this.Player_Head_Armor.Equipped = false;
-							Console.WriteLine("You have unequipped {0}.", this.Player_Head_Armor.GetName());
+							this.UnequipArmor(this.Player_Head_Armor);
 						}
 					}
 					catch(NullReferenceException) {}
 					this.Player_Head_Armor = armor;
+					armor.Equipped = true;
 					Console.WriteLine("You have equipped {0}.", this.Player_Head_Armor.GetName());
 					break;
 				case "Chest":
 					try {
 						if (this.Player_Chest_Armor.Equipped == true) {
-							this.Player_Chest_Armor.Equipped = false;
-							Console.WriteLine("You have unequipped {0}.", this.Player_Chest_Armor.GetName());
+							this.UnequipArmor(this.Player_Chest_Armor);
 						}
 					}
 					catch (NullReferenceException) {}
 					this.Player_Chest_Armor = armor;
+					armor.Equipped = true;
 					Console.WriteLine("You have equipped {0}.", this.Player_Chest_Armor.GetName());
 					break;
 				case "Legs":
 					try {
 						if (this.Player_Legs_Armor.Equipped == true) {
-							this.Player_Legs_Armor.Equipped = false;
-							Console.WriteLine("You have unequipped {0}.", this.Player_Legs_Armor.GetName());
+							this.UnequipArmor(this.Player_Legs_Armor);
 						}
 					}
 					catch (NullReferenceException) {}
 					this.Player_Legs_Armor = armor;
+					armor.Equipped = true;
 					Console.WriteLine("You have equipped {0}.", this.Player_Legs_Armor.GetName());
 					break;
 				default:

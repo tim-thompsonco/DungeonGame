@@ -94,10 +94,9 @@ namespace DungeonGame {
 					serializer.Serialize(writer, player, typeof(Player));
 				}
 				Console.WriteLine("Your game has been saved.");
+				return;
 			}
-			else {
-				Console.WriteLine("You can't save inside a dungeon! Go outside first.");
-			}
+			Console.WriteLine("You can't save inside a dungeon! Go outside first.");
 		}
   }
 }
