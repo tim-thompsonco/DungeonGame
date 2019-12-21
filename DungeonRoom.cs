@@ -17,21 +17,21 @@ namespace DungeonGame {
 		public bool GoUp { get; set; }
 		public bool GoDown { get; set; }
 		public string Name { get; set; }
-    public string Desc { get; set; }
-    public int X { get; set; }
+		public string Desc { get; set; }
+		public int X { get; set; }
 		public int Y { get; set; }
 		public int Z { get; set; }
-    public List<string> Commands { get; set; } = new List<string>() {
-      "[I]nventory",
+		public List<string> Commands { get; set; } = new List<string>() {
+			"[I]nventory",
 			"Save",
-      "[Q]uit"};
-    // List of objects in room (including monsters)
-    private readonly List<IRoomInteraction> RoomObjects = new List<IRoomInteraction>();
-    public IMonster Monster;
+			"[Q]uit"};
+		// List of objects in room (including monsters)
+		private readonly List<IRoomInteraction> RoomObjects = new List<IRoomInteraction>();
+		public IMonster Monster;
 
-    public DungeonRoom (
-      string name,
-      string desc,
+		public DungeonRoom(
+			string name,
+			string desc,
 			int x,
 			int y,
 			int z,
@@ -45,14 +45,14 @@ namespace DungeonGame {
 			bool goSouthEast,
 			bool goUp,
 			bool goDown
-      ) {
-      this.Name = name;
-      this.Desc = desc;
-      this.X = x;
+			) {
+			this.Name = name;
+			this.Desc = desc;
+			this.X = x;
 			this.Y = y;
 			this.Z = z;
-      this.GoNorth = goNorth;
-      this.GoSouth = goSouth;
+			this.GoNorth = goNorth;
+			this.GoSouth = goSouth;
 			this.GoEast = goEast;
 			this.GoWest = goWest;
 			this.GoNorthWest = goNorthWest;
@@ -61,7 +61,7 @@ namespace DungeonGame {
 			this.GoSouthEast = goSouthEast;
 			this.GoUp = goUp;
 			this.GoDown = goDown;
-    }
+		}
 		public DungeonRoom(
 			string name,
 			string desc,
@@ -84,12 +84,12 @@ namespace DungeonGame {
 			this.Monster = monster;
 		}
 
-		public void AttackOpponent(Player player, string[] input) {
+		public bool AttackOpponent(Player player, string[] input) {
 			var inputString = new StringBuilder();
 			for (int i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
 				inputString.Append(' ');
-				}
+			}
 			var inputName = inputString.ToString().Trim();
 			var monsterName = Monster.GetName().Split(' ');
 			if (monsterName.Last() == inputName || Monster.GetName() == inputName) {
@@ -98,6 +98,7 @@ namespace DungeonGame {
 					bool outcome = fightEvent.SingleCombat(Monster, player);
 					if (outcome == false) {
 						Helper.PlayerDeath();
+						return false;
 					}
 				}
 				else {
@@ -107,28 +108,29 @@ namespace DungeonGame {
 			else {
 				Console.WriteLine("There is no {0} to attack.", inputName);
 			}
+			return true;
 		}
-    public void RebuildRoomObjects() {
+		public void RebuildRoomObjects() {
 			RoomObjects.Clear();
-			if(this.Monster != null && !this.Monster.WasLooted) {
+			if (this.Monster != null && !this.Monster.WasLooted) {
 				RoomObjects.Add((DungeonGame.IRoomInteraction)Monster);
 			}
-    }
-    public void ShowCommands() {
+		}
+		public void ShowCommands() {
 			Console.ForegroundColor = ConsoleColor.DarkGreen;
-      Console.Write("Available Commands: ");
-      Console.WriteLine(String.Join(", ", this.Commands));
-    }
-    public void ShowDirections() {
-      Console.ForegroundColor = ConsoleColor.DarkCyan;
-      Console.Write("Available Directions: ");
-      Console.ForegroundColor = ConsoleColor.White;
-      if (this.GoNorth) {
-        Console.Write("[N]orth ");
-      }
-      if (this.GoSouth) {
-        Console.Write("[S]outh ");
-      }
+			Console.Write("Available Commands: ");
+			Console.WriteLine(String.Join(", ", this.Commands));
+		}
+		public void ShowDirections() {
+			Console.ForegroundColor = ConsoleColor.DarkCyan;
+			Console.Write("Available Directions: ");
+			Console.ForegroundColor = ConsoleColor.White;
+			if (this.GoNorth) {
+				Console.Write("[N]orth ");
+			}
+			if (this.GoSouth) {
+				Console.Write("[S]outh ");
+			}
 			if (this.GoEast) {
 				Console.Write("[E]ast ");
 			}
@@ -154,23 +156,23 @@ namespace DungeonGame {
 				Console.Write("[D]own ");
 			}
 			Console.WriteLine();
-    }
-    public void LookRoom() {
-      Console.ForegroundColor = ConsoleColor.DarkGreen;
-      Console.WriteLine("==================================================");
-      Console.ForegroundColor = ConsoleColor.DarkCyan;
-      Console.WriteLine(this.Name);
-      Console.ForegroundColor = ConsoleColor.DarkGreen;
-      Console.WriteLine("==================================================");
-      Console.ForegroundColor = ConsoleColor.DarkCyan;
-      Console.WriteLine(this.Desc);
-      Console.ForegroundColor = ConsoleColor.DarkGreen;
-      Console.WriteLine("==================================================");
-      Console.ForegroundColor = ConsoleColor.DarkCyan;
+		}
+		public void LookRoom() {
+			Console.ForegroundColor = ConsoleColor.DarkGreen;
+			Console.WriteLine("==================================================");
+			Console.ForegroundColor = ConsoleColor.DarkCyan;
+			Console.WriteLine(this.Name);
+			Console.ForegroundColor = ConsoleColor.DarkGreen;
+			Console.WriteLine("==================================================");
+			Console.ForegroundColor = ConsoleColor.DarkCyan;
+			Console.WriteLine(this.Desc);
+			Console.ForegroundColor = ConsoleColor.DarkGreen;
+			Console.WriteLine("==================================================");
+			Console.ForegroundColor = ConsoleColor.DarkCyan;
 			Console.Write("Room Contents: ");
 			Console.ForegroundColor = ConsoleColor.White;
 			this.RebuildRoomObjects();
-			if(RoomObjects.Count > 0 && RoomObjects[0] != null) {
+			if (RoomObjects.Count > 0 && RoomObjects[0] != null) {
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (IRoomInteraction item in RoomObjects) {
 					var itemTitle = item.GetName().ToString();
@@ -182,14 +184,14 @@ namespace DungeonGame {
 				Console.Write("There is nothing in the room");
 			}
 			Console.WriteLine("."); // Add period at end of list of objects in room
-      this.ShowDirections();
-    }
+			this.ShowDirections();
+		}
 		public void LootCorpse(Player player, string[] input) {
 			var inputString = new StringBuilder();
 			for (int i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
 				inputString.Append(' ');
-				}
+			}
 			var inputName = inputString.ToString().Trim();
 			var monsterName = Monster.GetName().Split(' ');
 			if (monsterName.Last() == inputName || Monster.GetName() == inputName) {
@@ -231,13 +233,13 @@ namespace DungeonGame {
 		}
 		public void LookNpc(string[] input) {
 			var inputString = new StringBuilder();
-			for(int i = 1; i < input.Length; i++) {
+			for (int i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
 				inputString.Append(' ');
 			}
 			var inputName = inputString.ToString().Trim();
 			var monsterName = Monster.GetName().Split(' ');
-			if(monsterName.Last() == inputName || Monster.GetName() == inputName) {
+			if (monsterName.Last() == inputName || Monster.GetName() == inputName) {
 				Console.ForegroundColor = ConsoleColor.DarkCyan;
 				Console.WriteLine(Monster.Desc);
 				Console.Write("\nHe is carrying:\n");

@@ -1,14 +1,14 @@
 ﻿using System;
 
 namespace DungeonGame {
-  public class Armor : IRoomInteraction, IEquipment {
+	public class Armor : IRoomInteraction, IEquipment {
 		public enum ArmorSlot {
 			Head,
 			Chest,
 			Legs
 		}
 		private static readonly Random RndGenerate = new Random();
-    public string Name { get; set; }
+		public string Name { get; set; }
 		public ArmorSlot ArmorCategory { get; set; }
 		public int ItemValue { get; set; }
 		public int ArmorRating { get; set; }
@@ -32,8 +32,8 @@ namespace DungeonGame {
 		}
 
 		public string GetName() {
-      return this.Name;
-    }
+			return this.Name;
+		}
 		public bool IsEquipped() {
 			return this.Equipped;
 		}
@@ -44,5 +44,5 @@ namespace DungeonGame {
 			var adjArmorRating = this.ArmorRating * (this.Durability / 100f);
 			return adjArmorRating;
 		}
-  }
+	}
 }

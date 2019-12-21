@@ -4,22 +4,29 @@ using System.IO;
 using System.Collections.Generic;
 
 namespace DungeonGame {
-  public static class Helper {
-    public static string GetFormattedInput() {
-      var input = Console.ReadLine();
-      var inputFormatted = input.ToLower().Trim();
-      return inputFormatted;
-    }
-    public static void RequestCommand() {
-      Console.Write("Your command: ");
-    }
-    public static void PlayerDeath() {
-      Console.WriteLine("You have died. Game over.");
-    }
+	public static class Helper {
+		public static string GetFormattedInput() {
+			var input = Console.ReadLine();
+			var inputFormatted = input.ToLower().Trim();
+			return inputFormatted;
+		}
+		public static void RequestCommand() {
+			Console.ForegroundColor = ConsoleColor.Gray;
+			Console.Write("Your command: ");
+		}
+		public static void PlayerDeath() {
+			Console.ForegroundColor = ConsoleColor.Gray;
+			Console.WriteLine("You have died. Game over.");
+		}
 		public static void GameIntro() {
+			Console.ForegroundColor = ConsoleColor.Gray;
 			Console.WriteLine(
 				"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot " +
-				"and explore dungeons. Stuff you've probably done a million times already across various RPG games.\n");
+				"and explore dungeons. Stuff you've probably done a million times already across various RPG games. At any time " +
+				"you can get help on commands by typing 'help'.\n");
+		}
+		public static void ShowCommandHelp() {
+			Console.ForegroundColor = ConsoleColor.Gray;
 			Console.WriteLine(
 				"Commands: Players may move in any direction of the game using a shortkey or the full direction name. " +
 				"For example, if you wish to go north, you may type either 'N' or 'North'. If a player wishes to look " +
@@ -27,32 +34,33 @@ namespace DungeonGame {
 				"'l zombie' or 'look zombie' would allow you to look at a zombie in the room. The same commands will  " +
 				"work to loot a monster that you have killed. Look or 'L' by itself will look at the room. Other common " +
 				"commands will be shown to the player. Any object that is consumable, such as a potion, can be drank " +
-				"by typing 'drink' and then the name of the potion or object.");
-			Console.WriteLine("For now, please enter a player name.\n");
+				"by typing 'drink' and then the name of the potion or object. To use armor or weapons, you must 'equip' " +
+				"them. You can 'unequip' them as well.");
 		}
 		public static string FetchPlayerName() {
-			while(true) {
+			Console.ForegroundColor = ConsoleColor.Gray;
+			while (true) {
 				Console.Write("Player name: ");
 				var playerName = Console.ReadLine();
 				Console.WriteLine("Your player name is {0}, is that correct? [Y] or [N].", playerName);
 				RequestCommand();
 				string input = GetFormattedInput();
-				if(input == "y") {
+				if (input == "y") {
 					return playerName;
 				}
 			}
 		}
-    public static void InvalidCommand() {
-      Console.ForegroundColor = ConsoleColor.DarkCyan;
-      Console.WriteLine("Not a valid command.");
-    }
-    public static int ChangeRoom(List<IRoom> roomList, Player player, int x, int y, int z) {
+		public static void InvalidCommand() {
+			Console.ForegroundColor = ConsoleColor.DarkCyan;
+			Console.WriteLine("Not a valid command.");
+		}
+		public static int ChangeRoom(List<IRoom> roomList, Player player, int x, int y, int z) {
 			player.X += x;
 			player.Y += y;
 			player.Z += z;
 			// Set player location to location of room found in search
-      IRoom roomName = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
-      var roomIndex = roomList.IndexOf(roomName);
+			IRoom roomName = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
+			var roomIndex = roomList.IndexOf(roomName);
 			roomList[roomIndex].LookRoom();
 			var roomType = roomList[roomIndex].GetType().Name;
 			if (roomType == "DungeonRoom") {
@@ -64,9 +72,15 @@ namespace DungeonGame {
 			return roomIndex;
 		}
 		public static void InvalidDirection() {
+			Console.ForegroundColor = ConsoleColor.DarkCyan;
 			Console.WriteLine("You can't go that way!");
 		}
+		public static void InvalidVendorSell() {
+			Console.ForegroundColor = ConsoleColor.DarkCyan;
+			Console.WriteLine("The vendor doesn't want that.");
+		}
 		public static bool QuitGame(Player player) {
+			Console.ForegroundColor = ConsoleColor.Gray;
 			Console.WriteLine("Are you sure you want to quit?");
 			string input = Helper.GetFormattedInput();
 			if (input == "yes" || input == "y") {
@@ -84,6 +98,7 @@ namespace DungeonGame {
 			return false;
 		}
 		public static void SaveGame(Player player) {
+			Console.ForegroundColor = ConsoleColor.Gray;
 			if (player.CanSave == true) {
 				var serializer = new Newtonsoft.Json.JsonSerializer();
 				serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
@@ -100,5 +115,5 @@ namespace DungeonGame {
 			}
 			Console.WriteLine("You can't save inside a dungeon! Go outside first.");
 		}
-  }
+	}
 }

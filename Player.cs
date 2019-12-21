@@ -12,31 +12,31 @@ namespace DungeonGame {
 		public int MaxManaPoints { get; set; } = 100;
 		public int HitPoints { get; set; } = 100;
 		public int ManaPoints { get; set; } = 100;
-    public int Gold { get; set; } = 0;
-    public int Experience { get; set; } = 0;
+		public int Gold { get; set; } = 0;
+		public int Experience { get; set; } = 0;
 		public int ExperienceToLevel { get; set; } = 500;
 		public int Level { get; set; } = 1;
-    public int X { get; set; } = 0;
+		public int X { get; set; } = 0;
 		public int Y { get; set; } = 0;
 		public int Z { get; set; } = 0;
 		public bool CanSave { get; set; }
-    public Armor Player_Chest_Armor { get; set; }
-    public Armor Player_Head_Armor { get; set; }
-    public Armor Player_Legs_Armor { get; set; }
+		public Armor Player_Chest_Armor { get; set; }
+		public Armor Player_Head_Armor { get; set; }
+		public Armor Player_Legs_Armor { get; set; }
 		public Weapon Player_Weapon { get; set; }
 		public Spell Player_Spell { get; set; }
 		public List<Consumable> Consumables { get; set; }
 		public List<IEquipment> Inventory { get; set; }
 
 		[JsonConstructor]
-    public Player (string name) {
+		public Player(string name) {
 			this.Name = name;
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();
-			this.Inventory.Add(new Weapon("bronze sword", 22, 28, 25, 1.2, false));
-			this.Inventory.Add(new Armor("bronze chestplate", Armor.ArmorSlot.Chest, 35, 10, 20, false));
-			this.Inventory.Add(new Armor("bronze helmet", Armor.ArmorSlot.Head, 12, 3, 7, false));
-			this.Inventory.Add(new Armor("bronze legplates", Armor.ArmorSlot.Legs, 20, 5, 10, false));
+			this.Inventory.Add(new Weapon("iron sword", 19, 25, 25, 1.2, false));
+			this.Inventory.Add(new Armor("iron chestplate", Armor.ArmorSlot.Chest, 35, 5, 10, false));
+			this.Inventory.Add(new Armor("iron helmet", Armor.ArmorSlot.Head, 12, 1, 3, false));
+			this.Inventory.Add(new Armor("iron legplates", Armor.ArmorSlot.Legs, 20, 3, 7, false));
 			this.Consumables.Add(new Consumable("minor health potion", 3, Consumable.PotionType.Health, 50));
 			this.Consumables.Add(new Consumable("minor mana potion", 3, Consumable.PotionType.Mana, 50));
 			this.Player_Spell = new Spell("Fireball", 50, 0, 1);
@@ -59,9 +59,9 @@ namespace DungeonGame {
 			this.EquipArmor(this.Inventory[2] as Armor);
 			this.EquipArmor(this.Inventory[3] as Armor);
 		}
-    public void ShowInventory(Player player) {
-      Console.ForegroundColor = ConsoleColor.DarkGray;
-      Console.WriteLine("Your inventory contains:\n");
+		public void ShowInventory(Player player) {
+			Console.ForegroundColor = ConsoleColor.DarkGray;
+			Console.WriteLine("Your inventory contains:\n");
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (IEquipment item in this.Inventory) {
 				if (item.IsEquipped()) {
@@ -77,13 +77,11 @@ namespace DungeonGame {
 					Console.WriteLine(itemName);
 				}
 			}
+			var consumableDict = new Dictionary<string, int>();
 			foreach (Consumable item in this.Consumables) {
 				var itemInfo = new StringBuilder();
-				try {
-					itemInfo.Append(item.GetName().ToString());
-				}
-				catch (NullReferenceException) { }
-				switch(item.PotionCategory.ToString()) {
+				itemInfo.Append(item.GetName().ToString());
+				switch (item.PotionCategory.ToString()) {
 					case "Health":
 						itemInfo.Append(" (" + item.RestoreHealth.RestoreHealthAmt + ")");
 						break;
@@ -94,10 +92,19 @@ namespace DungeonGame {
 						break;
 				}
 				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
-				Console.WriteLine(itemName);
+				if (!consumableDict.ContainsKey(itemName)) {
+					consumableDict.Add(itemName, 1);
+					continue;
+				}
+				var dictValue = consumableDict[itemName];
+				dictValue += 1;
+				consumableDict[itemName] = dictValue;
+			}
+			foreach (var potion in consumableDict) {
+				Console.WriteLine(potion.Key + " (Quantity: {0})", potion.Value);
 			}
 			Console.WriteLine("Gold: " + this.Gold + " coins.");
-    }
+		}
 		public string GetInventoryName(IEquipment item) {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			var itemInfo = new StringBuilder();
@@ -113,29 +120,29 @@ namespace DungeonGame {
 			var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 			return itemName;
 		}
-    public void LevelUpCheck() {
-      if (this.Experience >= this.ExperienceToLevel) {
-        this.Level += 1;
-        this.Experience -= this.ExperienceToLevel;
+		public void LevelUpCheck() {
+			if (this.Experience >= this.ExperienceToLevel) {
+				this.Level += 1;
+				this.Experience -= this.ExperienceToLevel;
 				this.ExperienceToLevel *= 2;
-        // Increase HP and MP from level
-        this.MaxHitPoints += 20;
-        this.MaxManaPoints += 20;
-        // Leveling sets player back to max HP/MP
-        this.HitPoints = this.MaxHitPoints;
-        this.ManaPoints = this.MaxManaPoints;
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("You have leveled! You are now level {0}.", this.Level);
-      }
-    }
+				// Increase HP and MP from level
+				this.MaxHitPoints += 20;
+				this.MaxManaPoints += 20;
+				// Leveling sets player back to max HP/MP
+				this.HitPoints = this.MaxHitPoints;
+				this.ManaPoints = this.MaxManaPoints;
+				Console.ForegroundColor = ConsoleColor.Cyan;
+				Console.WriteLine("You have leveled! You are now level {0}.", this.Level);
+			}
+		}
 		public void DisplayPlayerStats() {
-      Console.ForegroundColor = ConsoleColor.DarkGreen;
-      Console.WriteLine("==================================================");
+			Console.ForegroundColor = ConsoleColor.DarkGreen;
+			Console.WriteLine("==================================================");
 			Console.WriteLine("HP: {0}/{1} MP: {2}/{3} EXP: {4} LVL: {5}",
-        this.HitPoints, this.MaxHitPoints, this.ManaPoints, this.MaxManaPoints,
-        this.Experience, this.Level);
-      Console.WriteLine("==================================================");
-    }
+				this.HitPoints, this.MaxHitPoints, this.ManaPoints, this.MaxManaPoints,
+				this.Experience, this.Level);
+			Console.WriteLine("==================================================");
+		}
 		public void GainExperience(int experience) {
 			this.Experience += experience;
 		}
@@ -155,20 +162,20 @@ namespace DungeonGame {
 			}
 			return totalArmorRating;
 		}
-    public int ArmorRating(IMonster opponent) {
+		public int ArmorRating(IMonster opponent) {
 			int totalArmorRating = CheckArmorRating();
 			int levelDiff = opponent.Level - this.Level;
 			double armorMultiplier = 1.00 + (-(double)levelDiff / 20);
 			double adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
-    }
+		}
 		public int Attack() {
 			try {
 				if (this.Player_Weapon.IsEquipped()) {
 					return this.Player_Weapon.Attack();
 				}
 			}
-			catch(NullReferenceException) {
+			catch (NullReferenceException) {
 				Console.WriteLine("Your weapon is not equipped! Going hand to hand!");
 			}
 			return 5;
@@ -206,6 +213,7 @@ namespace DungeonGame {
 			}
 		}
 		public void EquipItem(string[] input) {
+			Console.ForegroundColor = ConsoleColor.Green;
 			var inputString = new StringBuilder();
 			for (int i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
@@ -302,7 +310,7 @@ namespace DungeonGame {
 				return;
 			}
 			var itemSlot = armor.ArmorCategory.ToString();
-			switch(itemSlot) {
+			switch (itemSlot) {
 				case "Head":
 					if (this.Player_Head_Armor != null && this.Player_Head_Armor.Equipped == true) {
 						this.UnequipArmor(this.Player_Head_Armor);

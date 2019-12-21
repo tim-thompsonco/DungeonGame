@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace DungeonGame {
 	public class Monster : IMonster {
-    public string Name { get; set; }
+		public string Name { get; set; }
 		public string Desc { get; set; }
 		public int Level { get; set; }
 		public int MaxHitPoints { get; set; }
-    public int HitPoints { get; set; }
-    public int ExperienceProvided { get; set; }
-    public int Gold { get; set; }
-    public bool OnFire { get; set; } = false;
-    public bool WasLooted { get; set; } = false;
+		public int HitPoints { get; set; }
+		public int ExperienceProvided { get; set; }
+		public int Gold { get; set; }
+		public bool OnFire { get; set; } = false;
+		public bool WasLooted { get; set; } = false;
 		public List<IEquipment> MonsterItems { get; set; } = new List<IEquipment>();
 		public Loot Item;
 		public Consumable Consumable;
@@ -21,14 +21,14 @@ namespace DungeonGame {
 		public Armor Monster_Leg_Armor;
 
 		public Monster(string name, string desc, int level, int GoldCoins, int MaxHP, int ExpProvided, Weapon weapon) {
-      this.Name = name;
+			this.Name = name;
 			this.Desc = desc;
 			this.Level = level;
-      this.Gold = GoldCoins;
+			this.Gold = GoldCoins;
 			this.MaxHitPoints = MaxHP;
 			this.HitPoints = MaxHP;
-      this.ExperienceProvided = ExpProvided;
-      this.Monster_Weapon = weapon;
+			this.ExperienceProvided = ExpProvided;
+			this.Monster_Weapon = weapon;
 			this.MonsterItems.Add((DungeonGame.IEquipment)this.Monster_Weapon);
 		}
 		public Monster(string name, string desc, int level, int GoldCoins, int MaxHP, int ExpProvided, Weapon weapon, Loot item)
@@ -50,15 +50,15 @@ namespace DungeonGame {
 		}
 
 		public void TakeDamage(int weaponDamage) {
-      HitPoints -= weaponDamage;
-    }
-    public void DisplayStats() {
-      Console.WriteLine("Opponent HP: {0} / {1}", HitPoints, MaxHitPoints);
-      Console.WriteLine("==================================================");
-    }
-    public int Attack() {
-      return Monster_Weapon.Attack();
-    }
+			HitPoints -= weaponDamage;
+		}
+		public void DisplayStats() {
+			Console.WriteLine("Opponent HP: {0} / {1}", HitPoints, MaxHitPoints);
+			Console.WriteLine("==================================================");
+		}
+		public int Attack() {
+			return Monster_Weapon.Attack();
+		}
 		public int CheckArmorRating() {
 			var totalArmorRating = 0;
 			if (this.Monster_Chest_Armor != null && this.Monster_Chest_Armor.IsEquipped()) {
@@ -80,8 +80,8 @@ namespace DungeonGame {
 			return (int)adjArmorRating;
 		}
 		public string GetName() {
-      return this.Name.ToString();
-    }
+			return this.Name.ToString();
+		}
 		public bool IsEquipped() {
 			return false;
 		}
