@@ -2,48 +2,48 @@
 using System.Linq;
 
 namespace DungeonGame {
-  public class CombatHelper {
+	public class CombatHelper {
 		public String[] Commands { get; set; } = new String[3] {
 		"[F]ight", "[I]nventory", "[C]ast [F]ireball" };
 
 		public bool SingleCombat(IMonster opponent, Player player) {
-      Console.ForegroundColor = ConsoleColor.Green;
-      Console.WriteLine("{0}, you have encountered a {1}. Time to fight!",
-        player.Name, opponent.Name);
-      while (true) {
-        player.DisplayPlayerStats();
-        opponent.DisplayStats();
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("{0}, you have encountered a {1}. Time to fight!",
+				player.Name, opponent.Name);
+			while (true) {
+				player.DisplayPlayerStats();
+				opponent.DisplayStats();
 				Console.Write("Available Commands: ");
 				Console.WriteLine(String.Join(", ", this.Commands));
 				Helper.RequestCommand();
 				string input = Helper.GetFormattedInput();
 				var inputParse = input.Split(' ');
 				Console.WriteLine(); // To add a blank space between the command and fight sequence
-        switch (inputParse[0]) {
-          case "f":
+				switch (inputParse[0]) {
+					case "f":
 					case "fight":
-            int attackDamage = player.Attack();
+						int attackDamage = player.Attack();
 						if (attackDamage - opponent.ArmorRating(player) < 0) {
 							Console.ForegroundColor = ConsoleColor.DarkRed;
 							Console.WriteLine("The {0}'s armor absorbed all of your attack!", opponent.Name);
 						}
-            else if (attackDamage == 0) {
-              Console.ForegroundColor = ConsoleColor.DarkRed;
-              Console.WriteLine("You missed {0}!", opponent.Name);
-            }
-            else {
-              Console.ForegroundColor = ConsoleColor.Red;
-              Console.WriteLine("You hit the {0} for {1} physical damage.", opponent.Name, attackDamage - opponent.ArmorRating(player));
-              opponent.TakeDamage(attackDamage - opponent.ArmorRating(player));
-            }
-            if (opponent.HitPoints <= 0) {
-              this.SingleCombatWin(opponent, player);
-              return true;
-            }
+						else if (attackDamage == 0) {
+							Console.ForegroundColor = ConsoleColor.DarkRed;
+							Console.WriteLine("You missed {0}!", opponent.Name);
+						}
+						else {
+							Console.ForegroundColor = ConsoleColor.Red;
+							Console.WriteLine("You hit the {0} for {1} physical damage.", opponent.Name, attackDamage - opponent.ArmorRating(player));
+							opponent.TakeDamage(attackDamage - opponent.ArmorRating(player));
+						}
+						if (opponent.HitPoints <= 0) {
+							this.SingleCombatWin(opponent, player);
+							return true;
+						}
 						break;
 					case "cf":
 					case "cast fireball":
-						if(player.ManaPoints >= player.Player_Spell.ManaCost) {
+						if (player.ManaPoints >= player.Player_Spell.ManaCost) {
 							player.ManaPoints -= player.Player_Spell.ManaCost;
 							attackDamage = player.Player_Spell.FireOffense.BlastDamage;
 							if (attackDamage == 0) {
@@ -81,9 +81,9 @@ namespace DungeonGame {
 						player.ShowInventory(player);
 						continue;
 					default:
-            Helper.InvalidCommand();
+						Helper.InvalidCommand();
 						continue;
-        }
+				}
 				if (opponent.OnFire) {
 					int burnDamage = player.Player_Spell.FireOffense.BurnDamage;
 					Console.ForegroundColor = ConsoleColor.Yellow;
@@ -101,26 +101,26 @@ namespace DungeonGame {
 					Console.WriteLine("Your armor absorbed all of {0}'s attack!", opponent.Name);
 					player.DecreaseArmorDurability();
 				}
-        else if (attackDamageM == 0) {
-          Console.ForegroundColor = ConsoleColor.DarkRed;
-          Console.WriteLine("The {0} missed you!", opponent.Name);
-        }
-        else {
-          Console.ForegroundColor = ConsoleColor.Red;
-          Console.WriteLine("The {0} hits you for {1} physical damage.",
-            opponent.Name, attackDamageM - player.ArmorRating(opponent));
-          player.TakeDamage(attackDamageM - player.ArmorRating(opponent));
+				else if (attackDamageM == 0) {
+					Console.ForegroundColor = ConsoleColor.DarkRed;
+					Console.WriteLine("The {0} missed you!", opponent.Name);
+				}
+				else {
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine("The {0} hits you for {1} physical damage.",
+						opponent.Name, attackDamageM - player.ArmorRating(opponent));
+					player.TakeDamage(attackDamageM - player.ArmorRating(opponent));
 					player.DecreaseArmorDurability();
 					if (player.HitPoints <= 0) {
-            return false;
-          }
-        }
-      }
-    }
-    public void SingleCombatWin(IMonster opponent, Player player) {
-      Console.ForegroundColor = ConsoleColor.Green;
-      Console.WriteLine("You have defeated the {0}!", opponent.Name);
-			foreach(IEquipment loot in opponent.MonsterItems) {
+						return false;
+					}
+				}
+			}
+		}
+		public void SingleCombatWin(IMonster opponent, Player player) {
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("You have defeated the {0}!", opponent.Name);
+			foreach (IEquipment loot in opponent.MonsterItems) {
 				loot.Equipped = false;
 			}
 			opponent.Name = "Dead " + opponent.GetName();
@@ -128,5 +128,5 @@ namespace DungeonGame {
 			player.GainExperience(opponent.ExperienceProvided);
 			player.LevelUpCheck();
 		}
-  }
+	}
 }

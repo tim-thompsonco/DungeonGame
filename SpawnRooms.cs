@@ -58,8 +58,8 @@ namespace DungeonGame {
 				100, // Experience provided
 					new Weapon(
 						"notched axe", // Name
-						15, // Low end of damage value range
-						25, // High end of damage value range
+						12, // Low end of damage value range
+						22, // High end of damage value range
 						10, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
@@ -96,10 +96,10 @@ namespace DungeonGame {
 				120, // Experience provided
 					new Weapon(
 						"venomous fang", // Name
-						20, // Low end of damage value range
-						30, // High end of damage value range
+						17, // Low end of damage value range
+						27, // High end of damage value range
 						25, // Item value
-						1.2, // Crit multiplier
+						1.3, // Crit multiplier
 						true // Equipped bool
 						),
 					new Loot(
@@ -112,7 +112,7 @@ namespace DungeonGame {
 				"Corridor", // Name
 				"You are at the end of a corridor carved out of smooth rock approximately 6 feet wide and 10 feet high. " +
 				"Torches in holders along the wall illuminate the hallway. The corridor ends in a pathway leading to the " +
-				"west, where the other smooth rock platform that you saw previously is." , // Description
+				"west, where the other smooth rock platform that you saw previously is.", // Description
 				1, // X coordinate
 				3, // Y coordinate
 				0, // Z coordinate
@@ -138,8 +138,8 @@ namespace DungeonGame {
 				120, // Experience provided
 					new Weapon(
 						"dull sword", // Name
-						16, // Low end of damage value range
-						23, // High end of damage value range
+						13, // Low end of damage value range
+						20, // High end of damage value range
 						25, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
@@ -147,9 +147,9 @@ namespace DungeonGame {
 					new Armor(
 						"bony chestplate", // Name
 						Armor.ArmorSlot.Chest, // Armor slot
-						10, // Item value
-						5, // Low end of armor value range
-						10, // High end of armor value range
+						25, // Item value
+						3, // Low end of armor value range
+						8, // High end of armor value range
 						true // Equipped bool
 						),
 					new Consumable(
@@ -185,26 +185,26 @@ namespace DungeonGame {
 				"skeleton guardian", // Name
 				"A skeleton stands in front of you. His bones look stronger than that of a normal skeleton. A ghastly " +
 				"yellow glow surrounds him, which is the only indication of the magic that must exist to reanimate this " +
-				"undead warrior. A shoddy, iron helmet adorns his head and a well-crafted iron longsword is clutched by " +
+				"undead warrior. A shoddy, bronze helmet adorns his head and a well-crafted bronze longsword is clutched by " +
 				"his skeletal fingers, which tighten their grip as he shuffles towards you and grunts.", // Description
 				2, // Level
 				20, // Gold
 				120, // Max HP
 				160, // Experience provided
 					new Weapon(
-						"iron longsword", // Name
-						22, // Low end of damage value range
-						28, // High end of damage value range
+						"bronze longsword", // Name
+						21, // Low end of damage value range
+						27, // High end of damage value range
 						30, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
 						),
 					new Armor(
-						"iron helmet", // Name
+						"bronze helmet", // Name
 						Armor.ArmorSlot.Head, // Armor slot
 						15, // Item value
-						8, // Low end of armor value range
-						12, // High end of armor value range
+						2, // Low end of armor value range
+						4, // High end of armor value range
 						true // Equipped bool
 						),
 					new Consumable(
@@ -245,8 +245,8 @@ namespace DungeonGame {
 				120, // Experience provided
 					new Weapon(
 						"dull sword", // Name
-						16, // Low end of damage value range
-						23, // High end of damage value range
+						13, // Low end of damage value range
+						20, // High end of damage value range
 						25, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
@@ -254,9 +254,9 @@ namespace DungeonGame {
 					new Armor(
 						"bony chestplate", // Name
 						Armor.ArmorSlot.Chest, // Armor slot
-						10, // Item value
-						5, // Low end of armor value range
-						10, // High end of armor value range
+						25, // Item value
+						3, // Low end of armor value range
+						8, // High end of armor value range
 						true // Equipped bool
 						),
 					new Consumable(
@@ -297,10 +297,10 @@ namespace DungeonGame {
 				120, // Experience provided
 					new Weapon(
 						"venomous fang", // Name
-						20,  // Low end of damage value range
-						30, // High end of damage value range
+						17,  // Low end of damage value range
+						27, // High end of damage value range
 						25, // Item value
-						1.2, // Crit multiplier
+						1.3, // Crit multiplier
 						true // Equipped bool
 						),
 					new Loot(
@@ -359,10 +359,10 @@ namespace DungeonGame {
 				250, // Experience provided
 					new Weapon(
 						"obsidian axe", // Name
-						30, // Low end of damage value range
-						36, // High end of damage value range
+						27, // Low end of damage value range
+						33, // High end of damage value range
 						50, // Item value
-						1.2, // Crit multiplier
+						1.1, // Crit multiplier
 						true // Equipped bool
 						),
 					new Loot(
@@ -459,7 +459,7 @@ namespace DungeonGame {
 				true, // goSouth bool
 				false, // goEast bool
 				false, // goWest bool
-				false, // goNorthWest bool
+				true, // goNorthWest bool
 				false, // goSouthWest bool
 				true, // goNorthEast bool
 				false, // goSouthEast bool
@@ -468,7 +468,7 @@ namespace DungeonGame {
 			this.SpawnedRooms.Add(room113);
 			var room114 = new TownRoom(
 				"Town - East", // Name
-				"You are in the east part of your town. In front of you is a small building with a forge and furnace outside " +
+				"You are in the east part of the town. In front of you is a small building with a forge and furnace outside " +
 				"and a large man pounding away at a chestplate with a hammer. One building over you can see another large man " +
 				"running a sword against a grindstone to sharpen it.", // Description
 				1, // X coordinate
@@ -491,38 +491,37 @@ namespace DungeonGame {
 					"buy <item>, sell <item>, or <show forsale> to see what he has for sale.", // Description
 					"Armor"
 				)); // goDown bool
-				this.SpawnedRooms.Add(room114);
-				var room115 = new TownRoom(
-				"Town - East", // Name
-				"You are in the east part of your town. A large man is in front of a building sharpening a sword against " +
-												"a grindstone. To the south, you can see a small building with a forge and furnace outside. There is " +
-												"another large man in front of it pounding away at a chestplate with a hammer.", // Description
-				1, // X coordinate
-				9, // Y coordinate
-				2, // Z coordinate
-				false, // goNorth bool
-				true, // goSouth bool
-				false, // goEast bool
-				false, // goWest bool
-				true, // goNorthWest bool
-				false, // goSouthWest bool
-				false, // goNorthEast bool
-				false, // goSouthEast bool
-				false, // goUp bool
-				false,
-				new Vendor(
-				"weaponsmith", // Name
-				"A large man covered in sweat sharpening a sword against a grindstone. He wipes his brow as " +
-				"you approach and wonders whether you're going to make him a little bit richer or not. You can: " +
-				"buy <item>, sell <item>, or <show forsale> to see what he has for sale.", // Description
-				"Weapon"
-				)); // goDown bool
-				this.SpawnedRooms.Add(room115);
+			this.SpawnedRooms.Add(room114);
+			var room115 = new TownRoom(
+			"Town - East", // Name
+			"You are in the east part of the town. A large man is in front of a building sharpening a sword against " +
+			"a grindstone. To the south, you can see a small building with a forge and furnace outside. There is " +
+			"another large man in front of it pounding away at a chestplate with a hammer.", // Description
+			1, // X coordinate
+			9, // Y coordinate
+			2, // Z coordinate
+			false, // goNorth bool
+			true, // goSouth bool
+			false, // goEast bool
+			false, // goWest bool
+			true, // goNorthWest bool
+			false, // goSouthWest bool
+			false, // goNorthEast bool
+			false, // goSouthEast bool
+			false, // goUp bool
+			false,
+			new Vendor(
+			"weaponsmith", // Name
+			"A large man covered in sweat sharpening a sword against a grindstone. He wipes his brow as " +
+			"you approach and wonders whether you're going to make him a little bit richer or not. You can: " +
+			"buy <item>, sell <item>, or <show forsale> to see what he has for sale.", // Description
+			"Weapon"
+			)); // goDown bool
+			this.SpawnedRooms.Add(room115);
 			var room116 = new TownRoom(
-				"Town - East", // Name
-				"You are in the east part of your town. A large man is in front of a building sharpening a sword against " +
-												"a grindstone. To the south, you can see a small building with a forge and furnace outside. There is " +
-												"another large man in front of it pounding away at a chestplate with a hammer.", // Description
+				"Town - Center", // Name
+				"You are in the central part of the town. There is a wrinkled old man standing in front of " +
+				"a small hut, his hands clasped in the arms of his robes, as he gazes around the town calmly. ", // Description
 				0, // X coordinate
 				10, // Y coordinate
 				2, // Z coordinate
@@ -531,7 +530,7 @@ namespace DungeonGame {
 				false, // goEast bool
 				false, // goWest bool
 				false, // goNorthWest bool
-				false, // goSouthWest bool
+				true, // goSouthWest bool
 				false, // goNorthEast bool
 				true, // goSouthEast bool
 				false, // goUp bool
@@ -545,7 +544,52 @@ namespace DungeonGame {
 				"Healer"
 				)); // goDown bool
 			this.SpawnedRooms.Add(room116);
-			}
+			var room117 = new TownRoom(
+				"Town - West", // Name
+				"You are in the west part of the town. A woman stands in front of a building with displays " +
+				"of various items in front of it. It looks like she buys and sells a little bit of everything.", // Description
+				-1, // X coordinate
+				9, // Y coordinate
+				2, // Z coordinate
+				false, // goNorth bool
+				true, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				true, // goNorthEast bool
+				false, // goSouthEast bool
+				false, // goUp bool
+				false,
+				new Vendor(
+				"shopkeeper", // Name
+				"A woman in casual work clothes looks at you and asks if you want to buy anything. She raises " +
+				"an item to show an example of what she has for sale. You can buy <item>, sell <item>, or " +
+				"<show forsale> to see what she has for sale.", // Description
+				"Shopkeeper"
+				)); // goDown bool
+			this.SpawnedRooms.Add(room117);
+			var room118 = new TownRoom(
+				"Town - West", // Name
+				"You are in the west part of the town. There is a large, wooden building in front of you with a " +
+				"sign out front that reads 'Training'. Depending on what class you are, it appears that this " +
+				"place might have some people who can help you learn more.", // Description
+				-1, // X coordinate
+				8, // Y coordinate
+				2, // Z coordinate
+				true, // goNorth bool
+				false, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				false, // goNorthEast bool
+				true, // goSouthEast bool
+				false, // goUp bool
+				false // goDown bool
+				);
+			this.SpawnedRooms.Add(room118);
+		}
 
 		public List<IRoom> RetrieveSpawnRooms() {
 			return this.SpawnedRooms;

@@ -10,7 +10,7 @@ namespace DungeonGame {
 		public string Desc { get; set; }
 		public string BuySellType { get; set; }
 		public List<IEquipment> VendorItems { get; set; } = new List<IEquipment>();
-		
+
 		public Vendor(string name, string desc, string buySellType) {
 			this.Name = name;
 			this.Desc = desc;
@@ -115,20 +115,42 @@ namespace DungeonGame {
 			}
 			var inputName = inputString.ToString().Trim();
 			var index = 0;
-			index = this.VendorItems.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()));
+			if (this.BuySellType == "Healer") {
+				index = this.VendorItems.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(inputName));
+			}
+			else {
+				index = this.VendorItems.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()));
+			}
 			if (index != -1) {
-				switch(this.BuySellType) {
+				Armor buyArmor = this.VendorItems[index] as Armor;
+				Weapon buyWeapon = this.VendorItems[index] as Weapon;
+				Consumable buyConsumable = this.VendorItems[index] as Consumable;
+				switch (this.BuySellType) {
 					case "Armor":
-						Armor buyArmor = this.VendorItems[index] as Armor;
-						this.BuyItem(player, userInput, buyArmor, index);
+						if (buyArmor != null) {
+							this.BuyItem(player, userInput, buyArmor, index);
+						}
 						break;
 					case "Weapon":
-						Weapon buyWeapon = this.VendorItems[index] as Weapon;
-						this.BuyItem(player, userInput, buyWeapon, index);
+						if (buyWeapon != null) {
+							this.BuyItem(player, userInput, buyWeapon, index);
+						}
 						break;
 					case "Healer":
-						Consumable buyConsumable = this.VendorItems[index] as Consumable;
-						this.BuyItem(player, userInput, buyConsumable, index);
+						if (buyConsumable != null) {
+							this.BuyItem(player, userInput, buyConsumable, index);
+						}
+						break;
+					case "Shopkeeper":
+						if (buyArmor != null) {
+							this.BuyItem(player, userInput, buyArmor, index);
+						}
+						if (buyWeapon != null) {
+							this.BuyItem(player, userInput, buyWeapon, index);
+						}
+						if (buyConsumable != null) {
+							this.BuyItem(player, userInput, buyConsumable, index);
+						}
 						break;
 					default:
 						break;
@@ -161,20 +183,47 @@ namespace DungeonGame {
 			}
 			var inputName = inputString.ToString().Trim();
 			var index = 0;
-			index = player.Inventory.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()));
+			index = player.Inventory.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()) && f.IsEquipped() == false);
 			if (index != -1) {
+				Armor sellArmor = player.Inventory[index] as Armor;
+				Weapon sellWeapon = player.Inventory[index] as Weapon;
+				Consumable sellConsumable = player.Inventory[index] as Consumable;
+				Loot sellLoot = player.Inventory[index] as Loot;
 				switch (this.BuySellType) {
 					case "Armor":
-						Armor sellArmor = player.Inventory[index] as Armor;
-						this.SellItem(player, userInput, sellArmor, index);
+						if (sellArmor != null) {
+							this.SellItem(player, userInput, sellArmor, index);
+							break;
+						}
+						Helper.InvalidVendorSell();
 						break;
 					case "Weapon":
-						Weapon sellWeapon = player.Inventory[index] as Weapon;
-						this.SellItem(player, userInput, sellWeapon, index);
+						if (sellWeapon != null) {
+							this.SellItem(player, userInput, sellWeapon, index);
+							break;
+						}
+						Helper.InvalidVendorSell();
 						break;
 					case "Healer":
-						Consumable sellConsumable = player.Inventory[index] as Consumable;
-						this.SellItem(player, userInput, sellConsumable, index);
+						if (sellConsumable != null) {
+							this.SellItem(player, userInput, sellConsumable, index);
+							break;
+						}
+						Helper.InvalidVendorSell();
+						break;
+					case "Shopkeeper":
+						if (sellArmor != null) {
+							this.SellItem(player, userInput, sellArmor, index);
+						}
+						if (sellWeapon != null) {
+							this.SellItem(player, userInput, sellWeapon, index);
+						}
+						if (sellConsumable != null) {
+							this.SellItem(player, userInput, sellConsumable, index);
+						}
+						if (sellLoot != null) {
+							this.SellItem(player, userInput, sellLoot, index);
+						}
 						break;
 					default:
 						break;
@@ -191,7 +240,6 @@ namespace DungeonGame {
 				player.Gold += sellItem.ItemValue;
 				player.Inventory.RemoveAt(index);
 				this.VendorItems.Add(sellItem);
-				
 				Console.WriteLine("You sold {0} to the vendor for {1} gold.", sellItem.Name, sellItem.ItemValue);
 				return;
 			}
@@ -241,7 +289,8 @@ namespace DungeonGame {
 						Console.WriteLine("The vendor doesn't repair that type of equipment.");
 						break;
 					case "Healer":
-						Console.WriteLine("Healers don't repair equipment.");
+					case "Shopkeeper":
+						Console.WriteLine("{0}s don't repair equipment.", this.BuySellType);
 						break;
 					default:
 						break;
@@ -250,6 +299,15 @@ namespace DungeonGame {
 		}
 		public string GetName() {
 			return this.Name.ToString();
+		}
+		public void HealPlayer(Player player) {
+			Console.ForegroundColor = ConsoleColor.Green;
+			if (this.BuySellType == "Healer") {
+				player.HitPoints = player.MaxHitPoints;
+				Console.WriteLine("You have been restored to full health by the {0}.", this.Name);
+				return;
+			}
+			Console.WriteLine("The {0} cannot heal you!", this.Name);
 		}
 	}
 }

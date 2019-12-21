@@ -2,9 +2,9 @@ using System;
 
 namespace DungeonGame {
 	public class Weapon : IEquipment {
-    private readonly Random RndGenerate = new Random();
-    public string Name { get; set; }
-    public int RegDamage { get; set; }
+		private readonly Random RndGenerate = new Random();
+		public string Name { get; set; }
+		public int RegDamage { get; set; }
 		public int ItemValue { get; set; }
 		public double CritMultiplier { get; set; }
 		public bool Equipped { get; set; }
@@ -22,12 +22,11 @@ namespace DungeonGame {
 		public int Attack() {
 			var attackDamage = 0f;
 			var attackType = RndGenerate.Next(1, 12); // Creates a random number to determine attack type
-      // Main attack
-			if (attackType < 6)
-			{
+			// Main attack
+			if (attackType < 6) {
 				attackDamage = this.RegDamage;
 			}
-      // Stronger attack
+			// Stronger attack
 			else if (attackType < 11) {
 				attackDamage = (int)((double)this.RegDamage * this.CritMultiplier);
 			}
@@ -36,9 +35,9 @@ namespace DungeonGame {
 			attackDamage *= this.Durability / 100f;
 			return (int)attackDamage;
 		}
-    public string GetName() {
-      return this.Name;
-    }
+		public string GetName() {
+			return this.Name;
+		}
 		public bool IsEquipped() {
 			return this.Equipped;
 		}

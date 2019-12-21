@@ -84,7 +84,9 @@ namespace DungeonGame {
 			this.Vendor = vendor;
 		}
 
-		public void AttackOpponent(Player player, string[] input) { }
+		public bool AttackOpponent(Player player, string[] input) {
+			return true;
+		}
 		public void LootCorpse(Player player, string[] input) { }
 		public void RebuildRoomObjects() {
 			if (RoomObjects != null) {

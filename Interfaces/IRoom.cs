@@ -1,7 +1,7 @@
 ﻿namespace DungeonGame {
-  public interface IRoom {
+	public interface IRoom {
 		bool GoNorth { get; set; }
-    bool GoSouth { get; set; }
+		bool GoSouth { get; set; }
 		bool GoEast { get; set; }
 		bool GoWest { get; set; }
 		bool GoNorthWest { get; set; }
@@ -11,17 +11,17 @@
 		bool GoUp { get; set; }
 		bool GoDown { get; set; }
 		string Name { get; set; }
-    string Desc { get; set; }
-    int X { get; set; }
+		string Desc { get; set; }
+		int X { get; set; }
 		int Y { get; set; }
 		int Z { get; set; }
 
-    void AttackOpponent(Player player, string[] input);
+		bool AttackOpponent(Player player, string[] input);
 		void LootCorpse(Player player, string[] input);
 		void RebuildRoomObjects();
-    void ShowDirections();
-    void ShowCommands();
-    void LookRoom();
+		void ShowDirections();
+		void ShowCommands();
+		void LookRoom();
 		void LookNpc(string[] input);
-  }
+	}
 }
