@@ -87,12 +87,10 @@ namespace DungeonGame {
 		public void AttackOpponent(Player player, string[] input) { }
 		public void LootCorpse(Player player, string[] input) { }
 		public void RebuildRoomObjects() {
-			try {
+			if (RoomObjects != null) {
 				RoomObjects.Clear();
-				RoomObjects.Add((DungeonGame.IRoomInteraction)Vendor);
 			}
-			catch (NullReferenceException) {
-			}
+			RoomObjects.Add((DungeonGame.IRoomInteraction)Vendor);
 		}
 		public void ShowCommands() {
 			Console.ForegroundColor = ConsoleColor.DarkGreen;

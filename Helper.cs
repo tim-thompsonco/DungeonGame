@@ -71,6 +71,7 @@ namespace DungeonGame {
 			string input = Helper.GetFormattedInput();
 			if (input == "yes" || input == "y") {
 				Console.WriteLine("Quitting the game.");
+				player.CanSave = true;
 				Helper.SaveGame(player);
 				return true;
 			}
@@ -89,6 +90,7 @@ namespace DungeonGame {
 				serializer.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 				serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
 				serializer.Formatting = Newtonsoft.Json.Formatting.Indented;
+				serializer.PreserveReferencesHandling = PreserveReferencesHandling.All;
 				using (StreamWriter sw = new StreamWriter("savegame.json"))
 				using (var writer = new Newtonsoft.Json.JsonTextWriter(sw)) {
 					serializer.Serialize(writer, player, typeof(Player));

@@ -81,8 +81,6 @@ namespace DungeonGame {
 					case "quit":
 						bool quitConfirm = Helper.QuitGame(player);
 						if (quitConfirm == true) {
-							player.CanSave = true;
-							Helper.SaveGame(player);
 							return;
 						}
 						break;

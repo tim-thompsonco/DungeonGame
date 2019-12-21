@@ -109,13 +109,9 @@ namespace DungeonGame {
 			}
 		}
     public void RebuildRoomObjects() {
-			try {
-				RoomObjects.Clear();
-				if(!this.Monster.WasLooted) {
-					RoomObjects.Add((DungeonGame.IRoomInteraction)Monster);
-				}
-			}
-			catch(NullReferenceException) {
+			RoomObjects.Clear();
+			if(this.Monster != null && !this.Monster.WasLooted) {
+				RoomObjects.Add((DungeonGame.IRoomInteraction)Monster);
 			}
     }
     public void ShowCommands() {

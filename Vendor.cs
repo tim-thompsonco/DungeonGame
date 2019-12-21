@@ -52,13 +52,10 @@ namespace DungeonGame {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (IEquipment item in this.VendorItems) {
 				var itemInfo = new StringBuilder();
-				try {
-					itemInfo.Append(item.GetName().ToString());
-					if (item.IsEquipped()) {
-						itemInfo.Append(" <Equipped>");
-					}
+				itemInfo.Append(item.GetName().ToString());
+				if (item.IsEquipped()) {
+					itemInfo.Append(" <Equipped>");
 				}
-				catch (NullReferenceException) { }
 				Armor isItemArmor = item as Armor;
 				if (isItemArmor != null) {
 					itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + " Cost: " + isItemArmor.ItemValue + ")");

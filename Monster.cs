@@ -61,26 +61,14 @@ namespace DungeonGame {
     }
 		public int CheckArmorRating() {
 			var totalArmorRating = 0;
-			try {
-				if (this.Monster_Chest_Armor.IsEquipped()) {
-					totalArmorRating += this.Monster_Chest_Armor.ArmorRating;
-				}
+			if (this.Monster_Chest_Armor != null && this.Monster_Chest_Armor.IsEquipped()) {
+				totalArmorRating += this.Monster_Chest_Armor.ArmorRating;
 			}
-			catch (NullReferenceException) {
+			if (this.Monster_Head_Armor != null && this.Monster_Head_Armor.IsEquipped()) {
+				totalArmorRating += this.Monster_Head_Armor.ArmorRating;
 			}
-			try {
-				if (this.Monster_Head_Armor.IsEquipped()) {
-					totalArmorRating += this.Monster_Head_Armor.ArmorRating;
-				}
-			}
-			catch (NullReferenceException) {
-			}
-			try {
-				if (this.Monster_Leg_Armor.IsEquipped()) {
-					totalArmorRating += this.Monster_Leg_Armor.ArmorRating;
-				}
-			}
-			catch (NullReferenceException) {
+			if (this.Monster_Leg_Armor != null && this.Monster_Leg_Armor.IsEquipped()) {
+				totalArmorRating += this.Monster_Leg_Armor.ArmorRating;
 			}
 			return totalArmorRating;
 		}
