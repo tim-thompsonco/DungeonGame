@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
@@ -147,14 +146,15 @@ namespace DungeonGame {
 					case "repair":
 						try {
 							if (inputParse[1] != null) {
-								try {
-									TownRoom isTownRoom = spawnedRooms[roomIndex] as TownRoom;
-									if (isTownRoom != null) {
-										isTownRoom.Vendor.RepairItem(player, inputParse);
+								TownRoom isTownRoom = spawnedRooms[roomIndex] as TownRoom;
+								if (isTownRoom != null) {
+									if (inputParse[1] == "all") {
+										foreach (IEquipment item in player.Inventory) {
+											var itemNameArray = new string[2] { inputParse[0], item.Name };
+											isTownRoom.Vendor.RepairItem(player, itemNameArray);
+										}
 									}
-								}
-								catch (NullReferenceException) {
-									Console.WriteLine("The vendor doesn't repair that type of equipment.");
+									isTownRoom.Vendor.RepairItem(player, inputParse);
 								}
 							}
 						}

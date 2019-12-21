@@ -15,8 +15,9 @@ namespace DungeonGame {
 			this.Name = name;
 			this.Desc = desc;
 			this.BuySellType = buySellType;
-			if (name == "armorer") {
-				VendorItems.Add(
+			switch (name) {
+				case "armorer":
+					VendorItems.Add(
 					new Armor(
 						"leather vest", // Name
 						Armor.ArmorSlot.Chest, // Armor slot
@@ -24,8 +25,8 @@ namespace DungeonGame {
 						6, // Low armor rating
 						10, // High armor rating
 						false // Equipped
-						));
-				VendorItems.Add(
+					));
+					VendorItems.Add(
 					new Armor(
 						"leather helm", // Name
 						Armor.ArmorSlot.Head, // Armor slot
@@ -33,8 +34,8 @@ namespace DungeonGame {
 						2, // Low armor rating
 						5, // High armor rating
 						false // Equipped
-						));
-				VendorItems.Add(
+					));
+					VendorItems.Add(
 					new Armor(
 						"leather leggings", // Name
 						Armor.ArmorSlot.Legs, // Armor slot
@@ -42,7 +43,41 @@ namespace DungeonGame {
 						3, // Low armor rating
 						7, // High armor rating
 						false // Equipped
+					));
+					break;
+				case "weaponsmith":
+					VendorItems.Add(
+					new Weapon(
+						"notched sword", // Name
+						11, // Low end of damage value range
+						18, // High end of damage value range
+						15, // Item value
+						1.1, // Crit multiplier
+						true // Equipped bool
+					));
+					break;
+				case "healer":
+					for (int i = 1; i <= 5; i++) {
+						VendorItems.Add(
+						new Consumable(
+							"minor health potion",
+							50,
+							Consumable.PotionType.Health,
+							50
 						));
+					}
+					for (int i = 1; i <= 5; i++) {
+						VendorItems.Add(
+						new Consumable(
+							"minor mana potion",
+							50,
+							Consumable.PotionType.Mana,
+							50
+						));
+					}
+					break;
+				default:
+					break;
 			}
 		}
 
@@ -61,6 +96,10 @@ namespace DungeonGame {
 					itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + " Cost: " + isItemArmor.ItemValue + ")");
 				}
 				Weapon isItemWeapon = item as Weapon;
+				if (isItemWeapon != null) {
+					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + " Cost: " + isItemWeapon.ItemValue + ")");
+				}
+				Consumable isItemConsumable = item as Consumable;
 				if (isItemWeapon != null) {
 					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + " Cost: " + isItemWeapon.ItemValue + ")");
 				}
@@ -87,20 +126,31 @@ namespace DungeonGame {
 						Weapon buyWeapon = this.VendorItems[index] as Weapon;
 						this.BuyItem(player, userInput, buyWeapon, index);
 						break;
+					case "Healer":
+						Consumable buyConsumable = this.VendorItems[index] as Consumable;
+						this.BuyItem(player, userInput, buyConsumable, index);
+						break;
 					default:
 						break;
 				}
 			}
 			else {
+				Console.ForegroundColor = ConsoleColor.Green;
 				Console.WriteLine("The vendor doesn't have that available for sale!");
 			}
 		}
 		public void BuyItem(Player player, string[] userInput, IEquipment buyItem, int index) {
 			if (player.Gold >= buyItem.ItemValue) {
 				player.Gold -= buyItem.ItemValue;
-				player.Inventory.Add(buyItem);
+				if (buyItem.GetType().Name == "Consumable") {
+					player.Consumables.Add(buyItem as Consumable);
+				}
+				else {
+					player.Inventory.Add(buyItem);
+				}
 				this.VendorItems.RemoveAt(index);
-				Console.WriteLine("You purchased {0} from the vendor.", buyItem.Name);
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.WriteLine("You purchased {0} from the vendor for {1} gold.", buyItem.Name, buyItem.ItemValue);
 			}
 		}
 		public void SellItemCheck(Player player, string[] userInput) {
@@ -122,20 +172,27 @@ namespace DungeonGame {
 						Weapon sellWeapon = player.Inventory[index] as Weapon;
 						this.SellItem(player, userInput, sellWeapon, index);
 						break;
+					case "Healer":
+						Consumable sellConsumable = player.Inventory[index] as Consumable;
+						this.SellItem(player, userInput, sellConsumable, index);
+						break;
 					default:
 						break;
 				}
 			}
 			else {
+				Console.ForegroundColor = ConsoleColor.Green;
 				Console.WriteLine("You don't have that to sell!");
 			}
 		}
 		public void SellItem(Player player, string[] userInput, IEquipment sellItem, int index) {
-			if(!sellItem.IsEquipped()) {
+			Console.ForegroundColor = ConsoleColor.Green;
+			if (!sellItem.IsEquipped()) {
 				player.Gold += sellItem.ItemValue;
 				player.Inventory.RemoveAt(index);
 				this.VendorItems.Add(sellItem);
-				Console.WriteLine("You sold {0} to the vendor.", sellItem.Name);
+				
+				Console.WriteLine("You sold {0} to the vendor for {1} gold.", sellItem.Name, sellItem.ItemValue);
 				return;
 			}
 			Console.WriteLine("You have to unequip that first!");
@@ -150,30 +207,41 @@ namespace DungeonGame {
 			var index = 0;
 			index = player.Inventory.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()));
 			if (index != -1) {
+				Console.ForegroundColor = ConsoleColor.Green;
 				switch (this.BuySellType) {
 					case "Armor":
 						Armor repairArmor = player.Inventory[index] as Armor;
-						var durabilityRepairArmor = 100 - repairArmor.Durability;
-						var repairCostArmor = repairArmor.ItemValue * (durabilityRepairArmor / 100f);
-						if(player.Gold >= (int)repairCostArmor) {
-							player.Gold -= (int)repairCostArmor;
-							repairArmor.Durability = 100;
-							Console.WriteLine("Your {0} has been repaired for {1} gold.", repairArmor.Name, (int)repairCostArmor);
-							break;
+						if (repairArmor != null && repairArmor.IsEquipped()) {
+							var durabilityRepairArmor = 100 - repairArmor.Durability;
+							var repairCostArmor = repairArmor.ItemValue * (durabilityRepairArmor / 100f);
+							Console.ForegroundColor = ConsoleColor.Green;
+							if (player.Gold >= (int)repairCostArmor) {
+								player.Gold -= (int)repairCostArmor;
+								repairArmor.Durability = 100;
+								Console.WriteLine("Your {0} has been repaired for {1} gold.", repairArmor.Name, (int)repairCostArmor);
+								break;
+							}
+							Console.WriteLine("You can't afford to repair {0}", repairArmor.Name);
 						}
-						Console.WriteLine("You can't afford to repair {0}", repairArmor.Name);
+						Console.WriteLine("The vendor doesn't repair that type of equipment.");
 						break;
 					case "Weapon":
 						Weapon repairWeapon = player.Inventory[index] as Weapon;
-						var durabilityRepairWeapon = 100 - repairWeapon.Durability;
-						var repairCostWeapon = repairWeapon.ItemValue * (durabilityRepairWeapon / 100f);
-						if (player.Gold >= repairCostWeapon) {
-							player.Gold -= (int)repairCostWeapon;
-							repairWeapon.Durability = 100;
-							Console.WriteLine("Your {0} has been repaired for {1} gold.", repairWeapon.Name, (int)repairCostWeapon);
-							break;
+						if (repairWeapon != null && repairWeapon.IsEquipped()) {
+							var durabilityRepairWeapon = 100 - repairWeapon.Durability;
+							var repairCostWeapon = repairWeapon.ItemValue * (durabilityRepairWeapon / 100f);
+							if (player.Gold >= repairCostWeapon) {
+								player.Gold -= (int)repairCostWeapon;
+								repairWeapon.Durability = 100;
+								Console.WriteLine("Your {0} has been repaired for {1} gold.", repairWeapon.Name, (int)repairCostWeapon);
+								break;
+							}
+							Console.WriteLine("You can't afford to repair {0}", repairWeapon.Name);
 						}
-						Console.WriteLine("You can't afford to repair {0}", repairWeapon.Name);
+						Console.WriteLine("The vendor doesn't repair that type of equipment.");
+						break;
+					case "Healer":
+						Console.WriteLine("Healers don't repair equipment.");
 						break;
 					default:
 						break;

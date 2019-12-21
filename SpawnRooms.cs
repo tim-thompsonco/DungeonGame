@@ -474,7 +474,7 @@ namespace DungeonGame {
 				1, // X coordinate
 				8, // Y coordinate
 				2, // Z coordinate
-				false, // goNorth bool
+				true, // goNorth bool
 				false, // goSouth bool
 				false, // goEast bool
 				false, // goWest bool
@@ -491,8 +491,61 @@ namespace DungeonGame {
 					"buy <item>, sell <item>, or <show forsale> to see what he has for sale.", // Description
 					"Armor"
 				)); // goDown bool
-			this.SpawnedRooms.Add(room114);
-		}
+				this.SpawnedRooms.Add(room114);
+				var room115 = new TownRoom(
+				"Town - East", // Name
+				"You are in the east part of your town. A large man is in front of a building sharpening a sword against " +
+												"a grindstone. To the south, you can see a small building with a forge and furnace outside. There is " +
+												"another large man in front of it pounding away at a chestplate with a hammer.", // Description
+				1, // X coordinate
+				9, // Y coordinate
+				2, // Z coordinate
+				false, // goNorth bool
+				true, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				true, // goNorthWest bool
+				false, // goSouthWest bool
+				false, // goNorthEast bool
+				false, // goSouthEast bool
+				false, // goUp bool
+				false,
+				new Vendor(
+				"weaponsmith", // Name
+				"A large man covered in sweat sharpening a sword against a grindstone. He wipes his brow as " +
+				"you approach and wonders whether you're going to make him a little bit richer or not. You can: " +
+				"buy <item>, sell <item>, or <show forsale> to see what he has for sale.", // Description
+				"Weapon"
+				)); // goDown bool
+				this.SpawnedRooms.Add(room115);
+			var room116 = new TownRoom(
+				"Town - East", // Name
+				"You are in the east part of your town. A large man is in front of a building sharpening a sword against " +
+												"a grindstone. To the south, you can see a small building with a forge and furnace outside. There is " +
+												"another large man in front of it pounding away at a chestplate with a hammer.", // Description
+				0, // X coordinate
+				10, // Y coordinate
+				2, // Z coordinate
+				false, // goNorth bool
+				false, // goSouth bool
+				false, // goEast bool
+				false, // goWest bool
+				false, // goNorthWest bool
+				false, // goSouthWest bool
+				false, // goNorthEast bool
+				true, // goSouthEast bool
+				false, // goUp bool
+				false,
+				new Vendor(
+				"healer", // Name
+				"An old man covered in robes looks you up and raises an eyebrow questioningly. He can rid you " +
+				"of all your pain every so often. In fact, he may even provide you with some help that will " +
+				"be invaluable in your travels. You can buy <item>, sell <item>, or <show forsale> to see what " +
+				"he has for sale. You can also try to ask him to <heal> you.", // Description
+				"Healer"
+				)); // goDown bool
+			this.SpawnedRooms.Add(room116);
+			}
 
 		public List<IRoom> RetrieveSpawnRooms() {
 			return this.SpawnedRooms;
