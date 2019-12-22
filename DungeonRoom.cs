@@ -96,8 +96,11 @@ namespace DungeonGame {
 				if (this.Monster.HitPoints > 0) {
 					var fightEvent = new CombatHelper();
 					bool outcome = fightEvent.SingleCombat(Monster, player);
-					if (outcome == false) {
+					if (outcome == false && player.HitPoints <= 0) {
 						Helper.PlayerDeath();
+						return false;
+					}
+					else if (outcome == false) {
 						return false;
 					}
 				}
@@ -187,6 +190,7 @@ namespace DungeonGame {
 			this.ShowDirections();
 		}
 		public void LootCorpse(Player player, string[] input) {
+			Console.ForegroundColor = ConsoleColor.Green;
 			var inputString = new StringBuilder();
 			for (int i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
@@ -198,7 +202,6 @@ namespace DungeonGame {
 				if (Monster.HitPoints <= 0 && Monster.WasLooted == false) {
 					var goldLooted = Monster.Gold;
 					player.Gold += Monster.Gold;
-					Console.ForegroundColor = ConsoleColor.Green;
 					try {
 						foreach (var loot in Monster.MonsterItems) {
 							var itemType = loot.GetType().FullName;
@@ -219,11 +222,9 @@ namespace DungeonGame {
 					Console.WriteLine("You looted {0} gold coins from the {1}!", goldLooted, this.Monster.Name);
 				}
 				else if (Monster.WasLooted) {
-					Console.ForegroundColor = ConsoleColor.Green;
 					Console.WriteLine("You already looted {0}!", this.Monster.Name);
 				}
 				else {
-					Console.ForegroundColor = ConsoleColor.Green;
 					Console.WriteLine("You cannot loot something that isn't dead!");
 				}
 			}

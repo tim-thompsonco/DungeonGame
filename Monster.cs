@@ -75,7 +75,7 @@ namespace DungeonGame {
 		public int ArmorRating(Player player) {
 			int totalArmorRating = CheckArmorRating();
 			int levelDiff = player.Level - this.Level;
-			double armorMultiplier = 1.00 + (-(double)levelDiff / 10);
+			double armorMultiplier = 1.00 + (-(double)levelDiff / 5);
 			double adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}

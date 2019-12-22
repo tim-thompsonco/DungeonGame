@@ -9,10 +9,12 @@ namespace DungeonGame {
 
 		void DisplayGearForSale(Player player);
 		void BuyItem(Player player, string[] userInput, IEquipment buyItem, int index);
+		void BuyItem(Player player, string[] userInput, IEquipment buyItem, int index, string inputName);
 		void BuyItemCheck(Player player, string[] userInput);
 		void SellItem(Player player, string[] userInput, IEquipment sellItem, int index);
 		void SellItemCheck(Player player, string[] userInput);
 		void RepairItem(Player player, string[] userInput);
 		void HealPlayer(Player player);
+		void RepopulateHealerPotion(string inputName);
 	}
 }

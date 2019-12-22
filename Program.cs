@@ -45,8 +45,11 @@ namespace DungeonGame {
 								if (inputParse[1] != null) {
 									try {
 										bool outcome = spawnedRooms[roomIndex].AttackOpponent(player, inputParse);
-										if (outcome == false) {
+										if (!outcome && player.HitPoints <= 0) {
 											isGameOver = true;
+										}
+										else if (!outcome) {
+											roomIndex = Helper.FleeRoom(spawnedRooms, player);
 										}
 									}
 									catch (Exception) {
@@ -149,6 +152,7 @@ namespace DungeonGame {
 										}
 									}
 									catch (NullReferenceException) {
+										Console.ForegroundColor = ConsoleColor.Green;
 										Console.WriteLine("The vendor doesn't want that.");
 									}
 								}

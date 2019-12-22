@@ -3,8 +3,9 @@ using System.Linq;
 
 namespace DungeonGame {
 	public class CombatHelper {
-		public String[] Commands { get; set; } = new String[3] {
-		"[F]ight", "[I]nventory", "[C]ast [F]ireball" };
+		private static readonly Random RndGenerate = new Random();
+		public String[] Commands { get; set; } = new String[4] {
+		"[F]ight", "[I]nventory", "[C]ast [F]ireball", "Flee" };
 
 		public bool SingleCombat(IMonster opponent, Player player) {
 			Console.ForegroundColor = ConsoleColor.Green;
@@ -68,6 +69,12 @@ namespace DungeonGame {
 							Console.WriteLine("You do not have enough mana to cast that spell!");
 							continue;
 						}
+					case "flee":
+						var canFlee = this.CanFleeCombat();
+						if (canFlee == true) {
+							return false;
+						}
+						break;
 					case "drink":
 						if (inputParse.Last() == "potion") {
 							player.DrinkPotion(inputParse);
@@ -127,6 +134,16 @@ namespace DungeonGame {
 			opponent.Desc = "A corpse of a monster you killed.";
 			player.GainExperience(opponent.ExperienceProvided);
 			player.LevelUpCheck();
+		}
+		public bool CanFleeCombat() {
+			Console.ForegroundColor = ConsoleColor.Green;
+			var randomNum = RndGenerate.Next(1, 10);
+			if (randomNum > 5) {
+				Console.WriteLine("You have fled combat successfully!");
+				return true;
+			}
+			Console.WriteLine("You tried to flee combat but failed!");
+			return false;
 		}
 	}
 }

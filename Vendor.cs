@@ -53,28 +53,24 @@ namespace DungeonGame {
 						18, // High end of damage value range
 						15, // Item value
 						1.1, // Crit multiplier
-						true // Equipped bool
+						false // Equipped bool
 					));
 					break;
 				case "healer":
-					for (int i = 1; i <= 5; i++) {
-						VendorItems.Add(
-						new Consumable(
-							"minor health potion",
-							50,
-							Consumable.PotionType.Health,
-							50
-						));
-					}
-					for (int i = 1; i <= 5; i++) {
-						VendorItems.Add(
-						new Consumable(
-							"minor mana potion",
-							50,
-							Consumable.PotionType.Mana,
-							50
-						));
-					}
+					VendorItems.Add(
+					new Consumable(
+						"minor health potion",
+						50,
+						Consumable.PotionType.Health,
+						50
+					));
+					VendorItems.Add(
+					new Consumable(
+						"minor mana potion",
+						50,
+						Consumable.PotionType.Mana,
+						50
+					));
 					break;
 				default:
 					break;
@@ -100,8 +96,8 @@ namespace DungeonGame {
 					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + " Cost: " + isItemWeapon.ItemValue + ")");
 				}
 				Consumable isItemConsumable = item as Consumable;
-				if (isItemWeapon != null) {
-					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + " Cost: " + isItemWeapon.ItemValue + ")");
+				if (isItemConsumable != null) {
+					itemInfo.Append(" (Cost: " + isItemConsumable.ItemValue + ")");
 				}
 				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 				Console.WriteLine(itemName);
@@ -138,7 +134,7 @@ namespace DungeonGame {
 						break;
 					case "Healer":
 						if (buyConsumable != null) {
-							this.BuyItem(player, userInput, buyConsumable, index);
+							this.BuyItem(player, userInput, buyConsumable, index, inputName);
 						}
 						break;
 					case "Shopkeeper":
@@ -162,18 +158,27 @@ namespace DungeonGame {
 			}
 		}
 		public void BuyItem(Player player, string[] userInput, IEquipment buyItem, int index) {
+			Console.ForegroundColor = ConsoleColor.Green;
 			if (player.Gold >= buyItem.ItemValue) {
 				player.Gold -= buyItem.ItemValue;
-				if (buyItem.GetType().Name == "Consumable") {
-					player.Consumables.Add(buyItem as Consumable);
-				}
-				else {
-					player.Inventory.Add(buyItem);
-				}
+				player.Inventory.Add(buyItem);
 				this.VendorItems.RemoveAt(index);
-				Console.ForegroundColor = ConsoleColor.Green;
 				Console.WriteLine("You purchased {0} from the vendor for {1} gold.", buyItem.Name, buyItem.ItemValue);
+				return;
 			}
+			Console.WriteLine("You can't afford that!");
+		}
+		public void BuyItem(Player player, string[] userInput, IEquipment buyItem, int index, string inputName) {
+			Console.ForegroundColor = ConsoleColor.Green;
+			if (player.Gold >= buyItem.ItemValue) {
+				player.Gold -= buyItem.ItemValue;
+				player.Consumables.Add(buyItem as Consumable);
+				this.VendorItems.RemoveAt(index);
+				Console.WriteLine("You purchased {0} from the vendor for {1} gold.", buyItem.Name, buyItem.ItemValue);
+				this.RepopulateHealerPotion(inputName);
+				return;
+			}
+			Console.WriteLine("You can't afford that!");
 		}
 		public void SellItemCheck(Player player, string[] userInput) {
 			var inputString = new StringBuilder();
@@ -246,6 +251,7 @@ namespace DungeonGame {
 			Console.WriteLine("You have to unequip that first!");
 		}
 		public void RepairItem(Player player, string[] userInput) {
+			Console.ForegroundColor = ConsoleColor.Green;
 			var inputString = new StringBuilder();
 			for (int i = 1; i < userInput.Length; i++) {
 				inputString.Append(userInput[i]);
@@ -262,7 +268,6 @@ namespace DungeonGame {
 						if (repairArmor != null && repairArmor.IsEquipped()) {
 							var durabilityRepairArmor = 100 - repairArmor.Durability;
 							var repairCostArmor = repairArmor.ItemValue * (durabilityRepairArmor / 100f);
-							Console.ForegroundColor = ConsoleColor.Green;
 							if (player.Gold >= (int)repairCostArmor) {
 								player.Gold -= (int)repairCostArmor;
 								repairArmor.Durability = 100;
@@ -295,7 +300,9 @@ namespace DungeonGame {
 					default:
 						break;
 				}
+				return;
 			}
+			Console.WriteLine("That item is not in your inventory.");
 		}
 		public string GetName() {
 			return this.Name.ToString();
@@ -308,6 +315,29 @@ namespace DungeonGame {
 				return;
 			}
 			Console.WriteLine("The {0} cannot heal you!", this.Name);
+		}
+		public void RepopulateHealerPotion(string inputName) {
+			var potionIndex = this.VendorItems.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(inputName));
+			if (potionIndex == -1) {
+				if (inputName.Contains("mana")) {
+					VendorItems.Add(
+					new Consumable(
+						"minor mana potion",
+						50,
+						Consumable.PotionType.Mana,
+						50
+					));
+				}
+				else if (inputName.Contains("health")) {
+					VendorItems.Add(
+					new Consumable(
+						"minor health potion",
+						50,
+						Consumable.PotionType.Health,
+						50
+					));
+				}
+			}
 		}
 	}
 }

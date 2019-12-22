@@ -115,5 +115,40 @@ namespace DungeonGame {
 			}
 			Console.WriteLine("You can't save inside a dungeon! Go outside first.");
 		}
+		public static int FleeRoom(List<IRoom> roomList, Player player) {
+			IRoom roomName = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
+			var roomIndex = roomList.IndexOf(roomName);
+			if (roomList[roomIndex].GoDown) {
+				roomIndex = ChangeRoom(roomList, player, 0, 0, -1);
+			}
+			else if (roomList[roomIndex].GoUp) {
+				roomIndex = ChangeRoom(roomList, player, 0, 0, 1);
+			}
+			else if (roomList[roomIndex].GoNorth) {
+				roomIndex = ChangeRoom(roomList, player, 0, 1, 0);
+			}
+			else if (roomList[roomIndex].GoSouth) {
+				roomIndex = ChangeRoom(roomList, player, 0, -1, 0);
+			}
+			else if (roomList[roomIndex].GoEast) {
+				roomIndex = ChangeRoom(roomList, player, 1, 0, 0);
+			}
+			else if (roomList[roomIndex].GoWest) {
+				roomIndex = ChangeRoom(roomList, player, -1, 0, 0);
+			}
+			else if (roomList[roomIndex].GoNorthEast) {
+				roomIndex = ChangeRoom(roomList, player, 1, 1, 0);
+			}
+			else if (roomList[roomIndex].GoNorthWest) {
+				roomIndex = ChangeRoom(roomList, player, -1, 1, 0);
+			}
+			else if (roomList[roomIndex].GoSouthEast) {
+				roomIndex = ChangeRoom(roomList, player, 1, -1, 0);
+			}
+			else if (roomList[roomIndex].GoSouthWest) {
+				roomIndex = ChangeRoom(roomList, player, -1, -1, 0);
+			}
+			return roomIndex;
+		}
 	}
 }
