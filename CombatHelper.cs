@@ -17,10 +17,9 @@ namespace DungeonGame {
 				Console.Write("Available Commands: ");
 				Console.WriteLine(String.Join(", ", this.Commands));
 				Helper.RequestCommand();
-				string input = Helper.GetFormattedInput();
-				var inputParse = input.Split(' ');
+				string[] input = Helper.GetFormattedInput();
 				Console.WriteLine(); // To add a blank space between the command and fight sequence
-				switch (inputParse[0]) {
+				switch (input[0]) {
 					case "f":
 					case "fight":
 						int attackDamage = player.Attack();
@@ -76,8 +75,8 @@ namespace DungeonGame {
 						}
 						break;
 					case "drink":
-						if (inputParse.Last() == "potion") {
-							player.DrinkPotion(inputParse);
+						if (input.Last() == "potion") {
+							player.DrinkPotion(input);
 						}
 						else {
 							Console.WriteLine("You can't drink that!");

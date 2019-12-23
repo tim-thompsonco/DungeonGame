@@ -9,7 +9,7 @@ namespace DungeonGame {
 			while (true) {
 				// Game loading commands
 				Helper.GameIntro();
-				var player = new Player("placeholder");
+				Player player;
 				try {
 					player = Newtonsoft.Json.JsonConvert.DeserializeObject<Player>(File.ReadAllText("savegame.json"), new Newtonsoft.Json.JsonSerializerSettings {
 						TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
@@ -18,10 +18,7 @@ namespace DungeonGame {
 					Console.WriteLine("Reloading your saved game.");
 				}
 				catch (FileNotFoundException) {
-					Console.WriteLine("Please enter a player name.\n");
-					string playerName = Helper.FetchPlayerName();
-					player.Name = playerName;
-					player.EquipInitialGear();
+					player = Helper.BuildNewPlayer();
 				}
 				List<IRoom> spawnedRooms = new SpawnRooms().RetrieveSpawnRooms();
 				// Set initial room condition
@@ -33,18 +30,17 @@ namespace DungeonGame {
 				while (!isGameOver) {
 					player.DisplayPlayerStats();
 					spawnedRooms[roomIndex].ShowCommands();
-					string input = Helper.GetFormattedInput();
-					var inputParse = input.Split(' ');
+					string[] input = Helper.GetFormattedInput();
 					TownRoom isTownRoom = spawnedRooms[roomIndex] as TownRoom;
 					// Obtain player command and process command
-					switch (inputParse[0]) {
+					switch (input[0]) {
 						case "a":
 						case "attack":
 						case "kill":
 							try {
-								if (inputParse[1] != null) {
+								if (input[1] != null) {
 									try {
-										bool outcome = spawnedRooms[roomIndex].AttackOpponent(player, inputParse);
+										bool outcome = spawnedRooms[roomIndex].AttackOpponent(player, input);
 										if (!outcome && player.HitPoints <= 0) {
 											isGameOver = true;
 										}
@@ -63,10 +59,10 @@ namespace DungeonGame {
 							break;
 						case "buy":
 							try {
-								if (inputParse[1] != null) {
+								if (input[1] != null) {
 									try {
 										if (isTownRoom != null) {
-											isTownRoom.Vendor.BuyItemCheck(player, inputParse);
+											isTownRoom.Vendor.BuyItemCheck(player, input);
 										}
 									}
 									catch (NullReferenceException) {
@@ -80,7 +76,7 @@ namespace DungeonGame {
 							break;
 						case "equip":
 						case "unequip":
-							player.EquipItem(inputParse);
+							player.EquipItem(input);
 							break;
 						case "i":
 						case "inventory":
@@ -96,9 +92,9 @@ namespace DungeonGame {
 						case "l":
 						case "look":
 							try {
-								if (inputParse[1] != null) {
+								if (input[1] != null) {
 									try {
-										spawnedRooms[roomIndex].LookNpc(inputParse);
+										spawnedRooms[roomIndex].LookNpc(input);
 									}
 									catch (Exception) {
 										Console.WriteLine("An error has occurred while looking.");
@@ -111,9 +107,9 @@ namespace DungeonGame {
 							break;
 						case "loot":
 							try {
-								if (inputParse[1] != null) {
+								if (input[1] != null) {
 									try {
-										spawnedRooms[roomIndex].LootCorpse(player, inputParse);
+										spawnedRooms[roomIndex].LootCorpse(player, input);
 									}
 									catch (Exception) {
 										Console.WriteLine("An error has occurred while looting.");
@@ -125,8 +121,8 @@ namespace DungeonGame {
 							}
 							break;
 						case "drink":
-							if (inputParse.Last() == "potion") {
-								player.DrinkPotion(inputParse);
+							if (input.Last() == "potion") {
+								player.DrinkPotion(input);
 							}
 							else {
 								Console.WriteLine("You can't drink that!");
@@ -145,10 +141,10 @@ namespace DungeonGame {
 							break;
 						case "sell":
 							try {
-								if (inputParse[1] != null) {
+								if (input[1] != null) {
 									try {
 										if (isTownRoom != null) {
-											isTownRoom.Vendor.SellItemCheck(player, inputParse);
+											isTownRoom.Vendor.SellItemCheck(player, input);
 										}
 									}
 									catch (NullReferenceException) {
@@ -163,17 +159,17 @@ namespace DungeonGame {
 							break;
 						case "repair":
 							try {
-								if (inputParse[1] != null) {
+								if (input[1] != null) {
 									if (isTownRoom != null) {
-										if (inputParse[1] == "all") {
+										if (input[1] == "all") {
 											foreach (IEquipment item in player.Inventory) {
 												if (item.IsEquipped()) {
-													var itemNameArray = new string[2] { inputParse[0], item.Name };
+													var itemNameArray = new string[2] { input[0], item.Name };
 													isTownRoom.Vendor.RepairItem(player, itemNameArray);
 												}
 											}
 										}
-										isTownRoom.Vendor.RepairItem(player, inputParse);
+										isTownRoom.Vendor.RepairItem(player, input);
 									}
 								}
 							}
@@ -183,7 +179,7 @@ namespace DungeonGame {
 							break;
 						case "show":
 							try {
-								if (inputParse[1] == "forsale") {
+								if (input[1] == "forsale") {
 									try {
 										if (isTownRoom != null) {
 											isTownRoom.Vendor.DisplayGearForSale(player);
