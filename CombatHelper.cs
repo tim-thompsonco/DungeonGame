@@ -19,10 +19,11 @@ namespace DungeonGame {
 				Helper.RequestCommand();
 				string[] input = Helper.GetFormattedInput();
 				Console.WriteLine(); // To add a blank space between the command and fight sequence
+				int attackDamage;
 				switch (input[0]) {
 					case "f":
 					case "fight":
-						int attackDamage = player.Attack();
+						attackDamage = player.Attack();
 						if (attackDamage - opponent.ArmorRating(player) < 0) {
 							Console.ForegroundColor = ConsoleColor.DarkRed;
 							Console.WriteLine("The {0}'s armor absorbed all of your attack!", opponent.Name);
