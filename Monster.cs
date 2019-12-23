@@ -10,9 +10,12 @@ namespace DungeonGame {
 		public int HitPoints { get; set; }
 		public int ExperienceProvided { get; set; }
 		public int Gold { get; set; }
-		public bool OnFire { get; set; } = false;
-		public bool WasLooted { get; set; } = false;
-		public List<IEquipment> MonsterItems { get; set; } = new List<IEquipment>();
+		public bool OnFire { get; set; }
+		public int OnFireDamage { get; set; }
+		public int OnFireCurRound { get; set; }
+		public int OnFireMaxRound { get; set; }
+		public bool WasLooted { get; set; }
+		public List<IEquipment> MonsterItems { get; set; }
 		public Loot Item;
 		public Consumable Consumable;
 		public Weapon Monster_Weapon;
@@ -21,6 +24,7 @@ namespace DungeonGame {
 		public Armor Monster_Leg_Armor;
 
 		public Monster(string name, string desc, int level, int GoldCoins, int MaxHP, int ExpProvided, Weapon weapon) {
+			this.MonsterItems = new List<IEquipment>();
 			this.Name = name;
 			this.Desc = desc;
 			this.Level = level;
@@ -84,6 +88,22 @@ namespace DungeonGame {
 		}
 		public bool IsEquipped() {
 			return false;
+		}
+		public void SetOnFire(bool onFire, int onFireDamage, int onFireCurRound, int onFireMaxRound) {
+			this.OnFire = onFire;
+			this.OnFireDamage = onFireDamage;
+			this.OnFireCurRound = onFireCurRound;
+			this.OnFireMaxRound = onFireMaxRound;
+		}
+		public void BurnOnFire() {
+			this.HitPoints -= OnFireDamage;
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine("The {0} burns for {1} fire damage.", this.Name, this.OnFireDamage);
+			this.OnFireCurRound += 1;
+			if (OnFireCurRound > OnFireMaxRound) {
+				this.OnFire = false;
+				OnFireCurRound = 1;
+			}
 		}
 	}
 }

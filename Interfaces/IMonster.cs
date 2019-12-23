@@ -10,6 +10,9 @@ namespace DungeonGame {
 		int Level { get; set; }
 		int Gold { get; set; }
 		bool OnFire { get; set; }
+		int OnFireDamage { get; set; }
+		int OnFireCurRound { get; set; }
+		int OnFireMaxRound { get; set; }
 		bool WasLooted { get; set; }
 		List<IEquipment> MonsterItems { get; set; }
 
@@ -18,5 +21,7 @@ namespace DungeonGame {
 		int Attack();
 		int CheckArmorRating();
 		int ArmorRating(Player player);
+		void SetOnFire(bool onFire, int onFireDamage, int onFireCurRound, int onFireMaxRound);
+		void BurnOnFire();
 	}
 }
