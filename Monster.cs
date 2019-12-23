@@ -57,6 +57,7 @@ namespace DungeonGame {
 			HitPoints -= weaponDamage;
 		}
 		public void DisplayStats() {
+			Helper.FormatGeneralInfoText();
 			Console.WriteLine("Opponent HP: {0} / {1}", HitPoints, MaxHitPoints);
 			Console.WriteLine("==================================================");
 		}
@@ -97,7 +98,7 @@ namespace DungeonGame {
 		}
 		public void BurnOnFire() {
 			this.HitPoints -= OnFireDamage;
-			Console.ForegroundColor = ConsoleColor.Yellow;
+			Helper.FormatOnFireText();
 			Console.WriteLine("The {0} burns for {1} fire damage.", this.Name, this.OnFireDamage);
 			this.OnFireCurRound += 1;
 			if (OnFireCurRound > OnFireMaxRound) {

@@ -105,10 +105,12 @@ namespace DungeonGame {
 					}
 				}
 				else {
+					Helper.FormatFailureOutputText();
 					Console.WriteLine("The {0} is already dead.", this.Monster.Name);
 				}
 			}
 			else {
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("There is no {0} to attack.", inputName);
 			}
 			return true;
@@ -120,7 +122,7 @@ namespace DungeonGame {
 			}
 		}
 		public void ShowCommands() {
-			Console.ForegroundColor = ConsoleColor.DarkGreen;
+			Helper.FormatGeneralInfoText();
 			Console.Write("Available Commands: ");
 			Console.WriteLine(String.Join(", ", this.Commands));
 		}
@@ -184,13 +186,13 @@ namespace DungeonGame {
 				}
 			}
 			else {
+				Helper.FormatRoomInfoText();
 				Console.Write("There is nothing in the room");
 			}
 			Console.WriteLine("."); // Add period at end of list of objects in room
 			this.ShowDirections();
 		}
 		public void LootCorpse(Player player, string[] input) {
-			Console.ForegroundColor = ConsoleColor.Green;
 			var inputString = new StringBuilder();
 			for (int i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
@@ -211,6 +213,7 @@ namespace DungeonGame {
 							else {
 								player.Inventory.Add(loot);
 							}
+							Helper.FormatSuccessOutputText();
 							Console.WriteLine("You looted {0} from the {1}!", loot.GetName(), this.Monster.Name);
 						}
 					}
@@ -219,16 +222,20 @@ namespace DungeonGame {
 					Monster.MonsterItems.Clear();
 					Monster.Gold = 0;
 					Monster.WasLooted = true;
+					Helper.FormatSuccessOutputText();
 					Console.WriteLine("You looted {0} gold coins from the {1}!", goldLooted, this.Monster.Name);
 				}
 				else if (Monster.WasLooted) {
+					Helper.FormatFailureOutputText();
 					Console.WriteLine("You already looted {0}!", this.Monster.Name);
 				}
 				else {
+					Helper.FormatFailureOutputText();
 					Console.WriteLine("You cannot loot something that isn't dead!");
 				}
 			}
 			else {
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("There is no {0} in the room!", inputName);
 			}
 		}
@@ -249,6 +256,7 @@ namespace DungeonGame {
 				}
 			}
 			else {
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("There is no {0} in the room!", inputName);
 			}
 		}

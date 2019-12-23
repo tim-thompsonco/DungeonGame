@@ -77,7 +77,7 @@ namespace DungeonGame {
 			this.EquipArmor(this.Inventory[3] as Armor);
 		}
 		public void ShowInventory(Player player) {
-			Console.ForegroundColor = ConsoleColor.DarkGray;
+			Helper.FormatInfoText();
 			Console.WriteLine("Your inventory contains:\n");
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (IEquipment item in this.Inventory) {
@@ -148,12 +148,12 @@ namespace DungeonGame {
 				// Leveling sets player back to max HP/MP
 				this.HitPoints = this.MaxHitPoints;
 				this.ManaPoints = this.MaxManaPoints;
-				Console.ForegroundColor = ConsoleColor.Cyan;
+				Helper.FormatLevelUpText();
 				Console.WriteLine("You have leveled! You are now level {0}.", this.Level);
 			}
 		}
 		public void DisplayPlayerStats() {
-			Console.ForegroundColor = ConsoleColor.DarkGreen;
+			Helper.FormatGeneralInfoText();
 			Console.WriteLine("==================================================");
 			Console.WriteLine("HP: {0}/{1} MP: {2}/{3} EXP: {4} LVL: {5}",
 				this.HitPoints, this.MaxHitPoints, this.ManaPoints, this.MaxManaPoints,
@@ -193,6 +193,7 @@ namespace DungeonGame {
 				}
 			}
 			catch (NullReferenceException) {
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("Your weapon is not equipped! Going hand to hand!");
 			}
 			return 5;
@@ -204,11 +205,12 @@ namespace DungeonGame {
 					index = this.Consumables.FindIndex(f => f.PotionCategory.ToString() == "Health");
 					if (index != -1) {
 						this.Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
-						Console.ForegroundColor = ConsoleColor.Red;
+						Helper.FormatSuccessOutputText();
 						Console.WriteLine("You drank a potion and replenished {0} health.", this.Consumables[index].RestoreHealth.RestoreHealthAmt);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
+						Helper.FormatFailureOutputText();
 						Console.WriteLine("You don't have any health potions!");
 					}
 					break;
@@ -216,15 +218,17 @@ namespace DungeonGame {
 					index = this.Consumables.FindIndex(f => f.PotionCategory.ToString() == "Mana");
 					if (index != -1) {
 						this.Consumables[index].RestoreMana.RestoreManaPlayer(this);
-						Console.ForegroundColor = ConsoleColor.Red;
+						Helper.FormatSuccessOutputText();
 						Console.WriteLine("You drank a potion and replenished {0} mana.", this.Consumables[index].RestoreMana.RestoreManaAmt);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
+						Helper.FormatFailureOutputText();
 						Console.WriteLine("You don't have any mana potions!");
 					}
 					break;
 				default:
+					Helper.FormatFailureOutputText();
 					Console.WriteLine("What potion did you want to drink?");
 					break;
 			}
@@ -255,9 +259,11 @@ namespace DungeonGame {
 						return;
 					}
 					else if (Helper.IsWearable(item)) {
+						Helper.FormatFailureOutputText();
 						Console.WriteLine("You have already equipped that.");
 						return;
 					}
+					Helper.FormatFailureOutputText();
 					Console.WriteLine("You can't equip that!");
 					return;
 				}
@@ -274,19 +280,23 @@ namespace DungeonGame {
 					return;
 				}
 			}
+			Helper.FormatFailureOutputText();
 			Console.WriteLine("You don't have {0} in your inventory!", inputName);
 		}
 		public void UnequipWeapon(Weapon weapon) {
 			if (weapon.IsEquipped() == false) {
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("You have already unequipped {0}.", weapon.GetName());
 				return;
 			}
 			weapon.Equipped = false;
+			Helper.FormatSuccessOutputText();
 			Console.WriteLine("You have unequipped {0}.", this.Player_Weapon.GetName());
 			this.Player_Weapon = null;
 		}
 		public void EquipWeapon(Weapon weapon) {
 			if (weapon.IsEquipped() == true) {
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("You have already equipped {0}.", weapon.GetName());
 				return;
 			}
@@ -295,10 +305,12 @@ namespace DungeonGame {
 			}
 			this.Player_Weapon = weapon;
 			weapon.Equipped = true;
+			Helper.FormatSuccessOutputText();
 			Console.WriteLine("You have equipped {0}.", this.Player_Weapon.GetName());
 		}
 		public void UnequipArmor(Armor armor) {
 			if (armor.IsEquipped() == false) {
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("You have already unequipped {0}.", armor.GetName());
 				return;
 			}
@@ -306,14 +318,17 @@ namespace DungeonGame {
 			var itemSlot = armor.ArmorCategory.ToString();
 			switch (itemSlot) {
 				case "Head":
+					Helper.FormatSuccessOutputText();
 					Console.WriteLine("You have unequipped {0}.", this.Player_Head_Armor.GetName());
 					this.Player_Head_Armor = null;
 					break;
 				case "Chest":
+					Helper.FormatSuccessOutputText();
 					Console.WriteLine("You have unequipped {0}.", this.Player_Chest_Armor.GetName());
 					this.Player_Chest_Armor = null;
 					break;
 				case "Legs":
+					Helper.FormatSuccessOutputText();
 					Console.WriteLine("You have unequipped {0}.", this.Player_Legs_Armor.GetName());
 					this.Player_Legs_Armor = null;
 					break;
@@ -323,6 +338,7 @@ namespace DungeonGame {
 		}
 		public void EquipArmor(Armor armor) {
 			if (armor.IsEquipped() == true) {
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("You have already equipped {0}.", armor.GetName());
 				return;
 			}
@@ -334,6 +350,7 @@ namespace DungeonGame {
 					}
 					this.Player_Head_Armor = armor;
 					armor.Equipped = true;
+					Helper.FormatSuccessOutputText();
 					Console.WriteLine("You have equipped {0}.", this.Player_Head_Armor.GetName());
 					break;
 				case "Chest":
@@ -342,6 +359,7 @@ namespace DungeonGame {
 					}
 					this.Player_Chest_Armor = armor;
 					armor.Equipped = true;
+					Helper.FormatSuccessOutputText();
 					Console.WriteLine("You have equipped {0}.", this.Player_Chest_Armor.GetName());
 					break;
 				case "Legs":
@@ -350,6 +368,7 @@ namespace DungeonGame {
 					}
 					this.Player_Legs_Armor = armor;
 					armor.Equipped = true;
+					Helper.FormatSuccessOutputText();
 					Console.WriteLine("You have equipped {0}.", this.Player_Legs_Armor.GetName());
 					break;
 				default:
@@ -364,14 +383,14 @@ namespace DungeonGame {
 						this.ManaPoints -= this.Spellbook[index].ManaCost;
 						var fireSpellDamage = this.Spellbook[index].FireOffense.BlastDamage;
 						if (fireSpellDamage == 0) {
-							Console.ForegroundColor = ConsoleColor.DarkRed;
+							Helper.FormatAttackFailText();
 							Console.WriteLine("You missed!");
 						}
 						else {
-							Console.ForegroundColor = ConsoleColor.Red;
+							Helper.FormatAttackSuccessText();
 							Console.WriteLine("You hit the {0} for {1} fire damage.", opponent.Name, fireSpellDamage);
 							opponent.TakeDamage(fireSpellDamage);
-							Console.ForegroundColor = ConsoleColor.Yellow;
+							Helper.FormatOnFireText();
 							Console.WriteLine("The {0} bursts into flame!", opponent.Name);
 							opponent.SetOnFire(
 								true, // Is monster on fire
@@ -386,15 +405,15 @@ namespace DungeonGame {
 				}
 			}
 			else if (this.PlayerClass != Player.PlayerClassType.Mage) {
-				Console.ForegroundColor = ConsoleColor.DarkCyan;
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("You can't cast spells. You're not a mage!");
 			}
 			else if (index != -1) {
-				Console.ForegroundColor = ConsoleColor.DarkCyan;
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("You do not have enough mana to cast that spell!");
 			}
 			else {
-				Console.ForegroundColor = ConsoleColor.DarkCyan;
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("You don't have that spell in your spellbook.");
 			}
 		}

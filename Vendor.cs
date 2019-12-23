@@ -78,7 +78,7 @@ namespace DungeonGame {
 		}
 
 		public void DisplayGearForSale(Player player) {
-			Console.ForegroundColor = ConsoleColor.DarkGray;
+			Helper.FormatInfoText();
 			Console.WriteLine("The {0} has the following items for sale:\n", this.Name);
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (IEquipment item in this.VendorItems) {
@@ -148,12 +148,12 @@ namespace DungeonGame {
 				}
 			}
 			else {
-				Console.ForegroundColor = ConsoleColor.Green;
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("The vendor doesn't have that available for sale!");
 			}
 		}
 		public void BuyItem(Player player, string[] userInput, IEquipment buyItem, int index) {
-			Console.ForegroundColor = ConsoleColor.Green;
+			Helper.FormatSuccessOutputText();
 			if (player.Gold >= buyItem.ItemValue) {
 				player.Gold -= buyItem.ItemValue;
 				player.Inventory.Add(buyItem);
@@ -164,7 +164,7 @@ namespace DungeonGame {
 			Console.WriteLine("You can't afford that!");
 		}
 		public void BuyItem(Player player, string[] userInput, IEquipment buyItem, int index, string inputName) {
-			Console.ForegroundColor = ConsoleColor.Green;
+			Helper.FormatSuccessOutputText();
 			if (player.Gold >= buyItem.ItemValue) {
 				player.Gold -= buyItem.ItemValue;
 				player.Consumables.Add(buyItem as Consumable);
@@ -225,12 +225,12 @@ namespace DungeonGame {
 				}
 			}
 			else {
-				Console.ForegroundColor = ConsoleColor.Green;
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("You don't have that to sell!");
 			}
 		}
 		public void SellItem(Player player, string[] userInput, IEquipment sellItem, int index) {
-			Console.ForegroundColor = ConsoleColor.Green;
+			Helper.FormatSuccessOutputText();
 			if (!sellItem.IsEquipped()) {
 				player.Gold += sellItem.ItemValue;
 				player.Inventory.RemoveAt(index);
@@ -241,12 +241,10 @@ namespace DungeonGame {
 			Console.WriteLine("You have to unequip that first!");
 		}
 		public void RepairItem(Player player, string[] userInput) {
-			Console.ForegroundColor = ConsoleColor.Green;
 			var parsedInput = Helper.ParseInput(userInput);
 			var index = 0;
 			index = player.Inventory.FindIndex(f => f.GetName() == parsedInput || f.GetName().Contains(userInput.Last()));
 			if (index != -1) {
-				Console.ForegroundColor = ConsoleColor.Green;
 				switch (this.BuySellType) {
 					case "Armor":
 						Armor repairArmor = player.Inventory[index] as Armor;
@@ -256,11 +254,14 @@ namespace DungeonGame {
 							if (player.Gold >= (int)repairCostArmor) {
 								player.Gold -= (int)repairCostArmor;
 								repairArmor.Durability = 100;
+								Helper.FormatSuccessOutputText();
 								Console.WriteLine("Your {0} has been repaired for {1} gold.", repairArmor.Name, (int)repairCostArmor);
 								break;
 							}
+							Helper.FormatFailureOutputText();
 							Console.WriteLine("You can't afford to repair {0}", repairArmor.Name);
 						}
+						Helper.FormatFailureOutputText();
 						Console.WriteLine("The vendor doesn't repair that type of equipment.");
 						break;
 					case "Weapon":
@@ -271,15 +272,19 @@ namespace DungeonGame {
 							if (player.Gold >= repairCostWeapon) {
 								player.Gold -= (int)repairCostWeapon;
 								repairWeapon.Durability = 100;
+								Helper.FormatSuccessOutputText();
 								Console.WriteLine("Your {0} has been repaired for {1} gold.", repairWeapon.Name, (int)repairCostWeapon);
 								break;
 							}
+							Helper.FormatFailureOutputText();
 							Console.WriteLine("You can't afford to repair {0}", repairWeapon.Name);
 						}
+						Helper.FormatFailureOutputText();
 						Console.WriteLine("The vendor doesn't repair that type of equipment.");
 						break;
 					case "Healer":
 					case "Shopkeeper":
+						Helper.FormatFailureOutputText();
 						Console.WriteLine("{0}s don't repair equipment.", this.BuySellType);
 						break;
 					default:
@@ -287,18 +292,20 @@ namespace DungeonGame {
 				}
 				return;
 			}
+			Helper.FormatFailureOutputText();
 			Console.WriteLine("That item is not in your inventory.");
 		}
 		public string GetName() {
 			return this.Name.ToString();
 		}
 		public void HealPlayer(Player player) {
-			Console.ForegroundColor = ConsoleColor.Green;
 			if (this.BuySellType == "Healer") {
 				player.HitPoints = player.MaxHitPoints;
+				Helper.FormatSuccessOutputText();
 				Console.WriteLine("You have been restored to full health by the {0}.", this.Name);
 				return;
 			}
+			Helper.FormatFailureOutputText();
 			Console.WriteLine("The {0} cannot heal you!", this.Name);
 		}
 		public void RepopulateHealerPotion(string inputName) {

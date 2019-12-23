@@ -13,6 +13,36 @@ namespace DungeonGame {
 			var inputParse = inputFormatted.Split(' ');
 			return inputParse;
 		}
+		public static void FormatSuccessOutputText() {
+			Console.ForegroundColor = ConsoleColor.Green;
+		}
+		public static void FormatFailureOutputText() {
+			Console.ForegroundColor = ConsoleColor.DarkCyan;
+		}
+		public static void FormatOnFireText() {
+			Console.ForegroundColor = ConsoleColor.Yellow;
+		}
+		public static void FormatAttackSuccessText() {
+			Console.ForegroundColor = ConsoleColor.Red;
+		}
+		public static void FormatAttackFailText() {
+			Console.ForegroundColor = ConsoleColor.DarkRed;
+		}
+		public static void FormatInfoText() {
+			Console.ForegroundColor = ConsoleColor.DarkGray;
+		}
+		public static void FormatLevelUpText() {
+			Console.ForegroundColor = ConsoleColor.Cyan;
+		}
+		public static void FormatGeneralInfoText() {
+			Console.ForegroundColor = ConsoleColor.DarkGreen;
+		}
+		public static void FormatRoomInfoText() {
+			Console.ForegroundColor = ConsoleColor.White;
+		}
+		public static void FormatAnnounceText() {
+			Console.ForegroundColor = ConsoleColor.Gray;
+		}
 		public static string ParseInput(string[] userInput) {
 			var inputString = new StringBuilder();
 			for (int i = 1; i < userInput.Length; i++) {
@@ -23,22 +53,22 @@ namespace DungeonGame {
 			return parsedInput;
 		}
 		public static void RequestCommand() {
-			Console.ForegroundColor = ConsoleColor.Gray;
+			FormatAnnounceText();
 			Console.Write("Your command: ");
 		}
 		public static void PlayerDeath() {
-			Console.ForegroundColor = ConsoleColor.Gray;
+			FormatAnnounceText();
 			Console.WriteLine("You have died. Game over.");
 		}
 		public static void GameIntro() {
-			Console.ForegroundColor = ConsoleColor.Gray;
+			FormatAnnounceText();
 			Console.WriteLine(
 				"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot " +
 				"and explore dungeons. Stuff you've probably done a million times already across various RPG games. At any time " +
 				"you can get help on commands by typing 'help'.\n");
 		}
 		public static void ShowCommandHelp() {
-			Console.ForegroundColor = ConsoleColor.Gray;
+			FormatAnnounceText();
 			Console.WriteLine(
 				"Commands: Players may move in any direction of the game using a shortkey or the full direction name. " +
 				"For example, if you wish to go north, you may type either 'N' or 'North'. If a player wishes to look " +
@@ -50,7 +80,7 @@ namespace DungeonGame {
 				"them. You can 'unequip' them as well.");
 		}
 		public static Player BuildNewPlayer() {
-			Console.ForegroundColor = ConsoleColor.Gray;
+			FormatAnnounceText();
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			Console.WriteLine("Please enter a player name.\n");
 			string playerName;
@@ -97,7 +127,7 @@ namespace DungeonGame {
 			}
 		}
 		public static void InvalidCommand() {
-			Console.ForegroundColor = ConsoleColor.DarkCyan;
+			FormatFailureOutputText();
 			Console.WriteLine("Not a valid command.");
 		}
 		public static int ChangeRoom(List<IRoom> roomList, Player player, int x, int y, int z) {
@@ -118,15 +148,15 @@ namespace DungeonGame {
 			return roomIndex;
 		}
 		public static void InvalidDirection() {
-			Console.ForegroundColor = ConsoleColor.DarkCyan;
+			FormatFailureOutputText();
 			Console.WriteLine("You can't go that way!");
 		}
 		public static void InvalidVendorSell() {
-			Console.ForegroundColor = ConsoleColor.DarkCyan;
+			FormatFailureOutputText();
 			Console.WriteLine("The vendor doesn't want that.");
 		}
 		public static bool QuitGame(Player player) {
-			Console.ForegroundColor = ConsoleColor.Gray;
+			FormatAnnounceText();
 			Console.WriteLine("Are you sure you want to quit?");
 			string[] input = Helper.GetFormattedInput();
 			if (input[0] == "yes" || input[0] == "y") {
@@ -144,7 +174,7 @@ namespace DungeonGame {
 			return false;
 		}
 		public static void SaveGame(Player player) {
-			Console.ForegroundColor = ConsoleColor.Gray;
+			FormatAnnounceText();
 			if (player.CanSave == true) {
 				var serializer = new Newtonsoft.Json.JsonSerializer();
 				serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
@@ -159,6 +189,7 @@ namespace DungeonGame {
 				Console.WriteLine("Your game has been saved.");
 				return;
 			}
+			FormatFailureOutputText();
 			Console.WriteLine("You can't save inside a dungeon! Go outside first.");
 		}
 		public static int FleeRoom(List<IRoom> roomList, Player player) {

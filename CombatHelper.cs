@@ -8,7 +8,7 @@ namespace DungeonGame {
 		"[F]ight", "[I]nventory", "Cast Fireball", "Flee" };
 
 		public bool SingleCombat(IMonster opponent, Player player) {
-			Console.ForegroundColor = ConsoleColor.Green;
+			Helper.FormatSuccessOutputText();
 			Console.WriteLine("{0}, you have encountered a {1}. Time to fight!",
 				player.Name, opponent.Name);
 			while (true) {
@@ -25,15 +25,15 @@ namespace DungeonGame {
 					case "fight":
 						attackDamage = player.Attack();
 						if (attackDamage - opponent.ArmorRating(player) < 0) {
-							Console.ForegroundColor = ConsoleColor.DarkRed;
+							Helper.FormatAttackFailText();
 							Console.WriteLine("The {0}'s armor absorbed all of your attack!", opponent.Name);
 						}
 						else if (attackDamage == 0) {
-							Console.ForegroundColor = ConsoleColor.DarkRed;
+							Helper.FormatAttackFailText();
 							Console.WriteLine("You missed {0}!", opponent.Name);
 						}
 						else {
-							Console.ForegroundColor = ConsoleColor.Red;
+							Helper.FormatAttackSuccessText();
 							Console.WriteLine("You hit the {0} for {1} physical damage.", opponent.Name, attackDamage - opponent.ArmorRating(player));
 							opponent.TakeDamage(attackDamage - opponent.ArmorRating(player));
 						}
@@ -59,6 +59,7 @@ namespace DungeonGame {
 							player.DrinkPotion(input);
 						}
 						else {
+							Helper.FormatFailureOutputText();
 							Console.WriteLine("You can't drink that!");
 						}
 						continue;
@@ -79,16 +80,16 @@ namespace DungeonGame {
 				}
 				int attackDamageM = opponent.Attack();
 				if (attackDamageM - player.ArmorRating(opponent) < 0) {
-					Console.ForegroundColor = ConsoleColor.DarkRed;
+					Helper.FormatAttackFailText();
 					Console.WriteLine("Your armor absorbed all of {0}'s attack!", opponent.Name);
 					player.DecreaseArmorDurability();
 				}
 				else if (attackDamageM == 0) {
-					Console.ForegroundColor = ConsoleColor.DarkRed;
+					Helper.FormatAttackFailText();
 					Console.WriteLine("The {0} missed you!", opponent.Name);
 				}
 				else {
-					Console.ForegroundColor = ConsoleColor.Red;
+					Helper.FormatAttackSuccessText();
 					Console.WriteLine("The {0} hits you for {1} physical damage.",
 						opponent.Name, attackDamageM - player.ArmorRating(opponent));
 					player.TakeDamage(attackDamageM - player.ArmorRating(opponent));
@@ -100,7 +101,7 @@ namespace DungeonGame {
 			}
 		}
 		public void SingleCombatWin(IMonster opponent, Player player) {
-			Console.ForegroundColor = ConsoleColor.Green;
+			Helper.FormatSuccessOutputText();
 			Console.WriteLine("You have defeated the {0}!", opponent.Name);
 			foreach (IEquipment loot in opponent.MonsterItems) {
 				loot.Equipped = false;
@@ -114,9 +115,11 @@ namespace DungeonGame {
 			Console.ForegroundColor = ConsoleColor.Green;
 			var randomNum = RndGenerate.Next(1, 10);
 			if (randomNum > 5) {
+				Helper.FormatSuccessOutputText();
 				Console.WriteLine("You have fled combat successfully!");
 				return true;
 			}
+			Helper.FormatFailureOutputText();
 			Console.WriteLine("You tried to flee combat but failed!");
 			return false;
 		}

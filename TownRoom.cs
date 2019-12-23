@@ -95,7 +95,7 @@ namespace DungeonGame {
 			RoomObjects.Add((DungeonGame.IRoomInteraction)Vendor);
 		}
 		public void ShowCommands() {
-			Console.ForegroundColor = ConsoleColor.DarkGreen;
+			Helper.FormatGeneralInfoText();
 			Console.Write("Available Commands: ");
 			Console.WriteLine(String.Join(", ", this.Commands));
 		}
@@ -159,7 +159,8 @@ namespace DungeonGame {
 				}
 			}
 			else {
-				Console.Write("There is nothing in the room");
+				Helper.FormatRoomInfoText();
+				Console.Write("There is nothing in the room.");
 			}
 			Console.WriteLine("."); // Add period at end of list of objects in room
 			this.ShowDirections();
@@ -173,7 +174,7 @@ namespace DungeonGame {
 			var inputName = inputString.ToString().Trim();
 			var vendorName = Vendor.GetName().Split(' ');
 			if (vendorName.Last() == inputName || Vendor.GetName() == inputName) {
-				Console.ForegroundColor = ConsoleColor.DarkCyan;
+				Helper.FormatGeneralInfoText();
 				Console.WriteLine(Vendor.Desc);
 				Console.Write("\nHe is carrying:\n");
 				foreach (IEquipment itemForSale in Vendor.VendorItems) {
@@ -181,6 +182,7 @@ namespace DungeonGame {
 				}
 			}
 			else {
+				Helper.FormatFailureOutputText();
 				Console.WriteLine("There is no {0} in the room!", inputName);
 			}
 		}

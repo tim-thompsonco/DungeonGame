@@ -15,6 +15,7 @@ namespace DungeonGame {
 						TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
 						NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
 					});
+					Helper.FormatGeneralInfoText();
 					Console.WriteLine("Reloading your saved game.");
 				}
 				catch (FileNotFoundException) {
@@ -49,11 +50,13 @@ namespace DungeonGame {
 										}
 									}
 									catch (Exception) {
+										Helper.FormatFailureOutputText();
 										Console.WriteLine("An error has occurred while attacking.");
 									}
 								}
 							}
 							catch (IndexOutOfRangeException) {
+								Helper.FormatFailureOutputText();
 								Console.WriteLine("You can't attack that.");
 							}
 							break;
@@ -66,11 +69,13 @@ namespace DungeonGame {
 										}
 									}
 									catch (NullReferenceException) {
+										Helper.FormatFailureOutputText();
 										Console.WriteLine("There is no vendor in the room to buy an item from.");
 									}
 								}
 							}
 							catch (IndexOutOfRangeException) {
+								Helper.FormatFailureOutputText();
 								Console.WriteLine("Buy what?");
 							}
 							break;
@@ -97,6 +102,7 @@ namespace DungeonGame {
 										spawnedRooms[roomIndex].LookNpc(input);
 									}
 									catch (Exception) {
+										Helper.FormatFailureOutputText();
 										Console.WriteLine("An error has occurred while looking.");
 									}
 								}
@@ -112,11 +118,13 @@ namespace DungeonGame {
 										spawnedRooms[roomIndex].LootCorpse(player, input);
 									}
 									catch (Exception) {
+										Helper.FormatFailureOutputText();
 										Console.WriteLine("An error has occurred while looting.");
 									}
 								}
 							}
 							catch (IndexOutOfRangeException) {
+								Helper.FormatFailureOutputText();
 								Console.WriteLine("Loot what?");
 							}
 							break;
@@ -125,6 +133,7 @@ namespace DungeonGame {
 								player.DrinkPotion(input);
 							}
 							else {
+								Helper.FormatFailureOutputText();
 								Console.WriteLine("You can't drink that!");
 							}
 							break;
@@ -148,12 +157,13 @@ namespace DungeonGame {
 										}
 									}
 									catch (NullReferenceException) {
-										Console.ForegroundColor = ConsoleColor.Green;
+										Helper.FormatFailureOutputText();
 										Console.WriteLine("The vendor doesn't want that.");
 									}
 								}
 							}
 							catch (IndexOutOfRangeException) {
+								Helper.FormatFailureOutputText();
 								Console.WriteLine("Sell what?");
 							}
 							break;
@@ -168,13 +178,19 @@ namespace DungeonGame {
 													isTownRoom.Vendor.RepairItem(player, itemNameArray);
 												}
 											}
+											break;
 										}
 										isTownRoom.Vendor.RepairItem(player, input);
 									}
 								}
 							}
 							catch (IndexOutOfRangeException) {
+								Helper.FormatFailureOutputText();
 								Console.WriteLine("Repair what?");
+							}
+							catch (NullReferenceException) {
+								Helper.FormatFailureOutputText();
+								Console.WriteLine("There is no vendor here!");
 							}
 							break;
 						case "show":
@@ -186,11 +202,13 @@ namespace DungeonGame {
 										}
 									}
 									catch (NullReferenceException) {
+										Helper.FormatFailureOutputText();
 										Console.WriteLine("There is no vendor in the room to show inventory available for sale.");
 									}
 								}
 							}
 							catch (IndexOutOfRangeException) {
+								Helper.FormatFailureOutputText();
 								Console.WriteLine("Show what?");
 							}
 							break;
