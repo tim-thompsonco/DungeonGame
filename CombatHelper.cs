@@ -5,7 +5,7 @@ namespace DungeonGame {
 	public class CombatHelper {
 		private static readonly Random RndGenerate = new Random();
 		public String[] Commands { get; set; } = new String[4] {
-		"[F]ight", "[I]nventory", "[C]ast [F]ireball", "Flee" };
+		"[F]ight", "[I]nventory", "Cast Fireball", "Flee" };
 
 		public bool SingleCombat(IMonster opponent, Player player) {
 			Console.ForegroundColor = ConsoleColor.Green;
@@ -41,33 +41,12 @@ namespace DungeonGame {
 							return true;
 						}
 						break;
-					case "cf":
-					case "cast fireball":
-						if (player.ManaPoints >= player.Player_Spell.ManaCost) {
-							player.ManaPoints -= player.Player_Spell.ManaCost;
-							attackDamage = player.Player_Spell.FireOffense.BlastDamage;
-							if (attackDamage == 0) {
-								Console.ForegroundColor = ConsoleColor.DarkRed;
-								Console.WriteLine("You missed!");
-							}
-							else {
-								Console.ForegroundColor = ConsoleColor.Red;
-								Console.WriteLine("You hit the {0} for {1} fire damage.", opponent.Name, attackDamage);
-								opponent.TakeDamage(attackDamage);
-								Console.ForegroundColor = ConsoleColor.Yellow;
-								Console.WriteLine("The {0} bursts into flame!", opponent.Name);
-								opponent.OnFire = true;
-							}
-							if (opponent.HitPoints <= 0) {
-								this.SingleCombatWin(opponent, player);
-								return true;
-							}
-							break;
+					case "cast":
+						if (input[1] != null) {
+							var spellName = Helper.ParseInput(input);
+							player.CastSpell(opponent, spellName);
 						}
-						else {
-							Console.WriteLine("You do not have enough mana to cast that spell!");
-							continue;
-						}
+						break;
 					case "flee":
 						var canFlee = this.CanFleeCombat();
 						if (canFlee == true) {
@@ -90,16 +69,12 @@ namespace DungeonGame {
 						Helper.InvalidCommand();
 						continue;
 				}
-				if (opponent.OnFire) {
-					int burnDamage = player.Player_Spell.FireOffense.BurnDamage;
-					Console.ForegroundColor = ConsoleColor.Yellow;
-					Console.WriteLine("The {0} burns for {1} fire damage.", opponent.Name, burnDamage);
-					opponent.TakeDamage(burnDamage);
-					player.Player_Spell.FireOffense.BurnCurRounds += 1;
+				if (opponent.HitPoints <= 0) {
+					this.SingleCombatWin(opponent, player);
+					return true;
 				}
-				if (player.Player_Spell.FireOffense.BurnCurRounds > player.Player_Spell.FireOffense.BurnMaxRounds) {
-					opponent.OnFire = false;
-					player.Player_Spell.FireOffense.BurnCurRounds = 1;
+				if (opponent.OnFire) {
+					opponent.BurnOnFire();
 				}
 				int attackDamageM = opponent.Attack();
 				if (attackDamageM - player.ArmorRating(opponent) < 0) {

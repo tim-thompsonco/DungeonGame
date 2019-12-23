@@ -30,7 +30,7 @@ namespace DungeonGame {
 		public Armor Player_Head_Armor { get; set; }
 		public Armor Player_Legs_Armor { get; set; }
 		public Weapon Player_Weapon { get; set; }
-		public Spell Player_Spell { get; set; }
+		public List<Spell> Spellbook { get; set; }
 		public List<Consumable> Consumables { get; set; }
 		public List<IEquipment> Inventory { get; set; }
 
@@ -38,6 +38,7 @@ namespace DungeonGame {
 		public Player(string name, PlayerClassType playerClass) {
 			this.Name = name;
 			this.PlayerClass = playerClass;
+			this.Spellbook = new List<Spell>();
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();
 			this.Inventory.Add(new Weapon("iron sword", 19, 25, 25, 1.2, false));
@@ -46,8 +47,16 @@ namespace DungeonGame {
 			this.Inventory.Add(new Armor("iron legplates", Armor.ArmorSlot.Legs, 20, 3, 7, false));
 			this.Consumables.Add(new Consumable("minor health potion", 3, Consumable.PotionType.Health, 50));
 			this.Consumables.Add(new Consumable("minor mana potion", 3, Consumable.PotionType.Mana, 50));
-			this.Player_Spell = new Spell("Fireball", 50, 0, 1);
 			this.EquipInitialGear();
+			if (PlayerClass == PlayerClassType.Mage) {
+				this.Spellbook.Add(
+					new Spell(
+					"fireball", // Name
+					50, // Mana cost
+					1, // Rank
+					Spell.SpellType.FireOffense // Spell type
+					));
+			}
 		}
 
 		public void DecreaseArmorDurability() {
@@ -345,6 +354,48 @@ namespace DungeonGame {
 					break;
 				default:
 					break;
+			}
+		}
+		public void CastSpell(IMonster opponent, string inputName) {
+			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
+			if (index != -1 && this.ManaPoints >= this.Spellbook[index].ManaCost && this.PlayerClass == PlayerClassType.Mage) {
+				switch (this.Spellbook[index].SpellCategory) {
+					case Spell.SpellType.FireOffense:
+						this.ManaPoints -= this.Spellbook[index].ManaCost;
+						var fireSpellDamage = this.Spellbook[index].FireOffense.BlastDamage;
+						if (fireSpellDamage == 0) {
+							Console.ForegroundColor = ConsoleColor.DarkRed;
+							Console.WriteLine("You missed!");
+						}
+						else {
+							Console.ForegroundColor = ConsoleColor.Red;
+							Console.WriteLine("You hit the {0} for {1} fire damage.", opponent.Name, fireSpellDamage);
+							opponent.TakeDamage(fireSpellDamage);
+							Console.ForegroundColor = ConsoleColor.Yellow;
+							Console.WriteLine("The {0} bursts into flame!", opponent.Name);
+							opponent.SetOnFire(
+								true, // Is monster on fire
+								this.Spellbook[index].FireOffense.BurnDamage, // Burn damage
+								this.Spellbook[index].FireOffense.BurnCurRounds, // Burn current round
+								this.Spellbook[index].FireOffense.BurnMaxRounds // Burn max round
+							);
+						}
+						break;
+					default:
+						break;
+				}
+			}
+			else if (this.PlayerClass != Player.PlayerClassType.Mage) {
+				Console.ForegroundColor = ConsoleColor.DarkCyan;
+				Console.WriteLine("You can't cast spells. You're not a mage!");
+			}
+			else if (index != -1) {
+				Console.ForegroundColor = ConsoleColor.DarkCyan;
+				Console.WriteLine("You do not have enough mana to cast that spell!");
+			}
+			else {
+				Console.ForegroundColor = ConsoleColor.DarkCyan;
+				Console.WriteLine("You don't have that spell in your spellbook.");
 			}
 		}
 	}
