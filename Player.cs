@@ -7,6 +7,11 @@ using System.Text;
 
 namespace DungeonGame {
 	public class Player {
+		public enum PlayerClassType {
+			Mage,
+			Warrior,
+			Archer
+		}
 		public string Name { get; set; }
 		public int MaxHitPoints { get; set; } = 100;
 		public int MaxManaPoints { get; set; } = 100;
@@ -20,6 +25,7 @@ namespace DungeonGame {
 		public int Y { get; set; } = 0;
 		public int Z { get; set; } = 0;
 		public bool CanSave { get; set; }
+		public PlayerClassType PlayerClass { get; set; }
 		public Armor Player_Chest_Armor { get; set; }
 		public Armor Player_Head_Armor { get; set; }
 		public Armor Player_Legs_Armor { get; set; }
@@ -29,8 +35,9 @@ namespace DungeonGame {
 		public List<IEquipment> Inventory { get; set; }
 
 		[JsonConstructor]
-		public Player(string name) {
+		public Player(string name, PlayerClassType playerClass) {
 			this.Name = name;
+			this.PlayerClass = playerClass;
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();
 			this.Inventory.Add(new Weapon("iron sword", 19, 25, 25, 1.2, false));
@@ -40,6 +47,7 @@ namespace DungeonGame {
 			this.Consumables.Add(new Consumable("minor health potion", 3, Consumable.PotionType.Health, 50));
 			this.Consumables.Add(new Consumable("minor mana potion", 3, Consumable.PotionType.Mana, 50));
 			this.Player_Spell = new Spell("Fireball", 50, 0, 1);
+			this.EquipInitialGear();
 		}
 
 		public void DecreaseArmorDurability() {

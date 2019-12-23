@@ -1,14 +1,26 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Collections.Generic;
+using System.Text;
 
 namespace DungeonGame {
 	public static class Helper {
-		public static string GetFormattedInput() {
+		public static string[] GetFormattedInput() {
 			var input = Console.ReadLine();
 			var inputFormatted = input.ToLower().Trim();
-			return inputFormatted;
+			var inputParse = inputFormatted.Split(' ');
+			return inputParse;
+		}
+		public static string ParseInput(string[] userInput) {
+			var inputString = new StringBuilder();
+			for (int i = 1; i < userInput.Length; i++) {
+				inputString.Append(userInput[i]);
+				inputString.Append(' ');
+			}
+			var parsedInput = inputString.ToString().Trim();
+			return parsedInput;
 		}
 		public static void RequestCommand() {
 			Console.ForegroundColor = ConsoleColor.Gray;
@@ -37,16 +49,50 @@ namespace DungeonGame {
 				"by typing 'drink' and then the name of the potion or object. To use armor or weapons, you must 'equip' " +
 				"them. You can 'unequip' them as well.");
 		}
-		public static string FetchPlayerName() {
+		public static Player BuildNewPlayer() {
 			Console.ForegroundColor = ConsoleColor.Gray;
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			Console.WriteLine("Please enter a player name.\n");
+			string playerName;
 			while (true) {
 				Console.Write("Player name: ");
-				var playerName = Console.ReadLine();
+				playerName = textInfo.ToTitleCase(Console.ReadLine().ToString());
 				Console.WriteLine("Your player name is {0}, is that correct? [Y] or [N].", playerName);
 				RequestCommand();
-				string input = GetFormattedInput();
-				if (input == "y") {
-					return playerName;
+				string[] input = GetFormattedInput();
+				if (input[0] == "y") {
+					break;
+				}
+			}
+			Console.WriteLine("Please enter your class. You can select Mage, Warrior, or Archer.\n");
+			while (true) {
+				Console.Write("Player class: ");
+				string playerClass;
+				string[] userInput = GetFormattedInput();
+				string playerClassInput = textInfo.ToTitleCase(userInput[0].ToString());
+				if (playerClassInput != "Mage" && playerClassInput != "Warrior" && playerClassInput != "Archer") {
+					Console.WriteLine("Invalid selection. Please enter Mage, Warrior, or Archer for your class.");
+					continue;
+				}
+				playerClass = playerClassInput;
+				Console.WriteLine("Your player class is {0}, is that correct? [Y] or [N].", playerClass);
+				RequestCommand();
+				string[] input = GetFormattedInput();
+				if (input[0] == "y") {
+					switch(playerClass) {
+						case "Archer":
+							var player_Archer = new Player(playerName, Player.PlayerClassType.Archer);
+							return player_Archer;
+						case "Mage":
+							var player_Mage = new Player(playerName, Player.PlayerClassType.Mage);
+							return player_Mage;
+							case "Warrior":
+							var player_Warrior = new Player(playerName, Player.PlayerClassType.Warrior);
+							return player_Warrior;
+						default:
+							var player_Default = new Player(playerName, Player.PlayerClassType.Warrior);
+							return player_Default;
+					}
 				}
 			}
 		}
@@ -82,8 +128,8 @@ namespace DungeonGame {
 		public static bool QuitGame(Player player) {
 			Console.ForegroundColor = ConsoleColor.Gray;
 			Console.WriteLine("Are you sure you want to quit?");
-			string input = Helper.GetFormattedInput();
-			if (input == "yes" || input == "y") {
+			string[] input = Helper.GetFormattedInput();
+			if (input[0] == "yes" || input[0] == "y") {
 				Console.WriteLine("Quitting the game.");
 				player.CanSave = true;
 				Helper.SaveGame(player);

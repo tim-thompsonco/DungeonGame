@@ -104,12 +104,7 @@ namespace DungeonGame {
 			}
 		}
 		public void BuyItemCheck(Player player, string[] userInput) {
-			var inputString = new StringBuilder();
-			for (int i = 1; i < userInput.Length; i++) {
-				inputString.Append(userInput[i]);
-				inputString.Append(' ');
-			}
-			var inputName = inputString.ToString().Trim();
+			var inputName = Helper.ParseInput(userInput);
 			var index = 0;
 			if (this.BuySellType == "Healer") {
 				index = this.VendorItems.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(inputName));
@@ -181,12 +176,7 @@ namespace DungeonGame {
 			Console.WriteLine("You can't afford that!");
 		}
 		public void SellItemCheck(Player player, string[] userInput) {
-			var inputString = new StringBuilder();
-			for (int i = 1; i < userInput.Length; i++) {
-				inputString.Append(userInput[i]);
-				inputString.Append(' ');
-			}
-			var inputName = inputString.ToString().Trim();
+			var inputName = Helper.ParseInput(userInput);
 			var index = 0;
 			index = player.Inventory.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()) && f.IsEquipped() == false);
 			if (index != -1) {
@@ -252,14 +242,9 @@ namespace DungeonGame {
 		}
 		public void RepairItem(Player player, string[] userInput) {
 			Console.ForegroundColor = ConsoleColor.Green;
-			var inputString = new StringBuilder();
-			for (int i = 1; i < userInput.Length; i++) {
-				inputString.Append(userInput[i]);
-				inputString.Append(' ');
-			}
-			var inputName = inputString.ToString().Trim();
+			var parsedInput = Helper.ParseInput(userInput);
 			var index = 0;
-			index = player.Inventory.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()));
+			index = player.Inventory.FindIndex(f => f.GetName() == parsedInput || f.GetName().Contains(userInput.Last()));
 			if (index != -1) {
 				Console.ForegroundColor = ConsoleColor.Green;
 				switch (this.BuySellType) {
