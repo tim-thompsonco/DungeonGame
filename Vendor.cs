@@ -21,27 +21,30 @@ namespace DungeonGame {
 					new Armor(
 						"leather vest", // Name
 						Armor.ArmorSlot.Chest, // Armor slot
-						18, // Item value
-						6, // Low armor rating
-						10, // High armor rating
+						Armor.ArmorType.Leather, // Armor type
+						12, // Item value
+						7, // Low armor rating
+						12, // High armor rating
 						false // Equipped
 					));
 					VendorItems.Add(
 					new Armor(
 						"leather helm", // Name
 						Armor.ArmorSlot.Head, // Armor slot
+						Armor.ArmorType.Leather, // Armor type
 						6, // Item value
-						2, // Low armor rating
-						5, // High armor rating
+						3, // Low armor rating
+						6, // High armor rating
 						false // Equipped
 					));
 					VendorItems.Add(
 					new Armor(
 						"leather leggings", // Name
 						Armor.ArmorSlot.Legs, // Armor slot
+						Armor.ArmorType.Leather, // Armor type
 						10, // Item value
-						3, // Low armor rating
-						7, // High armor rating
+						5, // Low armor rating
+						10, // High armor rating
 						false // Equipped
 					));
 					break;
@@ -49,9 +52,9 @@ namespace DungeonGame {
 					VendorItems.Add(
 					new Weapon(
 						"notched sword", // Name
-						11, // Low end of damage value range
-						18, // High end of damage value range
-						15, // Item value
+						13, // Low end of damage value range
+						20, // High end of damage value range
+						20, // Item value
 						1.1, // Crit multiplier
 						false // Equipped bool
 					));
@@ -177,8 +180,7 @@ namespace DungeonGame {
 		}
 		public void SellItemCheck(Player player, string[] userInput) {
 			var inputName = Helper.ParseInput(userInput);
-			var index = 0;
-			index = player.Inventory.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()) && f.IsEquipped() == false);
+			var index = player.Inventory.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()) && f.IsEquipped() == false);
 			if (index != -1) {
 				Armor sellArmor = player.Inventory[index] as Armor;
 				Weapon sellWeapon = player.Inventory[index] as Weapon;
@@ -242,8 +244,7 @@ namespace DungeonGame {
 		}
 		public void RepairItem(Player player, string[] userInput) {
 			var parsedInput = Helper.ParseInput(userInput);
-			var index = 0;
-			index = player.Inventory.FindIndex(f => f.GetName() == parsedInput || f.GetName().Contains(userInput.Last()));
+			var index = player.Inventory.FindIndex(f => f.GetName() == parsedInput || f.GetName().Contains(userInput.Last()));
 			if (index != -1) {
 				switch (this.BuySellType) {
 					case "Armor":

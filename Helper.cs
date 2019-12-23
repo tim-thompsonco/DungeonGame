@@ -115,6 +115,10 @@ namespace DungeonGame {
 							return player_Archer;
 						case "Mage":
 							var player_Mage = new Player(playerName, Player.PlayerClassType.Mage);
+							Console.WriteLine("\n\nYou have selected Mage. You can 'cast' a spell, for example " +
+								"'cast fireball', if you have a spell named fireball in your spellbook. To see " +
+								"the list of spells in your spellbook, you can 'list spells'. To view info " +
+								"about a spell, you can 'info' the spell name. For example, 'info fireball'.");
 							return player_Mage;
 							case "Warrior":
 							var player_Warrior = new Player(playerName, Player.PlayerClassType.Warrior);

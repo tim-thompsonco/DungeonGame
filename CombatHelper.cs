@@ -4,8 +4,8 @@ using System.Linq;
 namespace DungeonGame {
 	public class CombatHelper {
 		private static readonly Random RndGenerate = new Random();
-		public String[] Commands { get; set; } = new String[4] {
-		"[F]ight", "[I]nventory", "Cast Fireball", "Flee" };
+		public String[] Commands { get; set; } = new String[3] {
+		"[F]ight", "[I]nventory", "Flee" };
 
 		public bool SingleCombat(IMonster opponent, Player player) {
 			Helper.FormatSuccessOutputText();
@@ -77,6 +77,9 @@ namespace DungeonGame {
 				}
 				if (opponent.OnFire) {
 					opponent.BurnOnFire();
+				}
+				if (player.IsAugmented) {
+					player.AugmentArmorRound();
 				}
 				int attackDamageM = opponent.Attack();
 				if (attackDamageM - player.ArmorRating(opponent) < 0) {

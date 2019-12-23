@@ -39,6 +39,8 @@
     <Compile Include="Consumable Properties\RestoreHealth.cs" />
     <Compile Include="Interfaces\IEquipment.cs" />
     <Compile Include="Interfaces\IVendor.cs" />
+    <Compile Include="Spell Properties\Defense.cs" />
+    <Compile Include="Spell Properties\Healing.cs" />
     <Compile Include="Vendor.cs" />
     <Compile Include="Spell Properties\FireOffense.cs" />
     <Compile Include="Loot.cs" />

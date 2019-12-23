@@ -25,6 +25,13 @@ namespace DungeonGame {
 		public int Y { get; set; } = 0;
 		public int Z { get; set; } = 0;
 		public bool CanSave { get; set; }
+		public bool CanWearCloth { get; set; }
+		public bool CanWearLeather { get; set; }
+		public bool CanWearPlate { get; set; }
+		public bool IsAugmented { get; set; }
+		public int AugmentAmount { get; set; }
+		public int AugmentCurRound { get; set; }
+		public int AugmentMaxRound { get; set; }
 		public PlayerClassType PlayerClass { get; set; }
 		public Armor Player_Chest_Armor { get; set; }
 		public Armor Player_Head_Armor { get; set; }
@@ -41,22 +48,37 @@ namespace DungeonGame {
 			this.Spellbook = new List<Spell>();
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();
-			this.Inventory.Add(new Weapon("iron sword", 19, 25, 25, 1.2, false));
-			this.Inventory.Add(new Armor("iron chestplate", Armor.ArmorSlot.Chest, 35, 5, 10, false));
-			this.Inventory.Add(new Armor("iron helmet", Armor.ArmorSlot.Head, 12, 1, 3, false));
-			this.Inventory.Add(new Armor("iron legplates", Armor.ArmorSlot.Legs, 20, 3, 7, false));
 			this.Consumables.Add(new Consumable("minor health potion", 3, Consumable.PotionType.Health, 50));
 			this.Consumables.Add(new Consumable("minor mana potion", 3, Consumable.PotionType.Mana, 50));
-			this.EquipInitialGear();
 			if (PlayerClass == PlayerClassType.Mage) {
+				this.CanWearCloth = true;
+				this.Inventory.Add(new Weapon("dagger", 15, 15, 15, 1.2, false));
+				this.Inventory.Add(new Armor("cloth vest", Armor.ArmorSlot.Chest, Armor.ArmorType.Cloth, 10, 5, 10, false));
+				this.Inventory.Add(new Armor("cloth cap", Armor.ArmorSlot.Head, Armor.ArmorType.Cloth, 3, 1, 3, false));
+				this.Inventory.Add(new Armor("cloth leggings", Armor.ArmorSlot.Legs, Armor.ArmorType.Cloth, 7, 3, 7, false));
 				this.Spellbook.Add(
 					new Spell(
 					"fireball", // Name
-					50, // Mana cost
+					25, // Mana cost
 					1, // Rank
 					Spell.SpellType.FireOffense // Spell type
 					));
+				this.Spellbook.Add(
+					new Spell(
+					"heal", // Name
+					25, // Mana cost
+					1, // Rank
+					Spell.SpellType.Healing // Spell type
+					));
+				this.Spellbook.Add(
+					new Spell(
+					"diamondskin", // Name
+					25, // Mana cost
+					1, // Rank
+					Spell.SpellType.Defense // Spell type
+					));
 			}
+			this.EquipInitialGear();
 		}
 
 		public void DecreaseArmorDurability() {
@@ -176,6 +198,9 @@ namespace DungeonGame {
 			}
 			if (this.Player_Legs_Armor != null && this.Player_Legs_Armor.IsEquipped()) {
 				totalArmorRating += (int)this.Player_Legs_Armor.GetArmorRating();
+			}
+			if (IsAugmented) {
+				totalArmorRating += AugmentAmount;
 			}
 			return totalArmorRating;
 		}
@@ -375,30 +400,15 @@ namespace DungeonGame {
 					break;
 			}
 		}
-		public void CastSpell(IMonster opponent, string inputName) {
+		public void CastSpell(string inputName) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
 			if (index != -1 && this.ManaPoints >= this.Spellbook[index].ManaCost && this.PlayerClass == PlayerClassType.Mage) {
 				switch (this.Spellbook[index].SpellCategory) {
-					case Spell.SpellType.FireOffense:
-						this.ManaPoints -= this.Spellbook[index].ManaCost;
-						var fireSpellDamage = this.Spellbook[index].FireOffense.BlastDamage;
-						if (fireSpellDamage == 0) {
-							Helper.FormatAttackFailText();
-							Console.WriteLine("You missed!");
-						}
-						else {
-							Helper.FormatAttackSuccessText();
-							Console.WriteLine("You hit the {0} for {1} fire damage.", opponent.Name, fireSpellDamage);
-							opponent.TakeDamage(fireSpellDamage);
-							Helper.FormatOnFireText();
-							Console.WriteLine("The {0} bursts into flame!", opponent.Name);
-							opponent.SetOnFire(
-								true, // Is monster on fire
-								this.Spellbook[index].FireOffense.BurnDamage, // Burn damage
-								this.Spellbook[index].FireOffense.BurnCurRounds, // Burn current round
-								this.Spellbook[index].FireOffense.BurnMaxRounds // Burn max round
-							);
-						}
+					case Spell.SpellType.Healing:
+						this.Spellbook[index].CastHealing(this, index);
+						break;
+					case Spell.SpellType.Defense:
+						this.Spellbook[index].CastDefense(this, index);
 						break;
 					default:
 						break;
@@ -415,6 +425,101 @@ namespace DungeonGame {
 			else {
 				Helper.FormatFailureOutputText();
 				Console.WriteLine("You don't have that spell in your spellbook.");
+			}
+		}
+		public void CastSpell(IMonster opponent, string inputName) {
+			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
+			if (index != -1 && this.ManaPoints >= this.Spellbook[index].ManaCost && this.PlayerClass == PlayerClassType.Mage) {
+				switch (this.Spellbook[index].SpellCategory) {
+					case Spell.SpellType.FireOffense:
+						this.Spellbook[index].CastFireOffense(opponent, this, index);
+						break;
+					case Spell.SpellType.Healing:
+						this.Spellbook[index].CastHealing(this, index);
+						break;
+					case Spell.SpellType.Defense:
+						this.Spellbook[index].CastDefense(this, index);
+						break;
+					default:
+						break;
+				}
+			}
+			else if (this.PlayerClass != Player.PlayerClassType.Mage) {
+				Helper.FormatFailureOutputText();
+				Console.WriteLine("You can't cast spells. You're not a mage!");
+			}
+			else if (index != -1) {
+				Helper.FormatFailureOutputText();
+				Console.WriteLine("You do not have enough mana to cast that spell!");
+			}
+			else {
+				Helper.FormatFailureOutputText();
+				Console.WriteLine("You don't have that spell in your spellbook.");
+			}
+		}
+		public void ListSpells(string input) {
+			if (input == "spells" && this.PlayerClass == Player.PlayerClassType.Mage) {
+				var textInfo = new CultureInfo("en-US", false).TextInfo;
+				Helper.FormatInfoText();
+				Console.WriteLine("Your spellbook contains:");
+				foreach (var spell in this.Spellbook) {
+					var spellName = textInfo.ToTitleCase(spell.GetName().ToString());
+					Console.WriteLine("{0}, Rank {1}", spellName, spell.Rank);
+				}
+			}
+			else if (input == "spells" && this.PlayerClass != Player.PlayerClassType.Mage) {
+				Helper.FormatFailureOutputText();
+				Console.WriteLine("You're not a mage!");
+			}
+			else {
+				Helper.FormatFailureOutputText();
+				Console.WriteLine("You can't list that.");
+			}
+		}
+		public void SpellInfo(string input) {
+			var index = this.Spellbook.FindIndex(f => f.GetName() == input);
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			if (index != -1 && this.PlayerClass == Player.PlayerClassType.Mage) {
+				Helper.FormatInfoText();
+				Console.WriteLine(textInfo.ToTitleCase(this.Spellbook[index].Name.ToString()));
+				Console.WriteLine("Rank: {0}", this.Spellbook[index].Rank);
+				Console.WriteLine("Mana Cost: {0}", this.Spellbook[index].ManaCost);
+				switch(this.Spellbook[index].SpellCategory) {
+					case Spell.SpellType.FireOffense:
+						this.Spellbook[index].FireOffenseSpellInfo(this, index);
+						break;
+					case Spell.SpellType.Healing:
+						this.Spellbook[index].HealingSpellInfo(this, index);
+						break;
+					case Spell.SpellType.Defense:
+						this.Spellbook[index].DefenseSpellInfo(this, index);
+						break;
+					default:
+						break;
+				}
+			}
+			else if (index != -1 && this.PlayerClass != Player.PlayerClassType.Mage) {
+				Helper.FormatFailureOutputText();
+				Console.WriteLine("You're not a mage!");
+			}
+			else {
+				Helper.FormatFailureOutputText();
+				Console.WriteLine("That spell is not in your spellbook.");
+			}
+		}
+		public void SetAugmentArmor(bool isAugmented, int augmentAmount, int augmentCurRound, int augmentMaxRound) {
+			this.IsAugmented = isAugmented;
+			this.AugmentAmount = augmentAmount;
+			this.AugmentCurRound = augmentCurRound;
+			this.AugmentMaxRound = augmentMaxRound;
+		}
+		public void AugmentArmorRound() {
+			this.AugmentCurRound += 1;
+			Helper.FormatSuccessOutputText();
+			Console.WriteLine("Your armor is augmented by {0} for {1} more rounds.", this.AugmentAmount, this.AugmentMaxRound - this.AugmentCurRound + 1);
+			if (this.AugmentCurRound > this.AugmentMaxRound) {
+				this.IsAugmented = false;
+				this.AugmentCurRound = 1;
 			}
 		}
 	}

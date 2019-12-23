@@ -7,9 +7,15 @@ namespace DungeonGame {
 			Chest,
 			Legs
 		}
+		public enum ArmorType {
+			Cloth,
+			Leather,
+			Plate
+		}
 		private static readonly Random RndGenerate = new Random();
 		public string Name { get; set; }
 		public ArmorSlot ArmorCategory { get; set; }
+		public ArmorType ArmorGroup { get; set; }
 		public int ItemValue { get; set; }
 		public int ArmorRating { get; set; }
 		public bool Equipped { get; set; }
@@ -18,12 +24,14 @@ namespace DungeonGame {
 		public Armor(
 			string name,
 			ArmorSlot armorSlot,
+			ArmorType armorGroup,
 			int itemValue,
 			int armorRatingLow,
 			int armorRatingHigh,
 			bool equipped
 			) {
 			this.Name = name;
+			this.ArmorGroup = armorGroup;
 			this.ArmorCategory = armorSlot;
 			this.ItemValue = itemValue;
 			this.ArmorRating = RndGenerate.Next(armorRatingLow, armorRatingHigh);

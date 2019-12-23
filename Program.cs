@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -79,6 +80,12 @@ namespace DungeonGame {
 								Console.WriteLine("Buy what?");
 							}
 							break;
+						case "cast":
+							if (input[1] != null) {
+								var spellName = Helper.ParseInput(input);
+								player.CastSpell(spellName);
+							}
+						break;
 						case "equip":
 						case "unequip":
 							player.EquipItem(input);
@@ -92,6 +99,24 @@ namespace DungeonGame {
 							bool quitConfirm = Helper.QuitGame(player);
 							if (quitConfirm == true) {
 								return;
+							}
+							break;
+						case "list":
+							try {
+								player.ListSpells(input[1]);
+							}
+							catch (IndexOutOfRangeException) {
+								Helper.FormatFailureOutputText();
+								Console.WriteLine("List what?");
+							}
+							break;
+						case "info":
+							try {
+								player.SpellInfo(input[1]);
+							}
+							catch (IndexOutOfRangeException) {
+								Helper.FormatFailureOutputText();
+								Console.WriteLine("What spell did you want to know about?");
 							}
 							break;
 						case "l":

@@ -58,9 +58,9 @@ namespace DungeonGame {
 				100, // Experience provided
 					new Weapon(
 						"notched axe", // Name
-						12, // Low end of damage value range
-						22, // High end of damage value range
-						10, // Item value
+						14, // Low end of damage value range
+						24, // High end of damage value range
+						24, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
 						)
@@ -96,9 +96,9 @@ namespace DungeonGame {
 				120, // Experience provided
 					new Weapon(
 						"venomous fang", // Name
-						17, // Low end of damage value range
-						27, // High end of damage value range
-						25, // Item value
+						19, // Low end of damage value range
+						29, // High end of damage value range
+						29, // Item value
 						1.3, // Crit multiplier
 						true // Equipped bool
 						),
@@ -138,18 +138,19 @@ namespace DungeonGame {
 				120, // Experience provided
 					new Weapon(
 						"dull sword", // Name
-						13, // Low end of damage value range
-						20, // High end of damage value range
-						25, // Item value
+						15, // Low end of damage value range
+						22, // High end of damage value range
+						22, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
 						),
 					new Armor(
 						"bony chestplate", // Name
 						Armor.ArmorSlot.Chest, // Armor slot
-						25, // Item value
-						3, // Low end of armor value range
-						8, // High end of armor value range
+						Armor.ArmorType.Plate, // Armor type
+						18, // Item value
+						13, // Low end of armor value range
+						18, // High end of armor value range
 						true // Equipped bool
 						),
 					new Consumable(
@@ -193,18 +194,19 @@ namespace DungeonGame {
 				160, // Experience provided
 					new Weapon(
 						"bronze longsword", // Name
-						21, // Low end of damage value range
-						27, // High end of damage value range
-						30, // Item value
+						23, // Low end of damage value range
+						29, // High end of damage value range
+						29, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
 						),
 					new Armor(
 						"bronze helmet", // Name
 						Armor.ArmorSlot.Head, // Armor slot
-						15, // Item value
-						2, // Low end of armor value range
-						4, // High end of armor value range
+						Armor.ArmorType.Plate, // Armor type
+						14, // Item value
+						12, // Low end of armor value range
+						14, // High end of armor value range
 						true // Equipped bool
 						),
 					new Consumable(
@@ -245,18 +247,19 @@ namespace DungeonGame {
 				120, // Experience provided
 					new Weapon(
 						"dull sword", // Name
-						13, // Low end of damage value range
-						20, // High end of damage value range
-						25, // Item value
+						15, // Low end of damage value range
+						22, // High end of damage value range
+						22, // Item value
 						1.2, // Crit multiplier
 						true // Equipped bool
 						),
 					new Armor(
 						"bony chestplate", // Name
 						Armor.ArmorSlot.Chest, // Armor slot
-						25, // Item value
-						3, // Low end of armor value range
-						8, // High end of armor value range
+						Armor.ArmorType.Plate, // Armor type
+						18, // Item value
+						13, // Low end of armor value range
+						18, // High end of armor value range
 						true // Equipped bool
 						),
 					new Consumable(
@@ -297,9 +300,9 @@ namespace DungeonGame {
 				120, // Experience provided
 					new Weapon(
 						"venomous fang", // Name
-						17,  // Low end of damage value range
-						27, // High end of damage value range
-						25, // Item value
+						19,  // Low end of damage value range
+						29, // High end of damage value range
+						29, // Item value
 						1.3, // Crit multiplier
 						true // Equipped bool
 						),
@@ -359,9 +362,9 @@ namespace DungeonGame {
 				250, // Experience provided
 					new Weapon(
 						"obsidian axe", // Name
-						27, // Low end of damage value range
-						33, // High end of damage value range
-						50, // Item value
+						29, // Low end of damage value range
+						35, // High end of damage value range
+						35, // Item value
 						1.1, // Crit multiplier
 						true // Equipped bool
 						),
