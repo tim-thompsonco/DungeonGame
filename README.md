@@ -4,7 +4,7 @@ This is my fun project to finish what I started with C when I was 14. My goal at
 
 Stack used:
 
-C#, Visual Studio
+C#, Visual Studio for Windows dev, Rider for Mac dev
 
 Programming skills used:
 
