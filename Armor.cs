@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace DungeonGame {
-	public class Armor : IRoomInteraction, IEquipment {
+	public class Armor : IEquipment {
 		public enum ArmorSlot {
 			Head,
 			Chest,

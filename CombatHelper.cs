@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DungeonGame {
 	public class CombatHelper {
 		private static readonly Random RndGenerate = new Random();
-		public String[] Commands { get; set; } = new String[3] {
+		private string[] Commands { get; set; } = new string[3] {
 		"[F]ight", "[I]nventory", "Flee" };
 
 		public bool SingleCombat(IMonster opponent, Player player) {
@@ -15,15 +16,14 @@ namespace DungeonGame {
 				player.DisplayPlayerStats();
 				opponent.DisplayStats();
 				Console.Write("Available Commands: ");
-				Console.WriteLine(String.Join(", ", this.Commands));
+				Console.WriteLine(string.Join(", ", this.Commands));
 				Helper.RequestCommand();
-				string[] input = Helper.GetFormattedInput();
+				var input = Helper.GetFormattedInput();
 				Console.WriteLine(); // To add a blank space between the command and fight sequence
-				int attackDamage;
 				switch (input[0]) {
 					case "f":
 					case "fight":
-						attackDamage = player.Attack();
+						var attackDamage = player.Attack();
 						if (attackDamage - opponent.ArmorRating(player) < 0) {
 							Helper.FormatAttackFailText();
 							Console.WriteLine("The {0}'s armor absorbed all of your attack!", opponent.Name);
@@ -43,11 +43,51 @@ namespace DungeonGame {
 						}
 						break;
 					case "cast":
-						if (input[1] != null) {
-							var spellName = Helper.ParseInput(input);
-							player.CastSpell(opponent, spellName);
+						try {
+							if (input[1] != null) {
+								var spellName = Helper.ParseInput(input);
+								player.CastSpell(opponent, spellName);
+							}
+							break;
 						}
-						break;
+						catch (IndexOutOfRangeException) {
+							Helper.FormatFailureOutputText();
+							Console.WriteLine("You don't have that spell.");
+							continue;
+						}
+						catch (InvalidOperationException) {
+							if (player.PlayerClass != Player.PlayerClassType.Mage) {
+								Helper.FormatFailureOutputText();
+								Console.WriteLine("You can't cast spells. You're not a mage!");
+								continue;
+							}
+							Helper.FormatFailureOutputText();
+							Console.WriteLine("You do not have enough mana to cast that spell!");
+							continue;
+						}
+					case "use":
+						try {
+							if (input[1] != null) {
+								var abilityName = Helper.ParseInput(input);
+								player.UseAbility(opponent, abilityName);
+							}
+							break;
+						}
+						catch (IndexOutOfRangeException) {
+							Helper.FormatFailureOutputText();
+							Console.WriteLine("You don't have that ability.");
+							continue;
+						}
+						catch (InvalidOperationException) {
+							if (player.PlayerClass != Player.PlayerClassType.Warrior) {
+								Helper.FormatFailureOutputText();
+								Console.WriteLine("You can't use abilities. You're not a warrior!");
+								continue;
+							}
+							Helper.FormatFailureOutputText();
+							Console.WriteLine("You do not have enough rage to use that ability!");
+							continue;
+						}
 					case "flee":
 						var canFlee = this.CanFleeCombat();
 						if (canFlee == true) {
@@ -67,10 +107,51 @@ namespace DungeonGame {
 					case "inventory":
 						player.ShowInventory(player);
 						continue;
+					case "list":
+						switch (input[1]) {
+							case "abilities":
+								try {
+									player.ListAbilities();
+								}
+								catch (IndexOutOfRangeException) {
+									Helper.FormatFailureOutputText();
+									Console.WriteLine("List what?");
+								}
+								continue;
+							case "spells":
+								try {
+									player.ListSpells();
+								}
+								catch (IndexOutOfRangeException) {
+									Helper.FormatFailureOutputText();
+									Console.WriteLine("List what?");
+								}
+								continue;
+						}
+						break;
+					case "ability":
+						try {
+							player.AbilityInfo(input[1]);
+						}
+						catch (IndexOutOfRangeException) {
+							Helper.FormatFailureOutputText();
+							Console.WriteLine("What ability did you want to know about?");
+						}
+						continue;
+					case "spell":
+						try {
+							player.SpellInfo(input[1]);
+						}
+						catch (IndexOutOfRangeException) {
+							Helper.FormatFailureOutputText();
+							Console.WriteLine("What spell did you want to know about?");
+						}
+						continue;
 					default:
 						Helper.InvalidCommand();
 						continue;
 				}
+				// Check opponent health to determine dead or not before special abilities
 				if (opponent.HitPoints <= 0) {
 					this.SingleCombatWin(opponent, player);
 					return true;
@@ -78,10 +159,32 @@ namespace DungeonGame {
 				if (opponent.OnFire) {
 					opponent.BurnOnFire();
 				}
+				if (opponent.IsBleeding) {
+					opponent.Bleeding();
+				}
 				if (player.IsAugmented) {
 					player.AugmentArmorRound();
 				}
-				int attackDamageM = opponent.Attack();
+				if (opponent.IsStunned) {
+					opponent.Stunned();
+					continue;
+				}
+				// Check opponent health to determine dead or not after special abilities
+				if (opponent.HitPoints <= 0) {
+					this.SingleCombatWin(opponent, player);
+					return true;
+				}
+				var attackDamageM = opponent.Attack();
+				if (attackDamageM > player.AbsorbDamageAmount && player.AbsorbDamageAmount > 0) {
+					Console.WriteLine("Your defensive move blocked {0} damage!", player.AbsorbDamageAmount);
+					attackDamageM -= player.AbsorbDamageAmount;
+					player.AbsorbDamageAmount = 0;
+				}
+				else if (attackDamageM < player.AbsorbDamageAmount && player.AbsorbDamageAmount > 0) {
+					Console.WriteLine("Your defensive move blocked {0} damage!", attackDamageM);
+					player.AbsorbDamageAmount -= attackDamageM;
+					attackDamageM = 0;
+				}
 				if (attackDamageM - player.ArmorRating(opponent) < 0) {
 					Helper.FormatAttackFailText();
 					Console.WriteLine("Your armor absorbed all of {0}'s attack!", opponent.Name);
@@ -106,7 +209,7 @@ namespace DungeonGame {
 		public void SingleCombatWin(IMonster opponent, Player player) {
 			Helper.FormatSuccessOutputText();
 			Console.WriteLine("You have defeated the {0}!", opponent.Name);
-			foreach (IEquipment loot in opponent.MonsterItems) {
+			foreach (var loot in opponent.MonsterItems) {
 				loot.Equipped = false;
 			}
 			opponent.Name = "Dead " + opponent.GetName();
@@ -114,7 +217,7 @@ namespace DungeonGame {
 			player.GainExperience(opponent.ExperienceProvided);
 			player.LevelUpCheck();
 		}
-		public bool CanFleeCombat() {
+		private bool CanFleeCombat() {
 			Console.ForegroundColor = ConsoleColor.Green;
 			var randomNum = RndGenerate.Next(1, 10);
 			if (randomNum > 5) {

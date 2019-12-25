@@ -102,7 +102,7 @@ namespace DungeonGame {
 		public void ShowDirections() {
 			Console.ForegroundColor = ConsoleColor.DarkCyan;
 			Console.Write("Available Directions: ");
-			Console.ForegroundColor = ConsoleColor.White;
+			Helper.FormatRoomInfoText();
 			if (this.GoNorth) {
 				Console.Write("[N]orth ");
 			}
@@ -148,11 +148,11 @@ namespace DungeonGame {
 			Console.WriteLine("==================================================");
 			Console.ForegroundColor = ConsoleColor.DarkCyan;
 			Console.Write("Room Contents: ");
-			Console.ForegroundColor = ConsoleColor.White;
+			Helper.FormatRoomInfoText();
 			this.RebuildRoomObjects();
 			if (RoomObjects.Count > 0 && RoomObjects[0] != null) {
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				foreach (IRoomInteraction item in RoomObjects) {
+				foreach (var item in RoomObjects) {
 					var itemTitle = item.GetName().ToString();
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					Console.Write(string.Join(", ", itemTitle));
@@ -167,7 +167,7 @@ namespace DungeonGame {
 		}
 		public void LookNpc(string[] input) {
 			var inputString = new StringBuilder();
-			for (int i = 1; i < input.Length; i++) {
+			for (var i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
 				inputString.Append(' ');
 			}
@@ -177,7 +177,7 @@ namespace DungeonGame {
 				Helper.FormatGeneralInfoText();
 				Console.WriteLine(Vendor.Desc);
 				Console.Write("\nHe is carrying:\n");
-				foreach (IEquipment itemForSale in Vendor.VendorItems) {
+				foreach (var itemForSale in Vendor.VendorItems) {
 					Console.WriteLine(string.Join(", ", itemForSale.GetName()));
 				}
 			}

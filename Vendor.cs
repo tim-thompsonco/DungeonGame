@@ -19,44 +19,44 @@ namespace DungeonGame {
 				case "armorer":
 					VendorItems.Add(
 					new Armor(
-						"leather vest", // Name
-						Armor.ArmorSlot.Chest, // Armor slot
-						Armor.ArmorType.Leather, // Armor type
-						12, // Item value
-						7, // Low armor rating
-						12, // High armor rating
-						false // Equipped
+						"leather vest",
+						Armor.ArmorSlot.Chest, 
+						Armor.ArmorType.Leather, 
+						12, 
+						7,
+						12,
+						false
 					));
 					VendorItems.Add(
 					new Armor(
-						"leather helm", // Name
-						Armor.ArmorSlot.Head, // Armor slot
-						Armor.ArmorType.Leather, // Armor type
-						6, // Item value
-						3, // Low armor rating
-						6, // High armor rating
-						false // Equipped
+						"leather helm",
+						Armor.ArmorSlot.Head, 
+						Armor.ArmorType.Leather, 
+						6, 
+						3,
+						6,
+						false
 					));
 					VendorItems.Add(
 					new Armor(
-						"leather leggings", // Name
-						Armor.ArmorSlot.Legs, // Armor slot
-						Armor.ArmorType.Leather, // Armor type
-						10, // Item value
-						5, // Low armor rating
-						10, // High armor rating
-						false // Equipped
+						"leather leggings",
+						Armor.ArmorSlot.Legs, 
+						Armor.ArmorType.Leather, 
+						10, 
+						5,
+						10,
+						false
 					));
 					break;
 				case "weaponsmith":
 					VendorItems.Add(
 					new Weapon(
-						"notched sword", // Name
-						13, // Low end of damage value range
-						20, // High end of damage value range
-						20, // Item value
-						1.1, // Crit multiplier
-						false // Equipped bool
+						"notched sword",
+						13, 
+						20, 
+						20, 
+						1.1, 
+						false 
 					));
 					break;
 				case "healer":
@@ -84,21 +84,21 @@ namespace DungeonGame {
 			Helper.FormatInfoText();
 			Console.WriteLine("The {0} has the following items for sale:\n", this.Name);
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (IEquipment item in this.VendorItems) {
+			foreach (var item in this.VendorItems) {
 				var itemInfo = new StringBuilder();
 				itemInfo.Append(item.GetName().ToString());
 				if (item.IsEquipped()) {
 					itemInfo.Append(" <Equipped>");
 				}
-				Armor isItemArmor = item as Armor;
+				var isItemArmor = item as Armor;
 				if (isItemArmor != null) {
 					itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + " Cost: " + isItemArmor.ItemValue + ")");
 				}
-				Weapon isItemWeapon = item as Weapon;
+				var isItemWeapon = item as Weapon;
 				if (isItemWeapon != null) {
 					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + " Cost: " + isItemWeapon.ItemValue + ")");
 				}
-				Consumable isItemConsumable = item as Consumable;
+				var isItemConsumable = item as Consumable;
 				if (isItemConsumable != null) {
 					itemInfo.Append(" (Cost: " + isItemConsumable.ItemValue + ")");
 				}
@@ -116,9 +116,9 @@ namespace DungeonGame {
 				index = this.VendorItems.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()));
 			}
 			if (index != -1) {
-				Armor buyArmor = this.VendorItems[index] as Armor;
-				Weapon buyWeapon = this.VendorItems[index] as Weapon;
-				Consumable buyConsumable = this.VendorItems[index] as Consumable;
+				var buyArmor = this.VendorItems[index] as Armor;
+				var buyWeapon = this.VendorItems[index] as Weapon;
+				var buyConsumable = this.VendorItems[index] as Consumable;
 				switch (this.BuySellType) {
 					case "Armor":
 						if (buyArmor != null) {
@@ -180,53 +180,58 @@ namespace DungeonGame {
 		}
 		public void SellItemCheck(Player player, string[] userInput) {
 			var inputName = Helper.ParseInput(userInput);
-			var index = player.Inventory.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()) && f.IsEquipped() == false);
-			if (index != -1) {
-				Armor sellArmor = player.Inventory[index] as Armor;
-				Weapon sellWeapon = player.Inventory[index] as Weapon;
-				Consumable sellConsumable = player.Inventory[index] as Consumable;
-				Loot sellLoot = player.Inventory[index] as Loot;
+			var invIndex = player.Inventory.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(inputName) && f.IsEquipped() == false);
+			var conIndex = player.Consumables.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(inputName) && f.IsEquipped() == false);
+			if (conIndex != -1) {
+				var sellConsumable = player.Consumables[conIndex] as Consumable;
+				switch (this.BuySellType) {
+					case "Healer":
+						if (sellConsumable != null) {
+							this.SellItem(player, userInput, sellConsumable, conIndex);
+							break;
+						}
+						Helper.InvalidVendorSell();
+						break;
+					case "Shopkeeper":
+						if (sellConsumable != null) {
+							this.SellItem(player, userInput, sellConsumable, conIndex);
+						}
+						break;
+				}
+			}
+			if (invIndex != -1) {
+				var sellArmor = player.Inventory[invIndex] as Armor;
+				var sellWeapon = player.Inventory[invIndex] as Weapon;
+				var sellLoot = player.Inventory[invIndex] as Loot;
 				switch (this.BuySellType) {
 					case "Armor":
 						if (sellArmor != null) {
-							this.SellItem(player, userInput, sellArmor, index);
+							this.SellItem(player, userInput, sellArmor, invIndex);
 							break;
 						}
 						Helper.InvalidVendorSell();
 						break;
 					case "Weapon":
 						if (sellWeapon != null) {
-							this.SellItem(player, userInput, sellWeapon, index);
-							break;
-						}
-						Helper.InvalidVendorSell();
-						break;
-					case "Healer":
-						if (sellConsumable != null) {
-							this.SellItem(player, userInput, sellConsumable, index);
+							this.SellItem(player, userInput, sellWeapon, invIndex);
 							break;
 						}
 						Helper.InvalidVendorSell();
 						break;
 					case "Shopkeeper":
 						if (sellArmor != null) {
-							this.SellItem(player, userInput, sellArmor, index);
+							this.SellItem(player, userInput, sellArmor, invIndex);
 						}
 						if (sellWeapon != null) {
-							this.SellItem(player, userInput, sellWeapon, index);
-						}
-						if (sellConsumable != null) {
-							this.SellItem(player, userInput, sellConsumable, index);
+							this.SellItem(player, userInput, sellWeapon, invIndex);
 						}
 						if (sellLoot != null) {
-							this.SellItem(player, userInput, sellLoot, index);
+							this.SellItem(player, userInput, sellLoot, invIndex);
 						}
-						break;
-					default:
 						break;
 				}
 			}
-			else {
+			if (invIndex == -1 && conIndex == -1) {
 				Helper.FormatFailureOutputText();
 				Console.WriteLine("You don't have that to sell!");
 			}
@@ -235,7 +240,12 @@ namespace DungeonGame {
 			Helper.FormatSuccessOutputText();
 			if (!sellItem.IsEquipped()) {
 				player.Gold += sellItem.ItemValue;
-				player.Inventory.RemoveAt(index);
+				if (sellItem.GetType().Name == "Consumable") {
+					player.Consumables.RemoveAt(index);
+				}
+				else {
+					player.Inventory.RemoveAt(index);
+				}
 				this.VendorItems.Add(sellItem);
 				Console.WriteLine("You sold {0} to the vendor for {1} gold.", sellItem.Name, sellItem.ItemValue);
 				return;
@@ -248,7 +258,7 @@ namespace DungeonGame {
 			if (index != -1) {
 				switch (this.BuySellType) {
 					case "Armor":
-						Armor repairArmor = player.Inventory[index] as Armor;
+						var repairArmor = player.Inventory[index] as Armor;
 						if (repairArmor != null && repairArmor.IsEquipped()) {
 							var durabilityRepairArmor = 100 - repairArmor.Durability;
 							var repairCostArmor = repairArmor.ItemValue * (durabilityRepairArmor / 100f);
@@ -266,7 +276,7 @@ namespace DungeonGame {
 						Console.WriteLine("The vendor doesn't repair that type of equipment.");
 						break;
 					case "Weapon":
-						Weapon repairWeapon = player.Inventory[index] as Weapon;
+						var repairWeapon = player.Inventory[index] as Weapon;
 						if (repairWeapon != null && repairWeapon.IsEquipped()) {
 							var durabilityRepairWeapon = 100 - repairWeapon.Durability;
 							var repairCostWeapon = repairWeapon.ItemValue * (durabilityRepairWeapon / 100f);
@@ -299,15 +309,17 @@ namespace DungeonGame {
 		public string GetName() {
 			return this.Name.ToString();
 		}
-		public void HealPlayer(Player player) {
+		public void RestorePlayer(Player player) {
 			if (this.BuySellType == "Healer") {
 				player.HitPoints = player.MaxHitPoints;
+				player.RagePoints = player.MaxRagePoints;
+				player.ManaPoints = player.MaxManaPoints;
 				Helper.FormatSuccessOutputText();
-				Console.WriteLine("You have been restored to full health by the {0}.", this.Name);
+				Console.WriteLine("You have been restored by the {0}.", this.Name);
 				return;
 			}
 			Helper.FormatFailureOutputText();
-			Console.WriteLine("The {0} cannot heal you!", this.Name);
+			Console.WriteLine("The {0} cannot restore you!", this.Name);
 		}
 		public void RepopulateHealerPotion(string inputName) {
 			var potionIndex = this.VendorItems.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(inputName));

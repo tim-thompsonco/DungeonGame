@@ -29,7 +29,7 @@ namespace DungeonGame {
 			Console.ForegroundColor = ConsoleColor.DarkRed;
 		}
 		public static void FormatInfoText() {
-			Console.ForegroundColor = ConsoleColor.DarkGray;
+			Console.ForegroundColor = ConsoleColor.Black;
 		}
 		public static void FormatLevelUpText() {
 			Console.ForegroundColor = ConsoleColor.Cyan;
@@ -38,14 +38,14 @@ namespace DungeonGame {
 			Console.ForegroundColor = ConsoleColor.DarkGreen;
 		}
 		public static void FormatRoomInfoText() {
-			Console.ForegroundColor = ConsoleColor.White;
+			Console.ForegroundColor = ConsoleColor.Black;
 		}
 		public static void FormatAnnounceText() {
 			Console.ForegroundColor = ConsoleColor.Gray;
 		}
 		public static string ParseInput(string[] userInput) {
 			var inputString = new StringBuilder();
-			for (int i = 1; i < userInput.Length; i++) {
+			for (var i = 1; i < userInput.Length; i++) {
 				inputString.Append(userInput[i]);
 				inputString.Append(' ');
 			}
@@ -89,7 +89,7 @@ namespace DungeonGame {
 				playerName = textInfo.ToTitleCase(Console.ReadLine().ToString());
 				Console.WriteLine("Your player name is {0}, is that correct? [Y] or [N].", playerName);
 				RequestCommand();
-				string[] input = GetFormattedInput();
+				var input = GetFormattedInput();
 				if (input[0] == "y") {
 					break;
 				}
@@ -97,35 +97,31 @@ namespace DungeonGame {
 			Console.WriteLine("Please enter your class. You can select Mage, Warrior, or Archer.\n");
 			while (true) {
 				Console.Write("Player class: ");
-				string playerClass;
-				string[] userInput = GetFormattedInput();
-				string playerClassInput = textInfo.ToTitleCase(userInput[0].ToString());
+				var userInput = GetFormattedInput();
+				var playerClassInput = textInfo.ToTitleCase(userInput[0].ToString());
 				if (playerClassInput != "Mage" && playerClassInput != "Warrior" && playerClassInput != "Archer") {
 					Console.WriteLine("Invalid selection. Please enter Mage, Warrior, or Archer for your class.");
 					continue;
 				}
-				playerClass = playerClassInput;
+				var playerClass = playerClassInput;
 				Console.WriteLine("Your player class is {0}, is that correct? [Y] or [N].", playerClass);
 				RequestCommand();
-				string[] input = GetFormattedInput();
+				var input = GetFormattedInput();
 				if (input[0] == "y") {
 					switch(playerClass) {
 						case "Archer":
-							var player_Archer = new Player(playerName, Player.PlayerClassType.Archer);
-							return player_Archer;
+							var playerArcher = new Player(playerName, Player.PlayerClassType.Archer);
+							return playerArcher;
 						case "Mage":
-							var player_Mage = new Player(playerName, Player.PlayerClassType.Mage);
+							var playerMage = new Player(playerName, Player.PlayerClassType.Mage);
 							Console.WriteLine("\n\nYou have selected Mage. You can 'cast' a spell, for example " +
 								"'cast fireball', if you have a spell named fireball in your spellbook. To see " +
 								"the list of spells in your spellbook, you can 'list spells'. To view info " +
 								"about a spell, you can 'info' the spell name. For example, 'info fireball'.");
-							return player_Mage;
+							return playerMage;
 							case "Warrior":
-							var player_Warrior = new Player(playerName, Player.PlayerClassType.Warrior);
-							return player_Warrior;
-						default:
-							var player_Default = new Player(playerName, Player.PlayerClassType.Warrior);
-							return player_Default;
+							var playerWarrior = new Player(playerName, Player.PlayerClassType.Warrior);
+							return playerWarrior;
 					}
 				}
 			}
@@ -139,7 +135,7 @@ namespace DungeonGame {
 			player.Y += y;
 			player.Z += z;
 			// Set player location to location of room found in search
-			IRoom roomName = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
+			var roomName = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
 			var roomIndex = roomList.IndexOf(roomName);
 			roomList[roomIndex].LookRoom();
 			var roomType = roomList[roomIndex].GetType().Name;
@@ -162,7 +158,7 @@ namespace DungeonGame {
 		public static bool QuitGame(Player player) {
 			FormatAnnounceText();
 			Console.WriteLine("Are you sure you want to quit?");
-			string[] input = Helper.GetFormattedInput();
+			var input = Helper.GetFormattedInput();
 			if (input[0] == "yes" || input[0] == "y") {
 				Console.WriteLine("Quitting the game.");
 				player.CanSave = true;
@@ -186,7 +182,7 @@ namespace DungeonGame {
 				serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
 				serializer.Formatting = Newtonsoft.Json.Formatting.Indented;
 				serializer.PreserveReferencesHandling = PreserveReferencesHandling.All;
-				using (StreamWriter sw = new StreamWriter("savegame.json"))
+				using (var sw = new StreamWriter("savegame.json"))
 				using (var writer = new Newtonsoft.Json.JsonTextWriter(sw)) {
 					serializer.Serialize(writer, player, typeof(Player));
 				}
@@ -197,7 +193,7 @@ namespace DungeonGame {
 			Console.WriteLine("You can't save inside a dungeon! Go outside first.");
 		}
 		public static int FleeRoom(List<IRoom> roomList, Player player) {
-			IRoom roomName = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
+			var roomName = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
 			var roomIndex = roomList.IndexOf(roomName);
 			if (roomList[roomIndex].GoDown) {
 				roomIndex = ChangeRoom(roomList, player, 0, 0, -1);

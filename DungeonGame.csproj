@@ -34,6 +34,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ability Properties\Defensive.cs" />
+    <Compile Include="Ability Properties\Offensive.cs" />
+    <Compile Include="Ability Properties\Stun.cs" />
+    <Compile Include="Ability.cs" />
     <Compile Include="Consumable Properties\RestoreMana.cs" />
     <Compile Include="Consumable.cs" />
     <Compile Include="Consumable Properties\RestoreHealth.cs" />

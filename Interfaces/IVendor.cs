@@ -14,7 +14,7 @@ namespace DungeonGame {
 		void SellItem(Player player, string[] userInput, IEquipment sellItem, int index);
 		void SellItemCheck(Player player, string[] userInput);
 		void RepairItem(Player player, string[] userInput);
-		void HealPlayer(Player player);
+		void RestorePlayer(Player player);
 		void RepopulateHealerPotion(string inputName);
 	}
 }

@@ -13,10 +13,12 @@ namespace DungeonGame {
 			Archer
 		}
 		public string Name { get; set; }
-		public int MaxHitPoints { get; set; } = 100;
-		public int MaxManaPoints { get; set; } = 100;
-		public int HitPoints { get; set; } = 100;
-		public int ManaPoints { get; set; } = 100;
+		public int MaxHitPoints { get; set; }
+		public int MaxRagePoints { get; set; }
+		public int MaxManaPoints { get; set; }
+		public int HitPoints { get; set; }
+		public int RagePoints { get; set; }
+		public int ManaPoints { get; set; }
 		public int Gold { get; set; } = 0;
 		public int Experience { get; set; } = 0;
 		public int ExperienceToLevel { get; set; } = 500;
@@ -29,15 +31,17 @@ namespace DungeonGame {
 		public bool CanWearLeather { get; set; }
 		public bool CanWearPlate { get; set; }
 		public bool IsAugmented { get; set; }
-		public int AugmentAmount { get; set; }
-		public int AugmentCurRound { get; set; }
-		public int AugmentMaxRound { get; set; }
+		public int AbsorbDamageAmount { get; set; }
+		public int AugmentArmorAmount { get; set; }
+		public int AugmentArmorCurRound { get; set; }
+		public int AugmentArmorMaxRound { get; set; }
 		public PlayerClassType PlayerClass { get; set; }
 		public Armor Player_Chest_Armor { get; set; }
 		public Armor Player_Head_Armor { get; set; }
 		public Armor Player_Legs_Armor { get; set; }
 		public Weapon Player_Weapon { get; set; }
 		public List<Spell> Spellbook { get; set; }
+		public List<Ability> Abilities { get; set; }
 		public List<Consumable> Consumables { get; set; }
 		public List<IEquipment> Inventory { get; set; }
 
@@ -45,54 +49,114 @@ namespace DungeonGame {
 		public Player(string name, PlayerClassType playerClass) {
 			this.Name = name;
 			this.PlayerClass = playerClass;
-			this.Spellbook = new List<Spell>();
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();
-			this.Consumables.Add(new Consumable("minor health potion", 3, Consumable.PotionType.Health, 50));
-			this.Consumables.Add(new Consumable("minor mana potion", 3, Consumable.PotionType.Mana, 50));
-			if (PlayerClass == PlayerClassType.Mage) {
-				this.CanWearCloth = true;
-				this.Inventory.Add(new Weapon("dagger", 15, 15, 15, 1.2, false));
-				this.Inventory.Add(new Armor("cloth vest", Armor.ArmorSlot.Chest, Armor.ArmorType.Cloth, 10, 5, 10, false));
-				this.Inventory.Add(new Armor("cloth cap", Armor.ArmorSlot.Head, Armor.ArmorType.Cloth, 3, 1, 3, false));
-				this.Inventory.Add(new Armor("cloth leggings", Armor.ArmorSlot.Legs, Armor.ArmorType.Cloth, 7, 3, 7, false));
-				this.Spellbook.Add(
-					new Spell(
-					"fireball", // Name
-					25, // Mana cost
-					1, // Rank
-					Spell.SpellType.FireOffense // Spell type
-					));
-				this.Spellbook.Add(
-					new Spell(
-					"heal", // Name
-					25, // Mana cost
-					1, // Rank
-					Spell.SpellType.Healing // Spell type
-					));
-				this.Spellbook.Add(
-					new Spell(
-					"diamondskin", // Name
-					25, // Mana cost
-					1, // Rank
-					Spell.SpellType.Defense // Spell type
-					));
+			switch (PlayerClass) {
+				case PlayerClassType.Mage:
+					for (var i = 0; i < 3; i++) {
+						this.Consumables.Add(new Consumable("minor mana potion", 3, Consumable.PotionType.Mana, 50));
+					}
+					this.Spellbook = new List<Spell>();
+					this.MaxHitPoints = 100;
+					this.HitPoints = this.MaxHitPoints;
+					this.MaxManaPoints = 150;
+					this.ManaPoints = this.MaxManaPoints;
+					this.CanWearCloth = true;
+					this.Inventory.Add(new Weapon(
+						"dagger", 
+						14, 
+						17, 
+						18, 
+						1.2, 
+						false));
+					this.Inventory.Add(new Armor(
+						"cloth vest", Armor.ArmorSlot.Chest, 
+						Armor.ArmorType.Cloth, 
+						10, 
+						7, 
+						10, 
+						false));
+					this.Inventory.Add(new Armor(
+						"cloth cap", 
+						Armor.ArmorSlot.Head, 
+						Armor.ArmorType.Cloth, 
+						3, 
+						1, 
+						4, 
+						false));
+					this.Inventory.Add(new Armor(
+						"cloth leggings", 
+						Armor.ArmorSlot.Legs, 
+						Armor.ArmorType.Cloth, 
+						7, 
+						4, 
+						7, 
+						false));
+					this.Spellbook.Add(new Spell("fireball", 25, 1, Spell.SpellType.FireOffense));
+					this.Spellbook.Add(new Spell("heal", 25, 1, Spell.SpellType.Healing));
+					this.Spellbook.Add(new Spell("diamondskin", 25, 1, Spell.SpellType.Defense));
+					break;
+				case PlayerClassType.Warrior:
+					for (var i = 0; i < 3; i++) {
+						this.Consumables.Add(new Consumable("minor health potion", 3, Consumable.PotionType.Health, 50));
+					}
+					this.Abilities = new List<Ability>();
+					this.MaxHitPoints = 150;
+					this.HitPoints = this.MaxHitPoints;
+					this.MaxRagePoints = 100;
+					this.RagePoints = this.MaxRagePoints;
+					this.CanWearCloth = true;
+					this.CanWearLeather = true;
+					this.CanWearPlate = true;
+					this.Inventory.Add(new Weapon(
+						"iron sword", 
+						24, 
+						27, 
+						27, 
+						1.3, 
+						false));
+					this.Inventory.Add(new Armor(
+						"iron chestplate", Armor.ArmorSlot.Chest, 
+						Armor.ArmorType.Plate, 
+						11, 
+						8, 
+						11, 
+						false));
+					this.Inventory.Add(new Armor(
+						"iron helmet", 
+						Armor.ArmorSlot.Head, 
+						Armor.ArmorType.Plate, 
+						6, 
+						3, 
+						6, 
+						false));
+					this.Inventory.Add(new Armor(
+						"iron legplates", 
+						Armor.ArmorSlot.Legs, 
+						Armor.ArmorType.Plate, 
+						8, 
+						5, 
+						8, 
+						false));
+					this.Abilities.Add(new Ability("charge", 25, 1, Ability.AbilityType.Stun));
+					this.Abilities.Add(new Ability("slash", 25, 1, Ability.AbilityType.DirectDamage));
+					this.Abilities.Add(new Ability("rend", 25, 1, Ability.AbilityType.DamageOverTime));
+					this.Abilities.Add(new Ability("block", 25, 1, Ability.AbilityType.Block));
+					break;
+				case PlayerClassType.Archer:
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
 			this.EquipInitialGear();
 		}
 
 		public void DecreaseArmorDurability() {
-			if (this.Player_Chest_Armor != null) {
-				this.Player_Chest_Armor.DecreaseDurability();
-			}
-			if (this.Player_Head_Armor != null) {
-				this.Player_Head_Armor.DecreaseDurability();
-			}
-			if (this.Player_Legs_Armor != null) {
-				this.Player_Legs_Armor.DecreaseDurability();
-			}
+			Player_Chest_Armor?.DecreaseDurability();
+			Player_Head_Armor?.DecreaseDurability();
+			Player_Legs_Armor?.DecreaseDurability();
 		}
-		public void EquipInitialGear() {
+		private void EquipInitialGear() {
 			this.EquipWeapon(this.Inventory[0] as Weapon);
 			this.EquipArmor(this.Inventory[1] as Armor);
 			this.EquipArmor(this.Inventory[2] as Armor);
@@ -102,22 +166,22 @@ namespace DungeonGame {
 			Helper.FormatInfoText();
 			Console.WriteLine("Your inventory contains:\n");
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (IEquipment item in this.Inventory) {
+			foreach (var item in this.Inventory) {
 				if (item.IsEquipped()) {
-					string itemName = this.GetInventoryName(item);
+					var itemName = this.GetInventoryName(item);
 					var itemInfo = new StringBuilder(itemName);
 					itemInfo.Append(" <Equipped>");
 					Console.WriteLine(itemInfo);
 				}
 			}
-			foreach (IEquipment item in this.Inventory) {
+			foreach (var item in this.Inventory) {
 				if (!item.IsEquipped()) {
-					string itemName = this.GetInventoryName(item);
+					var itemName = this.GetInventoryName(item);
 					Console.WriteLine(itemName);
 				}
 			}
 			var consumableDict = new Dictionary<string, int>();
-			foreach (Consumable item in this.Consumables) {
+			foreach (var item in this.Consumables) {
 				var itemInfo = new StringBuilder();
 				itemInfo.Append(item.GetName().ToString());
 				switch (item.PotionCategory.ToString()) {
@@ -148,11 +212,11 @@ namespace DungeonGame {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			var itemInfo = new StringBuilder();
 			itemInfo.Append(item.GetName().ToString());
-			Armor isItemArmor = item as Armor;
+			var isItemArmor = item as Armor;
 			if (isItemArmor != null) {
 				itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + ")");
 			}
-			Weapon isItemWeapon = item as Weapon;
+			var isItemWeapon = item as Weapon;
 			if (isItemWeapon != null) {
 				itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + ")");
 			}
@@ -160,26 +224,49 @@ namespace DungeonGame {
 			return itemName;
 		}
 		public void LevelUpCheck() {
-			if (this.Experience >= this.ExperienceToLevel) {
-				this.Level += 1;
-				this.Experience -= this.ExperienceToLevel;
-				this.ExperienceToLevel *= 2;
-				// Increase HP and MP from level
-				this.MaxHitPoints += 20;
-				this.MaxManaPoints += 20;
-				// Leveling sets player back to max HP/MP
-				this.HitPoints = this.MaxHitPoints;
-				this.ManaPoints = this.MaxManaPoints;
-				Helper.FormatLevelUpText();
-				Console.WriteLine("You have leveled! You are now level {0}.", this.Level);
+			if (this.Experience < this.ExperienceToLevel) return;
+			this.Level += 1;
+			this.Experience -= this.ExperienceToLevel;
+			this.ExperienceToLevel *= 2;
+			// Increase stats from level
+			switch (PlayerClass) {
+				case PlayerClassType.Mage:
+					this.MaxHitPoints += 15;
+					this.MaxManaPoints += 35;
+					break;
+				case PlayerClassType.Warrior:
+					this.MaxHitPoints += 35;
+					this.MaxRagePoints += 15;
+					break;
+				case PlayerClassType.Archer:
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
+			// Leveling sets player back to max stats
+			this.HitPoints = this.MaxHitPoints;
+			this.RagePoints = this.MaxRagePoints;
+			this.ManaPoints = this.MaxManaPoints;
+			Helper.FormatLevelUpText();
+			Console.WriteLine("You have leveled! You are now level {0}.", this.Level);
 		}
 		public void DisplayPlayerStats() {
 			Helper.FormatGeneralInfoText();
 			Console.WriteLine("==================================================");
-			Console.WriteLine("HP: {0}/{1} MP: {2}/{3} EXP: {4} LVL: {5}",
-				this.HitPoints, this.MaxHitPoints, this.ManaPoints, this.MaxManaPoints,
-				this.Experience, this.Level);
+			Console.Write("Health: {0}/{1} ", this.HitPoints, this.MaxHitPoints);
+			switch (PlayerClass) {
+				case PlayerClassType.Mage:
+					Console.Write("Mana: {0}/{1} ", this.ManaPoints, this.MaxManaPoints);
+					break;
+				case PlayerClassType.Warrior:
+					Console.Write("Rage: {0}/{1} ", this.RagePoints, this.MaxRagePoints);
+					break;
+				case PlayerClassType.Archer:
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+			Console.WriteLine("EXP: {0} LVL: {1}", this.Experience, this.Level);
 			Console.WriteLine("==================================================");
 		}
 		public void GainExperience(int experience) {
@@ -200,15 +287,15 @@ namespace DungeonGame {
 				totalArmorRating += (int)this.Player_Legs_Armor.GetArmorRating();
 			}
 			if (IsAugmented) {
-				totalArmorRating += AugmentAmount;
+				totalArmorRating += AugmentArmorAmount;
 			}
 			return totalArmorRating;
 		}
 		public int ArmorRating(IMonster opponent) {
-			int totalArmorRating = CheckArmorRating();
-			int levelDiff = opponent.Level - this.Level;
-			double armorMultiplier = 1.00 + (-(double)levelDiff / 5);
-			double adjArmorRating = (double)totalArmorRating * armorMultiplier;
+			var totalArmorRating = CheckArmorRating();
+			var levelDiff = opponent.Level - this.Level;
+			var armorMultiplier = 1.00 + (-(double)levelDiff / 5);
+			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
 		public int Attack() {
@@ -261,7 +348,7 @@ namespace DungeonGame {
 		public void EquipItem(string[] input) {
 			Console.ForegroundColor = ConsoleColor.Green;
 			var inputString = new StringBuilder();
-			for (int i = 1; i < input.Length; i++) {
+			for (var i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
 				inputString.Append(' ');
 			}
@@ -275,11 +362,13 @@ namespace DungeonGame {
 				}
 				if (itemFound == true && input[0] == "equip") {
 					if (Helper.IsWearable(item) && item.IsEquipped() == false) {
-						if (itemType == "Weapon") {
-							this.EquipWeapon((Weapon)item);
-						}
-						else if (itemType == "Armor") {
-							this.EquipArmor((Armor)item);
+						switch (itemType) {
+							case "Weapon":
+								this.EquipWeapon((Weapon)item);
+								break;
+							case "Armor":
+								this.EquipArmor((Armor)item);
+								break;
 						}
 						return;
 					}
@@ -293,14 +382,14 @@ namespace DungeonGame {
 					return;
 				}
 				else if (itemFound == true && input[0] == "unequip") {
-					if (Helper.IsWearable(item)) {
-						if (itemType == "Weapon") {
+					if (!Helper.IsWearable(item)) return;
+					switch (itemType) {
+						case "Weapon":
 							this.UnequipWeapon((Weapon)item);
-						}
-						else if (itemType == "Armor") {
+							break;
+						case "Armor":
 							this.UnequipArmor((Armor)item);
-						}
-						return;
+							break;
 					}
 					return;
 				}
@@ -368,6 +457,18 @@ namespace DungeonGame {
 				return;
 			}
 			var itemSlot = armor.ArmorCategory.ToString();
+			var itemType = armor.ArmorGroup.ToString();
+			switch (itemType) {
+				case "Cloth" when this.CanWearCloth:
+					break;
+				case "Leather" when this.CanWearLeather:
+					break;
+				case "Plate" when this.CanWearPlate:
+					break;
+				default:
+					Console.WriteLine("You cannot wear that type of armor!");
+					return;
+			}
 			switch (itemSlot) {
 				case "Head":
 					if (this.Player_Head_Armor != null && this.Player_Head_Armor.Equipped == true) {
@@ -396,9 +497,32 @@ namespace DungeonGame {
 					Helper.FormatSuccessOutputText();
 					Console.WriteLine("You have equipped {0}.", this.Player_Legs_Armor.GetName());
 					break;
-				default:
-					break;
 			}
+		}
+		public void UseAbility(IMonster opponent, string inputName) {
+			var index = this.Abilities.FindIndex(f => f.GetName() == inputName);
+			if (index != -1 && this.RagePoints >= this.Abilities[index].RageCost && this.PlayerClass == PlayerClassType.Warrior) {
+				switch (this.Abilities[index].AbilityCategory) {
+					case Ability.AbilityType.DirectDamage:
+						this.Abilities[index].UseOffenseDamageAbility(opponent, this, index);
+						return;
+					case Ability.AbilityType.DamageOverTime:
+						this.Abilities[index].UseOffenseDamageAbility(opponent, this, index);
+						return;
+					case Ability.AbilityType.Stun:
+						this.Abilities[index].UseStunAbility(opponent, this, index);
+						return;
+					case Ability.AbilityType.Block:
+						this.AbsorbDamageAmount = this.Abilities[index].UseDefenseAbility(this, index);
+						return;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+			else if (index != -1) {
+				throw new InvalidOperationException();
+			}
+			throw new IndexOutOfRangeException();
 		}
 		public void CastSpell(string inputName) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
@@ -406,26 +530,24 @@ namespace DungeonGame {
 				switch (this.Spellbook[index].SpellCategory) {
 					case Spell.SpellType.Healing:
 						this.Spellbook[index].CastHealing(this, index);
-						break;
+						return;
 					case Spell.SpellType.Defense:
 						this.Spellbook[index].CastDefense(this, index);
-						break;
+						return;
+					case Spell.SpellType.FireOffense:
+						return;
+					case Spell.SpellType.FrostOffense:
+						return;
+					case Spell.SpellType.ArcaneOffense:
+						return;
 					default:
-						break;
+						throw new ArgumentOutOfRangeException();
 				}
 			}
-			else if (this.PlayerClass != Player.PlayerClassType.Mage) {
-				Helper.FormatFailureOutputText();
-				Console.WriteLine("You can't cast spells. You're not a mage!");
-			}
 			else if (index != -1) {
-				Helper.FormatFailureOutputText();
-				Console.WriteLine("You do not have enough mana to cast that spell!");
+				throw new InvalidOperationException();
 			}
-			else {
-				Helper.FormatFailureOutputText();
-				Console.WriteLine("You don't have that spell in your spellbook.");
-			}
+			throw new IndexOutOfRangeException();
 		}
 		public void CastSpell(IMonster opponent, string inputName) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
@@ -433,32 +555,47 @@ namespace DungeonGame {
 				switch (this.Spellbook[index].SpellCategory) {
 					case Spell.SpellType.FireOffense:
 						this.Spellbook[index].CastFireOffense(opponent, this, index);
-						break;
+						return;
 					case Spell.SpellType.Healing:
 						this.Spellbook[index].CastHealing(this, index);
-						break;
+						return;
 					case Spell.SpellType.Defense:
 						this.Spellbook[index].CastDefense(this, index);
-						break;
+						return;
+					case Spell.SpellType.FrostOffense:
+						return;
+					case Spell.SpellType.ArcaneOffense:
+						return;
 					default:
-						break;
+						throw new ArgumentOutOfRangeException();
 				}
 			}
-			else if (this.PlayerClass != Player.PlayerClassType.Mage) {
-				Helper.FormatFailureOutputText();
-				Console.WriteLine("You can't cast spells. You're not a mage!");
-			}
 			else if (index != -1) {
+				throw new InvalidOperationException();
+			}
+			throw new IndexOutOfRangeException();
+		}
+		public void ListAbilities() {
+			if (this.PlayerClass == Player.PlayerClassType.Warrior) {
+				var textInfo = new CultureInfo("en-US", false).TextInfo;
+				Helper.FormatInfoText();
+				Console.WriteLine("You have the following abilities:");
+				foreach (var ability in this.Abilities) {
+					var spellName = textInfo.ToTitleCase(ability.GetName().ToString());
+					Console.WriteLine("{0}, Rank {1}", spellName, ability.Rank);
+				}
+			}
+			else if (this.PlayerClass != Player.PlayerClassType.Warrior) {
 				Helper.FormatFailureOutputText();
-				Console.WriteLine("You do not have enough mana to cast that spell!");
+				Console.WriteLine("You're not a warrior!");
 			}
 			else {
 				Helper.FormatFailureOutputText();
-				Console.WriteLine("You don't have that spell in your spellbook.");
+				Console.WriteLine("You can't list that.");
 			}
 		}
-		public void ListSpells(string input) {
-			if (input == "spells" && this.PlayerClass == Player.PlayerClassType.Mage) {
+		public void ListSpells() {
+			if (this.PlayerClass == Player.PlayerClassType.Mage) {
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				Helper.FormatInfoText();
 				Console.WriteLine("Your spellbook contains:");
@@ -467,13 +604,47 @@ namespace DungeonGame {
 					Console.WriteLine("{0}, Rank {1}", spellName, spell.Rank);
 				}
 			}
-			else if (input == "spells" && this.PlayerClass != Player.PlayerClassType.Mage) {
+			else if (this.PlayerClass != Player.PlayerClassType.Mage) {
 				Helper.FormatFailureOutputText();
 				Console.WriteLine("You're not a mage!");
 			}
 			else {
 				Helper.FormatFailureOutputText();
 				Console.WriteLine("You can't list that.");
+			}
+		}
+		public void AbilityInfo(string input) {
+			var index = this.Abilities.FindIndex(f => f.GetName() == input);
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			if (index != -1 && this.PlayerClass == Player.PlayerClassType.Warrior) {
+				Helper.FormatInfoText();
+				Console.WriteLine(textInfo.ToTitleCase(this.Abilities[index].Name.ToString()));
+				Console.WriteLine("Rank: {0}", this.Abilities[index].Rank);
+				Console.WriteLine("Rage Cost: {0}", this.Abilities[index].RageCost);
+				switch(this.Abilities[index].AbilityCategory) {
+					case Ability.AbilityType.DirectDamage:
+						this.Abilities[index].OffenseDamageAbilityInfo(this, index);
+						break;
+					case Ability.AbilityType.DamageOverTime:
+						this.Abilities[index].OffenseDamageAbilityInfo(this, index);
+						break;
+					case Ability.AbilityType.Stun:
+						this.Abilities[index].StunAbilityInfo(this, index);
+						break;
+					case Ability.AbilityType.Block:
+						this.Abilities[index].DefenseAbilityInfo(this, index);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+			else if (index != -1 && this.PlayerClass != Player.PlayerClassType.Warrior) {
+				Helper.FormatFailureOutputText();
+				Console.WriteLine("You're not a warrior!");
+			}
+			else {
+				Helper.FormatFailureOutputText();
+				Console.WriteLine("You don't have that ability.");
 			}
 		}
 		public void SpellInfo(string input) {
@@ -494,8 +665,12 @@ namespace DungeonGame {
 					case Spell.SpellType.Defense:
 						this.Spellbook[index].DefenseSpellInfo(this, index);
 						break;
-					default:
+					case Spell.SpellType.FrostOffense:
 						break;
+					case Spell.SpellType.ArcaneOffense:
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
 				}
 			}
 			else if (index != -1 && this.PlayerClass != Player.PlayerClassType.Mage) {
@@ -504,23 +679,22 @@ namespace DungeonGame {
 			}
 			else {
 				Helper.FormatFailureOutputText();
-				Console.WriteLine("That spell is not in your spellbook.");
+				Console.WriteLine("You don't have that spell.");
 			}
 		}
 		public void SetAugmentArmor(bool isAugmented, int augmentAmount, int augmentCurRound, int augmentMaxRound) {
 			this.IsAugmented = isAugmented;
-			this.AugmentAmount = augmentAmount;
-			this.AugmentCurRound = augmentCurRound;
-			this.AugmentMaxRound = augmentMaxRound;
+			this.AugmentArmorAmount = augmentAmount;
+			this.AugmentArmorCurRound = augmentCurRound;
+			this.AugmentArmorMaxRound = augmentMaxRound;
 		}
 		public void AugmentArmorRound() {
-			this.AugmentCurRound += 1;
+			this.AugmentArmorCurRound += 1;
 			Helper.FormatSuccessOutputText();
-			Console.WriteLine("Your armor is augmented by {0} for {1} more rounds.", this.AugmentAmount, this.AugmentMaxRound - this.AugmentCurRound + 1);
-			if (this.AugmentCurRound > this.AugmentMaxRound) {
-				this.IsAugmented = false;
-				this.AugmentCurRound = 1;
-			}
+			Console.WriteLine("Your armor is augmented by {0} for {1} more rounds.", this.AugmentArmorAmount, this.AugmentArmorMaxRound - this.AugmentArmorCurRound + 1);
+			if (this.AugmentArmorCurRound <= this.AugmentArmorMaxRound) return;
+			this.IsAugmented = false;
+			this.AugmentArmorCurRound = 1;
 		}
 	}
 }

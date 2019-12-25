@@ -22,18 +22,18 @@ namespace DungeonGame {
 				catch (FileNotFoundException) {
 					player = Helper.BuildNewPlayer();
 				}
-				List<IRoom> spawnedRooms = new SpawnRooms().RetrieveSpawnRooms();
+				var spawnedRooms = new SpawnRooms().RetrieveSpawnRooms();
 				// Set initial room condition
 				// On loading game, display room that player starts in
 				// Begin game by putting player in room 100
-				int roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0);
+				var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0);
 				// While loop to continue obtaining input from player
 				var isGameOver = false;
 				while (!isGameOver) {
 					player.DisplayPlayerStats();
 					spawnedRooms[roomIndex].ShowCommands();
-					string[] input = Helper.GetFormattedInput();
-					TownRoom isTownRoom = spawnedRooms[roomIndex] as TownRoom;
+					var input = Helper.GetFormattedInput();
+					var isTownRoom = spawnedRooms[roomIndex] as TownRoom;
 					// Obtain player command and process command
 					switch (input[0]) {
 						case "a":
@@ -42,7 +42,7 @@ namespace DungeonGame {
 							try {
 								if (input[1] != null) {
 									try {
-										bool outcome = spawnedRooms[roomIndex].AttackOpponent(player, input);
+										var outcome = spawnedRooms[roomIndex].AttackOpponent(player, input);
 										if (!outcome && player.HitPoints <= 0) {
 											isGameOver = true;
 										}
@@ -65,9 +65,7 @@ namespace DungeonGame {
 							try {
 								if (input[1] != null) {
 									try {
-										if (isTownRoom != null) {
-											isTownRoom.Vendor.BuyItemCheck(player, input);
-										}
+										isTownRoom?.Vendor.BuyItemCheck(player, input);
 									}
 									catch (NullReferenceException) {
 										Helper.FormatFailureOutputText();
@@ -85,7 +83,7 @@ namespace DungeonGame {
 								var spellName = Helper.ParseInput(input);
 								player.CastSpell(spellName);
 							}
-						break;
+							break;
 						case "equip":
 						case "unequip":
 							player.EquipItem(input);
@@ -96,21 +94,43 @@ namespace DungeonGame {
 							break;
 						case "q":
 						case "quit":
-							bool quitConfirm = Helper.QuitGame(player);
+							var quitConfirm = Helper.QuitGame(player);
 							if (quitConfirm == true) {
 								return;
 							}
 							break;
 						case "list":
+							switch (input[1]) {
+								case "abilities":
+									try {
+										player.ListAbilities();
+									}
+									catch (IndexOutOfRangeException) {
+										Helper.FormatFailureOutputText();
+										Console.WriteLine("List what?");
+									}
+									break;
+								case "spells":
+									try {
+										player.ListSpells();
+									}
+									catch (IndexOutOfRangeException) {
+										Helper.FormatFailureOutputText();
+										Console.WriteLine("List what?");
+									}
+									break;
+							}
+							break;
+						case "ability":
 							try {
-								player.ListSpells(input[1]);
+								player.AbilityInfo(input[1]);
 							}
 							catch (IndexOutOfRangeException) {
 								Helper.FormatFailureOutputText();
-								Console.WriteLine("List what?");
+								Console.WriteLine("What ability did you want to know about?");
 							}
 							break;
-						case "info":
+						case "spell":
 							try {
 								player.SpellInfo(input[1]);
 							}
@@ -165,10 +185,8 @@ namespace DungeonGame {
 						case "save":
 							Helper.SaveGame(player);
 							break;
-						case "heal":
-							if (isTownRoom != null) {
-								isTownRoom.Vendor.HealPlayer(player);
-							}
+						case "restore":
+							isTownRoom?.Vendor.RestorePlayer(player);
 							break;
 						case "help":
 							Helper.ShowCommandHelp();
@@ -177,9 +195,7 @@ namespace DungeonGame {
 							try {
 								if (input[1] != null) {
 									try {
-										if (isTownRoom != null) {
-											isTownRoom.Vendor.SellItemCheck(player, input);
-										}
+										isTownRoom?.Vendor.SellItemCheck(player, input);
 									}
 									catch (NullReferenceException) {
 										Helper.FormatFailureOutputText();
@@ -197,7 +213,7 @@ namespace DungeonGame {
 								if (input[1] != null) {
 									if (isTownRoom != null) {
 										if (input[1] == "all") {
-											foreach (IEquipment item in player.Inventory) {
+											foreach (var item in player.Inventory) {
 												if (item.IsEquipped()) {
 													var itemNameArray = new string[2] { input[0], item.Name };
 													isTownRoom.Vendor.RepairItem(player, itemNameArray);
@@ -222,9 +238,7 @@ namespace DungeonGame {
 							try {
 								if (input[1] == "forsale") {
 									try {
-										if (isTownRoom != null) {
-											isTownRoom.Vendor.DisplayGearForSale(player);
-										}
+										isTownRoom?.Vendor.DisplayGearForSale(player);
 									}
 									catch (NullReferenceException) {
 										Helper.FormatFailureOutputText();
