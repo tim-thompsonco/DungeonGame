@@ -18,6 +18,9 @@ namespace DungeonGame {
 		public int BleedDamage { get; set; }
 		public int BleedCurRound { get; set; }
 		public int BleedMaxRound { get; set; }
+		public bool IsFrozen { get; set; }
+		public int FrozenCurRound { get; set; }
+		public int FrozenMaxRound { get; set; }
 		public bool OnFire { get; set; }
 		public int OnFireDamage { get; set; }
 		public int OnFireCurRound { get; set; }
@@ -60,9 +63,8 @@ namespace DungeonGame {
 			this.MonsterItems.Add((DungeonGame.IEquipment)this.Monster_Chest_Armor);
 			this.MonsterItems.Add((DungeonGame.IEquipment)this.Consumable);
 		}
-
 		public void TakeDamage(int weaponDamage) {
-			HitPoints -= weaponDamage;
+			this.HitPoints -= weaponDamage;
 		}
 		public void DisplayStats() {
 			Helper.FormatGeneralInfoText();
@@ -135,10 +137,22 @@ namespace DungeonGame {
 		}
 		public void Stunned() {
 			this.StunnedCurRound += 1;
-			Console.WriteLine("The {0} is stunned for {1} rounds and cannot attack.", this.Name, this.StunnedMaxRound - this.StunnedCurRound + 1);
+			Console.WriteLine("The {0} is stunned and cannot attack.", this.Name);
 			if (StunnedCurRound <= StunnedMaxRound) return;
 			this.IsStunned = false;
 			this.StunnedCurRound = 1;
+		}
+		public void StartFrozen(bool frozen, int frozenCurRound, int frozenMaxRound) {
+			this.IsFrozen = frozen;
+			this.FrozenCurRound = frozenCurRound;
+			this.FrozenMaxRound = frozenMaxRound;
+		}
+		public void Frozen() {
+			this.FrozenCurRound += 1;
+			Console.WriteLine("The {0} is frozen and cannot attack.", this.Name);
+			if (FrozenCurRound <= FrozenMaxRound) return;
+			this.IsFrozen = false;
+			this.FrozenCurRound = 1;
 		}
 	}
 }

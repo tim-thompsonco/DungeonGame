@@ -86,11 +86,14 @@ namespace DungeonGame {
 			var abilityDamage = player.Abilities[index].Offensive.DamageAmount;
 			if (abilityDamage == 0) {
 				Helper.FormatAttackFailText();
-				Console.WriteLine("You missed!");
+				Console.WriteLine("Your {0} missed!", player.Abilities[index].Name);
 			}
 			else {
 				Helper.FormatAttackSuccessText();
-				Console.WriteLine("You hit the {0} for {1} physical damage.", opponent.Name, abilityDamage);
+				Console.WriteLine("You {0} the {1} for {2} physical damage.",
+					player.Abilities[index].Name,
+					opponent.Name,
+					abilityDamage);
 				opponent.TakeDamage(abilityDamage);
 				if (player.Abilities[index].Offensive.DamageOverTime <= 0) return;
 				Console.WriteLine("The {0} is bleeding!", opponent.Name);

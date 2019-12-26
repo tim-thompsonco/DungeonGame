@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace DungeonGame {
 	class MainClass {
@@ -29,6 +28,12 @@ namespace DungeonGame {
 				var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0);
 				// While loop to continue obtaining input from player
 				var isGameOver = false;
+				// Player stats will replenish every 3 seconds
+				var timer = new Timer(
+					e => player.ReplenishStatsOverTime(),
+					null,
+					TimeSpan.Zero,
+					TimeSpan.FromSeconds(3));
 				while (!isGameOver) {
 					player.DisplayPlayerStats();
 					spawnedRooms[roomIndex].ShowCommands();
@@ -42,6 +47,7 @@ namespace DungeonGame {
 							try {
 								if (input[1] != null) {
 									try {
+										timer.Dispose();
 										var outcome = spawnedRooms[roomIndex].AttackOpponent(player, input);
 										if (!outcome && player.HitPoints <= 0) {
 											isGameOver = true;
@@ -49,6 +55,11 @@ namespace DungeonGame {
 										else if (!outcome) {
 											roomIndex = Helper.FleeRoom(spawnedRooms, player);
 										}
+										timer = new Timer(
+											e => player.ReplenishStatsOverTime(),
+											null,
+											TimeSpan.Zero,
+											TimeSpan.FromSeconds(3));
 									}
 									catch (Exception) {
 										Helper.FormatFailureOutputText();

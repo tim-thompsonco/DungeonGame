@@ -96,12 +96,12 @@ namespace DungeonGame {
 				if (this.Monster.HitPoints > 0) {
 					var fightEvent = new CombatHelper();
 					var outcome = fightEvent.SingleCombat(Monster, player);
-					if (outcome == false && player.HitPoints <= 0) {
-						Helper.PlayerDeath();
-						return false;
-					}
-					else if (outcome == false) {
-						return false;
+					switch (outcome) {
+						case false when player.HitPoints <= 0:
+							Helper.PlayerDeath();
+							return false;
+						case false:
+							return false;
 					}
 				}
 				else {
@@ -124,7 +124,7 @@ namespace DungeonGame {
 		public void ShowCommands() {
 			Helper.FormatGeneralInfoText();
 			Console.Write("Available Commands: ");
-			Console.WriteLine(String.Join(", ", this.Commands));
+			Console.WriteLine(string.Join(", ", this.Commands));
 		}
 		public void ShowDirections() {
 			Console.ForegroundColor = ConsoleColor.DarkCyan;
