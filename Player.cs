@@ -30,6 +30,10 @@ namespace DungeonGame {
 		public bool CanWearCloth { get; set; }
 		public bool CanWearLeather { get; set; }
 		public bool CanWearPlate { get; set; }
+		public bool IsHealing { get; set; }
+		public int HealAmount { get; set; }
+		public int HealCurRound { get; set; }
+		public int HealMaxRound { get; set; }
 		public bool IsAugmented { get; set; }
 		public int AbsorbDamageAmount { get; set; }
 		public int AugmentArmorAmount { get; set; }
@@ -92,9 +96,12 @@ namespace DungeonGame {
 						4, 
 						7, 
 						false));
-					this.Spellbook.Add(new Spell("fireball", 25, 1, Spell.SpellType.FireOffense));
-					this.Spellbook.Add(new Spell("heal", 25, 1, Spell.SpellType.Healing));
-					this.Spellbook.Add(new Spell("diamondskin", 25, 1, Spell.SpellType.Defense));
+					this.Spellbook.Add(new Spell("fireball", 35, 1, Spell.SpellType.FireOffense, true));
+					this.Spellbook.Add(new Spell("heal", 25, 1, Spell.SpellType.Healing, false));
+					this.Spellbook.Add(new Spell("diamondskin", 25, 1, Spell.SpellType.Defense, false));
+					this.Spellbook.Add(new Spell("frostbolt", 25, 1, Spell.SpellType.FrostOffense, false));
+					this.Spellbook.Add(new Spell("lightning", 25, 1, Spell.SpellType.ArcaneOffense, false));
+					this.Spellbook.Add(new Spell("rejuvenate", 25, 1, Spell.SpellType.Healing, true));
 					break;
 				case PlayerClassType.Warrior:
 					for (var i = 0; i < 3; i++) {
@@ -167,18 +174,16 @@ namespace DungeonGame {
 			Console.WriteLine("Your inventory contains:\n");
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (var item in this.Inventory) {
-				if (item.IsEquipped()) {
-					var itemName = this.GetInventoryName(item);
-					var itemInfo = new StringBuilder(itemName);
-					itemInfo.Append(" <Equipped>");
-					Console.WriteLine(itemInfo);
-				}
+				if (!item.IsEquipped()) continue;
+				var itemName = this.GetInventoryName(item);
+				var itemInfo = new StringBuilder(itemName);
+				itemInfo.Append(" <Equipped>");
+				Console.WriteLine(itemInfo);
 			}
 			foreach (var item in this.Inventory) {
-				if (!item.IsEquipped()) {
-					var itemName = this.GetInventoryName(item);
-					Console.WriteLine(itemName);
-				}
+				if (item.IsEquipped()) continue;
+				var itemName = this.GetInventoryName(item);
+				Console.WriteLine(itemName);
 			}
 			var consumableDict = new Dictionary<string, int>();
 			foreach (var item in this.Consumables) {
@@ -192,7 +197,7 @@ namespace DungeonGame {
 						itemInfo.Append(" (" + item.RestoreMana.RestoreManaAmt + ")");
 						break;
 					default:
-						break;
+						throw new ArgumentOutOfRangeException();
 				}
 				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 				if (!consumableDict.ContainsKey(itemName)) {
@@ -563,8 +568,10 @@ namespace DungeonGame {
 						this.Spellbook[index].CastDefense(this, index);
 						return;
 					case Spell.SpellType.FrostOffense:
+						this.Spellbook[index].CastFrostOffense(opponent, this, index);
 						return;
 					case Spell.SpellType.ArcaneOffense:
+						this.Spellbook[index].CastArcaneOffense(opponent, this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -666,8 +673,10 @@ namespace DungeonGame {
 						this.Spellbook[index].DefenseSpellInfo(this, index);
 						break;
 					case Spell.SpellType.FrostOffense:
+						this.Spellbook[index].FrostOffenseSpellInfo(this, index);
 						break;
 					case Spell.SpellType.ArcaneOffense:
+						this.Spellbook[index].ArcaneOffenseSpellInfo(this, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -682,6 +691,25 @@ namespace DungeonGame {
 				Console.WriteLine("You don't have that spell.");
 			}
 		}
+
+		public void SetHealing(bool isHealing, int healAmount, int healCurRound, int healMaxRound) {
+			this.IsHealing = isHealing;
+			this.HealAmount = healAmount;
+			this.HealCurRound = healCurRound;
+			this.HealMaxRound = healMaxRound;
+		}
+		public void HealingRound() {
+			this.HealCurRound += 1;
+			Helper.FormatSuccessOutputText();
+			this.HitPoints += this.HealAmount;
+			if (this.HitPoints > this.MaxHitPoints) {
+				this.HitPoints = this.MaxHitPoints;
+			}
+			Console.WriteLine("You have been healed for {0} health.", this.HealAmount);
+			if (this.HealCurRound <= this.HealMaxRound) return;
+			this.IsHealing = false;
+			this.HealCurRound = 1;
+		}
 		public void SetAugmentArmor(bool isAugmented, int augmentAmount, int augmentCurRound, int augmentMaxRound) {
 			this.IsAugmented = isAugmented;
 			this.AugmentArmorAmount = augmentAmount;
@@ -691,10 +719,28 @@ namespace DungeonGame {
 		public void AugmentArmorRound() {
 			this.AugmentArmorCurRound += 1;
 			Helper.FormatSuccessOutputText();
-			Console.WriteLine("Your armor is augmented by {0} for {1} more rounds.", this.AugmentArmorAmount, this.AugmentArmorMaxRound - this.AugmentArmorCurRound + 1);
+			Console.WriteLine("Your armor is augmented by {0}.", this.AugmentArmorAmount);
 			if (this.AugmentArmorCurRound <= this.AugmentArmorMaxRound) return;
 			this.IsAugmented = false;
 			this.AugmentArmorCurRound = 1;
+		}
+		public void ReplenishStatsOverTime() {
+			if (this.HitPoints == this.MaxHitPoints) return;
+			this.HitPoints += 1;
+			switch (PlayerClass) {
+				case PlayerClassType.Mage:
+					if (this.ManaPoints == this.MaxManaPoints) return;
+					this.ManaPoints += 1;
+					break;
+				case PlayerClassType.Warrior:
+					if (this.RagePoints == this.MaxRagePoints) return;
+					this.RagePoints += 1;
+					break;
+				case PlayerClassType.Archer:
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 	}
 }

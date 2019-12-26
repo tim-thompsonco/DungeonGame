@@ -23,7 +23,7 @@ namespace DungeonGame {
 		bool WasLooted { get; set; }
 		List<IEquipment> MonsterItems { get; set; }
 
-		void TakeDamage(int weaponDamage);
+		int TakeDamage(int weaponDamage);
 		void DisplayStats();
 		int Attack();
 		int CheckArmorRating();

@@ -151,20 +151,15 @@ namespace DungeonGame {
 						Helper.InvalidCommand();
 						continue;
 				}
+				if (player.IsHealing) player.HealingRound();
 				// Check opponent health to determine dead or not before special abilities
 				if (opponent.HitPoints <= 0) {
 					this.SingleCombatWin(opponent, player);
 					return true;
 				}
-				if (opponent.OnFire) {
-					opponent.BurnOnFire();
-				}
-				if (opponent.IsBleeding) {
-					opponent.Bleeding();
-				}
-				if (player.IsAugmented) {
-					player.AugmentArmorRound();
-				}
+				if (opponent.OnFire) opponent.BurnOnFire();
+				if (opponent.IsBleeding) opponent.Bleeding();
+				if (player.IsAugmented) player.AugmentArmorRound();
 				if (opponent.IsStunned) {
 					opponent.Stunned();
 					continue;
@@ -181,7 +176,7 @@ namespace DungeonGame {
 					player.AbsorbDamageAmount = 0;
 				}
 				else if (attackDamageM < player.AbsorbDamageAmount && player.AbsorbDamageAmount > 0) {
-					Console.WriteLine("Your defensive move blocked {0} damage!", attackDamageM);
+					Console.WriteLine("Your defensive move blocked {0} damage!", player.AbsorbDamageAmount);
 					player.AbsorbDamageAmount -= attackDamageM;
 					attackDamageM = 0;
 				}
