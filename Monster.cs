@@ -18,9 +18,6 @@ namespace DungeonGame {
 		public int BleedDamage { get; set; }
 		public int BleedCurRound { get; set; }
 		public int BleedMaxRound { get; set; }
-		public bool IsFrozen { get; set; }
-		public int FrozenCurRound { get; set; }
-		public int FrozenMaxRound { get; set; }
 		public bool OnFire { get; set; }
 		public int OnFireDamage { get; set; }
 		public int OnFireCurRound { get; set; }
@@ -141,18 +138,6 @@ namespace DungeonGame {
 			if (StunnedCurRound <= StunnedMaxRound) return;
 			this.IsStunned = false;
 			this.StunnedCurRound = 1;
-		}
-		public void StartFrozen(bool frozen, int frozenCurRound, int frozenMaxRound) {
-			this.IsFrozen = frozen;
-			this.FrozenCurRound = frozenCurRound;
-			this.FrozenMaxRound = frozenMaxRound;
-		}
-		public void Frozen() {
-			this.FrozenCurRound += 1;
-			Console.WriteLine("The {0} is frozen and cannot attack.", this.Name);
-			if (FrozenCurRound <= FrozenMaxRound) return;
-			this.IsFrozen = false;
-			this.FrozenCurRound = 1;
 		}
 	}
 }
