@@ -2,7 +2,7 @@ using System;
 
 namespace DungeonGame {
 	public class Weapon : IEquipment {
-		private readonly Random RndGenerate = new Random();
+		private readonly Random _rndGenerate = new Random();
 		public string Name { get; set; }
 		public int RegDamage { get; set; }
 		public int ItemValue { get; set; }
@@ -12,7 +12,7 @@ namespace DungeonGame {
 
 		public Weapon(string name, int regDamageLow, int regDamageHigh, int itemValue, double critMultiplier, bool equipped) {
 			this.Name = name;
-			this.RegDamage = RndGenerate.Next(regDamageLow, regDamageHigh);
+			this.RegDamage = this._rndGenerate.Next(regDamageLow, regDamageHigh);
 			this.ItemValue = itemValue;
 			this.CritMultiplier = critMultiplier;
 			this.Equipped = equipped;
@@ -20,8 +20,9 @@ namespace DungeonGame {
 		}
 
 		public int Attack() {
+			if (!this.Equipped) return 0;
 			var attackDamage = 0f;
-			var attackType = RndGenerate.Next(1, 12); // Creates a random number to determine attack type
+			var attackType = this._rndGenerate.Next(1, 12); // Creates a random number to determine attack type
 			// Main attack
 			if (attackType < 6) {
 				attackDamage = this.RegDamage;

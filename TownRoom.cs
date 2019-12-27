@@ -26,7 +26,7 @@ namespace DungeonGame {
 			"Save",
 			"[Q]uit"};
 		// List of objects in room (including monsters)
-		private readonly List<IRoomInteraction> RoomObjects = new List<IRoomInteraction>();
+		private readonly List<IRoomInteraction> _roomObjects = new List<IRoomInteraction>();
 		public IVendor Vendor;
 
 		public TownRoom(
@@ -89,10 +89,11 @@ namespace DungeonGame {
 		}
 		public void LootCorpse(Player player, string[] input) { }
 		public void RebuildRoomObjects() {
-			if (RoomObjects != null) {
-				RoomObjects.Clear();
+			if (this._roomObjects != null) {
+				this._roomObjects.Clear();
 			}
-			RoomObjects.Add((DungeonGame.IRoomInteraction)Vendor);
+
+			this._roomObjects.Add((IRoomInteraction) this.Vendor);
 		}
 		public void ShowCommands() {
 			Helper.FormatGeneralInfoText();
@@ -150,9 +151,9 @@ namespace DungeonGame {
 			Console.Write("Room Contents: ");
 			Helper.FormatRoomInfoText();
 			this.RebuildRoomObjects();
-			if (RoomObjects.Count > 0 && RoomObjects[0] != null) {
+			if (this._roomObjects.Count > 0 && this._roomObjects[0] != null) {
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				foreach (var item in RoomObjects) {
+				foreach (var item in this._roomObjects) {
 					var itemTitle = item.GetName().ToString();
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					Console.Write(string.Join(", ", itemTitle));
@@ -172,12 +173,12 @@ namespace DungeonGame {
 				inputString.Append(' ');
 			}
 			var inputName = inputString.ToString().Trim();
-			var vendorName = Vendor.GetName().Split(' ');
-			if (vendorName.Last() == inputName || Vendor.GetName() == inputName) {
+			var vendorName = this.Vendor.GetName().Split(' ');
+			if (vendorName.Last() == inputName || this.Vendor.GetName() == inputName) {
 				Helper.FormatGeneralInfoText();
-				Console.WriteLine(Vendor.Desc);
+				Console.WriteLine(this.Vendor.Desc);
 				Console.Write("\nHe is carrying:\n");
-				foreach (var itemForSale in Vendor.VendorItems) {
+				foreach (var itemForSale in this.Vendor.VendorItems) {
 					Console.WriteLine(string.Join(", ", itemForSale.GetName()));
 				}
 			}

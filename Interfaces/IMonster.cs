@@ -22,6 +22,12 @@ namespace DungeonGame {
 		int BleedMaxRound { get; set; }
 		bool WasLooted { get; set; }
 		List<IEquipment> MonsterItems { get; set; }
+		Loot Item { get; set; }
+		Consumable Consumable { get; set; }
+		Weapon MonsterWeapon { get; set; }
+		Armor MonsterChestArmor { get; set; }
+		Armor MonsterHeadArmor { get; set; }
+		Armor MonsterLegArmor { get; set; }
 
 		void TakeDamage(int weaponDamage);
 		void DisplayStats();

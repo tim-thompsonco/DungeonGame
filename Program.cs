@@ -20,6 +20,7 @@ namespace DungeonGame {
 				}
 				catch (FileNotFoundException) {
 					player = Helper.BuildNewPlayer();
+					player.EquipInitialGear();
 				}
 				var spawnedRooms = new SpawnRooms().RetrieveSpawnRooms();
 				// Set initial room condition

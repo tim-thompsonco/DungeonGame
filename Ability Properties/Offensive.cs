@@ -2,20 +2,20 @@ using Newtonsoft.Json;
 
 namespace DungeonGame {
 	public class Offensive {
-		public int DamageAmount { get; set; }
-		public int DamageOverTime { get; set; }
-		public int DamageCurRounds { get; set; }
-		public int DamageMaxRounds { get; set; }
+		public int Amount { get; set; }
+		public int AmountOverTime { get; set; }
+		public int AmountCurRounds { get; set; }
+		public int AmountMaxRounds { get; set; }
 
-		public Offensive(int damageAmount) {
-			this.DamageAmount = damageAmount;
+		public Offensive(int amount) {
+			this.Amount = amount;
 		}
 		[JsonConstructor]
-		public Offensive(int damageAmount, int damageOverTime, int damageCurRounds, int damageMaxRounds) {
-			this.DamageAmount = damageAmount;
-			this.DamageOverTime = damageOverTime;
-			this.DamageCurRounds = damageCurRounds;
-			this.DamageMaxRounds = damageMaxRounds;
+		public Offensive(int amount, int amountOverTime, int amountCurRounds, int amountMaxRounds) {
+			this.Amount = amount;
+			this.AmountOverTime = amountOverTime;
+			this.AmountCurRounds = amountCurRounds;
+			this.AmountMaxRounds = amountMaxRounds;
 		}
 	}
 }

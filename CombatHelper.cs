@@ -24,6 +24,7 @@ namespace DungeonGame {
 					case "f":
 					case "fight":
 						var attackDamage = player.Attack();
+						if (player.IsDamageChanged) attackDamage += player.ChangeDamageAmount;
 						if (attackDamage - opponent.ArmorRating(player) < 0) {
 							Helper.FormatAttackFailText();
 							Console.WriteLine("The {0}'s armor absorbed all of your attack!", opponent.Name);
@@ -159,7 +160,8 @@ namespace DungeonGame {
 				}
 				if (opponent.OnFire) opponent.BurnOnFire();
 				if (opponent.IsBleeding) opponent.Bleeding();
-				if (player.IsAugmented) player.AugmentArmorRound();
+				if (player.IsArmorChanged) player.ChangeArmorRound();
+				if (player.IsDamageChanged) player.ChangeDamageRound();
 				if (opponent.IsStunned) {
 					opponent.Stunned();
 					continue;

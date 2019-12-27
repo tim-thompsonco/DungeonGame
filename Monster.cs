@@ -27,12 +27,12 @@ namespace DungeonGame {
 		public int OnFireMaxRound { get; set; }
 		public bool WasLooted { get; set; }
 		public List<IEquipment> MonsterItems { get; set; }
-		public Loot Item;
-		public Consumable Consumable;
-		public Weapon Monster_Weapon;
-		public Armor Monster_Chest_Armor;
-		public Armor Monster_Head_Armor;
-		public Armor Monster_Leg_Armor;
+		public Loot Item { get; set; }
+		public Consumable Consumable { get; set; }
+		public Weapon MonsterWeapon { get; set; }
+		public Armor MonsterChestArmor { get; set; }
+		public Armor MonsterHeadArmor { get; set; }
+		public Armor MonsterLegArmor { get; set; }
 
 		public Monster(string name, string desc, int level, int goldCoins, int maxHp, int expProvided, Weapon weapon) {
 			this.MonsterItems = new List<IEquipment>();
@@ -43,52 +43,53 @@ namespace DungeonGame {
 			this.MaxHitPoints = maxHp;
 			this.HitPoints = maxHp;
 			this.ExperienceProvided = expProvided;
-			this.Monster_Weapon = weapon;
-			this.MonsterItems.Add((DungeonGame.IEquipment)this.Monster_Weapon);
+			this.MonsterWeapon = weapon;
+			this.MonsterItems.Add((IEquipment)this.MonsterWeapon);
 		}
 		public Monster(string name, string desc, int level, int goldCoins, int maxHp, int expProvided, Weapon weapon, Loot item)
 			: this(name, desc, level, goldCoins, maxHp, expProvided, weapon) {
 			this.Item = item;
-			this.MonsterItems.Add((DungeonGame.IEquipment)this.Item);
+			this.MonsterItems.Add((IEquipment)this.Item);
 		}
 		public Monster(string name, string desc, int level, int goldCoins, int maxHp, int expProvided, Weapon weapon, Armor armor)
 			: this(name, desc, level, goldCoins, maxHp, expProvided, weapon) {
-			this.Monster_Chest_Armor = armor;
-			this.MonsterItems.Add((DungeonGame.IEquipment)this.Monster_Chest_Armor);
+			this.MonsterChestArmor = armor;
+			this.MonsterItems.Add((IEquipment)this.MonsterChestArmor);
 		}
 		public Monster(string name, string desc, int level, int goldCoins, int maxHp, int expProvided, Weapon weapon, Armor armor, Consumable consumable)
 			: this(name, desc, level, goldCoins, maxHp, expProvided, weapon) {
-			this.Monster_Chest_Armor = armor;
+			this.MonsterChestArmor = armor;
 			this.Consumable = consumable;
-			this.MonsterItems.Add((DungeonGame.IEquipment)this.Monster_Chest_Armor);
-			this.MonsterItems.Add((DungeonGame.IEquipment)this.Consumable);
+			this.MonsterItems.Add((IEquipment)this.MonsterChestArmor);
+			this.MonsterItems.Add((IEquipment)this.Consumable);
 		}
+		
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;
 		}
 		public void DisplayStats() {
 			Helper.FormatGeneralInfoText();
-			Console.WriteLine("Opponent HP: {0} / {1}", HitPoints, MaxHitPoints);
+			Console.WriteLine("Opponent HP: {0} / {1}", this.HitPoints, this.MaxHitPoints);
 			Console.WriteLine("==================================================");
 		}
 		public int Attack() {
-			return Monster_Weapon.Attack();
+			return this.MonsterWeapon.Attack();
 		}
 		public int CheckArmorRating() {
 			var totalArmorRating = 0;
-			if (this.Monster_Chest_Armor != null && this.Monster_Chest_Armor.IsEquipped()) {
-				totalArmorRating += this.Monster_Chest_Armor.ArmorRating;
+			if (this.MonsterChestArmor != null && this.MonsterChestArmor.IsEquipped()) {
+				totalArmorRating += this.MonsterChestArmor.ArmorRating;
 			}
-			if (this.Monster_Head_Armor != null && this.Monster_Head_Armor.IsEquipped()) {
-				totalArmorRating += this.Monster_Head_Armor.ArmorRating;
+			if (this.MonsterHeadArmor != null && this.MonsterHeadArmor.IsEquipped()) {
+				totalArmorRating += this.MonsterHeadArmor.ArmorRating;
 			}
-			if (this.Monster_Leg_Armor != null && this.Monster_Leg_Armor.IsEquipped()) {
-				totalArmorRating += this.Monster_Leg_Armor.ArmorRating;
+			if (this.MonsterLegArmor != null && this.MonsterLegArmor.IsEquipped()) {
+				totalArmorRating += this.MonsterLegArmor.ArmorRating;
 			}
 			return totalArmorRating;
 		}
 		public int ArmorRating(Player player) {
-			var totalArmorRating = CheckArmorRating();
+			var totalArmorRating = this.CheckArmorRating();
 			var levelDiff = player.Level - this.Level;
 			var armorMultiplier = 1.00 + (-(double)levelDiff / 5);
 			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
@@ -126,7 +127,7 @@ namespace DungeonGame {
 			this.HitPoints -= this.BleedDamage;
 			Console.WriteLine("The {0} bleeds for {1} physical damage.", this.Name, this.BleedDamage);
 			this.BleedCurRound += 1;
-			if (BleedCurRound <= BleedMaxRound) return;
+			if (this.BleedCurRound <= this.BleedMaxRound) return;
 			this.IsBleeding = false;
 			this.BleedCurRound = 1;
 		}
@@ -138,7 +139,7 @@ namespace DungeonGame {
 		public void Stunned() {
 			this.StunnedCurRound += 1;
 			Console.WriteLine("The {0} is stunned and cannot attack.", this.Name);
-			if (StunnedCurRound <= StunnedMaxRound) return;
+			if (this.StunnedCurRound <= this.StunnedMaxRound) return;
 			this.IsStunned = false;
 			this.StunnedCurRound = 1;
 		}
@@ -150,7 +151,7 @@ namespace DungeonGame {
 		public void Frozen() {
 			this.FrozenCurRound += 1;
 			Console.WriteLine("The {0} is frozen and cannot attack.", this.Name);
-			if (FrozenCurRound <= FrozenMaxRound) return;
+			if (this.FrozenCurRound <= this.FrozenMaxRound) return;
 			this.IsFrozen = false;
 			this.FrozenCurRound = 1;
 		}

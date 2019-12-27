@@ -26,7 +26,7 @@ namespace DungeonGame {
 			"Save",
 			"[Q]uit"};
 		// List of objects in room (including monsters)
-		private readonly List<IRoomInteraction> RoomObjects = new List<IRoomInteraction>();
+		private readonly List<IRoomInteraction> _roomObjects = new List<IRoomInteraction>();
 		public IMonster Monster;
 
 		public DungeonRoom(
@@ -91,11 +91,11 @@ namespace DungeonGame {
 				inputString.Append(' ');
 			}
 			var inputName = inputString.ToString().Trim();
-			var monsterName = Monster.GetName().Split(' ');
-			if (monsterName.Last() == inputName || Monster.GetName() == inputName) {
+			var monsterName = this.Monster.GetName().Split(' ');
+			if (monsterName.Last() == inputName || this.Monster.GetName() == inputName) {
 				if (this.Monster.HitPoints > 0) {
 					var fightEvent = new CombatHelper();
-					var outcome = fightEvent.SingleCombat(Monster, player);
+					var outcome = fightEvent.SingleCombat(this.Monster, player);
 					switch (outcome) {
 						case false when player.HitPoints <= 0:
 							Helper.PlayerDeath();
@@ -116,9 +116,9 @@ namespace DungeonGame {
 			return true;
 		}
 		public void RebuildRoomObjects() {
-			RoomObjects.Clear();
+			this._roomObjects.Clear();
 			if (this.Monster != null && !this.Monster.WasLooted) {
-				RoomObjects.Add((DungeonGame.IRoomInteraction)Monster);
+				this._roomObjects.Add((IRoomInteraction) this.Monster);
 			}
 		}
 		public void ShowCommands() {
@@ -177,9 +177,9 @@ namespace DungeonGame {
 			Console.Write("Room Contents: ");
 			Helper.FormatRoomInfoText();
 			this.RebuildRoomObjects();
-			if (RoomObjects.Count > 0 && RoomObjects[0] != null) {
+			if (this._roomObjects.Count > 0 && this._roomObjects[0] != null) {
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				foreach (var item in RoomObjects) {
+				foreach (var item in this._roomObjects) {
 					var itemTitle = item.GetName().ToString();
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					Console.Write(string.Join(", ", itemTitle));
@@ -199,16 +199,16 @@ namespace DungeonGame {
 				inputString.Append(' ');
 			}
 			var inputName = inputString.ToString().Trim();
-			var monsterName = Monster.GetName().Split(' ');
-			if (monsterName.Last() == inputName || Monster.GetName() == inputName) {
-				if (Monster.HitPoints <= 0 && Monster.WasLooted == false) {
-					var goldLooted = Monster.Gold;
-					player.Gold += Monster.Gold;
+			var monsterName = this.Monster.GetName().Split(' ');
+			if (monsterName.Last() == inputName || this.Monster.GetName() == inputName) {
+				if (this.Monster.HitPoints <= 0 && this.Monster.WasLooted == false) {
+					var goldLooted = this.Monster.Gold;
+					player.Gold += this.Monster.Gold;
 					try {
-						foreach (var loot in Monster.MonsterItems) {
+						foreach (var loot in this.Monster.MonsterItems) {
 							var itemType = loot.GetType().FullName;
 							if (itemType == "DungeonGame.Consumable") {
-								player.Consumables.Add((DungeonGame.Consumable)loot);
+								player.Consumables.Add((Consumable)loot);
 							}
 							else {
 								player.Inventory.Add(loot);
@@ -219,13 +219,14 @@ namespace DungeonGame {
 					}
 					catch (InvalidOperationException) {
 					}
-					Monster.MonsterItems.Clear();
-					Monster.Gold = 0;
-					Monster.WasLooted = true;
+
+					this.Monster.MonsterItems.Clear();
+					this.Monster.Gold = 0;
+					this.Monster.WasLooted = true;
 					Helper.FormatSuccessOutputText();
 					Console.WriteLine("You looted {0} gold coins from the {1}!", goldLooted, this.Monster.Name);
 				}
-				else if (Monster.WasLooted) {
+				else if (this.Monster.WasLooted) {
 					Helper.FormatFailureOutputText();
 					Console.WriteLine("You already looted {0}!", this.Monster.Name);
 				}
@@ -246,12 +247,12 @@ namespace DungeonGame {
 				inputString.Append(' ');
 			}
 			var inputName = inputString.ToString().Trim();
-			var monsterName = Monster.GetName().Split(' ');
-			if (monsterName.Last() == inputName || Monster.GetName() == inputName) {
+			var monsterName = this.Monster.GetName().Split(' ');
+			if (monsterName.Last() == inputName || this.Monster.GetName() == inputName) {
 				Console.ForegroundColor = ConsoleColor.DarkCyan;
-				Console.WriteLine(Monster.Desc);
+				Console.WriteLine(this.Monster.Desc);
 				Console.Write("\nHe is carrying:\n");
-				foreach (var loot in Monster.MonsterItems) {
+				foreach (var loot in this.Monster.MonsterItems) {
 					Console.WriteLine(string.Join(", ", loot.GetName()));
 				}
 			}

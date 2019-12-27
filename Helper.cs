@@ -115,12 +115,16 @@ namespace DungeonGame {
 						case "Mage":
 							var playerMage = new Player(playerName, Player.PlayerClassType.Mage);
 							Console.WriteLine("\n\nYou have selected Mage. You can 'cast' a spell, for example " +
-								"'cast fireball', if you have a spell named fireball in your spellbook. To see " +
-								"the list of spells in your spellbook, you can 'list spells'. To view info " +
-								"about a spell, you can 'info' the spell name. For example, 'info fireball'.");
+							                  "'cast fireball', if you have a spell named fireball in your spellbook. To see " +
+							                  "the list of spells in your spellbook, you can 'list spells'. To view info " +
+							                  "about a spell, you can 'spell' the spell name. For example, 'spell fireball'.");
 							return playerMage;
 							case "Warrior":
 							var playerWarrior = new Player(playerName, Player.PlayerClassType.Warrior);
+							Console.WriteLine("\n\nYou have selected Warrior. You can 'use' an ability, for example " +
+							                  "'use charge', if you have an ability named charge in your abilities. To see " +
+							                  "the list of abilities you have available, you can 'list abilities'. To view info " +
+							                  "about an ability, you can 'ability' the spell name. For example, 'ability charge'.");
 							return playerWarrior;
 					}
 				}
@@ -158,11 +162,11 @@ namespace DungeonGame {
 		public static bool QuitGame(Player player) {
 			FormatAnnounceText();
 			Console.WriteLine("Are you sure you want to quit?");
-			var input = Helper.GetFormattedInput();
+			var input = GetFormattedInput();
 			if (input[0] == "yes" || input[0] == "y") {
 				Console.WriteLine("Quitting the game.");
 				player.CanSave = true;
-				Helper.SaveGame(player);
+				SaveGame(player);
 				return true;
 			}
 			return false;
@@ -176,14 +180,14 @@ namespace DungeonGame {
 		public static void SaveGame(Player player) {
 			FormatAnnounceText();
 			if (player.CanSave == true) {
-				var serializer = new Newtonsoft.Json.JsonSerializer();
+				var serializer = new JsonSerializer();
 				serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
-				serializer.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-				serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
-				serializer.Formatting = Newtonsoft.Json.Formatting.Indented;
+				serializer.NullValueHandling = NullValueHandling.Ignore;
+				serializer.TypeNameHandling = TypeNameHandling.Auto;
+				serializer.Formatting = Formatting.Indented;
 				serializer.PreserveReferencesHandling = PreserveReferencesHandling.All;
 				using (var sw = new StreamWriter("savegame.json"))
-				using (var writer = new Newtonsoft.Json.JsonTextWriter(sw)) {
+				using (var writer = new JsonTextWriter(sw)) {
 					serializer.Serialize(writer, player, typeof(Player));
 				}
 				Console.WriteLine("Your game has been saved.");

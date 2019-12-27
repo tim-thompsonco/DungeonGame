@@ -17,7 +17,7 @@ namespace DungeonGame {
 			this.BuySellType = buySellType;
 			switch (name) {
 				case "armorer":
-					VendorItems.Add(
+					this.VendorItems.Add(
 					new Armor(
 						"leather vest",
 						Armor.ArmorSlot.Chest, 
@@ -27,7 +27,7 @@ namespace DungeonGame {
 						12,
 						false
 					));
-					VendorItems.Add(
+					this.VendorItems.Add(
 					new Armor(
 						"leather helm",
 						Armor.ArmorSlot.Head, 
@@ -37,7 +37,7 @@ namespace DungeonGame {
 						6,
 						false
 					));
-					VendorItems.Add(
+					this.VendorItems.Add(
 					new Armor(
 						"leather leggings",
 						Armor.ArmorSlot.Legs, 
@@ -49,7 +49,7 @@ namespace DungeonGame {
 					));
 					break;
 				case "weaponsmith":
-					VendorItems.Add(
+					this.VendorItems.Add(
 					new Weapon(
 						"notched sword",
 						13, 
@@ -60,14 +60,14 @@ namespace DungeonGame {
 					));
 					break;
 				case "healer":
-					VendorItems.Add(
+					this.VendorItems.Add(
 					new Consumable(
 						"minor health potion",
 						50,
 						Consumable.PotionType.Health,
 						50
 					));
-					VendorItems.Add(
+					this.VendorItems.Add(
 					new Consumable(
 						"minor mana potion",
 						50,
@@ -325,7 +325,7 @@ namespace DungeonGame {
 			var potionIndex = this.VendorItems.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(inputName));
 			if (potionIndex == -1) {
 				if (inputName.Contains("mana")) {
-					VendorItems.Add(
+					this.VendorItems.Add(
 					new Consumable(
 						"minor mana potion",
 						50,
@@ -334,7 +334,7 @@ namespace DungeonGame {
 					));
 				}
 				else if (inputName.Contains("health")) {
-					VendorItems.Add(
+					this.VendorItems.Add(
 					new Consumable(
 						"minor health potion",
 						50,

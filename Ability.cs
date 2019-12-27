@@ -1,17 +1,22 @@
 using System;
 
 namespace DungeonGame {
-	public class Ability {
+	public class 
+		Ability {
 		public enum AbilityType {
-			DirectDamage,
-			DamageOverTime,
-			Stun,
-			Block
+			Slash,
+			Rend,
+			Charge,
+			Block,
+			Berserk,
+			Disarm
 		}
+		private static readonly Random RndGenerate = new Random();
 		public string Name { get; set; }
 		public AbilityType AbilityCategory { get; set; }
 		public Defensive Defensive { get; set; }
 		public Offensive Offensive { get; set; }
+		public ChangeArmor ChangeArmor { get; set; }
 		public Stun Stun { get; set; }
 		public int RageCost { get; set; }
 		public bool CanStun { get; set; }
@@ -22,18 +27,25 @@ namespace DungeonGame {
 			this.RageCost = rageCost;
 			this.Rank = rank;
 			this.AbilityCategory = abilityType;
-			switch (AbilityCategory) {
-				case AbilityType.DirectDamage:
+			switch (this.AbilityCategory) {
+				case AbilityType.Slash:
 					this.Offensive = new Offensive(50);
 					break;
-				case AbilityType.DamageOverTime:
+				case AbilityType.Rend:
 					this.Offensive = new Offensive(10, 5, 1, 3);
 					break;
-				case AbilityType.Stun:
+				case AbilityType.Charge:
 					this.Stun = new Stun(15, 1, 2);
 					break;
 				case AbilityType.Block:
 					this.Defensive = new Defensive(50);
+					break;
+				case AbilityType.Berserk:
+					this.Offensive = new Offensive(20);
+					this.ChangeArmor = new ChangeArmor(15, 1, 4);
+					break;
+				case AbilityType.Disarm:
+					this.Offensive = new Offensive(35);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -67,6 +79,21 @@ namespace DungeonGame {
 				);
 			}
 		}
+		public void BerserkAbilityInfo(Player player, int index) {
+			Console.WriteLine("Damage Increase: {0}", player.Abilities[index].Offensive.Amount);
+			Console.WriteLine("Armor Decrease: {0}", player.Abilities[index].ChangeArmor.ChangeArmorAmount);
+			Console.WriteLine("Damage increased at cost of armor decrease for {0} rounds", player.Abilities[index].ChangeArmor.ChangeMaxRound);
+		}
+		public int[] UseBerserkAbility(IMonster opponent, Player player, int index) {
+			Helper.FormatAttackSuccessText();
+			player.RagePoints -= player.Abilities[index].RageCost;
+			var returnValues = new int[4];
+			returnValues[0] = player.Abilities[index].Offensive.Amount; // Damage increase amount
+			returnValues[1] = player.Abilities[index].ChangeArmor.ChangeArmorAmount; // Armor decrease amount
+			returnValues[2] = player.Abilities[index].ChangeArmor.ChangeCurRound; // Armor decrease current round
+			returnValues[3] = player.Abilities[index].ChangeArmor.ChangeMaxRound; // Armor decrease max round
+			return returnValues;
+		}
 		public void DefenseAbilityInfo(Player player, int index) {
 			Console.WriteLine("Absorb Damage: {0}", player.Abilities[index].Defensive.AbsorbDamage);
 		}
@@ -75,15 +102,31 @@ namespace DungeonGame {
 			player.RagePoints -= player.Abilities[index].RageCost;
 			return player.Abilities[index].Defensive.AbsorbDamage;
 		}
+		public void DisarmAbilityInfo(Player player, int index) {
+			Console.WriteLine("{0}% chance to disarm opponent's weapon.", player.Abilities[index].Offensive.Amount);
+		}
+		public void UseDisarmAbility(IMonster opponent, Player player, int index) {
+			player.RagePoints -= player.Abilities[index].RageCost;
+			var successChance = RndGenerate.Next(1, 100);
+			if (successChance > player.Abilities[index].Offensive.Amount) {
+				Helper.FormatAttackFailText();
+				Console.WriteLine("You tried to disarm {0} but failed!", opponent.Name);
+			}
+			else {
+				Helper.FormatAttackSuccessText();
+				opponent.MonsterWeapon.Equipped = false;
+				Console.WriteLine("You successfully disarmed {0}!", opponent.Name);
+			}
+		}
 		public void OffenseDamageAbilityInfo(Player player, int index) {
-			Console.WriteLine("Instant Damage: {0}", player.Abilities[index].Offensive.DamageAmount);
-			if (player.Abilities[index].Offensive.DamageOverTime <= 0) return;
-			Console.WriteLine("Damage Over Time: {0}", player.Abilities[index].Offensive.DamageOverTime);
-			Console.WriteLine("Bleeding damage over time for {0} rounds.", player.Abilities[index].Offensive.DamageMaxRounds);
+			Console.WriteLine("Instant Damage: {0}", player.Abilities[index].Offensive.Amount);
+			if (player.Abilities[index].Offensive.AmountOverTime <= 0) return;
+			Console.WriteLine("Damage Over Time: {0}", player.Abilities[index].Offensive.AmountOverTime);
+			Console.WriteLine("Bleeding damage over time for {0} rounds.", player.Abilities[index].Offensive.AmountMaxRounds);
 		}
 		public void UseOffenseDamageAbility(IMonster opponent, Player player, int index) {
 			player.RagePoints -= player.Abilities[index].RageCost;
-			var abilityDamage = player.Abilities[index].Offensive.DamageAmount;
+			var abilityDamage = player.Abilities[index].Offensive.Amount;
 			if (abilityDamage == 0) {
 				Helper.FormatAttackFailText();
 				Console.WriteLine("Your {0} missed!", player.Abilities[index].Name);
@@ -95,13 +138,13 @@ namespace DungeonGame {
 					opponent.Name,
 					abilityDamage);
 				opponent.TakeDamage(abilityDamage);
-				if (player.Abilities[index].Offensive.DamageOverTime <= 0) return;
+				if (player.Abilities[index].Offensive.AmountOverTime <= 0) return;
 				Console.WriteLine("The {0} is bleeding!", opponent.Name);
 				opponent.StartBleeding(
 					true,
-					player.Abilities[index].Offensive.DamageOverTime,
-					player.Abilities[index].Offensive.DamageCurRounds,
-					player.Abilities[index].Offensive.DamageMaxRounds
+					player.Abilities[index].Offensive.AmountOverTime,
+					player.Abilities[index].Offensive.AmountCurRounds,
+					player.Abilities[index].Offensive.AmountMaxRounds
 					);
 			}
 		}

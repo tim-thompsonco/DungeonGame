@@ -34,6 +34,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ability Properties\ChangeArmor.cs" />
     <Compile Include="Ability Properties\Defensive.cs" />
     <Compile Include="Ability Properties\Offensive.cs" />
     <Compile Include="Ability Properties\Stun.cs" />
