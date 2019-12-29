@@ -29,7 +29,7 @@ namespace DungeonGame {
 			Console.ForegroundColor = ConsoleColor.DarkRed;
 		}
 		public static void FormatInfoText() {
-			Console.ForegroundColor = ConsoleColor.Black;
+			Console.ForegroundColor = ConsoleColor.White;
 		}
 		public static void FormatLevelUpText() {
 			Console.ForegroundColor = ConsoleColor.Cyan;
@@ -38,7 +38,7 @@ namespace DungeonGame {
 			Console.ForegroundColor = ConsoleColor.DarkGreen;
 		}
 		public static void FormatRoomInfoText() {
-			Console.ForegroundColor = ConsoleColor.Black;
+			Console.ForegroundColor = ConsoleColor.White;
 		}
 		public static void FormatAnnounceText() {
 			Console.ForegroundColor = ConsoleColor.Gray;

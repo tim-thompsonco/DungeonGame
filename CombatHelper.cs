@@ -13,7 +13,7 @@ namespace DungeonGame {
 			Console.WriteLine("{0}, you have encountered a {1}. Time to fight!",
 				player.Name, opponent.Name);
 			while (true) {
-				player.DisplayPlayerStats();
+				PlayerHelper.DisplayPlayerStats(player);
 				opponent.DisplayStats();
 				Console.Write("Available Commands: ");
 				Console.WriteLine(string.Join(", ", this.Commands));
@@ -79,15 +79,29 @@ namespace DungeonGame {
 							Console.WriteLine("You don't have that ability.");
 							continue;
 						}
+						catch (ArgumentOutOfRangeException) {
+							Helper.FormatFailureOutputText();
+							Console.WriteLine("You don't have that ability.");
+							continue;
+						}
 						catch (InvalidOperationException) {
-							if (player.PlayerClass != Player.PlayerClassType.Warrior) {
-								Helper.FormatFailureOutputText();
-								Console.WriteLine("You can't use abilities. You're not a warrior!");
+							Helper.FormatFailureOutputText();
+							if (player.PlayerClass == Player.PlayerClassType.Mage) {
+								Console.WriteLine("You can't use abilities. You're not a warrior or archer!");
 								continue;
 							}
-							Helper.FormatFailureOutputText();
-							Console.WriteLine("You do not have enough rage to use that ability!");
-							continue;
+							switch (player.PlayerClass) {
+								case Player.PlayerClassType.Mage:
+									continue;
+								case Player.PlayerClassType.Warrior:
+									Console.WriteLine("You do not have enough rage to use that ability!");
+									continue;
+								case Player.PlayerClassType.Archer:
+									Console.WriteLine("You do not have enough combo points to use that ability!");
+									continue;
+								default:
+									throw new ArgumentOutOfRangeException();
+							}
 						}
 					case "flee":
 						var canFlee = this.CanFleeCombat();
@@ -106,13 +120,13 @@ namespace DungeonGame {
 						continue;
 					case "i":
 					case "inventory":
-						player.ShowInventory(player);
+						PlayerHelper.ShowInventory(player);
 						continue;
 					case "list":
 						switch (input[1]) {
 							case "abilities":
 								try {
-									player.ListAbilities();
+									PlayerHelper.ListAbilities(player);
 								}
 								catch (IndexOutOfRangeException) {
 									Helper.FormatFailureOutputText();
@@ -121,7 +135,7 @@ namespace DungeonGame {
 								continue;
 							case "spells":
 								try {
-									player.ListSpells();
+									PlayerHelper.ListSpells(player);
 								}
 								catch (IndexOutOfRangeException) {
 									Helper.FormatFailureOutputText();
@@ -132,7 +146,7 @@ namespace DungeonGame {
 						break;
 					case "ability":
 						try {
-							player.AbilityInfo(input[1]);
+							PlayerHelper.AbilityInfo(player, input);
 						}
 						catch (IndexOutOfRangeException) {
 							Helper.FormatFailureOutputText();
@@ -141,7 +155,7 @@ namespace DungeonGame {
 						continue;
 					case "spell":
 						try {
-							player.SpellInfo(input[1]);
+							PlayerHelper.SpellInfo(player, input[1]);
 						}
 						catch (IndexOutOfRangeException) {
 							Helper.FormatFailureOutputText();
@@ -152,7 +166,7 @@ namespace DungeonGame {
 						Helper.InvalidCommand();
 						continue;
 				}
-				if (player.IsHealing) player.HealingRound();
+				if (player.IsHealing) this.HealingRound(player);
 				// Check opponent health to determine dead or not before special abilities
 				if (opponent.HitPoints <= 0) {
 					this.SingleCombatWin(opponent, player);
@@ -160,8 +174,8 @@ namespace DungeonGame {
 				}
 				if (opponent.OnFire) opponent.BurnOnFire();
 				if (opponent.IsBleeding) opponent.Bleeding();
-				if (player.IsArmorChanged) player.ChangeArmorRound();
-				if (player.IsDamageChanged) player.ChangeDamageRound();
+				if (player.IsArmorChanged) this.ChangeArmorRound(player);
+				if (player.IsDamageChanged) this.ChangeDamageRound(player);
 				if (opponent.IsStunned) {
 					opponent.Stunned();
 					continue;
@@ -185,7 +199,7 @@ namespace DungeonGame {
 				if (attackDamageM - player.ArmorRating(opponent) < 0) {
 					Helper.FormatAttackFailText();
 					Console.WriteLine("Your armor absorbed all of {0}'s attack!", opponent.Name);
-					player.DecreaseArmorDurability();
+					GearHelper.DecreaseArmorDurability(player);
 				}
 				else if (attackDamageM == 0) {
 					Helper.FormatAttackFailText();
@@ -196,7 +210,7 @@ namespace DungeonGame {
 					Console.WriteLine("The {0} hits you for {1} physical damage.",
 						opponent.Name, attackDamageM - player.ArmorRating(opponent));
 					player.TakeDamage(attackDamageM - player.ArmorRating(opponent));
-					player.DecreaseArmorDurability();
+					GearHelper.DecreaseArmorDurability(player);
 					if (player.HitPoints <= 0) {
 						return false;
 					}
@@ -212,7 +226,7 @@ namespace DungeonGame {
 			opponent.Name = "Dead " + opponent.GetName();
 			opponent.Desc = "A corpse of a monster you killed.";
 			player.GainExperience(opponent.ExperienceProvided);
-			player.LevelUpCheck();
+			PlayerHelper.LevelUpCheck(player);
 		}
 		private bool CanFleeCombat() {
 			Console.ForegroundColor = ConsoleColor.Green;
@@ -225,6 +239,33 @@ namespace DungeonGame {
 			Helper.FormatFailureOutputText();
 			Console.WriteLine("You tried to flee combat but failed!");
 			return false;
+		}
+		public void ChangeArmorRound(Player player) {
+			player.ChangeArmorCurRound += 1;
+			Helper.FormatSuccessOutputText();
+			Console.WriteLine("Your armor is augmented by {0}.", player.ChangeArmorAmount);
+			if (player.ChangeArmorCurRound <= player.ChangeArmorMaxRound) return;
+			player.IsArmorChanged = false;
+			player.ChangeArmorCurRound = 1;
+		}
+		public void ChangeDamageRound(Player player) {
+			player.ChangeDamageCurRound += 1;
+			Console.WriteLine(
+				player.ChangeDamageAmount > 0 ? "Your damage is increased by {0}." : "Your damage is decreased by {0}",
+				player.ChangeDamageAmount);
+			if (player.ChangeDamageCurRound <= player.ChangeDamageMaxRound) return;
+			player.IsDamageChanged = false;
+			player.ChangeDamageCurRound = 1;
+		}
+		public void HealingRound(Player player) {
+			player.HealCurRound += 1;
+			Helper.FormatSuccessOutputText();
+			player.HitPoints += player.HealAmount;
+			if (player.HitPoints > player.MaxHitPoints) player.HitPoints = player.MaxHitPoints;
+			Console.WriteLine("You have been healed for {0} health.", player.HealAmount);
+			if (player.HealCurRound <= player.HealMaxRound) return;
+			player.IsHealing = false;
+			player.HealCurRound = 1;
 		}
 	}
 }

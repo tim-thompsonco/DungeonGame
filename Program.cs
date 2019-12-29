@@ -20,7 +20,7 @@ namespace DungeonGame {
 				}
 				catch (FileNotFoundException) {
 					player = Helper.BuildNewPlayer();
-					player.EquipInitialGear();
+					GearHelper.EquipInitialGear(player);
 				}
 				var spawnedRooms = new SpawnRooms().RetrieveSpawnRooms();
 				// Set initial room condition
@@ -36,7 +36,7 @@ namespace DungeonGame {
 					TimeSpan.Zero,
 					TimeSpan.FromSeconds(3));
 				while (!isGameOver) {
-					player.DisplayPlayerStats();
+					PlayerHelper.DisplayPlayerStats(player);
 					spawnedRooms[roomIndex].ShowCommands();
 					var input = Helper.GetFormattedInput();
 					var isTownRoom = spawnedRooms[roomIndex] as TownRoom;
@@ -98,11 +98,11 @@ namespace DungeonGame {
 							break;
 						case "equip":
 						case "unequip":
-							player.EquipItem(input);
+							GearHelper.EquipItem(player, input);
 							break;
 						case "i":
 						case "inventory":
-							player.ShowInventory(player);
+							PlayerHelper.ShowInventory(player);
 							break;
 						case "q":
 						case "quit":
@@ -115,7 +115,7 @@ namespace DungeonGame {
 							switch (input[1]) {
 								case "abilities":
 									try {
-										player.ListAbilities();
+										PlayerHelper.ListAbilities(player);
 									}
 									catch (IndexOutOfRangeException) {
 										Helper.FormatFailureOutputText();
@@ -124,7 +124,7 @@ namespace DungeonGame {
 									break;
 								case "spells":
 									try {
-										player.ListSpells();
+										PlayerHelper.ListSpells(player);
 									}
 									catch (IndexOutOfRangeException) {
 										Helper.FormatFailureOutputText();
@@ -135,7 +135,7 @@ namespace DungeonGame {
 							break;
 						case "ability":
 							try {
-								player.AbilityInfo(input[1]);
+								PlayerHelper.AbilityInfo(player, input);
 							}
 							catch (IndexOutOfRangeException) {
 								Helper.FormatFailureOutputText();
@@ -144,7 +144,7 @@ namespace DungeonGame {
 							break;
 						case "spell":
 							try {
-								player.SpellInfo(input[1]);
+								PlayerHelper.SpellInfo(player, input[1]);
 							}
 							catch (IndexOutOfRangeException) {
 								Helper.FormatFailureOutputText();

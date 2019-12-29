@@ -55,7 +55,7 @@ namespace DungeonGame {
 				1, 
 				10, 
 				80, 
-				100, 
+				1000, 
 					new Weapon(
 						"notched axe",
 						14, 

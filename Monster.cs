@@ -98,9 +98,6 @@ namespace DungeonGame {
 		public string GetName() {
 			return this.Name.ToString();
 		}
-		public bool IsEquipped() {
-			return false;
-		}
 		public void SetOnFire(bool onFire, int onFireDamage, int onFireCurRound, int onFireMaxRound) {
 			this.OnFire = onFire;
 			this.OnFireDamage = onFireDamage;
@@ -142,18 +139,6 @@ namespace DungeonGame {
 			if (this.StunnedCurRound <= this.StunnedMaxRound) return;
 			this.IsStunned = false;
 			this.StunnedCurRound = 1;
-		}
-		public void StartFrozen(bool frozen, int frozenCurRound, int frozenMaxRound) {
-			this.IsFrozen = frozen;
-			this.FrozenCurRound = frozenCurRound;
-			this.FrozenMaxRound = frozenMaxRound;
-		}
-		public void Frozen() {
-			this.FrozenCurRound += 1;
-			Console.WriteLine("The {0} is frozen and cannot attack.", this.Name);
-			if (this.FrozenCurRound <= this.FrozenMaxRound) return;
-			this.IsFrozen = false;
-			this.FrozenCurRound = 1;
 		}
 	}
 }
