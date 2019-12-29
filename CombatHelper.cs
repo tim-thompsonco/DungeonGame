@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace DungeonGame {
 	public class CombatHelper {
@@ -35,19 +34,19 @@ namespace DungeonGame {
 						}
 						else {
 							Helper.FormatAttackSuccessText();
-							Console.WriteLine("You hit the {0} for {1} physical damage.", opponent.Name, attackDamage - opponent.ArmorRating(player));
+							Console.WriteLine("You hit the {0} for {1} physical damage.", 
+								opponent.Name, 
+								attackDamage - opponent.ArmorRating(player));
 							opponent.TakeDamage(attackDamage - opponent.ArmorRating(player));
 						}
-						if (opponent.HitPoints <= 0) {
-							this.SingleCombatWin(opponent, player);
-							return true;
-						}
+						if (opponent.IsMonsterDead(player)) return true;
 						break;
 					case "cast":
 						try {
 							if (input[1] != null) {
 								var spellName = Helper.ParseInput(input);
 								player.CastSpell(opponent, spellName);
+								if (opponent.IsMonsterDead(player)) return true;
 							}
 							break;
 						}
@@ -71,6 +70,7 @@ namespace DungeonGame {
 							if (input[1] != null) {
 								var abilityName = Helper.ParseInput(input);
 								player.UseAbility(opponent, abilityName);
+								if (opponent.IsMonsterDead(player)) return true;
 							}
 							break;
 						}
@@ -118,6 +118,9 @@ namespace DungeonGame {
 							Console.WriteLine("You can't drink that!");
 						}
 						continue;
+					case "reload":
+						player.ReloadQuiver();
+						break;
 					case "i":
 					case "inventory":
 						PlayerHelper.ShowInventory(player);
@@ -167,23 +170,19 @@ namespace DungeonGame {
 						continue;
 				}
 				if (player.IsHealing) this.HealingRound(player);
-				// Check opponent health to determine dead or not before special abilities
-				if (opponent.HitPoints <= 0) {
-					this.SingleCombatWin(opponent, player);
-					return true;
+				if (opponent.OnFire) {
+					this.BurnOnFire(opponent);
+					if (opponent.IsMonsterDead(player)) return true;
 				}
-				if (opponent.OnFire) opponent.BurnOnFire();
-				if (opponent.IsBleeding) opponent.Bleeding();
+				if (opponent.IsBleeding) {
+					this.Bleeding(opponent);
+					if (opponent.IsMonsterDead(player)) return true;
+				}
 				if (player.IsArmorChanged) this.ChangeArmorRound(player);
 				if (player.IsDamageChanged) this.ChangeDamageRound(player);
 				if (opponent.IsStunned) {
 					opponent.Stunned();
 					continue;
-				}
-				// Check opponent health to determine dead or not after special abilities
-				if (opponent.HitPoints <= 0) {
-					this.SingleCombatWin(opponent, player);
-					return true;
 				}
 				var attackDamageM = opponent.Attack();
 				if (attackDamageM > player.AbsorbDamageAmount && player.AbsorbDamageAmount > 0) {
@@ -217,17 +216,7 @@ namespace DungeonGame {
 				}
 			}
 		}
-		public void SingleCombatWin(IMonster opponent, Player player) {
-			Helper.FormatSuccessOutputText();
-			Console.WriteLine("You have defeated the {0}!", opponent.Name);
-			foreach (var loot in opponent.MonsterItems) {
-				loot.Equipped = false;
-			}
-			opponent.Name = "Dead " + opponent.GetName();
-			opponent.Desc = "A corpse of a monster you killed.";
-			player.GainExperience(opponent.ExperienceProvided);
-			PlayerHelper.LevelUpCheck(player);
-		}
+		
 		private bool CanFleeCombat() {
 			Console.ForegroundColor = ConsoleColor.Green;
 			var randomNum = RndGenerate.Next(1, 10);
@@ -266,6 +255,24 @@ namespace DungeonGame {
 			if (player.HealCurRound <= player.HealMaxRound) return;
 			player.IsHealing = false;
 			player.HealCurRound = 1;
+		}
+		public void BurnOnFire(IMonster opponent) {
+			opponent.HitPoints -= opponent.OnFireDamage;
+			Helper.FormatOnFireText();
+			Console.WriteLine("The {0} burns for {1} fire damage.", opponent.Name, opponent.OnFireDamage);
+			opponent.OnFireCurRound += 1;
+			if (opponent.OnFireCurRound <= opponent.OnFireMaxRound) return;
+			opponent.OnFire = false;
+			opponent.OnFireCurRound = 1;
+		}
+		public void Bleeding(IMonster opponent) {
+			Helper.FormatAttackSuccessText();
+			opponent.HitPoints -= opponent.BleedDamage;
+			Console.WriteLine("The {0} bleeds for {1} physical damage.", opponent.Name, opponent.BleedDamage);
+			opponent.BleedCurRound += 1;
+			if (opponent.BleedCurRound <= opponent.BleedMaxRound) return;
+			opponent.IsBleeding = false;
+			opponent.BleedCurRound = 1;
 		}
 	}
 }

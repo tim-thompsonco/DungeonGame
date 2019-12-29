@@ -11,7 +11,8 @@ namespace DungeonGame {
 				Helper.GameIntro();
 				Player player;
 				try {
-					player = Newtonsoft.Json.JsonConvert.DeserializeObject<Player>(File.ReadAllText("savegame.json"), new Newtonsoft.Json.JsonSerializerSettings {
+					player = Newtonsoft.Json.JsonConvert.DeserializeObject<Player>(File.ReadAllText(
+						"savegame.json"), new Newtonsoft.Json.JsonSerializerSettings {
 						TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
 						NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
 					});
@@ -91,14 +92,70 @@ namespace DungeonGame {
 							}
 							break;
 						case "cast":
-							if (input[1] != null) {
-								var spellName = Helper.ParseInput(input);
-								player.CastSpell(spellName);
+							try {
+								if (input[1] != null) {
+									var spellName = Helper.ParseInput(input);
+									player.CastSpell(spellName);
+								}
+								break;
 							}
-							break;
+							catch (IndexOutOfRangeException) {
+								Helper.FormatFailureOutputText();
+								Console.WriteLine("You don't have that spell.");
+								continue;
+							}
+							catch (InvalidOperationException) {
+								if (player.PlayerClass != Player.PlayerClassType.Mage) {
+									Helper.FormatFailureOutputText();
+									Console.WriteLine("You can't cast spells. You're not a mage!");
+									continue;
+								}
+								Helper.FormatFailureOutputText();
+								Console.WriteLine("You do not have enough mana to cast that spell!");
+								continue;
+							}
+						case "use":
+							try {
+								if (input.Contains("distance")) {
+									player.UseAbility(spawnedRooms, input);
+								}
+								break;
+							}
+							catch (IndexOutOfRangeException) {
+								Helper.FormatFailureOutputText();
+								Console.WriteLine("You don't have that ability.");
+								continue;
+							}
+							catch (ArgumentOutOfRangeException) {
+								Helper.FormatFailureOutputText();
+								Console.WriteLine("You don't have that ability.");
+								continue;
+							}
+							catch (InvalidOperationException) {
+								Helper.FormatFailureOutputText();
+								if (player.PlayerClass == Player.PlayerClassType.Mage) {
+									Console.WriteLine("You can't use abilities. You're not a warrior or archer!");
+									continue;
+								}
+								switch (player.PlayerClass) {
+									case Player.PlayerClassType.Mage:
+										continue;
+									case Player.PlayerClassType.Warrior:
+										Console.WriteLine("You do not have enough rage to use that ability!");
+										continue;
+									case Player.PlayerClassType.Archer:
+										Console.WriteLine("You do not have enough combo points to use that ability!");
+										continue;
+									default:
+										throw new ArgumentOutOfRangeException();
+								}
+							}
 						case "equip":
 						case "unequip":
 							GearHelper.EquipItem(player, input);
+							break;
+						case "reload":
+							player.ReloadQuiver();
 							break;
 						case "i":
 						case "inventory":
@@ -107,7 +164,7 @@ namespace DungeonGame {
 						case "q":
 						case "quit":
 							var quitConfirm = Helper.QuitGame(player);
-							if (quitConfirm == true) {
+							if (quitConfirm) {
 								return;
 							}
 							break;
@@ -226,10 +283,9 @@ namespace DungeonGame {
 									if (isTownRoom != null) {
 										if (input[1] == "all") {
 											foreach (var item in player.Inventory) {
-												if (item.IsEquipped()) {
-													var itemNameArray = new string[2] { input[0], item.Name };
-													isTownRoom.Vendor.RepairItem(player, itemNameArray);
-												}
+												if (!item.IsEquipped()) continue;
+												var itemNameArray = new string[2] { input[0], item.Name };
+												isTownRoom.Vendor.RepairItem(player, itemNameArray);
 											}
 											break;
 										}

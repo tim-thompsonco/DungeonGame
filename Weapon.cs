@@ -2,21 +2,37 @@ using System;
 
 namespace DungeonGame {
 	public class Weapon : IEquipment {
+		public enum WeaponType {
+			Dagger,
+			OneHandedSword,
+			TwoHandedSword,
+			Axe,
+			Bow
+		}
 		private readonly Random _rndGenerate = new Random();
 		public string Name { get; set; }
 		public int RegDamage { get; set; }
 		public int ItemValue { get; set; }
+		public WeaponType WeaponGroup { get; set; }
 		public double CritMultiplier { get; set; }
 		public bool Equipped { get; set; }
 		public int Durability { get; set; }
 
-		public Weapon(string name, int regDamageLow, int regDamageHigh, int itemValue, double critMultiplier, bool equipped) {
+		public Weapon(
+			string name, 
+			int regDamageLow, 
+			int regDamageHigh, 
+			int itemValue, 
+			double critMultiplier,
+			bool equipped,
+			WeaponType weaponGroup) {
 			this.Name = name;
 			this.RegDamage = this._rndGenerate.Next(regDamageLow, regDamageHigh);
 			this.ItemValue = itemValue;
 			this.CritMultiplier = critMultiplier;
 			this.Equipped = equipped;
 			this.Durability = 100;
+			this.WeaponGroup = weaponGroup;
 		}
 
 		public int Attack() {

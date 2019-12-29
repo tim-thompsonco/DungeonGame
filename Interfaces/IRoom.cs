@@ -16,6 +16,7 @@
 		int Y { get; set; }
 		int Z { get; set; }
 
+		IMonster GetMonster();
 		bool AttackOpponent(Player player, string[] input);
 		void LootCorpse(Player player, string[] input);
 		void RebuildRoomObjects();

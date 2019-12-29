@@ -1,8 +1,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Runtime.CompilerServices;
+using System.Linq;
 
 namespace DungeonGame {
 	public class Player {
@@ -31,6 +30,11 @@ namespace DungeonGame {
 		public bool CanWearCloth { get; set; }
 		public bool CanWearLeather { get; set; }
 		public bool CanWearPlate { get; set; }
+		public bool CanUseDagger { get; set; }
+		public bool CanUseOneHandedSword { get; set; }
+		public bool CanUseTwoHandedSword { get; set; }
+		public bool CanUseAxe { get; set; }
+		public bool CanUseBow { get; set; }
 		public bool IsHealing { get; set; }
 		public int HealAmount { get; set; }
 		public int HealCurRound { get; set; }
@@ -45,6 +49,7 @@ namespace DungeonGame {
 		public int ChangeArmorCurRound { get; set; }
 		public int ChangeArmorMaxRound { get; set; }
 		public PlayerClassType PlayerClass { get; set; }
+		public Quiver PlayerQuiver { get; set; }
 		public Armor PlayerHeadArmor { get; set; }
 		public Armor PlayerChestArmor { get; set; }
 		public Armor PlayerLegsArmor { get; set; }
@@ -65,7 +70,11 @@ namespace DungeonGame {
 			switch (this.PlayerClass) {
 				case PlayerClassType.Mage:
 					for (var i = 0; i < 3; i++) {
-						this.Consumables.Add(new Consumable("minor mana potion", 3, Consumable.PotionType.Mana, 50));
+						this.Consumables.Add(new Consumable(
+							"minor mana potion", 
+							3, 
+							Consumable.PotionType.Mana, 
+							50));
 					}
 					this.Spellbook = new List<Spell>();
 					this.MaxHitPoints = 100;
@@ -73,13 +82,16 @@ namespace DungeonGame {
 					this.MaxManaPoints = 150;
 					this.ManaPoints = this.MaxManaPoints;
 					this.CanWearCloth = true;
+					this.CanUseDagger = true;
+					this.CanUseOneHandedSword = true;
 					this.Inventory.Add(new Weapon(
 						"dagger", 
 						14, 
 						17, 
 						18, 
 						1.2, 
-						false));
+						false,
+						Weapon.WeaponType.Dagger));
 					this.Inventory.Add(new Armor(
 						"cloth vest", Armor.ArmorSlot.Chest, 
 						Armor.ArmorType.Cloth, 
@@ -112,7 +124,11 @@ namespace DungeonGame {
 					break;
 				case PlayerClassType.Warrior:
 					for (var i = 0; i < 3; i++) {
-						this.Consumables.Add(new Consumable("minor health potion", 3, Consumable.PotionType.Health, 50));
+						this.Consumables.Add(new Consumable(
+							"minor health potion", 
+							3,
+							Consumable.PotionType.Health, 
+							50));
 					}
 					this.Abilities = new List<Ability>();
 					this.MaxHitPoints = 150;
@@ -122,13 +138,19 @@ namespace DungeonGame {
 					this.CanWearCloth = true;
 					this.CanWearLeather = true;
 					this.CanWearPlate = true;
+					this.CanUseAxe = true;
+					this.CanUseDagger = true;
+					this.CanUseBow = true;
+					this.CanUseOneHandedSword = true;
+					this.CanUseTwoHandedSword = true;
 					this.Inventory.Add(new Weapon(
 						"iron sword", 
 						24, 
 						27, 
 						27, 
 						1.3, 
-						false));
+						false,
+						Weapon.WeaponType.OneHandedSword));
 					this.Inventory.Add(new Armor(
 						"iron chestplate", Armor.ArmorSlot.Chest, 
 						Armor.ArmorType.Plate, 
@@ -153,15 +175,19 @@ namespace DungeonGame {
 						8, 
 						false));
 					this.Abilities.Add(new Ability("charge", 25, 1, Ability.AbilityType.Charge));
-					this.Abilities.Add(new Ability("slash", 25, 1, Ability.AbilityType.Slash));
+					this.Abilities.Add(new Ability("slash", 40, 1, Ability.AbilityType.Slash));
 					this.Abilities.Add(new Ability("rend", 25, 1, Ability.AbilityType.Rend));
 					this.Abilities.Add(new Ability("block", 25, 1, Ability.AbilityType.Block));
-					this.Abilities.Add(new Ability("berserk", 50, 1, Ability.AbilityType.Berserk));
+					this.Abilities.Add(new Ability("berserk", 40, 1, Ability.AbilityType.Berserk));
 					this.Abilities.Add(new Ability("disarm", 25, 1, Ability.AbilityType.Disarm));
 					break;
 				case PlayerClassType.Archer:
 					for (var i = 0; i < 3; i++) {
-						this.Consumables.Add(new Consumable("minor health potion", 3, Consumable.PotionType.Health, 50));
+						this.Consumables.Add(new Consumable(
+							"minor health potion", 
+							3, 
+							Consumable.PotionType.Health, 
+							50));
 					}
 					this.Abilities = new List<Ability>();
 					this.MaxHitPoints = 100;
@@ -170,13 +196,17 @@ namespace DungeonGame {
 					this.ComboPoints = this.MaxComboPoints;
 					this.CanWearCloth = true;
 					this.CanWearLeather = true;
+					this.CanUseBow = true;
+					this.CanUseDagger = true;
+					this.CanUseOneHandedSword = true;
 					this.Inventory.Add(new Weapon(
 						"short bow", 
 						20, 
 						23, 
 						23, 
 						1.3, 
-						false));
+						false,
+						Weapon.WeaponType.Bow));
 					this.Inventory.Add(new Armor(
 						"leather vest", Armor.ArmorSlot.Chest, 
 						Armor.ArmorType.Leather, 
@@ -200,9 +230,41 @@ namespace DungeonGame {
 						2, 
 						5, 
 						false));
-					this.Abilities.Add(new Ability("precision shot", 25, 1, Ability.ShotType.Precise));
-					this.Abilities.Add(new Ability("gut shot", 25, 1, Ability.ShotType.Gut));
-					this.Abilities.Add(new Ability("stun shot", 25, 1, Ability.ShotType.Stun));
+					this.Inventory.Add( new Quiver(
+						"basic quiver",
+						50,
+						50,
+						15));
+					this.Abilities.Add(new Ability(
+						"precision shot", 
+						40, 
+						1, 
+						Ability.ShotType.Precise));
+					this.Abilities.Add(new Ability(
+						"gut shot", 
+						25, 
+						1,
+						Ability.ShotType.Gut));
+					this.Abilities.Add(new Ability(
+						"stun shot", 
+						25, 
+						1, 
+						Ability.ShotType.Stun));
+					this.Abilities.Add(new Ability(
+						"double shot", 
+						25, 
+						1, 
+						Ability.ShotType.Double));
+					this.Abilities.Add(new Ability(
+						"wound shot", 
+						40, 
+						1, 
+						Ability.ShotType.Wound));
+					this.Abilities.Add(new Ability(
+						"distance shot", 
+						25, 
+						1, 
+						Ability.ShotType.Distance));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -224,9 +286,16 @@ namespace DungeonGame {
 		}
 		public int Attack() {
 			try {
-				if (this.PlayerWeapon.IsEquipped()) {
+				if (this.PlayerWeapon.IsEquipped() && this.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
 					return this.PlayerWeapon.Attack();
 				}
+				if (this.PlayerWeapon.IsEquipped() &&
+				    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
+				    this.PlayerQuiver.HaveArrows()) {
+					this.PlayerQuiver.UseArrow();
+					return this.PlayerWeapon.Attack();
+				}
+				this.PlayerQuiver.OutOfArrows();
 			}
 			catch (NullReferenceException) {
 				Helper.FormatFailureOutputText();
@@ -242,7 +311,8 @@ namespace DungeonGame {
 					if (index != -1) {
 						this.Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
 						Helper.FormatSuccessOutputText();
-						Console.WriteLine("You drank a potion and replenished {0} health.", this.Consumables[index].RestoreHealth.RestoreHealthAmt);
+						Console.WriteLine("You drank a potion and replenished {0} health.",
+							this.Consumables[index].RestoreHealth.RestoreHealthAmt);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
@@ -255,7 +325,8 @@ namespace DungeonGame {
 					if (index != -1) {
 						this.Consumables[index].RestoreMana.RestoreManaPlayer(this);
 						Helper.FormatSuccessOutputText();
-						Console.WriteLine("You drank a potion and replenished {0} mana.", this.Consumables[index].RestoreMana.RestoreManaAmt);
+						Console.WriteLine("You drank a potion and replenished {0} mana.",
+							this.Consumables[index].RestoreMana.RestoreManaAmt);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
@@ -269,24 +340,93 @@ namespace DungeonGame {
 					break;
 			}
 		}
-		public void UseAbility(IMonster opponent, string inputName) {
-			var index = this.Abilities.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(inputName));
-			if (index != -1 && this.RagePoints >= this.Abilities[index].RageCost && this.PlayerClass == PlayerClassType.Warrior) {
+		public void ReloadQuiver() {
+			var index = 0;
+			index = this.Consumables.FindIndex(
+				f => f.ArrowCategory == Consumable.ArrowType.Standard && f.Name.Contains("arrow"));
+			if (index != -1) {
+				this.Consumables[index].Arrow.LoadArrowsPlayer(this);
+				Helper.FormatSuccessOutputText();
+				Console.WriteLine("You reloaded your quiver.");
+				if (this.Consumables[index].Arrow.Quantity == 0) this.Consumables.RemoveAt(index);
+			}
+			else {
+				Helper.FormatFailureOutputText();
+				Console.WriteLine("You don't have any arrows!");
+			}
+		}
+		public void UseAbility(List<IRoom> spawnedRooms, string[] input) {
+			var index = this.Abilities.FindIndex(
+				f => f.GetName() == input[1] || f.GetName().Contains(input[1]));
+			var direction = input.Last();
+			if (index != -1 && 
+			    this.RagePoints >= this.Abilities[index].RageCost && 
+			    this.PlayerClass == PlayerClassType.Warrior) {
 				switch (this.Abilities[index].AbilityCategory) {
 					case Ability.AbilityType.Slash:
-						this.Abilities[index].UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case Ability.AbilityType.Rend:
-						this.Abilities[index].UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case Ability.AbilityType.Charge:
-						this.Abilities[index].UseStunAbility(opponent, this, index);
 						return;
 					case Ability.AbilityType.Block:
-						this.AbsorbDamageAmount = this.Abilities[index].UseDefenseAbility(this, index);
 						return;
 					case Ability.AbilityType.Berserk:
-						var berserkValues = this.Abilities[index].UseBerserkAbility(opponent, this, index);
+						return;
+					case Ability.AbilityType.Disarm:
+						return;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+			if (index != -1 &&
+			    this.ComboPoints >= this.Abilities[index].ComboCost && 
+			    this.PlayerClass == PlayerClassType.Archer && 
+			    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
+				switch (this.Abilities[index].ShotCategory) {
+					case Ability.ShotType.Distance:
+						Ability.UseDistanceAbility(spawnedRooms, this, index, direction);
+						return;
+					case Ability.ShotType.Gut:
+						return;
+					case Ability.ShotType.Precise:
+						return;
+					case Ability.ShotType.Stun:
+						return;
+					case Ability.ShotType.Double:
+						return;
+					case Ability.ShotType.Wound:
+						return;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+			if (index != -1) {
+				throw new InvalidOperationException();
+			}
+			throw new IndexOutOfRangeException();
+		}
+		public void UseAbility(IMonster opponent, string inputName) {
+			var index = this.Abilities.FindIndex(
+				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+			if (index != -1 && 
+			    this.RagePoints >= this.Abilities[index].RageCost && 
+			    this.PlayerClass == PlayerClassType.Warrior) {
+				switch (this.Abilities[index].AbilityCategory) {
+					case Ability.AbilityType.Slash:
+						Ability.UseOffenseDamageAbility(opponent, this, index);
+						return;
+					case Ability.AbilityType.Rend:
+						Ability.UseOffenseDamageAbility(opponent, this, index);
+						return;
+					case Ability.AbilityType.Charge:
+						Ability.UseStunAbility(opponent, this, index);
+						return;
+					case Ability.AbilityType.Block:
+						this.AbsorbDamageAmount = Ability.UseDefenseAbility(this, index);
+						return;
+					case Ability.AbilityType.Berserk:
+						var berserkValues = Ability.UseBerserkAbility(opponent, this, index);
 						this.SetChangeArmor(
 							true, 
 							berserkValues[1], 
@@ -299,28 +439,35 @@ namespace DungeonGame {
 							berserkValues[3]);
 						return;
 					case Ability.AbilityType.Disarm:
-						this.Abilities[index].UseDisarmAbility(opponent, this, index);
+						Ability.UseDisarmAbility(opponent, this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			if (index != -1 && this.ComboPoints >= this.Abilities[index].ComboCost && this.PlayerClass == PlayerClassType.Archer) {
+			if (index != -1 &&
+			    this.ComboPoints >= this.Abilities[index].ComboCost && 
+			    this.PlayerClass == PlayerClassType.Archer && 
+			    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
 				switch (this.Abilities[index].ShotCategory) {
 					case Ability.ShotType.Distance:
 						return;
 					case Ability.ShotType.Gut:
-						this.Abilities[index].UseOffenseDamageAbility(opponent, this, index);
+						Ability.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case Ability.ShotType.Precise:
-						this.Abilities[index].UseOffenseDamageAbility(opponent, this, index);
+						Ability.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case Ability.ShotType.Stun:
-						this.Abilities[index].UseStunAbility(opponent, this, index);
+						Ability.UseStunAbility(opponent, this, index);
 						return;
 					case Ability.ShotType.Double:
+						for (var i = 0; i < 2; i++) {
+							Ability.UseOffenseDamageAbility(opponent, this, index);
+						}
 						return;
-					case Ability.ShotType.Poison:
+					case Ability.ShotType.Wound:
+						Ability.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -333,16 +480,18 @@ namespace DungeonGame {
 		}
 		public void CastSpell(string inputName) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
-			if (index != -1 && this.ManaPoints >= this.Spellbook[index].ManaCost && this.PlayerClass == PlayerClassType.Mage) {
+			if (index != -1 &&
+			    this.ManaPoints >= this.Spellbook[index].ManaCost &&
+			    this.PlayerClass == PlayerClassType.Mage) {
 				switch (this.Spellbook[index].SpellCategory) {
 					case Spell.SpellType.Heal:
-						this.Spellbook[index].CastHealing(this, index);
+						Spell.CastHealing(this, index);
 						return;
 					case Spell.SpellType.Rejuvenate:
-						this.Spellbook[index].CastHealing(this, index);
+						Spell.CastHealing(this, index);
 						return;
 					case Spell.SpellType.Diamondskin:
-						this.Spellbook[index].CastDefense(this, index);
+						Spell.CastDefense(this, index);
 						return;
 					case Spell.SpellType.Fireball:
 						return;
@@ -361,25 +510,27 @@ namespace DungeonGame {
 		}
 		public void CastSpell(IMonster opponent, string inputName) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
-			if (index != -1 && this.ManaPoints >= this.Spellbook[index].ManaCost && this.PlayerClass == PlayerClassType.Mage) {
+			if (index != -1 && 
+			    this.ManaPoints >= this.Spellbook[index].ManaCost && 
+			    this.PlayerClass == PlayerClassType.Mage) {
 				switch (this.Spellbook[index].SpellCategory) {
 					case Spell.SpellType.Fireball:
-						this.Spellbook[index].CastFireOffense(opponent, this, index);
+						Spell.CastFireOffense(opponent, this, index);
 						return;
 					case Spell.SpellType.Frostbolt:
-						this.Spellbook[index].CastFrostOffense(opponent, this, index);
+						Spell.CastFrostOffense(opponent, this, index);
 						return;
 					case Spell.SpellType.Lightning:
-						this.Spellbook[index].CastArcaneOffense(opponent, this, index);
+						Spell.CastArcaneOffense(opponent, this, index);
 						return;
 					case Spell.SpellType.Heal:
-						this.Spellbook[index].CastHealing(this, index);
+						Spell.CastHealing(this, index);
 						return;
 					case Spell.SpellType.Rejuvenate:
-						this.Spellbook[index].CastHealing(this, index);
+						Spell.CastHealing(this, index);
 						return;
 					case Spell.SpellType.Diamondskin:
-						this.Spellbook[index].CastDefense(this, index);
+						Spell.CastDefense(this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -396,13 +547,21 @@ namespace DungeonGame {
 			this.HealCurRound = healCurRound;
 			this.HealMaxRound = healMaxRound;
 		}
-		public void SetChangeArmor(bool isArmorChanged, int changeArmorAmount, int changeArmorCurRound, int changeArmorMaxRound) {
+		public void SetChangeArmor(
+			bool isArmorChanged,
+			int changeArmorAmount,
+			int changeArmorCurRound, 
+			int changeArmorMaxRound) {
 			this.IsArmorChanged = isArmorChanged;
 			this.ChangeArmorAmount = changeArmorAmount;
 			this.ChangeArmorCurRound = changeArmorCurRound;
 			this.ChangeArmorMaxRound = changeArmorMaxRound;
 		}
-		public void SetChangeDamage(bool isDamageChanged, int changeDamageAmount, int changeDamageCurRound, int changeDamageMaxRound) {
+		public void SetChangeDamage(
+			bool isDamageChanged, 
+			int changeDamageAmount,
+			int changeDamageCurRound,
+			int changeDamageMaxRound) {
 			this.IsDamageChanged = isDamageChanged;
 			this.ChangeDamageAmount = changeDamageAmount;
 			this.ChangeDamageCurRound = changeDamageCurRound;

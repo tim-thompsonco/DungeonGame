@@ -50,25 +50,25 @@ namespace DungeonGame {
 		}
 
 		public string GetName() {
-			return this.Name.ToString();
+			return this.Name;
 		}
-		public void DefenseSpellInfo(Player player, int index) {
+		public static void DefenseSpellInfo(Player player, int index) {
 			Console.WriteLine("Augment Armor Amount: {0}", player.Spellbook[index].Defense.AugmentAmount);
 			Console.WriteLine("Armor will be augmented for {0} rounds.", player.Spellbook[index].Defense.AugmentMaxRounds);
 		}
-		public void CastDefense(Player player, int index) {
+		public static void CastDefense(Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var changeArmorAmount = player.Spellbook[index].Defense.AugmentAmount;
 			Helper.FormatAttackSuccessText();
 			Console.WriteLine("You augmented your armor by {0} with {1}.", changeArmorAmount, player.Spellbook[index].Name);
 			player.SetChangeArmor(true, changeArmorAmount, 1, 3);
 		}
-		public void FrostOffenseSpellInfo(Player player, int index) {
+		public static void FrostOffenseSpellInfo(Player player, int index) {
 			Console.WriteLine("Instant Damage: {0}", player.Spellbook[index].FrostOffense.FrostDamage);
 			Console.WriteLine("Frost damage will freeze opponent for {0} rounds, stunning them.",
 				player.Spellbook[index].FrostOffense.FrozenMaxRounds);
 		}
-		public void CastFrostOffense(IMonster opponent, Player player, int index) {
+		public static void CastFrostOffense(IMonster opponent, Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var frostSpellDamage = player.Spellbook[index].FrostOffense.FrostDamage;
 			if (frostSpellDamage == 0) {
@@ -86,13 +86,14 @@ namespace DungeonGame {
 					);
 			}
 		}
-		public void FireOffenseSpellInfo(Player player, int index) {
+		public static void FireOffenseSpellInfo(Player player, int index) {
 			Console.WriteLine("Instant Damage: {0}", player.Spellbook[index].FireOffense.BlastDamage);
 			if (player.Spellbook[index].FireOffense.BurnDamage <= 0) return;
 			Console.WriteLine("Damage Over Time: {0}", player.Spellbook[index].FireOffense.BurnDamage);
-			Console.WriteLine("Fire damage over time will burn for {0} rounds.", player.Spellbook[index].FireOffense.BurnMaxRounds);
+			Console.WriteLine("Fire damage over time will burn for {0} rounds.", 
+				player.Spellbook[index].FireOffense.BurnMaxRounds);
 		}
-		public void CastFireOffense(IMonster opponent, Player player, int index) {
+		public static void CastFireOffense(IMonster opponent, Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var fireSpellDamage = player.Spellbook[index].FireOffense.BlastDamage;
 			if (fireSpellDamage == 0) {
@@ -114,10 +115,10 @@ namespace DungeonGame {
 				);
 			}
 		}
-		public void ArcaneOffenseSpellInfo(Player player, int index) {
+		public static void ArcaneOffenseSpellInfo(Player player, int index) {
 			Console.WriteLine("Instant Damage: {0}", player.Spellbook[index].ArcaneOffense.ArcaneDamage);
 		}
-		public void CastArcaneOffense(IMonster opponent, Player player, int index) {
+		public static void CastArcaneOffense(IMonster opponent, Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var arcaneSpellDamage = player.Spellbook[index].ArcaneOffense.ArcaneDamage;
 			if (arcaneSpellDamage == 0) {
@@ -130,13 +131,14 @@ namespace DungeonGame {
 				opponent.TakeDamage(arcaneSpellDamage);
 			}
 		}
-		public void HealingSpellInfo(Player player, int index) {
+		public static void HealingSpellInfo(Player player, int index) {
 			Console.WriteLine("Heal Amount: {0}", player.Spellbook[index].Healing.HealAmount);
 			if (player.Spellbook[index].Healing.HealOverTime <= 0) return;
 			Console.WriteLine("Heal Over Time: {0}", player.Spellbook[index].Healing.HealOverTime);
-			Console.WriteLine("Heal over time will restore health for {0} rounds.", player.Spellbook[index].Healing.HealMaxRounds);
+			Console.WriteLine("Heal over time will restore health for {0} rounds.", 
+				player.Spellbook[index].Healing.HealMaxRounds);
 		}
-		public void CastHealing(Player player, int index) {
+		public static void CastHealing(Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var healAmount = player.Spellbook[index].Healing.HealAmount;
 			Helper.FormatAttackSuccessText();

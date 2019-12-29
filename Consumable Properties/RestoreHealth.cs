@@ -1,4 +1,6 @@
-﻿namespace DungeonGame {
+﻿using System;
+
+namespace DungeonGame {
 	public class RestoreHealth {
 		public int RestoreHealthAmt { get; set; }
 

@@ -33,11 +33,11 @@ namespace DungeonGame {
 		void DisplayStats();
 		int Attack();
 		int CheckArmorRating();
+		void MonsterDeath(Player player);
+		bool IsMonsterDead(Player player);
 		int ArmorRating(Player player);
 		void SetOnFire(bool onFire, int onFireDamage, int onFireCurRound, int onFireMaxRound);
-		void BurnOnFire();
 		void StartBleeding(bool bleeding, int bleedDamage, int bleedCurRound, int bleedMaxRound);
-		void Bleeding();
 		void StartStunned(bool stunned, int stunCurRound, int stunMaxRound);
 		void Stunned();
 	}

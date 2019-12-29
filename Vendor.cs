@@ -50,14 +50,21 @@ namespace DungeonGame {
 					break;
 				case "weaponsmith":
 					this.VendorItems.Add(
-					new Weapon(
-						"notched sword",
-						13, 
-						20, 
-						20, 
-						1.1, 
-						false 
-					));
+						new Weapon(
+							"notched sword",
+							13,
+							20,
+							20,
+							1.1,
+							false,
+							Weapon.WeaponType.OneHandedSword
+						));
+					this.VendorItems.Add(
+						new Consumable(
+						"arrows",
+						15,
+						Consumable.ArrowType.Standard,
+						50));
 					break;
 				case "healer":
 					this.VendorItems.Add(
@@ -90,17 +97,20 @@ namespace DungeonGame {
 				if (item.IsEquipped()) {
 					itemInfo.Append(" <Equipped>");
 				}
-				var isItemArmor = item as Armor;
-				if (isItemArmor != null) {
-					itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + " Cost: " + isItemArmor.ItemValue + ")");
-				}
-				var isItemWeapon = item as Weapon;
-				if (isItemWeapon != null) {
-					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + " Cost: " + isItemWeapon.ItemValue + ")");
-				}
-				var isItemConsumable = item as Consumable;
-				if (isItemConsumable != null) {
-					itemInfo.Append(" (Cost: " + isItemConsumable.ItemValue + ")");
+				switch (item) {
+					case Armor isItemArmor:
+						itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + " Cost: " + isItemArmor.ItemValue + ")");
+						break;
+					case Weapon isItemWeapon:
+						itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + 
+						                " Cost: " + isItemWeapon.ItemValue + ")");
+						break;
+					case Consumable isItemConsumable:
+						if (item.Name.Contains("arrow")) {
+							itemInfo.Append(" (" + isItemConsumable.Arrow.Quantity + ")");
+						}
+						itemInfo.Append(" (Cost: " + isItemConsumable.ItemValue + ")");
+						break;
 				}
 				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 				Console.WriteLine(itemName);
@@ -110,10 +120,12 @@ namespace DungeonGame {
 			var inputName = Helper.ParseInput(userInput);
 			var index = 0;
 			if (this.BuySellType == "Healer") {
-				index = this.VendorItems.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(inputName));
+				index = this.VendorItems.FindIndex(
+					f => f.GetName() == inputName || f.GetName().Contains(inputName));
 			}
 			else {
-				index = this.VendorItems.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()));
+				index = this.VendorItems.FindIndex(
+					f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()));
 			}
 			if (index != -1) {
 				var buyArmor = this.VendorItems[index] as Armor;
@@ -128,6 +140,9 @@ namespace DungeonGame {
 					case "Weapon":
 						if (buyWeapon != null) {
 							this.BuyItem(player, userInput, buyWeapon, index);
+						}
+						if (buyConsumable != null) {
+							this.BuyItem(player, userInput, buyConsumable, index, inputName);
 						}
 						break;
 					case "Healer":
@@ -145,8 +160,6 @@ namespace DungeonGame {
 						if (buyConsumable != null) {
 							this.BuyItem(player, userInput, buyConsumable, index);
 						}
-						break;
-					default:
 						break;
 				}
 			}
@@ -180,8 +193,10 @@ namespace DungeonGame {
 		}
 		public void SellItemCheck(Player player, string[] userInput) {
 			var inputName = Helper.ParseInput(userInput);
-			var invIndex = player.Inventory.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(inputName) && f.IsEquipped() == false);
-			var conIndex = player.Consumables.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(inputName) && f.IsEquipped() == false);
+			var invIndex = player.Inventory.FindIndex(
+				f => f.GetName() == inputName || f.GetName().Contains(inputName) && f.IsEquipped() == false);
+			var conIndex = player.Consumables.FindIndex(
+				f => f.GetName() == inputName || f.GetName().Contains(inputName) && f.IsEquipped() == false);
 			if (conIndex != -1) {
 				var sellConsumable = player.Consumables[conIndex] as Consumable;
 				switch (this.BuySellType) {
@@ -231,10 +246,9 @@ namespace DungeonGame {
 						break;
 				}
 			}
-			if (invIndex == -1 && conIndex == -1) {
-				Helper.FormatFailureOutputText();
-				Console.WriteLine("You don't have that to sell!");
-			}
+			if (invIndex != -1 || conIndex != -1) return;
+			Helper.FormatFailureOutputText();
+			Console.WriteLine("You don't have that to sell!");
 		}
 		public void SellItem(Player player, string[] userInput, IEquipment sellItem, int index) {
 			Helper.FormatSuccessOutputText();
@@ -254,7 +268,8 @@ namespace DungeonGame {
 		}
 		public void RepairItem(Player player, string[] userInput) {
 			var parsedInput = Helper.ParseInput(userInput);
-			var index = player.Inventory.FindIndex(f => f.GetName() == parsedInput || f.GetName().Contains(userInput.Last()));
+			var index = player.Inventory.FindIndex(
+				f => f.GetName() == parsedInput || f.GetName().Contains(userInput.Last()));
 			if (index != -1) {
 				switch (this.BuySellType) {
 					case "Armor":
@@ -314,6 +329,7 @@ namespace DungeonGame {
 				player.HitPoints = player.MaxHitPoints;
 				player.RagePoints = player.MaxRagePoints;
 				player.ManaPoints = player.MaxManaPoints;
+				player.ComboPoints = player.MaxComboPoints;
 				Helper.FormatSuccessOutputText();
 				Console.WriteLine("You have been restored by the {0}.", this.Name);
 				return;
@@ -322,26 +338,26 @@ namespace DungeonGame {
 			Console.WriteLine("The {0} cannot restore you!", this.Name);
 		}
 		public void RepopulateHealerPotion(string inputName) {
-			var potionIndex = this.VendorItems.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(inputName));
-			if (potionIndex == -1) {
-				if (inputName.Contains("mana")) {
-					this.VendorItems.Add(
+			var potionIndex = this.VendorItems.FindIndex(
+				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+			if (potionIndex != -1) return;
+			if (inputName.Contains("mana")) {
+				this.VendorItems.Add(
 					new Consumable(
 						"minor mana potion",
 						50,
 						Consumable.PotionType.Mana,
 						50
 					));
-				}
-				else if (inputName.Contains("health")) {
-					this.VendorItems.Add(
+			}
+			else if (inputName.Contains("health")) {
+				this.VendorItems.Add(
 					new Consumable(
 						"minor health potion",
 						50,
 						Consumable.PotionType.Health,
 						50
 					));
-				}
 			}
 		}
 	}

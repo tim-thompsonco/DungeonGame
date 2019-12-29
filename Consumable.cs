@@ -1,5 +1,10 @@
-﻿namespace DungeonGame {
+﻿using System;
+
+namespace DungeonGame {
 	public class Consumable : IEquipment {
+		public enum ArrowType {
+			Standard
+		}
 		public enum PotionType {
 			Health,
 			Mana
@@ -7,9 +12,14 @@
 		public string Name { get; set; }
 		public int ItemValue { get; set; }
 		public bool Equipped { get; set; }
+		public ArrowType ArrowCategory { get; set; }
 		public PotionType PotionCategory { get; set; }
 		public RestoreHealth RestoreHealth { get; set; }
 		public RestoreMana RestoreMana { get; set; }
+		public Arrow Arrow { get; set; }
+		
+		// Default constructor for JSON serialization to work since there isn't 1 main constructor
+		public Consumable() {}
 
 		public Consumable(
 			string name,
@@ -28,9 +38,21 @@
 					this.RestoreMana = new RestoreMana(amount);
 					break;
 				default:
-					break;
+					throw new ArgumentOutOfRangeException();
 			}
 		}
+		public Consumable(
+			string name,
+			int itemValue,
+			ArrowType arrowType,
+			int amount
+		) {
+			this.Name = name;
+			this.ItemValue = itemValue;
+			this.ArrowCategory = arrowType;
+			this.Arrow = new Arrow(50);
+		}
+		
 		public string GetName() {
 			return this.Name;
 		}

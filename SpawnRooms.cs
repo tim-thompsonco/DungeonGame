@@ -55,16 +55,15 @@ namespace DungeonGame {
 				1, 
 				10, 
 				80, 
-				1000, 
+				100, 
 					new Weapon(
 						"notched axe",
 						14, 
 						24, 
 						24, 
 						1.2, 
-						true 
-						)
-				)); 
+						true,
+						Weapon.WeaponType.Axe))); 
 			this.SpawnedRooms.Add(room101);
 			var room102 = new DungeonRoom(
 				"Corridor",
@@ -100,13 +99,11 @@ namespace DungeonGame {
 						29, 
 						29, 
 						1.3, 
-						true 
-						),
+						true ,
+						Weapon.WeaponType.Dagger),
 					new Loot(
 						"large venom sac",
-						15 
-						)
-				)); 
+						15))); 
 			this.SpawnedRooms.Add(room102);
 			var room103 = new DungeonRoom(
 				"Corridor",
@@ -142,8 +139,8 @@ namespace DungeonGame {
 						22, 
 						22, 
 						1.2, 
-						true 
-						),
+						true ,
+						Weapon.WeaponType.OneHandedSword),
 					new Armor(
 						"bony chestplate",
 						Armor.ArmorSlot.Chest, 
@@ -151,15 +148,12 @@ namespace DungeonGame {
 						16, 
 						11, 
 						16, 
-						true 
-						),
+						true),
 					new Consumable(
 						"minor health potion",
 						3, 
 						Consumable.PotionType.Health, 
-						50 
-						)
-				)); 
+						50))); 
 			this.SpawnedRooms.Add(room103);
 			var room104 = new DungeonRoom(
 				"Dimly Lit Platform",
@@ -198,8 +192,8 @@ namespace DungeonGame {
 						29, 
 						29, 
 						1.2, 
-						true 
-						),
+						true ,
+						Weapon.WeaponType.OneHandedSword),
 					new Armor(
 						"bronze helmet",
 						Armor.ArmorSlot.Head, 
@@ -207,15 +201,12 @@ namespace DungeonGame {
 						12, 
 						10, 
 						12, 
-						true 
-						),
+						true),
 					new Consumable(
 						"minor mana potion",
 						3, 
 						Consumable.PotionType.Mana, 
-						50 
-						)
-				)); 
+						50))); 
 			this.SpawnedRooms.Add(room104);
 			var room105 = new DungeonRoom(
 				"Corridor",
@@ -251,8 +242,8 @@ namespace DungeonGame {
 						22, 
 						22, 
 						1.2, 
-						true 
-						),
+						true ,
+						Weapon.WeaponType.OneHandedSword),
 					new Armor(
 						"bony chestplate",
 						Armor.ArmorSlot.Chest, 
@@ -260,15 +251,12 @@ namespace DungeonGame {
 						16, 
 						11, 
 						16, 
-						true 
-						),
+						true),
 					new Consumable(
 						"minor health potion",
 						3, 
 						Consumable.PotionType.Health, 
-						50 
-						)
-				)); 
+						50))); 
 			this.SpawnedRooms.Add(room105);
 			var room106 = new DungeonRoom(
 				"Corridor",
@@ -304,13 +292,11 @@ namespace DungeonGame {
 						29, 
 						29, 
 						1.3, 
-						true 
-						),
+						true ,
+						Weapon.WeaponType.Dagger),
 					new Loot(
 						"large venom sac",
-						15 
-						)
-				)); 
+						15))); 
 			this.SpawnedRooms.Add(room106);
 			var room107 = new DungeonRoom(
 				"Pathway to Sunken Pit",
@@ -366,13 +352,11 @@ namespace DungeonGame {
 						35, 
 						35, 
 						1.1, 
-						true 
-						),
+						true ,
+						Weapon.WeaponType.Axe),
 					new Loot(
 						"ruby",
-						50 
-						)
-				)); 
+						50))); 
 			this.SpawnedRooms.Add(room108);
 			var room109 = new DungeonRoom(
 				"Stairway Leading Up",
@@ -492,8 +476,7 @@ namespace DungeonGame {
 					"A large man covered in sweat beating away at a chestplate with a hammer. He wipes his brow as " +
 					"you approach and wonders whether you're going to make him a little bit richer or not. You can: " +
 					"buy <item>, sell <item>, or <show forsale> to see what he has for sale.", 
-					"Armor"
-				)); 
+					"Armor")); 
 			this.SpawnedRooms.Add(room114);
 			var room115 = new TownRoom(
 			"Town - East",
@@ -518,8 +501,7 @@ namespace DungeonGame {
 			"A large man covered in sweat sharpening a sword against a grindstone. He wipes his brow as " +
 			"you approach and wonders whether you're going to make him a little bit richer or not. You can: " +
 			"buy <item>, sell <item>, or <show forsale> to see what he has for sale.", 
-			"Weapon"
-			)); 
+			"Weapon")); 
 			this.SpawnedRooms.Add(room115);
 			var room116 = new TownRoom(
 				"Town - Center",
@@ -544,8 +526,7 @@ namespace DungeonGame {
 				"of all your pain every so often. In fact, he may even provide you with some help that will " +
 				"be invaluable in your travels. You can buy <item>, sell <item>, or <show forsale> to see what " +
 				"he has for sale. You can also try to ask him to <heal> you.", 
-				"Healer"
-				)); 
+				"Healer")); 
 			this.SpawnedRooms.Add(room116);
 			var room117 = new TownRoom(
 				"Town - West",
@@ -569,8 +550,7 @@ namespace DungeonGame {
 				"A woman in casual work clothes looks at you and asks if you want to buy anything. She raises " +
 				"an item to show an example of what she has for sale. You can buy <item>, sell <item>, or " +
 				"<show forsale> to see what she has for sale.", 
-				"Shopkeeper"
-				)); 
+				"Shopkeeper")); 
 			this.SpawnedRooms.Add(room117);
 			var room118 = new TownRoom(
 				"Town - West",
@@ -589,8 +569,7 @@ namespace DungeonGame {
 				false, 
 				true, 
 				false, 
-				false 
-				);
+				false);
 			this.SpawnedRooms.Add(room118);
 		}
 

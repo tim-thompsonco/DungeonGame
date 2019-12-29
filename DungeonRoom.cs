@@ -80,10 +80,29 @@ namespace DungeonGame {
 			bool goDown,
 			IMonster monster
 			)
-			: this(name, desc, x, y, z, goNorth, goSouth, goEast, goWest, goNorthWest, goSouthWest, goNorthEast, goSouthEast, goUp, goDown) {
+			: this(
+				name, 
+				desc, 
+				x, 
+				y, 
+				z, 
+				goNorth, 
+				goSouth, 
+				goEast,
+				goWest,
+				goNorthWest,
+				goSouthWest, 
+				goNorthEast, 
+				goSouthEast, 
+				goUp, 
+				goDown
+				) {
 			this.Monster = monster;
 		}
 
+		public IMonster GetMonster() {
+			return this.Monster;
+		}
 		public bool AttackOpponent(Player player, string[] input) {
 			var inputString = new StringBuilder();
 			for (var i = 1; i < input.Length; i++) {
