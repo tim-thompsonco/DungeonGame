@@ -63,7 +63,7 @@ namespace DungeonGame {
 		public static void GameIntro() {
 			FormatAnnounceText();
 			Console.WriteLine(
-				"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot " +
+				"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot" +
 				"and explore dungeons. Stuff you've probably done a million times already across various RPG games. At any time " +
 				"you can get help on commands by typing 'help'.\n");
 		}
@@ -111,6 +111,12 @@ namespace DungeonGame {
 					switch(playerClass) {
 						case "Archer":
 							var playerArcher = new Player(playerName, Player.PlayerClassType.Archer);
+							Console.WriteLine("\n\nYou have selected Archer. You can 'use' an ability, for example " +
+							                  "'use gut', if you have an ability named gut shot in your abilities. To see " +
+							                  "the list of abilities you have available, you can 'list abilities'. To view info " +
+							                  "about an ability, you can 'ability' the ability name. For example, 'ability distance'. " +
+							                  "To use a bow, you must have a quiver equipped, and it must not be empty. To reload " +
+							                  "your quiver, you can 'reload'.");
 							return playerArcher;
 						case "Mage":
 							var playerMage = new Player(playerName, Player.PlayerClassType.Mage);
@@ -124,7 +130,7 @@ namespace DungeonGame {
 							Console.WriteLine("\n\nYou have selected Warrior. You can 'use' an ability, for example " +
 							                  "'use charge', if you have an ability named charge in your abilities. To see " +
 							                  "the list of abilities you have available, you can 'list abilities'. To view info " +
-							                  "about an ability, you can 'ability' the spell name. For example, 'ability charge'.");
+							                  "about an ability, you can 'ability' the ability name. For example, 'ability charge'.");
 							return playerWarrior;
 					}
 				}
@@ -172,10 +178,7 @@ namespace DungeonGame {
 			return false;
 		}
 		public static bool IsWearable(IEquipment item) {
-			if (item.GetType().Name == "Armor" || item.GetType().Name == "Weapon") {
-				return true;
-			}
-			return false;
+			return item.GetType().Name == "Armor" || item.GetType().Name == "Weapon" || item.GetType().Name == "Quiver";
 		}
 		public static void SaveGame(Player player) {
 			FormatAnnounceText();

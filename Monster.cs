@@ -18,9 +18,6 @@ namespace DungeonGame {
 		public int BleedDamage { get; set; }
 		public int BleedCurRound { get; set; }
 		public int BleedMaxRound { get; set; }
-		public bool IsFrozen { get; set; }
-		public int FrozenCurRound { get; set; }
-		public int FrozenMaxRound { get; set; }
 		public bool OnFire { get; set; }
 		public int OnFireDamage { get; set; }
 		public int OnFireCurRound { get; set; }
@@ -46,17 +43,42 @@ namespace DungeonGame {
 			this.MonsterWeapon = weapon;
 			this.MonsterItems.Add((IEquipment)this.MonsterWeapon);
 		}
-		public Monster(string name, string desc, int level, int goldCoins, int maxHp, int expProvided, Weapon weapon, Loot item)
+		public Monster(
+			string name, 
+			string desc,
+			int level,
+			int goldCoins,
+			int maxHp,
+			int expProvided, 
+			Weapon weapon, 
+			Loot item)
 			: this(name, desc, level, goldCoins, maxHp, expProvided, weapon) {
 			this.Item = item;
 			this.MonsterItems.Add((IEquipment)this.Item);
 		}
-		public Monster(string name, string desc, int level, int goldCoins, int maxHp, int expProvided, Weapon weapon, Armor armor)
+		public Monster(
+			string name,
+			string desc,
+			int level,
+			int goldCoins,
+			int maxHp, 
+			int expProvided,
+			Weapon weapon, 
+			Armor armor)
 			: this(name, desc, level, goldCoins, maxHp, expProvided, weapon) {
 			this.MonsterChestArmor = armor;
 			this.MonsterItems.Add((IEquipment)this.MonsterChestArmor);
 		}
-		public Monster(string name, string desc, int level, int goldCoins, int maxHp, int expProvided, Weapon weapon, Armor armor, Consumable consumable)
+		public Monster(
+			string name, 
+			string desc, 
+			int level,
+			int goldCoins,
+			int maxHp,
+			int expProvided,
+			Weapon weapon, 
+			Armor armor, 
+			Consumable consumable)
 			: this(name, desc, level, goldCoins, maxHp, expProvided, weapon) {
 			this.MonsterChestArmor = armor;
 			this.Consumable = consumable;
@@ -96,7 +118,7 @@ namespace DungeonGame {
 			return (int)adjArmorRating;
 		}
 		public string GetName() {
-			return this.Name.ToString();
+			return this.Name;
 		}
 		public void SetOnFire(bool onFire, int onFireDamage, int onFireCurRound, int onFireMaxRound) {
 			this.OnFire = onFire;
@@ -104,29 +126,11 @@ namespace DungeonGame {
 			this.OnFireCurRound = onFireCurRound;
 			this.OnFireMaxRound = onFireMaxRound;
 		}
-		public void BurnOnFire() {
-			this.HitPoints -= this.OnFireDamage;
-			Helper.FormatOnFireText();
-			Console.WriteLine("The {0} burns for {1} fire damage.", this.Name, this.OnFireDamage);
-			this.OnFireCurRound += 1;
-			if (this.OnFireCurRound <= this.OnFireMaxRound) return;
-			this.OnFire = false;
-			this.OnFireCurRound = 1;
-		}
 		public void StartBleeding(bool bleeding, int bleedDamage, int bleedCurRound, int bleedMaxRound) {
 			this.IsBleeding = bleeding;
 			this.BleedDamage = bleedDamage;
 			this.BleedCurRound = bleedCurRound;
 			this.BleedMaxRound = bleedMaxRound;
-		}
-		public void Bleeding() {
-			Helper.FormatAttackSuccessText();
-			this.HitPoints -= this.BleedDamage;
-			Console.WriteLine("The {0} bleeds for {1} physical damage.", this.Name, this.BleedDamage);
-			this.BleedCurRound += 1;
-			if (this.BleedCurRound <= this.BleedMaxRound) return;
-			this.IsBleeding = false;
-			this.BleedCurRound = 1;
 		}
 		public void StartStunned(bool stunned, int stunCurRound, int stunMaxRound) {
 			this.IsStunned = stunned;
@@ -139,6 +143,21 @@ namespace DungeonGame {
 			if (this.StunnedCurRound <= this.StunnedMaxRound) return;
 			this.IsStunned = false;
 			this.StunnedCurRound = 1;
+		}
+		public bool IsMonsterDead(Player player) {
+			if (this.HitPoints <= 0) this.MonsterDeath(player);
+			return this.HitPoints <= 0;
+		}
+		public void MonsterDeath(Player player) {
+			Helper.FormatSuccessOutputText();
+			Console.WriteLine("You have defeated the {0}!", this.Name);
+			foreach (var loot in this.MonsterItems) {
+				loot.Equipped = false;
+			}
+			this.Name = "Dead " + this.GetName();
+			this.Desc = "A corpse of a monster you killed.";
+			player.GainExperience(this.ExperienceProvided);
+			PlayerHelper.LevelUpCheck(player);
 		}
 	}
 }

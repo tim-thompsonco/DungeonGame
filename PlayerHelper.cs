@@ -13,27 +13,37 @@ namespace DungeonGame {
 				if (!item.IsEquipped()) continue;
 				var itemName = GetInventoryName(player, item);
 				var itemInfo = new StringBuilder(itemName);
+				if (itemName.Contains("Quiver"))
+					itemInfo.Append(" (Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity + ")");
 				itemInfo.Append(" <Equipped>");
 				Console.WriteLine(itemInfo);
 			}
 			foreach (var item in player.Inventory) {
 				if (item.IsEquipped()) continue;
 				var itemName = GetInventoryName(player, item);
+				var itemInfo = new StringBuilder(itemName);
+				if (player.PlayerQuiver.Name == itemName)
+					itemInfo.Append("Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity);
 				Console.WriteLine(itemName);
 			}
 			var consumableDict = new Dictionary<string, int>();
 			foreach (var item in player.Consumables) {
 				var itemInfo = new StringBuilder();
-				itemInfo.Append(item.GetName().ToString());
-				switch (item.PotionCategory.ToString()) {
-					case "Health":
-						itemInfo.Append(" (" + item.RestoreHealth.RestoreHealthAmt + ")");
-						break;
-					case "Mana":
-						itemInfo.Append(" (" + item.RestoreMana.RestoreManaAmt + ")");
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
+				itemInfo.Append(item.GetName());
+				if (item.Name.Contains("potion")) {
+					switch (item.PotionCategory.ToString()) {
+						case "Health":
+							itemInfo.Append(" (" + item.RestoreHealth.RestoreHealthAmt + ")");
+							break;
+						case "Mana":
+							itemInfo.Append(" (" + item.RestoreMana.RestoreManaAmt + ")");
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				}
+				if (item.Name.Contains("arrow")) {
+					itemInfo.Append(" (" + item.Arrow.Quantity + ")");
 				}
 				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 				if (!consumableDict.ContainsKey(itemName)) {
@@ -44,8 +54,8 @@ namespace DungeonGame {
 				dictValue += 1;
 				consumableDict[itemName] = dictValue;
 			}
-			foreach (var potion in consumableDict) {
-				Console.WriteLine(potion.Key + " (Quantity: {0})", potion.Value);
+			foreach (var consumable in consumableDict) {
+				Console.WriteLine(consumable.Key + " (Quantity: {0})", consumable.Value);
 			}
 			Console.WriteLine("Gold: " + player.Gold + " coins.");
 		}
@@ -120,7 +130,7 @@ namespace DungeonGame {
 				Helper.FormatInfoText();
 				Console.WriteLine("You have the following abilities:");
 				foreach (var ability in player.Abilities) {
-					var abilityName = textInfo.ToTitleCase(ability.GetName().ToString());
+					var abilityName = textInfo.ToTitleCase(ability.GetName());
 					Console.WriteLine("{0}, Rank {1}", abilityName, ability.Rank);
 				}
 			}
@@ -139,7 +149,7 @@ namespace DungeonGame {
 				Helper.FormatInfoText();
 				Console.WriteLine("Your spellbook contains:");
 				foreach (var spell in player.Spellbook) {
-					var spellName = textInfo.ToTitleCase(spell.GetName().ToString());
+					var spellName = textInfo.ToTitleCase(spell.GetName());
 					Console.WriteLine("{0}, Rank {1}", spellName, spell.Rank);
 				}
 			}
@@ -154,31 +164,32 @@ namespace DungeonGame {
 		}
 		public static void AbilityInfo(Player player, string[] input) {
 			var inputName = Helper.ParseInput(input);
-			var index = player.Abilities.FindIndex(f => f.GetName() == inputName || f.GetName().Contains(inputName));
+			var index = player.Abilities.FindIndex(
+				f => f.GetName() == inputName || f.GetName().Contains(inputName));
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (index != -1 && player.PlayerClass == Player.PlayerClassType.Warrior) {
 				Helper.FormatInfoText();
-				Console.WriteLine(textInfo.ToTitleCase(player.Abilities[index].Name.ToString()));
+				Console.WriteLine(textInfo.ToTitleCase(player.Abilities[index].Name));
 				Console.WriteLine("Rank: {0}", player.Abilities[index].Rank);
 				Console.WriteLine("Rage Cost: {0}", player.Abilities[index].RageCost);
 				switch (player.Abilities[index].AbilityCategory) {
 					case Ability.AbilityType.Slash:
-						player.Abilities[index].OffenseDamageAbilityInfo(player, index);
+						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
 					case Ability.AbilityType.Rend:
-						player.Abilities[index].OffenseDamageAbilityInfo(player, index);
+						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
 					case Ability.AbilityType.Charge:
-						player.Abilities[index].StunAbilityInfo(player, index);
+						Ability.StunAbilityInfo(player, index);
 						break;
 					case Ability.AbilityType.Block:
-						player.Abilities[index].DefenseAbilityInfo(player, index);
+						Ability.DefenseAbilityInfo(player, index);
 						break;
 					case Ability.AbilityType.Berserk:
-						player.Abilities[index].BerserkAbilityInfo(player, index);
+						Ability.BerserkAbilityInfo(player, index);
 						break;
 					case Ability.AbilityType.Disarm:
-						player.Abilities[index].DisarmAbilityInfo(player, index);
+						Ability.DisarmAbilityInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -186,24 +197,26 @@ namespace DungeonGame {
 			}
 			else if (index != -1 && player.PlayerClass == Player.PlayerClassType.Archer) {
 				Helper.FormatInfoText();
-				Console.WriteLine(textInfo.ToTitleCase(player.Abilities[index].Name.ToString()));
+				Console.WriteLine(textInfo.ToTitleCase(player.Abilities[index].Name));
 				Console.WriteLine("Rank: {0}", player.Abilities[index].Rank);
 				Console.WriteLine("Combo Cost: {0}", player.Abilities[index].ComboCost);
 				switch (player.Abilities[index].ShotCategory) {
 					case Ability.ShotType.Distance:
 						break;
 					case Ability.ShotType.Gut:
-						player.Abilities[index].OffenseDamageAbilityInfo(player, index);
+						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
 					case Ability.ShotType.Precise:
-						player.Abilities[index].OffenseDamageAbilityInfo(player, index);
+						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
 					case Ability.ShotType.Stun:
-						player.Abilities[index].StunAbilityInfo(player, index);
+						Ability.StunAbilityInfo(player, index);
 						break;
 					case Ability.ShotType.Double:
+						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
-					case Ability.ShotType.Poison:
+					case Ability.ShotType.Wound:
+						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -223,27 +236,27 @@ namespace DungeonGame {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (index != -1 && player.PlayerClass == Player.PlayerClassType.Mage) {
 				Helper.FormatInfoText();
-				Console.WriteLine(textInfo.ToTitleCase(player.Spellbook[index].Name.ToString()));
+				Console.WriteLine(textInfo.ToTitleCase(player.Spellbook[index].Name));
 				Console.WriteLine("Rank: {0}", player.Spellbook[index].Rank);
 				Console.WriteLine("Mana Cost: {0}", player.Spellbook[index].ManaCost);
 				switch(player.Spellbook[index].SpellCategory) {
 					case Spell.SpellType.Fireball:
-						player.Spellbook[index].FireOffenseSpellInfo(player, index);
+						Spell.FireOffenseSpellInfo(player, index);
 						break;
 					case Spell.SpellType.Frostbolt:
-						player.Spellbook[index].FrostOffenseSpellInfo(player, index);
+						Spell.FrostOffenseSpellInfo(player, index);
 						break;
 					case Spell.SpellType.Lightning:
-						player.Spellbook[index].ArcaneOffenseSpellInfo(player, index);
+						Spell.ArcaneOffenseSpellInfo(player, index);
 						break;
 					case Spell.SpellType.Heal:
-						player.Spellbook[index].HealingSpellInfo(player, index);
+						Spell.HealingSpellInfo(player, index);
 						break;
 					case Spell.SpellType.Rejuvenate:
-						player.Spellbook[index].HealingSpellInfo(player, index);
+						Spell.HealingSpellInfo(player, index);
 						break;
 					case Spell.SpellType.Diamondskin:
-						player.Spellbook[index].DefenseSpellInfo(player, index);
+						Spell.DefenseSpellInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

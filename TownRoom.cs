@@ -28,6 +28,7 @@ namespace DungeonGame {
 		// List of objects in room (including monsters)
 		private readonly List<IRoomInteraction> _roomObjects = new List<IRoomInteraction>();
 		public IVendor Vendor;
+		public IMonster Monster;
 
 		public TownRoom(
 			string name,
@@ -80,25 +81,39 @@ namespace DungeonGame {
 			bool goDown,
 			IVendor vendor
 			)
-			: this(name, desc, x, y, z, goNorth, goSouth, goEast, goWest, goNorthWest, goSouthWest, goNorthEast, goSouthEast, goUp, goDown) {
+			: this(name, 
+				desc, 
+				x, 
+				y, 
+				z,
+				goNorth,
+				goSouth, 
+				goEast,
+				goWest,
+				goNorthWest, 
+				goSouthWest,
+				goNorthEast, 
+				goSouthEast, 
+				goUp, 
+				goDown) {
 			this.Vendor = vendor;
 		}
 
+		public IMonster GetMonster() {
+			return this.Monster;
+		}
 		public bool AttackOpponent(Player player, string[] input) {
 			return true;
 		}
 		public void LootCorpse(Player player, string[] input) { }
 		public void RebuildRoomObjects() {
-			if (this._roomObjects != null) {
-				this._roomObjects.Clear();
-			}
-
+			this._roomObjects?.Clear();
 			this._roomObjects.Add((IRoomInteraction) this.Vendor);
 		}
 		public void ShowCommands() {
 			Helper.FormatGeneralInfoText();
 			Console.Write("Available Commands: ");
-			Console.WriteLine(String.Join(", ", this.Commands));
+			Console.WriteLine(string.Join(", ", this.Commands));
 		}
 		public void ShowDirections() {
 			Console.ForegroundColor = ConsoleColor.DarkCyan;
