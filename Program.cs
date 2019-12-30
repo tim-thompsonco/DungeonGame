@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -8,6 +9,10 @@ namespace DungeonGame {
 		public static void Main(string[] args) {
 			while (true) {
 				// Game loading commands
+				Console.BufferHeight = 50;
+				Console.BufferWidth = 150;
+				Console.WindowHeight = 50;
+				Console.WindowWidth = 150;
 				Helper.GameIntro();
 				Player player;
 				try {
@@ -114,6 +119,9 @@ namespace DungeonGame {
 								Console.WriteLine("You do not have enough mana to cast that spell!");
 								continue;
 							}
+						case "map":
+							Helper.ShowMap(spawnedRooms, player, 10, 20);
+							break;
 						case "use":
 							try {
 								if (input.Contains("distance")) {

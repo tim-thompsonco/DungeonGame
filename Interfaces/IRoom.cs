@@ -1,5 +1,6 @@
 ﻿namespace DungeonGame {
 	public interface IRoom {
+		bool IsDiscovered { get; set; }
 		bool GoNorth { get; set; }
 		bool GoSouth { get; set; }
 		bool GoEast { get; set; }

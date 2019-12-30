@@ -6,6 +6,7 @@ using System.Text;
 
 namespace DungeonGame {
 	public class TownRoom : IRoom {
+		public bool IsDiscovered { get; set; }
 		public bool GoNorth { get; set; }
 		public bool GoSouth { get; set; }
 		public bool GoEast { get; set; }

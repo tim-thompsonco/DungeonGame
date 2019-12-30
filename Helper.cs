@@ -3,6 +3,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Collections.Generic;
+using System.Security.AccessControl;
 using System.Text;
 
 namespace DungeonGame {
@@ -42,6 +43,27 @@ namespace DungeonGame {
 		}
 		public static void FormatAnnounceText() {
 			Console.ForegroundColor = ConsoleColor.Gray;
+		}
+		public static void ShowImpassibleDungeonTile() {
+			Console.BackgroundColor = ConsoleColor.Black;
+			Console.Write("  ");
+		}
+		public static void ShowPlayerDungeonTile() {
+			Console.BackgroundColor = ConsoleColor.Green;
+			Console.Write("  ");
+		}
+		public static void ShowPlayerDungeonUpDownTile() {
+			Console.BackgroundColor = ConsoleColor.Green;
+			Console.ForegroundColor = ConsoleColor.Black;
+			Console.Write("OO");
+		}
+		public static void ShowDiscoveredDungeonTile() {
+			Console.BackgroundColor = ConsoleColor.DarkGray;
+			Console.Write("  ");
+		}
+		public static void ShowDiscoveredDungeonUpDownTile() {
+			Console.BackgroundColor = ConsoleColor.DarkGray;
+			Console.Write("OO");
 		}
 		public static string ParseInput(string[] userInput) {
 			var inputString = new StringBuilder();
@@ -141,20 +163,18 @@ namespace DungeonGame {
 			Console.WriteLine("Not a valid command.");
 		}
 		public static int ChangeRoom(List<IRoom> roomList, Player player, int x, int y, int z) {
+			// Player location is changed to the new coordinates
 			player.X += x;
 			player.Y += y;
 			player.Z += z;
-			// Set player location to location of room found in search
+			// Room at new coordinates is found and room description displayed for user
 			var roomName = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
 			var roomIndex = roomList.IndexOf(roomName);
 			roomList[roomIndex].LookRoom();
+			if (!roomList[roomIndex].IsDiscovered) roomList[roomIndex].IsDiscovered = true;
 			var roomType = roomList[roomIndex].GetType().Name;
-			if (roomType == "DungeonRoom") {
-				player.CanSave = false;
-			}
-			else {
-				player.CanSave = true;
-			}
+			player.CanSave = roomType != "DungeonRoom";
+			ShowMap(roomList, player, 5, 10);
 			return roomIndex;
 		}
 		public static void InvalidDirection() {
@@ -233,6 +253,43 @@ namespace DungeonGame {
 				roomIndex = ChangeRoom(roomList, player, -1, -1, 0);
 			}
 			return roomIndex;
+		}
+		public static void ShowMap(List<IRoom> roomList, Player player, int height, int width) {
+			/* Map starts drawing from top left, so it needs to decrement since
+			each new console writeline pushes screen down instead of up */ 
+			for (var i = player.Y + height; i > player.Y - height; i--) {
+				for (var j = player.X - width; j < player.X + width; j ++) {
+					var mapX = j;
+					var mapY = i;
+					var mapZ = player.Z;
+					var roomName = roomList.Find(f => f.X == mapX && f.Y == mapY && f.Z == mapZ);
+					var roomIndex = roomList.IndexOf(roomName);
+					if (roomIndex != -1 &&
+					    mapX == player.X &&
+					    mapY == player.Y &&
+					    mapZ == player.Z) {
+						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
+							ShowPlayerDungeonUpDownTile();
+							continue;
+						}
+						ShowPlayerDungeonTile();
+						continue;
+					}
+					if (roomIndex != -1 && roomList[roomIndex].IsDiscovered) {
+						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
+							ShowDiscoveredDungeonUpDownTile();
+							continue;
+						}
+						ShowDiscoveredDungeonTile();
+						continue;
+					}
+					ShowImpassibleDungeonTile();
+				}
+				// End of each j loop should create new line on console
+				Console.WriteLine();
+			}
+			// Restore console background color to default
+			Console.BackgroundColor = ConsoleColor.Black;
 		}
 	}
 }
