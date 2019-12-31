@@ -28,9 +28,11 @@ namespace DungeonGame {
 			this.Quantity -= 1;
 		}
 
-		public void OutOfArrows() {
-			Helper.FormatAttackFailText();
-			Console.WriteLine("You ran out of arrows! Going hand to hand!");
+		public void OutOfArrows(UserOutput output) {
+			output.StoreUserOutput(
+				Helper.FormatAttackFailText(),
+				Helper.FormatDefaultBackground(),
+				"You ran out of arrows! Going hand to hand!");
 		}
 	}
 }

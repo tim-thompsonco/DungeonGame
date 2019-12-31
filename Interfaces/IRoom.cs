@@ -19,11 +19,11 @@
 
 		IMonster GetMonster();
 		bool AttackOpponent(Player player, string[] input, UserOutput output);
-		void LootCorpse(Player player, string[] input);
+		void LootCorpse(Player player, string[] input, UserOutput output);
 		void RebuildRoomObjects();
 		void ShowDirections(UserOutput output);
 		void ShowCommands(UserOutput output);
 		void LookRoom(UserOutput output);
-		void LookNpc(string[] input);
+		void LookNpc(string[] input, UserOutput output);
 	}
 }

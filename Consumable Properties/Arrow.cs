@@ -8,9 +8,12 @@ namespace DungeonGame {
 			this.Quantity = quantity;
 		}
 
-		public void LoadArrowsPlayer(Player player) {
+		public void LoadArrowsPlayer(Player player, UserOutput output) {
 			if (player.PlayerQuiver == null) {
-				Console.WriteLine("You don't have a quiver to reload!");
+				output.StoreUserOutput(
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					"You don't have a quiver to reload!");
 				return;
 			}
 			var amountCanLoad = player.PlayerQuiver.MaxQuantity - player.PlayerQuiver.Quantity;

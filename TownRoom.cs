@@ -106,7 +106,7 @@ namespace DungeonGame {
 		public bool AttackOpponent(Player player, string[] input, UserOutput output) {
 			return true;
 		}
-		public void LootCorpse(Player player, string[] input) { }
+		public void LootCorpse(Player player, string[] input, UserOutput output) { }
 		public void RebuildRoomObjects() {
 			this._roomObjects?.Clear();
 			this._roomObjects.Add((IRoomInteraction) this.Vendor);
@@ -233,7 +233,7 @@ namespace DungeonGame {
 			output.StoreUserOutput(sameLineOutput); 
 			this.ShowDirections(output);
 		}
-		public void LookNpc(string[] input) {
+		public void LookNpc(string[] input, UserOutput output) {
 			var inputString = new StringBuilder();
 			for (var i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);

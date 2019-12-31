@@ -284,7 +284,7 @@ namespace DungeonGame {
 			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
-		public int Attack() {
+		public int Attack(UserOutput output) {
 			try {
 				if (this.PlayerWeapon.IsEquipped() && this.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
 					return this.PlayerWeapon.Attack();
@@ -295,7 +295,7 @@ namespace DungeonGame {
 					this.PlayerQuiver.UseArrow();
 					return this.PlayerWeapon.Attack();
 				}
-				this.PlayerQuiver.OutOfArrows();
+				this.PlayerQuiver.OutOfArrows(output);
 			}
 			catch (NullReferenceException) {
 				Helper.FormatFailureOutputText();
@@ -340,12 +340,12 @@ namespace DungeonGame {
 					break;
 			}
 		}
-		public void ReloadQuiver() {
+		public void ReloadQuiver(UserOutput output) {
 			var index = 0;
 			index = this.Consumables.FindIndex(
 				f => f.ArrowCategory == Consumable.ArrowType.Standard && f.Name.Contains("arrow"));
 			if (index != -1) {
-				this.Consumables[index].Arrow.LoadArrowsPlayer(this);
+				this.Consumables[index].Arrow.LoadArrowsPlayer(this, output);
 				Helper.FormatSuccessOutputText();
 				Console.WriteLine("You reloaded your quiver.");
 				if (this.Consumables[index].Arrow.Quantity == 0) this.Consumables.RemoveAt(index);

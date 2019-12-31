@@ -125,13 +125,19 @@ namespace DungeonGame {
 					}
 				}
 				else {
-					Helper.FormatFailureOutputText();
-					Console.WriteLine("The {0} is already dead.", this.Monster.Name);
+					var monsterDeadString = "The " + this.Monster.Name + " is already dead."; 
+					output.StoreUserOutput(
+						Helper.FormatFailureOutputText(),
+						Helper.FormatDefaultBackground(),
+						monsterDeadString);
 				}
 			}
 			else {
-				Helper.FormatFailureOutputText();
-				Console.WriteLine("There is no {0} to attack.", inputName);
+				var noMonsterString = "There is no " + inputName + " to attack.";
+				output.StoreUserOutput(
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					noMonsterString);
 			}
 			return true;
 		}
@@ -261,7 +267,7 @@ namespace DungeonGame {
 			output.StoreUserOutput(sameLineOutput);
 			this.ShowDirections(output);
 		}
-		public void LootCorpse(Player player, string[] input) {
+		public void LootCorpse(Player player, string[] input, UserOutput output) {
 			var inputString = new StringBuilder();
 			for (var i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
@@ -282,34 +288,47 @@ namespace DungeonGame {
 							else {
 								player.Inventory.Add(loot);
 							}
-							Helper.FormatSuccessOutputText();
-							Console.WriteLine("You looted {0} from the {1}!", loot.GetName(), this.Monster.Name);
+							var lootItemString = "You looted " + loot.GetName() + " from the " + this.Monster.Name + "!";
+							output.StoreUserOutput(
+								Helper.FormatSuccessOutputText(),
+								Helper.FormatDefaultBackground(),
+								lootItemString);
 						}
 					}
 					catch (InvalidOperationException) {
 					}
-
 					this.Monster.MonsterItems.Clear();
 					this.Monster.Gold = 0;
 					this.Monster.WasLooted = true;
-					Helper.FormatSuccessOutputText();
-					Console.WriteLine("You looted {0} gold coins from the {1}!", goldLooted, this.Monster.Name);
+					var lootGoldString = "You looted " + goldLooted + " gold coins from the " + this.Monster.Name + "!";
+					output.StoreUserOutput(
+						Helper.FormatSuccessOutputText(),
+						Helper.FormatDefaultBackground(),
+						lootGoldString);
 				}
 				else if (this.Monster.WasLooted) {
-					Helper.FormatFailureOutputText();
-					Console.WriteLine("You already looted {0}!", this.Monster.Name);
+					var alreadyLootString = "You already looted " + this.Monster.Name + "!";
+					output.StoreUserOutput(
+						Helper.FormatFailureOutputText(),
+						Helper.FormatDefaultBackground(),
+						alreadyLootString);
 				}
 				else {
-					Helper.FormatFailureOutputText();
-					Console.WriteLine("You cannot loot something that isn't dead!");
+						output.StoreUserOutput(
+							Helper.FormatFailureOutputText(),
+							Helper.FormatDefaultBackground(),
+							"You cannot loot something that isn't dead!");
 				}
 			}
 			else {
-				Helper.FormatFailureOutputText();
-				Console.WriteLine("There is no {0} in the room!", inputName);
+				var noLootString = "There is no " + inputName + " in the room!"; 
+				output.StoreUserOutput(
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					noLootString);
 			}
 		}
-		public void LookNpc(string[] input) {
+		public void LookNpc(string[] input, UserOutput output) {
 			var inputString = new StringBuilder();
 			for (var i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
@@ -318,16 +337,37 @@ namespace DungeonGame {
 			var inputName = inputString.ToString().Trim();
 			var monsterName = this.Monster.GetName().Split(' ');
 			if (monsterName.Last() == inputName || this.Monster.GetName() == inputName) {
-				Console.ForegroundColor = ConsoleColor.DarkCyan;
-				Console.WriteLine(this.Monster.Desc);
-				Console.Write("\nHe is carrying:\n");
+				output.StoreUserOutput(
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					this.Monster.Desc);
+				var sameLineOutput = new List<string>() {
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					"He is carrying:"};
+				var objCount = this.Monster.MonsterItems.Count;
+				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (var loot in this.Monster.MonsterItems) {
-					Console.WriteLine(string.Join(", ", loot.GetName()));
+					var sb = new StringBuilder();
+					var itemTitle = loot.GetName();
+					itemTitle = textInfo.ToTitleCase(itemTitle);
+					sb.Append(itemTitle);
+					if (this.Monster.MonsterItems[objCount - 1] != loot) {
+						sb.Append(", ");
+					}
+					sb.Append(".");
+					sameLineOutput.Add(Helper.FormatFailureOutputText());
+					sameLineOutput.Add(Helper.FormatDefaultBackground());
+					sameLineOutput.Add(sb.ToString());
 				}
+				output.StoreUserOutput(sameLineOutput);
 			}
 			else {
-				Helper.FormatFailureOutputText();
-				Console.WriteLine("There is no {0} in the room!", inputName);
+				var noNpcString = "There is no " + inputName + " in the room!";
+				output.StoreUserOutput(
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					noNpcString);
 			}
 		}
 	}
