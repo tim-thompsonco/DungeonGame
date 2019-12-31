@@ -7,16 +7,16 @@ namespace DungeonGame {
 		private string[] Commands { get; set; } = new string[3] {
 		"[F]ight", "[I]nventory", "Flee" };
 
-		public bool SingleCombat(IMonster opponent, Player player) {
+		public bool SingleCombat(IMonster opponent, Player player, UserOutput output) {
 			Helper.FormatSuccessOutputText();
 			Console.WriteLine("{0}, you have encountered a {1}. Time to fight!",
 				player.Name, opponent.Name);
 			while (true) {
-				PlayerHelper.DisplayPlayerStats(player);
+				PlayerHelper.DisplayPlayerStats(player, output);
 				opponent.DisplayStats();
 				Console.Write("Available Commands: ");
 				Console.WriteLine(string.Join(", ", this.Commands));
-				Helper.RequestCommand();
+				Helper.RequestCommand(output);
 				var input = Helper.GetFormattedInput();
 				Console.WriteLine(); // To add a blank space between the command and fight sequence
 				switch (input[0]) {
@@ -39,14 +39,14 @@ namespace DungeonGame {
 								attackDamage - opponent.ArmorRating(player));
 							opponent.TakeDamage(attackDamage - opponent.ArmorRating(player));
 						}
-						if (opponent.IsMonsterDead(player)) return true;
+						if (opponent.IsMonsterDead(player, output)) return true;
 						break;
 					case "cast":
 						try {
 							if (input[1] != null) {
 								var spellName = Helper.ParseInput(input);
 								player.CastSpell(opponent, spellName);
-								if (opponent.IsMonsterDead(player)) return true;
+								if (opponent.IsMonsterDead(player, output)) return true;
 							}
 							break;
 						}
@@ -70,7 +70,7 @@ namespace DungeonGame {
 							if (input[1] != null) {
 								var abilityName = Helper.ParseInput(input);
 								player.UseAbility(opponent, abilityName);
-								if (opponent.IsMonsterDead(player)) return true;
+								if (opponent.IsMonsterDead(player, output)) return true;
 							}
 							break;
 						}
@@ -131,7 +131,7 @@ namespace DungeonGame {
 						break;
 					case "i":
 					case "inventory":
-						PlayerHelper.ShowInventory(player);
+						PlayerHelper.ShowInventory(player, output);
 						continue;
 					case "list":
 						switch (input[1]) {
@@ -157,7 +157,7 @@ namespace DungeonGame {
 						break;
 					case "ability":
 						try {
-							PlayerHelper.AbilityInfo(player, input);
+							PlayerHelper.AbilityInfo(player, input, output);
 						}
 						catch (IndexOutOfRangeException) {
 							Helper.FormatFailureOutputText();
@@ -180,11 +180,11 @@ namespace DungeonGame {
 				if (player.IsHealing) this.HealingRound(player);
 				if (opponent.OnFire) {
 					this.BurnOnFire(opponent);
-					if (opponent.IsMonsterDead(player)) return true;
+					if (opponent.IsMonsterDead(player, output)) return true;
 				}
 				if (opponent.IsBleeding) {
 					this.Bleeding(opponent);
-					if (opponent.IsMonsterDead(player)) return true;
+					if (opponent.IsMonsterDead(player, output)) return true;
 				}
 				if (player.IsArmorChanged) this.ChangeArmorRound(player);
 				if (player.IsDamageChanged) this.ChangeDamageRound(player);

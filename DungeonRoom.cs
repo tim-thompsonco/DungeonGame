@@ -104,7 +104,7 @@ namespace DungeonGame {
 		public IMonster GetMonster() {
 			return this.Monster;
 		}
-		public bool AttackOpponent(Player player, string[] input) {
+		public bool AttackOpponent(Player player, string[] input, UserOutput output) {
 			var inputString = new StringBuilder();
 			for (var i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
@@ -115,10 +115,10 @@ namespace DungeonGame {
 			if (monsterName.Last() == inputName || this.Monster.GetName() == inputName) {
 				if (this.Monster.HitPoints > 0) {
 					var fightEvent = new CombatHelper();
-					var outcome = fightEvent.SingleCombat(this.Monster, player);
+					var outcome = fightEvent.SingleCombat(this.Monster, player, output);
 					switch (outcome) {
 						case false when player.HitPoints <= 0:
-							Helper.PlayerDeath();
+							Helper.PlayerDeath(output);
 							return false;
 						case false:
 							return false;
@@ -146,71 +146,109 @@ namespace DungeonGame {
 			Console.Write("Available Commands: ");
 			Console.WriteLine(string.Join(", ", this.Commands));
 		}
-		public void ShowDirections() {
-			Console.ForegroundColor = ConsoleColor.DarkCyan;
-			Console.Write("Available Directions: ");
-			Helper.FormatRoomInfoText();
+		public void ShowDirections(UserOutput output) {
+			var sameLineOutput = new List<string> {"darkcyan", "black", "Available Directions: "};
+			Helper.FormatRoomInfoText(); // white
+			var sb = new StringBuilder();
 			if (this.GoNorth) {
-				Console.Write("[N]orth ");
+				sameLineOutput.Add("white");
+				sameLineOutput.Add("black");
+				sameLineOutput.Add("[N]orth ");
 			}
 			if (this.GoSouth) {
-				Console.Write("[S]outh ");
+				sameLineOutput.Add("white");
+				sameLineOutput.Add("black");
+				sameLineOutput.Add("[S]outh ");
 			}
 			if (this.GoEast) {
-				Console.Write("[E]ast ");
+				sameLineOutput.Add("white");
+				sameLineOutput.Add("black");
+				sameLineOutput.Add("[E]ast ");
 			}
 			if (this.GoWest) {
-				Console.Write("[W]est ");
+				sameLineOutput.Add("white");
+				sameLineOutput.Add("black");
+				sameLineOutput.Add("[W]est ");
 			}
 			if (this.GoNorthWest) {
-				Console.Write("[N]orth[W]est ");
+				sameLineOutput.Add("white");
+				sameLineOutput.Add("black");
+				sameLineOutput.Add("[N]orth[W]est ");
 			}
 			if (this.GoSouthWest) {
-				Console.Write("[S]outh[W]est ");
+				sameLineOutput.Add("white");
+				sameLineOutput.Add("black");
+				sameLineOutput.Add("[S]outh[W]est ");
 			}
 			if (this.GoNorthEast) {
-				Console.Write("[N]orth[E]ast ");
+				sameLineOutput.Add("white");
+				sameLineOutput.Add("black");
+				sameLineOutput.Add("[N]orth[E]ast ");
 			}
 			if (this.GoSouthEast) {
-				Console.Write("[S]outh[E]ast ");
+				sameLineOutput.Add("white");
+				sameLineOutput.Add("black");
+				sameLineOutput.Add("[S]outh[E]ast ");
 			}
 			if (this.GoUp) {
-				Console.Write("[U]p ");
+				sameLineOutput.Add("white");
+				sameLineOutput.Add("black");
+				sameLineOutput.Add("[U]p ");
 			}
 			if (this.GoDown) {
-				Console.Write("[D]own ");
+				sameLineOutput.Add("white");
+				sameLineOutput.Add("black");
+				sameLineOutput.Add("[D]own");
 			}
-			Console.WriteLine();
+			output.StoreUserOutput(sameLineOutput);
 		}
-		public void LookRoom() {
-			Console.ForegroundColor = ConsoleColor.DarkGreen;
-			Console.WriteLine("==================================================");
-			Console.ForegroundColor = ConsoleColor.DarkCyan;
-			Console.WriteLine(this.Name);
-			Console.ForegroundColor = ConsoleColor.DarkGreen;
-			Console.WriteLine("==================================================");
-			Console.ForegroundColor = ConsoleColor.DarkCyan;
-			Console.WriteLine(this.Desc);
-			Console.ForegroundColor = ConsoleColor.DarkGreen;
-			Console.WriteLine("==================================================");
-			Console.ForegroundColor = ConsoleColor.DarkCyan;
-			Console.Write("Room Contents: ");
-			Helper.FormatRoomInfoText();
+		public void LookRoom(UserOutput output) {
+			output.StoreUserOutput(
+				"darkgreen", 
+				"black", 
+				"==================================================");
+			output.StoreUserOutput(
+				"darkcyan", 
+				"black", 
+				this.Name);
+			output.StoreUserOutput(
+				"darkgreen", 
+				"black", 
+				"==================================================");
+			output.StoreUserOutput(
+				"darkcyan", 
+				"black", 
+				this.Desc);
+			output.StoreUserOutput(
+				"darkgreen", 
+				"black", 
+				"==================================================");
+			var sameLineOutput = new List<string> {"darkcyan", "black", "Room Contents: "};
 			this.RebuildRoomObjects();
 			if (this._roomObjects.Count > 0 && this._roomObjects[0] != null) {
+				var objCount = this._roomObjects.Count;
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (var item in this._roomObjects) {
-					var itemTitle = item.GetName().ToString();
+					var sb = new StringBuilder();
+					var itemTitle = item.GetName();
 					itemTitle = textInfo.ToTitleCase(itemTitle);
-					Console.Write(string.Join(", ", itemTitle));
+					sb.Append(itemTitle);
+					if (this._roomObjects[objCount - 1] != item) {
+						sb.Append(", ");
+					}
+					sb.Append(".");
+					sameLineOutput.Add("white");
+					sameLineOutput.Add("black");
+					sameLineOutput.Add(sb.ToString());
 				}
 			}
 			else {
-				Helper.FormatRoomInfoText();
-				Console.Write("There is nothing in the room");
+				sameLineOutput.Add("white");
+				sameLineOutput.Add("black");
+				sameLineOutput.Add("There is nothing in the room.");
 			}
-			Console.WriteLine("."); // Add period at end of list of objects in room
-			this.ShowDirections();
+			output.StoreUserOutput(sameLineOutput);
+			this.ShowDirections(output);
 		}
 		public void LootCorpse(Player player, string[] input) {
 			var inputString = new StringBuilder();

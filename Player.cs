@@ -355,7 +355,7 @@ namespace DungeonGame {
 				Console.WriteLine("You don't have any arrows!");
 			}
 		}
-		public void UseAbility(List<IRoom> spawnedRooms, string[] input) {
+		public void UseAbility(List<IRoom> spawnedRooms, string[] input, UserOutput output) {
 			var index = this.Abilities.FindIndex(
 				f => f.GetName() == input[1] || f.GetName().Contains(input[1]));
 			var direction = input.Last();
@@ -385,7 +385,7 @@ namespace DungeonGame {
 			    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
 				switch (this.Abilities[index].ShotCategory) {
 					case Ability.ShotType.Distance:
-						Ability.UseDistanceAbility(spawnedRooms, this, index, direction);
+						Ability.UseDistanceAbility(spawnedRooms, this, index, direction, output);
 						return;
 					case Ability.ShotType.Gut:
 						return;

@@ -5,9 +5,8 @@ using System.Text;
 
 namespace DungeonGame {
 	public static class PlayerHelper {
-		public static void ShowInventory(Player player) {
-			Helper.FormatInfoText();
-			Console.WriteLine("Your inventory contains:\n");
+		public static void ShowInventory(Player player, UserOutput output) {
+			output.StoreUserOutput("white", "black","Your inventory contains:" );
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (var item in player.Inventory) {
 				if (!item.IsEquipped()) continue;
@@ -16,7 +15,7 @@ namespace DungeonGame {
 				if (itemName.Contains("Quiver"))
 					itemInfo.Append(" (Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity + ")");
 				itemInfo.Append(" <Equipped>");
-				Console.WriteLine(itemInfo);
+				output.StoreUserOutput("white", "black",itemInfo.ToString());
 			}
 			foreach (var item in player.Inventory) {
 				if (item.IsEquipped()) continue;
@@ -24,7 +23,7 @@ namespace DungeonGame {
 				var itemInfo = new StringBuilder(itemName);
 				if (player.PlayerQuiver.Name == itemName)
 					itemInfo.Append("Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity);
-				Console.WriteLine(itemName);
+				output.StoreUserOutput("white", "black",itemInfo.ToString());
 			}
 			var consumableDict = new Dictionary<string, int>();
 			foreach (var item in player.Consumables) {
@@ -55,9 +54,11 @@ namespace DungeonGame {
 				consumableDict[itemName] = dictValue;
 			}
 			foreach (var consumable in consumableDict) {
-				Console.WriteLine(consumable.Key + " (Quantity: {0})", consumable.Value);
+				var consumableString = consumable.Key + " (Quantity: " + consumable.Value + ")";
+				output.StoreUserOutput("white", "black",consumableString);
 			}
-			Console.WriteLine("Gold: " + player.Gold + " coins.");
+			var goldString = "Gold: " + player.Gold + " coins.";
+			output.StoreUserOutput("white", "black",goldString);
 		}
 		public static string GetInventoryName(Player player, IEquipment item) {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
@@ -74,7 +75,7 @@ namespace DungeonGame {
 			var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 			return itemName;
 		}
-		public static void LevelUpCheck(Player player) {
+		public static void LevelUpCheck(Player player, UserOutput output) {
 			if (player.Experience < player.ExperienceToLevel) return;
 			player.Level += 1;
 			player.Experience -= player.ExperienceToLevel;
@@ -101,28 +102,48 @@ namespace DungeonGame {
 			player.RagePoints = player.MaxRagePoints;
 			player.ComboPoints = player.MaxComboPoints;
 			player.ManaPoints = player.MaxManaPoints;
-			Helper.FormatLevelUpText();
-			Console.WriteLine("You have leveled! You are now level {0}.", player.Level);
+			var levelUpString = "You have leveled! You are now level " + player.Level + ".";
+			output.StoreUserOutput("cyan", "black", levelUpString);
 		}
-		public static void DisplayPlayerStats(Player player) {
+		public static void DisplayPlayerStats(Player player, UserOutput output) {
 			Helper.FormatGeneralInfoText();
-			Console.WriteLine("==================================================");
-			Console.Write("Health: {0}/{1} ", player.HitPoints, player.MaxHitPoints);
+			output.StoreUserOutput(
+				"darkgreen",
+				"black",
+				"==================================================");
+			var playerHealthString = "Health: " + player.HitPoints + "/" + player.MaxHitPoints + " ";
+			var sameLineOutput = new List<string>() {"darkgreen", "black", playerHealthString};
 			switch (player.PlayerClass) {
 				case Player.PlayerClassType.Mage:
-					Console.Write("Mana: {0}/{1} ", player.ManaPoints, player.MaxManaPoints);
+					var playerManaString = "Mana: " + player.ManaPoints + "/" + player.MaxManaPoints + " ";
+					sameLineOutput.Add("darkgreen");
+					sameLineOutput.Add("black");
+					sameLineOutput.Add(playerManaString);
 					break;
 				case Player.PlayerClassType.Warrior:
-					Console.Write("Rage: {0}/{1} ", player.RagePoints, player.MaxRagePoints);
+					var playerRageString = "Rage: " + player.RagePoints + "/" + player.MaxRagePoints + " ";
+					sameLineOutput.Add("darkgreen");
+					sameLineOutput.Add("black");
+					sameLineOutput.Add(playerRageString);
 					break;
 				case Player.PlayerClassType.Archer:
-					Console.Write("Combo: {0}/{1} ", player.ComboPoints, player.MaxComboPoints);
+					var playerComboString = "Combo: " + player.ComboPoints + "/" + player.MaxComboPoints + " ";
+					sameLineOutput.Add("darkgreen");
+					sameLineOutput.Add("black");
+					sameLineOutput.Add(playerComboString);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			Console.WriteLine("EXP: {0} LVL: {1}", player.Experience, player.Level);
-			Console.WriteLine("==================================================");
+			var expLevelString = "EXP: " +  player.Experience + " LVL: " + player.Level;
+			sameLineOutput.Add("darkgreen");
+			sameLineOutput.Add("black");
+			sameLineOutput.Add(expLevelString);
+			output.StoreUserOutput(sameLineOutput);
+			output.StoreUserOutput(
+				"darkgreen",
+				"black",
+				"==================================================");
 		}
 		public static void ListAbilities(Player player) {
 			if (player.PlayerClass != Player.PlayerClassType.Mage) {
@@ -162,7 +183,7 @@ namespace DungeonGame {
 				Console.WriteLine("You can't list that.");
 			}
 		}
-		public static void AbilityInfo(Player player, string[] input) {
+		public static void AbilityInfo(Player player, string[] input, UserOutput output) {
 			var inputName = Helper.ParseInput(input);
 			var index = player.Abilities.FindIndex(
 				f => f.GetName() == inputName || f.GetName().Contains(inputName));

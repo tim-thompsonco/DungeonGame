@@ -166,7 +166,12 @@ namespace DungeonGame {
 				player.Abilities[index].Offensive.ChanceToSucceed);
 			Console.WriteLine("Usage example if monster is in room to north. 'use distance north'");
 		}
-		public static void UseDistanceAbility(List<IRoom> spawnedRooms, Player player, int index, string direction) {
+		public static void UseDistanceAbility(
+			List<IRoom> spawnedRooms,
+			Player player,
+			int index,
+			string direction, 
+			UserOutput output) {
 			var targetX = player.X;
 			var targetY = player.Y;
 			var targetZ = player.Z;
@@ -239,7 +244,7 @@ namespace DungeonGame {
 				Console.WriteLine("You successfully shot {0} from afar for {1} damage!", 
 					opponent.Name,
 					player.Abilities[index].Offensive.Amount);
-				opponent.IsMonsterDead(player);
+				opponent.IsMonsterDead(player, output);
 			}
 		}
 		public static void DefenseAbilityInfo(Player player, int index) {

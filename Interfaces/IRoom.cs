@@ -18,12 +18,12 @@
 		int Z { get; set; }
 
 		IMonster GetMonster();
-		bool AttackOpponent(Player player, string[] input);
+		bool AttackOpponent(Player player, string[] input, UserOutput output);
 		void LootCorpse(Player player, string[] input);
 		void RebuildRoomObjects();
-		void ShowDirections();
+		void ShowDirections(UserOutput output);
 		void ShowCommands();
-		void LookRoom();
+		void LookRoom(UserOutput output);
 		void LookNpc(string[] input);
 	}
 }

@@ -144,11 +144,11 @@ namespace DungeonGame {
 			this.IsStunned = false;
 			this.StunnedCurRound = 1;
 		}
-		public bool IsMonsterDead(Player player) {
-			if (this.HitPoints <= 0) this.MonsterDeath(player);
+		public bool IsMonsterDead(Player player, UserOutput output) {
+			if (this.HitPoints <= 0) this.MonsterDeath(player, output);
 			return this.HitPoints <= 0;
 		}
-		public void MonsterDeath(Player player) {
+		public void MonsterDeath(Player player, UserOutput output) {
 			Helper.FormatSuccessOutputText();
 			Console.WriteLine("You have defeated the {0}!", this.Name);
 			foreach (var loot in this.MonsterItems) {
@@ -157,7 +157,7 @@ namespace DungeonGame {
 			this.Name = "Dead " + this.GetName();
 			this.Desc = "A corpse of a monster you killed.";
 			player.GainExperience(this.ExperienceProvided);
-			PlayerHelper.LevelUpCheck(player);
+			PlayerHelper.LevelUpCheck(player, output);
 		}
 	}
 }

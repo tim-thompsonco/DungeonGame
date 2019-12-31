@@ -191,7 +191,7 @@ namespace DungeonGame {
 			}
 			Console.WriteLine("You can't afford that!");
 		}
-		public void SellItemCheck(Player player, string[] userInput) {
+		public void SellItemCheck(Player player, string[] userInput, UserOutput output) {
 			var inputName = Helper.ParseInput(userInput);
 			var invIndex = player.Inventory.FindIndex(
 				f => f.GetName() == inputName || f.GetName().Contains(inputName) && f.IsEquipped() == false);
@@ -205,7 +205,7 @@ namespace DungeonGame {
 							this.SellItem(player, userInput, sellConsumable, conIndex);
 							break;
 						}
-						Helper.InvalidVendorSell();
+						Helper.InvalidVendorSell(output);
 						break;
 					case "Shopkeeper":
 						if (sellConsumable != null) {
@@ -224,14 +224,14 @@ namespace DungeonGame {
 							this.SellItem(player, userInput, sellArmor, invIndex);
 							break;
 						}
-						Helper.InvalidVendorSell();
+						Helper.InvalidVendorSell(output);
 						break;
 					case "Weapon":
 						if (sellWeapon != null) {
 							this.SellItem(player, userInput, sellWeapon, invIndex);
 							break;
 						}
-						Helper.InvalidVendorSell();
+						Helper.InvalidVendorSell(output);
 						break;
 					case "Shopkeeper":
 						if (sellArmor != null) {

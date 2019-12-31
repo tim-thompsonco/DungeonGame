@@ -33,8 +33,8 @@ namespace DungeonGame {
 		void DisplayStats();
 		int Attack();
 		int CheckArmorRating();
-		void MonsterDeath(Player player);
-		bool IsMonsterDead(Player player);
+		void MonsterDeath(Player player, UserOutput output);
+		bool IsMonsterDead(Player player, UserOutput output);
 		int ArmorRating(Player player);
 		void SetOnFire(bool onFire, int onFireDamage, int onFireCurRound, int onFireMaxRound);
 		void StartBleeding(bool bleeding, int bleedDamage, int bleedCurRound, int bleedMaxRound);
