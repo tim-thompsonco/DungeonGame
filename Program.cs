@@ -19,8 +19,8 @@ namespace DungeonGame {
 						NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
 					});
 					initialOutput.StoreUserOutput(
-						"darkgreen", 
-						"black", 
+						Helper.FormatGeneralInfoText(), 
+						Helper.FormatDefaultBackground(), 
 						"Reloading your saved game.");
 				}
 				catch (FileNotFoundException) {
@@ -32,7 +32,6 @@ namespace DungeonGame {
 				// On loading game, display room that player starts in
 				// Begin game by putting player in room 100
 				var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0, initialOutput);
-				spawnedRooms[roomIndex].LookRoom(initialOutput);
 				// While loop to continue obtaining input from player
 				var isGameOver = false;
 				// Player stats will replenish every 3 seconds
@@ -41,9 +40,9 @@ namespace DungeonGame {
 					null,
 					TimeSpan.Zero,
 					TimeSpan.FromSeconds(3));
+				initialOutput.RetrieveUserOutput();
 				while (!isGameOver) {
 					var userOutput = new UserOutput();
-					spawnedRooms[roomIndex].ShowCommands();
 					var input = Helper.GetFormattedInput();
 					var isTownRoom = spawnedRooms[roomIndex] as TownRoom;
 					Console.Clear();
@@ -71,16 +70,16 @@ namespace DungeonGame {
 									}
 									catch (Exception) {
 										userOutput.StoreUserOutput(
-											"darkcyan", 
-											"black", 
+											Helper.FormatFailureOutputText(), 
+											Helper.FormatDefaultBackground(), 
 											"An error has occurred while attacking.");
 									}
 								}
 							}
 							catch (IndexOutOfRangeException) {
 								userOutput.StoreUserOutput(
-									"darkcyan", 
-									"black", 
+									Helper.FormatFailureOutputText(), 
+									Helper.FormatDefaultBackground(), 
 									"You can't attack that.");
 							}
 							break;
@@ -92,16 +91,16 @@ namespace DungeonGame {
 									}
 									catch (NullReferenceException) {
 										userOutput.StoreUserOutput(
-											"darkcyan", 
-											"black", 
+											Helper.FormatFailureOutputText(), 
+											Helper.FormatDefaultBackground(), 
 											"There is no vendor in the room to buy an item from.");
 									}
 								}
 							}
 							catch (IndexOutOfRangeException) {
 								userOutput.StoreUserOutput(
-									"darkcyan", 
-									"black", 
+									Helper.FormatFailureOutputText(), 
+									Helper.FormatDefaultBackground(), 
 									"Buy what?");
 							}
 							break;
@@ -115,22 +114,22 @@ namespace DungeonGame {
 							}
 							catch (IndexOutOfRangeException) {
 								userOutput.StoreUserOutput(
-									"darkcyan", 
-									"black", 
+									Helper.FormatFailureOutputText(), 
+									Helper.FormatDefaultBackground(), 
 									"You don't have that spell.");
 								continue;
 							}
 							catch (InvalidOperationException) {
 								if (player.PlayerClass != Player.PlayerClassType.Mage) {
 									userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"You can't cast spells. You're not a mage!");
 									continue;
 								}
 								userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"You do not have enough mana to cast that spell!");
 								continue;
 							}
@@ -146,24 +145,24 @@ namespace DungeonGame {
 							}
 							catch (IndexOutOfRangeException) {
 								userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"You don't have that ability.");
 								Console.WriteLine();
 								continue;
 							}
 							catch (ArgumentOutOfRangeException) {
 								userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"You don't have that ability.");
 								continue;
 							}
 							catch (InvalidOperationException) {
 								if (player.PlayerClass == Player.PlayerClassType.Mage) {
 									userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"You can't use abilities. You're not a warrior or archer!");
 									continue;
 								}
@@ -172,21 +171,21 @@ namespace DungeonGame {
 										continue;
 									case Player.PlayerClassType.Warrior:
 										userOutput.StoreUserOutput(
-											"darkcyan", 
-											"black", 
+											Helper.FormatFailureOutputText(), 
+											Helper.FormatDefaultBackground(), 
 											"You do not have enough rage to use that ability!");
 										continue;
 									case Player.PlayerClassType.Archer:
 										if (player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
 											userOutput.StoreUserOutput(
-												"darkcyan", 
-												"black", 
+												Helper.FormatFailureOutputText(), 
+												Helper.FormatDefaultBackground(), 
 												"You do not have a bow equipped!");
 											continue;
 										}
 										userOutput.StoreUserOutput(
-											"darkcyan", 
-											"black", 
+											Helper.FormatFailureOutputText(), 
+											Helper.FormatDefaultBackground(), 
 											"You do not have enough combo points to use that ability!");
 										continue;
 									default:
@@ -215,23 +214,23 @@ namespace DungeonGame {
 							switch (input[1]) {
 								case "abilities":
 									try {
-										PlayerHelper.ListAbilities(player);
+										PlayerHelper.ListAbilities(player, userOutput);
 									}
 									catch (IndexOutOfRangeException) {
 										userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"List what?");
 									}
 									break;
 								case "spells":
 									try {
-										PlayerHelper.ListSpells(player);
+										PlayerHelper.ListSpells(player, userOutput);
 									}
 									catch (IndexOutOfRangeException) {
 										userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"List what?");
 									}
 									break;
@@ -243,19 +242,19 @@ namespace DungeonGame {
 							}
 							catch (IndexOutOfRangeException) {
 								userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"What ability did you want to know about?");
 							}
 							break;
 						case "spell":
 							try {
-								PlayerHelper.SpellInfo(player, input[1]);
+								PlayerHelper.SpellInfo(player, input[1], userOutput);
 							}
 							catch (IndexOutOfRangeException) {
 								userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"What spell did you want to know about?");
 							}
 							break;
@@ -268,8 +267,8 @@ namespace DungeonGame {
 									}
 									catch (Exception) {
 										userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"An error has occurred while looking.");
 									}
 								}
@@ -286,16 +285,16 @@ namespace DungeonGame {
 									}
 									catch (Exception) {
 										userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"An error has occurred while looting.");
 									}
 								}
 							}
 							catch (IndexOutOfRangeException) {
 								userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"Loot what?");
 							}
 							break;
@@ -305,8 +304,8 @@ namespace DungeonGame {
 							}
 							else {
 								userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"You can't drink that!");
 							}
 							break;
@@ -327,16 +326,16 @@ namespace DungeonGame {
 									}
 									catch (NullReferenceException) {
 										userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"The vendor doesn't want that.");
 									}
 								}
 							}
 							catch (IndexOutOfRangeException) {
 								userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"Sell what?");
 							}
 							break;
@@ -358,14 +357,14 @@ namespace DungeonGame {
 							}
 							catch (IndexOutOfRangeException) {
 								userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"Repair what?");
 							}
 							catch (NullReferenceException) {
 								userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"There is no vendor here!");
 							}
 							break;
@@ -377,16 +376,16 @@ namespace DungeonGame {
 									}
 									catch (NullReferenceException) {
 										userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"There is no vendor in the room to show inventory available for sale.");
 									}
 								}
 							}
 							catch (IndexOutOfRangeException) {
 								userOutput.StoreUserOutput(
-										"darkcyan", 
-										"black", 
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
 										"Show what?");
 							}
 							break;
@@ -535,6 +534,7 @@ namespace DungeonGame {
 							break;
 					}
 				PlayerHelper.DisplayPlayerStats(player, userOutput);
+				spawnedRooms[roomIndex].ShowCommands(userOutput);
 				userOutput.RetrieveUserOutput();
 				}
 			}

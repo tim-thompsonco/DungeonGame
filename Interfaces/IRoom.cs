@@ -22,7 +22,7 @@
 		void LootCorpse(Player player, string[] input);
 		void RebuildRoomObjects();
 		void ShowDirections(UserOutput output);
-		void ShowCommands();
+		void ShowCommands(UserOutput output);
 		void LookRoom(UserOutput output);
 		void LookNpc(string[] input);
 	}

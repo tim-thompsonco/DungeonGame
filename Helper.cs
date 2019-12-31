@@ -14,32 +14,35 @@ namespace DungeonGame {
 			var inputParse = inputFormatted.Split(' ');
 			return inputParse;
 		}
-		public static void FormatSuccessOutputText() {
-			Console.ForegroundColor = ConsoleColor.Green;
+		public static string FormatDefaultBackground() {
+			return "black";
 		}
-		public static void FormatFailureOutputText() {
-			Console.ForegroundColor = ConsoleColor.DarkCyan;
+		public static string FormatSuccessOutputText() {
+			return "green";
 		}
-		public static void FormatOnFireText() {
-			Console.ForegroundColor = ConsoleColor.Yellow;
+		public static string FormatFailureOutputText() {
+			return "darkcyan";
 		}
-		public static void FormatAttackSuccessText() {
-			Console.ForegroundColor = ConsoleColor.Red;
+		public static string FormatOnFireText() {
+			return "yellow";
 		}
-		public static void FormatAttackFailText() {
-			Console.ForegroundColor = ConsoleColor.DarkRed;
+		public static string FormatAttackSuccessText() {
+			return "red";
 		}
-		public static void FormatInfoText() {
-			Console.ForegroundColor = ConsoleColor.White;
+		public static string FormatAttackFailText() {
+			return "darkred";
 		}
-		public static void FormatGeneralInfoText() {
-			Console.ForegroundColor = ConsoleColor.DarkGreen;
+		public static string FormatInfoText() {
+			return "white";
 		}
-		public static void FormatRoomInfoText() {
-			Console.ForegroundColor = ConsoleColor.White;
+		public static string FormatLevelUpText() {
+			return "cyan";
 		}
-		public static void FormatAnnounceText() {
-			Console.ForegroundColor = ConsoleColor.Gray;
+		public static string FormatGeneralInfoText() {
+			return "darkgreen";
+		}
+		public static string FormatAnnounceText() {
+			return "gray";
 		}
 		public static void ShowImpassibleDungeonTile() {
 			Console.BackgroundColor = ConsoleColor.Black;

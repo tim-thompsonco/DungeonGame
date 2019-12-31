@@ -141,63 +141,74 @@ namespace DungeonGame {
 				this._roomObjects.Add((IRoomInteraction) this.Monster);
 			}
 		}
-		public void ShowCommands() {
-			Helper.FormatGeneralInfoText();
-			Console.Write("Available Commands: ");
-			Console.WriteLine(string.Join(", ", this.Commands));
+		public void ShowCommands(UserOutput output) {
+			var sameLineOutput = new List<string> {
+				Helper.FormatGeneralInfoText(), Helper.FormatDefaultBackground(), "Available Commands: "};
+			var objCount = this.Commands.Count;
+			foreach (var command in this.Commands) {
+				var sb = new StringBuilder();
+				sb.Append(command);
+				if (this.Commands[objCount - 1] != command) {
+					sb.Append(", ");
+				}
+				if (this.Commands[objCount - 1] == command) sb.Append(".");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
+				sameLineOutput.Add(sb.ToString());
+			}
+			output.StoreUserOutput(sameLineOutput);
 		}
 		public void ShowDirections(UserOutput output) {
-			var sameLineOutput = new List<string> {"darkcyan", "black", "Available Directions: "};
-			Helper.FormatRoomInfoText(); // white
+			var sameLineOutput = new List<string> {"darkcyan", Helper.FormatDefaultBackground(), "Available Directions: "};
 			var sb = new StringBuilder();
 			if (this.GoNorth) {
-				sameLineOutput.Add("white");
-				sameLineOutput.Add("black");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
 				sameLineOutput.Add("[N]orth ");
 			}
 			if (this.GoSouth) {
-				sameLineOutput.Add("white");
-				sameLineOutput.Add("black");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
 				sameLineOutput.Add("[S]outh ");
 			}
 			if (this.GoEast) {
-				sameLineOutput.Add("white");
-				sameLineOutput.Add("black");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
 				sameLineOutput.Add("[E]ast ");
 			}
 			if (this.GoWest) {
-				sameLineOutput.Add("white");
-				sameLineOutput.Add("black");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
 				sameLineOutput.Add("[W]est ");
 			}
 			if (this.GoNorthWest) {
-				sameLineOutput.Add("white");
-				sameLineOutput.Add("black");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
 				sameLineOutput.Add("[N]orth[W]est ");
 			}
 			if (this.GoSouthWest) {
-				sameLineOutput.Add("white");
-				sameLineOutput.Add("black");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
 				sameLineOutput.Add("[S]outh[W]est ");
 			}
 			if (this.GoNorthEast) {
-				sameLineOutput.Add("white");
-				sameLineOutput.Add("black");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
 				sameLineOutput.Add("[N]orth[E]ast ");
 			}
 			if (this.GoSouthEast) {
-				sameLineOutput.Add("white");
-				sameLineOutput.Add("black");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
 				sameLineOutput.Add("[S]outh[E]ast ");
 			}
 			if (this.GoUp) {
-				sameLineOutput.Add("white");
-				sameLineOutput.Add("black");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
 				sameLineOutput.Add("[U]p ");
 			}
 			if (this.GoDown) {
-				sameLineOutput.Add("white");
-				sameLineOutput.Add("black");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
 				sameLineOutput.Add("[D]own");
 			}
 			output.StoreUserOutput(sameLineOutput);
@@ -205,25 +216,25 @@ namespace DungeonGame {
 		public void LookRoom(UserOutput output) {
 			output.StoreUserOutput(
 				"darkgreen", 
-				"black", 
+				Helper.FormatDefaultBackground(), 
 				"==================================================");
 			output.StoreUserOutput(
 				"darkcyan", 
-				"black", 
+				Helper.FormatDefaultBackground(), 
 				this.Name);
 			output.StoreUserOutput(
 				"darkgreen", 
-				"black", 
+				Helper.FormatDefaultBackground(), 
 				"==================================================");
 			output.StoreUserOutput(
 				"darkcyan", 
-				"black", 
+				Helper.FormatDefaultBackground(), 
 				this.Desc);
 			output.StoreUserOutput(
 				"darkgreen", 
-				"black", 
+				Helper.FormatDefaultBackground(), 
 				"==================================================");
-			var sameLineOutput = new List<string> {"darkcyan", "black", "Room Contents: "};
+			var sameLineOutput = new List<string> {"darkcyan", Helper.FormatDefaultBackground(), "Room Contents: "};
 			this.RebuildRoomObjects();
 			if (this._roomObjects.Count > 0 && this._roomObjects[0] != null) {
 				var objCount = this._roomObjects.Count;
@@ -237,14 +248,14 @@ namespace DungeonGame {
 						sb.Append(", ");
 					}
 					sb.Append(".");
-					sameLineOutput.Add("white");
-					sameLineOutput.Add("black");
+					sameLineOutput.Add(Helper.FormatInfoText());
+					sameLineOutput.Add(Helper.FormatDefaultBackground());
 					sameLineOutput.Add(sb.ToString());
 				}
 			}
 			else {
-				sameLineOutput.Add("white");
-				sameLineOutput.Add("black");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
 				sameLineOutput.Add("There is nothing in the room.");
 			}
 			output.StoreUserOutput(sameLineOutput);

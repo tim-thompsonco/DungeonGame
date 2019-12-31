@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace DungeonGame {
 	public class CombatHelper {
@@ -8,14 +10,14 @@ namespace DungeonGame {
 		"[F]ight", "[I]nventory", "Flee" };
 
 		public bool SingleCombat(IMonster opponent, Player player, UserOutput output) {
-			Helper.FormatSuccessOutputText();
-			Console.WriteLine("{0}, you have encountered a {1}. Time to fight!",
-				player.Name, opponent.Name);
+			var fightStartString = player.Name + ", you have encountered a " + opponent.Name + ". Time to fight!";
+			output.StoreUserOutput(
+				Helper.FormatSuccessOutputText(),
+				Helper.FormatDefaultBackground(),
+				fightStartString);
+			this.ShowCommands(output);
+			output.RetrieveUserOutput();
 			while (true) {
-				PlayerHelper.DisplayPlayerStats(player, output);
-				opponent.DisplayStats();
-				Console.Write("Available Commands: ");
-				Console.WriteLine(string.Join(", ", this.Commands));
 				Helper.RequestCommand(output);
 				var input = Helper.GetFormattedInput();
 				Console.WriteLine(); // To add a blank space between the command and fight sequence
@@ -69,7 +71,7 @@ namespace DungeonGame {
 						try {
 							if (input[1] != null) {
 								var abilityName = Helper.ParseInput(input);
-								player.UseAbility(opponent, abilityName);
+								player.UseAbility(opponent, abilityName, output);
 								if (opponent.IsMonsterDead(player, output)) return true;
 							}
 							break;
@@ -137,7 +139,7 @@ namespace DungeonGame {
 						switch (input[1]) {
 							case "abilities":
 								try {
-									PlayerHelper.ListAbilities(player);
+									PlayerHelper.ListAbilities(player, output);
 								}
 								catch (IndexOutOfRangeException) {
 									Helper.FormatFailureOutputText();
@@ -146,7 +148,7 @@ namespace DungeonGame {
 								continue;
 							case "spells":
 								try {
-									PlayerHelper.ListSpells(player);
+									PlayerHelper.ListSpells(player, output);
 								}
 								catch (IndexOutOfRangeException) {
 									Helper.FormatFailureOutputText();
@@ -166,7 +168,7 @@ namespace DungeonGame {
 						continue;
 					case "spell":
 						try {
-							PlayerHelper.SpellInfo(player, input[1]);
+							PlayerHelper.SpellInfo(player, input[1], output);
 						}
 						catch (IndexOutOfRangeException) {
 							Helper.FormatFailureOutputText();
@@ -222,9 +224,12 @@ namespace DungeonGame {
 						return false;
 					}
 				}
+				PlayerHelper.DisplayPlayerStats(player, output);
+				opponent.DisplayStats();
+				this.ShowCommands(output);
+				output.RetrieveUserOutput();
 			}
 		}
-		
 		private bool CanFleeCombat() {
 			Console.ForegroundColor = ConsoleColor.Green;
 			var randomNum = RndGenerate.Next(1, 10);
@@ -281,6 +286,23 @@ namespace DungeonGame {
 			if (opponent.BleedCurRound <= opponent.BleedMaxRound) return;
 			opponent.IsBleeding = false;
 			opponent.BleedCurRound = 1;
+		}
+		public void ShowCommands(UserOutput output) {
+			var sameLineOutput = new List<string> {
+				Helper.FormatGeneralInfoText(), Helper.FormatDefaultBackground(), "Available Commands: "};
+			var objCount = this.Commands.Length;
+			foreach (var command in this.Commands) {
+				var sb = new StringBuilder();
+				sb.Append(command);
+				if (this.Commands[objCount - 1] != command) {
+					sb.Append(", ");
+				}
+				sb.Append(".");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
+				sameLineOutput.Add(sb.ToString());
+			}
+			output.StoreUserOutput(sameLineOutput);
 		}
 	}
 }

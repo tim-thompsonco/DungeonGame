@@ -406,7 +406,7 @@ namespace DungeonGame {
 			}
 			throw new IndexOutOfRangeException();
 		}
-		public void UseAbility(IMonster opponent, string inputName) {
+		public void UseAbility(IMonster opponent, string inputName, UserOutput output) {
 			var index = this.Abilities.FindIndex(
 				f => f.GetName() == inputName || f.GetName().Contains(inputName));
 			if (index != -1 && 
@@ -414,13 +414,13 @@ namespace DungeonGame {
 			    this.PlayerClass == PlayerClassType.Warrior) {
 				switch (this.Abilities[index].AbilityCategory) {
 					case Ability.AbilityType.Slash:
-						Ability.UseOffenseDamageAbility(opponent, this, index);
+						Ability.UseOffenseDamageAbility(opponent, this, index, output);
 						return;
 					case Ability.AbilityType.Rend:
-						Ability.UseOffenseDamageAbility(opponent, this, index);
+						Ability.UseOffenseDamageAbility(opponent, this, index, output);
 						return;
 					case Ability.AbilityType.Charge:
-						Ability.UseStunAbility(opponent, this, index);
+						Ability.UseStunAbility(opponent, this, index, output);
 						return;
 					case Ability.AbilityType.Block:
 						this.AbsorbDamageAmount = Ability.UseDefenseAbility(this, index);
@@ -439,7 +439,7 @@ namespace DungeonGame {
 							berserkValues[3]);
 						return;
 					case Ability.AbilityType.Disarm:
-						Ability.UseDisarmAbility(opponent, this, index);
+						Ability.UseDisarmAbility(opponent, this, index, output);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -453,21 +453,21 @@ namespace DungeonGame {
 					case Ability.ShotType.Distance:
 						return;
 					case Ability.ShotType.Gut:
-						Ability.UseOffenseDamageAbility(opponent, this, index);
+						Ability.UseOffenseDamageAbility(opponent, this, index, output);
 						return;
 					case Ability.ShotType.Precise:
-						Ability.UseOffenseDamageAbility(opponent, this, index);
+						Ability.UseOffenseDamageAbility(opponent, this, index, output);
 						return;
 					case Ability.ShotType.Stun:
-						Ability.UseStunAbility(opponent, this, index);
+						Ability.UseStunAbility(opponent, this, index, output);
 						return;
 					case Ability.ShotType.Double:
 						for (var i = 0; i < 2; i++) {
-							Ability.UseOffenseDamageAbility(opponent, this, index);
+							Ability.UseOffenseDamageAbility(opponent, this, index, output);
 						}
 						return;
 					case Ability.ShotType.Wound:
-						Ability.UseOffenseDamageAbility(opponent, this, index);
+						Ability.UseOffenseDamageAbility(opponent, this, index, output);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
