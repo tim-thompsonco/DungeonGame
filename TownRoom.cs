@@ -198,10 +198,19 @@ namespace DungeonGame {
 				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 
 				"==================================================");
-			output.StoreUserOutput(
-				Helper.FormatFailureOutputText(), 
-				Helper.FormatDefaultBackground(), 
-				this.Desc);
+			for (var i = 0; i < this.Desc.Length; i += Helper.GetGameWidth()) {
+				if (this.Desc.Length - i < Helper.GetGameWidth()) {
+					output.StoreUserOutput(
+						"darkcyan", 
+						Helper.FormatDefaultBackground(), 
+						this.Desc.Substring(i, this.Desc.Length - i));
+					continue;
+				}
+				output.StoreUserOutput(
+					"darkcyan", 
+					Helper.FormatDefaultBackground(), 
+					this.Desc.Substring(i, Helper.GetGameWidth()));
+			}
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 

@@ -89,10 +89,16 @@ namespace DungeonGame {
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;
 		}
-		public void DisplayStats() {
-			Helper.FormatGeneralInfoText();
-			Console.WriteLine("Opponent HP: {0} / {1}", this.HitPoints, this.MaxHitPoints);
-			Console.WriteLine("==================================================");
+		public void DisplayStats(UserOutput output) {
+			var opponentStats = "Opponent HP: " + this.HitPoints + " / " + this.MaxHitPoints;
+			output.StoreUserOutput(
+				Helper.FormatGeneralInfoText(),
+				Helper.FormatDefaultBackground(),
+				opponentStats);
+			output.StoreUserOutput(
+				Helper.FormatGeneralInfoText(),
+				Helper.FormatDefaultBackground(),
+				"==================================================");
 		}
 		public int Attack() {
 			return this.MonsterWeapon.Attack();
@@ -137,9 +143,13 @@ namespace DungeonGame {
 			this.StunnedCurRound = stunCurRound;
 			this.StunnedMaxRound = stunMaxRound;
 		}
-		public void Stunned() {
+		public void Stunned(UserOutput output) {
 			this.StunnedCurRound += 1;
-			Console.WriteLine("The {0} is stunned and cannot attack.", this.Name);
+			var stunnedString = "The " + this.Name + " is stunned and cannot attack.";
+			output.StoreUserOutput(
+				Helper.FormatAttackSuccessText(),
+				Helper.FormatDefaultBackground(),
+				stunnedString);
 			if (this.StunnedCurRound <= this.StunnedMaxRound) return;
 			this.IsStunned = false;
 			this.StunnedCurRound = 1;
@@ -149,8 +159,11 @@ namespace DungeonGame {
 			return this.HitPoints <= 0;
 		}
 		public void MonsterDeath(Player player, UserOutput output) {
-			Helper.FormatSuccessOutputText();
-			Console.WriteLine("You have defeated the {0}!", this.Name);
+			var defeatString = "You have defeated the " + this.Name + "!";
+			output.StoreUserOutput(
+				Helper.FormatSuccessOutputText(),
+				Helper.FormatDefaultBackground(),
+				defeatString);
 			foreach (var loot in this.MonsterItems) {
 				loot.Equipped = false;
 			}

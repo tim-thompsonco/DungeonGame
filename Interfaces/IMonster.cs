@@ -30,7 +30,7 @@ namespace DungeonGame {
 		Armor MonsterLegArmor { get; set; }
 
 		void TakeDamage(int weaponDamage);
-		void DisplayStats();
+		void DisplayStats(UserOutput output);
 		int Attack();
 		int CheckArmorRating();
 		void MonsterDeath(Player player, UserOutput output);
@@ -39,6 +39,6 @@ namespace DungeonGame {
 		void SetOnFire(bool onFire, int onFireDamage, int onFireCurRound, int onFireMaxRound);
 		void StartBleeding(bool bleeding, int bleedDamage, int bleedCurRound, int bleedMaxRound);
 		void StartStunned(bool stunned, int stunCurRound, int stunMaxRound);
-		void Stunned();
+		void Stunned(UserOutput output);
 	}
 }

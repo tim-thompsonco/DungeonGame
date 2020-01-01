@@ -10,6 +10,7 @@ namespace DungeonGame {
 			while (true) {
 				// Game loading commands
 				var initialOutput = new UserOutput();
+				var initialMapOutput = new UserOutput();
 				Helper.GameIntro(initialOutput);
 				Player player;
 				try {
@@ -40,9 +41,11 @@ namespace DungeonGame {
 					null,
 					TimeSpan.Zero,
 					TimeSpan.FromSeconds(3));
-				initialOutput.RetrieveUserOutput();
+				initialMapOutput = Helper.ShowMap(spawnedRooms, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
+				initialOutput.RetrieveUserOutput(initialMapOutput);
 				while (!isGameOver) {
 					var output = new UserOutput();
+					var mapOutput = new UserOutput();
 					var input = Helper.GetFormattedInput();
 					var isTownRoom = spawnedRooms[roomIndex] as TownRoom;
 					Console.Clear();
@@ -134,7 +137,7 @@ namespace DungeonGame {
 								continue;
 							}
 						case "map":
-							Helper.ShowMap(spawnedRooms, player, 10, 20);
+							mapOutput = Helper.ShowMap(spawnedRooms, player, 10, 20);
 							break;
 						case "use":
 							try {
@@ -408,6 +411,7 @@ namespace DungeonGame {
 							if (spawnedRooms[roomIndex].GoSouth) {
 								try {
 									roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, -1, 0, output);
+									
 								}
 								catch (ArgumentOutOfRangeException) {
 									Helper.InvalidDirection(output);
@@ -535,7 +539,8 @@ namespace DungeonGame {
 					}
 				PlayerHelper.DisplayPlayerStats(player, output);
 				spawnedRooms[roomIndex].ShowCommands(output);
-				output.RetrieveUserOutput();
+				mapOutput = Helper.ShowMap(spawnedRooms, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
+				output.RetrieveUserOutput(mapOutput);
 				}
 			}
 		}

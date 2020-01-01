@@ -14,6 +14,21 @@ namespace DungeonGame {
 			var inputParse = inputFormatted.Split(' ');
 			return inputParse;
 		}
+		public static int GetGameWidth() {
+			return 100 - GetBufferGap();
+		}
+		public static int GetMiniMapHeight() {
+			return 5;
+		}
+		public static int GetMiniMapWidth() {
+			return 10;
+		}
+		public static int GetBufferGap() {
+			return 5;
+		}
+		public static int GetMiniMapBorderWidth() {
+			return (GetMiniMapWidth() * 4) + 6;
+		}
 		public static string FormatDefaultBackground() {
 			return "black";
 		}
@@ -44,27 +59,6 @@ namespace DungeonGame {
 		public static string FormatAnnounceText() {
 			return "gray";
 		}
-		public static void ShowImpassibleDungeonTile() {
-			Console.BackgroundColor = ConsoleColor.Black;
-			Console.Write("  ");
-		}
-		public static void ShowPlayerDungeonTile() {
-			Console.BackgroundColor = ConsoleColor.Green;
-			Console.Write("  ");
-		}
-		public static void ShowPlayerDungeonUpDownTile() {
-			Console.BackgroundColor = ConsoleColor.Green;
-			Console.ForegroundColor = ConsoleColor.Black;
-			Console.Write("OO");
-		}
-		public static void ShowDiscoveredDungeonTile() {
-			Console.BackgroundColor = ConsoleColor.DarkGray;
-			Console.Write("  ");
-		}
-		public static void ShowDiscoveredDungeonUpDownTile() {
-			Console.BackgroundColor = ConsoleColor.DarkGray;
-			Console.Write("OO");
-		}
 		public static string ParseInput(string[] userInput) {
 			var inputString = new StringBuilder();
 			for (var i = 1; i < userInput.Length; i++) {
@@ -83,30 +77,45 @@ namespace DungeonGame {
 		public static void GameIntro(UserOutput output) {
 			var gameIntroString =
 				"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot" +
-				Environment.NewLine +
 				"and explore dungeons. Stuff you've probably done a million times already across various RPG games. At any time " +
-				Environment.NewLine +
 				"you can get help on commands by typing 'help'.";
-			output.StoreUserOutput("gray", "black", gameIntroString);
+			for (var i = 0; i < gameIntroString.Length; i += GetGameWidth()) {
+				if (gameIntroString.Length - i < Helper.GetGameWidth()) {
+					output.StoreUserOutput(
+						FormatAnnounceText(), 
+						FormatDefaultBackground(), 
+						gameIntroString.Substring(i, gameIntroString.Length - i));
+					continue;
+				}
+				output.StoreUserOutput(
+					FormatAnnounceText(), 
+					FormatDefaultBackground(), 
+					gameIntroString.Substring(i, GetGameWidth()));
+			}
 		}
 		public static void ShowCommandHelp(UserOutput output) {
 			var commandHelpString = 
 				"Commands: Players may move in any direction of the game using a shortkey or the full direction name. " +
-				Environment.NewLine +
 				"For example, if you wish to go north, you may type either 'N' or 'North'. If a player wishes to look " +
-				Environment.NewLine +
 				"at something, they can use 'l' or 'look' and then the name of what they want to look at. For example " +
-				Environment.NewLine +
 				"'l zombie' or 'look zombie' would allow you to look at a zombie in the room. The same commands will  " +
-				Environment.NewLine +
 				"work to loot a monster that you have killed. Look or 'L' by itself will look at the room. Other common " +
-				Environment.NewLine +
 				"commands will be shown to the player. Any object that is consumable, such as a potion, can be drank " +
-				Environment.NewLine +
 				"by typing 'drink' and then the name of the potion or object. To use armor or weapons, you must 'equip' " +
-				Environment.NewLine +
 				"them. You can 'unequip' them as well.";
-			output.StoreUserOutput("gray", "black", commandHelpString);
+			for (var i = 0; i < commandHelpString.Length; i += GetGameWidth()) {
+				if (commandHelpString.Length - i < Helper.GetGameWidth()) {
+					output.StoreUserOutput(
+						FormatAnnounceText(), 
+						FormatDefaultBackground(), 
+						commandHelpString.Substring(i, commandHelpString.Length - i));
+					continue;
+				}
+				output.StoreUserOutput(
+					FormatAnnounceText(), 
+					FormatDefaultBackground(), 
+					commandHelpString.Substring(i, GetGameWidth()));
+			}
 		}
 		public static Player BuildNewPlayer(UserOutput output) {
 			FormatAnnounceText();
@@ -181,7 +190,6 @@ namespace DungeonGame {
 			if (!roomList[roomIndex].IsDiscovered) roomList[roomIndex].IsDiscovered = true;
 			var roomType = roomList[roomIndex].GetType().Name;
 			player.CanSave = roomType != "DungeonRoom";
-			ShowMap(roomList, player, 5, 10);
 			return roomIndex;
 		}
 		public static void InvalidDirection(UserOutput output) {
@@ -263,11 +271,25 @@ namespace DungeonGame {
 			}
 			return roomIndex;
 		}
-		public static void ShowMap(List<IRoom> roomList, Player player, int height, int width) {
+		public static UserOutput ShowMap(List<IRoom> roomList, Player player, int height, int width) {
+			var output = new UserOutput();
+			// Draw top border of map
+			var mapBorder = new StringBuilder();
+			// Minimap border needs to extend same width as minimap itself in either direction
+			for (var b = 0; b < GetMiniMapBorderWidth(); b++) {
+				mapBorder.Append("=");
+			}
+			output.StoreUserOutput(
+				"darkgreen", 
+				FormatDefaultBackground(), 
+				mapBorder.ToString());
 			/* Map starts drawing from top left, so it needs to decrement since
-			each new console writeline pushes screen down instead of up */ 
+			each new console writeline pushes screen down instead of up */
 			for (var i = player.Y + height; i > player.Y - height; i--) {
-				for (var j = player.X - width; j < player.X + width; j ++) {
+				var sameLineOutput = new List<string>();
+				var startLeftPos = player.X - width;
+				var endRightPos = player.X + width - 1;
+				for (var j = startLeftPos; j <= endRightPos; j ++) {
 					var mapX = j;
 					var mapY = i;
 					var mapZ = player.Z;
@@ -278,27 +300,105 @@ namespace DungeonGame {
 					    mapY == player.Y &&
 					    mapZ == player.Z) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							ShowPlayerDungeonUpDownTile();
+							sameLineOutput.Add("black"); // Foreground color
+							sameLineOutput.Add("green"); // Background color
+							sameLineOutput.Add("OO"); // What prints to display
 							continue;
 						}
-						ShowPlayerDungeonTile();
+						sameLineOutput.Add("black"); // Foreground color
+						sameLineOutput.Add("green"); // Background color
+						sameLineOutput.Add("  "); // What prints to display
+						continue;
+					}
+					if (roomIndex != -1 &&
+					    mapX == player.X &&
+					    mapY == player.Y &&
+					    mapZ == player.Z &&
+					    j == endRightPos) {
+						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
+							sameLineOutput.Add("black"); // Foreground color
+							sameLineOutput.Add("green"); // Background color
+							sameLineOutput.Add("OO |"); // What prints to display
+							continue;
+						}
+						sameLineOutput.Add("black"); // Foreground color
+						sameLineOutput.Add("green"); // Background color
+						sameLineOutput.Add("   |"); // What prints to display
+						continue;
+					}
+					if (roomIndex != -1 &&
+					    mapX == player.X &&
+					    mapY == player.Y &&
+					    mapZ == player.Z &&
+					    j == startLeftPos) {
+						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
+							sameLineOutput.Add("black"); // Foreground color
+							sameLineOutput.Add("green"); // Background color
+							sameLineOutput.Add("| OO"); // What prints to display
+							continue;
+						}
+						sameLineOutput.Add("black"); // Foreground color
+						sameLineOutput.Add("green"); // Background color
+						sameLineOutput.Add("|   "); // What prints to display
 						continue;
 					}
 					if (roomIndex != -1 && roomList[roomIndex].IsDiscovered) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							ShowDiscoveredDungeonUpDownTile();
+							sameLineOutput.Add("darkgreen"); // Foreground color
+							sameLineOutput.Add("darkgray"); // Background color
+							sameLineOutput.Add("OO"); // What prints to display
 							continue;
 						}
-						ShowDiscoveredDungeonTile();
+						sameLineOutput.Add("darkgray"); // Foreground color
+						sameLineOutput.Add("darkgray"); // Background color
+						sameLineOutput.Add("  "); // What prints to display
 						continue;
 					}
-					ShowImpassibleDungeonTile();
+					if (roomIndex != -1 && roomList[roomIndex].IsDiscovered && j == endRightPos) {
+						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
+							sameLineOutput.Add("darkgreen"); // Foreground color
+							sameLineOutput.Add("darkgray"); // Background color
+							sameLineOutput.Add("OO |"); // What prints to display
+							continue;
+						}
+						sameLineOutput.Add("darkgray"); // Foreground color
+						sameLineOutput.Add("darkgray"); // Background color
+						sameLineOutput.Add("   |"); // What prints to display
+						continue;
+					}
+					if (roomIndex != -1 && roomList[roomIndex].IsDiscovered && j == startLeftPos) {
+						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
+							sameLineOutput.Add("darkgreen"); // Foreground color
+							sameLineOutput.Add("darkgray"); // Background color
+							sameLineOutput.Add("| OO"); // What prints to display
+							continue;
+						}
+						sameLineOutput.Add("darkgray"); // Foreground color
+						sameLineOutput.Add("darkgray"); // Background color
+						sameLineOutput.Add("|   "); // What prints to display
+						continue;
+					}
+					if (j == endRightPos) {
+						sameLineOutput.Add("darkgreen"); // Foreground color
+						sameLineOutput.Add("black"); // Background color
+						sameLineOutput.Add("   |"); // What prints to display
+					}
+					if (j == startLeftPos) {
+						sameLineOutput.Add("darkgreen"); // Foreground color
+						sameLineOutput.Add("black"); // Background color
+						sameLineOutput.Add("|   "); // What prints to display
+					}
+					sameLineOutput.Add("darkgreen"); // Foreground color
+					sameLineOutput.Add("black"); // Background color
+					sameLineOutput.Add("  "); // What prints to display
 				}
-				// End of each j loop should create new line on console
-				Console.WriteLine();
+				output.StoreUserOutput(sameLineOutput);
 			}
-			// Restore console background color to default
-			Console.BackgroundColor = ConsoleColor.Black;
+			output.StoreUserOutput(
+				"darkgreen", 
+				FormatDefaultBackground(), 
+				mapBorder.ToString());
+			return output;
 		}
 	}
 }

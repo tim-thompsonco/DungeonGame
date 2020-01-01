@@ -228,7 +228,7 @@ namespace DungeonGame {
 				if (player.IsArmorChanged) this.ChangeArmorRound(player, output);
 				if (player.IsDamageChanged) this.ChangeDamageRound(player, output);
 				if (opponent.IsStunned) {
-					opponent.Stunned();
+					opponent.Stunned(output);
 					continue;
 				}
 				var attackDamageM = opponent.Attack();
@@ -278,7 +278,7 @@ namespace DungeonGame {
 					}
 				}
 				PlayerHelper.DisplayPlayerStats(player, output);
-				opponent.DisplayStats();
+				opponent.DisplayStats(output);
 				this.ShowCommands(output);
 				output.RetrieveUserOutput();
 			}
