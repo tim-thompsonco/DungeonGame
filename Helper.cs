@@ -279,17 +279,19 @@ namespace DungeonGame {
 			output.StoreUserOutput(
 				FormatFailureOutputText(), FormatDefaultBackground(), outputString);
 		}
-		public static bool QuitGame(Player player, UserOutput output) {
+		public static bool QuitGame(Player player, UserOutput output, List<IRoom> spawnedRooms) {
 			output.StoreUserOutput(
 				FormatAnnounceText(),
 				FormatDefaultBackground(),
 				"Are you sure you want to quit?");
+			output.RetrieveUserOutput();
+			output.ClearUserOutput();
 			var input = GetFormattedInput();
 			if (input[0] == "yes" || input[0] == "y") {
 				output.StoreUserOutput(
 					FormatAnnounceText(), FormatDefaultBackground(), "Quitting the game.");
 				player.CanSave = true;
-				SaveGame(player, output);
+				SaveGame(player, output, spawnedRooms);
 				return true;
 			}
 			return false;
@@ -297,25 +299,36 @@ namespace DungeonGame {
 		public static bool IsWearable(IEquipment item) {
 			return item.GetType().Name == "Armor" || item.GetType().Name == "Weapon" || item.GetType().Name == "Quiver";
 		}
-		public static void SaveGame(Player player, UserOutput output) {
+		public static void SaveGame(Player player, UserOutput output, List<IRoom> spawnedRooms) {
 			string outputString;
 			if (player.CanSave == true) {
-				var serializer = new JsonSerializer();
-				serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
-				serializer.NullValueHandling = NullValueHandling.Ignore;
-				serializer.TypeNameHandling = TypeNameHandling.Auto;
-				serializer.Formatting = Formatting.Indented;
-				serializer.PreserveReferencesHandling = PreserveReferencesHandling.All;
-				using (var sw = new StreamWriter("savegame.json"))
+				var serializerPlayer = new JsonSerializer();
+				serializerPlayer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
+				serializerPlayer.NullValueHandling = NullValueHandling.Ignore;
+				serializerPlayer.TypeNameHandling = TypeNameHandling.Auto;
+				serializerPlayer.Formatting = Formatting.Indented;
+				serializerPlayer.PreserveReferencesHandling = PreserveReferencesHandling.All;
+				using (var sw = new StreamWriter("playersave.json"))
 				using (var writer = new JsonTextWriter(sw)) {
-					serializer.Serialize(writer, player, typeof(Player));
+					serializerPlayer.Serialize(writer, player, typeof(Player));
+				}
+				var serializerRooms = new JsonSerializer();
+				serializerRooms.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
+				serializerRooms.NullValueHandling = NullValueHandling.Ignore;
+				serializerRooms.TypeNameHandling = TypeNameHandling.Auto;
+				serializerRooms.Formatting = Formatting.Indented;
+				serializerRooms.PreserveReferencesHandling = PreserveReferencesHandling.All;
+				using (var sw = new StreamWriter("gamesave.json"))
+				using (var writer = new JsonTextWriter(sw)) {
+					serializerPlayer.Serialize(writer, spawnedRooms, typeof(List<IRoom>));
 				}
 				outputString = "Your game has been saved.";
 				output.StoreUserOutput(
 					FormatAnnounceText(), FormatDefaultBackground(), outputString);
+				output.RetrieveUserOutput();
+				output.ClearUserOutput();
 				return;
 			}
-
 			outputString = "You can't save inside a dungeon! Go outside first.";
 			output.StoreUserOutput(
 				FormatAnnounceText(), FormatDefaultBackground(), outputString);

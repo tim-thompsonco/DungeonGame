@@ -31,6 +31,8 @@ namespace DungeonGame {
 		public IVendor Vendor;
 		public IMonster Monster;
 
+		// Default constructor for JSON serialization to work since there isn't 1 main constructor
+		public TownRoom() {}
 		public TownRoom(
 			string name,
 			string desc,
@@ -252,16 +254,37 @@ namespace DungeonGame {
 			var inputName = inputString.ToString().Trim();
 			var vendorName = this.Vendor.GetName().Split(' ');
 			if (vendorName.Last() == inputName || this.Vendor.GetName() == inputName) {
-				Helper.FormatGeneralInfoText();
-				Console.WriteLine(this.Vendor.Desc);
-				Console.Write("\nHe is carrying:\n");
+				output.StoreUserOutput(
+					Helper.FormatGeneralInfoText(),
+					Helper.FormatDefaultBackground(),
+					this.Vendor.Desc);
+				var sameLineOutput = new List<string>() {
+					Helper.FormatRoomOutputText(),
+					Helper.FormatDefaultBackground(),
+					"He is carrying:"};
+				var objCount = this.Vendor.VendorItems.Count;
+				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (var itemForSale in this.Vendor.VendorItems) {
-					Console.WriteLine(string.Join(", ", itemForSale.GetName()));
+					var sb = new StringBuilder();
+					var itemTitle = itemForSale.GetName();
+					itemTitle = textInfo.ToTitleCase(itemTitle);
+					sb.Append(itemTitle);
+					if (this.Vendor.VendorItems[objCount - 1] != itemForSale) {
+						sb.Append(", ");
+					}
+					sb.Append(".");
+					sameLineOutput.Add(Helper.FormatRoomOutputText());
+					sameLineOutput.Add(Helper.FormatDefaultBackground());
+					sameLineOutput.Add(sb.ToString());
 				}
+				output.StoreUserOutput(sameLineOutput);
 			}
 			else {
-				Helper.FormatFailureOutputText();
-				Console.WriteLine("There is no {0} in the room!", inputName);
+				var noVendorString = "There is no " + inputName + " in the room!";
+				output.StoreUserOutput(
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					noVendorString);
 			}
 		}
 	}

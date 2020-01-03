@@ -21,20 +21,29 @@ namespace DungeonGame {
 				Helper.FormatSuccessOutputText(),
 				Helper.FormatDefaultBackground(),
 				fightStartString);
-			this.ShowCommands(output);
 			output.RetrieveUserOutput();
+			output.ClearUserOutput();
 			while (true) {
+				PlayerHelper.DisplayPlayerStats(player, output);
+				opponent.DisplayStats(output);
+				this.ShowCommands(output);
+				mapOutput = Helper.ShowMap(roomList, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
+				output.RetrieveUserOutput(mapOutput);
+				output.ClearUserOutput();
 				Helper.RequestCommand(output);
 				var input = Helper.GetFormattedInput();
-				Console.WriteLine(); // To add a blank space between the command and fight sequence
+				Console.Clear();
 				switch (input[0]) {
 					case "f":
 					case "fight":
 						var attackDamage = player.Attack(output);
 						if (player.IsDamageChanged) attackDamage += player.ChangeDamageAmount;
 						if (attackDamage - opponent.ArmorRating(player) < 0) {
-							Helper.FormatAttackFailText();
-							Console.WriteLine("The {0}'s armor absorbed all of your attack!", opponent.Name);
+							var armorAbsorbString = "The " + opponent.Name + "'s armor absorbed all of your attack!";
+							output.StoreUserOutput(
+								Helper.FormatAttackFailText(),
+								Helper.FormatDefaultBackground(),
+								armorAbsorbString);
 						}
 						else if (attackDamage == 0) {
 							var attackFailString = "You missed " + opponent.Name + "!";
@@ -153,7 +162,7 @@ namespace DungeonGame {
 						break;
 					case "drink":
 						if (input.Last() == "potion") {
-							player.DrinkPotion(input);
+							player.DrinkPotion(input, output);
 						}
 						else {
 							output.StoreUserOutput(
@@ -282,11 +291,6 @@ namespace DungeonGame {
 						return false;
 					}
 				}
-				PlayerHelper.DisplayPlayerStats(player, output);
-				opponent.DisplayStats(output);
-				this.ShowCommands(output);
-				mapOutput = Helper.ShowMap(roomList, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
-				output.RetrieveUserOutput(mapOutput);
 			}
 		}
 		private bool CanFleeCombat(UserOutput output) {

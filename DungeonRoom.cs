@@ -30,6 +30,8 @@ namespace DungeonGame {
 		private readonly List<IRoomInteraction> _roomObjects = new List<IRoomInteraction>();
 		public IMonster Monster;
 
+		// Default constructor for JSON serialization to work since there isn't 1 main constructor
+		public DungeonRoom() {}
 		public DungeonRoom(
 			string name,
 			string desc,

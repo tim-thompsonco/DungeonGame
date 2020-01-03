@@ -13,9 +13,15 @@ namespace DungeonGame {
 				var initialMapOutput = new UserOutput();
 				Helper.GameIntro(initialOutput);
 				Player player;
+				List<IRoom> spawnedRooms;
 				try {
 					player = Newtonsoft.Json.JsonConvert.DeserializeObject<Player>(File.ReadAllText(
-						"savegame.json"), new Newtonsoft.Json.JsonSerializerSettings {
+						"playersave.json"), new Newtonsoft.Json.JsonSerializerSettings {
+						TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
+						NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
+					});
+					spawnedRooms = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IRoom>>(File.ReadAllText(
+						"gamesave.json"), new Newtonsoft.Json.JsonSerializerSettings {
 						TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
 						NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
 					});
@@ -25,10 +31,10 @@ namespace DungeonGame {
 						"Reloading your saved game.");
 				}
 				catch (FileNotFoundException) {
+					spawnedRooms = new SpawnRooms().RetrieveSpawnRooms();
 					player = Helper.BuildNewPlayer(initialOutput);
 					GearHelper.EquipInitialGear(player, initialOutput);
 				}
-				var spawnedRooms = new SpawnRooms().RetrieveSpawnRooms();
 				// Set initial room condition
 				// On loading game, display room that player starts in
 				// Begin game by putting player in room 100
@@ -91,7 +97,7 @@ namespace DungeonGame {
 							try {
 								if (input[1] != null) {
 									try {
-										isTownRoom?.Vendor.BuyItemCheck(player, input);
+										isTownRoom?.Vendor.BuyItemCheck(player, input, output);
 									}
 									catch (NullReferenceException) {
 										output.StoreUserOutput(
@@ -206,7 +212,7 @@ namespace DungeonGame {
 							break;
 						case "q":
 						case "quit":
-							var quitConfirm = Helper.QuitGame(player, output);
+							var quitConfirm = Helper.QuitGame(player, output, spawnedRooms);
 							if (quitConfirm) {
 								return;
 							}
@@ -301,7 +307,7 @@ namespace DungeonGame {
 							break;
 						case "drink":
 							if (input.Last() == "potion") {
-								player.DrinkPotion(input);
+								player.DrinkPotion(input, output);
 							}
 							else {
 								output.StoreUserOutput(
@@ -311,10 +317,10 @@ namespace DungeonGame {
 							}
 							break;
 						case "save":
-							Helper.SaveGame(player, output);
+							Helper.SaveGame(player, output, spawnedRooms);
 							break;
 						case "restore":
-							isTownRoom?.Vendor.RestorePlayer(player);
+							isTownRoom?.Vendor.RestorePlayer(player, output);
 							break;
 						case "help":
 							Helper.ShowCommandHelp(output);
@@ -348,11 +354,11 @@ namespace DungeonGame {
 											foreach (var item in player.Inventory) {
 												if (!item.IsEquipped()) continue;
 												var itemNameArray = new string[2] { input[0], item.Name };
-												isTownRoom.Vendor.RepairItem(player, itemNameArray);
+												isTownRoom.Vendor.RepairItem(player, itemNameArray, output);
 											}
 											break;
 										}
-										isTownRoom.Vendor.RepairItem(player, input);
+										isTownRoom.Vendor.RepairItem(player, input, output);
 									}
 								}
 							}
@@ -373,7 +379,7 @@ namespace DungeonGame {
 							try {
 								if (input[1] == "forsale") {
 									try {
-										isTownRoom?.Vendor.DisplayGearForSale(player);
+										isTownRoom?.Vendor.DisplayGearForSale(player, output);
 									}
 									catch (NullReferenceException) {
 										output.StoreUserOutput(

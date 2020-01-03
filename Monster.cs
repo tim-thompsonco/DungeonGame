@@ -31,6 +31,8 @@ namespace DungeonGame {
 		public Armor MonsterHeadArmor { get; set; }
 		public Armor MonsterLegArmor { get; set; }
 
+		// Default constructor for JSON serialization to work since there isn't 1 main constructor
+		public Monster() {}
 		public Monster(string name, string desc, int level, int goldCoins, int maxHp, int expProvided, Weapon weapon) {
 			this.MonsterItems = new List<IEquipment>();
 			this.Name = name;

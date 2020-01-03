@@ -298,45 +298,59 @@ namespace DungeonGame {
 				this.PlayerQuiver.OutOfArrows(output);
 			}
 			catch (NullReferenceException) {
-				Helper.FormatFailureOutputText();
-				Console.WriteLine("Your weapon is not equipped! Going hand to hand!");
+				output.StoreUserOutput(
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					"Your weapon is not equipped! Going hand to hand!");
 			}
 			return 5;
 		}
-		public void DrinkPotion(string[] userInput) {
+		public void DrinkPotion(string[] userInput, UserOutput output) {
 			var index = 0;
 			switch (userInput[1]) {
 				case "health":
 					index = this.Consumables.FindIndex(f => f.PotionCategory.ToString() == "Health");
 					if (index != -1) {
 						this.Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
-						Helper.FormatSuccessOutputText();
-						Console.WriteLine("You drank a potion and replenished {0} health.",
-							this.Consumables[index].RestoreHealth.RestoreHealthAmt);
+						var drankHealthString = "You drank a potion and replenished " +
+						                  this.Consumables[index].RestoreHealth.RestoreHealthAmt + " health.";
+						output.StoreUserOutput(
+							Helper.FormatSuccessOutputText(),
+							Helper.FormatDefaultBackground(),
+							drankHealthString);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
-						Helper.FormatFailureOutputText();
-						Console.WriteLine("You don't have any health potions!");
+						output.StoreUserOutput(
+							Helper.FormatFailureOutputText(),
+							Helper.FormatDefaultBackground(),
+							"You don't have any health potions!");
 					}
 					break;
 				case "mana":
 					index = this.Consumables.FindIndex(f => f.PotionCategory.ToString() == "Mana");
 					if (index != -1) {
 						this.Consumables[index].RestoreMana.RestoreManaPlayer(this);
-						Helper.FormatSuccessOutputText();
-						Console.WriteLine("You drank a potion and replenished {0} mana.",
-							this.Consumables[index].RestoreMana.RestoreManaAmt);
+						var drankManaString = "You drank a potion and replenished " +
+						                      this.Consumables[index].RestoreMana.RestoreManaAmt + " mana.";
+						output.StoreUserOutput(
+							Helper.FormatSuccessOutputText(),
+							Helper.FormatDefaultBackground(),
+							drankManaString);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
-						Helper.FormatFailureOutputText();
-						Console.WriteLine("You don't have any mana potions!");
+						output.StoreUserOutput(
+							Helper.FormatFailureOutputText(),
+							Helper.FormatDefaultBackground(),
+							"You don't have any mana potions!");
 					}
 					break;
 				default:
-					Helper.FormatFailureOutputText();
-					Console.WriteLine("What potion did you want to drink?");
+					output.StoreUserOutput(
+						Helper.FormatFailureOutputText(),
+						Helper.FormatDefaultBackground(),
+						"What potion did you want to drink?");
 					break;
 			}
 		}
@@ -346,13 +360,17 @@ namespace DungeonGame {
 				f => f.ArrowCategory == Consumable.ArrowType.Standard && f.Name.Contains("arrow"));
 			if (index != -1) {
 				this.Consumables[index].Arrow.LoadArrowsPlayer(this, output);
-				Helper.FormatSuccessOutputText();
-				Console.WriteLine("You reloaded your quiver.");
+				output.StoreUserOutput(
+					Helper.FormatSuccessOutputText(),
+					Helper.FormatDefaultBackground(),
+					"You reloaded your quiver.");
 				if (this.Consumables[index].Arrow.Quantity == 0) this.Consumables.RemoveAt(index);
 			}
 			else {
-				Helper.FormatFailureOutputText();
-				Console.WriteLine("You don't have any arrows!");
+				output.StoreUserOutput(
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					"You don't have any arrows!");
 			}
 		}
 		public void UseAbility(List<IRoom> spawnedRooms, string[] input, UserOutput output) {

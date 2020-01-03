@@ -27,7 +27,7 @@ namespace DungeonGame {
 				if (item.IsEquipped()) continue;
 				var itemName = GetInventoryName(player, item);
 				var itemInfo = new StringBuilder(itemName);
-				if (player.PlayerQuiver.Name == itemName)
+				if (player.PlayerQuiver?.Name == itemName)
 					itemInfo.Append("Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity);
 				output.StoreUserOutput(
 					Helper.FormatInfoText(), 
