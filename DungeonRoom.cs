@@ -104,7 +104,8 @@ namespace DungeonGame {
 		public IMonster GetMonster() {
 			return this.Monster;
 		}
-		public bool AttackOpponent(Player player, string[] input, UserOutput output) {
+		public bool AttackOpponent(
+			Player player, string[] input, UserOutput output, UserOutput mapOutput, List<IRoom> roomList) {
 			var inputString = new StringBuilder();
 			for (var i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
@@ -115,7 +116,7 @@ namespace DungeonGame {
 			if (monsterName.Last() == inputName || this.Monster.GetName() == inputName) {
 				if (this.Monster.HitPoints > 0) {
 					var fightEvent = new CombatHelper();
-					var outcome = fightEvent.SingleCombat(this.Monster, player, output);
+					var outcome = fightEvent.SingleCombat(this.Monster, player, output, mapOutput, roomList);
 					switch (outcome) {
 						case false when player.HitPoints <= 0:
 							Helper.PlayerDeath(output);
@@ -165,7 +166,10 @@ namespace DungeonGame {
 			output.StoreUserOutput(sameLineOutput);
 		}
 		public void ShowDirections(UserOutput output) {
-			var sameLineOutput = new List<string> {"darkcyan", Helper.FormatDefaultBackground(), "Available Directions: "};
+			var sameLineOutput = new List<string> {
+				Helper.FormatRoomOutputText(), 
+				Helper.FormatDefaultBackground(),
+				"Available Directions: "};
 			var sb = new StringBuilder();
 			if (this.GoNorth) {
 				sameLineOutput.Add(Helper.FormatInfoText());
@@ -221,35 +225,38 @@ namespace DungeonGame {
 		}
 		public void LookRoom(UserOutput output) {
 			output.StoreUserOutput(
-				"darkgreen", 
+				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 
 				"==================================================");
 			output.StoreUserOutput(
-				"darkcyan", 
+				Helper.FormatRoomOutputText(), 
 				Helper.FormatDefaultBackground(), 
 				this.Name);
 			output.StoreUserOutput(
-				"darkgreen", 
+				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 
 				"==================================================");
 			for (var i = 0; i < this.Desc.Length; i += Helper.GetGameWidth()) {
 				if (this.Desc.Length - i < Helper.GetGameWidth()) {
 					output.StoreUserOutput(
-						"darkcyan", 
+						Helper.FormatRoomOutputText(), 
 						Helper.FormatDefaultBackground(), 
 						this.Desc.Substring(i, this.Desc.Length - i));
 					continue;
 				}
 				output.StoreUserOutput(
-					"darkcyan", 
+					Helper.FormatRoomOutputText(), 
 					Helper.FormatDefaultBackground(), 
 					this.Desc.Substring(i, Helper.GetGameWidth()));
 			}
 			output.StoreUserOutput(
-				"darkgreen", 
+				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 
 				"==================================================");
-			var sameLineOutput = new List<string> {"darkcyan", Helper.FormatDefaultBackground(), "Room Contents: "};
+			var sameLineOutput = new List<string> {
+				Helper.FormatRoomOutputText(),
+				Helper.FormatDefaultBackground(), 
+				"Room Contents: "};
 			this.RebuildRoomObjects();
 			if (this._roomObjects.Count > 0 && this._roomObjects[0] != null) {
 				var objCount = this._roomObjects.Count;
@@ -347,11 +354,11 @@ namespace DungeonGame {
 			var monsterName = this.Monster.GetName().Split(' ');
 			if (monsterName.Last() == inputName || this.Monster.GetName() == inputName) {
 				output.StoreUserOutput(
-					Helper.FormatFailureOutputText(),
+					Helper.FormatRoomOutputText(),
 					Helper.FormatDefaultBackground(),
 					this.Monster.Desc);
 				var sameLineOutput = new List<string>() {
-					Helper.FormatFailureOutputText(),
+					Helper.FormatRoomOutputText(),
 					Helper.FormatDefaultBackground(),
 					"He is carrying:"};
 				var objCount = this.Monster.MonsterItems.Count;
@@ -365,7 +372,7 @@ namespace DungeonGame {
 						sb.Append(", ");
 					}
 					sb.Append(".");
-					sameLineOutput.Add(Helper.FormatFailureOutputText());
+					sameLineOutput.Add(Helper.FormatRoomOutputText());
 					sameLineOutput.Add(Helper.FormatDefaultBackground());
 					sameLineOutput.Add(sb.ToString());
 				}

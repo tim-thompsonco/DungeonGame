@@ -10,7 +10,12 @@ namespace DungeonGame {
 		private string[] Commands { get; set; } = new string[3] {
 		"[F]ight", "[I]nventory", "Flee" };
 
-		public bool SingleCombat(IMonster opponent, Player player, UserOutput output) {
+		public bool SingleCombat(
+			IMonster opponent, 
+			Player player, 
+			UserOutput output, 
+			UserOutput mapOutput,
+			List<IRoom> roomList) {
 			var fightStartString = player.Name + ", you have encountered a " + opponent.Name + ". Time to fight!";
 			output.StoreUserOutput(
 				Helper.FormatSuccessOutputText(),
@@ -53,7 +58,7 @@ namespace DungeonGame {
 						try {
 							if (input[1] != null) {
 								var spellName = Helper.ParseInput(input);
-								player.CastSpell(opponent, spellName);
+								player.CastSpell(opponent, spellName, output);
 								if (opponent.IsMonsterDead(player, output)) return true;
 							}
 							break;
@@ -213,7 +218,7 @@ namespace DungeonGame {
 						}
 						continue;
 					default:
-						Helper.InvalidCommand();
+						Helper.InvalidCommand(output);
 						continue;
 				}
 				if (player.IsHealing) this.HealingRound(player, output);
@@ -280,7 +285,8 @@ namespace DungeonGame {
 				PlayerHelper.DisplayPlayerStats(player, output);
 				opponent.DisplayStats(output);
 				this.ShowCommands(output);
-				output.RetrieveUserOutput();
+				mapOutput = Helper.ShowMap(roomList, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
+				output.RetrieveUserOutput(mapOutput);
 			}
 		}
 		private bool CanFleeCombat(UserOutput output) {
@@ -370,7 +376,7 @@ namespace DungeonGame {
 				if (this.Commands[objCount - 1] != command) {
 					sb.Append(", ");
 				}
-				sb.Append(".");
+				if (this.Commands[objCount - 1] == command) sb.Append(".");
 				sameLineOutput.Add(Helper.FormatInfoText());
 				sameLineOutput.Add(Helper.FormatDefaultBackground());
 				sameLineOutput.Add(sb.ToString());

@@ -337,22 +337,22 @@ namespace DungeonGame {
 					manaCostString);
 				switch(player.Spellbook[index].SpellCategory) {
 					case Spell.SpellType.Fireball:
-						Spell.FireOffenseSpellInfo(player, index);
+						Spell.FireOffenseSpellInfo(player, index, output);
 						break;
 					case Spell.SpellType.Frostbolt:
-						Spell.FrostOffenseSpellInfo(player, index);
+						Spell.FrostOffenseSpellInfo(player, index, output);
 						break;
 					case Spell.SpellType.Lightning:
-						Spell.ArcaneOffenseSpellInfo(player, index);
+						Spell.ArcaneOffenseSpellInfo(player, index, output);
 						break;
 					case Spell.SpellType.Heal:
-						Spell.HealingSpellInfo(player, index);
+						Spell.HealingSpellInfo(player, index, output);
 						break;
 					case Spell.SpellType.Rejuvenate:
-						Spell.HealingSpellInfo(player, index);
+						Spell.HealingSpellInfo(player, index, output);
 						break;
 					case Spell.SpellType.Diamondskin:
-						Spell.DefenseSpellInfo(player, index);
+						Spell.DefenseSpellInfo(player, index, output);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

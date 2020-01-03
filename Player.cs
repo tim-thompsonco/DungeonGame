@@ -478,20 +478,20 @@ namespace DungeonGame {
 			}
 			throw new IndexOutOfRangeException();
 		}
-		public void CastSpell(string inputName) {
+		public void CastSpell(string inputName, UserOutput output) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
 			if (index != -1 &&
 			    this.ManaPoints >= this.Spellbook[index].ManaCost &&
 			    this.PlayerClass == PlayerClassType.Mage) {
 				switch (this.Spellbook[index].SpellCategory) {
 					case Spell.SpellType.Heal:
-						Spell.CastHealing(this, index);
+						Spell.CastHealing(this, index, output);
 						return;
 					case Spell.SpellType.Rejuvenate:
-						Spell.CastHealing(this, index);
+						Spell.CastHealing(this, index, output);
 						return;
 					case Spell.SpellType.Diamondskin:
-						Spell.CastDefense(this, index);
+						Spell.CastDefense(this, index, output);
 						return;
 					case Spell.SpellType.Fireball:
 						return;
@@ -508,29 +508,29 @@ namespace DungeonGame {
 			}
 			throw new IndexOutOfRangeException();
 		}
-		public void CastSpell(IMonster opponent, string inputName) {
+		public void CastSpell(IMonster opponent, string inputName, UserOutput output) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
 			if (index != -1 && 
 			    this.ManaPoints >= this.Spellbook[index].ManaCost && 
 			    this.PlayerClass == PlayerClassType.Mage) {
 				switch (this.Spellbook[index].SpellCategory) {
 					case Spell.SpellType.Fireball:
-						Spell.CastFireOffense(opponent, this, index);
+						Spell.CastFireOffense(opponent, this, index, output);
 						return;
 					case Spell.SpellType.Frostbolt:
-						Spell.CastFrostOffense(opponent, this, index);
+						Spell.CastFrostOffense(opponent, this, index, output);
 						return;
 					case Spell.SpellType.Lightning:
-						Spell.CastArcaneOffense(opponent, this, index);
+						Spell.CastArcaneOffense(opponent, this, index, output);
 						return;
 					case Spell.SpellType.Heal:
-						Spell.CastHealing(this, index);
+						Spell.CastHealing(this, index, output);
 						return;
 					case Spell.SpellType.Rejuvenate:
-						Spell.CastHealing(this, index);
+						Spell.CastHealing(this, index, output);
 						return;
 					case Spell.SpellType.Diamondskin:
-						Spell.CastDefense(this, index);
+						Spell.CastDefense(this, index, output);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();

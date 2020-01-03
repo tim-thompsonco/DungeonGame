@@ -58,7 +58,8 @@ namespace DungeonGame {
 								if (input[1] != null) {
 									try {
 										timer.Dispose();
-										var outcome = spawnedRooms[roomIndex].AttackOpponent(player, input, output);
+										var outcome = spawnedRooms[roomIndex].AttackOpponent(
+											player, input, output, mapOutput, spawnedRooms);
 										if (!outcome && player.HitPoints <= 0) {
 											isGameOver = true;
 										}
@@ -111,7 +112,7 @@ namespace DungeonGame {
 							try {
 								if (input[1] != null) {
 									var spellName = Helper.ParseInput(input);
-									player.CastSpell(spellName);
+									player.CastSpell(spellName, output);
 								}
 								break;
 							}
@@ -136,9 +137,6 @@ namespace DungeonGame {
 										"You do not have enough mana to cast that spell!");
 								continue;
 							}
-						case "map":
-							mapOutput = Helper.ShowMap(spawnedRooms, player, 10, 20);
-							break;
 						case "use":
 							try {
 								if (input.Contains("distance")) {
@@ -534,7 +532,7 @@ namespace DungeonGame {
 							}
 							break;
 						default:
-							Helper.InvalidCommand();
+							Helper.InvalidCommand(output);
 							break;
 					}
 				PlayerHelper.DisplayPlayerStats(player, output);

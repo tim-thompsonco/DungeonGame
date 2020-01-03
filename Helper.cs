@@ -3,7 +3,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Collections.Generic;
-using System.Security.AccessControl;
 using System.Text;
 
 namespace DungeonGame {
@@ -35,7 +34,13 @@ namespace DungeonGame {
 		public static string FormatSuccessOutputText() {
 			return "green";
 		}
+		public static string FormatHiddenOutputText() {
+			return "black";
+		}
 		public static string FormatFailureOutputText() {
+			return "darkcyan";
+		}
+		public static string FormatRoomOutputText() {
 			return "darkcyan";
 		}
 		public static string FormatOnFireText() {
@@ -58,6 +63,12 @@ namespace DungeonGame {
 		}
 		public static string FormatAnnounceText() {
 			return "gray";
+		}
+		public static string FormatPlayerTile() {
+			return "green";
+		}
+		public static string FormatDiscoveredTile() {
+			return "darkgray";
 		}
 		public static string ParseInput(string[] userInput) {
 			var inputString = new StringBuilder();
@@ -118,65 +129,131 @@ namespace DungeonGame {
 			}
 		}
 		public static Player BuildNewPlayer(UserOutput output) {
-			FormatAnnounceText();
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			Console.WriteLine("Please enter a player name.\n");
+			output.StoreUserOutput(
+				FormatAnnounceText(), FormatDefaultBackground(), "Please enter a player name.");
 			string playerName;
 			while (true) {
-				Console.Write("Player name: ");
-				playerName = textInfo.ToTitleCase(Console.ReadLine().ToString());
-				Console.WriteLine("Your player name is {0}, is that correct? [Y] or [N].", playerName);
+				var sameLineOutput = new List<string>();
+				sameLineOutput.Add(FormatAnnounceText());
+				sameLineOutput.Add(FormatDefaultBackground());
+				sameLineOutput.Add("Player name: ");
+				output.StoreUserOutput(sameLineOutput);
+				output.RetrieveUserOutput();
+				playerName = textInfo.ToTitleCase(Console.ReadLine());
+				output.ClearUserOutput();
+				var playerNameString = "Your player name is " + playerName + ", is that correct? [Y] or [N].";
+				output.StoreUserOutput(
+					FormatAnnounceText(), FormatDefaultBackground(), playerNameString);
+				output.RetrieveUserOutput();
 				RequestCommand(output);
 				var input = GetFormattedInput();
+				output.ClearUserOutput();
 				if (input[0] == "y") {
 					break;
 				}
 			}
-			Console.WriteLine("Please enter your class. You can select Mage, Warrior, or Archer.\n");
 			while (true) {
-				Console.Write("Player class: ");
+				output.StoreUserOutput(
+					FormatAnnounceText(),
+					FormatDefaultBackground(),
+					"Please enter your class. You can select Mage, Warrior, or Archer.");
+				var sameLineOutputClass = new List<string>();
+				sameLineOutputClass.Add(FormatAnnounceText());
+				sameLineOutputClass.Add(FormatDefaultBackground());
+				sameLineOutputClass.Add("Player class: ");
+				output.StoreUserOutput(sameLineOutputClass);
+				output.RetrieveUserOutput();
 				var userInput = GetFormattedInput();
+				output.ClearUserOutput();
 				var playerClassInput = textInfo.ToTitleCase(userInput[0].ToString());
 				if (playerClassInput != "Mage" && playerClassInput != "Warrior" && playerClassInput != "Archer") {
-					Console.WriteLine("Invalid selection. Please enter Mage, Warrior, or Archer for your class.");
+					output.StoreUserOutput(
+						FormatAnnounceText(), 
+						FormatDefaultBackground(), 
+						"Invalid selection. Please enter Mage, Warrior, or Archer for your class.");
+					output.RetrieveUserOutput();
 					continue;
 				}
 				var playerClass = playerClassInput;
-				Console.WriteLine("Your player class is {0}, is that correct? [Y] or [N].", playerClass);
+				var playerClassString = "Your player class is " + playerClass + ", is that correct? [Y] or [N].";
+				output.StoreUserOutput(
+					FormatAnnounceText(), FormatDefaultBackground(), playerClassString);
 				RequestCommand(output);
+				output.RetrieveUserOutput();
 				var input = GetFormattedInput();
 				if (input[0] == "y") {
+					output.ClearUserOutput();
 					switch(playerClass) {
 						case "Archer":
 							var playerArcher = new Player(playerName, Player.PlayerClassType.Archer);
-							Console.WriteLine("\n\nYou have selected Archer. You can 'use' an ability, for example " +
+							var archerString = "You have selected Archer. You can 'use' an ability, for example " +
 							                  "'use gut', if you have an ability named gut shot in your abilities. To see " +
 							                  "the list of abilities you have available, you can 'list abilities'. To view info " +
 							                  "about an ability, you can 'ability' the ability name. For example, 'ability distance'. " +
 							                  "To use a bow, you must have a quiver equipped, and it must not be empty. To reload " +
-							                  "your quiver, you can 'reload'.");
+							                  "your quiver, you can 'reload'.";
+							for (var i = 0; i < archerString.Length; i += GetGameWidth()) {
+								if (archerString.Length - i < Helper.GetGameWidth()) {
+									output.StoreUserOutput(
+										FormatAnnounceText(), 
+										FormatDefaultBackground(), 
+										archerString.Substring(i, archerString.Length - i));
+									continue;
+								}
+								output.StoreUserOutput(
+									FormatAnnounceText(), 
+									FormatDefaultBackground(), 
+									archerString.Substring(i, GetGameWidth()));
+							}
 							return playerArcher;
 						case "Mage":
 							var playerMage = new Player(playerName, Player.PlayerClassType.Mage);
-							Console.WriteLine("\n\nYou have selected Mage. You can 'cast' a spell, for example " +
+							var mageString = "You have selected Mage. You can 'cast' a spell, for example " +
 							                  "'cast fireball', if you have a spell named fireball in your spellbook. To see " +
 							                  "the list of spells in your spellbook, you can 'list spells'. To view info " +
-							                  "about a spell, you can 'spell' the spell name. For example, 'spell fireball'.");
+							                  "about a spell, you can 'spell' the spell name. For example, 'spell fireball'.";
+							for (var i = 0; i < mageString.Length; i += GetGameWidth()) {
+								if (mageString.Length - i < Helper.GetGameWidth()) {
+									output.StoreUserOutput(
+										FormatAnnounceText(), 
+										FormatDefaultBackground(), 
+										mageString.Substring(i, mageString.Length - i));
+									continue;
+								}
+								output.StoreUserOutput(
+									FormatAnnounceText(), 
+									FormatDefaultBackground(), 
+									mageString.Substring(i, GetGameWidth()));
+							}
 							return playerMage;
 							case "Warrior":
 							var playerWarrior = new Player(playerName, Player.PlayerClassType.Warrior);
-							Console.WriteLine("\n\nYou have selected Warrior. You can 'use' an ability, for example " +
+							var warriorString = "You have selected Warrior. You can 'use' an ability, for example " +
 							                  "'use charge', if you have an ability named charge in your abilities. To see " +
 							                  "the list of abilities you have available, you can 'list abilities'. To view info " +
-							                  "about an ability, you can 'ability' the ability name. For example, 'ability charge'.");
+							                  "about an ability, you can 'ability' the ability name. For example, 'ability charge'.";
+							for (var i = 0; i < warriorString.Length; i += GetGameWidth()) {
+								if (warriorString.Length - i < Helper.GetGameWidth()) {
+									output.StoreUserOutput(
+										FormatAnnounceText(), 
+										FormatDefaultBackground(), 
+										warriorString.Substring(i, warriorString.Length - i));
+									continue;
+								}
+								output.StoreUserOutput(
+									FormatAnnounceText(), 
+									FormatDefaultBackground(), 
+									warriorString.Substring(i, GetGameWidth()));
+							}
 							return playerWarrior;
 					}
 				}
 			}
 		}
-		public static void InvalidCommand() {
-			FormatFailureOutputText();
-			Console.WriteLine("Not a valid command.");
+		public static void InvalidCommand(UserOutput output) {
+			output.StoreUserOutput(
+				FormatFailureOutputText(), FormatDefaultBackground(), "Not a valid command.");
 		}
 		public static int ChangeRoom(List<IRoom> roomList, Player player, int x, int y, int z, UserOutput output) {
 			// Player location is changed to the new coordinates
@@ -194,18 +271,23 @@ namespace DungeonGame {
 		}
 		public static void InvalidDirection(UserOutput output) {
 			const string outputString = "You can't go that way!";
-			output.StoreUserOutput("darkcyan", "black", outputString);
+			output.StoreUserOutput(
+				FormatFailureOutputText(), FormatDefaultBackground(), outputString);
 		}
 		public static void InvalidVendorSell(UserOutput output) {
 			const string outputString = "The vendor doesn't want that.";
-			output.StoreUserOutput("darkcyan", "black", outputString);
+			output.StoreUserOutput(
+				FormatFailureOutputText(), FormatDefaultBackground(), outputString);
 		}
 		public static bool QuitGame(Player player, UserOutput output) {
-			FormatAnnounceText();
-			Console.WriteLine("Are you sure you want to quit?");
+			output.StoreUserOutput(
+				FormatAnnounceText(),
+				FormatDefaultBackground(),
+				"Are you sure you want to quit?");
 			var input = GetFormattedInput();
 			if (input[0] == "yes" || input[0] == "y") {
-				Console.WriteLine("Quitting the game.");
+				output.StoreUserOutput(
+					FormatAnnounceText(), FormatDefaultBackground(), "Quitting the game.");
 				player.CanSave = true;
 				SaveGame(player, output);
 				return true;
@@ -229,12 +311,14 @@ namespace DungeonGame {
 					serializer.Serialize(writer, player, typeof(Player));
 				}
 				outputString = "Your game has been saved.";
-				output.StoreUserOutput("gray", "black", outputString);
+				output.StoreUserOutput(
+					FormatAnnounceText(), FormatDefaultBackground(), outputString);
 				return;
 			}
 
 			outputString = "You can't save inside a dungeon! Go outside first.";
-			output.StoreUserOutput("gray", "black", outputString);
+			output.StoreUserOutput(
+				FormatAnnounceText(), FormatDefaultBackground(), outputString);
 		}
 		public static int FleeRoom(List<IRoom> roomList, Player player, UserOutput output) {
 			var roomName = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
@@ -300,13 +384,13 @@ namespace DungeonGame {
 					    mapY == player.Y &&
 					    mapZ == player.Z) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							sameLineOutput.Add("black"); // Foreground color
-							sameLineOutput.Add("green"); // Background color
+							sameLineOutput.Add(FormatHiddenOutputText()); // Foreground color
+							sameLineOutput.Add(FormatPlayerTile()); // Background color
 							sameLineOutput.Add("OO"); // What prints to display
 							continue;
 						}
-						sameLineOutput.Add("black"); // Foreground color
-						sameLineOutput.Add("green"); // Background color
+						sameLineOutput.Add(FormatHiddenOutputText()); // Foreground color
+						sameLineOutput.Add(FormatPlayerTile()); // Background color
 						sameLineOutput.Add("  "); // What prints to display
 						continue;
 					}
@@ -316,13 +400,13 @@ namespace DungeonGame {
 					    mapZ == player.Z &&
 					    j == endRightPos) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							sameLineOutput.Add("black"); // Foreground color
-							sameLineOutput.Add("green"); // Background color
+							sameLineOutput.Add(FormatHiddenOutputText()); // Foreground color
+							sameLineOutput.Add(FormatPlayerTile()); // Background color
 							sameLineOutput.Add("OO |"); // What prints to display
 							continue;
 						}
-						sameLineOutput.Add("black"); // Foreground color
-						sameLineOutput.Add("green"); // Background color
+						sameLineOutput.Add(FormatHiddenOutputText()); // Foreground color
+						sameLineOutput.Add(FormatPlayerTile()); // Background color
 						sameLineOutput.Add("   |"); // What prints to display
 						continue;
 					}
@@ -332,70 +416,70 @@ namespace DungeonGame {
 					    mapZ == player.Z &&
 					    j == startLeftPos) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							sameLineOutput.Add("black"); // Foreground color
-							sameLineOutput.Add("green"); // Background color
+							sameLineOutput.Add(FormatHiddenOutputText()); // Foreground color
+							sameLineOutput.Add(FormatPlayerTile()); // Background color
 							sameLineOutput.Add("| OO"); // What prints to display
 							continue;
 						}
-						sameLineOutput.Add("black"); // Foreground color
-						sameLineOutput.Add("green"); // Background color
+						sameLineOutput.Add(FormatHiddenOutputText()); // Foreground color
+						sameLineOutput.Add(FormatPlayerTile()); // Background color
 						sameLineOutput.Add("|   "); // What prints to display
 						continue;
 					}
 					if (roomIndex != -1 && roomList[roomIndex].IsDiscovered) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							sameLineOutput.Add("darkgreen"); // Foreground color
-							sameLineOutput.Add("darkgray"); // Background color
+							sameLineOutput.Add(FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(FormatDiscoveredTile()); // Background color
 							sameLineOutput.Add("OO"); // What prints to display
 							continue;
 						}
-						sameLineOutput.Add("darkgray"); // Foreground color
-						sameLineOutput.Add("darkgray"); // Background color
+						sameLineOutput.Add(FormatGeneralInfoText()); // Foreground color
+						sameLineOutput.Add(FormatDiscoveredTile()); // Background color
 						sameLineOutput.Add("  "); // What prints to display
 						continue;
 					}
 					if (roomIndex != -1 && roomList[roomIndex].IsDiscovered && j == endRightPos) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							sameLineOutput.Add("darkgreen"); // Foreground color
-							sameLineOutput.Add("darkgray"); // Background color
+							sameLineOutput.Add(FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(FormatDiscoveredTile()); // Background color
 							sameLineOutput.Add("OO |"); // What prints to display
 							continue;
 						}
-						sameLineOutput.Add("darkgray"); // Foreground color
-						sameLineOutput.Add("darkgray"); // Background color
+						sameLineOutput.Add(FormatGeneralInfoText()); // Foreground color
+						sameLineOutput.Add(FormatDiscoveredTile()); // Background color
 						sameLineOutput.Add("   |"); // What prints to display
 						continue;
 					}
 					if (roomIndex != -1 && roomList[roomIndex].IsDiscovered && j == startLeftPos) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							sameLineOutput.Add("darkgreen"); // Foreground color
-							sameLineOutput.Add("darkgray"); // Background color
+							sameLineOutput.Add(FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(FormatDiscoveredTile()); // Background color
 							sameLineOutput.Add("| OO"); // What prints to display
 							continue;
 						}
-						sameLineOutput.Add("darkgray"); // Foreground color
-						sameLineOutput.Add("darkgray"); // Background color
+						sameLineOutput.Add(FormatGeneralInfoText()); // Foreground color
+						sameLineOutput.Add(FormatDiscoveredTile()); // Background color
 						sameLineOutput.Add("|   "); // What prints to display
 						continue;
 					}
 					if (j == endRightPos) {
-						sameLineOutput.Add("darkgreen"); // Foreground color
-						sameLineOutput.Add("black"); // Background color
+						sameLineOutput.Add(FormatGeneralInfoText()); // Foreground color
+						sameLineOutput.Add(FormatDefaultBackground()); // Background color
 						sameLineOutput.Add("   |"); // What prints to display
 					}
 					if (j == startLeftPos) {
-						sameLineOutput.Add("darkgreen"); // Foreground color
-						sameLineOutput.Add("black"); // Background color
+						sameLineOutput.Add(FormatGeneralInfoText()); // Foreground color
+						sameLineOutput.Add(FormatDefaultBackground()); // Background color
 						sameLineOutput.Add("|   "); // What prints to display
 					}
-					sameLineOutput.Add("darkgreen"); // Foreground color
-					sameLineOutput.Add("black"); // Background color
+					sameLineOutput.Add(FormatGeneralInfoText()); // Foreground color
+					sameLineOutput.Add(FormatDefaultBackground()); // Background color
 					sameLineOutput.Add("  "); // What prints to display
 				}
 				output.StoreUserOutput(sameLineOutput);
 			}
 			output.StoreUserOutput(
-				"darkgreen", 
+				FormatGeneralInfoText(), 
 				FormatDefaultBackground(), 
 				mapBorder.ToString());
 			return output;

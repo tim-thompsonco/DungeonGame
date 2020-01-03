@@ -103,7 +103,8 @@ namespace DungeonGame {
 		public IMonster GetMonster() {
 			return this.Monster;
 		}
-		public bool AttackOpponent(Player player, string[] input, UserOutput output) {
+		public bool AttackOpponent(
+			Player player, string[] input, UserOutput output, UserOutput mapOutput, List<IRoom> roomList) {
 			return true;
 		}
 		public void LootCorpse(Player player, string[] input, UserOutput output) { }

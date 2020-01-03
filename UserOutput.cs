@@ -94,5 +94,11 @@ namespace DungeonGame {
 			}
 			this.RetrieveUserOutput();
 		}
+		public void ClearUserOutput() {
+			var removeLines = this.Output.Count;
+			for (var i = 0; i < removeLines; i++) {
+				this.Output.RemoveAt(removeLines - i - 1);
+			}
+		}
 	}
 }

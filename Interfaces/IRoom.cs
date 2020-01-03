@@ -1,4 +1,6 @@
-﻿namespace DungeonGame {
+﻿using System.Collections.Generic;
+
+namespace DungeonGame {
 	public interface IRoom {
 		bool IsDiscovered { get; set; }
 		bool GoNorth { get; set; }
@@ -18,7 +20,12 @@
 		int Z { get; set; }
 
 		IMonster GetMonster();
-		bool AttackOpponent(Player player, string[] input, UserOutput output);
+		bool AttackOpponent(
+			Player player,
+			string[] input,
+			UserOutput output,
+			UserOutput mapOutput,
+			List<IRoom> roomList);
 		void LootCorpse(Player player, string[] input, UserOutput output);
 		void RebuildRoomObjects();
 		void ShowDirections(UserOutput output);
