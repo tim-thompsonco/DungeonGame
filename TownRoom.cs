@@ -22,11 +22,8 @@ namespace DungeonGame {
 		public int X { get; set; }
 		public int Y { get; set; }
 		public int Z { get; set; }
-		public List<string> Commands { get; set; } = new List<string>() {
-			"[I]nventory",
-			"Save",
-			"[Q]uit"};
-		// List of objects in room (including monsters)
+		public List<string> Commands { get; set; }
+		// List of objects in room (including Vendors)
 		private readonly List<IRoomInteraction> _roomObjects = new List<IRoomInteraction>();
 		public IVendor Vendor;
 		public IMonster Monster;
@@ -65,6 +62,10 @@ namespace DungeonGame {
 			this.GoSouthEast = goSouthEast;
 			this.GoUp = goUp;
 			this.GoDown = goDown;
+			this.Commands = new List<string>() {
+				"[I]nventory",
+				"Save",
+				"[Q]uit"};
 		}
 		public TownRoom(
 			string name,
@@ -192,7 +193,7 @@ namespace DungeonGame {
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 
-				"==================================================");
+				Helper.FormatTextBorder());
 			output.StoreUserOutput(
 				Helper.FormatFailureOutputText(), 
 				Helper.FormatDefaultBackground(), 
@@ -200,7 +201,7 @@ namespace DungeonGame {
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 
-				"==================================================");
+				Helper.FormatTextBorder());
 			for (var i = 0; i < this.Desc.Length; i += Helper.GetGameWidth()) {
 				if (this.Desc.Length - i < Helper.GetGameWidth()) {
 					output.StoreUserOutput(
@@ -217,7 +218,7 @@ namespace DungeonGame {
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 
-				"==================================================");
+				Helper.FormatTextBorder());
 			var sameLineOutput = new List<string> {Helper.FormatFailureOutputText(), Helper.FormatDefaultBackground(), "Room Contents: "};
 			this.RebuildRoomObjects();
 			if (this._roomObjects.Count > 0 && this._roomObjects[0] != null) {
@@ -254,14 +255,23 @@ namespace DungeonGame {
 			var inputName = inputString.ToString().Trim();
 			var vendorName = this.Vendor.GetName().Split(' ');
 			if (vendorName.Last() == inputName || this.Vendor.GetName() == inputName) {
-				output.StoreUserOutput(
-					Helper.FormatGeneralInfoText(),
-					Helper.FormatDefaultBackground(),
-					this.Vendor.Desc);
+				for (var i = 0; i < this.Vendor.Desc.Length; i += Helper.GetGameWidth()) {
+					if (this.Vendor.Desc.Length - i < Helper.GetGameWidth()) {
+						output.StoreUserOutput(
+							Helper.FormatRoomOutputText(), 
+							Helper.FormatDefaultBackground(), 
+							this.Vendor.Desc.Substring(i, this.Vendor.Desc.Length - i));
+						continue;
+					}
+					output.StoreUserOutput(
+						Helper.FormatRoomOutputText(), 
+						Helper.FormatDefaultBackground(), 
+						this.Vendor.Desc.Substring(i, Helper.GetGameWidth()));
+				}
 				var sameLineOutput = new List<string>() {
 					Helper.FormatRoomOutputText(),
 					Helper.FormatDefaultBackground(),
-					"He is carrying:"};
+					"He is carrying: "};
 				var objCount = this.Vendor.VendorItems.Count;
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (var itemForSale in this.Vendor.VendorItems) {
@@ -269,10 +279,7 @@ namespace DungeonGame {
 					var itemTitle = itemForSale.GetName();
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
-					if (this.Vendor.VendorItems[objCount - 1] != itemForSale) {
-						sb.Append(", ");
-					}
-					sb.Append(".");
+					sb.Append(this.Vendor.VendorItems[objCount - 1] != itemForSale ? ", " : ".");
 					sameLineOutput.Add(Helper.FormatRoomOutputText());
 					sameLineOutput.Add(Helper.FormatDefaultBackground());
 					sameLineOutput.Add(sb.ToString());

@@ -22,10 +22,7 @@ namespace DungeonGame {
 		public int X { get; set; }
 		public int Y { get; set; }
 		public int Z { get; set; }
-		public List<string> Commands { get; set; } = new List<string>() {
-			"[I]nventory",
-			"Save",
-			"[Q]uit"};
+		public List<string> Commands { get; set; }
 		// List of objects in room (including monsters)
 		private readonly List<IRoomInteraction> _roomObjects = new List<IRoomInteraction>();
 		public IMonster Monster;
@@ -47,7 +44,9 @@ namespace DungeonGame {
 			bool goNorthEast,
 			bool goSouthEast,
 			bool goUp,
-			bool goDown
+			bool goDown,
+			int levelRangeLow,
+			int levelRangeHigh
 			) {
 			this.Name = name;
 			this.Desc = desc;
@@ -64,45 +63,27 @@ namespace DungeonGame {
 			this.GoSouthEast = goSouthEast;
 			this.GoUp = goUp;
 			this.GoDown = goDown;
+			this.Commands = new List<string>() {
+				"[I]nventory",
+				"Save",
+				"[Q]uit"};
+			var randomNum = Helper.GetRandomNumber(1, 100);
+			var randomNumLevel = Helper.GetRandomNumber(levelRangeLow, levelRangeHigh);
+			// Reserving numbers 90-100 for chance of room not having a monster
+			if (randomNum < 35) {
+				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Zombie);
+			}
+			else if (randomNum < 60) {
+				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Skeleton);
+			}
+			else if (randomNum < 80) {
+				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Spider);
+			}
+			else if (randomNum < 90) {
+				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Demon);
+			}
 		}
-		public DungeonRoom(
-			string name,
-			string desc,
-			int x,
-			int y,
-			int z,
-			bool goNorth,
-			bool goSouth,
-			bool goEast,
-			bool goWest,
-			bool goNorthWest,
-			bool goSouthWest,
-			bool goNorthEast,
-			bool goSouthEast,
-			bool goUp,
-			bool goDown,
-			IMonster monster
-			)
-			: this(
-				name, 
-				desc, 
-				x, 
-				y, 
-				z, 
-				goNorth, 
-				goSouth, 
-				goEast,
-				goWest,
-				goNorthWest,
-				goSouthWest, 
-				goNorthEast, 
-				goSouthEast, 
-				goUp, 
-				goDown
-				) {
-			this.Monster = monster;
-		}
-
+		
 		public IMonster GetMonster() {
 			return this.Monster;
 		}
@@ -152,7 +133,7 @@ namespace DungeonGame {
 		}
 		public void ShowCommands(UserOutput output) {
 			var sameLineOutput = new List<string> {
-				Helper.FormatGeneralInfoText(), Helper.FormatDefaultBackground(), "Available Commands: "};
+			Helper.FormatGeneralInfoText(), Helper.FormatDefaultBackground(), "Available Commands: "};
 			var objCount = this.Commands.Count;
 			foreach (var command in this.Commands) {
 				var sb = new StringBuilder();
@@ -229,7 +210,7 @@ namespace DungeonGame {
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 
-				"==================================================");
+				Helper.FormatTextBorder());
 			output.StoreUserOutput(
 				Helper.FormatRoomOutputText(), 
 				Helper.FormatDefaultBackground(), 
@@ -237,7 +218,7 @@ namespace DungeonGame {
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 
-				"==================================================");
+				Helper.FormatTextBorder());
 			for (var i = 0; i < this.Desc.Length; i += Helper.GetGameWidth()) {
 				if (this.Desc.Length - i < Helper.GetGameWidth()) {
 					output.StoreUserOutput(
@@ -254,7 +235,7 @@ namespace DungeonGame {
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 
-				"==================================================");
+				Helper.FormatTextBorder());
 			var sameLineOutput = new List<string> {
 				Helper.FormatRoomOutputText(),
 				Helper.FormatDefaultBackground(), 
@@ -355,14 +336,23 @@ namespace DungeonGame {
 			var inputName = inputString.ToString().Trim();
 			var monsterName = this.Monster.GetName().Split(' ');
 			if (monsterName.Last() == inputName || this.Monster.GetName() == inputName) {
-				output.StoreUserOutput(
-					Helper.FormatRoomOutputText(),
-					Helper.FormatDefaultBackground(),
-					this.Monster.Desc);
+				for (var i = 0; i < this.Monster.Desc.Length; i += Helper.GetGameWidth()) {
+					if (this.Monster.Desc.Length - i < Helper.GetGameWidth()) {
+						output.StoreUserOutput(
+							Helper.FormatRoomOutputText(), 
+							Helper.FormatDefaultBackground(), 
+							this.Monster.Desc.Substring(i, this.Monster.Desc.Length - i));
+						continue;
+					}
+					output.StoreUserOutput(
+						Helper.FormatRoomOutputText(), 
+						Helper.FormatDefaultBackground(), 
+						this.Monster.Desc.Substring(i, Helper.GetGameWidth()));
+				}
 				var sameLineOutput = new List<string>() {
 					Helper.FormatRoomOutputText(),
 					Helper.FormatDefaultBackground(),
-					"He is carrying:"};
+					"He is carrying: "};
 				var objCount = this.Monster.MonsterItems.Count;
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (var loot in this.Monster.MonsterItems) {
@@ -370,10 +360,7 @@ namespace DungeonGame {
 					var itemTitle = loot.GetName();
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
-					if (this.Monster.MonsterItems[objCount - 1] != loot) {
-						sb.Append(", ");
-					}
-					sb.Append(".");
+					sb.Append(this.Monster.MonsterItems[objCount - 1] != loot ? ", " : ".");
 					sameLineOutput.Add(Helper.FormatRoomOutputText());
 					sameLineOutput.Add(Helper.FormatDefaultBackground());
 					sameLineOutput.Add(sb.ToString());

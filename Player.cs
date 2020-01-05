@@ -51,7 +51,10 @@ namespace DungeonGame {
 		public PlayerClassType PlayerClass { get; set; }
 		public Quiver PlayerQuiver { get; set; }
 		public Armor PlayerHeadArmor { get; set; }
+		public Armor PlayerBackArmor { get; set; }
 		public Armor PlayerChestArmor { get; set; }
+		public Armor PlayerWristArmor { get; set; }
+		public Armor PlayerWaistArmor { get; set; }
 		public Armor PlayerLegsArmor { get; set; }
 		public Weapon PlayerWeapon { get; set; }
 		public List<Spell> Spellbook { get; set; }
@@ -84,14 +87,7 @@ namespace DungeonGame {
 					this.CanWearCloth = true;
 					this.CanUseDagger = true;
 					this.CanUseOneHandedSword = true;
-					this.Inventory.Add(new Weapon(
-						"dagger", 
-						14, 
-						17, 
-						18, 
-						1.2, 
-						false,
-						Weapon.WeaponType.Dagger));
+					this.Inventory.Add(new Weapon(this.Level, Weapon.WeaponType.Dagger));
 					this.Inventory.Add(new Armor(
 						"cloth vest", Armor.ArmorSlot.Chest, 
 						Armor.ArmorType.Cloth, 
@@ -143,14 +139,7 @@ namespace DungeonGame {
 					this.CanUseBow = true;
 					this.CanUseOneHandedSword = true;
 					this.CanUseTwoHandedSword = true;
-					this.Inventory.Add(new Weapon(
-						"iron sword", 
-						24, 
-						27, 
-						27, 
-						1.3, 
-						false,
-						Weapon.WeaponType.OneHandedSword));
+					this.Inventory.Add(new Weapon(this.Level, Weapon.WeaponType.TwoHandedSword));
 					this.Inventory.Add(new Armor(
 						"iron chestplate", Armor.ArmorSlot.Chest, 
 						Armor.ArmorType.Plate, 
@@ -199,14 +188,7 @@ namespace DungeonGame {
 					this.CanUseBow = true;
 					this.CanUseDagger = true;
 					this.CanUseOneHandedSword = true;
-					this.Inventory.Add(new Weapon(
-						"short bow", 
-						20, 
-						23, 
-						23, 
-						1.3, 
-						false,
-						Weapon.WeaponType.Bow));
+					this.Inventory.Add(new Weapon(this.Level, Weapon.WeaponType.Bow));
 					this.Inventory.Add(new Armor(
 						"leather vest", Armor.ArmorSlot.Chest, 
 						Armor.ArmorType.Leather, 
@@ -309,7 +291,8 @@ namespace DungeonGame {
 			var index = 0;
 			switch (userInput[1]) {
 				case "health":
-					index = this.Consumables.FindIndex(f => f.PotionCategory.ToString() == "Health");
+					index = this.Consumables.FindIndex(
+						f => f.PotionCategory.ToString() == "Health" && f.Name.Contains(userInput[1]));
 					if (index != -1) {
 						this.Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
 						var drankHealthString = "You drank a potion and replenished " +
@@ -328,7 +311,8 @@ namespace DungeonGame {
 					}
 					break;
 				case "mana":
-					index = this.Consumables.FindIndex(f => f.PotionCategory.ToString() == "Mana");
+					index = this.Consumables.FindIndex(
+						f => f.PotionCategory.ToString() == "Mana" && f.Name.Contains(userInput[1]));
 					if (index != -1) {
 						this.Consumables[index].RestoreMana.RestoreManaPlayer(this);
 						var drankManaString = "You drank a potion and replenished " +

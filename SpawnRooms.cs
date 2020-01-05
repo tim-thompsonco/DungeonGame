@@ -25,7 +25,9 @@ namespace DungeonGame {
 				false, 
 				false, 
 				false, 
-				false); 
+				false, 
+				1, 
+				3); 
 			this.SpawnedRooms.Add(room100);
 			var room101 = new DungeonRoom(
 				"Dimly Lit Platform",
@@ -42,29 +44,14 @@ namespace DungeonGame {
 				true, 
 				false, 
 				false, 
-				true, 
+				true, 	
 				false, 
 				true, 
 				false,
 				false, 
 				false,
-				new Monster(
-				"rotting zombie",
-				"A rotting corpse stares at you, it's face frozen in a look of indifference to the fact a bug is crawling" +
-				" out of it's empty eye sockets. In one hand, it drags a weapon against the ground, as it stares at you " +
-				"menacingly. Bones, muscle and tendons are visible through many gashes and tears in it's rotting skin.",
-				1, 
-				10, 
-				80, 
-				100, 
-					new Weapon(
-						"notched axe",
-						14, 
-						24, 
-						24, 
-						1.2, 
-						true,
-						Weapon.WeaponType.Axe))); 
+				1,
+				3); 
 			this.SpawnedRooms.Add(room101);
 			var room102 = new DungeonRoom(
 				"Corridor",
@@ -85,26 +72,8 @@ namespace DungeonGame {
 				false, 
 				false, 
 				false,
-				new Monster(
-				"huge spider",
-				"A huge black spider about the size of a large bear skitters down the corridor towards you. " +
-				"Coarse hair sticks out from every direction on it's thorax and legs. It's many eyes stare at " +
-				"you, legs ending in sharp claws carrying it closer as it hisses hungrily.", 
-				2, 
-				0, 
-				100, 
-				120, 
-					new Weapon(
-						"venomous fang",
-						19, 
-						29, 
-						29, 
-						1.3, 
-						true ,
-						Weapon.WeaponType.Dagger),
-					new Loot(
-						"large venom sac",
-						15))); 
+				1,
+				3); 
 			this.SpawnedRooms.Add(room102);
 			var room103 = new DungeonRoom(
 				"Corridor",
@@ -124,37 +93,8 @@ namespace DungeonGame {
 				false, 
 				false, 
 				false,
-				new Monster(
-				"skeleton warrior",
-				"A skeleton stands in front of you. His bones look worn and damaged from years of fighting. A ghastly " +
-				"yellow glow surrounds him, which is the only indication of the magic that must exist to reanimate this " +
-				"undead warrior. His chest and ribcage are fused together in a single, solid piece of armor and he raises " +
-				"a sword menacingly towards you.", 
-				2, 
-				15, 
-				100, 
-				120, 
-					new Weapon(
-						"dull sword",
-						15, 
-						22, 
-						22, 
-						1.2, 
-						true ,
-						Weapon.WeaponType.OneHandedSword),
-					new Armor(
-						"bony chestplate",
-						Armor.ArmorSlot.Chest, 
-						Armor.ArmorType.Plate, 
-						16, 
-						11, 
-						16, 
-						true),
-					new Consumable(
-						"minor health potion",
-						3, 
-						Consumable.PotionType.Health, 
-						50))); 
+				1,
+				3); 
 			this.SpawnedRooms.Add(room103);
 			var room104 = new DungeonRoom(
 				"Dimly Lit Platform",
@@ -177,37 +117,8 @@ namespace DungeonGame {
 				true, 
 				true, 
 				true,
-				new Monster(
-				"skeleton guardian",
-				"A skeleton stands in front of you. His bones look stronger than that of a normal skeleton. A ghastly " +
-				"yellow glow surrounds him, which is the only indication of the magic that must exist to reanimate this " +
-				"undead warrior. A shoddy, bronze helmet adorns his head and a well-crafted bronze longsword is clutched by " +
-				"his skeletal fingers, which tighten their grip as he shuffles towards you and grunts.", 
-				2, 
-				20, 
-				120, 
-				160, 
-					new Weapon(
-						"bronze longsword",
-						23, 
-						29, 
-						29, 
-						1.2, 
-						true ,
-						Weapon.WeaponType.OneHandedSword),
-					new Armor(
-						"bronze helmet",
-						Armor.ArmorSlot.Head, 
-						Armor.ArmorType.Plate, 
-						12, 
-						10, 
-						12, 
-						true),
-					new Consumable(
-						"minor mana potion",
-						3, 
-						Consumable.PotionType.Mana, 
-						50))); 
+				1,
+				3); 
 			this.SpawnedRooms.Add(room104);
 			var room105 = new DungeonRoom(
 				"Corridor",
@@ -227,37 +138,8 @@ namespace DungeonGame {
 				false, 
 				false, 
 				false,
-				new Monster(
-				"skeleton warrior",
-				"A skeleton stands in front of you. His bones look worn and damaged from years of fighting. A ghastly " +
-				"yellow glow surrounds him, which is the only indication of the magic that must exist to reanimate this " +
-				"undead warrior. His chest and ribcage are fused together in a single, solid piece of armor and he raises " +
-				"a sword menacingly towards you.", 
-				2, 
-				15, 
-				100, 
-				120, 
-					new Weapon(
-						"dull sword",
-						15, 
-						22, 
-						22, 
-						1.2, 
-						true ,
-						Weapon.WeaponType.OneHandedSword),
-					new Armor(
-						"bony chestplate",
-						Armor.ArmorSlot.Chest, 
-						Armor.ArmorType.Plate, 
-						16, 
-						11, 
-						16, 
-						true),
-					new Consumable(
-						"minor health potion",
-						3, 
-						Consumable.PotionType.Health, 
-						50))); 
+				1,
+				3); 
 			this.SpawnedRooms.Add(room105);
 			var room106 = new DungeonRoom(
 				"Corridor",
@@ -278,26 +160,8 @@ namespace DungeonGame {
 				true, 
 				false, 
 				false,
-				new Monster(
-				"huge spider",
-				"A huge black spider about the size of a large bear skitters down the corridor towards you. " +
-				"Coarse hair sticks out from every direction on it's thorax and legs. It's many eyes stare at " +
-				"you, legs ending in sharp claws carrying it closer as it hisses hungrily.", 
-				2, 
-				0, 
-				100, 
-				120, 
-					new Weapon(
-						"venomous fang",
-						19,  
-						29, 
-						29, 
-						1.3, 
-						true ,
-						Weapon.WeaponType.Dagger),
-					new Loot(
-						"large venom sac",
-						15))); 
+				1,
+				3); 
 			this.SpawnedRooms.Add(room106);
 			var room107 = new DungeonRoom(
 				"Pathway to Sunken Pit",
@@ -317,7 +181,9 @@ namespace DungeonGame {
 				false, 
 				false, 
 				true, 
-				false); 
+				false,
+				1,
+				3); 
 			this.SpawnedRooms.Add(room107);
 			var room108 = new DungeonRoom(
 				"Sunken Pit",
@@ -338,26 +204,8 @@ namespace DungeonGame {
 				false, 
 				false, 
 				false,
-				new Monster(
-				"horned demon",
-				"A massive red demon stands before you with two horns sticking out of it's head. It's eyes glint " +
-				"yellow and a look of pure hatred adorns its face. Leathery wings spread out on either side of its " +
-				"back as it rises up to its full height of 8 feet and growls at you.", 
-				4, 
-				50, 
-				200, 
-				250, 
-					new Weapon(
-						"obsidian axe",
-						29, 
-						35, 
-						35, 
-						1.1, 
-						true ,
-						Weapon.WeaponType.Axe),
-					new Loot(
-						"ruby",
-						50))); 
+				1,
+				3); 
 			this.SpawnedRooms.Add(room108);
 			var room109 = new DungeonRoom(
 				"Stairway Leading Up",
@@ -377,7 +225,9 @@ namespace DungeonGame {
 				false, 
 				false, 
 				true, 
-				true); 
+				true,
+				1,
+				3); 
 			this.SpawnedRooms.Add(room109);
 			var room110 = new TownRoom(
 				"Outside Dungeon Entrance",

@@ -7,6 +7,10 @@ using System.Threading;
 namespace DungeonGame {
 	class MainClass {
 		public static void Main(string[] args) {
+			try {
+				Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+			}
+			catch (Exception) {}
 			while (true) {
 				// Game loading commands
 				var initialOutput = new UserOutput();
@@ -25,10 +29,20 @@ namespace DungeonGame {
 						TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
 						NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
 					});
+					// Insert blank space before game reload info for formatting
+					initialOutput.StoreUserOutput(
+						Helper.FormatGeneralInfoText(),
+						Helper.FormatDefaultBackground(),
+						"");
 					initialOutput.StoreUserOutput(
 						Helper.FormatGeneralInfoText(), 
 						Helper.FormatDefaultBackground(), 
 						"Reloading your saved game.");
+					// Insert blank space after game reload info for formatting
+					initialOutput.StoreUserOutput(
+						Helper.FormatGeneralInfoText(),
+						Helper.FormatDefaultBackground(),
+						"");
 				}
 				catch (FileNotFoundException) {
 					spawnedRooms = new SpawnRooms().RetrieveSpawnRooms();
@@ -48,6 +62,8 @@ namespace DungeonGame {
 					TimeSpan.Zero,
 					TimeSpan.FromSeconds(3));
 				initialMapOutput = Helper.ShowMap(spawnedRooms, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
+				PlayerHelper.DisplayPlayerStats(player, initialOutput);
+				spawnedRooms[roomIndex].ShowCommands(initialOutput);
 				initialOutput.RetrieveUserOutput(initialMapOutput);
 				while (!isGameOver) {
 					var output = new UserOutput();

@@ -3,7 +3,12 @@ using System.Collections.Generic;
 
 namespace DungeonGame {
 	public class Monster : IMonster {
-		private static readonly Random RndGenerate = new Random();
+		public enum MonsterType {
+			Skeleton,
+			Zombie,
+			Spider,
+			Demon
+		}
 		public string Name { get; set; }
 		public string Desc { get; set; }
 		public int Level { get; set; }
@@ -23,80 +28,154 @@ namespace DungeonGame {
 		public int OnFireCurRound { get; set; }
 		public int OnFireMaxRound { get; set; }
 		public bool WasLooted { get; set; }
+		public MonsterType MonsterCategory { get; set; }
 		public List<IEquipment> MonsterItems { get; set; }
 		public Loot Item { get; set; }
 		public Consumable Consumable { get; set; }
 		public Weapon MonsterWeapon { get; set; }
-		public Armor MonsterChestArmor { get; set; }
 		public Armor MonsterHeadArmor { get; set; }
+		public Armor MonsterBackArmor { get; set; }
+		public Armor MonsterChestArmor { get; set; }
+		public Armor MonsterWristArmor { get; set; }
+		public Armor MonsterWaistArmor { get; set; }
 		public Armor MonsterLegArmor { get; set; }
 
-		// Default constructor for JSON serialization to work since there isn't 1 main constructor
+		// Default constructor for JSON serialization
 		public Monster() {}
-		public Monster(string name, string desc, int level, int goldCoins, int maxHp, int expProvided, Weapon weapon) {
+		public Monster(int level, MonsterType monsterType) {
 			this.MonsterItems = new List<IEquipment>();
-			this.Name = name;
-			this.Desc = desc;
 			this.Level = level;
-			this.Gold = goldCoins;
-			this.MaxHitPoints = maxHp;
-			this.HitPoints = maxHp;
-			this.ExperienceProvided = expProvided;
-			this.MonsterWeapon = weapon;
-			this.MonsterItems.Add((IEquipment)this.MonsterWeapon);
+			this.MonsterCategory = monsterType;
+			this.BuildMonsterNameDesc();
+			var randomNumHitPoint = Helper.GetRandomNumber(20, 40);
+			var maxHitPoints = 80 + ((this.Level - 1) * randomNumHitPoint);
+			this.MaxHitPoints = Helper.RoundNumber(maxHitPoints);
+			this.HitPoints = this.MaxHitPoints;
+			if (this.MonsterCategory == MonsterType.Spider) {
+				this.Gold = 0;
+			}
+			else {
+				var randomNumGold = Helper.GetRandomNumber(5, 10);
+				this.Gold = 10 + ((this.Level - 1) * randomNumGold);
+			}
+			var randomNumExp = Helper.GetRandomNumber(20, 40);
+			var expProvided = this.MaxHitPoints + randomNumExp;
+			this.ExperienceProvided = Helper.RoundNumber(expProvided);
+			this.BuildMonsterGear();
 		}
-		public Monster(
-			string name, 
-			string desc,
-			int level,
-			int goldCoins,
-			int maxHp,
-			int expProvided, 
-			Weapon weapon, 
-			Loot item)
-			: this(name, desc, level, goldCoins, maxHp, expProvided, weapon) {
-			this.Item = item;
-			this.MonsterItems.Add((IEquipment)this.Item);
+
+		private void BuildMonsterGear() {
+			var randomGearNum = Helper.GetRandomNumber(1, 10);
+			switch (this.MonsterCategory) {
+				case MonsterType.Skeleton:
+					this.MonsterWeapon = randomGearNum switch {
+						1 => 
+						this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Axe, this.MonsterCategory),
+						2 => 
+						this.MonsterWeapon = new Weapon(
+							this.Level, Weapon.WeaponType.TwoHandedSword, this.MonsterCategory),
+						_ => 
+						this.MonsterWeapon = new Weapon(
+							this.Level, Weapon.WeaponType.OneHandedSword, this.MonsterCategory)
+					};
+					break;
+				case MonsterType.Zombie:
+					this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Axe, this.MonsterCategory);
+					break;
+				case MonsterType.Spider:
+					this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Dagger, this.MonsterCategory);
+					break;
+				case MonsterType.Demon:
+					this.MonsterWeapon = randomGearNum switch {
+						1 => 
+						this.MonsterWeapon = new Weapon(
+							this.Level, Weapon.WeaponType.OneHandedSword, this.MonsterCategory),
+						2 => 
+						this.MonsterWeapon = new Weapon(
+							this.Level, Weapon.WeaponType.TwoHandedSword, this.MonsterCategory),
+						_ => 
+						this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Axe, this.MonsterCategory) 
+					};
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+			this.MonsterWeapon.Equipped = true;
+			this.MonsterItems.Add(this.MonsterWeapon);
 		}
-		public Monster(
-			string name,
-			string desc,
-			int level,
-			int goldCoins,
-			int maxHp, 
-			int expProvided,
-			Weapon weapon, 
-			Armor armor)
-			: this(name, desc, level, goldCoins, maxHp, expProvided, weapon) {
-			this.MonsterChestArmor = armor;
-			this.MonsterItems.Add((IEquipment)this.MonsterChestArmor);
+		private void BuildMonsterNameDesc() {
+			switch (this.MonsterCategory) {
+				case MonsterType.Skeleton:
+					this.Name = this.Level switch {
+						1 => "skeleton",
+						2 => "skeleton warrior",
+						3 => "skeleton guardian",
+						_ => "skeleton placeholder"
+					};
+					this.Desc =
+						"A " + this.Name + " stands in front of you. Its bones look worn and damaged from years of fighting. A " +
+						"ghastly yellow glow surrounds it, which is the only indication of the magic that must exist to " +
+						"reanimate it.";
+					break;
+				case MonsterType.Zombie:
+					this.Name = this.Level switch {
+						1 => "zombie",
+						2 => "rotting zombie",
+						3 => "vicious zombie",
+						_ => "zombie placeholder"
+					};
+					this.Desc =
+						"A " + this.Name +
+						" stares at you, it's face frozen in a look of indifference to the fact a bug is crawling" +
+						" out of it's empty eye sockets. In one hand, it drags a weapon against the ground, as it stares at you " +
+						"menacingly. Bones, muscle and tendons are visible through many gashes and tears in it's rotting skin.";
+					break;
+				case MonsterType.Spider:
+					this.Name = this.Level switch {
+						1 => "spider",
+						2 => "black spider",
+						3 => "huge spider",
+						_ => "spider placeholder"
+					};
+					this.Desc =
+						"A " + this.Name + " about the size of a large bear skitters down the corridor towards you. " +
+						"Coarse hair sticks out from every direction on it's thorax and legs. It's many eyes stare at " +
+						"you, legs ending in sharp claws carrying it closer as it hisses hungrily.";
+					break;
+				case MonsterType.Demon:
+					this.Name = this.Level switch {
+						1 => "lesser demon",
+						2 => "demon",
+						3 => "horned demon",
+						_ => "demon placeholder"
+					};
+					this.Desc =
+						"A " + this.Name + " stands before you with two horns sticking out of it's head. It's eyes glint " +
+						"yellow and a look of pure hatred adorns its face. Leathery wings spread out on either side of its " +
+						"back as it rises up to its full height and growls at you.";
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
-		public Monster(
-			string name, 
-			string desc, 
-			int level,
-			int goldCoins,
-			int maxHp,
-			int expProvided,
-			Weapon weapon, 
-			Armor armor, 
-			Consumable consumable)
-			: this(name, desc, level, goldCoins, maxHp, expProvided, weapon) {
-			this.MonsterChestArmor = armor;
-			this.Consumable = consumable;
-			this.MonsterItems.Add((IEquipment)this.MonsterChestArmor);
-			this.MonsterItems.Add((IEquipment)this.Consumable);
-		}
-		
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;
 		}
 		public void DisplayStats(UserOutput output) {
-			var opponentStats = "Opponent HP: " + this.HitPoints + " / " + this.MaxHitPoints;
+			var opponentHealthString = "Opponent HP: " + this.HitPoints + " / " + this.MaxHitPoints;
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(),
 				Helper.FormatDefaultBackground(),
-				opponentStats);
+				opponentHealthString);
+			var healLineOutput = new List<string>();
+			var hitPointMaxUnits = this.MaxHitPoints / 10;
+			var hitPointUnits = this.HitPoints / hitPointMaxUnits;
+			for (var i = 0; i < hitPointUnits; i++) {
+				healLineOutput.Add(Helper.FormatGeneralInfoText());
+				healLineOutput.Add(Helper.FormatHealthBackground());
+				healLineOutput.Add("    ");
+			}
+			output.StoreUserOutput(healLineOutput);
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(),
 				Helper.FormatDefaultBackground(),
@@ -166,6 +245,11 @@ namespace DungeonGame {
 				Helper.FormatSuccessOutputText(),
 				Helper.FormatDefaultBackground(),
 				defeatString);
+			var expGainString = "You have gained " + this.ExperienceProvided + " experience!";
+			output.StoreUserOutput(
+				Helper.FormatSuccessOutputText(),
+				Helper.FormatDefaultBackground(),
+				expGainString);
 			foreach (var loot in this.MonsterItems) {
 				loot.Equipped = false;
 			}

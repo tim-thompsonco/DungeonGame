@@ -49,16 +49,7 @@ namespace DungeonGame {
 					));
 					break;
 				case "weaponsmith":
-					this.VendorItems.Add(
-						new Weapon(
-							"notched sword",
-							13,
-							20,
-							20,
-							1.1,
-							false,
-							Weapon.WeaponType.OneHandedSword
-						));
+					this.VendorItems.Add(new Weapon(1, Weapon.WeaponType.OneHandedSword));
 					this.VendorItems.Add(
 						new Consumable(
 						"arrows",
@@ -117,7 +108,7 @@ namespace DungeonGame {
 				}
 				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 				output.StoreUserOutput(
-					Helper.FormatGeneralInfoText(),
+					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					itemName);
 			}

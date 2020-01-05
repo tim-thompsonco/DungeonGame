@@ -3,10 +3,13 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DungeonGame {
 	public static class Helper {
+		private static readonly Random _rndGenerate = new Random();
+		
 		public static string[] GetFormattedInput() {
 			var input = Console.ReadLine();
 			var inputFormatted = input.ToLower().Trim();
@@ -30,6 +33,21 @@ namespace DungeonGame {
 		}
 		public static string FormatDefaultBackground() {
 			return "black";
+		}
+		public static string FormatHealthBackground() {
+			return "darkred";
+		}
+		public static string FormatManaBackground() {
+			return "darkblue";
+		}
+		public static string FormatRageBackground() {
+			return "darkyellow";
+		}
+		public static string FormatComboBackground() {
+			return "darkyellow";
+		}
+		public static string FormatExpBackground() {
+			return "darkcyan";
 		}
 		public static string FormatSuccessOutputText() {
 			return "green";
@@ -61,6 +79,9 @@ namespace DungeonGame {
 		public static string FormatGeneralInfoText() {
 			return "darkgreen";
 		}
+		public static string FormatUpDownIndicator() {
+			return "black";
+		}
 		public static string FormatAnnounceText() {
 			return "gray";
 		}
@@ -69,6 +90,9 @@ namespace DungeonGame {
 		}
 		public static string FormatDiscoveredTile() {
 			return "darkgray";
+		}
+		public static string FormatTextBorder() {
+			return "========================================================";
 		}
 		public static string ParseInput(string[] userInput) {
 			var inputString = new StringBuilder();
@@ -397,7 +421,7 @@ namespace DungeonGame {
 					    mapY == player.Y &&
 					    mapZ == player.Z) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							sameLineOutput.Add(FormatHiddenOutputText()); // Foreground color
+							sameLineOutput.Add(FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(FormatPlayerTile()); // Background color
 							sameLineOutput.Add("OO"); // What prints to display
 							continue;
@@ -413,7 +437,7 @@ namespace DungeonGame {
 					    mapZ == player.Z &&
 					    j == endRightPos) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							sameLineOutput.Add(FormatHiddenOutputText()); // Foreground color
+							sameLineOutput.Add(FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(FormatPlayerTile()); // Background color
 							sameLineOutput.Add("OO |"); // What prints to display
 							continue;
@@ -429,7 +453,7 @@ namespace DungeonGame {
 					    mapZ == player.Z &&
 					    j == startLeftPos) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							sameLineOutput.Add(FormatHiddenOutputText()); // Foreground color
+							sameLineOutput.Add(FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(FormatPlayerTile()); // Background color
 							sameLineOutput.Add("| OO"); // What prints to display
 							continue;
@@ -441,7 +465,7 @@ namespace DungeonGame {
 					}
 					if (roomIndex != -1 && roomList[roomIndex].IsDiscovered) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							sameLineOutput.Add(FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(FormatDiscoveredTile()); // Background color
 							sameLineOutput.Add("OO"); // What prints to display
 							continue;
@@ -453,7 +477,7 @@ namespace DungeonGame {
 					}
 					if (roomIndex != -1 && roomList[roomIndex].IsDiscovered && j == endRightPos) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							sameLineOutput.Add(FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(FormatDiscoveredTile()); // Background color
 							sameLineOutput.Add("OO |"); // What prints to display
 							continue;
@@ -465,7 +489,7 @@ namespace DungeonGame {
 					}
 					if (roomIndex != -1 && roomList[roomIndex].IsDiscovered && j == startLeftPos) {
 						if (roomList[roomIndex].GoUp || roomList[roomIndex].GoDown) {
-							sameLineOutput.Add(FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(FormatDiscoveredTile()); // Background color
 							sameLineOutput.Add("| OO"); // What prints to display
 							continue;
@@ -496,6 +520,17 @@ namespace DungeonGame {
 				FormatDefaultBackground(), 
 				mapBorder.ToString());
 			return output;
+		}
+		public static int GetRandomNumber(int lowNum, int highNum) {
+			return _rndGenerate.Next(lowNum, highNum);
+		}
+		public static int RoundNumber(int number) {
+			var lastDigit = number % 10;
+			number /= 10;
+			var newLastDigit = lastDigit >= 5 ? 1 : 0;
+			number += newLastDigit;
+			number *= 10;
+			return number;
 		}
 	}
 }

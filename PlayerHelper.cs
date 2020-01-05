@@ -128,43 +128,123 @@ namespace DungeonGame {
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(),
 				Helper.FormatDefaultBackground(),
-				"==================================================");
+				Helper.FormatTextBorder());
 			var playerHealthString = "Health: " + player.HitPoints + "/" + player.MaxHitPoints + " ";
-			var sameLineOutput = new List<string>() {
+			var healLineOutput = new List<string>() {
 				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 
 				playerHealthString};
+			var hitPointMaxUnits = player.MaxHitPoints / 10;
+			var hitPointUnits = player.HitPoints / hitPointMaxUnits;
+			for (var i = 0; i < hitPointUnits; i++) {
+				healLineOutput.Add(Helper.FormatGeneralInfoText());
+				healLineOutput.Add(Helper.FormatHealthBackground());
+				healLineOutput.Add("    ");
+			}
+			output.StoreUserOutput(healLineOutput);
 			switch (player.PlayerClass) {
 				case Player.PlayerClassType.Mage:
 					var playerManaString = "Mana: " + player.ManaPoints + "/" + player.MaxManaPoints + " ";
-					sameLineOutput.Add(Helper.FormatGeneralInfoText());
-					sameLineOutput.Add(Helper.FormatDefaultBackground());
-					sameLineOutput.Add(playerManaString);
+					var manaLineOutput = new List<string>();
+					manaLineOutput.Add(Helper.FormatGeneralInfoText());
+					manaLineOutput.Add(Helper.FormatDefaultBackground());
+					manaLineOutput.Add(playerManaString);
+					var manaBufferAmount = playerHealthString.Length - playerManaString.Length;
+					var manaBufferStringBuilder = new StringBuilder();
+					for (var b = 0; b < manaBufferAmount; b++) {
+						manaBufferStringBuilder.Append(" ");
+					}
+					manaLineOutput.Add(Helper.FormatGeneralInfoText());
+					manaLineOutput.Add(Helper.FormatDefaultBackground());
+					manaLineOutput.Add(manaBufferStringBuilder.ToString());
+					var manaPointMaxUnits = player.MaxManaPoints / 10;
+					var manaPointUnits = player.ManaPoints / manaPointMaxUnits;
+					for (var i = 0; i < manaPointUnits; i++) {
+						manaLineOutput.Add(Helper.FormatGeneralInfoText());
+						manaLineOutput.Add(Helper.FormatManaBackground());
+						manaLineOutput.Add("    ");
+					}
+					output.StoreUserOutput(manaLineOutput);
 					break;
 				case Player.PlayerClassType.Warrior:
 					var playerRageString = "Rage: " + player.RagePoints + "/" + player.MaxRagePoints + " ";
-					sameLineOutput.Add(Helper.FormatGeneralInfoText());
-					sameLineOutput.Add(Helper.FormatDefaultBackground());
-					sameLineOutput.Add(playerRageString);
+					var rageLineOutput = new List<string>();
+					rageLineOutput.Add(Helper.FormatGeneralInfoText());
+					rageLineOutput.Add(Helper.FormatDefaultBackground());
+					rageLineOutput.Add(playerRageString);
+					var rageBufferAmount = playerHealthString.Length - playerRageString.Length;
+					var rageBufferStringBuilder = new StringBuilder();
+					for (var b = 0; b < rageBufferAmount; b++) {
+						rageBufferStringBuilder.Append(" ");
+					}
+					rageLineOutput.Add(Helper.FormatGeneralInfoText());
+					rageLineOutput.Add(Helper.FormatDefaultBackground());
+					rageLineOutput.Add(rageBufferStringBuilder.ToString());
+					var ragePointMaxUnits = player.MaxRagePoints / 10;
+					var ragePointUnits = player.RagePoints / ragePointMaxUnits;
+					for (var i = 0; i < ragePointUnits; i++) {
+						rageLineOutput.Add(Helper.FormatGeneralInfoText());
+						rageLineOutput.Add(Helper.FormatRageBackground());
+						rageLineOutput.Add("    ");
+					}
+					output.StoreUserOutput(rageLineOutput);
 					break;
 				case Player.PlayerClassType.Archer:
 					var playerComboString = "Combo: " + player.ComboPoints + "/" + player.MaxComboPoints + " ";
-					sameLineOutput.Add(Helper.FormatGeneralInfoText());
-					sameLineOutput.Add(Helper.FormatDefaultBackground());
-					sameLineOutput.Add(playerComboString);
+					var comboLineOutput = new List<string>();
+					comboLineOutput.Add(Helper.FormatGeneralInfoText());
+					comboLineOutput.Add(Helper.FormatDefaultBackground());
+					comboLineOutput.Add(playerComboString);
+					var comboBufferAmount = playerHealthString.Length - playerComboString.Length;
+					var comboBufferStringBuilder = new StringBuilder();
+					for (var b = 0; b < comboBufferAmount; b++) {
+						comboBufferStringBuilder.Append(" ");
+					}
+					comboLineOutput.Add(Helper.FormatGeneralInfoText());
+					comboLineOutput.Add(Helper.FormatDefaultBackground());
+					comboLineOutput.Add(comboBufferStringBuilder.ToString());
+					var comboPointMaxUnits = player.MaxComboPoints / 10;
+					var comboPointUnits = player.ComboPoints / comboPointMaxUnits;
+					for (var i = 0; i < comboPointUnits; i++) {
+						comboLineOutput.Add(Helper.FormatGeneralInfoText());
+						comboLineOutput.Add(Helper.FormatComboBackground());
+						comboLineOutput.Add("    ");
+					}
+					output.StoreUserOutput(comboLineOutput);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			var expLevelString = "EXP: " +  player.Experience + " LVL: " + player.Level;
-			sameLineOutput.Add(Helper.FormatGeneralInfoText());
-			sameLineOutput.Add(Helper.FormatDefaultBackground());
-			sameLineOutput.Add(expLevelString);
-			output.StoreUserOutput(sameLineOutput);
+			var expString = "EXP: " +  player.Experience;
+			var expLineOutput = new List<string>();
+			expLineOutput.Add(Helper.FormatGeneralInfoText());
+			expLineOutput.Add(Helper.FormatDefaultBackground());
+			expLineOutput.Add(expString);
+			var expBufferAmount = playerHealthString.Length - expString.Length;
+			var expBufferStringBuilder = new StringBuilder();
+			for (var b = 0; b < expBufferAmount; b++) {
+				expBufferStringBuilder.Append(" ");
+			}
+			expLineOutput.Add(Helper.FormatGeneralInfoText());
+			expLineOutput.Add(Helper.FormatDefaultBackground());
+			expLineOutput.Add(expBufferStringBuilder.ToString());
+			var expPointMaxUnits = player.ExperienceToLevel / 10;
+			var expPointUnits = player.Experience / expPointMaxUnits;
+			for (var i = 0; i < expPointUnits; i++) {
+				expLineOutput.Add(Helper.FormatGeneralInfoText());
+				expLineOutput.Add(Helper.FormatExpBackground());
+				expLineOutput.Add("    ");
+			}
+			output.StoreUserOutput(expLineOutput);
+			var levelString = "Level: " + player.Level;
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(),
 				Helper.FormatDefaultBackground(),
-				"==================================================");
+				levelString);
+			output.StoreUserOutput(
+				Helper.FormatGeneralInfoText(),
+				Helper.FormatDefaultBackground(),
+				Helper.FormatTextBorder());
 		}
 		public static void ListAbilities(Player player, UserOutput output) {
 			if (player.PlayerClass != Player.PlayerClassType.Mage) {
