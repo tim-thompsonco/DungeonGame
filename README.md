@@ -8,4 +8,4 @@ C#, Visual Studio for Windows dev, Rider for Mac dev
 
 Programming skills used:
 
-Loops, conditionals, variables, logic, encapsulation, classes, methods, inheritance, composition, polymorphism, interfaces, lambdas, LINQ
+Loops, conditionals, variables, logic, encapsulation, classes, methods, inheritance, composition, polymorphism, interfaces, lambdas, LINQ, unit tests
