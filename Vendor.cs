@@ -54,24 +54,13 @@ namespace DungeonGame {
 						new Consumable(
 						"arrows",
 						15,
-						Consumable.ArrowType.Standard,
-						50));
+						Consumable.ArrowType.Standard));
 					break;
 				case "healer":
 					this.VendorItems.Add(
-					new Consumable(
-						"minor health potion",
-						50,
-						Consumable.PotionType.Health,
-						50
-					));
+					new Consumable(1, Consumable.PotionType.Health));
 					this.VendorItems.Add(
-					new Consumable(
-						"minor mana potion",
-						50,
-						Consumable.PotionType.Mana,
-						50
-					));
+					new Consumable(1, Consumable.PotionType.Mana));
 					break;
 				default:
 					break;
@@ -391,22 +380,10 @@ namespace DungeonGame {
 				f => f.GetName() == inputName || f.GetName().Contains(inputName));
 			if (potionIndex != -1) return;
 			if (inputName.Contains("mana")) {
-				this.VendorItems.Add(
-					new Consumable(
-						"minor mana potion",
-						50,
-						Consumable.PotionType.Mana,
-						50
-					));
+				this.VendorItems.Add(new Consumable(1, Consumable.PotionType.Mana));
 			}
 			else if (inputName.Contains("health")) {
-				this.VendorItems.Add(
-					new Consumable(
-						"minor health potion",
-						50,
-						Consumable.PotionType.Health,
-						50
-					));
+				this.VendorItems.Add(new Consumable(1, Consumable.PotionType.Health));
 			}
 		}
 	}

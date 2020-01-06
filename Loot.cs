@@ -4,9 +4,9 @@
 		public bool Equipped { get; set; }
 		public int ItemValue { get; set; }
 
-		public Loot(string name, int itemValue) {
+		public Loot(string name, int level) {
 			this.Name = name;
-			this.ItemValue = itemValue;
+			this.ItemValue = 15 + ((level - 1) * 5);
 		}
 
 		public string GetName() {

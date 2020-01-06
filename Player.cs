@@ -73,11 +73,7 @@ namespace DungeonGame {
 			switch (this.PlayerClass) {
 				case PlayerClassType.Mage:
 					for (var i = 0; i < 3; i++) {
-						this.Consumables.Add(new Consumable(
-							"minor mana potion", 
-							3, 
-							Consumable.PotionType.Mana, 
-							50));
+						this.Consumables.Add(new Consumable(1, Consumable.PotionType.Mana));
 					}
 					this.Spellbook = new List<Spell>();
 					this.MaxHitPoints = 100;
@@ -120,11 +116,7 @@ namespace DungeonGame {
 					break;
 				case PlayerClassType.Warrior:
 					for (var i = 0; i < 3; i++) {
-						this.Consumables.Add(new Consumable(
-							"minor health potion", 
-							3,
-							Consumable.PotionType.Health, 
-							50));
+						this.Consumables.Add(new Consumable(1, Consumable.PotionType.Health));
 					}
 					this.Abilities = new List<Ability>();
 					this.MaxHitPoints = 150;
@@ -172,11 +164,7 @@ namespace DungeonGame {
 					break;
 				case PlayerClassType.Archer:
 					for (var i = 0; i < 3; i++) {
-						this.Consumables.Add(new Consumable(
-							"minor health potion", 
-							3, 
-							Consumable.PotionType.Health, 
-							50));
+						this.Consumables.Add(new Consumable(1, Consumable.PotionType.Health));
 					}
 					this.Abilities = new List<Ability>();
 					this.MaxHitPoints = 100;

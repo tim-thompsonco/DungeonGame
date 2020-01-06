@@ -78,12 +78,19 @@ namespace DungeonGame {
 						this.MonsterWeapon = new Weapon(
 							this.Level, Weapon.WeaponType.OneHandedSword, this.MonsterCategory)
 					};
+					if (randomGearNum <= 4) {
+						var randomPotionNum = Helper.GetRandomNumber(1, 10);
+						this.MonsterItems.Add(randomPotionNum <= 5
+							? new Consumable(this.Level, Consumable.PotionType.Health)
+							: new Consumable(this.Level, Consumable.PotionType.Mana));
+					}
 					break;
 				case MonsterType.Zombie:
 					this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Axe, this.MonsterCategory);
 					break;
 				case MonsterType.Spider:
 					this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Dagger, this.MonsterCategory);
+					if (randomGearNum <= 5) this.MonsterItems.Add(new Loot("large venom sac", this.Level));
 					break;
 				case MonsterType.Demon:
 					this.MonsterWeapon = randomGearNum switch {
@@ -96,6 +103,31 @@ namespace DungeonGame {
 						_ => 
 						this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Axe, this.MonsterCategory) 
 					};
+					if (randomGearNum <= 3) {
+						var randomGemNum = Helper.GetRandomNumber(1, 6);
+						switch (randomGemNum) {
+							case 1:
+								this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Amethyst));
+								break;
+							case 2:
+								this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Diamond));
+								break;
+							case 3:
+								this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Emerald));
+								break;
+							case 4:
+								this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Ruby));
+								break;
+							case 5:
+								this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Sapphire));
+								break;
+							case 6:
+								this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Topaz));
+								break;
+							default:
+								throw new ArgumentOutOfRangeException();
+						}
+					}
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
