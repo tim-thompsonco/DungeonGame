@@ -38,6 +38,7 @@ namespace DungeonGame {
 		public Armor MonsterBackArmor { get; set; }
 		public Armor MonsterChestArmor { get; set; }
 		public Armor MonsterWristArmor { get; set; }
+		public Armor MonsterHandsArmor { get; set; }
 		public Armor MonsterWaistArmor { get; set; }
 		public Armor MonsterLegArmor { get; set; }
 
@@ -141,7 +142,7 @@ namespace DungeonGame {
 			}
 		}
 		private void BuildMonsterArmor() {
-			var randomCatNum = Helper.GetRandomNumber(1, 6);
+			var randomCatNum = Helper.GetRandomNumber(1, 7);
 			switch(randomCatNum){
 				case 1:
 					this.MonsterBackArmor = new Armor(this.Level, Armor.ArmorSlot.Back);
@@ -172,6 +173,11 @@ namespace DungeonGame {
 					this.MonsterWristArmor = new Armor(this.Level, Armor.ArmorSlot.Wrist);
 					this.MonsterWristArmor.Equipped = true;
 					this.MonsterItems.Add(this.MonsterWristArmor);
+					break;
+				case 7:
+					this.MonsterHandsArmor = new Armor(this.Level, Armor.ArmorSlot.Hands);
+					this.MonsterHandsArmor.Equipped = true;
+					this.MonsterItems.Add(this.MonsterHandsArmor);
 					break;
 			}
 		}

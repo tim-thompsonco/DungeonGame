@@ -352,20 +352,21 @@ namespace DungeonGame {
 				var sameLineOutput = new List<string>() {
 					Helper.FormatRoomOutputText(),
 					Helper.FormatDefaultBackground(),
-					"He is carrying: "};
+					"It is carrying: "};
+				output.StoreUserOutput(sameLineOutput);
 				var objCount = this.Monster.MonsterItems.Count;
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (var loot in this.Monster.MonsterItems) {
+					var sameLineOutputItem = new List<string>();
 					var sb = new StringBuilder();
 					var itemTitle = loot.GetName();
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
-					sb.Append(this.Monster.MonsterItems[objCount - 1] != loot ? ", " : ".");
-					sameLineOutput.Add(Helper.FormatRoomOutputText());
-					sameLineOutput.Add(Helper.FormatDefaultBackground());
-					sameLineOutput.Add(sb.ToString());
+					sameLineOutputItem.Add(Helper.FormatRoomOutputText());
+					sameLineOutputItem.Add(Helper.FormatDefaultBackground());
+					sameLineOutputItem.Add(sb.ToString());
+					output.StoreUserOutput(sameLineOutputItem);
 				}
-				output.StoreUserOutput(sameLineOutput);
 			}
 			else {
 				var noNpcString = "There is no " + inputName + " in the room!";

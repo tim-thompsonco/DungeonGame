@@ -54,6 +54,7 @@ namespace DungeonGame {
 		public Armor PlayerBackArmor { get; set; }
 		public Armor PlayerChestArmor { get; set; }
 		public Armor PlayerWristArmor { get; set; }
+		public Armor PlayerHandsArmor { get; set; }
 		public Armor PlayerWaistArmor { get; set; }
 		public Armor PlayerLegsArmor { get; set; }
 		public Weapon PlayerWeapon { get; set; }

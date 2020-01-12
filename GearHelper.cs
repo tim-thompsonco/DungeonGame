@@ -191,6 +191,14 @@ namespace DungeonGame {
 						unequipLegsString);
 					player.PlayerLegsArmor = null;
 					break;
+				case Armor.ArmorSlot.Hands:
+					var unequipHandsString = "You have unequipped " + player.PlayerHandsArmor.GetName() + ".";
+					output.StoreUserOutput(
+						Helper.FormatSuccessOutputText(),
+						Helper.FormatDefaultBackground(),
+						unequipHandsString);
+					player.PlayerHandsArmor = null;
+					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
@@ -350,6 +358,18 @@ namespace DungeonGame {
 						Helper.FormatSuccessOutputText(),
 						Helper.FormatDefaultBackground(),
 						equipLegsString);
+					break;
+				case Armor.ArmorSlot.Hands:
+					if (player.PlayerHandsArmor != null && player.PlayerHandsArmor.IsEquipped()) {
+						UnequipArmor(player, player.PlayerHandsArmor, output);
+					}
+					player.PlayerHandsArmor = armor;
+					armor.Equipped = true;
+					var equipHandsString = "You have equipped " + player.PlayerHandsArmor.GetName() + ".";
+					output.StoreUserOutput(
+						Helper.FormatSuccessOutputText(),
+						Helper.FormatDefaultBackground(),
+						equipHandsString);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

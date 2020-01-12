@@ -9,6 +9,7 @@ namespace DungeonGame {
 			Back,
 			Chest,
 			Wrist,
+			Hands,
 			Waist,
 			Legs
 		}
@@ -47,6 +48,7 @@ namespace DungeonGame {
 				ArmorSlot.Legs => 3,
 				ArmorSlot.Waist => 2,
 				ArmorSlot.Wrist => 1,
+				ArmorSlot.Hands => 1,
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add armor type armor rating to base value
@@ -77,6 +79,7 @@ namespace DungeonGame {
 				ArmorSlot.Legs => 3,
 				ArmorSlot.Waist => 2,
 				ArmorSlot.Wrist => 1,
+				ArmorSlot.Hands => 1,
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add armor type armor rating to base value
@@ -124,6 +127,9 @@ namespace DungeonGame {
 						case ArmorSlot.Legs:
 							sb.Append("leggings");
 							break;
+						case ArmorSlot.Hands:
+							sb.Append("gloves");
+							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
@@ -154,6 +160,9 @@ namespace DungeonGame {
 						case ArmorSlot.Legs:
 							sb.Append("leggings");
 							break;
+						case ArmorSlot.Hands:
+							sb.Append("gloves");
+							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
@@ -183,6 +192,9 @@ namespace DungeonGame {
 							break;
 						case ArmorSlot.Legs:
 							sb.Append("plate leggings");
+							break;
+						case ArmorSlot.Hands:
+							sb.Append("gauntlets");
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();

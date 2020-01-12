@@ -272,19 +272,20 @@ namespace DungeonGame {
 					Helper.FormatRoomOutputText(),
 					Helper.FormatDefaultBackground(),
 					"He is carrying: "};
+				output.StoreUserOutput(sameLineOutput);
 				var objCount = this.Vendor.VendorItems.Count;
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (var itemForSale in this.Vendor.VendorItems) {
+					var sameLineOutputItem = new List<string>();
 					var sb = new StringBuilder();
 					var itemTitle = itemForSale.GetName();
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
-					sb.Append(this.Vendor.VendorItems[objCount - 1] != itemForSale ? ", " : ".");
-					sameLineOutput.Add(Helper.FormatRoomOutputText());
-					sameLineOutput.Add(Helper.FormatDefaultBackground());
-					sameLineOutput.Add(sb.ToString());
+					sameLineOutputItem.Add(Helper.FormatRoomOutputText());
+					sameLineOutputItem.Add(Helper.FormatDefaultBackground());
+					sameLineOutputItem.Add(sb.ToString());
+					output.StoreUserOutput(sameLineOutputItem);
 				}
-				output.StoreUserOutput(sameLineOutput);
 			}
 			else {
 				var noVendorString = "There is no " + inputName + " in the room!";
