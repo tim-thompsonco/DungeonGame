@@ -3,9 +3,11 @@
 namespace DungeonGame {
 	public class Consumable : IEquipment {
 		public enum ArrowType {
+			Undefined,
 			Standard
 		}
 		public enum PotionType {
+			Undefined,
 			Health,
 			Mana
 		}

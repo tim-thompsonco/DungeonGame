@@ -18,51 +18,21 @@ namespace DungeonGame {
 			switch (name) {
 				case "armorer":
 					this.VendorItems.Add(
-					new Armor(
-						"leather vest",
-						Armor.ArmorSlot.Chest, 
-						Armor.ArmorType.Leather, 
-						12, 
-						7,
-						12,
-						false
-					));
+						new Armor(1, Armor.ArmorType.Leather, Armor.ArmorSlot.Head));
 					this.VendorItems.Add(
-					new Armor(
-						"leather helm",
-						Armor.ArmorSlot.Head, 
-						Armor.ArmorType.Leather, 
-						6, 
-						3,
-						6,
-						false
-					));
+						new Armor(1, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest));
 					this.VendorItems.Add(
-					new Armor(
-						"leather leggings",
-						Armor.ArmorSlot.Legs, 
-						Armor.ArmorType.Leather, 
-						10, 
-						5,
-						10,
-						false
-					));
+						new Armor(1, Armor.ArmorType.Leather, Armor.ArmorSlot.Legs));
 					break;
 				case "weaponsmith":
 					this.VendorItems.Add(new Weapon(1, Weapon.WeaponType.OneHandedSword));
-					this.VendorItems.Add(
-						new Consumable(
-						"arrows",
-						15,
-						Consumable.ArrowType.Standard));
+					this.VendorItems.Add(new Consumable("arrows", 15, Consumable.ArrowType.Standard));
 					break;
 				case "healer":
 					this.VendorItems.Add(
 					new Consumable(1, Consumable.PotionType.Health));
 					this.VendorItems.Add(
 					new Consumable(1, Consumable.PotionType.Mana));
-					break;
-				default:
 					break;
 			}
 		}
@@ -184,7 +154,12 @@ namespace DungeonGame {
 					Helper.FormatSuccessOutputText(),
 					Helper.FormatDefaultBackground(),
 					purchaseString);
-				this.RepopulateHealerPotion(inputName);
+				if (this.BuySellType == "Healer") {
+					this.RepopulateHealerPotion(inputName);
+				}
+				else {
+					this.RepopulateArrows(inputName);
+				}
 				return;
 			}
 			output.StoreUserOutput(
@@ -385,6 +360,12 @@ namespace DungeonGame {
 			else if (inputName.Contains("health")) {
 				this.VendorItems.Add(new Consumable(1, Consumable.PotionType.Health));
 			}
+		}
+		public void RepopulateArrows(string inputName) {
+			var arrowIndex = this.VendorItems.FindIndex(
+				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+			if (arrowIndex != -1) return;
+			this.VendorItems.Add(new Consumable("arrows", 15, Consumable.ArrowType.Standard));
 		}
 	}
 }

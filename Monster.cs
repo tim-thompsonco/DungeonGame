@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace DungeonGame {
 	public class Monster : IMonster {
@@ -40,8 +41,6 @@ namespace DungeonGame {
 		public Armor MonsterWaistArmor { get; set; }
 		public Armor MonsterLegArmor { get; set; }
 
-		// Default constructor for JSON serialization
-		public Monster() {}
 		public Monster(int level, MonsterType monsterType) {
 			this.MonsterItems = new List<IEquipment>();
 			this.Level = level;
@@ -78,6 +77,7 @@ namespace DungeonGame {
 						this.MonsterWeapon = new Weapon(
 							this.Level, Weapon.WeaponType.OneHandedSword, this.MonsterCategory)
 					};
+					this.BuildMonsterArmor();
 					if (randomGearNum <= 4) {
 						var randomPotionNum = Helper.GetRandomNumber(1, 10);
 						this.MonsterItems.Add(randomPotionNum <= 5
@@ -87,6 +87,7 @@ namespace DungeonGame {
 					break;
 				case MonsterType.Zombie:
 					this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Axe, this.MonsterCategory);
+					this.BuildMonsterArmor();
 					break;
 				case MonsterType.Spider:
 					this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Dagger, this.MonsterCategory);
@@ -104,36 +105,75 @@ namespace DungeonGame {
 						this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Axe, this.MonsterCategory) 
 					};
 					if (randomGearNum <= 3) {
-						var randomGemNum = Helper.GetRandomNumber(1, 6);
-						switch (randomGemNum) {
-							case 1:
-								this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Amethyst));
-								break;
-							case 2:
-								this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Diamond));
-								break;
-							case 3:
-								this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Emerald));
-								break;
-							case 4:
-								this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Ruby));
-								break;
-							case 5:
-								this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Sapphire));
-								break;
-							case 6:
-								this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Topaz));
-								break;
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
+						this.BuildMonsterGem();
 					}
+					this.BuildMonsterArmor();
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 			this.MonsterWeapon.Equipped = true;
 			this.MonsterItems.Add(this.MonsterWeapon);
+		}
+		private void BuildMonsterGem() {
+			var randomGemNum = Helper.GetRandomNumber(1, 6);
+			switch (randomGemNum) {
+				case 1:
+					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Amethyst));
+					break;
+				case 2:
+					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Diamond));
+					break;
+				case 3:
+					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Emerald));
+					break;
+				case 4:
+					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Ruby));
+					break;
+				case 5:
+					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Sapphire));
+					break;
+				case 6:
+					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Topaz));
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+		private void BuildMonsterArmor() {
+			var randomCatNum = Helper.GetRandomNumber(1, 6);
+			switch(randomCatNum){
+				case 1:
+					this.MonsterBackArmor = new Armor(this.Level, Armor.ArmorSlot.Back);
+					this.MonsterBackArmor.Equipped = true;
+					this.MonsterItems.Add(this.MonsterBackArmor);
+					break;
+				case 2:
+					this.MonsterChestArmor = new Armor(this.Level, Armor.ArmorSlot.Chest);
+					this.MonsterChestArmor.Equipped = true;
+					this.MonsterItems.Add(this.MonsterChestArmor);
+					break;
+				case 3:
+					this.MonsterHeadArmor = new Armor(this.Level, Armor.ArmorSlot.Head);
+					this.MonsterHeadArmor.Equipped = true;
+					this.MonsterItems.Add(this.MonsterHeadArmor);
+					break;
+				case 4:
+					this.MonsterLegArmor = new Armor(this.Level, Armor.ArmorSlot.Legs);
+					this.MonsterLegArmor.Equipped = true;
+					this.MonsterItems.Add(this.MonsterLegArmor);
+					break;
+				case 5:
+					this.MonsterWaistArmor = new Armor(this.Level, Armor.ArmorSlot.Waist);
+					this.MonsterWaistArmor.Equipped = true;
+					this.MonsterItems.Add(this.MonsterWaistArmor);
+					break;
+				case 6:
+					this.MonsterWristArmor = new Armor(this.Level, Armor.ArmorSlot.Wrist);
+					this.MonsterWristArmor.Equipped = true;
+					this.MonsterItems.Add(this.MonsterWristArmor);
+					break;
+			}
 		}
 		private void BuildMonsterNameDesc() {
 			switch (this.MonsterCategory) {

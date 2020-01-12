@@ -85,28 +85,11 @@ namespace DungeonGame {
 					this.CanUseOneHandedSword = true;
 					this.Inventory.Add(new Weapon(this.Level, Weapon.WeaponType.Dagger));
 					this.Inventory.Add(new Armor(
-						"cloth vest", Armor.ArmorSlot.Chest, 
-						Armor.ArmorType.Cloth, 
-						10, 
-						7, 
-						10, 
-						false));
+						1, Armor.ArmorType.Cloth, Armor.ArmorSlot.Head));
 					this.Inventory.Add(new Armor(
-						"cloth cap", 
-						Armor.ArmorSlot.Head, 
-						Armor.ArmorType.Cloth, 
-						3, 
-						1, 
-						4, 
-						false));
+						1, Armor.ArmorType.Cloth, Armor.ArmorSlot.Chest));
 					this.Inventory.Add(new Armor(
-						"cloth leggings", 
-						Armor.ArmorSlot.Legs, 
-						Armor.ArmorType.Cloth, 
-						7, 
-						4, 
-						7, 
-						false));
+						1, Armor.ArmorType.Cloth, Armor.ArmorSlot.Legs));
 					this.Spellbook.Add(new Spell("fireball", 35, 1, Spell.SpellType.Fireball));
 					this.Spellbook.Add(new Spell("heal", 25, 1, Spell.SpellType.Heal));
 					this.Spellbook.Add(new Spell("diamondskin", 25, 1, Spell.SpellType.Diamondskin));
@@ -133,28 +116,11 @@ namespace DungeonGame {
 					this.CanUseTwoHandedSword = true;
 					this.Inventory.Add(new Weapon(this.Level, Weapon.WeaponType.TwoHandedSword));
 					this.Inventory.Add(new Armor(
-						"iron chestplate", Armor.ArmorSlot.Chest, 
-						Armor.ArmorType.Plate, 
-						11, 
-						8, 
-						11, 
-						false));
+						1, Armor.ArmorType.Plate, Armor.ArmorSlot.Head));
 					this.Inventory.Add(new Armor(
-						"iron helmet", 
-						Armor.ArmorSlot.Head, 
-						Armor.ArmorType.Plate, 
-						6, 
-						3, 
-						6, 
-						false));
+						1, Armor.ArmorType.Plate, Armor.ArmorSlot.Chest));
 					this.Inventory.Add(new Armor(
-						"iron legplates", 
-						Armor.ArmorSlot.Legs, 
-						Armor.ArmorType.Plate, 
-						8, 
-						5, 
-						8, 
-						false));
+						1, Armor.ArmorType.Plate, Armor.ArmorSlot.Legs));
 					this.Abilities.Add(new Ability("charge", 25, 1, Ability.AbilityType.Charge));
 					this.Abilities.Add(new Ability("slash", 40, 1, Ability.AbilityType.Slash));
 					this.Abilities.Add(new Ability("rend", 25, 1, Ability.AbilityType.Rend));
@@ -178,28 +144,11 @@ namespace DungeonGame {
 					this.CanUseOneHandedSword = true;
 					this.Inventory.Add(new Weapon(this.Level, Weapon.WeaponType.Bow));
 					this.Inventory.Add(new Armor(
-						"leather vest", Armor.ArmorSlot.Chest, 
-						Armor.ArmorType.Leather, 
-						8, 
-						5, 
-						8, 
-						false));
+						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Head));
 					this.Inventory.Add(new Armor(
-						"leather cap", 
-						Armor.ArmorSlot.Head, 
-						Armor.ArmorType.Leather, 
-						4, 
-						2, 
-						4, 
-						false));
+						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest));
 					this.Inventory.Add(new Armor(
-						"leather leggings", 
-						Armor.ArmorSlot.Legs, 
-						Armor.ArmorType.Leather, 
-						5, 
-						2, 
-						5, 
-						false));
+						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Legs));
 					this.Inventory.Add( new Quiver(
 						"basic quiver",
 						50,

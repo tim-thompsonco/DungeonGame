@@ -16,98 +16,94 @@ namespace DungeonGame {
 		public WeaponType WeaponGroup { get; set; }
 		public double CritMultiplier { get; set; }
 		public bool Equipped { get; set; }
+		public int Level { get; set; }
 		public int Durability { get; set; }
+		public int Quality { get; set; }
 
 		// Default constructor for JSON serialization
 		public Weapon() {}
 		public Weapon(int level, WeaponType weaponType) {
+			this.Level = level;
 			this.WeaponGroup = weaponType;
 			this.Durability = 100;
 			var randomNum = Helper.GetRandomNumber(1, 100);
-			var randomWeaponDmg = Helper.GetRandomNumber(14, 24);
+			var randomWeaponDmg = Helper.GetRandomNumber(18, 24);
 			if (randomNum < 5) {
 				this.RegDamage = randomWeaponDmg + ((level - 1) * 3);
 				this.CritMultiplier = 1.3;
-				this.Name = this.WeaponGroup switch {
-					WeaponType.Axe => "obsidian axe",
-					WeaponType.Dagger => "obsidian dagger",
-					WeaponType.OneHandedSword => "obsidian sword (1H)",
-					WeaponType.TwoHandedSword => "obsidian claymore (2H)",
-					WeaponType.Bow => "great oak bow",
-					_ => throw new ArgumentOutOfRangeException()
-				};
+				this.Quality = 3;
 			}
 			else if (randomNum < 40) {
 				this.RegDamage = randomWeaponDmg + ((level - 1) * 2);
 				this.CritMultiplier = 1.2;
-				this.Name = this.WeaponGroup switch {
-					WeaponType.Axe => "bronze axe",
-					WeaponType.Dagger => "bronze dagger",
-					WeaponType.OneHandedSword => "bronze sword (1H)",
-					WeaponType.TwoHandedSword => "bronze claymore (2H)",
-					WeaponType.Bow => "oak bow",
-					_ => throw new ArgumentOutOfRangeException()
-				};
+				this.Quality = 2;
 			}
 			else if (randomNum <= 100) {
 				this.RegDamage = randomWeaponDmg + ((level - 1) * 1);
 				this.CritMultiplier = 1.1;
-				this.Name = this.WeaponGroup switch {
-					WeaponType.Axe => "iron axe",
-					WeaponType.Dagger => "iron dagger",
-					WeaponType.OneHandedSword => "iron sword (1H)",
-					WeaponType.TwoHandedSword => "iron claymore (2H)",
-					WeaponType.Bow => "pine bow",
-					_ => throw new ArgumentOutOfRangeException()
-				};
+				this.Quality = 1;
 			}
 			this.ItemValue = this.RegDamage;
+			this.BuildWeaponName();
 		}
-		public Weapon(int level, WeaponType weaponType, Monster.MonsterType monsterType) {
-			this.WeaponGroup = weaponType;
-			this.Durability = 100;
-			var randomNum = Helper.GetRandomNumber(1, 100);
-			var randomWeaponDmg = Helper.GetRandomNumber(14, 24);
-			if (randomNum < 20) {
-				this.RegDamage = randomWeaponDmg + ((level - 1) * 3);
-				this.CritMultiplier = 1.3;
-				this.Name = this.WeaponGroup switch {
-					WeaponType.Axe => "obsidian axe",
-					WeaponType.Dagger => "obsidian dagger",
-					WeaponType.OneHandedSword => "obsidian sword (1H)",
-					WeaponType.TwoHandedSword => "obsidian claymore (2H)",
-					WeaponType.Bow => "great oak bow",
-					_ => throw new ArgumentOutOfRangeException()
-				};
-			}
-			else if (randomNum < 40) {
-				this.RegDamage = randomWeaponDmg + ((level - 1) * 2);
-				this.CritMultiplier = 1.2;
-				this.Name = this.WeaponGroup switch {
-					WeaponType.Axe => "bronze axe",
-					WeaponType.Dagger => "bronze dagger",
-					WeaponType.OneHandedSword => "bronze sword (1H)",
-					WeaponType.TwoHandedSword => "bronze claymore (2H)",
-					WeaponType.Bow => "oak bow",
-					_ => throw new ArgumentOutOfRangeException()
-				};
-			}
-			else if (randomNum <= 100) {
-				this.RegDamage = randomWeaponDmg + ((level - 1) * 1);
-				this.CritMultiplier = 1.1;
-				this.Name = this.WeaponGroup switch {
-					WeaponType.Axe => "iron axe",
-					WeaponType.Dagger => "iron dagger",
-					WeaponType.OneHandedSword => "iron sword (1H)",
-					WeaponType.TwoHandedSword => "iron claymore (2H)",
-					WeaponType.Bow => "pine bow",
-					_ => throw new ArgumentOutOfRangeException()
-				};
-			}
-			if (monsterType == Monster.MonsterType.Spider) this.Name = "venomous fang";
-			this.ItemValue = this.RegDamage;
+		public Weapon(int level, WeaponType weaponType, Monster.MonsterType monsterType)
+			: this(level, weaponType) {
+			if (monsterType != Monster.MonsterType.Spider) return;
+			var sb = new StringBuilder();
+			sb.Append(this.Quality switch {
+				1 => "",
+				2 => "sturdy ",
+				3 => "fine ",
+				_ => ""
+			});
+			sb.Append("venomous fang");
+			this.Name = sb.ToString();
 		}
 
+		private void BuildWeaponName() {
+			var sb = new StringBuilder();
+			if (this.WeaponGroup != WeaponType.Bow) {
+				sb.Append(this.Level switch {
+					1 => "chipped ",
+					2 => "dull ",
+					3 => "worn ",
+					_ => ""
+				});
+			}
+			else {
+				sb.Append(this.Level switch {
+					1 => "cracked ",
+					2 => "worn ",
+					3 => "solid ",
+					_ => ""
+				});
+			}
+			if (this.WeaponGroup != WeaponType.Bow) {
+				sb.Append(this.Quality switch {
+					1 => "",
+					2 => "sturdy ",
+					3 => "fine ",
+					_ => ""
+				});
+			}
+			else {
+				sb.Append(this.Quality switch {
+					1 => "pine ",
+					2 => "oak ",
+					3 => "great oak ",
+					_ => ""
+				});
+			}
+			sb.Append(this.WeaponGroup switch {
+				WeaponType.Axe => "axe",
+				WeaponType.Bow => "bow",
+				WeaponType.Dagger => "dagger",
+				WeaponType.OneHandedSword => "sword (1H)",
+				WeaponType.TwoHandedSword => "sword (2H)",
+				_ => ""
+			});
+			this.Name = sb.ToString();
+		}
 		public int Attack() {
 			if (!this.Equipped) return 0;
 			var attackDamage = 0f;
