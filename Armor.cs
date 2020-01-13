@@ -32,7 +32,7 @@ namespace DungeonGame {
 		// Constructor to randomly create armor for monsters
 		public Armor(int level, ArmorSlot armorCategory) {
 			this.Level = level;
-			var randomArmorNum = Helper.GetRandomNumber(1, 4);
+			var randomArmorNum = Helper.GetRandomNumber(1, 3);
 			this.ArmorGroup = randomArmorNum switch {
 				1 => ArmorType.Cloth,
 				2 => ArmorType.Leather,
@@ -59,7 +59,7 @@ namespace DungeonGame {
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			this.ArmorRating += Helper.GetRandomNumber(2, 5);
+			this.ArmorRating += Helper.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
 			this.ArmorRating += (level - 1) * 3;
 			this.ItemValue = this.ArmorRating;
@@ -90,7 +90,7 @@ namespace DungeonGame {
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			this.ArmorRating += Helper.GetRandomNumber(2, 5);
+			this.ArmorRating += Helper.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
 			this.ArmorRating += (level - 1) * 3;
 			this.ItemValue = this.ArmorRating;

@@ -47,7 +47,7 @@ namespace DungeonGame {
 			this.Level = level;
 			this.MonsterCategory = monsterType;
 			this.BuildMonsterNameDesc();
-			var randomNumHitPoint = Helper.GetRandomNumber(20, 41);
+			var randomNumHitPoint = Helper.GetRandomNumber(20, 40);
 			var maxHitPoints = 80 + ((this.Level - 1) * randomNumHitPoint);
 			this.MaxHitPoints = Helper.RoundNumber(maxHitPoints);
 			this.HitPoints = this.MaxHitPoints;
@@ -55,17 +55,17 @@ namespace DungeonGame {
 				this.Gold = 0;
 			}
 			else {
-				var randomNumGold = Helper.GetRandomNumber(5, 11);
+				var randomNumGold = Helper.GetRandomNumber(5, 10);
 				this.Gold = 10 + ((this.Level - 1) * randomNumGold);
 			}
-			var randomNumExp = Helper.GetRandomNumber(20, 41);
+			var randomNumExp = Helper.GetRandomNumber(20, 40);
 			var expProvided = this.MaxHitPoints + randomNumExp;
 			this.ExperienceProvided = Helper.RoundNumber(expProvided);
 			this.BuildMonsterGear();
 		}
 
 		private void BuildMonsterGear() {
-			var randomGearNum = Helper.GetRandomNumber(1, 11);
+			var randomGearNum = Helper.GetRandomNumber(1, 10);
 			switch (this.MonsterCategory) {
 				case MonsterType.Skeleton:
 					this.MonsterWeapon = randomGearNum switch {
@@ -80,7 +80,7 @@ namespace DungeonGame {
 					};
 					this.BuildMonsterArmor();
 					if (randomGearNum <= 4) {
-						var randomPotionNum = Helper.GetRandomNumber(1, 11);
+						var randomPotionNum = Helper.GetRandomNumber(1, 10);
 						this.MonsterItems.Add(randomPotionNum <= 5
 							? new Consumable(this.Level, Consumable.PotionType.Health)
 							: new Consumable(this.Level, Consumable.PotionType.Mana));
@@ -117,7 +117,7 @@ namespace DungeonGame {
 			this.MonsterItems.Add(this.MonsterWeapon);
 		}
 		private void BuildMonsterGem() {
-			var randomGemNum = Helper.GetRandomNumber(1, 7);
+			var randomGemNum = Helper.GetRandomNumber(1, 6);
 			switch (randomGemNum) {
 				case 1:
 					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Amethyst));
@@ -142,7 +142,7 @@ namespace DungeonGame {
 			}
 		}
 		private void BuildMonsterArmor() {
-			var randomCatNum = Helper.GetRandomNumber(1, 8);
+			var randomCatNum = Helper.GetRandomNumber(1, 7);
 			switch(randomCatNum){
 				case 1:
 					this.MonsterBackArmor = new Armor(this.Level, Armor.ArmorSlot.Back);

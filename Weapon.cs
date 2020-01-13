@@ -26,8 +26,8 @@ namespace DungeonGame {
 			this.Level = level;
 			this.WeaponGroup = weaponType;
 			this.Durability = 100;
-			var randomNum = Helper.GetRandomNumber(1, 101);
-			var randomWeaponDmg = Helper.GetRandomNumber(18, 25);
+			var randomNum = Helper.GetRandomNumber(1, 100);
+			var randomWeaponDmg = Helper.GetRandomNumber(18, 24);
 			if (randomNum < 5) {
 				this.RegDamage = randomWeaponDmg + ((level - 1) * 3);
 				this.CritMultiplier = 1.3;
@@ -107,7 +107,7 @@ namespace DungeonGame {
 		public int Attack() {
 			if (!this.Equipped) return 0;
 			var attackDamage = 0f;
-			var attackType = Helper.GetRandomNumber(1, 13); // Creates a random number to determine attack type
+			var attackType = Helper.GetRandomNumber(1, 12); // Creates a random number to determine attack type
 			// Main attack
 			if (attackType < 6) {
 				attackDamage = this.RegDamage;
