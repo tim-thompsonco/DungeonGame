@@ -3,232 +3,85 @@ using System.Collections.Generic;
 
 namespace DungeonGame {
 	public class SpawnRooms {
-		public List<IRoom> SpawnedRooms { get; set; } = new List<IRoom>();
+		public enum StartDirection {
+			Up,
+			Down
+		}
+		public StartDirection StartDir { get; set; }
+		public int Size { get; set; }
+		public int Levels { get; set; }
+		public int LevelRangeLow { get; set; }
+		public int LevelRangeHigh { get; set; }
+		public int xCoord { get; set; }
+		public int yCoord { get; set; }
+		public int zCoord { get; set; }
+		public int CurrentLevel { get; set; }
+		public bool GoNorth { get; set; }
+		public bool GoSouth { get; set; }
+		public bool GoEast { get; set; }
+		public bool GoWest { get; set; }
+		public bool GoNorthWest { get; set; }
+		public bool GoSouthWest { get; set; }
+		public bool GoNorthEast { get; set; }
+		public bool GoSouthEast { get; set; }
+		public bool GoUp { get; set; }
+		public bool GoDown { get; set; }
+		public List<IRoom> SpawnedDungeonRooms { get; set; } = new List<IRoom>();
 
-		public SpawnRooms() {
-			var room100 = new DungeonRoom(
-				"A Dark Room",
-				"You are in a dimly lit room. There is a lantern burning on a hook on the opposite wall. Water drips " + 
-				"from a few stalactites hanging from the ceiling, which is about 12 feet high. You appear to be in a " +
-				"dungeon. A moaning wail echoes in the distance through an open doorway in front of you. Glinting " +
-				"red eyes seem to be visible in the distance. There is an unsettling sound of a heavy metal object " +
-				"being dragged on the ground by a faint shape beyond the doorway. You can't make out what it is.",
-				0, 
-				0, 
-				0, 
-				true, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				1, 
-				3); 
-			this.SpawnedRooms.Add(room100);
-			var room101 = new DungeonRoom(
-				"Dimly Lit Platform",
-				"You are standing on a platform of smooth rock in a cavern. The ceiling is roughly 40 feet high, with " +
-				"stalactites hanging from the ceiling as in the room behind you that you just left. To your northwest " +
-				"and northeast are pathways leading down corridors. Torches in holders along the corridors illuminate " +
-				"the way. In front of you is a deep pit encased in darkness. Above it on the other side of the cavern " +
-				"is another platform. The air seems colder and thicker than it otherwise should be. Various shapes " +
-				"that should not exist move slowly in the shadows.", 
-				0, 
-				1, 
-				0, 
-				false, 
-				true, 
-				false, 
-				false, 
-				true, 	
-				false, 
-				true, 
-				false,
-				false, 
-				false,
-				1,
-				3); 
-			this.SpawnedRooms.Add(room101);
-			var room102 = new DungeonRoom(
-				"Corridor",
-				"You are at the start of a corridor carved out of smooth rock approximately 6 feet wide and 10 feet high. " +
-				"Torches in holders along the wall illuminate the hallway. The corridor stretches on for an unknown distance, " +
-				"as the light from the torches cannot penetrate further than about 20 feet ahead. A dark shape skitters from " +
-				"the end of the hallway towards you.", 
-				1, 
-				2, 
-				0, 
-				true, 
-				false, 
-				false, 
-				false, 
-				false, 
-				true, 
-				false, 
-				false, 
-				false, 
-				false,
-				1,
-				3); 
-			this.SpawnedRooms.Add(room102);
-			var room103 = new DungeonRoom(
-				"Corridor",
-				"You are at the end of a corridor carved out of smooth rock approximately 6 feet wide and 10 feet high. " +
-				"Torches in holders along the wall illuminate the hallway. The corridor ends in a pathway leading to the " +
-				"west, where the other smooth rock platform that you saw previously is.", 
-				1, 
-				3, 
-				0, 
-				false, 
-				true, 
-				false, 
-				false, 
-				true, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false,
-				1,
-				3); 
-			this.SpawnedRooms.Add(room103);
-			var room104 = new DungeonRoom(
-				"Dimly Lit Platform",
-				"You are standing on a platform of smooth rock in a cavern. The ceiling is roughly 40 feet high, with " +
-				"stalactites hanging from the ceiling as in the room behind you that you just left. To your southwest " +
-				"and southeast are pathways leading down corridors. Torches in holders along the corridors illuminate " +
-				"the way. In front of you is a deep pit encased in darkness. Above it on the other side of the cavern " +
-				"is another platform. The air seems colder and thicker than it otherwise should be. Various shapes " +
-				"that should not exist move slowly in the shadows.", 
-				0, 
-				4, 
-				0, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				true, 
-				false, 
-				true, 
-				true, 
-				true,
-				1,
-				3); 
-			this.SpawnedRooms.Add(room104);
-			var room105 = new DungeonRoom(
-				"Corridor",
-				"You are at the end of a corridor carved out of smooth rock approximately 6 feet wide and 10 feet high. " +
-				"Torches in holders along the wall illuminate the hallway. The corridor ends in a pathway leading to the " +
-				"west, where the other smooth rock platform that you saw previously is.", 
-				-1, 
-				3, 
-				0, 
-				false, 
-				true, 
-				false, 
-				false, 
-				false, 
-				false, 
-				true, 
-				false, 
-				false, 
-				false,
-				1,
-				3); 
-			this.SpawnedRooms.Add(room105);
-			var room106 = new DungeonRoom(
-				"Corridor",
-				"You are at the start of a corridor carved out of smooth rock approximately 6 feet wide and 10 feet high. " +
-				"Torches in holders along the wall illuminate the hallway. The corridor stretches on for an unknown distance, " +
-				"as the light from the torches cannot penetrate further than about 20 feet ahead. A dark shape skitters from " +
-				"the end of the hallway towards you.", 
-				-1, 
-				2, 
-				0, 
-				true, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				true, 
-				false, 
-				false,
-				1,
-				3); 
-			this.SpawnedRooms.Add(room106);
-			var room107 = new DungeonRoom(
-				"Pathway to Sunken Pit",
-				"You walk down an incline of smooth rock down a pathway to arrive at a sunken pit. You can see the other " +
-				"platform above you on the other side of the cavern. There is almost complete darkness in front of you, with no " +
-				" torches lighting the way as before. A large shape seems to be pacing back and forth in the shadows but you " +
-				"can't make out many details unless you walk closer.", 
-				0, 
-				4, 
-				-1, 
-				false, 
-				true, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				true, 
-				false,
-				1,
-				3); 
-			this.SpawnedRooms.Add(room107);
-			var room108 = new DungeonRoom(
-				"Sunken Pit",
-				"You are at the bottom of the downward inclined pathway and are standing in a pit below the cavern pathways to " +
-				"either side above you. Bones and skulls adorn the pit, as you carefully pick your way in between them to avoid " +
-				"making a crunching sound. There is a red hue around the room yet it's not created by any torches or natural " +
-				"light. A deep growl emanates from somewhere in front of you, the sound vibrating the ground with it's force.", 
-				0, 
-				3, 
-				-1, 
-				true, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false,
-				1,
-				3); 
-			this.SpawnedRooms.Add(room108);
-			var room109 = new DungeonRoom(
-				"Stairway Leading Up",
-				"You are at the base of a long stairway leading up towards an old, wooden door. Torches line the walls to either " +
-				"side and a few drops of blood stain some of the steps. There appears to be a skeleton stretched out before the " +
-				"steps, one hand reaching out and it's wrist bones crushed by a large object, as if someone was trying to flee " +
-				"and didn't make it.", 
-				0, 
-				4, 
-				1, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				false, 
-				true, 
-				true,
-				1,
-				3); 
-			this.SpawnedRooms.Add(room109);
+		public SpawnRooms(int size, int levels, int levelRangeLow, int levelRangeHigh, 
+			int startX, int startY, int startZ, StartDirection startDir) {
+			// Dungeon difficulty settings
+			this.LevelRangeLow = levelRangeLow;
+			this.LevelRangeHigh = levelRangeHigh;
+			// Dungeon build settings
+			this.StartDir = startDir;
+			this.Size = size;
+			this.Levels = levels;
+			var levelSize = size / levels;
+			for (var i = 0; i < levels; i++) {
+				for (var j = 0; j < levelSize; j++) {
+					if (i == 0 && j == 0) {
+						/* To connect static room to dynamic dungeon build, always have first room go down one, and the static
+						 room must always be up by one for the two to connect */
+						this.GenerateStartRoomDirections();
+						var firstRoom = new DungeonRoom(startX, startY,startZ - 1, 
+							this.GoNorth, this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, 
+							this.GoNorthEast, this.GoSouthEast, this.GoUp, this.GoDown, this.LevelRangeLow, this.LevelRangeHigh);
+						this.SpawnedDungeonRooms.Add(firstRoom);
+						this.ResetRoomDirections();
+						this.CurrentLevel--;
+						continue;
+					}
+					if (i > 0 && j == 0) {
+						/* To connect upper level to lower level, always have first room go down one, and the upper level
+						 room must always be up by one for the two to connect, so X/Y coords are same but Z coord is -1
+						 from beginning Z coord */
+						this.xCoord = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].X;
+						this.yCoord = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Y;
+						this.zCoord = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Z - 1;
+						this.GenerateStairwayRoomDirections();
+						var firstRoom = new DungeonRoom(this.xCoord, this.yCoord, this.zCoord, this.GoNorth, 
+							this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, this.GoNorthEast, 
+							this.GoSouthEast, this.GoUp, this.GoDown, this.LevelRangeLow, this.LevelRangeHigh);
+						this.SpawnedDungeonRooms.Add(firstRoom);
+						this.ResetRoomDirections();
+						this.CurrentLevel--;
+						continue;
+					}
+					this.GenerateRandomCoords();
+					this.GenerateRoomDirections();
+					var newRoom = new DungeonRoom(this.xCoord, this.yCoord, this.zCoord, this.GoNorth, 
+						this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, this.GoNorthEast, 
+						this.GoSouthEast, this.GoUp, this.GoDown, this.LevelRangeLow, this.LevelRangeHigh);
+					this.SpawnedDungeonRooms.Add(newRoom);
+					this.ResetRoomDirections();
+				}
+			}
+			foreach (var room in this.SpawnedDungeonRooms) {
+				this.DetermineRoomCategory(room);
+				room.Name = RoomHelper.PopulateDungeonRoomName(room);
+				room.Desc = RoomHelper.PopulateDungeonRoomDesc(room);
+			}
 			var room110 = new TownRoom(
 				"Outside Dungeon Entrance",
 				"You are outside a rocky outcropping with a wooden door laid into the rock. It has a simple metal handle with no " +
@@ -237,7 +90,7 @@ namespace DungeonGame {
 				"town. Smoke rises from a few chimneys in the distance.", 
 				0, 
 				4, 
-				2, 
+				0, 
 				true, 
 				false, 
 				false, 
@@ -248,14 +101,14 @@ namespace DungeonGame {
 				false, 
 				false, 
 				true); 
-			this.SpawnedRooms.Add(room110);
+			this.SpawnedDungeonRooms.Add(room110);
 			var room111 = new TownRoom(
 				"Cobblestone Path",
 				"You are walking on a cobblestone path north towards a town in the distance. Smoke rises from a few chimneys. " +
 				"Around you is a grassy meadow and behind you is a rocky outcropping with a wooden door set into the rock. ", 
 				0, 
 				5, 
-				2, 
+				0, 
 				true, 
 				true, 
 				false, 
@@ -266,14 +119,14 @@ namespace DungeonGame {
 				false, 
 				false, 
 				false); 
-			this.SpawnedRooms.Add(room111);
+			this.SpawnedDungeonRooms.Add(room111);
 			var room112 = new TownRoom(
 				"Cobblestone Path",
 				"You are walking on a cobblestone path north towards a nearby town. Smoke rises from a few chimneys. " +
 				"Around you is a grassy meadow and behind you is a rocky outcropping with a wooden door set into the rock. ", 
 				0, 
 				6, 
-				2, 
+				0, 
 				true, 
 				true, 
 				false, 
@@ -284,7 +137,7 @@ namespace DungeonGame {
 				false, 
 				false, 
 				false); 
-			this.SpawnedRooms.Add(room112);
+			this.SpawnedDungeonRooms.Add(room112);
 			var room113 = new TownRoom(
 				"Town Entrance",
 				"You are at the entrance to a small town. To the northeast you hear the clanking of metal on metal from what " +
@@ -292,7 +145,7 @@ namespace DungeonGame {
 				"northwest are a few buildings with signs outside that you can't read from this distance.", 
 				0, 
 				7, 
-				2, 
+				0, 
 				false, 
 				true, 
 				false, 
@@ -303,7 +156,7 @@ namespace DungeonGame {
 				false, 
 				false, 
 				false); 
-			this.SpawnedRooms.Add(room113);
+			this.SpawnedDungeonRooms.Add(room113);
 			var room114 = new TownRoom(
 				"Town - East",
 				"You are in the east part of the town. In front of you is a small building with a forge and furnace outside " +
@@ -311,7 +164,7 @@ namespace DungeonGame {
 				"running a sword against a grindstone to sharpen it.", 
 				1, 
 				8, 
-				2, 
+				0, 
 				true, 
 				false, 
 				false, 
@@ -328,7 +181,7 @@ namespace DungeonGame {
 					"you approach and wonders whether you're going to make him a little bit richer or not. You can: " +
 					"buy <item>, sell <item>, or <show forsale> to see what he has for sale.", 
 					"Armor")); 
-			this.SpawnedRooms.Add(room114);
+			this.SpawnedDungeonRooms.Add(room114);
 			var room115 = new TownRoom(
 			"Town - East",
 			"You are in the east part of the town. A large man is in front of a building sharpening a sword against " +
@@ -336,7 +189,7 @@ namespace DungeonGame {
 			"another large man in front of it pounding away at a chestplate with a hammer.", 
 			1, 
 			9, 
-			2, 
+			0, 
 			false, 
 			true, 
 			false, 
@@ -353,14 +206,14 @@ namespace DungeonGame {
 			"you approach and wonders whether you're going to make him a little bit richer or not. You can: " +
 			"buy <item>, sell <item>, or <show forsale> to see what he has for sale.", 
 			"Weapon")); 
-			this.SpawnedRooms.Add(room115);
+			this.SpawnedDungeonRooms.Add(room115);
 			var room116 = new TownRoom(
 				"Town - Center",
 				"You are in the central part of the town. There is a wrinkled old man standing in front of " +
 				"a small hut, his hands clasped in the arms of his robes, as he gazes around the town calmly. ", 
 				0, 
 				10, 
-				2, 
+				0, 
 				false, 
 				false, 
 				false, 
@@ -378,14 +231,14 @@ namespace DungeonGame {
 				"be invaluable in your travels. You can buy <item>, sell <item>, or <show forsale> to see what " +
 				"he has for sale. You can also try to ask him to <heal> you.", 
 				"Healer")); 
-			this.SpawnedRooms.Add(room116);
+			this.SpawnedDungeonRooms.Add(room116);
 			var room117 = new TownRoom(
 				"Town - West",
 				"You are in the west part of the town. A woman stands in front of a building with displays " +
 				"of various items in front of it. It looks like she buys and sells a little bit of everything.", 
 				-1, 
 				9, 
-				2, 
+				0, 
 				false, 
 				true, 
 				false, 
@@ -402,7 +255,7 @@ namespace DungeonGame {
 				"an item to show an example of what she has for sale. You can buy <item>, sell <item>, or " +
 				"<show forsale> to see what she has for sale.", 
 				"Shopkeeper")); 
-			this.SpawnedRooms.Add(room117);
+			this.SpawnedDungeonRooms.Add(room117);
 			var room118 = new TownRoom(
 				"Town - West",
 				"You are in the west part of the town. There is a large, wooden building in front of you with a " +
@@ -410,7 +263,7 @@ namespace DungeonGame {
 				"place might have some people who can help you learn more.", 
 				-1, 
 				8, 
-				2, 
+				0, 
 				true, 
 				false, 
 				false, 
@@ -421,11 +274,173 @@ namespace DungeonGame {
 				true, 
 				false, 
 				false);
-			this.SpawnedRooms.Add(room118);
+			this.SpawnedDungeonRooms.Add(room118);
 		}
 
 		public List<IRoom> RetrieveSpawnRooms() {
-			return this.SpawnedRooms;
+			return this.SpawnedDungeonRooms;
+		}
+		private int FindRoomCordsIndex(int xCoord, int yCoord, int zCoord) {
+			var roomName = this.SpawnedDungeonRooms.Find(
+				f => f.X == xCoord && f.Y == yCoord && f.Z == zCoord);
+			var roomIndex = this.SpawnedDungeonRooms.IndexOf(roomName);
+			return roomIndex;
+		}
+		private void GenerateRandomCoords() {
+			while (true) {
+				this.xCoord = Helper.GetRandomNumber(
+					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].X - 1, 
+					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].X + 1);
+				this.yCoord = Helper.GetRandomNumber(
+					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Y - 1, 
+					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Y + 1);
+				this.zCoord = this.CurrentLevel;
+				if (this.FindRoomCordsIndex(this.xCoord, this.yCoord, this.zCoord) != -1) continue;
+				break;
+			}
+		}
+		private void GenerateStartRoomDirections() {
+			switch (this.StartDir) {
+				case StartDirection.Up:
+					this.GoDown = true;
+					break;
+				case StartDirection.Down:
+					this.GoUp = true;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}			
+		}
+		private void GenerateRoomDirections() {
+			var checkWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord, this.zCoord);
+			if (checkWest != -1) {
+				this.SpawnedDungeonRooms[checkWest].GoEast = true;
+				this.GoWest = true;
+			}
+			var checkNorthWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord + 1, this.zCoord);
+			if (checkNorthWest != -1) {
+				this.SpawnedDungeonRooms[checkNorthWest].GoSouthEast = true;
+				this.GoNorthWest = true;
+			}
+			var checkNorth = this.FindRoomCordsIndex(this.xCoord, this.yCoord + 1, this.zCoord);
+			if (checkNorth != -1) {
+				this.SpawnedDungeonRooms[checkNorth].GoSouth = true;
+				this.GoNorth = true;
+			}
+			var checkNorthEast = this.FindRoomCordsIndex(this.xCoord + 1, this.yCoord + 1, this.zCoord);
+			if (checkNorthEast != -1) {
+				this.SpawnedDungeonRooms[checkNorthEast].GoSouthWest = true;
+				this.GoNorthEast = true;
+			}
+			var checkEast = this.FindRoomCordsIndex(this.xCoord + 1, this.yCoord, this.zCoord);
+			if (checkEast != -1) {
+				this.SpawnedDungeonRooms[checkEast].GoWest = true;
+				this.GoEast = true;
+			}
+			var checkSouthEast = this.FindRoomCordsIndex(this.xCoord + 1, this.yCoord - 1, this.zCoord);
+			if (checkSouthEast != -1) {
+				this.SpawnedDungeonRooms[checkSouthEast].GoNorthWest = true;
+				this.GoSouthEast = true;
+			}
+			var checkSouth = this.FindRoomCordsIndex(this.xCoord, this.yCoord - 1, this.zCoord);
+			if (checkSouth != -1) {
+				this.SpawnedDungeonRooms[checkSouth].GoNorth = true;
+				this.GoSouth = true;
+			}
+			var checkSouthWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord - 1, this.zCoord);
+			if (checkSouthWest != -1) {
+				this.SpawnedDungeonRooms[checkSouthWest].GoNorthEast = true;
+				this.GoSouthWest = true;
+			}
+		}
+		private void GenerateStairwayRoomDirections() {
+			var checkWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord, this.zCoord);
+			if (checkWest != -1) {
+				this.SpawnedDungeonRooms[checkWest].GoEast = true;
+				this.GoWest = true;
+			}
+			var checkNorthWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord + 1, this.zCoord);
+			if (checkNorthWest != -1) {
+				this.SpawnedDungeonRooms[checkNorthWest].GoSouthEast = true;
+				this.GoNorthWest = true;
+			}
+			var checkNorth = this.FindRoomCordsIndex(this.xCoord, this.yCoord + 1, this.zCoord);
+			if (checkNorth != -1) {
+				this.SpawnedDungeonRooms[checkNorth].GoSouth = true;
+				this.GoNorth = true;
+			}
+			var checkNorthEast = this.FindRoomCordsIndex(this.xCoord + 1, this.yCoord + 1, this.zCoord);
+			if (checkNorthEast != -1) {
+				this.SpawnedDungeonRooms[checkNorthEast].GoSouthWest = true;
+				this.GoNorthEast = true;
+			}
+			var checkEast = this.FindRoomCordsIndex(this.xCoord + 1, this.yCoord, this.zCoord);
+			if (checkEast != -1) {
+				this.SpawnedDungeonRooms[checkEast].GoWest = true;
+				this.GoEast = true;
+			}
+			var checkSouthEast = this.FindRoomCordsIndex(this.xCoord + 1, this.yCoord - 1, this.zCoord);
+			if (checkSouthEast != -1) {
+				this.SpawnedDungeonRooms[checkSouthEast].GoNorthWest = true;
+				this.GoSouthEast = true;
+			}
+			var checkSouth = this.FindRoomCordsIndex(this.xCoord, this.yCoord - 1, this.zCoord);
+			if (checkSouth != -1) {
+				this.SpawnedDungeonRooms[checkSouth].GoNorth = true;
+				this.GoSouth = true;
+			}
+			var checkSouthWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord - 1, this.zCoord);
+			if (checkSouthWest != -1) {
+				this.SpawnedDungeonRooms[checkSouthWest].GoNorthEast = true;
+				this.GoSouthWest = true;
+			}
+			var checkUp = this.FindRoomCordsIndex(this.xCoord, this.yCoord, this.zCoord + 1);
+			if (checkUp != -1) {
+				this.SpawnedDungeonRooms[checkUp].GoDown = true;
+				this.GoUp = true;
+			}
+			var checkDown = this.FindRoomCordsIndex(this.xCoord, this.yCoord, this.zCoord - 1);
+			if (checkDown != -1) {
+				this.SpawnedDungeonRooms[checkDown].GoUp = true;
+				this.GoDown = true;
+			}
+		}
+		private void ResetRoomDirections() {
+			this.GoEast = false;
+			this.GoNorthEast = false;
+			this.GoSouthEast = false;
+			this.GoWest = false;
+			this.GoNorthWest = false;
+			this.GoSouthWest = false;
+			this.GoNorth = false;
+			this.GoSouth = false;
+			this.GoUp = false;
+			this.GoDown = false;
+		}
+		private void DetermineRoomCategory(IRoom originalRoom) {
+			var castedRoom = originalRoom as DungeonRoom;
+			var directionCount = 0;
+			if (castedRoom.GoUp) directionCount++;
+			if (castedRoom.GoDown) directionCount++;
+			if (castedRoom.GoEast) directionCount++;
+			if (castedRoom.GoWest) directionCount++;
+			if (castedRoom.GoNorth) directionCount++;
+			if (castedRoom.GoSouth) directionCount++;
+			if (castedRoom.GoNorthEast) directionCount++;
+			if (castedRoom.GoNorthWest) directionCount++;
+			if (castedRoom.GoSouthEast) directionCount++;
+			if (castedRoom.GoSouthWest) directionCount++;
+			if (directionCount == 0) throw new ArgumentOutOfRangeException();
+			if (castedRoom.GoUp || castedRoom.GoDown) {
+				castedRoom.RoomCategory = DungeonRoom.RoomType.Stairs;
+				return;
+			}
+			if (directionCount <= 2) {
+				castedRoom.RoomCategory = DungeonRoom.RoomType.Corridor;
+			}
+			else {
+				castedRoom.RoomCategory = DungeonRoom.RoomType.Openspace;
+			}
 		}
 	}
 }

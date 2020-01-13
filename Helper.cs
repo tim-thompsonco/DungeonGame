@@ -285,8 +285,8 @@ namespace DungeonGame {
 			player.Y += y;
 			player.Z += z;
 			// Room at new coordinates is found and room description displayed for user
-			var roomName = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
-			var roomIndex = roomList.IndexOf(roomName);
+			var room = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
+			var roomIndex = roomList.IndexOf(room);
 			roomList[roomIndex].LookRoom(output);
 			if (!roomList[roomIndex].IsDiscovered) roomList[roomIndex].IsDiscovered = true;
 			var roomType = roomList[roomIndex].GetType().Name;
@@ -522,7 +522,7 @@ namespace DungeonGame {
 			return output;
 		}
 		public static int GetRandomNumber(int lowNum, int highNum) {
-			return _rndGenerate.Next(lowNum, highNum);
+			return _rndGenerate.Next(lowNum, highNum + 1);
 		}
 		public static int RoundNumber(int number) {
 			var lastDigit = number % 10;
