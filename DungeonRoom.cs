@@ -9,6 +9,8 @@ namespace DungeonGame {
 		public enum RoomType {
 			Corridor,
 			Openspace,
+			Corner,
+			Intersection,
 			Stairs
 		}
 		public RoomType RoomCategory { get; set; }

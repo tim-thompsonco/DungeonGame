@@ -435,11 +435,19 @@ namespace DungeonGame {
 				castedRoom.RoomCategory = DungeonRoom.RoomType.Stairs;
 				return;
 			}
-			if (directionCount <= 2) {
-				castedRoom.RoomCategory = DungeonRoom.RoomType.Corridor;
-			}
-			else {
-				castedRoom.RoomCategory = DungeonRoom.RoomType.Openspace;
+			switch (directionCount) {
+				case 1:
+					castedRoom.RoomCategory = DungeonRoom.RoomType.Corner;
+					return;
+				case 2:
+					castedRoom.RoomCategory = DungeonRoom.RoomType.Corridor;
+					return;
+				case 3:
+					castedRoom.RoomCategory = DungeonRoom.RoomType.Intersection;
+					return;
+				default:
+					castedRoom.RoomCategory = DungeonRoom.RoomType.Openspace;
+					break;
 			}
 		}
 	}
