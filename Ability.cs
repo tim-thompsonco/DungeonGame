@@ -20,7 +20,6 @@ namespace DungeonGame {
 			Double,
 			Wound
 		}
-		private static readonly Random RndGenerate = new Random();
 		public string Name { get; set; }
 		public ShotType ShotCategory { get; set; }
 		public AbilityType AbilityCategory { get; set; }
@@ -276,7 +275,7 @@ namespace DungeonGame {
 				return;
 			}
 			DeductAbilityCost(player, index);
-			var successChance = RndGenerate.Next(1, 100);
+			var successChance = Helper.GetRandomNumber(1, 101);
 			if (successChance > player.Abilities[index].Offensive.ChanceToSucceed) {
 				var attackString = "You tried to shoot " + opponent.Name + " from afar but failed!";
 				output.StoreUserOutput(
@@ -316,7 +315,7 @@ namespace DungeonGame {
 		}
 		public static void UseDisarmAbility(IMonster opponent, Player player, int index, UserOutput output) {
 			DeductAbilityCost(player, index);
-			var successChance = RndGenerate.Next(1, 100);
+			var successChance = Helper.GetRandomNumber(1, 101);
 			if (successChance > player.Abilities[index].Offensive.Amount) {
 				var disarmFailString = "You tried to disarm " + opponent.Name + " but failed!";
 				output.StoreUserOutput(

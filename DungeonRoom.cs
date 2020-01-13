@@ -6,6 +6,12 @@ using System.Text;
 
 namespace DungeonGame {
 	public class DungeonRoom : IRoom {
+		public enum RoomType {
+			Corridor,
+			Openspace,
+			Stairs
+		}
+		public RoomType RoomCategory { get; set; }
 		public bool IsDiscovered { get; set; }
 		public bool GoNorth { get; set; }
 		public bool GoSouth { get; set; }
@@ -29,27 +35,9 @@ namespace DungeonGame {
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public DungeonRoom() {}
-		public DungeonRoom(
-			string name,
-			string desc,
-			int x,
-			int y,
-			int z,
-			bool goNorth,
-			bool goSouth,
-			bool goEast,
-			bool goWest,
-			bool goNorthWest,
-			bool goSouthWest,
-			bool goNorthEast,
-			bool goSouthEast,
-			bool goUp,
-			bool goDown,
-			int levelRangeLow,
-			int levelRangeHigh
-			) {
-			this.Name = name;
-			this.Desc = desc;
+		public DungeonRoom(int x, int y, int z, bool goNorth, bool goSouth, bool goEast, bool goWest, bool goNorthWest,
+			bool goSouthWest, bool goNorthEast, bool goSouthEast, bool goUp, bool goDown, int levelRangeLow,
+			int levelRangeHigh) {
 			this.X = x;
 			this.Y = y;
 			this.Z = z;
@@ -67,19 +55,19 @@ namespace DungeonGame {
 				"[I]nventory",
 				"Save",
 				"[Q]uit"};
-			var randomNum = Helper.GetRandomNumber(1, 100);
-			var randomNumLevel = Helper.GetRandomNumber(levelRangeLow, levelRangeHigh);
-			// Reserving numbers 90-100 for chance of room not having a monster
-			if (randomNum < 35) {
+			var randomNum = Helper.GetRandomNumber(1, 101);
+			var randomNumLevel = Helper.GetRandomNumber(levelRangeLow, levelRangeHigh + 1);
+			// Reserving numbers 80-100 for chance of room not having a monster
+			if (randomNum < 25) {
 				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Zombie);
 			}
-			else if (randomNum < 60) {
+			else if (randomNum < 50) {
 				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Skeleton);
 			}
-			else if (randomNum < 80) {
+			else if (randomNum < 70) {
 				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Spider);
 			}
-			else if (randomNum < 90) {
+			else if (randomNum < 80) {
 				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Demon);
 			}
 		}

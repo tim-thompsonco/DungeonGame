@@ -6,7 +6,6 @@ using System.Text;
 
 namespace DungeonGame {
 	public class CombatHelper {
-		private static readonly Random RndGenerate = new Random();
 		private string[] Commands { get; set; } = new string[3] {
 		"[F]ight", "[I]nventory", "Flee" };
 
@@ -295,7 +294,7 @@ namespace DungeonGame {
 		}
 		private bool CanFleeCombat(UserOutput output) {
 			Console.ForegroundColor = ConsoleColor.Green;
-			var randomNum = RndGenerate.Next(1, 10);
+			var randomNum = Helper.GetRandomNumber(1, 11);
 			if (randomNum > 5) {
 				output.StoreUserOutput(
 					Helper.FormatSuccessOutputText(),
