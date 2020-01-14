@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 namespace DungeonGame {
-	public class SpawnRooms {
+	public class RoomBuilder {
 		public enum StartDirection {
 			Up,
 			Down
@@ -28,7 +28,7 @@ namespace DungeonGame {
 		public bool GoDown { get; set; }
 		public List<IRoom> SpawnedDungeonRooms { get; set; } = new List<IRoom>();
 
-		public SpawnRooms(int size, int levels, int levelRangeLow, int levelRangeHigh, 
+		public RoomBuilder(int size, int levels, int levelRangeLow, int levelRangeHigh, 
 			int startX, int startY, int startZ, StartDirection startDir) {
 			// Dungeon difficulty settings
 			this.LevelRangeLow = levelRangeLow;
@@ -79,8 +79,8 @@ namespace DungeonGame {
 			}
 			foreach (var room in this.SpawnedDungeonRooms) {
 				this.DetermineRoomCategory(room);
-				room.Name = RoomHelper.PopulateDungeonRoomName(room);
-				room.Desc = RoomHelper.PopulateDungeonRoomDesc(room);
+				room.Name = RoomBuilderHelper.PopulateDungeonRoomName(room);
+				room.Desc = RoomBuilderHelper.PopulateDungeonRoomDesc(room);
 			}
 			var room110 = new TownRoom(
 				"Outside Dungeon Entrance",

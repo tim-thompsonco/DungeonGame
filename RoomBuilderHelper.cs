@@ -1,5 +1,5 @@
 ﻿namespace DungeonGame {
-	public static class RoomHelper {
+	public static class RoomBuilderHelper {
 		public static string PopulateDungeonRoomName(IRoom originalRoom) {
 			var castedRoom = originalRoom as DungeonRoom;
 			return castedRoom.RoomCategory switch {

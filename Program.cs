@@ -45,16 +45,19 @@ namespace DungeonGame {
 						"");
 				}
 				catch (FileNotFoundException) {
-					spawnedRooms = new SpawnRooms(
+					// Create dungeon
+					spawnedRooms = new RoomBuilder(
 						100, 5, 1, 3, 
-						0, 4, 0, SpawnRooms.StartDirection.Down).RetrieveSpawnRooms();
+						0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
 					player = Helper.BuildNewPlayer(initialOutput);
 					GearHelper.EquipInitialGear(player, initialOutput);
+					// Begin game by putting player at coords 0, 7, 0, town entrance
+					var checkRoomIndex = Helper.SetPlayerLocation(spawnedRooms, player, 0, 7, 0);
+					if (checkRoomIndex == -1) throw new InvalidOperationException();
 				}
-				// Set initial room condition
-				// On loading game, display room that player starts in
-				// Begin game by putting player at coords 0, 4, 0
-				var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 4, 0, initialOutput);
+				/* Set initial room condition for player
+					On loading game, display room that player starts in */
+				var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0, initialOutput);
 				// While loop to continue obtaining input from player
 				var isGameOver = false;
 				// Player stats will replenish every 3 seconds

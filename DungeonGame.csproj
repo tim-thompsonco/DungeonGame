@@ -48,7 +48,7 @@
     <Compile Include="Interfaces\IVendor.cs" />
     <Compile Include="PlayerHelper.cs" />
     <Compile Include="Quiver.cs" />
-    <Compile Include="RoomHelper.cs" />
+    <Compile Include="RoomBuilderHelper.cs" />
     <Compile Include="Spell Properties\ArcaneOffense.cs" />
     <Compile Include="Spell Properties\Defense.cs" />
     <Compile Include="Spell Properties\FrostOffense.cs" />
@@ -61,7 +61,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="SpawnRooms.cs" />
+    <Compile Include="RoomBuilder.cs" />
     <Compile Include="Spell.cs" />
     <Compile Include="Armor.cs" />
     <Compile Include="CombatHelper.cs" />

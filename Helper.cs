@@ -293,6 +293,19 @@ namespace DungeonGame {
 			player.CanSave = roomType != "DungeonRoom";
 			return roomIndex;
 		}
+		public static int SetPlayerLocation(List<IRoom> roomList, Player player, int x, int y, int z) {
+			player.X = x;
+			player.Y = y;
+			player.Z = z;
+			// Room at new coordinates is found and room description displayed for user
+			var room = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
+			var roomIndex = roomList.IndexOf(room);
+			if (roomIndex == -1) return -1;
+			if (!roomList[roomIndex].IsDiscovered) roomList[roomIndex].IsDiscovered = true;
+			var roomType = roomList[roomIndex].GetType().Name;
+			player.CanSave = roomType != "DungeonRoom";
+			return roomIndex;
+		}
 		public static void InvalidDirection(UserOutput output) {
 			const string outputString = "You can't go that way!";
 			output.StoreUserOutput(
