@@ -3,10 +3,12 @@
 		public string Name { get; set; }
 		public bool Equipped { get; set; }
 		public int ItemValue { get; set; }
+		public int Weight { get; set; }
 
-		public Loot(string name, int itemValue) {
+		public Loot(string name, int level, int weight) {
 			this.Name = name;
-			this.ItemValue = itemValue;
+			this.Weight = weight;
+			this.ItemValue = 15 + ((level - 1) * 5);
 		}
 
 		public string GetName() {

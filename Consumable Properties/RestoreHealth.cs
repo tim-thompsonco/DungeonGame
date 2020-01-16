@@ -1,4 +1,6 @@
-﻿namespace DungeonGame {
+﻿using System;
+
+namespace DungeonGame {
 	public class RestoreHealth {
 		public int RestoreHealthAmt { get; set; }
 
@@ -6,7 +8,7 @@
 			this.RestoreHealthAmt = amount;
 		}
 		public void RestoreHealthPlayer(Player player) {
-			player.HitPoints += RestoreHealthAmt;
+			player.HitPoints += this.RestoreHealthAmt;
 			if (player.HitPoints > player.MaxHitPoints) {
 				player.HitPoints = player.MaxHitPoints;
 			}

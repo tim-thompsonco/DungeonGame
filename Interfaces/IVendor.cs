@@ -7,14 +7,14 @@ namespace DungeonGame {
 		string BuySellType { get; set; }
 		List<IEquipment> VendorItems { get; set; }
 
-		void DisplayGearForSale(Player player);
-		void BuyItem(Player player, string[] userInput, IEquipment buyItem, int index);
-		void BuyItem(Player player, string[] userInput, IEquipment buyItem, int index, string inputName);
-		void BuyItemCheck(Player player, string[] userInput);
-		void SellItem(Player player, string[] userInput, IEquipment sellItem, int index);
-		void SellItemCheck(Player player, string[] userInput);
-		void RepairItem(Player player, string[] userInput);
-		void RestorePlayer(Player player);
+		void DisplayGearForSale(Player player, UserOutput output);
+		void BuyItem(Player player, string[] userInput, IEquipment buyItem, int index, UserOutput output);
+		void BuyItem(Player player, string[] userInput, IEquipment buyItem, int index, string inputName, UserOutput output);
+		void BuyItemCheck(Player player, string[] userInput, UserOutput output);
+		void SellItem(Player player, string[] userInput, IEquipment sellItem, int index, UserOutput output);
+		void SellItemCheck(Player player, string[] userInput, UserOutput output);
+		void RepairItem(Player player, string[] userInput, UserOutput output);
+		void RestorePlayer(Player player, UserOutput output);
 		void RepopulateHealerPotion(string inputName);
 	}
 }

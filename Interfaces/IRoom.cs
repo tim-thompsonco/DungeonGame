@@ -1,5 +1,8 @@
-﻿namespace DungeonGame {
+﻿using System.Collections.Generic;
+
+namespace DungeonGame {
 	public interface IRoom {
+		bool IsDiscovered { get; set; }
 		bool GoNorth { get; set; }
 		bool GoSouth { get; set; }
 		bool GoEast { get; set; }
@@ -15,13 +18,20 @@
 		int X { get; set; }
 		int Y { get; set; }
 		int Z { get; set; }
+		List<IRoomInteraction> RoomObjects { get; set; }
 
-		bool AttackOpponent(Player player, string[] input);
-		void LootCorpse(Player player, string[] input);
+		IMonster GetMonster();
+		bool AttackOpponent(
+			Player player,
+			string[] input,
+			UserOutput output,
+			UserOutput mapOutput,
+			List<IRoom> roomList);
+		void LootCorpse(Player player, string[] input, UserOutput output);
 		void RebuildRoomObjects();
-		void ShowDirections();
-		void ShowCommands();
-		void LookRoom();
-		void LookNpc(string[] input);
+		void ShowDirections(UserOutput output);
+		void ShowCommands(UserOutput output);
+		void LookRoom(UserOutput output);
+		void LookNpc(string[] input, UserOutput output);
 	}
 }

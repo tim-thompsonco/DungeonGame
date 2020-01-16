@@ -1,228 +1,390 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace DungeonGame {
 	public class CombatHelper {
-		private static readonly Random RndGenerate = new Random();
 		private string[] Commands { get; set; } = new string[3] {
 		"[F]ight", "[I]nventory", "Flee" };
 
-		public bool SingleCombat(IMonster opponent, Player player) {
-			Helper.FormatSuccessOutputText();
-			Console.WriteLine("{0}, you have encountered a {1}. Time to fight!",
-				player.Name, opponent.Name);
+		public bool SingleCombat(
+			IMonster opponent, 
+			Player player, 
+			UserOutput output, 
+			UserOutput mapOutput,
+			List<IRoom> roomList) {
+			var fightStartString = player.Name + ", you have encountered a " + opponent.Name + ". Time to fight!";
+			output.StoreUserOutput(
+				Helper.FormatSuccessOutputText(),
+				Helper.FormatDefaultBackground(),
+				fightStartString);
+			output.RetrieveUserOutput();
+			output.ClearUserOutput();
 			while (true) {
-				player.DisplayPlayerStats();
-				opponent.DisplayStats();
-				Console.Write("Available Commands: ");
-				Console.WriteLine(string.Join(", ", this.Commands));
-				Helper.RequestCommand();
+				PlayerHelper.DisplayPlayerStats(player, output);
+				opponent.DisplayStats(output);
+				this.ShowCommands(output);
+				mapOutput = Helper.ShowMap(roomList, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
+				output.RetrieveUserOutput(mapOutput);
+				output.ClearUserOutput();
+				Helper.RequestCommand(output);
 				var input = Helper.GetFormattedInput();
-				Console.WriteLine(); // To add a blank space between the command and fight sequence
+				Console.Clear();
 				switch (input[0]) {
 					case "f":
 					case "fight":
-						var attackDamage = player.Attack();
+						var attackDamage = player.Attack(output);
+						if (player.IsDamageChanged) attackDamage += player.ChangeDamageAmount;
 						if (attackDamage - opponent.ArmorRating(player) < 0) {
-							Helper.FormatAttackFailText();
-							Console.WriteLine("The {0}'s armor absorbed all of your attack!", opponent.Name);
+							var armorAbsorbString = "The " + opponent.Name + "'s armor absorbed all of your attack!";
+							output.StoreUserOutput(
+								Helper.FormatAttackFailText(),
+								Helper.FormatDefaultBackground(),
+								armorAbsorbString);
 						}
 						else if (attackDamage == 0) {
-							Helper.FormatAttackFailText();
-							Console.WriteLine("You missed {0}!", opponent.Name);
+							var attackFailString = "You missed " + opponent.Name + "!";
+							output.StoreUserOutput(
+								Helper.FormatAttackFailText(),
+								Helper.FormatDefaultBackground(),
+								attackFailString);
 						}
 						else {
-							Helper.FormatAttackSuccessText();
-							Console.WriteLine("You hit the {0} for {1} physical damage.", opponent.Name, attackDamage - opponent.ArmorRating(player));
-							opponent.TakeDamage(attackDamage - opponent.ArmorRating(player));
+							var attackAmount = attackDamage - opponent.ArmorRating(player);
+							var attackSucceedString = "You hit the " + opponent.Name + " for " + attackAmount + " physical damage.";
+							output.StoreUserOutput(
+								Helper.FormatAttackSuccessText(),
+								Helper.FormatDefaultBackground(),
+								attackSucceedString);
+							opponent.TakeDamage(attackAmount);
 						}
-						if (opponent.HitPoints <= 0) {
-							this.SingleCombatWin(opponent, player);
-							return true;
-						}
+						if (opponent.IsMonsterDead(player, output)) return true;
 						break;
 					case "cast":
 						try {
 							if (input[1] != null) {
 								var spellName = Helper.ParseInput(input);
-								player.CastSpell(opponent, spellName);
+								player.CastSpell(opponent, spellName, output);
+								if (opponent.IsMonsterDead(player, output)) return true;
 							}
 							break;
 						}
 						catch (IndexOutOfRangeException) {
-							Helper.FormatFailureOutputText();
-							Console.WriteLine("You don't have that spell.");
+							output.StoreUserOutput(
+								Helper.FormatFailureOutputText(),
+								Helper.FormatDefaultBackground(),
+								"You don't have that spell.");
 							continue;
 						}
 						catch (InvalidOperationException) {
 							if (player.PlayerClass != Player.PlayerClassType.Mage) {
-								Helper.FormatFailureOutputText();
-								Console.WriteLine("You can't cast spells. You're not a mage!");
+								output.StoreUserOutput(
+									Helper.FormatFailureOutputText(),
+									Helper.FormatDefaultBackground(),
+									"You can't cast spells. You're not a mage!");
 								continue;
 							}
-							Helper.FormatFailureOutputText();
-							Console.WriteLine("You do not have enough mana to cast that spell!");
+							output.StoreUserOutput(
+								Helper.FormatFailureOutputText(),
+								Helper.FormatDefaultBackground(),
+								"You do not have enough mana to cast that spell!");
 							continue;
 						}
 					case "use":
 						try {
 							if (input[1] != null) {
 								var abilityName = Helper.ParseInput(input);
-								player.UseAbility(opponent, abilityName);
+								player.UseAbility(opponent, abilityName, output);
+								if (opponent.IsMonsterDead(player, output)) return true;
 							}
 							break;
 						}
 						catch (IndexOutOfRangeException) {
-							Helper.FormatFailureOutputText();
-							Console.WriteLine("You don't have that ability.");
+							output.StoreUserOutput(
+								Helper.FormatFailureOutputText(),
+								Helper.FormatDefaultBackground(),
+								"You don't have that ability.");
+							continue;
+						}
+						catch (ArgumentOutOfRangeException) {
+							output.StoreUserOutput(
+								Helper.FormatFailureOutputText(),
+								Helper.FormatDefaultBackground(),
+								"You don't have that ability.");
 							continue;
 						}
 						catch (InvalidOperationException) {
-							if (player.PlayerClass != Player.PlayerClassType.Warrior) {
-								Helper.FormatFailureOutputText();
-								Console.WriteLine("You can't use abilities. You're not a warrior!");
+							if (player.PlayerClass == Player.PlayerClassType.Mage) {
+								output.StoreUserOutput(
+									Helper.FormatFailureOutputText(),
+									Helper.FormatDefaultBackground(),
+									"You can't use abilities. You're not a warrior or archer!");
 								continue;
 							}
-							Helper.FormatFailureOutputText();
-							Console.WriteLine("You do not have enough rage to use that ability!");
-							continue;
+							switch (player.PlayerClass) {
+								case Player.PlayerClassType.Mage:
+									continue;
+								case Player.PlayerClassType.Warrior:
+									output.StoreUserOutput(
+										Helper.FormatFailureOutputText(),
+										Helper.FormatDefaultBackground(),
+										"You do not have enough rage to use that ability!");
+									continue;
+								case Player.PlayerClassType.Archer:
+									if (player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
+										output.StoreUserOutput(
+											Helper.FormatFailureOutputText(),
+											Helper.FormatDefaultBackground(),
+											"You do not have a bow equipped!");
+										continue;
+									}
+									output.StoreUserOutput(
+										Helper.FormatFailureOutputText(),
+										Helper.FormatDefaultBackground(),
+										"You do not have enough combo points to use that ability!");
+									continue;
+								default:
+									throw new ArgumentOutOfRangeException();
+							}
 						}
+					case "equip":
+					case "unequip":
+						GearHelper.EquipItem(player, input, output);
+						break;
 					case "flee":
-						var canFlee = this.CanFleeCombat();
+						var canFlee = this.CanFleeCombat(output);
 						if (canFlee == true) {
 							return false;
 						}
 						break;
 					case "drink":
 						if (input.Last() == "potion") {
-							player.DrinkPotion(input);
+							player.DrinkPotion(input, output);
 						}
 						else {
-							Helper.FormatFailureOutputText();
-							Console.WriteLine("You can't drink that!");
+							output.StoreUserOutput(
+								Helper.FormatFailureOutputText(),
+								Helper.FormatDefaultBackground(),
+								"You can't drink that!");
 						}
 						continue;
+					case "reload":
+						player.ReloadQuiver(output);
+						break;
 					case "i":
 					case "inventory":
-						player.ShowInventory(player);
+						PlayerHelper.ShowInventory(player, output);
 						continue;
 					case "list":
 						switch (input[1]) {
 							case "abilities":
 								try {
-									player.ListAbilities();
+									PlayerHelper.ListAbilities(player, output);
 								}
 								catch (IndexOutOfRangeException) {
-									Helper.FormatFailureOutputText();
-									Console.WriteLine("List what?");
+									output.StoreUserOutput(
+										Helper.FormatFailureOutputText(),
+										Helper.FormatDefaultBackground(),
+										"List what?");
 								}
 								continue;
 							case "spells":
 								try {
-									player.ListSpells();
+									PlayerHelper.ListSpells(player, output);
 								}
 								catch (IndexOutOfRangeException) {
-									Helper.FormatFailureOutputText();
-									Console.WriteLine("List what?");
+									output.StoreUserOutput(
+										Helper.FormatFailureOutputText(),
+										Helper.FormatDefaultBackground(),
+										"List what?");
 								}
 								continue;
 						}
 						break;
 					case "ability":
 						try {
-							player.AbilityInfo(input[1]);
+							PlayerHelper.AbilityInfo(player, input, output);
 						}
 						catch (IndexOutOfRangeException) {
-							Helper.FormatFailureOutputText();
-							Console.WriteLine("What ability did you want to know about?");
+							output.StoreUserOutput(
+								Helper.FormatFailureOutputText(),
+								Helper.FormatDefaultBackground(),
+								"What ability did you want to know about?");
 						}
 						continue;
 					case "spell":
 						try {
-							player.SpellInfo(input[1]);
+							PlayerHelper.SpellInfo(player, input[1], output);
 						}
 						catch (IndexOutOfRangeException) {
-							Helper.FormatFailureOutputText();
-							Console.WriteLine("What spell did you want to know about?");
+							output.StoreUserOutput(
+								Helper.FormatFailureOutputText(),
+								Helper.FormatDefaultBackground(),
+								"What spell did you want to know about?");
 						}
 						continue;
 					default:
-						Helper.InvalidCommand();
+						Helper.InvalidCommand(output);
 						continue;
 				}
-				if (player.IsHealing) player.HealingRound();
-				// Check opponent health to determine dead or not before special abilities
-				if (opponent.HitPoints <= 0) {
-					this.SingleCombatWin(opponent, player);
-					return true;
+				if (player.IsHealing) this.HealingRound(player, output);
+				if (opponent.OnFire) {
+					this.BurnOnFire(opponent, output);
+					if (opponent.IsMonsterDead(player, output)) return true;
 				}
-				if (opponent.OnFire) opponent.BurnOnFire();
-				if (opponent.IsBleeding) opponent.Bleeding();
-				if (player.IsAugmented) player.AugmentArmorRound();
+				if (opponent.IsBleeding) {
+					this.Bleeding(opponent, output);
+					if (opponent.IsMonsterDead(player, output)) return true;
+				}
+				if (player.IsArmorChanged) this.ChangeArmorRound(player, output);
+				if (player.IsDamageChanged) this.ChangeDamageRound(player, output);
 				if (opponent.IsStunned) {
-					opponent.Stunned();
+					opponent.Stunned(output);
 					continue;
 				}
-				// Check opponent health to determine dead or not after special abilities
-				if (opponent.HitPoints <= 0) {
-					this.SingleCombatWin(opponent, player);
-					return true;
-				}
 				var attackDamageM = opponent.Attack();
+				var defenseMoveString = "Your defensive move blocked " + player.AbsorbDamageAmount + " damage!";
 				if (attackDamageM > player.AbsorbDamageAmount && player.AbsorbDamageAmount > 0) {
-					Console.WriteLine("Your defensive move blocked {0} damage!", player.AbsorbDamageAmount);
+					output.StoreUserOutput(
+						Helper.FormatAttackFailText(),
+						Helper.FormatDefaultBackground(),
+						defenseMoveString);
 					attackDamageM -= player.AbsorbDamageAmount;
 					player.AbsorbDamageAmount = 0;
 				}
 				else if (attackDamageM < player.AbsorbDamageAmount && player.AbsorbDamageAmount > 0) {
-					Console.WriteLine("Your defensive move blocked {0} damage!", player.AbsorbDamageAmount);
+					output.StoreUserOutput(
+						Helper.FormatAttackFailText(),
+						Helper.FormatDefaultBackground(),
+						defenseMoveString);
 					player.AbsorbDamageAmount -= attackDamageM;
 					attackDamageM = 0;
 				}
 				if (attackDamageM - player.ArmorRating(opponent) < 0) {
-					Helper.FormatAttackFailText();
-					Console.WriteLine("Your armor absorbed all of {0}'s attack!", opponent.Name);
-					player.DecreaseArmorDurability();
+					var armorAbsorbString = "Your armor absorbed all of " + opponent.Name + "'s attack!"; 
+					output.StoreUserOutput(
+						Helper.FormatAttackFailText(),
+						Helper.FormatDefaultBackground(),
+						armorAbsorbString);
+					GearHelper.DecreaseArmorDurability(player);
 				}
 				else if (attackDamageM == 0) {
-					Helper.FormatAttackFailText();
-					Console.WriteLine("The {0} missed you!", opponent.Name);
+					var missString = "The " + opponent.Name + " missed you!"; 
+					output.StoreUserOutput(
+						Helper.FormatAttackFailText(),
+						Helper.FormatDefaultBackground(),
+						missString);
 				}
 				else {
-					Helper.FormatAttackSuccessText();
-					Console.WriteLine("The {0} hits you for {1} physical damage.",
-						opponent.Name, attackDamageM - player.ArmorRating(opponent));
-					player.TakeDamage(attackDamageM - player.ArmorRating(opponent));
-					player.DecreaseArmorDurability();
+					var hitAmount = attackDamageM - player.ArmorRating(opponent);
+					var hitString = "The " + opponent.Name + " hits you for " + hitAmount + " physical damage.";
+					output.StoreUserOutput(
+						Helper.FormatAttackSuccessText(),
+						Helper.FormatDefaultBackground(),
+						hitString);
+					player.TakeDamage(hitAmount);
+					GearHelper.DecreaseArmorDurability(player);
 					if (player.HitPoints <= 0) {
 						return false;
 					}
 				}
 			}
 		}
-		public void SingleCombatWin(IMonster opponent, Player player) {
-			Helper.FormatSuccessOutputText();
-			Console.WriteLine("You have defeated the {0}!", opponent.Name);
-			foreach (var loot in opponent.MonsterItems) {
-				loot.Equipped = false;
-			}
-			opponent.Name = "Dead " + opponent.GetName();
-			opponent.Desc = "A corpse of a monster you killed.";
-			player.GainExperience(opponent.ExperienceProvided);
-			player.LevelUpCheck();
-		}
-		private bool CanFleeCombat() {
+		private bool CanFleeCombat(UserOutput output) {
 			Console.ForegroundColor = ConsoleColor.Green;
-			var randomNum = RndGenerate.Next(1, 10);
+			var randomNum = Helper.GetRandomNumber(1, 10);
 			if (randomNum > 5) {
-				Helper.FormatSuccessOutputText();
-				Console.WriteLine("You have fled combat successfully!");
+				output.StoreUserOutput(
+					Helper.FormatSuccessOutputText(),
+					Helper.FormatDefaultBackground(),
+					"You have fled combat successfully!");
 				return true;
 			}
-			Helper.FormatFailureOutputText();
-			Console.WriteLine("You tried to flee combat but failed!");
+			output.StoreUserOutput(
+				Helper.FormatFailureOutputText(),
+				Helper.FormatDefaultBackground(),
+				"You tried to flee combat but failed!");
 			return false;
+		}
+		public void ChangeArmorRound(Player player, UserOutput output) {
+			player.ChangeArmorCurRound += 1;
+			var augmentString = "Your armor is augmented by " + player.ChangeArmorAmount + ".";
+			output.StoreUserOutput(
+				Helper.FormatSuccessOutputText(),
+				Helper.FormatDefaultBackground(),
+				augmentString);
+			if (player.ChangeArmorCurRound <= player.ChangeArmorMaxRound) return;
+			player.IsArmorChanged = false;
+			player.ChangeArmorCurRound = 1;
+		}
+		public void ChangeDamageRound(Player player, UserOutput output) {
+			player.ChangeDamageCurRound += 1;
+			var changeDmgString = player.ChangeDamageAmount > 0 ?
+				"Your damage is increased by " + player.ChangeDamageAmount + "."
+				: "Your damage is decreased by " + player.ChangeDamageAmount + ".";
+			output.StoreUserOutput(
+				Helper.FormatSuccessOutputText(),
+				Helper.FormatDefaultBackground(),
+				changeDmgString);
+			if (player.ChangeDamageCurRound <= player.ChangeDamageMaxRound) return;
+			player.IsDamageChanged = false;
+			player.ChangeDamageCurRound = 1;
+		}
+		public void HealingRound(Player player, UserOutput output) {
+			player.HealCurRound += 1;
+			player.HitPoints += player.HealAmount;
+			if (player.HitPoints > player.MaxHitPoints) player.HitPoints = player.MaxHitPoints;
+			var healAmtString = "You have been healed for " + player.HealAmount + " health."; 
+			output.StoreUserOutput(
+				Helper.FormatSuccessOutputText(),
+				Helper.FormatDefaultBackground(),
+				healAmtString);
+			if (player.HealCurRound <= player.HealMaxRound) return;
+			player.IsHealing = false;
+			player.HealCurRound = 1;
+		}
+		public void BurnOnFire(IMonster opponent, UserOutput output) {
+			opponent.HitPoints -= opponent.OnFireDamage;
+			var burnString = "The " + opponent.Name + " burns for " + opponent.OnFireDamage + " fire damage.";
+			output.StoreUserOutput(
+				Helper.FormatOnFireText(),
+				Helper.FormatDefaultBackground(),
+				burnString);
+			opponent.OnFireCurRound += 1;
+			if (opponent.OnFireCurRound <= opponent.OnFireMaxRound) return;
+			opponent.OnFire = false;
+			opponent.OnFireCurRound = 1;
+		}
+		public void Bleeding(IMonster opponent, UserOutput output) {
+			opponent.HitPoints -= opponent.BleedDamage;
+			var bleedString = "The " + opponent.Name + " bleeds for " + opponent.BleedDamage + " physical damage.";
+			output.StoreUserOutput(
+				Helper.FormatAttackSuccessText(),
+				Helper.FormatDefaultBackground(),
+				bleedString);
+			opponent.BleedCurRound += 1;
+			if (opponent.BleedCurRound <= opponent.BleedMaxRound) return;
+			opponent.IsBleeding = false;
+			opponent.BleedCurRound = 1;
+		}
+		public void ShowCommands(UserOutput output) {
+			var sameLineOutput = new List<string> {
+				Helper.FormatGeneralInfoText(), Helper.FormatDefaultBackground(), "Available Commands: "};
+			var objCount = this.Commands.Length;
+			foreach (var command in this.Commands) {
+				var sb = new StringBuilder();
+				sb.Append(command);
+				if (this.Commands[objCount - 1] != command) {
+					sb.Append(", ");
+				}
+				if (this.Commands[objCount - 1] == command) sb.Append(".");
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
+				sameLineOutput.Add(sb.ToString());
+			}
+			output.StoreUserOutput(sameLineOutput);
 		}
 	}
 }
