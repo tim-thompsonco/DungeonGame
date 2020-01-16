@@ -92,7 +92,7 @@ namespace DungeonGame {
 					break;
 				case MonsterType.Spider:
 					this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Dagger, this.MonsterCategory);
-					if (randomGearNum <= 5) this.MonsterItems.Add(new Loot("large venom sac", this.Level));
+					if (randomGearNum <= 5) this.MonsterItems.Add(new Loot("large venom sac", this.Level, 1));
 					break;
 				case MonsterType.Demon:
 					this.MonsterWeapon = randomGearNum switch {

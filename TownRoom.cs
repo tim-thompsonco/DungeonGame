@@ -24,7 +24,7 @@ namespace DungeonGame {
 		public int Z { get; set; }
 		public List<string> Commands { get; set; }
 		// List of objects in room (including Vendors)
-		private readonly List<IRoomInteraction> _roomObjects = new List<IRoomInteraction>();
+		public List<IRoomInteraction> RoomObjects { get; set; }
 		public IVendor Vendor;
 		public IMonster Monster;
 
@@ -47,6 +47,7 @@ namespace DungeonGame {
 			bool goUp,
 			bool goDown
 			) {
+			this.RoomObjects = new List<IRoomInteraction>();
 			this.Name = name;
 			this.Desc = desc;
 			this.X = x;
@@ -112,8 +113,8 @@ namespace DungeonGame {
 		}
 		public void LootCorpse(Player player, string[] input, UserOutput output) { }
 		public void RebuildRoomObjects() {
-			this._roomObjects?.Clear();
-			this._roomObjects.Add((IRoomInteraction) this.Vendor);
+			this.RoomObjects?.Clear();
+			this.RoomObjects.Add((IRoomInteraction) this.Vendor);
 		}
 		public void ShowCommands(UserOutput output) {
 			var sameLineOutput = new List<string> {
@@ -220,16 +221,15 @@ namespace DungeonGame {
 				Helper.FormatDefaultBackground(), 
 				Helper.FormatTextBorder());
 			var sameLineOutput = new List<string> {Helper.FormatFailureOutputText(), Helper.FormatDefaultBackground(), "Room Contents: "};
-			this.RebuildRoomObjects();
-			if (this._roomObjects.Count > 0 && this._roomObjects[0] != null) {
-				var objCount = this._roomObjects.Count;
+			if (this.RoomObjects.Count > 0 && this.RoomObjects[0] != null) {
+				var objCount = this.RoomObjects.Count;
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				foreach (var item in this._roomObjects) {
+				foreach (var item in this.RoomObjects) {
 					var sb = new StringBuilder();
 					var itemTitle = item.GetName();
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
-					if (this._roomObjects[objCount - 1] != item) {
+					if (this.RoomObjects[objCount - 1] != item) {
 						sb.Append(", ");
 					}
 					sb.Append(".");

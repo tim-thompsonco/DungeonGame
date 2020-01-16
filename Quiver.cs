@@ -6,6 +6,7 @@ namespace DungeonGame {
 		public int ItemValue { get; set; }
 		public int Quantity { get; set; }
 		public int MaxQuantity { get; set; }
+		public int Weight { get; set; }
 		public string Name { get; set; }
 
 		public Quiver(string name, int quantity, int maxQuantity, int itemValue) {
@@ -13,6 +14,7 @@ namespace DungeonGame {
 			this.Quantity = quantity;
 			this.MaxQuantity = maxQuantity;
 			this.ItemValue = itemValue;
+			this.Weight = 1;
 		}
 		
 		public string GetName() {

@@ -19,6 +19,11 @@ namespace DungeonGame {
 		public int RagePoints { get; set; }
 		public int ComboPoints { get; set; }
 		public int ManaPoints { get; set; }
+		public int Strength { get; set; }
+		public int Intelligence { get; set; }
+		public int Dexterity { get; set; }
+		public int Constitution { get; set; }
+		public int MaxCarryWeight { get; set; }
 		public int Gold { get; set; }
 		public int Experience { get; set; }
 		public int ExperienceToLevel { get; set; }
@@ -77,9 +82,11 @@ namespace DungeonGame {
 						this.Consumables.Add(new Consumable(1, Consumable.PotionType.Mana));
 					}
 					this.Spellbook = new List<Spell>();
-					this.MaxHitPoints = 100;
-					this.HitPoints = this.MaxHitPoints;
-					this.MaxManaPoints = 150;
+					this.Strength = 5;
+					this.Dexterity = 5;
+					this.Intelligence = 15;
+					this.Constitution = 10;
+					this.MaxManaPoints = this.Intelligence * 10;
 					this.ManaPoints = this.MaxManaPoints;
 					this.CanWearCloth = true;
 					this.CanUseDagger = true;
@@ -103,9 +110,11 @@ namespace DungeonGame {
 						this.Consumables.Add(new Consumable(1, Consumable.PotionType.Health));
 					}
 					this.Abilities = new List<Ability>();
-					this.MaxHitPoints = 150;
-					this.HitPoints = this.MaxHitPoints;
-					this.MaxRagePoints = 100;
+					this.Strength = 15;
+					this.Dexterity = 5;
+					this.Intelligence = 5;
+					this.Constitution = 10;
+					this.MaxRagePoints = this.Strength * 10;
 					this.RagePoints = this.MaxRagePoints;
 					this.CanWearCloth = true;
 					this.CanWearLeather = true;
@@ -134,9 +143,11 @@ namespace DungeonGame {
 						this.Consumables.Add(new Consumable(1, Consumable.PotionType.Health));
 					}
 					this.Abilities = new List<Ability>();
-					this.MaxHitPoints = 100;
-					this.HitPoints = this.MaxHitPoints;
-					this.MaxComboPoints = 150;
+					this.Strength = 5;
+					this.Dexterity = 15;
+					this.Intelligence = 5;
+					this.Constitution = 10;
+					this.MaxComboPoints = this.Dexterity * 10;
 					this.ComboPoints = this.MaxComboPoints;
 					this.CanWearCloth = true;
 					this.CanWearLeather = true;
@@ -189,6 +200,9 @@ namespace DungeonGame {
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+			this.MaxHitPoints = this.Constitution * 10;
+			this.HitPoints = this.MaxHitPoints;
+			this.MaxCarryWeight = this.Strength * 10;
 		}
 		
 		public void GainExperience(int experience) {

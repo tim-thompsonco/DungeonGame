@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -34,8 +35,103 @@ namespace DungeonGame {
 			}
 			return totalArmorRating;
 		}
+		public static void DropItem(Player player, string[] input, UserOutput output, List<IRoom> roomList) {
+			if (input[1] == null) {
+				output.StoreUserOutput(
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					"What item did you want to drop?");
+				return;
+			}
+			var room = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
+			var roomIndex = roomList.IndexOf(room);
+			var itemIndex = player.Inventory.FindIndex(
+				f => f.Name == input[1] || f.Name.Contains(input[1]));
+			if (itemIndex != -1) {
+				if (player.Inventory[itemIndex].Equipped) {
+					output.StoreUserOutput(
+						Helper.FormatFailureOutputText(),
+						Helper.FormatDefaultBackground(),
+						"You have to unequip that item first!");
+					return;
+				}
+				roomList[roomIndex].RoomObjects.Add(player.Inventory[itemIndex]);
+				var dropInventoryString = "You dropped " +
+				                        player.Inventory[itemIndex].Name + ".";
+				player.Inventory.RemoveAt(itemIndex);
+				output.StoreUserOutput(
+					Helper.FormatSuccessOutputText(),
+					Helper.FormatDefaultBackground(),
+					dropInventoryString);
+				return;
+			}
+			itemIndex = player.Consumables.FindIndex(
+				f => f.Name == input[1] || f.Name.Contains(input[1]));
+			if (itemIndex != -1) {
+				roomList[roomIndex].RoomObjects.Add(player.Consumables[itemIndex]);
+				var dropConsumableString = "You dropped " +
+				                          player.Consumables[itemIndex].Name + ".";
+				player.Consumables.RemoveAt(itemIndex);
+				output.StoreUserOutput(
+					Helper.FormatSuccessOutputText(),
+					Helper.FormatDefaultBackground(),
+					dropConsumableString);
+				return;
+			}
+			output.StoreUserOutput(
+				Helper.FormatFailureOutputText(),
+				Helper.FormatDefaultBackground(),
+				"You don't have that item in your inventory!");
+		}
+		public static void PickupItem(Player player, string[] input, UserOutput output, List<IRoom> roomList) {
+			if (input[1] == null) {
+				output.StoreUserOutput(
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					"What item did you want to pickup?");
+				return;
+			}
+			var room = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
+			var roomIndex = roomList.IndexOf(room);
+			var itemIndex = roomList[roomIndex].RoomObjects.FindIndex(
+				f => f.GetName() == input[1] || f.GetName().Contains(input[1]));
+			if (!(roomList[roomIndex].RoomObjects[itemIndex] is IEquipment item)) {
+				output.StoreUserOutput(
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					"You can't pick that up!");
+				return;
+			}
+			var playerWeight = PlayerHelper.GetInventoryWeight(player);
+			var itemWeight = item.Weight;
+			if (playerWeight + itemWeight > player.MaxCarryWeight) {
+				output.StoreUserOutput(
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					"You can't carry that much!");
+			}
+			if (itemIndex == -1) {
+				output.StoreUserOutput(
+					Helper.FormatFailureOutputText(),
+					Helper.FormatDefaultBackground(),
+					"That item is not in the room!");
+				return;
+			}
+			if (roomList[roomIndex].RoomObjects[itemIndex].GetType() == typeof(Consumable)) {
+				player.Consumables.Add(roomList[roomIndex].RoomObjects[itemIndex] as Consumable);
+			}
+			else {
+				player.Inventory.Add(roomList[roomIndex].RoomObjects[itemIndex] as IEquipment);
+			}
+			var pickupItemString = "You picked up " +
+			                       roomList[roomIndex].RoomObjects[itemIndex].GetName() + ".";
+			roomList[roomIndex].RoomObjects.RemoveAt(itemIndex);
+			output.StoreUserOutput(
+				Helper.FormatSuccessOutputText(),
+				Helper.FormatDefaultBackground(),
+				pickupItemString);
+		}
 		public static void EquipItem(Player player, string[] input, UserOutput output) {
-			Console.ForegroundColor = ConsoleColor.Green;
 			var inputString = new StringBuilder();
 			for (var i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
@@ -62,7 +158,7 @@ namespace DungeonGame {
 							}
 							return;
 						}
-						else if (Helper.IsWearable(item)) {
+						if (Helper.IsWearable(item)) {
 							output.StoreUserOutput(
 								Helper.FormatFailureOutputText(),
 								Helper.FormatDefaultBackground(),

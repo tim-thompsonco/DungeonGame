@@ -3,11 +3,9 @@
 namespace DungeonGame {
 	public class Consumable : IEquipment {
 		public enum ArrowType {
-			Undefined,
 			Standard
 		}
 		public enum PotionType {
-			Undefined,
 			Health,
 			Mana
 		}
@@ -40,12 +38,14 @@ namespace DungeonGame {
 		public RestoreHealth RestoreHealth { get; set; }
 		public RestoreMana RestoreMana { get; set; }
 		public Arrow Arrow { get; set; }
+		public int Weight { get; set; }
 		
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public Consumable() {}
 		public Consumable(int level, PotionType potionType) {
 			this.PotionCategory = potionType;
 			this.ItemValue = level * 3;
+			this.Weight = 1;
 			int amount;
 			string name;
 			if (level <= 3) {
@@ -77,12 +77,14 @@ namespace DungeonGame {
 		}
 		public Consumable(string name, int itemValue, ArrowType arrowType) {
 			this.Name = name;
+			this.Weight = 1;
 			this.ItemValue = itemValue;
 			this.ArrowCategory = arrowType;
 			this.Arrow = new Arrow(50);
 		}
 		public Consumable(int level, GemType gemType) {
 			this.GemCategory = gemType;
+			this.Weight = 1;
 			this.ItemValue = level * 20;
 			string name;
 			if (level <= 3) {

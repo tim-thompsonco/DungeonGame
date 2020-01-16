@@ -1,10 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DungeonGame {
 	public static class PlayerHelper {
+		public static int GetInventoryWeight(Player player) {
+			var weight = 0;
+			foreach (var item in player.Inventory) {
+				weight += item.Weight;
+			}
+			foreach (var consumable in player.Consumables) {
+				weight += consumable.Weight;
+			}
+			return weight;
+		}
 		public static void ShowInventory(Player player, UserOutput output) {
 			output.StoreUserOutput(
 				Helper.FormatInfoText(), 
@@ -74,6 +85,11 @@ namespace DungeonGame {
 				Helper.FormatInfoText(), 
 				Helper.FormatDefaultBackground(),
 				goldString);
+			var weightString = "Weight: " + GetInventoryWeight(player) + "/" + player.MaxCarryWeight;
+			output.StoreUserOutput(
+				Helper.FormatInfoText(), 
+				Helper.FormatDefaultBackground(),
+				weightString);
 		}
 		public static string GetInventoryName(Player player, IEquipment item) {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;

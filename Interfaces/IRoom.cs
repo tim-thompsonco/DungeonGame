@@ -18,6 +18,7 @@ namespace DungeonGame {
 		int X { get; set; }
 		int Y { get; set; }
 		int Z { get; set; }
+		List<IRoomInteraction> RoomObjects { get; set; }
 
 		IMonster GetMonster();
 		bool AttackOpponent(

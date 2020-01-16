@@ -26,6 +26,7 @@ namespace DungeonGame {
 		public bool Equipped { get; set; }
 		public int Durability { get; set; }
 		public int Level { get; set; }
+		public int Weight { get; set; }
 
 		// Default constructor for JSON serialization
 		public Armor() {}
@@ -65,6 +66,7 @@ namespace DungeonGame {
 			this.ItemValue = this.ArmorRating;
 			this.Durability = 100;
 			this.BuildArmorName();
+			this.SetArmorWeight();
 		}
 		// Constructor to define specific armor slot for players, vendors
 		public Armor(int level, ArmorType armorGroup, ArmorSlot armorCategory) {
@@ -96,8 +98,47 @@ namespace DungeonGame {
 			this.ItemValue = this.ArmorRating;
 			this.Durability = 100;
 			this.BuildArmorName();
+			this.SetArmorWeight();
 		}
 
+		private void SetArmorWeight() {
+			switch (this.ArmorGroup) {
+				case ArmorType.Cloth:
+					if (this.ArmorCategory == ArmorSlot.Chest || this.ArmorCategory == ArmorSlot.Legs) {
+						this.Weight = 2;
+					}
+					this.Weight = 1;
+					break;
+				case ArmorType.Leather:
+					switch (this.ArmorCategory) {
+						case ArmorSlot.Chest:
+							this.Weight = 3;
+							break;
+						case ArmorSlot.Legs:
+							this.Weight = 2;
+							break;
+						default:
+							this.Weight = 1;
+							break;
+					}
+					break;
+				case ArmorType.Plate:
+					switch (this.ArmorCategory) {
+						case ArmorSlot.Chest:
+							this.Weight = 4;
+							break;
+						case ArmorSlot.Legs:
+							this.Weight = 3;
+							break;
+						default:
+							this.Weight = 2;
+							break;
+					}
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
 		private void BuildArmorName() {
 			var sb = new StringBuilder();
 			switch (this.ArmorGroup) {

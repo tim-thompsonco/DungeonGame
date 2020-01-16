@@ -164,6 +164,12 @@ namespace DungeonGame {
 										"You do not have enough mana to cast that spell!");
 								continue;
 							}
+						case "drop":
+							GearHelper.DropItem(player, input, output, spawnedRooms);
+							break;		
+						case "pickup":
+							GearHelper.PickupItem(player, input, output, spawnedRooms);
+							break;	
 						case "use":
 							try {
 								if (input.Contains("distance")) {

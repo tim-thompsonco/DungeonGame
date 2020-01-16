@@ -32,7 +32,7 @@ namespace DungeonGame {
 		public int Z { get; set; }
 		public List<string> Commands { get; set; }
 		// List of objects in room (including monsters)
-		private readonly List<IRoomInteraction> _roomObjects = new List<IRoomInteraction>();
+		public List<IRoomInteraction> RoomObjects { get; set; }
 		public IMonster Monster;
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
@@ -40,6 +40,7 @@ namespace DungeonGame {
 		public DungeonRoom(int x, int y, int z, bool goNorth, bool goSouth, bool goEast, bool goWest, bool goNorthWest,
 			bool goSouthWest, bool goNorthEast, bool goSouthEast, bool goUp, bool goDown, int levelRangeLow,
 			int levelRangeHigh) {
+			this.RoomObjects = new List<IRoomInteraction>();
 			this.X = x;
 			this.Y = y;
 			this.Z = z;
@@ -62,15 +63,19 @@ namespace DungeonGame {
 			// Reserving numbers 80-100 for chance of room not having a monster
 			if (randomNum < 25) {
 				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Zombie);
+				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum < 50) {
 				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Skeleton);
+				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum < 70) {
 				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Spider);
+				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum < 80) {
 				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Demon);
+				this.RoomObjects.Add(this.Monster);
 			}
 		}
 		
@@ -116,9 +121,9 @@ namespace DungeonGame {
 			return true;
 		}
 		public void RebuildRoomObjects() {
-			this._roomObjects.Clear();
+			this.RoomObjects.Clear();
 			if (this.Monster != null && !this.Monster.WasLooted) {
-				this._roomObjects.Add((IRoomInteraction) this.Monster);
+				this.RoomObjects.Add(this.Monster);
 			}
 		}
 		public void ShowCommands(UserOutput output) {
@@ -230,16 +235,15 @@ namespace DungeonGame {
 				Helper.FormatRoomOutputText(),
 				Helper.FormatDefaultBackground(), 
 				"Room Contents: "};
-			this.RebuildRoomObjects();
-			if (this._roomObjects.Count > 0 && this._roomObjects[0] != null) {
-				var objCount = this._roomObjects.Count;
+			if (this.RoomObjects.Count > 0 && this.RoomObjects[0] != null) {
+				var objCount = this.RoomObjects.Count;
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				foreach (var item in this._roomObjects) {
+				foreach (var item in this.RoomObjects) {
 					var sb = new StringBuilder();
 					var itemTitle = item.GetName();
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
-					if (this._roomObjects[objCount - 1] != item) {
+					if (this.RoomObjects[objCount - 1] != item) {
 						sb.Append(", ");
 					}
 					sb.Append(".");
@@ -269,31 +273,45 @@ namespace DungeonGame {
 					var goldLooted = this.Monster.Gold;
 					player.Gold += this.Monster.Gold;
 					try {
-						foreach (var loot in this.Monster.MonsterItems) {
-							var itemType = loot.GetType().FullName;
+						this.Monster.Gold = 0;
+						var lootGoldString = "You looted " + goldLooted + " gold coins from the " + this.Monster.Name + "!";
+						output.StoreUserOutput(
+							Helper.FormatSuccessOutputText(),
+							Helper.FormatDefaultBackground(),
+							lootGoldString);
+						for (var i = 0; i < this.Monster.MonsterItems.Count; i++) {
+							var itemType = this.Monster.MonsterItems[i].GetType().FullName;
+							var playerWeight = PlayerHelper.GetInventoryWeight(player);
+							var itemWeight = this.Monster.MonsterItems[i].Weight;
+							if (playerWeight + itemWeight > player.MaxCarryWeight) {
+								output.StoreUserOutput(
+									Helper.FormatFailureOutputText(),
+									Helper.FormatDefaultBackground(),
+									"You can't carry that much!");
+								return;
+							}
 							if (itemType == "DungeonGame.Consumable") {
-								player.Consumables.Add((Consumable)loot);
+								player.Consumables.Add((Consumable)this.Monster.MonsterItems[i]);
 							}
 							else {
-								player.Inventory.Add(loot);
+								player.Inventory.Add(this.Monster.MonsterItems[i]);
 							}
-							var lootItemString = "You looted " + loot.GetName() + " from the " + this.Monster.Name + "!";
+							var lootItemString = "You looted " + this.Monster.MonsterItems[i].GetName() + " from the " +
+							                     this.Monster.Name + "!";
 							output.StoreUserOutput(
 								Helper.FormatSuccessOutputText(),
 								Helper.FormatDefaultBackground(),
 								lootItemString);
+							this.Monster.MonsterItems.RemoveAt(i);
 						}
+						this.Monster.MonsterItems.Clear();
+						this.Monster.WasLooted = true;
+						var monsterIndex = this.RoomObjects.FindIndex(
+							f => f.GetName() == this.Monster.Name);
+						if (monsterIndex != -1) this.RoomObjects.RemoveAt(monsterIndex);
 					}
 					catch (InvalidOperationException) {
 					}
-					this.Monster.MonsterItems.Clear();
-					this.Monster.Gold = 0;
-					this.Monster.WasLooted = true;
-					var lootGoldString = "You looted " + goldLooted + " gold coins from the " + this.Monster.Name + "!";
-					output.StoreUserOutput(
-						Helper.FormatSuccessOutputText(),
-						Helper.FormatDefaultBackground(),
-						lootGoldString);
 				}
 				else if (this.Monster.WasLooted) {
 					var alreadyLootString = "You already looted " + this.Monster.Name + "!";
@@ -346,10 +364,10 @@ namespace DungeonGame {
 				output.StoreUserOutput(sameLineOutput);
 				var objCount = this.Monster.MonsterItems.Count;
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				foreach (var loot in this.Monster.MonsterItems) {
+				foreach (var item in this.Monster.MonsterItems) {
 					var sameLineOutputItem = new List<string>();
 					var sb = new StringBuilder();
-					var itemTitle = loot.GetName();
+					var itemTitle = item.GetName();
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
 					sameLineOutputItem.Add(Helper.FormatRoomOutputText());

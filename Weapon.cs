@@ -19,12 +19,14 @@ namespace DungeonGame {
 		public int Level { get; set; }
 		public int Durability { get; set; }
 		public int Quality { get; set; }
+		public int Weight { get; set; }
 
 		// Default constructor for JSON serialization
 		public Weapon() {}
 		public Weapon(int level, WeaponType weaponType) {
 			this.Level = level;
 			this.WeaponGroup = weaponType;
+			this.Weight = this.WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
 			this.Durability = 100;
 			var randomNum = Helper.GetRandomNumber(1, 100);
 			var randomWeaponDmg = Helper.GetRandomNumber(18, 24);
