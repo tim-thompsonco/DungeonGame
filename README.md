@@ -1,3 +1,5 @@
+<h2>Dungeon Game</h2>
+
 <p>This is my fun project to finish what I started with C when I was 14. My goal at the time was to build a simple text dungeon game. I didn't really understand OOP at the time, so that didn't go too far, but now I have learned OOP with C# from some courses on Udemy. The intent of this game was to provide as much coding practice as possible in C# and OOP, hence why I have not placed much of an emphasis on a very fancy GUI, since the goal is to build code rather than work with a game engine such as Unity. Everything in this game, from the combat engine, to the GUI, was built from scratch by me for this reason.</p>
 
 <h2>Game Commands</h2>
