@@ -102,6 +102,7 @@ namespace DungeonGame {
 				goUp, 
 				goDown) {
 			this.Vendor = vendor;
+			this.RoomObjects.Add(this.Vendor);
 		}
 
 		public IMonster GetMonster() {

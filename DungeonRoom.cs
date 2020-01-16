@@ -120,12 +120,6 @@ namespace DungeonGame {
 			}
 			return true;
 		}
-		public void RebuildRoomObjects() {
-			this.RoomObjects.Clear();
-			if (this.Monster != null && !this.Monster.WasLooted) {
-				this.RoomObjects.Add(this.Monster);
-			}
-		}
 		public void ShowCommands(UserOutput output) {
 			var sameLineOutput = new List<string> {
 			Helper.FormatGeneralInfoText(), Helper.FormatDefaultBackground(), "Available Commands: "};

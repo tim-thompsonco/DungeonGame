@@ -202,7 +202,7 @@ namespace DungeonGame {
 			}
 			this.MaxHitPoints = this.Constitution * 10;
 			this.HitPoints = this.MaxHitPoints;
-			this.MaxCarryWeight = this.Strength * 10;
+			this.MaxCarryWeight = this.Strength * 6;
 		}
 		
 		public void GainExperience(int experience) {

@@ -28,7 +28,6 @@ namespace DungeonGame {
 			UserOutput mapOutput,
 			List<IRoom> roomList);
 		void LootCorpse(Player player, string[] input, UserOutput output);
-		void RebuildRoomObjects();
 		void ShowDirections(UserOutput output);
 		void ShowCommands(UserOutput output);
 		void LookRoom(UserOutput output);
