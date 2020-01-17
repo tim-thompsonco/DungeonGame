@@ -19,10 +19,10 @@ namespace DungeonGame {
 			Plate
 		}
 		public string Name { get; set; }
-		public ArmorSlot ArmorCategory { get; }
-		public ArmorType ArmorGroup { get; }
+		public ArmorSlot ArmorCategory { get; set; }
+		public ArmorType ArmorGroup { get; set; }
 		public int ItemValue { get; set; }
-		public int ArmorRating { get; }
+		public int ArmorRating { get; set; }
 		public bool Equipped { get; set; }
 		public int Durability { get; set; }
 		public int Level { get; set; }

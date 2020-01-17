@@ -108,19 +108,11 @@ namespace DungeonGame {
 		}
 		public int Attack() {
 			if (!this.Equipped) return 0;
-			var attackDamage = 0f;
-			var attackType = Helper.GetRandomNumber(1, 12); // Creates a random number to determine attack type
-			// Main attack
-			if (attackType < 6) {
-				attackDamage = this.RegDamage;
-			}
-			// Stronger attack
-			else if (attackType < 11) {
-				attackDamage = (int)((double)this.RegDamage * this.CritMultiplier);
-			}
-			// If RNG didn't cause main or stronger attack, it's a miss
+			double attackDamage = this.RegDamage;
+			var chanceToCrit = Helper.GetRandomNumber(1, 100);
+			if (chanceToCrit <= 25) attackDamage *= this.CritMultiplier;
 			this.Durability -= 1;
-			attackDamage *= this.Durability / 100f;
+			attackDamage *= this.Durability / (double)100;
 			return (int)attackDamage;
 		}
 		public string GetName() {

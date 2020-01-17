@@ -53,6 +53,7 @@ namespace DungeonGame {
 		public int ChangeArmorAmount { get; set; }
 		public int ChangeArmorCurRound { get; set; }
 		public int ChangeArmorMaxRound { get; set; }
+		public double DodgeChance { get; set; }
 		public PlayerClassType PlayerClass { get; set; }
 		public Quiver PlayerQuiver { get; set; }
 		public Armor PlayerHeadArmor { get; set; }
@@ -203,6 +204,7 @@ namespace DungeonGame {
 			this.MaxHitPoints = this.Constitution * 10;
 			this.HitPoints = this.MaxHitPoints;
 			this.MaxCarryWeight = this.Strength * 6;
+			this.DodgeChance = this.Dexterity * 1.5;
 		}
 		
 		public void GainExperience(int experience) {

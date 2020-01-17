@@ -244,7 +244,7 @@ namespace DungeonGame {
 					opponent.Stunned(output);
 					continue;
 				}
-				var attackDamageM = opponent.Attack();
+				var attackDamageM = opponent.Attack(player);
 				var defenseMoveString = "Your defensive move blocked " + player.AbsorbDamageAmount + " damage!";
 				if (attackDamageM > player.AbsorbDamageAmount && player.AbsorbDamageAmount > 0) {
 					output.StoreUserOutput(
@@ -262,20 +262,20 @@ namespace DungeonGame {
 					player.AbsorbDamageAmount -= attackDamageM;
 					attackDamageM = 0;
 				}
-				if (attackDamageM - player.ArmorRating(opponent) < 0) {
+				if (attackDamageM == 0) {
+					var missString = "The " + opponent.Name + " missed you!"; 
+					output.StoreUserOutput(
+						Helper.FormatAttackFailText(),
+						Helper.FormatDefaultBackground(),
+						missString);
+				}
+				else if (attackDamageM - player.ArmorRating(opponent) < 0) {
 					var armorAbsorbString = "Your armor absorbed all of " + opponent.Name + "'s attack!"; 
 					output.StoreUserOutput(
 						Helper.FormatAttackFailText(),
 						Helper.FormatDefaultBackground(),
 						armorAbsorbString);
 					GearHelper.DecreaseArmorDurability(player);
-				}
-				else if (attackDamageM == 0) {
-					var missString = "The " + opponent.Name + " missed you!"; 
-					output.StoreUserOutput(
-						Helper.FormatAttackFailText(),
-						Helper.FormatDefaultBackground(),
-						missString);
 				}
 				else {
 					var hitAmount = attackDamageM - player.ArmorRating(opponent);

@@ -259,8 +259,12 @@ namespace DungeonGame {
 				Helper.FormatDefaultBackground(),
 				"==================================================");
 		}
-		public int Attack() {
-			return this.MonsterWeapon.Attack();
+		public int Attack(Player player) {
+			var attackDamage = this.MonsterWeapon.Attack();
+			var randomChanceToHit = Helper.GetRandomNumber(1, 100);
+			var chanceToDodge = player.DodgeChance;
+			if (chanceToDodge > 50) chanceToDodge = 50;
+			return randomChanceToHit <= chanceToDodge ? 0 : attackDamage;
 		}
 		public int CheckArmorRating() {
 			var totalArmorRating = 0;

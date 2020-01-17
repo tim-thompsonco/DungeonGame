@@ -31,7 +31,7 @@ namespace DungeonGame {
 
 		void TakeDamage(int weaponDamage);
 		void DisplayStats(UserOutput output);
-		int Attack();
+		int Attack(Player player);
 		int CheckArmorRating();
 		void MonsterDeath(Player player, UserOutput output);
 		bool IsMonsterDead(Player player, UserOutput output);
