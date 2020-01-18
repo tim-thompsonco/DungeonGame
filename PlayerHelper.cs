@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DungeonGame {
@@ -252,11 +251,12 @@ namespace DungeonGame {
 				expLineOutput.Add("    ");
 			}
 			output.StoreUserOutput(expLineOutput);
-			var levelString = "Level: " + player.Level;
+			var statsString =  "Str: " + player.Strength + " Int: " + player.Intelligence +
+			                  " Dex: " + player.Dexterity + " Level: " + player.Level;
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(),
 				Helper.FormatDefaultBackground(),
-				levelString);
+				statsString);
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(),
 				Helper.FormatDefaultBackground(),
@@ -340,24 +340,27 @@ namespace DungeonGame {
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					rageCostString);
-				switch (player.Abilities[index].AbilityCategory) {
-					case Ability.AbilityType.Slash:
+				switch (player.Abilities[index].WarAbilityCategory) {
+					case Ability.WarriorAbility.Slash:
 						Ability.OffenseDamageAbilityInfo(player, index, output);
 						break;
-					case Ability.AbilityType.Rend:
+					case Ability.WarriorAbility.Rend:
 						Ability.OffenseDamageAbilityInfo(player, index, output);
 						break;
-					case Ability.AbilityType.Charge:
+					case Ability.WarriorAbility.Charge:
 						Ability.StunAbilityInfo(player, index, output);
 						break;
-					case Ability.AbilityType.Block:
+					case Ability.WarriorAbility.Block:
 						Ability.DefenseAbilityInfo(player, index, output);
 						break;
-					case Ability.AbilityType.Berserk:
+					case Ability.WarriorAbility.Berserk:
 						Ability.BerserkAbilityInfo(player, index, output);
 						break;
-					case Ability.AbilityType.Disarm:
+					case Ability.WarriorAbility.Disarm:
 						Ability.DisarmAbilityInfo(player, index, output);
+						break;
+					case Ability.WarriorAbility.Bandage:
+						Ability.BandageAbilityInfo(player, index, output);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -378,23 +381,27 @@ namespace DungeonGame {
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					comboCostString);
-				switch (player.Abilities[index].ShotCategory) {
-					case Ability.ShotType.Distance:
+				switch (player.Abilities[index].ArcAbilityCategory) {
+					case Ability.ArcherAbility.Distance:
+						Ability.DistanceAbilityInfo(player, index, output);
 						break;
-					case Ability.ShotType.Gut:
+					case Ability.ArcherAbility.Gut:
 						Ability.OffenseDamageAbilityInfo(player, index, output);
 						break;
-					case Ability.ShotType.Precise:
+					case Ability.ArcherAbility.Precise:
 						Ability.OffenseDamageAbilityInfo(player, index, output);
 						break;
-					case Ability.ShotType.Stun:
+					case Ability.ArcherAbility.Stun:
 						Ability.StunAbilityInfo(player, index, output);
 						break;
-					case Ability.ShotType.Double:
+					case Ability.ArcherAbility.Double:
 						Ability.OffenseDamageAbilityInfo(player, index, output);
 						break;
-					case Ability.ShotType.Wound:
+					case Ability.ArcherAbility.Wound:
 						Ability.OffenseDamageAbilityInfo(player, index, output);
+						break;
+					case Ability.ArcherAbility.Bandage:
+						Ability.BandageAbilityInfo(player, index, output);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -466,6 +473,19 @@ namespace DungeonGame {
 					Helper.FormatDefaultBackground(), 
 					"You don't have that spell.");
 			}
+		}
+		public static void HealingRound(Player player, UserOutput output) {
+			player.HealCurRound += 1;
+			player.HitPoints += player.HealAmount;
+			if (player.HitPoints > player.MaxHitPoints) player.HitPoints = player.MaxHitPoints;
+			var healAmtString = "You have been healed for " + player.HealAmount + " health."; 
+			output.StoreUserOutput(
+				Helper.FormatSuccessOutputText(),
+				Helper.FormatDefaultBackground(),
+				healAmtString);
+			if (player.HealCurRound <= player.HealMaxRound) return;
+			player.IsHealing = false;
+			player.HealCurRound = 1;
 		}
 	}
 }

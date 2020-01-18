@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DungeonGame {
+	namespace DungeonGame {
 	public class Player {
 		public enum PlayerClassType {
 			Mage,
@@ -41,6 +41,7 @@ namespace DungeonGame {
 		public bool CanUseAxe { get; set; }
 		public bool CanUseBow { get; set; }
 		public bool IsHealing { get; set; }
+		public bool HealTimerOn { get; set; }
 		public int HealAmount { get; set; }
 		public int HealCurRound { get; set; }
 		public int HealMaxRound { get; set; }
@@ -132,12 +133,12 @@ namespace DungeonGame {
 						1, Armor.ArmorType.Plate, Armor.ArmorSlot.Chest));
 					this.Inventory.Add(new Armor(
 						1, Armor.ArmorType.Plate, Armor.ArmorSlot.Legs));
-					this.Abilities.Add(new Ability("charge", 25, 1, Ability.AbilityType.Charge));
-					this.Abilities.Add(new Ability("slash", 40, 1, Ability.AbilityType.Slash));
-					this.Abilities.Add(new Ability("rend", 25, 1, Ability.AbilityType.Rend));
-					this.Abilities.Add(new Ability("block", 25, 1, Ability.AbilityType.Block));
-					this.Abilities.Add(new Ability("berserk", 40, 1, Ability.AbilityType.Berserk));
-					this.Abilities.Add(new Ability("disarm", 25, 1, Ability.AbilityType.Disarm));
+					this.Abilities.Add(new Ability("charge", 25, 1, Ability.WarriorAbility.Charge));
+					this.Abilities.Add(new Ability("slash", 40, 1, Ability.WarriorAbility.Slash));
+					this.Abilities.Add(new Ability("rend", 25, 1, Ability.WarriorAbility.Rend));
+					this.Abilities.Add(new Ability("block", 25, 1, Ability.WarriorAbility.Block));
+					this.Abilities.Add(new Ability("berserk", 40, 1, Ability.WarriorAbility.Berserk));
+					this.Abilities.Add(new Ability("disarm", 25, 1, Ability.WarriorAbility.Disarm));
 					break;
 				case PlayerClassType.Archer:
 					for (var i = 0; i < 3; i++) {
@@ -171,32 +172,32 @@ namespace DungeonGame {
 						"precision shot", 
 						40, 
 						1, 
-						Ability.ShotType.Precise));
+						Ability.ArcherAbility.Precise));
 					this.Abilities.Add(new Ability(
 						"gut shot", 
 						25, 
 						1,
-						Ability.ShotType.Gut));
+						Ability.ArcherAbility.Gut));
 					this.Abilities.Add(new Ability(
 						"stun shot", 
 						25, 
 						1, 
-						Ability.ShotType.Stun));
+						Ability.ArcherAbility.Stun));
 					this.Abilities.Add(new Ability(
 						"double shot", 
 						25, 
 						1, 
-						Ability.ShotType.Double));
+						Ability.ArcherAbility.Double));
 					this.Abilities.Add(new Ability(
 						"wound shot", 
 						40, 
 						1, 
-						Ability.ShotType.Wound));
+						Ability.ArcherAbility.Wound));
 					this.Abilities.Add(new Ability(
 						"distance shot", 
 						25, 
 						1, 
-						Ability.ShotType.Distance));
+						Ability.ArcherAbility.Distance));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -318,18 +319,75 @@ namespace DungeonGame {
 			if (index != -1 && 
 			    this.RagePoints >= this.Abilities[index].RageCost && 
 			    this.PlayerClass == PlayerClassType.Warrior) {
-				switch (this.Abilities[index].AbilityCategory) {
-					case Ability.AbilityType.Slash:
+				switch (this.Abilities[index].WarAbilityCategory) {
+					case Ability.WarriorAbility.Slash:
 						return;
-					case Ability.AbilityType.Rend:
+					case Ability.WarriorAbility.Rend:
 						return;
-					case Ability.AbilityType.Charge:
+					case Ability.WarriorAbility.Charge:
 						return;
-					case Ability.AbilityType.Block:
+					case Ability.WarriorAbility.Block:
 						return;
-					case Ability.AbilityType.Berserk:
+					case Ability.WarriorAbility.Berserk:
 						return;
-					case Ability.AbilityType.Disarm:
+					case Ability.WarriorAbility.Disarm:
+						return;
+					case Ability.WarriorAbility.Bandage:
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+			if (index != -1 &&
+			    this.ComboPoints >= this.Abilities[index].ComboCost && 
+			    this.PlayerClass == PlayerClassType.Archer && 
+			    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
+				switch (this.Abilities[index].ArcAbilityCategory) {
+					case Ability.ArcherAbility.Distance:
+						Ability.UseDistanceAbility(spawnedRooms, this, index, direction, output);
+						return;
+					case Ability.ArcherAbility.Gut:
+						return;
+					case Ability.ArcherAbility.Precise:
+						return;
+					case Ability.ArcherAbility.Stun:
+						return;
+					case Ability.ArcherAbility.Double:
+						return;
+					case Ability.ArcherAbility.Wound:
+						return;
+					case Ability.ArcherAbility.Bandage:
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+			if (index != -1) {
+				throw new InvalidOperationException();
+			}
+			throw new IndexOutOfRangeException();
+		}
+		public void UseAbility(string inputName, UserOutput output) {
+			var index = this.Abilities.FindIndex(
+				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+			if (index != -1 && 
+			    this.RagePoints >= this.Abilities[index].RageCost && 
+			    this.PlayerClass == PlayerClassType.Warrior) {
+				switch (this.Abilities[index].WarAbilityCategory) {
+					case Ability.WarriorAbility.Slash:
+						return;
+					case Ability.WarriorAbility.Rend:
+						return;
+					case Ability.WarriorAbility.Charge:
+						return;
+					case Ability.WarriorAbility.Block:
+						return;
+					case Ability.WarriorAbility.Berserk:
+						return;
+					case Ability.WarriorAbility.Disarm:
+						return;
+					case Ability.WarriorAbility.Bandage:
+						Ability.UseBandageAbility(this, index, output);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -339,19 +397,21 @@ namespace DungeonGame {
 			    this.ComboPoints >= this.Abilities[index].ComboCost && 
 			    this.PlayerClass == PlayerClassType.Archer && 
 			    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
-				switch (this.Abilities[index].ShotCategory) {
-					case Ability.ShotType.Distance:
-						Ability.UseDistanceAbility(spawnedRooms, this, index, direction, output);
+				switch (this.Abilities[index].ArcAbilityCategory) {
+					case Ability.ArcherAbility.Distance:
 						return;
-					case Ability.ShotType.Gut:
+					case Ability.ArcherAbility.Gut:
 						return;
-					case Ability.ShotType.Precise:
+					case Ability.ArcherAbility.Precise:
 						return;
-					case Ability.ShotType.Stun:
+					case Ability.ArcherAbility.Stun:
 						return;
-					case Ability.ShotType.Double:
+					case Ability.ArcherAbility.Double:
 						return;
-					case Ability.ShotType.Wound:
+					case Ability.ArcherAbility.Wound:
+						return;
+					case Ability.ArcherAbility.Bandage:
+						Ability.UseBandageAbility(this, index, output);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -368,20 +428,20 @@ namespace DungeonGame {
 			if (index != -1 && 
 			    this.RagePoints >= this.Abilities[index].RageCost && 
 			    this.PlayerClass == PlayerClassType.Warrior) {
-				switch (this.Abilities[index].AbilityCategory) {
-					case Ability.AbilityType.Slash:
+				switch (this.Abilities[index].WarAbilityCategory) {
+					case Ability.WarriorAbility.Slash:
 						Ability.UseOffenseDamageAbility(opponent, this, index, output);
 						return;
-					case Ability.AbilityType.Rend:
+					case Ability.WarriorAbility.Rend:
 						Ability.UseOffenseDamageAbility(opponent, this, index, output);
 						return;
-					case Ability.AbilityType.Charge:
+					case Ability.WarriorAbility.Charge:
 						Ability.UseStunAbility(opponent, this, index, output);
 						return;
-					case Ability.AbilityType.Block:
+					case Ability.WarriorAbility.Block:
 						this.AbsorbDamageAmount = Ability.UseDefenseAbility(this, index);
 						return;
-					case Ability.AbilityType.Berserk:
+					case Ability.WarriorAbility.Berserk:
 						var berserkValues = Ability.UseBerserkAbility(opponent, this, index);
 						this.SetChangeArmor(
 							true, 
@@ -394,9 +454,11 @@ namespace DungeonGame {
 							berserkValues[2],
 							berserkValues[3]);
 						return;
-					case Ability.AbilityType.Disarm:
+					case Ability.WarriorAbility.Disarm:
 						Ability.UseDisarmAbility(opponent, this, index, output);
 						return;
+					case Ability.WarriorAbility.Bandage:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -405,26 +467,29 @@ namespace DungeonGame {
 			    this.ComboPoints >= this.Abilities[index].ComboCost && 
 			    this.PlayerClass == PlayerClassType.Archer && 
 			    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
-				switch (this.Abilities[index].ShotCategory) {
-					case Ability.ShotType.Distance:
+				switch (this.Abilities[index].ArcAbilityCategory) {
+					case Ability.ArcherAbility.Distance:
 						return;
-					case Ability.ShotType.Gut:
+					case Ability.ArcherAbility.Gut:
 						Ability.UseOffenseDamageAbility(opponent, this, index, output);
 						return;
-					case Ability.ShotType.Precise:
+					case Ability.ArcherAbility.Precise:
 						Ability.UseOffenseDamageAbility(opponent, this, index, output);
 						return;
-					case Ability.ShotType.Stun:
+					case Ability.ArcherAbility.Stun:
 						Ability.UseStunAbility(opponent, this, index, output);
 						return;
-					case Ability.ShotType.Double:
+					case Ability.ArcherAbility.Double:
 						for (var i = 0; i < 2; i++) {
 							Ability.UseOffenseDamageAbility(opponent, this, index, output);
 						}
 						return;
-					case Ability.ShotType.Wound:
+					case Ability.ArcherAbility.Wound:
 						Ability.UseOffenseDamageAbility(opponent, this, index, output);
 						return;
+					case Ability.ArcherAbility.Bandage:
+						Ability.UseBandageAbility(this, index, output);
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}

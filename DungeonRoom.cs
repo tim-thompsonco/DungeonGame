@@ -138,62 +138,70 @@ namespace DungeonGame {
 			output.StoreUserOutput(sameLineOutput);
 		}
 		public void ShowDirections(UserOutput output) {
+			const string directionList = "Available Directions: ";
 			var sameLineOutput = new List<string> {
 				Helper.FormatRoomOutputText(), 
 				Helper.FormatDefaultBackground(),
-				"Available Directions: "};
-			var sb = new StringBuilder();
+				directionList};
+			var roomDirs = new StringBuilder();
 			if (this.GoNorth) {
-				sameLineOutput.Add(Helper.FormatInfoText());
-				sameLineOutput.Add(Helper.FormatDefaultBackground());
-				sameLineOutput.Add("[N]orth ");
+				roomDirs.Append("[N]orth ");
 			}
 			if (this.GoSouth) {
-				sameLineOutput.Add(Helper.FormatInfoText());
-				sameLineOutput.Add(Helper.FormatDefaultBackground());
-				sameLineOutput.Add("[S]outh ");
+				roomDirs.Append("[S]outh ");
 			}
 			if (this.GoEast) {
-				sameLineOutput.Add(Helper.FormatInfoText());
-				sameLineOutput.Add(Helper.FormatDefaultBackground());
-				sameLineOutput.Add("[E]ast ");
+				roomDirs.Append("[E]ast ");
 			}
 			if (this.GoWest) {
-				sameLineOutput.Add(Helper.FormatInfoText());
-				sameLineOutput.Add(Helper.FormatDefaultBackground());
-				sameLineOutput.Add("[W]est ");
+				roomDirs.Append("[W]est ");
 			}
 			if (this.GoNorthWest) {
-				sameLineOutput.Add(Helper.FormatInfoText());
-				sameLineOutput.Add(Helper.FormatDefaultBackground());
-				sameLineOutput.Add("[N]orth[W]est ");
+				roomDirs.Append("[N]orth[W]est ");
 			}
 			if (this.GoSouthWest) {
-				sameLineOutput.Add(Helper.FormatInfoText());
-				sameLineOutput.Add(Helper.FormatDefaultBackground());
-				sameLineOutput.Add("[S]outh[W]est ");
+				roomDirs.Append("[S]outh[W]est ");
 			}
 			if (this.GoNorthEast) {
-				sameLineOutput.Add(Helper.FormatInfoText());
-				sameLineOutput.Add(Helper.FormatDefaultBackground());
-				sameLineOutput.Add("[N]orth[E]ast ");
+				roomDirs.Append("[N]orth[E]ast ");
 			}
 			if (this.GoSouthEast) {
-				sameLineOutput.Add(Helper.FormatInfoText());
-				sameLineOutput.Add(Helper.FormatDefaultBackground());
-				sameLineOutput.Add("[S]outh[E]ast ");
+				roomDirs.Append("[S]outh[E]ast ");
 			}
 			if (this.GoUp) {
-				sameLineOutput.Add(Helper.FormatInfoText());
-				sameLineOutput.Add(Helper.FormatDefaultBackground());
-				sameLineOutput.Add("[U]p ");
+				roomDirs.Append("[U]p ");
 			}
 			if (this.GoDown) {
+				roomDirs.Append("[D]own");
+			}
+			if (directionList.Length + roomDirs.ToString().Length > Helper.GetGameWidth()) {
 				sameLineOutput.Add(Helper.FormatInfoText());
 				sameLineOutput.Add(Helper.FormatDefaultBackground());
-				sameLineOutput.Add("[D]own");
+				sameLineOutput.Add(roomDirs.ToString().Substring(
+					0, Helper.GetGameWidth() - directionList.Length));
+				output.StoreUserOutput(sameLineOutput);
 			}
-			output.StoreUserOutput(sameLineOutput);
+			else {
+				sameLineOutput.Add(Helper.FormatInfoText());
+				sameLineOutput.Add(Helper.FormatDefaultBackground());
+				sameLineOutput.Add(roomDirs.ToString());
+				output.StoreUserOutput(sameLineOutput);
+				return;
+			}
+			var remainingRoomDirs = roomDirs.ToString().Substring(Helper.GetGameWidth() - directionList.Length);
+			for (var i = 0; i < remainingRoomDirs.Length; i += Helper.GetGameWidth()) {
+				if (remainingRoomDirs.Length - i < Helper.GetGameWidth()) {
+					output.StoreUserOutput(
+						Helper.FormatInfoText(), 
+						Helper.FormatDefaultBackground(), 
+						remainingRoomDirs.Substring(i, remainingRoomDirs.Length - i));
+					continue;
+				}
+				output.StoreUserOutput(
+					Helper.FormatInfoText(), 
+					Helper.FormatDefaultBackground(), 
+					remainingRoomDirs.Substring(i, Helper.GetGameWidth()));
+			}
 		}
 		public void LookRoom(UserOutput output) {
 			output.StoreUserOutput(
@@ -226,9 +234,7 @@ namespace DungeonGame {
 				Helper.FormatDefaultBackground(), 
 				Helper.FormatTextBorder());
 			var sameLineOutput = new List<string> {
-				Helper.FormatRoomOutputText(),
-				Helper.FormatDefaultBackground(), 
-				"Room Contents: "};
+				Helper.FormatRoomOutputText(), Helper.FormatDefaultBackground(), "Room Contents: "};
 			if (this.RoomObjects.Count > 0 && this.RoomObjects[0] != null) {
 				var objCount = this.RoomObjects.Count;
 				var textInfo = new CultureInfo("en-US", false).TextInfo;

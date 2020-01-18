@@ -19,6 +19,7 @@
     <WarningLevel>4</WarningLevel>
     <ExternalConsole>true</ExternalConsole>
     <LangVersion>8.0</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|anycpu' ">
     <Optimize>true</Optimize>
@@ -27,15 +28,12 @@
     <WarningLevel>4</WarningLevel>
     <ExternalConsole>true</ExternalConsole>
     <LangVersion>8.0</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="Ability Properties\ChangeArmor.cs" />
     <Compile Include="Ability Properties\Defensive.cs" />
+    <Compile Include="Ability Properties\Bandage.cs" />
     <Compile Include="Ability Properties\Offensive.cs" />
     <Compile Include="Ability Properties\Stun.cs" />
     <Compile Include="Ability.cs" />
@@ -72,6 +70,13 @@
     <Compile Include="Monster.cs" />
     <Compile Include="TownRoom.cs" />
     <Compile Include="Weapon.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

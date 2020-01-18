@@ -13,9 +13,9 @@ namespace DungeonGame {
 			catch (Exception) {}
 			while (true) {
 				// Game loading commands
-				var initialOutput = new UserOutput();
-				var initialMapOutput = new UserOutput();
-				Helper.GameIntro(initialOutput);
+				var output = new UserOutput();
+				var mapOutput = new UserOutput();
+				Helper.GameIntro(output);
 				Player player;
 				List<IRoom> spawnedRooms;
 				try {
@@ -30,16 +30,16 @@ namespace DungeonGame {
 						NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
 					});
 					// Insert blank space before game reload info for formatting
-					initialOutput.StoreUserOutput(
+					output.StoreUserOutput(
 						Helper.FormatGeneralInfoText(),
 						Helper.FormatDefaultBackground(),
 						"");
-					initialOutput.StoreUserOutput(
+					output.StoreUserOutput(
 						Helper.FormatGeneralInfoText(), 
 						Helper.FormatDefaultBackground(), 
 						"Reloading your saved game.");
 					// Insert blank space after game reload info for formatting
-					initialOutput.StoreUserOutput(
+					output.StoreUserOutput(
 						Helper.FormatGeneralInfoText(),
 						Helper.FormatDefaultBackground(),
 						"");
@@ -49,30 +49,37 @@ namespace DungeonGame {
 					spawnedRooms = new RoomBuilder(
 						100, 5, 1, 3, 
 						0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
-					player = Helper.BuildNewPlayer(initialOutput);
-					GearHelper.EquipInitialGear(player, initialOutput);
+					player = Helper.BuildNewPlayer(output);
+					GearHelper.EquipInitialGear(player, output);
 					// Begin game by putting player at coords 0, 7, 0, town entrance
 					var checkRoomIndex = Helper.SetPlayerLocation(spawnedRooms, player, 0, 7, 0);
 					if (checkRoomIndex == -1) throw new InvalidOperationException();
 				}
 				/* Set initial room condition for player
 					On loading game, display room that player starts in */
-				var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0, initialOutput);
+				var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0, output);
 				// While loop to continue obtaining input from player
 				var isGameOver = false;
 				// Player stats will replenish every 3 seconds
-				var timer = new Timer(
-					e => player.ReplenishStatsOverTime(),
-					null,
-					TimeSpan.Zero,
-					TimeSpan.FromSeconds(3));
-				initialMapOutput = Helper.ShowMap(spawnedRooms, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
-				PlayerHelper.DisplayPlayerStats(player, initialOutput);
-				spawnedRooms[roomIndex].ShowCommands(initialOutput);
-				initialOutput.RetrieveUserOutput(initialMapOutput);
+				var timerReplenishPlayerStats = new Timer(
+					e => player.ReplenishStatsOverTime(), 
+					null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
+				var timerPlayerIsHealing = new Timer(
+					e => PlayerHelper.HealingRound(player, output),
+					null, Timeout.Infinite, Timeout.Infinite);
+				mapOutput = Helper.ShowMap(spawnedRooms, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
+				PlayerHelper.DisplayPlayerStats(player, output);
+				spawnedRooms[roomIndex].ShowCommands(output);
+				output.RetrieveUserOutput(mapOutput);
 				while (!isGameOver) {
-					var output = new UserOutput();
-					var mapOutput = new UserOutput();
+					if (player.IsHealing && player.HealTimerOn == false) {
+						timerPlayerIsHealing.Change(TimeSpan.Zero, TimeSpan.FromSeconds(10));
+						player.HealTimerOn = true;
+					}
+					if (!player.IsHealing && player.HealTimerOn) {
+						timerPlayerIsHealing.Change(Timeout.Infinite, Timeout.Infinite);
+						player.HealTimerOn = false;
+					}
 					var input = Helper.GetFormattedInput();
 					var isTownRoom = spawnedRooms[roomIndex] as TownRoom;
 					Console.Clear();
@@ -84,7 +91,8 @@ namespace DungeonGame {
 							try {
 								if (input[1] != null) {
 									try {
-										timer.Dispose();
+										timerReplenishPlayerStats.Change(Timeout.Infinite, Timeout.Infinite);
+										timerPlayerIsHealing.Dispose();
 										var outcome = spawnedRooms[roomIndex].AttackOpponent(
 											player, input, output, mapOutput, spawnedRooms);
 										if (!outcome && player.HitPoints <= 0) {
@@ -93,11 +101,10 @@ namespace DungeonGame {
 										else if (!outcome) {
 											roomIndex = Helper.FleeRoom(spawnedRooms, player, output);
 										}
-										timer = new Timer(
-											e => player.ReplenishStatsOverTime(),
-											null,
-											TimeSpan.Zero,
-											TimeSpan.FromSeconds(3));
+										timerReplenishPlayerStats.Change(TimeSpan.Zero, TimeSpan.FromSeconds(3));
+										timerPlayerIsHealing = new Timer(
+											e => PlayerHelper.HealingRound(player, output),
+											null, Timeout.Infinite, Timeout.Infinite);
 									}
 									catch (Exception) {
 										output.StoreUserOutput(
@@ -174,6 +181,10 @@ namespace DungeonGame {
 							try {
 								if (input.Contains("distance")) {
 									player.UseAbility(spawnedRooms, input, output);
+								}
+								if (input[1] != null) {
+									var abilityName = Helper.ParseInput(input);
+									player.UseAbility(abilityName, output);
 								}
 								break;
 							}
@@ -572,7 +583,10 @@ namespace DungeonGame {
 				spawnedRooms[roomIndex].ShowCommands(output);
 				mapOutput = Helper.ShowMap(spawnedRooms, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
 				output.RetrieveUserOutput(mapOutput);
+				output.ClearUserOutput();
 				}
+				timerReplenishPlayerStats.Dispose();
+				timerPlayerIsHealing.Dispose();
 			}
 		}
 	}

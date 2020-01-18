@@ -4,25 +4,28 @@ using System.Runtime.CompilerServices;
 
 namespace DungeonGame {
 	public class Ability {
-		public enum AbilityType {
+		public enum WarriorAbility {
 			Slash,
 			Rend,
 			Charge,
 			Block,
 			Berserk,
-			Disarm
+			Disarm,
+			Bandage
 		}
-		public enum ShotType {
+		public enum ArcherAbility {
 			Distance,
 			Gut,
 			Precise,
 			Stun,
 			Double,
-			Wound
+			Wound,
+			Bandage
 		}
 		public string Name { get; set; }
-		public ShotType ShotCategory { get; set; }
-		public AbilityType AbilityCategory { get; set; }
+		public ArcherAbility ArcAbilityCategory { get; set; }
+		public WarriorAbility WarAbilityCategory { get; set; }
+		public Bandage Bandage { get; set; }
 		public Defensive Defensive { get; set; }
 		public Offensive Offensive { get; set; }
 		public ChangeArmor ChangeArmor { get; set; }
@@ -35,58 +38,64 @@ namespace DungeonGame {
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public Ability() {}
 
-		public Ability(string name, int rageCost, int rank, AbilityType abilityType) {
+		public Ability(string name, int rageCost, int rank, WarriorAbility warAbility) {
 			this.Name = name;
 			this.RageCost = rageCost;
 			this.Rank = rank;
-			this.AbilityCategory = abilityType;
-			switch (this.AbilityCategory) {
-				case AbilityType.Slash:
+			this.WarAbilityCategory = warAbility;
+			switch (this.WarAbilityCategory) {
+				case WarriorAbility.Slash:
 					this.Offensive = new Offensive(50);
 					break;
-				case AbilityType.Rend:
+				case WarriorAbility.Rend:
 					this.Offensive = new Offensive(10, 5, 1, 3);
 					break;
-				case AbilityType.Charge:
+				case WarriorAbility.Charge:
 					this.Stun = new Stun(15, 1, 2);
 					break;
-				case AbilityType.Block:
+				case WarriorAbility.Block:
 					this.Defensive = new Defensive(50);
 					break;
-				case AbilityType.Berserk:
+				case WarriorAbility.Berserk:
 					this.Offensive = new Offensive(20);
 					this.ChangeArmor = new ChangeArmor(15, 1, 4);
 					break;
-				case AbilityType.Disarm:
+				case WarriorAbility.Disarm:
 					this.Offensive = new Offensive(35);
+					break;
+				case WarriorAbility.Bandage:
+					this.Bandage = new Bandage(25, 5, 1, 3);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		public Ability(string name, int comboCost, int rank, ShotType shotType) {
+		public Ability(string name, int comboCost, int rank, ArcherAbility archerAbility) {
 			this.Name = name;
 			this.ComboCost = comboCost;
 			this.Rank = rank;
-			this.ShotCategory = shotType;
-			switch (this.ShotCategory) {
-				case ShotType.Distance:
+			this.ArcAbilityCategory = archerAbility;
+			switch (this.ArcAbilityCategory) {
+				case ArcherAbility.Distance:
 					this.Offensive = new Offensive(25, 50);
 					break;
-				case ShotType.Gut:
+				case ArcherAbility.Gut:
 					this.Offensive = new Offensive(15, 5, 1, 3);
 					break;
-				case ShotType.Precise:
+				case ArcherAbility.Precise:
 					this.Offensive = new Offensive(50);
 					break;
-				case ShotType.Stun:
+				case ArcherAbility.Stun:
 					this.Stun = new Stun(15, 1, 3);
 					break;
-				case ShotType.Wound:
+				case ArcherAbility.Wound:
 					this.Offensive = new Offensive(5, 10, 1, 5);
 					break;
-				case ShotType.Double:
+				case ArcherAbility.Double:
 					this.Offensive = new Offensive(25);
+					break;
+				case ArcherAbility.Bandage:
+					this.Bandage = new Bandage(25, 5, 1, 3);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -102,8 +111,6 @@ namespace DungeonGame {
 			}
 			else {
 				player.ComboPoints -= player.Abilities[index].ComboCost;
-				
-				player.PlayerQuiver.UseArrow();
 			}
 		}
 		public static bool OutOfArrows(Player player) {
@@ -130,6 +137,10 @@ namespace DungeonGame {
 				return;
 			}
 			DeductAbilityCost(player, index);
+			if (player.PlayerClass == Player.PlayerClassType.Archer) {
+				player.PlayerQuiver.UseArrow();
+			}
+			player.PlayerQuiver.UseArrow();
 			var abilityDamage = player.Abilities[index].Stun.DamageAmount;
 			if (abilityDamage == 0) {
 				output.StoreUserOutput(
@@ -275,6 +286,9 @@ namespace DungeonGame {
 				return;
 			}
 			DeductAbilityCost(player, index);
+			if (player.PlayerClass == Player.PlayerClassType.Archer) {
+				player.PlayerQuiver.UseArrow();
+			}
 			var successChance = Helper.GetRandomNumber(1, 100);
 			if (successChance > player.Abilities[index].Offensive.ChanceToSucceed) {
 				var attackString = "You tried to shoot " + opponent.Name + " from afar but failed!";
@@ -305,6 +319,49 @@ namespace DungeonGame {
 		public static int UseDefenseAbility(Player player, int index) {
 			DeductAbilityCost(player, index);
 			return player.Abilities[index].Defensive.AbsorbDamage;
+		}
+		public static void BandageAbilityInfo(Player player, int index, UserOutput output) {
+			var healAmountString = "Heal Amount: " + player.Abilities[index].Bandage.HealAmount;
+			output.StoreUserOutput(
+				Helper.FormatGeneralInfoText(),
+				Helper.FormatDefaultBackground(),
+				healAmountString);
+			if (player.Abilities[index].Bandage.HealOverTime <= 0) return;
+			var healOverTimeString = "Heal Over Time: " + player.Abilities[index].Bandage.HealOverTime;
+			output.StoreUserOutput(
+				Helper.FormatGeneralInfoText(),
+				Helper.FormatDefaultBackground(),
+				healOverTimeString);
+			var healInfoStringCombat = "Heal over time will restore health for " + 
+			                     player.Abilities[index].Bandage.HealMaxRounds + " rounds in combat.";
+			output.StoreUserOutput(
+				Helper.FormatGeneralInfoText(),
+				Helper.FormatDefaultBackground(),
+				healInfoStringCombat);
+			var healInfoStringNonCombat = "Heal over time will restore health " + 
+			                           player.Abilities[index].Bandage.HealMaxRounds + " times every 10 seconds.";
+			output.StoreUserOutput(
+				Helper.FormatGeneralInfoText(),
+				Helper.FormatDefaultBackground(),
+				healInfoStringNonCombat);
+		}
+		public static void UseBandageAbility(Player player, int index, UserOutput output) {
+			DeductAbilityCost(player, index);
+			var healAmount = player.Abilities[index].Bandage.HealAmount;
+			var healString = "You heal yourself for " + healAmount + " health.";
+			output.StoreUserOutput(
+				Helper.FormatSuccessOutputText(),
+				Helper.FormatDefaultBackground(),
+				healString);
+			player.HitPoints += healAmount;
+			if (player.HitPoints > player.MaxHitPoints) {
+				player.HitPoints = player.MaxHitPoints;
+			}
+			player.SetHealing(
+				true,
+				player.Abilities[index].Bandage.HealOverTime,
+				player.Abilities[index].Bandage.HealCurRounds,
+				player.Abilities[index].Bandage.HealMaxRounds);
 		}
 		public static void DisarmAbilityInfo(Player player, int index, UserOutput output) {
 			var abilityString = player.Abilities[index].Offensive.Amount + "% chance to disarm opponent's weapon.";
@@ -338,7 +395,7 @@ namespace DungeonGame {
 				Helper.FormatInfoText(),
 				Helper.FormatDefaultBackground(),
 				abilityDmgString);
-			if (player.Abilities[index].ShotCategory == ShotType.Double) {
+			if (player.Abilities[index].ArcAbilityCategory == ArcherAbility.Double) {
 				output.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
@@ -365,6 +422,9 @@ namespace DungeonGame {
 				return;
 			}
 			DeductAbilityCost(player, index);
+			if (player.PlayerClass == Player.PlayerClassType.Archer) {
+				player.PlayerQuiver.UseArrow();
+			}
 			var abilityDamage = player.Abilities[index].Offensive.Amount;
 			if (abilityDamage == 0) {
 				var abilityFailString = "Your " + player.Abilities[index].Name + " missed!";
@@ -374,7 +434,6 @@ namespace DungeonGame {
 					abilityFailString);
 			}
 			else {
-				;
 				var abilitySuccessString = "You " + player.Abilities[index].Name + " the " + opponent.Name + " for " +
 				                           abilityDamage + " physical damage.";
 				output.StoreUserOutput(

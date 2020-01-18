@@ -94,10 +94,14 @@ namespace DungeonGame {
 						}
 					case "use":
 						try {
-							if (input[1] != null) {
+							if (input[1] != null && input[1] != "bandage") {
 								var abilityName = Helper.ParseInput(input);
 								player.UseAbility(opponent, abilityName, output);
 								if (opponent.IsMonsterDead(player, output)) return true;
+							}
+							if (input[1] != null && input[1] == "bandage") {
+								var abilityName = Helper.ParseInput(input);
+								player.UseAbility(abilityName, output);
 							}
 							break;
 						}
@@ -229,7 +233,7 @@ namespace DungeonGame {
 						Helper.InvalidCommand(output);
 						continue;
 				}
-				if (player.IsHealing) this.HealingRound(player, output);
+				if (player.IsHealing) PlayerHelper.HealingRound(player, output);
 				if (opponent.OnFire) {
 					this.BurnOnFire(opponent, output);
 					if (opponent.IsMonsterDead(player, output)) return true;
@@ -331,19 +335,6 @@ namespace DungeonGame {
 			if (player.ChangeDamageCurRound <= player.ChangeDamageMaxRound) return;
 			player.IsDamageChanged = false;
 			player.ChangeDamageCurRound = 1;
-		}
-		public void HealingRound(Player player, UserOutput output) {
-			player.HealCurRound += 1;
-			player.HitPoints += player.HealAmount;
-			if (player.HitPoints > player.MaxHitPoints) player.HitPoints = player.MaxHitPoints;
-			var healAmtString = "You have been healed for " + player.HealAmount + " health."; 
-			output.StoreUserOutput(
-				Helper.FormatSuccessOutputText(),
-				Helper.FormatDefaultBackground(),
-				healAmtString);
-			if (player.HealCurRound <= player.HealMaxRound) return;
-			player.IsHealing = false;
-			player.HealCurRound = 1;
 		}
 		public void BurnOnFire(IMonster opponent, UserOutput output) {
 			opponent.HitPoints -= opponent.OnFireDamage;
