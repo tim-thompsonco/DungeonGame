@@ -31,13 +31,12 @@
 
 <h2>Deployment</h2>
 
-<p>All releases are built as an executable console application and are compatible on Windows machines only at this time.</p>
+<p>All releases are built as an executable console application using .NET Framework 4.7.2.</p>
 
 <h2>Built With</h2>
 
 <p>C# for OOP</p>
-<p>Visual Studio for Windows development</p>
-<p>IntelliJ Rider for Mac development</p>
+<p>IntelliJ Rider</p>
 
 <h2>Versioning</h2>
 
