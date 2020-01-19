@@ -355,7 +355,7 @@ namespace DungeonGame {
 			player.Effects.Add(new Effect(player.Abilities[index].Name,
 				Effect.EffectType.Healing, player.Abilities[index].Bandage.HealOverTime,
 				player.Abilities[index].Bandage.HealCurRounds, player.Abilities[index].Bandage.HealMaxRounds,
-				player, output, 10));
+				player, output, 10, 1));
 		}
 		public static void DisarmAbilityInfo(Player player, int index, UserOutput output) {
 			var abilityString = player.Abilities[index].Offensive.Amount + "% chance to disarm opponent's weapon.";
@@ -444,7 +444,7 @@ namespace DungeonGame {
 				opponent.Effects.Add(new Effect(player.Abilities[index].Name,
 					Effect.EffectType.Bleeding, player.Abilities[index].Offensive.AmountOverTime, 
 					player.Abilities[index].Offensive.AmountCurRounds, 
-					player.Abilities[index].Offensive.AmountMaxRounds, 0));
+					player.Abilities[index].Offensive.AmountMaxRounds, 1));
 			}
 		}
 	}

@@ -240,7 +240,8 @@ using System.Threading;
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
-						attackAmount *= effect.EffectMultiplier;
+						var frozenAttackAmount = attackAmount * effect.EffectMultiplier;
+						attackAmount = (int)frozenAttackAmount;
 						effect.FrozenRound(opponent, output);
 						break;
 					default:

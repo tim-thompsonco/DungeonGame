@@ -76,7 +76,8 @@ namespace DungeonGame {
 				augmentString);
 			player.Effects.Add(new Effect(player.Spellbook[index].Name,
 				Effect.EffectType.ChangeArmor, player.Spellbook[index].Defense.AugmentAmount,
-				player.Spellbook[index].Defense.AugmentCurRounds, player.Spellbook[index].Defense.AugmentMaxRounds));
+				player.Spellbook[index].Defense.AugmentCurRounds, player.Spellbook[index].Defense.AugmentMaxRounds, 
+				1));
 		}
 		public static void FrostOffenseSpellInfo(Player player, int index, UserOutput output) {
 			var frostAmountString = "Instant Damage: " + player.Spellbook[index].FrostOffense.FrostDamage;
@@ -109,7 +110,7 @@ namespace DungeonGame {
 				opponent.TakeDamage(frostSpellDamage);
 				opponent.Effects.Add(new Effect(player.Spellbook[index].Name,Effect.EffectType.Frozen, 
 					player.Spellbook[index].FrostOffense.FrozenCurRounds, player.Spellbook[index].FrostOffense.FrozenMaxRounds, 
-					2));
+					1.5));
 			}
 		}
 		public static void FireOffenseSpellInfo(Player player, int index, UserOutput output) {
@@ -156,7 +157,7 @@ namespace DungeonGame {
 				opponent.Effects.Add(new Effect(player.Spellbook[index].Name,
 					Effect.EffectType.OnFire, player.Spellbook[index].FireOffense.BurnDamage,
 					player.Spellbook[index].FireOffense.BurnCurRounds, 
-					player.Spellbook[index].FireOffense.BurnMaxRounds, 0));
+					player.Spellbook[index].FireOffense.BurnMaxRounds, 1));
 			}
 		}
 		public static void ArcaneOffenseSpellInfo(Player player, int index, UserOutput output) {
@@ -220,7 +221,7 @@ namespace DungeonGame {
 			player.Effects.Add(new Effect(player.Spellbook[index].Healing.GetType().ToString(),
 				Effect.EffectType.Healing, player.Spellbook[index].Healing.HealOverTime,
 				player.Spellbook[index].Healing.HealCurRounds, player.Spellbook[index].Healing.HealMaxRounds,
-				player, output, 10));
+				player, output, 10, 1));
 		}
 	}
 }
