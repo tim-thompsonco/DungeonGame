@@ -74,7 +74,9 @@ namespace DungeonGame {
 				Helper.FormatAttackSuccessText(),
 				Helper.FormatDefaultBackground(),
 				augmentString);
-			player.SetChangeArmor(true, changeArmorAmount, 1, 3);
+			player.Effects.Add(new Effect(player.Spellbook[index].Name,
+				Effect.EffectType.ChangeArmor, player.Spellbook[index].Defense.AugmentAmount,
+				player.Spellbook[index].Defense.AugmentCurRounds, player.Spellbook[index].Defense.AugmentMaxRounds));
 		}
 		public static void FrostOffenseSpellInfo(Player player, int index, UserOutput output) {
 			var frostAmountString = "Instant Damage: " + player.Spellbook[index].FrostOffense.FrostDamage;
@@ -205,6 +207,7 @@ namespace DungeonGame {
 				Helper.FormatDefaultBackground(),
 				healInfoString);
 		}
+
 		public static void CastHealing(Player player, int index, UserOutput output) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var healAmount = player.Spellbook[index].Healing.HealAmount;
@@ -218,11 +221,10 @@ namespace DungeonGame {
 				player.HitPoints = player.MaxHitPoints;
 			}
 			if (player.Spellbook[index].Healing.HealOverTime <= 0) return;
-			player.SetHealing(
-				true,
-				player.Spellbook[index].Healing.HealOverTime,
-				player.Spellbook[index].Healing.HealCurRounds,
-				player.Spellbook[index].Healing.HealMaxRounds);
+			player.Effects.Add(new Effect(player.Spellbook[index].Healing.GetType().ToString(),
+				Effect.EffectType.Healing, player.Spellbook[index].Healing.HealOverTime,
+				player.Spellbook[index].Healing.HealCurRounds, player.Spellbook[index].Healing.HealMaxRounds,
+				player, output, 10));
 		}
 	}
 }

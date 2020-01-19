@@ -41,6 +41,7 @@
     <Compile Include="Consumable Properties\RestoreMana.cs" />
     <Compile Include="Consumable.cs" />
     <Compile Include="Consumable Properties\RestoreHealth.cs" />
+    <Compile Include="Effect.cs" />
     <Compile Include="GearHelper.cs" />
     <Compile Include="Interfaces\IEquipment.cs" />
     <Compile Include="Interfaces\IVendor.cs" />

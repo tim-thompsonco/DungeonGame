@@ -187,14 +187,14 @@ namespace DungeonGame {
 				Helper.FormatDefaultBackground(),
 				dmgInfoString);
 		}
-		public static int[] UseBerserkAbility(IMonster opponent, Player player, int index) {
+		public static void UseBerserkAbility(Player player, int index) {
 			DeductAbilityCost(player, index);
-			var returnValues = new int[4];
-			returnValues[0] = player.Abilities[index].Offensive.Amount; // Damage increase amount
-			returnValues[1] = player.Abilities[index].ChangeArmor.ChangeArmorAmount; // Armor decrease amount
-			returnValues[2] = player.Abilities[index].ChangeArmor.ChangeCurRound; // Armor decrease current round
-			returnValues[3] = player.Abilities[index].ChangeArmor.ChangeMaxRound; // Armor decrease max round
-			return returnValues;
+			player.Effects.Add(new Effect(player.Abilities[index].Name,
+				Effect.EffectType.ChangeDamage, player.Abilities[index].Offensive.Amount,
+				player.Abilities[index].ChangeArmor.ChangeCurRound, player.Abilities[index].ChangeArmor.ChangeMaxRound));
+			player.Effects.Add(new Effect(player.Abilities[index].Name,
+				Effect.EffectType.ChangeArmor, player.Abilities[index].ChangeArmor.ChangeArmorAmount,
+				player.Abilities[index].ChangeArmor.ChangeCurRound, player.Abilities[index].ChangeArmor.ChangeMaxRound));
 		}
 		public static void DistanceAbilityInfo(Player player, int index, UserOutput output) {
 			var abilityDmgString = "Instant Damage: " + player.Abilities[index].Offensive.Amount;
@@ -357,11 +357,11 @@ namespace DungeonGame {
 			if (player.HitPoints > player.MaxHitPoints) {
 				player.HitPoints = player.MaxHitPoints;
 			}
-			player.SetHealing(
-				true,
-				player.Abilities[index].Bandage.HealOverTime,
-				player.Abilities[index].Bandage.HealCurRounds,
-				player.Abilities[index].Bandage.HealMaxRounds);
+			if (player.Abilities[index].Bandage.HealOverTime <= 0) return;
+			player.Effects.Add(new Effect(player.Abilities[index].Name,
+				Effect.EffectType.Healing, player.Abilities[index].Bandage.HealOverTime,
+				player.Abilities[index].Bandage.HealCurRounds, player.Abilities[index].Bandage.HealMaxRounds,
+				player, output, 10));
 		}
 		public static void DisarmAbilityInfo(Player player, int index, UserOutput output) {
 			var abilityString = player.Abilities[index].Offensive.Amount + "% chance to disarm opponent's weapon.";

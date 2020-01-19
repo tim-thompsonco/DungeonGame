@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 	namespace DungeonGame {
 	public class Player {
@@ -31,6 +32,7 @@ using System.Linq;
 		public int X { get; set; }
 		public int Y { get; set; }
 		public int Z { get; set; }
+		public bool InCombat { get; set; }
 		public bool CanSave { get; set; }
 		public bool CanWearCloth { get; set; }
 		public bool CanWearLeather { get; set; }
@@ -40,20 +42,7 @@ using System.Linq;
 		public bool CanUseTwoHandedSword { get; set; }
 		public bool CanUseAxe { get; set; }
 		public bool CanUseBow { get; set; }
-		public bool IsHealing { get; set; }
-		public bool HealTimerOn { get; set; }
-		public int HealAmount { get; set; }
-		public int HealCurRound { get; set; }
-		public int HealMaxRound { get; set; }
-		public bool IsArmorChanged { get; set; }
 		public int AbsorbDamageAmount { get; set; }
-		public bool IsDamageChanged { get; set; }
-		public int ChangeDamageAmount { get; set; }
-		public int ChangeDamageCurRound { get; set; }
-		public int ChangeDamageMaxRound { get; set; }
-		public int ChangeArmorAmount { get; set; }
-		public int ChangeArmorCurRound { get; set; }
-		public int ChangeArmorMaxRound { get; set; }
 		public double DodgeChance { get; set; }
 		public PlayerClassType PlayerClass { get; set; }
 		public Quiver PlayerQuiver { get; set; }
@@ -65,10 +54,13 @@ using System.Linq;
 		public Armor PlayerWaistArmor { get; set; }
 		public Armor PlayerLegsArmor { get; set; }
 		public Weapon PlayerWeapon { get; set; }
+		public List<Effect> Effects { get; set; }
 		public List<Spell> Spellbook { get; set; }
 		public List<Ability> Abilities { get; set; }
 		public List<Consumable> Consumables { get; set; }
 		public List<IEquipment> Inventory { get; set; }
+		public Timer PlayerStatCheckTimer { get; set; }
+		public Timer PlayerEffectCheckTimer { get; set; }
 
 		[JsonConstructor]
 		public Player(string name, PlayerClassType playerClass) {
@@ -78,6 +70,11 @@ using System.Linq;
 			this.ExperienceToLevel = 500;
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();
+			this.Effects = new List<Effect>();
+			this.PlayerStatCheckTimer = new Timer(
+				e => this.ReplenishStatsOverTime(), null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
+			this.PlayerEffectCheckTimer = new Timer(
+				e => this.RemovedExpiredEffects(), null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 			switch (this.PlayerClass) {
 				case PlayerClassType.Mage:
 					for (var i = 0; i < 3; i++) {
@@ -163,40 +160,16 @@ using System.Linq;
 						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest));
 					this.Inventory.Add(new Armor(
 						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Legs));
-					this.Inventory.Add( new Quiver(
-						"basic quiver",
-						50,
-						50,
-						15));
-					this.Abilities.Add(new Ability(
-						"precision shot", 
-						40, 
-						1, 
+					this.Inventory.Add( new Quiver("basic quiver", 50, 50, 15));
+					this.Abilities.Add(new Ability("precision shot", 40, 1, 
 						Ability.ArcherAbility.Precise));
-					this.Abilities.Add(new Ability(
-						"gut shot", 
-						25, 
-						1,
-						Ability.ArcherAbility.Gut));
-					this.Abilities.Add(new Ability(
-						"stun shot", 
-						25, 
-						1, 
-						Ability.ArcherAbility.Stun));
-					this.Abilities.Add(new Ability(
-						"double shot", 
-						25, 
-						1, 
+					this.Abilities.Add(new Ability("gut shot", 25, 1, Ability.ArcherAbility.Gut));
+					this.Abilities.Add(new Ability("stun shot", 25, 1, Ability.ArcherAbility.Stun));
+					this.Abilities.Add(new Ability("double shot", 25, 1,
 						Ability.ArcherAbility.Double));
-					this.Abilities.Add(new Ability(
-						"wound shot", 
-						40, 
-						1, 
+					this.Abilities.Add(new Ability("wound shot", 40, 1,
 						Ability.ArcherAbility.Wound));
-					this.Abilities.Add(new Ability(
-						"distance shot", 
-						25, 
-						1, 
+					this.Abilities.Add(new Ability("distance shot", 25, 1,
 						Ability.ArcherAbility.Distance));
 					break;
 				default:
@@ -214,23 +187,30 @@ using System.Linq;
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;
 		}
-		public int ArmorRating(IMonster opponent) {
-			var totalArmorRating = GearHelper.CheckArmorRating(this);
+		public int ArmorRating(IMonster opponent, UserOutput output) {
+			var totalArmorRating = GearHelper.CheckArmorRating(this, output);
 			var levelDiff = opponent.Level - this.Level;
 			var armorMultiplier = 1.00 + (-(double)levelDiff / 5);
 			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
 		public int Attack(UserOutput output) {
+			var attackModifier = 0;
+			foreach (var effect in this.Effects) {
+				if (effect.EffectGroup != Effect.EffectType.ChangeDamage) continue;
+				attackModifier += effect.EffectAmountOverTime;
+				this.RemovedExpiredEffects();
+				effect.ChangeDamageRound(output);
+			}
 			try {
 				if (this.PlayerWeapon.IsEquipped() && this.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
-					return this.PlayerWeapon.Attack();
+					return this.PlayerWeapon.Attack() + attackModifier;
 				}
 				if (this.PlayerWeapon.IsEquipped() &&
 				    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
 				    this.PlayerQuiver.HaveArrows()) {
 					this.PlayerQuiver.UseArrow();
-					return this.PlayerWeapon.Attack();
+					return this.PlayerWeapon.Attack() + attackModifier;
 				}
 				this.PlayerQuiver.OutOfArrows(output);
 			}
@@ -394,33 +374,17 @@ using System.Linq;
 				}
 			}
 			if (index != -1 &&
-			    this.ComboPoints >= this.Abilities[index].ComboCost && 
-			    this.PlayerClass == PlayerClassType.Archer && 
-			    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
-				switch (this.Abilities[index].ArcAbilityCategory) {
-					case Ability.ArcherAbility.Distance:
-						return;
-					case Ability.ArcherAbility.Gut:
-						return;
-					case Ability.ArcherAbility.Precise:
-						return;
-					case Ability.ArcherAbility.Stun:
-						return;
-					case Ability.ArcherAbility.Double:
-						return;
-					case Ability.ArcherAbility.Wound:
-						return;
-					case Ability.ArcherAbility.Bandage:
-						Ability.UseBandageAbility(this, index, output);
-						return;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
+			    this.ComboPoints >= this.Abilities[index].ComboCost &&
+			    this.PlayerClass == PlayerClassType.Archer &&
+			    this.Abilities[index].ArcAbilityCategory == Ability.ArcherAbility.Bandage) {
+				Ability.UseBandageAbility(this, index, output);
 			}
-			if (index != -1) {
+			else if (index != -1) {
 				throw new InvalidOperationException();
 			}
-			throw new IndexOutOfRangeException();
+			else {
+				throw new IndexOutOfRangeException();
+			}
 		}
 		public void UseAbility(IMonster opponent, string inputName, UserOutput output) {
 			var index = this.Abilities.FindIndex(
@@ -442,17 +406,7 @@ using System.Linq;
 						this.AbsorbDamageAmount = Ability.UseDefenseAbility(this, index);
 						return;
 					case Ability.WarriorAbility.Berserk:
-						var berserkValues = Ability.UseBerserkAbility(opponent, this, index);
-						this.SetChangeArmor(
-							true, 
-							berserkValues[1], 
-							berserkValues[2],
-							berserkValues[3]);
-						this.SetChangeDamage(
-							true,
-							berserkValues[0],
-							berserkValues[2],
-							berserkValues[3]);
+						Ability.UseBerserkAbility(this, index);
 						return;
 					case Ability.WarriorAbility.Disarm:
 						Ability.UseDisarmAbility(opponent, this, index, output);
@@ -494,10 +448,12 @@ using System.Linq;
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			if (index != -1) {
+			else if (index != -1) {
 				throw new InvalidOperationException();
 			}
-			throw new IndexOutOfRangeException();
+			else {
+				throw new IndexOutOfRangeException();
+			}
 		}
 		public void CastSpell(string inputName, UserOutput output) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
@@ -562,33 +518,8 @@ using System.Linq;
 			}
 			throw new IndexOutOfRangeException();
 		}
-		public void SetHealing(bool isHealing, int healAmount, int healCurRound, int healMaxRound) {
-			this.IsHealing = isHealing;
-			this.HealAmount = healAmount;
-			this.HealCurRound = healCurRound;
-			this.HealMaxRound = healMaxRound;
-		}
-		public void SetChangeArmor(
-			bool isArmorChanged,
-			int changeArmorAmount,
-			int changeArmorCurRound, 
-			int changeArmorMaxRound) {
-			this.IsArmorChanged = isArmorChanged;
-			this.ChangeArmorAmount = changeArmorAmount;
-			this.ChangeArmorCurRound = changeArmorCurRound;
-			this.ChangeArmorMaxRound = changeArmorMaxRound;
-		}
-		public void SetChangeDamage(
-			bool isDamageChanged, 
-			int changeDamageAmount,
-			int changeDamageCurRound,
-			int changeDamageMaxRound) {
-			this.IsDamageChanged = isDamageChanged;
-			this.ChangeDamageAmount = changeDamageAmount;
-			this.ChangeDamageCurRound = changeDamageCurRound;
-			this.ChangeDamageMaxRound = changeDamageMaxRound;
-		}
 		public void ReplenishStatsOverTime() {
+			if (this.InCombat) return;
 			if (this.HitPoints == this.MaxHitPoints) return;
 			this.HitPoints += 1;
 			switch (this.PlayerClass) {
@@ -606,6 +537,11 @@ using System.Linq;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
+			}
+		}
+		public void RemovedExpiredEffects() {
+			for (var i = 0; i < this.Effects.Count; i++) {
+				if (this.Effects[i].IsEffectExpired) this.Effects.RemoveAt(i);				
 			}
 		}
 	}

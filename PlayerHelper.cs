@@ -474,18 +474,5 @@ namespace DungeonGame {
 					"You don't have that spell.");
 			}
 		}
-		public static void HealingRound(Player player, UserOutput output) {
-			player.HealCurRound += 1;
-			player.HitPoints += player.HealAmount;
-			if (player.HitPoints > player.MaxHitPoints) player.HitPoints = player.MaxHitPoints;
-			var healAmtString = "You have been healed for " + player.HealAmount + " health."; 
-			output.StoreUserOutput(
-				Helper.FormatSuccessOutputText(),
-				Helper.FormatDefaultBackground(),
-				healAmtString);
-			if (player.HealCurRound <= player.HealMaxRound) return;
-			player.IsHealing = false;
-			player.HealCurRound = 1;
-		}
 	}
 }

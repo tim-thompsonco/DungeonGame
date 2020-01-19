@@ -32,11 +32,28 @@ namespace DungeonGame {
 				Helper.RequestCommand(output);
 				var input = Helper.GetFormattedInput();
 				Console.Clear();
+				if (player.Effects.Any()) {
+					player.RemovedExpiredEffects();
+					foreach (var effect in player.Effects) {
+						switch (effect.EffectGroup) {
+							case Effect.EffectType.Healing:
+								effect.HealingRound(player, output);
+								break;
+							case Effect.EffectType.ChangeDamage:
+								break;
+							case Effect.EffectType.ChangeArmor:
+								break;
+							case Effect.EffectType.AbsorbDamage:
+								break;
+							default:
+								throw new ArgumentOutOfRangeException();
+						}
+					}
+				}
 				switch (input[0]) {
 					case "f":
 					case "fight":
 						var attackDamage = player.Attack(output);
-						if (player.IsDamageChanged) attackDamage += player.ChangeDamageAmount;
 						if (attackDamage - opponent.ArmorRating(player) < 0) {
 							var armorAbsorbString = "The " + opponent.Name + "'s armor absorbed all of your attack!";
 							output.StoreUserOutput(
@@ -233,7 +250,6 @@ namespace DungeonGame {
 						Helper.InvalidCommand(output);
 						continue;
 				}
-				if (player.IsHealing) PlayerHelper.HealingRound(player, output);
 				if (opponent.OnFire) {
 					this.BurnOnFire(opponent, output);
 					if (opponent.IsMonsterDead(player, output)) return true;
@@ -242,8 +258,6 @@ namespace DungeonGame {
 					this.Bleeding(opponent, output);
 					if (opponent.IsMonsterDead(player, output)) return true;
 				}
-				if (player.IsArmorChanged) this.ChangeArmorRound(player, output);
-				if (player.IsDamageChanged) this.ChangeDamageRound(player, output);
 				if (opponent.IsStunned) {
 					opponent.Stunned(output);
 					continue;
@@ -273,7 +287,7 @@ namespace DungeonGame {
 						Helper.FormatDefaultBackground(),
 						missString);
 				}
-				else if (attackDamageM - player.ArmorRating(opponent) < 0) {
+				else if (attackDamageM - player.ArmorRating(opponent, output) < 0) {
 					var armorAbsorbString = "Your armor absorbed all of " + opponent.Name + "'s attack!"; 
 					output.StoreUserOutput(
 						Helper.FormatAttackFailText(),
@@ -282,7 +296,7 @@ namespace DungeonGame {
 					GearHelper.DecreaseArmorDurability(player);
 				}
 				else {
-					var hitAmount = attackDamageM - player.ArmorRating(opponent);
+					var hitAmount = attackDamageM - player.ArmorRating(opponent, output);
 					var hitString = "The " + opponent.Name + " hits you for " + hitAmount + " physical damage.";
 					output.StoreUserOutput(
 						Helper.FormatAttackSuccessText(),
@@ -311,30 +325,6 @@ namespace DungeonGame {
 				Helper.FormatDefaultBackground(),
 				"You tried to flee combat but failed!");
 			return false;
-		}
-		public void ChangeArmorRound(Player player, UserOutput output) {
-			player.ChangeArmorCurRound += 1;
-			var augmentString = "Your armor is augmented by " + player.ChangeArmorAmount + ".";
-			output.StoreUserOutput(
-				Helper.FormatSuccessOutputText(),
-				Helper.FormatDefaultBackground(),
-				augmentString);
-			if (player.ChangeArmorCurRound <= player.ChangeArmorMaxRound) return;
-			player.IsArmorChanged = false;
-			player.ChangeArmorCurRound = 1;
-		}
-		public void ChangeDamageRound(Player player, UserOutput output) {
-			player.ChangeDamageCurRound += 1;
-			var changeDmgString = player.ChangeDamageAmount > 0 ?
-				"Your damage is increased by " + player.ChangeDamageAmount + "."
-				: "Your damage is decreased by " + player.ChangeDamageAmount + ".";
-			output.StoreUserOutput(
-				Helper.FormatSuccessOutputText(),
-				Helper.FormatDefaultBackground(),
-				changeDmgString);
-			if (player.ChangeDamageCurRound <= player.ChangeDamageMaxRound) return;
-			player.IsDamageChanged = false;
-			player.ChangeDamageCurRound = 1;
 		}
 		public void BurnOnFire(IMonster opponent, UserOutput output) {
 			opponent.HitPoints -= opponent.OnFireDamage;

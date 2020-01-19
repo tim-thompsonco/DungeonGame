@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using DungeonGame;
 using NUnit.Framework;
 
@@ -320,6 +321,58 @@ namespace DungeonGameTests {
 					}
 					break;
 			}
+		}
+		[Test]
+		public void EffectUnitTests() {
+			var player = new Player("placeholder", Player.PlayerClassType.Archer);
+			player.PlayerStatCheckTimer.Dispose(); // Remove stat replenishing over time to remove "noise" in test
+			var output = new UserOutput();
+			player.Abilities.Add(
+				new Ability("use bandage", 25, 1, Ability.ArcherAbility.Bandage));
+			player.HitPoints = 10;
+			player.Abilities[player.Abilities.Count - 1].Bandage.HealAmount = 25;
+			player.Abilities[player.Abilities.Count - 1].Bandage.HealOverTime = 5;
+			player.Abilities[player.Abilities.Count - 1].Bandage.HealCurRounds = 1;
+			player.Abilities[player.Abilities.Count - 1].Bandage.HealMaxRounds = 3;
+			// Make sure stacked healing effects only tick for 3 rounds in combat
+			player.InCombat = true;
+			var input = new string[2] {"use", "bandage"};
+			var abilityName = Helper.ParseInput(input);
+			Assert.AreEqual("bandage", abilityName);
+			player.UseAbility(abilityName, output);
+			player.UseAbility(abilityName, output);
+			for (var i = 0; i < 5; i++) {
+				player.Effects[0].HealingRound(player, output);
+				player.Effects[1].HealingRound(player, output);
+			}
+			Assert.AreEqual(90, player.HitPoints);
+			player.InCombat = false;
+			// Make sure stacked healing effects tick properly outside of combat		
+			player.HitPoints = 10;
+			var inputTwo = new string[2] {"use", "bandage"};
+			var abilityNameTwo = Helper.ParseInput(inputTwo);
+			Assert.AreEqual("bandage", abilityName);
+			player.UseAbility(abilityNameTwo, output);
+			player.UseAbility(abilityNameTwo, output);
+			Thread.Sleep(35000); // Should finish ticking after 30 seconds but 5 for buffer
+			Assert.AreEqual(90, player.HitPoints);
+			// Make sure additional erroneous ticks don't happen
+			Thread.Sleep(15000); // Check additional 15 seconds to make sure no more ticks
+			Assert.AreEqual(90, player.HitPoints);
+			// Berserk should create a change damage and change armor effect, which should expire when combat ends
+			var playerWar = new Player("placeholder", Player.PlayerClassType.Warrior) {InCombat = true};
+			var monster = new Monster(2, Monster.MonsterType.Demon);
+			var berserkInput = new string[2] {"use", "berserk"};
+			var abilityNameBerserk = Helper.ParseInput(berserkInput);
+			Assert.AreEqual("berserk", abilityNameBerserk);
+			playerWar.UseAbility(monster, abilityNameBerserk, output);
+			Assert.AreEqual(2, playerWar.Effects.Count);
+			foreach (var effect in playerWar.Effects) {
+				effect.ExitCombat(playerWar, output);
+			}
+			playerWar.InCombat = false;
+			Thread.Sleep(3000);
+			Assert.AreEqual(0, playerWar.Effects.Count);
 		}
 	}
 }

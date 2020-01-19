@@ -19,7 +19,7 @@ namespace DungeonGame {
 			player.PlayerHeadArmor?.DecreaseDurability();
 			player.PlayerLegsArmor?.DecreaseDurability();
 		}
-		public static int CheckArmorRating(Player player) {
+		public static int CheckArmorRating(Player player, UserOutput output) {
 			var totalArmorRating = 0;
 			if (player.PlayerChestArmor != null && player.PlayerChestArmor.IsEquipped()) {
 				totalArmorRating += (int)player.PlayerChestArmor.GetArmorRating();
@@ -30,8 +30,12 @@ namespace DungeonGame {
 			if (player.PlayerLegsArmor != null && player.PlayerLegsArmor.IsEquipped()) {
 				totalArmorRating += (int)player.PlayerLegsArmor.GetArmorRating();
 			}
-			if (player.IsArmorChanged) {
-				totalArmorRating += player.ChangeArmorAmount;
+			if (!player.InCombat) return totalArmorRating;
+			player.RemovedExpiredEffects();
+			foreach (var effect in player.Effects) {
+				if (effect.EffectGroup != Effect.EffectType.ChangeArmor) continue;
+				totalArmorRating += effect.EffectAmountOverTime;
+				effect.ChangeArmorRound(output);
 			}
 			return totalArmorRating;
 		}
