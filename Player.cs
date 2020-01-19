@@ -72,9 +72,11 @@ using System.Threading;
 			this.Inventory = new List<IEquipment>();
 			this.Effects = new List<Effect>();
 			this.PlayerStatCheckTimer = new Timer(
-				e => this.ReplenishStatsOverTime(), null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
+				e => Helper.ReplenishStatsOverTime(this), 
+				null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
 			this.PlayerEffectCheckTimer = new Timer(
-				e => this.RemovedExpiredEffects(), null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+				e => Helper.RemovedExpiredEffects(this), 
+				null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 			switch (this.PlayerClass) {
 				case PlayerClassType.Mage:
 					for (var i = 0; i < 3; i++) {
@@ -194,23 +196,67 @@ using System.Threading;
 			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
-		public int Attack(UserOutput output) {
-			var attackModifier = 0;
+		public int Attack(IMonster opponent, UserOutput output) {
+			var attackAmount = this.PlayerWeapon.Attack();
 			foreach (var effect in this.Effects) {
-				if (effect.EffectGroup != Effect.EffectType.ChangeDamage) continue;
-				attackModifier += effect.EffectAmountOverTime;
-				this.RemovedExpiredEffects();
-				effect.ChangeDamageRound(output);
+				switch (effect.EffectGroup) {
+					case Effect.EffectType.Healing:
+						break;
+					case Effect.EffectType.ChangeDamage:
+						attackAmount += effect.EffectAmountOverTime;
+						effect.ChangeDamageRound(output);
+						break;
+					case Effect.EffectType.ChangeArmor:
+						break;
+					case Effect.EffectType.AbsorbDamage:
+						break;
+					case Effect.EffectType.OnFire:
+						break;
+					case Effect.EffectType.Bleeding:
+						break;
+					case Effect.EffectType.Stunned:
+						break;
+					case Effect.EffectType.Frozen:
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+				Helper.RemovedExpiredEffects(this);
+			}
+			foreach (var effect in opponent.Effects) {
+				switch (effect.EffectGroup) {
+					case Effect.EffectType.Healing:
+						break;
+					case Effect.EffectType.ChangeDamage:
+						break;
+					case Effect.EffectType.ChangeArmor:
+						break;
+					case Effect.EffectType.AbsorbDamage:
+						break;
+					case Effect.EffectType.OnFire:
+						break;
+					case Effect.EffectType.Bleeding:
+						break;
+					case Effect.EffectType.Stunned:
+						break;
+					case Effect.EffectType.Frozen:
+						attackAmount *= effect.EffectMultiplier;
+						effect.FrozenRound(opponent, output);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+				Helper.RemovedExpiredEffects(this);
 			}
 			try {
 				if (this.PlayerWeapon.IsEquipped() && this.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
-					return this.PlayerWeapon.Attack() + attackModifier;
+					return attackAmount;
 				}
 				if (this.PlayerWeapon.IsEquipped() &&
 				    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
 				    this.PlayerQuiver.HaveArrows()) {
 					this.PlayerQuiver.UseArrow();
-					return this.PlayerWeapon.Attack() + attackModifier;
+					return attackAmount;
 				}
 				this.PlayerQuiver.OutOfArrows(output);
 			}
@@ -517,32 +563,6 @@ using System.Threading;
 				throw new InvalidOperationException();
 			}
 			throw new IndexOutOfRangeException();
-		}
-		public void ReplenishStatsOverTime() {
-			if (this.InCombat) return;
-			if (this.HitPoints == this.MaxHitPoints) return;
-			this.HitPoints += 1;
-			switch (this.PlayerClass) {
-				case PlayerClassType.Mage:
-					if (this.ManaPoints == this.MaxManaPoints) return;
-					this.ManaPoints += 1;
-					break;
-				case PlayerClassType.Warrior:
-					if (this.RagePoints == this.MaxRagePoints) return;
-					this.RagePoints += 1;
-					break;
-				case PlayerClassType.Archer:
-					if (this.ComboPoints == this.MaxComboPoints) return;
-					this.ComboPoints += 1;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-		public void RemovedExpiredEffects() {
-			for (var i = 0; i < this.Effects.Count; i++) {
-				if (this.Effects[i].IsEffectExpired) this.Effects.RemoveAt(i);				
-			}
 		}
 	}
 }

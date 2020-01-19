@@ -31,7 +31,7 @@ namespace DungeonGame {
 				totalArmorRating += (int)player.PlayerLegsArmor.GetArmorRating();
 			}
 			if (!player.InCombat) return totalArmorRating;
-			player.RemovedExpiredEffects();
+			Helper.RemovedExpiredEffects(player);
 			foreach (var effect in player.Effects) {
 				if (effect.EffectGroup != Effect.EffectType.ChangeArmor) continue;
 				totalArmorRating += effect.EffectAmountOverTime;

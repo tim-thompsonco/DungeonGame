@@ -8,29 +8,39 @@ namespace DungeonGame {
 			Healing,
 			ChangeDamage,
 			ChangeArmor,
-			AbsorbDamage
+			AbsorbDamage,
+			OnFire,
+			Bleeding,
+			Stunned,
+			Frozen
 		}
 		public string Name { get; set; }
 		public EffectType EffectGroup { get; set; }
 		public int EffectAmountOverTime { get; set; }
 		public int EffectCurRound { get; set; }
 		public int EffectMaxRound { get; set; }
+		public int EffectMultiplier { get; set; }
 		public bool IsEffectExpired { get; set; }
 		public Timer EffectTimer { get; set; }
 		public int TimerDuration { get; set; }
 
-		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
-			int effectMaxRound) {
+		// Default constructor for JSON serialization
+		public Effect() {}
+		public Effect(string name, EffectType effectGroup, int effectCurRound, int effectMaxRound, int effectMultiplier) {
 			this.Name = name;
 			this.EffectGroup = effectGroup;
-			this.EffectAmountOverTime = effectAmountOverTime;
 			this.EffectCurRound = effectCurRound;
 			this.EffectMaxRound = effectMaxRound;
+			this.EffectMultiplier = effectMultiplier;
 		}
-		[JsonConstructor]
+		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
+			int effectMaxRound, int effectMultiplier)
+			: this(name, effectGroup, effectCurRound, effectMaxRound, effectMultiplier) {
+			this.EffectAmountOverTime = effectAmountOverTime;
+		}
 		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
 			int effectMaxRound, Player player, UserOutput output, int timerDuration)
-			: this(name, effectGroup, effectAmountOverTime, effectCurRound, effectMaxRound){
+			: this(name, effectGroup, effectAmountOverTime, effectCurRound, effectMaxRound) {
 			this.TimerDuration = timerDuration;
 			switch (this.EffectGroup) {
 				case EffectType.Healing:
@@ -43,6 +53,14 @@ namespace DungeonGame {
 				case EffectType.ChangeArmor:
 					break;
 				case EffectType.AbsorbDamage:
+					break;
+				case EffectType.OnFire:
+					break;
+				case EffectType.Bleeding:
+					break;
+				case EffectType.Stunned:
+					break;
+				case EffectType.Frozen:
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(effectGroup), effectGroup, null);
@@ -68,6 +86,14 @@ namespace DungeonGame {
 					break;
 				case EffectType.AbsorbDamage:
 					break;
+				case EffectType.OnFire:
+					break;
+				case EffectType.Bleeding:
+					break;
+				case EffectType.Stunned:
+					break;
+				case EffectType.Frozen:
+					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
@@ -90,6 +116,14 @@ namespace DungeonGame {
 						null, TimeSpan.FromSeconds(this.TimerDuration), TimeSpan.FromSeconds(this.TimerDuration));
 					break;
 				case EffectType.AbsorbDamage:
+					break;
+				case EffectType.OnFire:
+					break;
+				case EffectType.Bleeding:
+					break;
+				case EffectType.Stunned:
+					break;
+				case EffectType.Frozen:
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -130,6 +164,52 @@ namespace DungeonGame {
 				Helper.FormatSuccessOutputText(),
 				Helper.FormatDefaultBackground(),
 				augmentString);
+			if (this.EffectCurRound <= this.EffectMaxRound) return;
+			this.IsEffectExpired = true;
+		}
+		public void OnFireRound(IMonster opponent, UserOutput output) {
+			if (this.IsEffectExpired) return;
+			this.EffectCurRound += 1;
+			opponent.HitPoints -= this.EffectAmountOverTime;
+			var burnString = "The " + opponent.Name + " burns for " + this.EffectAmountOverTime + " fire damage.";
+			output.StoreUserOutput(
+				Helper.FormatOnFireText(),
+				Helper.FormatDefaultBackground(),
+				burnString);
+			if (this.EffectCurRound <= this.EffectMaxRound) return;
+			this.IsEffectExpired = true;
+		}
+		public void BleedingRound(IMonster opponent, UserOutput output) {
+			if (this.IsEffectExpired) return;
+			this.EffectCurRound += 1;
+			opponent.HitPoints -= this.EffectAmountOverTime;
+			var bleedString = "The " + opponent.Name + " bleeds for " + this.EffectAmountOverTime + " physical damage.";
+			output.StoreUserOutput(
+				Helper.FormatAttackSuccessText(),
+				Helper.FormatDefaultBackground(),
+				bleedString);
+			if (this.EffectCurRound <= this.EffectMaxRound) return;
+			this.IsEffectExpired = true;
+		}
+		public void StunnedRound(IMonster opponent, UserOutput output) {
+			if (this.IsEffectExpired) return;
+			this.EffectCurRound += 1;
+			var stunnedString = "The " + opponent.Name + " is stunned and cannot attack.";
+			output.StoreUserOutput(
+				Helper.FormatAttackSuccessText(),
+				Helper.FormatDefaultBackground(),
+				stunnedString);
+			if (this.EffectCurRound <= this.EffectMaxRound) return;
+			this.IsEffectExpired = true;
+		}
+		public void FrozenRound(IMonster opponent, UserOutput output) {
+			if (this.IsEffectExpired) return;
+			this.EffectCurRound += 1;
+			var frozenString = "The " + opponent.Name + " is frozen. Any damage to it will be double!";
+			output.StoreUserOutput(
+				Helper.FormatAttackSuccessText(),
+				Helper.FormatDefaultBackground(),
+				frozenString);
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}

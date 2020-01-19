@@ -107,11 +107,9 @@ namespace DungeonGame {
 					Helper.FormatDefaultBackground(),
 					attackSuccessString);
 				opponent.TakeDamage(frostSpellDamage);
-				opponent.StartStunned(
-					true,
-					player.Spellbook[index].FrostOffense.FrozenCurRounds,
-					player.Spellbook[index].FrostOffense.FrozenMaxRounds
-					);
+				opponent.Effects.Add(new Effect(player.Spellbook[index].Name,Effect.EffectType.Frozen, 
+					player.Spellbook[index].FrostOffense.FrozenCurRounds, player.Spellbook[index].FrostOffense.FrozenMaxRounds, 
+					2));
 			}
 		}
 		public static void FireOffenseSpellInfo(Player player, int index, UserOutput output) {
@@ -155,12 +153,10 @@ namespace DungeonGame {
 					Helper.FormatOnFireText(),
 					Helper.FormatDefaultBackground(),
 					onFireString);
-				opponent.SetOnFire(
-					true,
-					player.Spellbook[index].FireOffense.BurnDamage,
-					player.Spellbook[index].FireOffense.BurnCurRounds,
-					player.Spellbook[index].FireOffense.BurnMaxRounds
-				);
+				opponent.Effects.Add(new Effect(player.Spellbook[index].Name,
+					Effect.EffectType.OnFire, player.Spellbook[index].FireOffense.BurnDamage,
+					player.Spellbook[index].FireOffense.BurnCurRounds, 
+					player.Spellbook[index].FireOffense.BurnMaxRounds, 0));
 			}
 		}
 		public static void ArcaneOffenseSpellInfo(Player player, int index, UserOutput output) {

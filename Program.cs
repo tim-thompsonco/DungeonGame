@@ -78,7 +78,6 @@ namespace DungeonGame {
 										foreach (var effect in player.Effects) {
 											effect.EnterCombat(player, output);
 										}
-										player.InCombat = true;
 										var outcome = spawnedRooms[roomIndex].AttackOpponent(
 											player, input, output, mapOutput, spawnedRooms);
 										if (!outcome && player.HitPoints <= 0) {
@@ -87,7 +86,6 @@ namespace DungeonGame {
 										else if (!outcome) {
 											roomIndex = Helper.FleeRoom(spawnedRooms, player, output);
 										}
-										player.InCombat = false;
 										foreach (var effect in player.Effects) {
 											effect.ExitCombat(player, output);
 										}

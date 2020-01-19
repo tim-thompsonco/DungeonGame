@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace DungeonGame {
 	public class Monster : IMonster {
@@ -17,20 +18,9 @@ namespace DungeonGame {
 		public int HitPoints { get; set; }
 		public int ExperienceProvided { get; set; }
 		public int Gold { get; set; }
-		public bool IsStunned { get; set; }
-		public int StunnedCurRound { get; set; }
-		public int StunnedMaxRound { get; set; }
-		public bool IsBleeding { get; set; }
-		public int BleedDamage { get; set; }
-		public int BleedCurRound { get; set; }
-		public int BleedMaxRound { get; set; }
-		public bool OnFire { get; set; }
-		public int OnFireDamage { get; set; }
-		public int OnFireCurRound { get; set; }
-		public int OnFireMaxRound { get; set; }
 		public bool WasLooted { get; set; }
+		public bool InCombat { get; set; }
 		public MonsterType MonsterCategory { get; set; }
-		public List<IEquipment> MonsterItems { get; set; }
 		public Loot Item { get; set; }
 		public Consumable Consumable { get; set; }
 		public Weapon MonsterWeapon { get; set; }
@@ -41,11 +31,18 @@ namespace DungeonGame {
 		public Armor MonsterHandsArmor { get; set; }
 		public Armor MonsterWaistArmor { get; set; }
 		public Armor MonsterLegArmor { get; set; }
+		public List<IEquipment> MonsterItems { get; set; }
+		public List<Effect> Effects { get; set; }
+		public Timer MonsterStatCheckTimer { get; set; }
 
 		public Monster(int level, MonsterType monsterType) {
 			this.MonsterItems = new List<IEquipment>();
+			this.Effects = new List<Effect>();
 			this.Level = level;
 			this.MonsterCategory = monsterType;
+			this.MonsterStatCheckTimer = new Timer(
+				e => Helper.ReplenishStatsOverTime(this), 
+				null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
 			this.BuildMonsterNameDesc();
 			var randomNumHitPoint = Helper.GetRandomNumber(20, 40);
 			var maxHitPoints = 80 + ((this.Level - 1) * randomNumHitPoint);
@@ -289,39 +286,13 @@ namespace DungeonGame {
 		public string GetName() {
 			return this.Name;
 		}
-		public void SetOnFire(bool onFire, int onFireDamage, int onFireCurRound, int onFireMaxRound) {
-			this.OnFire = onFire;
-			this.OnFireDamage = onFireDamage;
-			this.OnFireCurRound = onFireCurRound;
-			this.OnFireMaxRound = onFireMaxRound;
-		}
-		public void StartBleeding(bool bleeding, int bleedDamage, int bleedCurRound, int bleedMaxRound) {
-			this.IsBleeding = bleeding;
-			this.BleedDamage = bleedDamage;
-			this.BleedCurRound = bleedCurRound;
-			this.BleedMaxRound = bleedMaxRound;
-		}
-		public void StartStunned(bool stunned, int stunCurRound, int stunMaxRound) {
-			this.IsStunned = stunned;
-			this.StunnedCurRound = stunCurRound;
-			this.StunnedMaxRound = stunMaxRound;
-		}
-		public void Stunned(UserOutput output) {
-			this.StunnedCurRound += 1;
-			var stunnedString = "The " + this.Name + " is stunned and cannot attack.";
-			output.StoreUserOutput(
-				Helper.FormatAttackSuccessText(),
-				Helper.FormatDefaultBackground(),
-				stunnedString);
-			if (this.StunnedCurRound <= this.StunnedMaxRound) return;
-			this.IsStunned = false;
-			this.StunnedCurRound = 1;
-		}
 		public bool IsMonsterDead(Player player, UserOutput output) {
 			if (this.HitPoints <= 0) this.MonsterDeath(player, output);
 			return this.HitPoints <= 0;
 		}
 		public void MonsterDeath(Player player, UserOutput output) {
+			player.InCombat = false;
+			this.InCombat = false;
 			var defeatString = "You have defeated the " + this.Name + "!";
 			output.StoreUserOutput(
 				Helper.FormatSuccessOutputText(),

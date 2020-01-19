@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
+using System.Xml.Schema;
 using DungeonGame;
 using NUnit.Framework;
 
@@ -323,6 +325,20 @@ namespace DungeonGameTests {
 			}
 		}
 		[Test]
+		public void StatUnitTests() {
+			var player = new Player("placeholder", Player.PlayerClassType.Archer);
+			player.Abilities.Add(
+				new Ability("use bandage", 25, 1, Ability.ArcherAbility.Bandage));
+			var monster = new Monster(3, Monster.MonsterType.Demon);
+			player.HitPoints = 80;
+			player.MaxHitPoints = 100;
+			monster.HitPoints = 80;
+			monster.MaxHitPoints = 100;
+			Thread.Sleep(65000); // Should finish ticking after 60 seconds but 5 for buffer
+			Assert.AreEqual(100, player.HitPoints);
+			Assert.AreEqual(100, monster.HitPoints);
+		}
+		[Test]
 		public void EffectUnitTests() {
 			var player = new Player("placeholder", Player.PlayerClassType.Archer);
 			player.PlayerStatCheckTimer.Dispose(); // Remove stat replenishing over time to remove "noise" in test
@@ -373,6 +389,132 @@ namespace DungeonGameTests {
 			playerWar.InCombat = false;
 			Thread.Sleep(3000);
 			Assert.AreEqual(0, playerWar.Effects.Count);
+		}
+		[Test]
+		public void WarriorAbilityUnitTests() {
+			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
+			player.PlayerStatCheckTimer.Dispose(); // Remove stat replenishing over time to remove "noise" in test
+			var output = new UserOutput();
+			var monster = new Monster(3, Monster.MonsterType.Demon);
+			monster.MonsterStatCheckTimer.Dispose(); // Remove stat replenishing over time to remove "noise" in test
+			player.InCombat = true;
+			monster.InCombat = true;
+			monster.HitPoints = 50;
+			monster.MaxHitPoints = 100;
+			var input = new string[2] {"use", "charge"};
+			var abilityName = Helper.ParseInput(input);
+			Assert.AreEqual("charge", abilityName);
+			player.UseAbility(monster, abilityName, output);
+			Assert.AreEqual(35, monster.HitPoints);
+			Assert.AreEqual(2, monster.Effects[0].EffectMaxRound);
+			for (var i = 2; i < 4; i++) {
+				monster.Effects[0].StunnedRound(monster, output);
+				Assert.AreEqual(i , monster.Effects[0].EffectCurRound);
+				Helper.RemovedExpiredEffects(monster);
+			}
+			Assert.AreEqual(false, monster.Effects.Any());
+			monster.HitPoints = 80;
+			var inputTwo = new string[2] {"use", "rend"};
+			var abilityNameTwo = Helper.ParseInput(inputTwo);
+			Assert.AreEqual("rend", abilityNameTwo);
+			player.UseAbility(monster, abilityNameTwo, output);
+			Assert.AreEqual(70, monster.HitPoints);
+			Assert.AreEqual(1, monster.Effects[0].EffectCurRound);
+			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
+			for (var i = 2; i < 5; i++) {
+				monster.Effects[0].BleedingRound(monster, output);
+				Assert.AreEqual(i , monster.Effects[0].EffectCurRound);
+				Helper.RemovedExpiredEffects(monster);
+			}
+			Assert.AreEqual(false, monster.Effects.Any());
+			Assert.AreEqual(55, monster.HitPoints);
+		}
+		[Test]
+		public void ArcherAbilityUnitTests() {
+			var player = new Player("placeholder", Player.PlayerClassType.Archer);
+			player.PlayerStatCheckTimer.Dispose(); // Remove stat replenishing over time to remove "noise" in test
+			var output = new UserOutput();
+			GearHelper.EquipInitialGear(player, output);
+			var monster = new Monster(3, Monster.MonsterType.Demon);
+			monster.MonsterStatCheckTimer.Dispose(); // Remove stat replenishing over time to remove "noise" in test
+			player.InCombat = true;
+			monster.InCombat = true;
+			monster.HitPoints = 50;
+			monster.MaxHitPoints = 100;
+			var input = new string[2] {"use", "stun"};
+			var abilityName = Helper.ParseInput(input);
+			Assert.AreEqual("stun", abilityName);
+			player.UseAbility(monster, abilityName, output);
+			Assert.AreEqual(35, monster.HitPoints);
+			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
+			for (var i = 2; i < 5; i++) {
+				monster.Effects[0].StunnedRound(monster, output);
+				Assert.AreEqual(i , monster.Effects[0].EffectCurRound);
+				Helper.RemovedExpiredEffects(monster);
+			}
+			Assert.AreEqual(false, monster.Effects.Any());
+			monster.HitPoints = 80;
+			var inputTwo = new string[2] {"use", "gut"};
+			var abilityNameTwo = Helper.ParseInput(inputTwo);
+			Assert.AreEqual("gut", abilityNameTwo);
+			player.UseAbility(monster, abilityNameTwo, output);
+			Assert.AreEqual(65, monster.HitPoints);
+			Assert.AreEqual(1, monster.Effects[0].EffectCurRound);
+			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
+			for (var i = 2; i < 5; i++) {
+				monster.Effects[0].BleedingRound(monster, output);
+				Assert.AreEqual(i , monster.Effects[0].EffectCurRound);
+				Helper.RemovedExpiredEffects(monster);
+			}
+			Assert.AreEqual(false, monster.Effects.Any());
+			Assert.AreEqual(50, monster.HitPoints);
+		}
+		[Test]
+		public void MageSpellUnitTests() {
+			var player = new Player("placeholder", Player.PlayerClassType.Mage);
+			player.PlayerStatCheckTimer.Dispose(); // Remove stat replenishing over time to remove "noise" in test
+			var output = new UserOutput();
+			GearHelper.EquipInitialGear(player, output);
+			var monster = new Monster(3, Monster.MonsterType.Demon);
+			monster.MonsterStatCheckTimer.Dispose(); // Remove stat replenishing over time to remove "noise" in test
+			player.InCombat = true;
+			monster.InCombat = true;
+			monster.HitPoints = 50;
+			monster.MaxHitPoints = 100;
+			var input = new string[2] {"cast", "fireball"};
+			var spellName = Helper.ParseInput(input);
+			Assert.AreEqual("fireball", spellName);
+			player.CastSpell(monster, spellName, output);
+			Assert.AreEqual(25, monster.HitPoints);
+			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
+			for (var i = 2; i < 5; i++) {
+				monster.Effects[0].OnFireRound(monster, output);
+				Assert.AreEqual(i , monster.Effects[0].EffectCurRound);
+				Helper.RemovedExpiredEffects(monster);
+			}
+			Assert.AreEqual(false, monster.Effects.Any());
+			Assert.AreEqual(10, monster.HitPoints);
+			monster.HitPoints = 100;
+			var inputTwo = new string[2] {"cast", "frostbolt"};
+			var spellNameTwo = Helper.ParseInput(inputTwo);
+			Assert.AreEqual("frostbolt", spellNameTwo);
+			player.CastSpell(monster, spellNameTwo, output);
+			Assert.AreEqual(85, monster.HitPoints);
+			Assert.AreEqual(1, monster.Effects[0].EffectCurRound);
+			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
+			var monsterHitPointsBefore = monster.HitPoints;
+			var totalBaseDamage = 0;
+			var totalFrozenDamage = 0;
+			for (var i = 2; i < 4; i++) {
+				monster.Effects[0]?.FrozenRound(monster, output);
+				Assert.AreEqual(i , monster.Effects[0].EffectCurRound);
+				totalBaseDamage += player.PlayerWeapon.Attack();
+				totalFrozenDamage += player.Attack(monster, output);
+				Helper.RemovedExpiredEffects(monster);
+			}
+			Assert.AreEqual(totalFrozenDamage, totalBaseDamage * monster.Effects[0].EffectMultiplier);
+			Assert.AreEqual(monster.HitPoints, monsterHitPointsBefore - totalFrozenDamage);
+			Assert.AreEqual(false, monster.Effects.Any());
 		}
 	}
 }

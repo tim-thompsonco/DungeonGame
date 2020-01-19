@@ -545,5 +545,41 @@ namespace DungeonGame {
 			number *= 10;
 			return number;
 		}
+		public static void RemovedExpiredEffects(Player player) {
+			for (var i = 0; i < player.Effects.Count; i++) {
+				if (player.Effects[i].IsEffectExpired) player.Effects.RemoveAt(i);				
+			}
+		}
+		public static void RemovedExpiredEffects(IMonster monster) {
+			for (var i = 0; i < monster.Effects.Count; i++) {
+				if (monster.Effects[i].IsEffectExpired) monster.Effects.RemoveAt(i);				
+			}
+		}
+		public static void ReplenishStatsOverTime(Player player) {
+			if (player.InCombat) return;
+			if (player.HitPoints == player.MaxHitPoints) return;
+			player.HitPoints += 1;
+			switch (player.PlayerClass) {
+				case Player.PlayerClassType.Mage:
+					if (player.ManaPoints == player.MaxManaPoints) return;
+					player.ManaPoints += 1;
+					break;
+				case Player.PlayerClassType.Warrior:
+					if (player.RagePoints == player.MaxRagePoints) return;
+					player.RagePoints += 1;
+					break;
+				case Player.PlayerClassType.Archer:
+					if (player.ComboPoints == player.MaxComboPoints) return;
+					player.ComboPoints += 1;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+		public static void ReplenishStatsOverTime(Monster monster) {
+			if (monster.InCombat) return;
+			if (monster.HitPoints == monster.MaxHitPoints) return;
+			monster.HitPoints += 1;
+		}
 	}
 }

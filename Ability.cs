@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace DungeonGame {
 	public class Ability {
@@ -133,14 +132,13 @@ namespace DungeonGame {
 			if (player.PlayerClass == Player.PlayerClassType.Archer && OutOfArrows(player)) {
 				/* If quiver is empty, player can only do a normal attack, and attack() also checks for
 				 arrow count and informs player that they are out of arrows */
-				player.Attack(output);
+				player.Attack(opponent, output);
 				return;
 			}
 			DeductAbilityCost(player, index);
 			if (player.PlayerClass == Player.PlayerClassType.Archer) {
 				player.PlayerQuiver.UseArrow();
 			}
-			player.PlayerQuiver.UseArrow();
 			var abilityDamage = player.Abilities[index].Stun.DamageAmount;
 			if (abilityDamage == 0) {
 				output.StoreUserOutput(
@@ -156,17 +154,13 @@ namespace DungeonGame {
 					Helper.FormatDefaultBackground(),
 					attackSuccessString);
 				opponent.TakeDamage(abilityDamage);
-				opponent.IsStunned = true;
 				var stunString = "The " + opponent.Name + " is stunned!";
 				output.StoreUserOutput(
 					Helper.FormatAttackSuccessText(),
 					Helper.FormatDefaultBackground(),
 					stunString);
-				opponent.StartStunned(
-					true,
-					player.Abilities[index].Stun.StunCurRounds,
-					player.Abilities[index].Stun.StunMaxRounds
-				);
+				opponent.Effects.Add(new Effect(player.Abilities[index].Name,Effect.EffectType.Stunned, 
+					player.Abilities[index].Stun.StunCurRounds, player.Abilities[index].Stun.StunMaxRounds, 0));
 			}
 		}
 		public static void BerserkAbilityInfo(Player player, int index, UserOutput output) {
@@ -418,7 +412,7 @@ namespace DungeonGame {
 			if (player.PlayerClass == Player.PlayerClassType.Archer && OutOfArrows(player)) {
 				/* If quiver is empty, player can only do a normal attack, and attack() also checks for
 				 arrow count and informs player that they are out of arrows */
-				player.Attack(output);
+				player.Attack(opponent, output);
 				return;
 			}
 			DeductAbilityCost(player, index);
@@ -447,12 +441,10 @@ namespace DungeonGame {
 					Helper.FormatAttackSuccessText(),
 					Helper.FormatDefaultBackground(),
 					bleedString);
-				opponent.StartBleeding(
-					true,
-					player.Abilities[index].Offensive.AmountOverTime,
-					player.Abilities[index].Offensive.AmountCurRounds,
-					player.Abilities[index].Offensive.AmountMaxRounds
-					);
+				opponent.Effects.Add(new Effect(player.Abilities[index].Name,
+					Effect.EffectType.Bleeding, player.Abilities[index].Offensive.AmountOverTime, 
+					player.Abilities[index].Offensive.AmountCurRounds, 
+					player.Abilities[index].Offensive.AmountMaxRounds, 0));
 			}
 		}
 	}

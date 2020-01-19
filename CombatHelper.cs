@@ -15,6 +15,8 @@ namespace DungeonGame {
 			UserOutput output, 
 			UserOutput mapOutput,
 			List<IRoom> roomList) {
+			player.InCombat = true;
+			opponent.InCombat = true;
 			var fightStartString = player.Name + ", you have encountered a " + opponent.Name + ". Time to fight!";
 			output.StoreUserOutput(
 				Helper.FormatSuccessOutputText(),
@@ -33,7 +35,7 @@ namespace DungeonGame {
 				var input = Helper.GetFormattedInput();
 				Console.Clear();
 				if (player.Effects.Any()) {
-					player.RemovedExpiredEffects();
+					Helper.RemovedExpiredEffects(player);
 					foreach (var effect in player.Effects) {
 						switch (effect.EffectGroup) {
 							case Effect.EffectType.Healing:
@@ -45,6 +47,14 @@ namespace DungeonGame {
 								break;
 							case Effect.EffectType.AbsorbDamage:
 								break;
+							case Effect.EffectType.OnFire:
+								break;
+							case Effect.EffectType.Bleeding:
+								break;
+							case Effect.EffectType.Stunned:
+								break;
+							case Effect.EffectType.Frozen:
+								break;
 							default:
 								throw new ArgumentOutOfRangeException();
 						}
@@ -53,7 +63,7 @@ namespace DungeonGame {
 				switch (input[0]) {
 					case "f":
 					case "fight":
-						var attackDamage = player.Attack(output);
+						var attackDamage = player.Attack(opponent, output);
 						if (attackDamage - opponent.ArmorRating(player) < 0) {
 							var armorAbsorbString = "The " + opponent.Name + "'s armor absorbed all of your attack!";
 							output.StoreUserOutput(
@@ -175,8 +185,8 @@ namespace DungeonGame {
 						GearHelper.EquipItem(player, input, output);
 						break;
 					case "flee":
-						var canFlee = this.CanFleeCombat(output);
-						if (canFlee == true) {
+						var canFlee = this.CanFleeCombat(player, output, opponent);
+						if (canFlee) {
 							return false;
 						}
 						break;
@@ -250,17 +260,60 @@ namespace DungeonGame {
 						Helper.InvalidCommand(output);
 						continue;
 				}
-				if (opponent.OnFire) {
-					this.BurnOnFire(opponent, output);
-					if (opponent.IsMonsterDead(player, output)) return true;
+				if (player.Effects.Any()) {
+					Helper.RemovedExpiredEffects(player);
+					foreach (var effect in player.Effects) {
+						switch (effect.EffectGroup) {
+							case Effect.EffectType.Healing:
+								effect.HealingRound(player, output);
+								break;
+							case Effect.EffectType.ChangeDamage:
+								break;
+							case Effect.EffectType.ChangeArmor:
+								break;
+							case Effect.EffectType.AbsorbDamage:
+								break;
+							case Effect.EffectType.OnFire:
+								break;
+							case Effect.EffectType.Bleeding:
+								break;
+							case Effect.EffectType.Stunned:
+								continue;
+							case Effect.EffectType.Frozen:
+								break;
+							default:
+								throw new ArgumentOutOfRangeException();
+						}
+					}
 				}
-				if (opponent.IsBleeding) {
-					this.Bleeding(opponent, output);
-					if (opponent.IsMonsterDead(player, output)) return true;
-				}
-				if (opponent.IsStunned) {
-					opponent.Stunned(output);
-					continue;
+				if (opponent.Effects.Any()) {
+					Helper.RemovedExpiredEffects(opponent);
+					foreach (var effect in opponent.Effects) {
+						switch (effect.EffectGroup) {
+							case Effect.EffectType.Healing:
+								break;
+							case Effect.EffectType.ChangeDamage:
+								break;
+							case Effect.EffectType.ChangeArmor:
+								break;
+							case Effect.EffectType.AbsorbDamage:
+								break;
+							case Effect.EffectType.OnFire:
+								effect.OnFireRound(opponent, output);
+								break;
+							case Effect.EffectType.Bleeding:
+								effect.BleedingRound(opponent, output);
+								break;
+							case Effect.EffectType.Stunned:
+								effect.StunnedRound(opponent, output);
+								continue;
+							case Effect.EffectType.Frozen:
+								break;
+							default:
+								throw new ArgumentOutOfRangeException();
+						}
+						if (opponent.IsMonsterDead(player, output)) return true;
+					}
 				}
 				var attackDamageM = opponent.Attack(player);
 				var defenseMoveString = "Your defensive move blocked " + player.AbsorbDamageAmount + " damage!";
@@ -310,14 +363,15 @@ namespace DungeonGame {
 				}
 			}
 		}
-		private bool CanFleeCombat(UserOutput output) {
-			Console.ForegroundColor = ConsoleColor.Green;
+		private bool CanFleeCombat(Player player, UserOutput output, IMonster opponent) {
 			var randomNum = Helper.GetRandomNumber(1, 10);
 			if (randomNum > 5) {
 				output.StoreUserOutput(
 					Helper.FormatSuccessOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You have fled combat successfully!");
+				player.InCombat = false;
+				opponent.InCombat = false;
 				return true;
 			}
 			output.StoreUserOutput(
@@ -325,30 +379,6 @@ namespace DungeonGame {
 				Helper.FormatDefaultBackground(),
 				"You tried to flee combat but failed!");
 			return false;
-		}
-		public void BurnOnFire(IMonster opponent, UserOutput output) {
-			opponent.HitPoints -= opponent.OnFireDamage;
-			var burnString = "The " + opponent.Name + " burns for " + opponent.OnFireDamage + " fire damage.";
-			output.StoreUserOutput(
-				Helper.FormatOnFireText(),
-				Helper.FormatDefaultBackground(),
-				burnString);
-			opponent.OnFireCurRound += 1;
-			if (opponent.OnFireCurRound <= opponent.OnFireMaxRound) return;
-			opponent.OnFire = false;
-			opponent.OnFireCurRound = 1;
-		}
-		public void Bleeding(IMonster opponent, UserOutput output) {
-			opponent.HitPoints -= opponent.BleedDamage;
-			var bleedString = "The " + opponent.Name + " bleeds for " + opponent.BleedDamage + " physical damage.";
-			output.StoreUserOutput(
-				Helper.FormatAttackSuccessText(),
-				Helper.FormatDefaultBackground(),
-				bleedString);
-			opponent.BleedCurRound += 1;
-			if (opponent.BleedCurRound <= opponent.BleedMaxRound) return;
-			opponent.IsBleeding = false;
-			opponent.BleedCurRound = 1;
 		}
 		public void ShowCommands(UserOutput output) {
 			var sameLineOutput = new List<string> {
