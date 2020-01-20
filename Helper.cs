@@ -3,13 +3,88 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 
 namespace DungeonGame {
 	public static class Helper {
-		private static readonly Random _rndGenerate = new Random();
-		
+		private static readonly Random RndGenerate = new Random();
+		public static int gameTicks;
+
+		public static void CheckStatus(Player player, List<IRoom> spawnedRooms, UserOutput output) {
+			gameTicks++;
+			RemovedExpiredEffects(player);
+			if (gameTicks % player.StatReplenishInterval == 0) ReplenishStatsOverTime(player);
+			if (player.Effects.Any()) {
+				foreach (var effect in player.Effects.Where(effect => gameTicks % effect.TickDuration == 0)) {
+					switch (effect.EffectGroup) {
+						case Effect.EffectType.Healing:
+							effect.HealingRound(player, output);
+							break;
+						case Effect.EffectType.ChangeDamage:
+							if (player.InCombat == false && effect.Name == "berserk") {
+								effect.IsEffectExpired = true;
+							}
+							break;
+						case Effect.EffectType.ChangeArmor:
+							if (player.InCombat == false && effect.Name == "berserk") {
+								effect.IsEffectExpired = true;
+							}
+							effect.ChangeArmorRound(output);
+							break;
+						case Effect.EffectType.AbsorbDamage:
+							break;
+						case Effect.EffectType.OnFire:
+							break;
+						case Effect.EffectType.Bleeding:
+							break;
+						case Effect.EffectType.Stunned:
+							continue;
+						case Effect.EffectType.Frozen:
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				}
+			}
+			foreach (var room in spawnedRooms) {
+				foreach (var roomObject in room.RoomObjects.Where(
+					roomObject => roomObject.GetType() == typeof(Monster))) {
+					var monster = (Monster) roomObject;
+					RemovedExpiredEffects(monster);
+					if (gameTicks % monster.StatReplenishInterval == 0) ReplenishStatsOverTime(monster);
+					if (!monster.Effects.Any()) continue;
+						foreach (var effect in monster.Effects.Where(effect => gameTicks % effect.TickDuration == 0)) {
+							switch (effect.EffectGroup) {
+								case Effect.EffectType.Healing:
+									break;
+								case Effect.EffectType.ChangeDamage:
+									break;
+								case Effect.EffectType.ChangeArmor:
+									break;
+								case Effect.EffectType.AbsorbDamage:
+									break;
+								case Effect.EffectType.OnFire:
+									effect.OnFireRound(monster, output);
+									break;
+								case Effect.EffectType.Bleeding:
+									effect.BleedingRound(monster, output);
+									break;
+								case Effect.EffectType.Stunned:
+									effect.StunnedRound(monster, output);
+									break;
+								case Effect.EffectType.Frozen:
+									effect.FrozenRound(monster, output);
+									break;
+								default:
+									throw new ArgumentOutOfRangeException();
+							}
+						}
+				}
+			}
+		}
 		public static string[] GetFormattedInput() {
 			var input = Console.ReadLine();
 			var inputFormatted = input.ToLower().Trim();
@@ -535,7 +610,7 @@ namespace DungeonGame {
 			return output;
 		}
 		public static int GetRandomNumber(int lowNum, int highNum) {
-			return _rndGenerate.Next(lowNum, highNum + 1);
+			return RndGenerate.Next(lowNum, highNum + 1);
 		}
 		public static int RoundNumber(int number) {
 			var lastDigit = number % 10;

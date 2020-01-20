@@ -26,7 +26,7 @@ namespace DungeonGame {
 		// List of objects in room (including Vendors)
 		public List<IRoomInteraction> RoomObjects { get; set; }
 		public IVendor Vendor;
-		public IMonster Monster;
+		public IMonster Monster { get; set; }
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public TownRoom() {}

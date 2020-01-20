@@ -33,7 +33,7 @@ namespace DungeonGame {
 		public List<string> Commands { get; set; }
 		// List of objects in room (including monsters)
 		public List<IRoomInteraction> RoomObjects { get; set; }
-		public IMonster Monster;
+		public IMonster Monster { get; set; }
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public DungeonRoom() {}

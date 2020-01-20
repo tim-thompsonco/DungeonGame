@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace DungeonGame {
 	class MainClass {
+		
+		
 		public static void Main(string[] args) {
 			try {
 				Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
@@ -56,6 +59,9 @@ namespace DungeonGame {
 				}
 				/* Set initial room condition for player
 					On loading game, display room that player starts in */
+				var globalTimer = new Timer(
+					e => Helper.CheckStatus(player, spawnedRooms, output), 
+					null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 				var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0, output);
 				// While loop to continue obtaining input from player
 				var isGameOver = false;
@@ -75,9 +81,7 @@ namespace DungeonGame {
 							try {
 								if (input[1] != null) {
 									try {
-										foreach (var effect in player.Effects) {
-											effect.EnterCombat(player, output);
-										}
+										globalTimer.Dispose();
 										var outcome = spawnedRooms[roomIndex].AttackOpponent(
 											player, input, output, mapOutput, spawnedRooms);
 										if (!outcome && player.HitPoints <= 0) {
@@ -86,9 +90,9 @@ namespace DungeonGame {
 										else if (!outcome) {
 											roomIndex = Helper.FleeRoom(spawnedRooms, player, output);
 										}
-										foreach (var effect in player.Effects) {
-											effect.ExitCombat(player, output);
-										}
+										globalTimer = new Timer(
+											e => Helper.CheckStatus(player, spawnedRooms, output), 
+											null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 									}
 									catch (Exception) {
 										output.StoreUserOutput(
@@ -132,13 +136,23 @@ namespace DungeonGame {
 									var spellName = Helper.ParseInput(input);
 									player.CastSpell(spellName, output);
 								}
+
 								break;
 							}
 							catch (IndexOutOfRangeException) {
 								output.StoreUserOutput(
-									Helper.FormatFailureOutputText(), 
-									Helper.FormatDefaultBackground(), 
+									Helper.FormatFailureOutputText(),
+									Helper.FormatDefaultBackground(),
 									"You don't have that spell.");
+								continue;
+							}
+							catch (NullReferenceException) {
+								if (player.PlayerClass != Player.PlayerClassType.Mage) {
+									output.StoreUserOutput(
+										Helper.FormatFailureOutputText(), 
+										Helper.FormatDefaultBackground(), 
+										"You can't cast spells. You're not a mage!");
+								}
 								continue;
 							}
 							catch (InvalidOperationException) {
@@ -166,25 +180,37 @@ namespace DungeonGame {
 								if (input.Contains("distance")) {
 									player.UseAbility(spawnedRooms, input, output);
 								}
+
 								if (input[1] != null) {
 									var abilityName = Helper.ParseInput(input);
 									player.UseAbility(abilityName, output);
 								}
+
 								break;
 							}
 							catch (IndexOutOfRangeException) {
 								output.StoreUserOutput(
-										Helper.FormatFailureOutputText(), 
-										Helper.FormatDefaultBackground(), 
-										"You don't have that ability.");
+									Helper.FormatFailureOutputText(),
+									Helper.FormatDefaultBackground(),
+									"You don't have that ability.");
 								Console.WriteLine();
 								continue;
 							}
 							catch (ArgumentOutOfRangeException) {
 								output.StoreUserOutput(
+									Helper.FormatFailureOutputText(),
+									Helper.FormatDefaultBackground(),
+									"You don't have that ability.");
+								continue;
+							}
+							catch (NullReferenceException) {
+								if (player.PlayerClass == Player.PlayerClassType.Mage) {
+									output.StoreUserOutput(
 										Helper.FormatFailureOutputText(), 
 										Helper.FormatDefaultBackground(), 
-										"You don't have that ability.");
+										"You can't use abilities. You're not a warrior or archer!");
+									
+								}
 								continue;
 							}
 							catch (InvalidOperationException) {
@@ -236,6 +262,7 @@ namespace DungeonGame {
 						case "quit":
 							var quitConfirm = Helper.QuitGame(player, output, spawnedRooms);
 							if (quitConfirm) {
+								globalTimer.Dispose();
 								return;
 							}
 							break;

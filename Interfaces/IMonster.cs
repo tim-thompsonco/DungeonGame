@@ -12,6 +12,7 @@ namespace DungeonGame {
 		int Gold { get; set; }
 		bool WasLooted { get; set; }
 		bool InCombat { get; set; }
+		int StatReplenishInterval { get; set; }
 		Loot Item { get; set; }
 		Consumable Consumable { get; set; }
 		Weapon MonsterWeapon { get; set; }
@@ -24,7 +25,6 @@ namespace DungeonGame {
 		Armor MonsterLegArmor { get; set; }
 		List<IEquipment> MonsterItems { get; set; }
 		List<Effect> Effects { get; set; }
-		Timer MonsterStatCheckTimer { get; set; }
 
 		void TakeDamage(int weaponDamage);
 		void DisplayStats(UserOutput output);

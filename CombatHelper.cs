@@ -44,6 +44,7 @@ namespace DungeonGame {
 							case Effect.EffectType.ChangeDamage:
 								break;
 							case Effect.EffectType.ChangeArmor:
+								effect.ChangeArmorRound(output);
 								break;
 							case Effect.EffectType.AbsorbDamage:
 								break;
@@ -96,6 +97,7 @@ namespace DungeonGame {
 								player.CastSpell(opponent, spellName, output);
 								if (opponent.IsMonsterDead(player, output)) return true;
 							}
+
 							break;
 						}
 						catch (IndexOutOfRangeException) {
@@ -103,6 +105,15 @@ namespace DungeonGame {
 								Helper.FormatFailureOutputText(),
 								Helper.FormatDefaultBackground(),
 								"You don't have that spell.");
+							continue;
+						}
+						catch (NullReferenceException) {
+							if (player.PlayerClass != Player.PlayerClassType.Mage) {
+								output.StoreUserOutput(
+									Helper.FormatFailureOutputText(),
+									Helper.FormatDefaultBackground(),
+									"You can't cast spells. You're not a mage!");
+							}
 							continue;
 						}
 						catch (InvalidOperationException) {
@@ -126,10 +137,12 @@ namespace DungeonGame {
 								player.UseAbility(opponent, abilityName, output);
 								if (opponent.IsMonsterDead(player, output)) return true;
 							}
+
 							if (input[1] != null && input[1] == "bandage") {
 								var abilityName = Helper.ParseInput(input);
 								player.UseAbility(abilityName, output);
 							}
+
 							break;
 						}
 						catch (IndexOutOfRangeException) {
@@ -144,6 +157,15 @@ namespace DungeonGame {
 								Helper.FormatFailureOutputText(),
 								Helper.FormatDefaultBackground(),
 								"You don't have that ability.");
+							continue;
+						}
+						catch (NullReferenceException) {
+							if (player.PlayerClass == Player.PlayerClassType.Mage) {
+								output.StoreUserOutput(
+									Helper.FormatFailureOutputText(),
+									Helper.FormatDefaultBackground(),
+									"You can't use abilities. You're not a warrior or archer!");
+							}
 							continue;
 						}
 						catch (InvalidOperationException) {
@@ -259,32 +281,6 @@ namespace DungeonGame {
 					default:
 						Helper.InvalidCommand(output);
 						continue;
-				}
-				if (player.Effects.Any()) {
-					Helper.RemovedExpiredEffects(player);
-					foreach (var effect in player.Effects) {
-						switch (effect.EffectGroup) {
-							case Effect.EffectType.Healing:
-								effect.HealingRound(player, output);
-								break;
-							case Effect.EffectType.ChangeDamage:
-								break;
-							case Effect.EffectType.ChangeArmor:
-								break;
-							case Effect.EffectType.AbsorbDamage:
-								break;
-							case Effect.EffectType.OnFire:
-								break;
-							case Effect.EffectType.Bleeding:
-								break;
-							case Effect.EffectType.Stunned:
-								continue;
-							case Effect.EffectType.Frozen:
-								break;
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-					}
 				}
 				if (opponent.Effects.Any()) {
 					Helper.RemovedExpiredEffects(opponent);

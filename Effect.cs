@@ -21,125 +21,25 @@ namespace DungeonGame {
 		public int EffectMaxRound { get; set; }
 		public double EffectMultiplier { get; set; }
 		public bool IsEffectExpired { get; set; }
-		public Timer EffectTimer { get; set; }
-		public int TimerDuration { get; set; }
+		public int TickDuration { get; set; }
 
 		// Default constructor for JSON serialization
 		public Effect() {}
-		public Effect(string name, EffectType effectGroup, int effectCurRound, int effectMaxRound, double effectMultiplier) {
+		public Effect(string name, EffectType effectGroup, int effectCurRound, int effectMaxRound, 
+			double effectMultiplier, int tickDuration) {
 			this.Name = name;
 			this.EffectGroup = effectGroup;
 			this.EffectCurRound = effectCurRound;
 			this.EffectMaxRound = effectMaxRound;
+			this.TickDuration = tickDuration;
 			this.EffectMultiplier = effectMultiplier;
 		}
 		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
-			int effectMaxRound, double effectMultiplier)
-			: this(name, effectGroup, effectCurRound, effectMaxRound, effectMultiplier) {
+			int effectMaxRound, double effectMultiplier, int tickDuration)
+			: this(name, effectGroup, effectCurRound, effectMaxRound, effectMultiplier, tickDuration) {
 			this.EffectAmountOverTime = effectAmountOverTime;
 		}
-		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
-			int effectMaxRound, Player player, UserOutput output, int timerDuration, double effectMultiplier)
-			: this(name, effectGroup, effectAmountOverTime, effectCurRound, effectMaxRound, effectMultiplier) {
-			this.TimerDuration = timerDuration;
-			switch (this.EffectGroup) {
-				case EffectType.Healing:
-					this.EffectTimer = new Timer(
-						e => this.HealingRound(player, output),
-						null, TimeSpan.FromSeconds(this.TimerDuration), TimeSpan.FromSeconds(this.TimerDuration));
-					break;
-				case EffectType.ChangeDamage:
-					break;
-				case EffectType.ChangeArmor:
-					break;
-				case EffectType.AbsorbDamage:
-					break;
-				case EffectType.OnFire:
-					break;
-				case EffectType.Bleeding:
-					break;
-				case EffectType.Stunned:
-					break;
-				case EffectType.Frozen:
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(effectGroup), effectGroup, null);
-			}
-		}
 
-		public void EnterCombat(Player player, UserOutput output) {
-			try {
-				switch (this.EffectGroup) {
-					case EffectType.Healing:
-						this.EffectTimer = new Timer(
-							e => this.HealingRound(player, output),
-							null, TimeSpan.FromSeconds(Timeout.Infinite), TimeSpan.FromSeconds(Timeout.Infinite));
-						break;
-					case EffectType.ChangeDamage:
-						this.EffectTimer = new Timer(
-							e => this.ChangeArmorRound(output),
-							null, TimeSpan.FromSeconds(Timeout.Infinite), TimeSpan.FromSeconds(Timeout.Infinite));
-						break;
-					case EffectType.ChangeArmor:
-						this.EffectTimer = new Timer(
-							e => this.ChangeDamageRound(output),
-							null, TimeSpan.FromSeconds(Timeout.Infinite), TimeSpan.FromSeconds(Timeout.Infinite));
-						break;
-					case EffectType.AbsorbDamage:
-						break;
-					case EffectType.OnFire:
-						break;
-					case EffectType.Bleeding:
-						break;
-					case EffectType.Stunned:
-						break;
-					case EffectType.Frozen:
-						break;
-					default:
-						throw new InvalidOperationException();
-				}
-			}
-			catch (ArgumentOutOfRangeException) {
-				// The only time an argument OOR exception should happen is if the effect has no timer
-			}
-		}
-		public void ExitCombat(Player player, UserOutput output) {
-			try {
-				switch (this.EffectGroup) {
-					case EffectType.Healing:
-						this.EffectTimer = new Timer(
-							e => this.HealingRound(player, output),
-							null, TimeSpan.FromSeconds(this.TimerDuration), TimeSpan.FromSeconds(this.TimerDuration));
-						break;
-					case EffectType.ChangeDamage:
-						this.EffectTimer = new Timer(
-							e => this.ChangeDamageRound(output),
-							null, TimeSpan.FromSeconds(this.TimerDuration), TimeSpan.FromSeconds(this.TimerDuration));
-						break;
-					case EffectType.ChangeArmor:
-						this.EffectTimer = new Timer(
-							e => this.ChangeArmorRound(output),
-							null, TimeSpan.FromSeconds(this.TimerDuration), TimeSpan.FromSeconds(this.TimerDuration));
-						break;
-					case EffectType.AbsorbDamage:
-						break;
-					case EffectType.OnFire:
-						break;
-					case EffectType.Bleeding:
-						break;
-					case EffectType.Stunned:
-						break;
-					case EffectType.Frozen:
-						break;
-					default:
-						throw new InvalidOperationException();
-				}
-			}
-			catch (ArgumentOutOfRangeException) {
-				// The only time an argument OOR exception should happen is if the effect has no timer
-			}
-			if (this.Name == Ability.WarriorAbility.Berserk.ToString().ToLower()) this.IsEffectExpired = true;
-		}
 		public void HealingRound(Player player, UserOutput output) {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;

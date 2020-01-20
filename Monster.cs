@@ -20,6 +20,7 @@ namespace DungeonGame {
 		public int Gold { get; set; }
 		public bool WasLooted { get; set; }
 		public bool InCombat { get; set; }
+		public int StatReplenishInterval { get; set; }
 		public MonsterType MonsterCategory { get; set; }
 		public Loot Item { get; set; }
 		public Consumable Consumable { get; set; }
@@ -33,16 +34,13 @@ namespace DungeonGame {
 		public Armor MonsterLegArmor { get; set; }
 		public List<IEquipment> MonsterItems { get; set; }
 		public List<Effect> Effects { get; set; }
-		public Timer MonsterStatCheckTimer { get; set; }
 
 		public Monster(int level, MonsterType monsterType) {
 			this.MonsterItems = new List<IEquipment>();
 			this.Effects = new List<Effect>();
+			this.StatReplenishInterval = 3;
 			this.Level = level;
 			this.MonsterCategory = monsterType;
-			this.MonsterStatCheckTimer = new Timer(
-				e => Helper.ReplenishStatsOverTime(this), 
-				null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
 			this.BuildMonsterNameDesc();
 			var randomNumHitPoint = Helper.GetRandomNumber(20, 40);
 			var maxHitPoints = 80 + ((this.Level - 1) * randomNumHitPoint);

@@ -2,7 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+	using System.Security.Cryptography.X509Certificates;
+	using System.Threading;
 
 	namespace DungeonGame {
 	public class Player {
@@ -43,6 +44,7 @@ using System.Threading;
 		public bool CanUseAxe { get; set; }
 		public bool CanUseBow { get; set; }
 		public int AbsorbDamageAmount { get; set; }
+		public int StatReplenishInterval { get; set; }
 		public double DodgeChance { get; set; }
 		public PlayerClassType PlayerClass { get; set; }
 		public Quiver PlayerQuiver { get; set; }
@@ -59,24 +61,17 @@ using System.Threading;
 		public List<Ability> Abilities { get; set; }
 		public List<Consumable> Consumables { get; set; }
 		public List<IEquipment> Inventory { get; set; }
-		public Timer PlayerStatCheckTimer { get; set; }
-		public Timer PlayerEffectCheckTimer { get; set; }
 
 		[JsonConstructor]
 		public Player(string name, PlayerClassType playerClass) {
 			this.Name = name;
 			this.PlayerClass = playerClass;
+			this.StatReplenishInterval = 3;
 			this.Level = 1;
 			this.ExperienceToLevel = 500;
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();
 			this.Effects = new List<Effect>();
-			this.PlayerStatCheckTimer = new Timer(
-				e => Helper.ReplenishStatsOverTime(this), 
-				null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
-			this.PlayerEffectCheckTimer = new Timer(
-				e => Helper.RemovedExpiredEffects(this), 
-				null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 			switch (this.PlayerClass) {
 				case PlayerClassType.Mage:
 					for (var i = 0; i < 3; i++) {
@@ -198,6 +193,7 @@ using System.Threading;
 		}
 		public int Attack(IMonster opponent, UserOutput output) {
 			var attackAmount = this.PlayerWeapon.Attack();
+			Helper.RemovedExpiredEffects(this);
 			foreach (var effect in this.Effects) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
@@ -221,7 +217,6 @@ using System.Threading;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-				Helper.RemovedExpiredEffects(this);
 			}
 			foreach (var effect in opponent.Effects) {
 				switch (effect.EffectGroup) {

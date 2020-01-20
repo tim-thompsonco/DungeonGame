@@ -31,7 +31,6 @@ namespace DungeonGame {
 		public Stun Stun { get; set; }
 		public int RageCost { get; set; }
 		public int ComboCost { get; set; }
-		public bool CanStun { get; set; }
 		public int Rank { get; set; }
 		
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
@@ -159,8 +158,9 @@ namespace DungeonGame {
 					Helper.FormatAttackSuccessText(),
 					Helper.FormatDefaultBackground(),
 					stunString);
-				opponent.Effects.Add(new Effect(player.Abilities[index].Name,Effect.EffectType.Stunned, 
-					player.Abilities[index].Stun.StunCurRounds, player.Abilities[index].Stun.StunMaxRounds, 0));
+				opponent.Effects.Add(new Effect(player.Abilities[index].Name, Effect.EffectType.Stunned, 
+					player.Abilities[index].Stun.StunCurRounds, player.Abilities[index].Stun.StunMaxRounds, 
+					1, 1));
 			}
 		}
 		public static void BerserkAbilityInfo(Player player, int index, UserOutput output) {
@@ -185,10 +185,12 @@ namespace DungeonGame {
 			DeductAbilityCost(player, index);
 			player.Effects.Add(new Effect(player.Abilities[index].Name,
 				Effect.EffectType.ChangeDamage, player.Abilities[index].Offensive.Amount,
-				player.Abilities[index].ChangeArmor.ChangeCurRound, player.Abilities[index].ChangeArmor.ChangeMaxRound));
+				player.Abilities[index].ChangeArmor.ChangeCurRound, player.Abilities[index].ChangeArmor.ChangeMaxRound, 
+				1, 1));
 			player.Effects.Add(new Effect(player.Abilities[index].Name,
 				Effect.EffectType.ChangeArmor, player.Abilities[index].ChangeArmor.ChangeArmorAmount,
-				player.Abilities[index].ChangeArmor.ChangeCurRound, player.Abilities[index].ChangeArmor.ChangeMaxRound));
+				player.Abilities[index].ChangeArmor.ChangeCurRound, player.Abilities[index].ChangeArmor.ChangeMaxRound, 
+				1, 1));
 		}
 		public static void DistanceAbilityInfo(Player player, int index, UserOutput output) {
 			var abilityDmgString = "Instant Damage: " + player.Abilities[index].Offensive.Amount;
@@ -355,7 +357,7 @@ namespace DungeonGame {
 			player.Effects.Add(new Effect(player.Abilities[index].Name,
 				Effect.EffectType.Healing, player.Abilities[index].Bandage.HealOverTime,
 				player.Abilities[index].Bandage.HealCurRounds, player.Abilities[index].Bandage.HealMaxRounds,
-				player, output, 10, 1));
+				1, 10));
 		}
 		public static void DisarmAbilityInfo(Player player, int index, UserOutput output) {
 			var abilityString = player.Abilities[index].Offensive.Amount + "% chance to disarm opponent's weapon.";
@@ -443,8 +445,8 @@ namespace DungeonGame {
 					bleedString);
 				opponent.Effects.Add(new Effect(player.Abilities[index].Name,
 					Effect.EffectType.Bleeding, player.Abilities[index].Offensive.AmountOverTime, 
-					player.Abilities[index].Offensive.AmountCurRounds, 
-					player.Abilities[index].Offensive.AmountMaxRounds, 1));
+					player.Abilities[index].Offensive.AmountCurRounds, player.Abilities[index].Offensive.AmountMaxRounds, 
+					1, 1));
 			}
 		}
 	}
