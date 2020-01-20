@@ -200,7 +200,7 @@ using System.Linq;
 						break;
 					case Effect.EffectType.ChangeDamage:
 						attackAmount += effect.EffectAmountOverTime;
-						effect.ChangeDamageRound(output);
+						effect.ChangeDamageRound(this, output);
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;

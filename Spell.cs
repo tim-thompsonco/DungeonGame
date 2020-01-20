@@ -86,7 +86,8 @@ namespace DungeonGame {
 				Helper.FormatDefaultBackground(),
 				frostAmountString);
 			var frostInfoString = "Frost damage will freeze opponent for " + 
-			                      player.Spellbook[index].FrostOffense.FrozenMaxRounds + " rounds, stunning them.";
+			                      player.Spellbook[index].FrostOffense.FrozenMaxRounds + " rounds, increasing subsequent + " +
+			                      "physical, arcane and frost damage by 1.5x.";
 			output.StoreUserOutput(
 				Helper.FormatGeneralInfoText(),
 				Helper.FormatDefaultBackground(),
@@ -95,6 +96,32 @@ namespace DungeonGame {
 		public static void CastFrostOffense(IMonster opponent, Player player, int index, UserOutput output) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var frostSpellDamage = player.Spellbook[index].FrostOffense.FrostDamage;
+			foreach (var effect in opponent.Effects) {
+				switch (effect.EffectGroup) {
+					case Effect.EffectType.Healing:
+						break;
+					case Effect.EffectType.ChangeDamage:
+						break;
+					case Effect.EffectType.ChangeArmor:
+						break;
+					case Effect.EffectType.AbsorbDamage:
+						break;
+					case Effect.EffectType.OnFire:
+						break;
+					case Effect.EffectType.Bleeding:
+						break;
+					case Effect.EffectType.Stunned:
+						break;
+					case Effect.EffectType.Frozen:
+						var frozenAttackAmount = frostSpellDamage * effect.EffectMultiplier;
+						frostSpellDamage = (int)frozenAttackAmount;
+						effect.FrozenRound(opponent, output);
+						effect.IsEffectExpired = true;
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
 			if (frostSpellDamage == 0) {
 				output.StoreUserOutput(
 					Helper.FormatAttackFailText(),
@@ -107,6 +134,16 @@ namespace DungeonGame {
 					Helper.FormatAttackSuccessText(),
 					Helper.FormatDefaultBackground(),
 					attackSuccessString);
+				var frozenEffectIndex = opponent.Effects.FindIndex(
+					e => e.EffectGroup == Effect.EffectType.Frozen);
+				if (frozenEffectIndex == -1) {
+					var frozenString = "The " + opponent.Name +
+					                   " is frozen. Physical, frost and arcane damage to it will be double!";
+					output.StoreUserOutput(
+						Helper.FormatAttackSuccessText(),
+						Helper.FormatDefaultBackground(),
+						frozenString);
+				} 
 				opponent.TakeDamage(frostSpellDamage);
 				opponent.Effects.Add(new Effect(player.Spellbook[index].Name,Effect.EffectType.Frozen, 
 					player.Spellbook[index].FrostOffense.FrozenCurRounds, player.Spellbook[index].FrostOffense.FrozenMaxRounds, 
@@ -170,6 +207,31 @@ namespace DungeonGame {
 		public static void CastArcaneOffense(IMonster opponent, Player player, int index, UserOutput output) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var arcaneSpellDamage = player.Spellbook[index].ArcaneOffense.ArcaneDamage;
+			foreach (var effect in opponent.Effects) {
+				switch (effect.EffectGroup) {
+					case Effect.EffectType.Healing:
+						break;
+					case Effect.EffectType.ChangeDamage:
+						break;
+					case Effect.EffectType.ChangeArmor:
+						break;
+					case Effect.EffectType.AbsorbDamage:
+						break;
+					case Effect.EffectType.OnFire:
+						break;
+					case Effect.EffectType.Bleeding:
+						break;
+					case Effect.EffectType.Stunned:
+						break;
+					case Effect.EffectType.Frozen:
+						var frozenAttackAmount = arcaneSpellDamage * effect.EffectMultiplier;
+						arcaneSpellDamage = (int)frozenAttackAmount;
+						effect.FrozenRound(opponent, output);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
 			if (arcaneSpellDamage == 0) {
 				output.StoreUserOutput(
 					Helper.FormatAttackFailText(),

@@ -44,7 +44,6 @@ namespace DungeonGame {
 							case Effect.EffectType.ChangeDamage:
 								break;
 							case Effect.EffectType.ChangeArmor:
-								effect.ChangeArmorRound(output);
 								break;
 							case Effect.EffectType.AbsorbDamage:
 								break;

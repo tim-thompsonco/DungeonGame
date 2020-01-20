@@ -291,6 +291,7 @@ namespace DungeonGame {
 		public void MonsterDeath(Player player, UserOutput output) {
 			player.InCombat = false;
 			this.InCombat = false;
+			this.Effects.Clear();
 			var defeatString = "You have defeated the " + this.Name + "!";
 			output.StoreUserOutput(
 				Helper.FormatSuccessOutputText(),

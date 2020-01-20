@@ -35,7 +35,7 @@ namespace DungeonGame {
 			foreach (var effect in player.Effects) {
 				if (effect.EffectGroup != Effect.EffectType.ChangeArmor) continue;
 				totalArmorRating += effect.EffectAmountOverTime;
-				effect.ChangeArmorRound(output);
+				effect.ChangeArmorRound(player, output);
 			}
 			return totalArmorRating;
 		}

@@ -69,6 +69,7 @@ namespace DungeonGame {
 				PlayerHelper.DisplayPlayerStats(player, output);
 				spawnedRooms[roomIndex].ShowCommands(output);
 				output.RetrieveUserOutput(mapOutput);
+				output.ClearUserOutput();
 				while (!isGameOver) {
 					var input = Helper.GetFormattedInput();
 					var isTownRoom = spawnedRooms[roomIndex] as TownRoom;

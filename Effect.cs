@@ -53,7 +53,8 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void ChangeDamageRound(UserOutput output) {
+		public void ChangeDamageRound(Player player, UserOutput output) {
+			if (this.IsEffectExpired || player.InCombat == false) return;
 			this.EffectCurRound += 1;
 			var changeDmgString = this.EffectAmountOverTime > 0 ?
 				"Your damage is increased by " + this.EffectAmountOverTime + "."
@@ -65,7 +66,8 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void ChangeArmorRound(UserOutput output) {
+		public void ChangeArmorRound(Player player, UserOutput output) {
+			if (this.IsEffectExpired || player.InCombat == false) return;
 			this.EffectCurRound += 1;
 			var augmentString = "Your armor is augmented by " + this.EffectAmountOverTime + ".";
 			output.StoreUserOutput(
@@ -113,7 +115,7 @@ namespace DungeonGame {
 		public void FrozenRound(IMonster opponent, UserOutput output) {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
-			var frozenString = "The " + opponent.Name + " is frozen. Any damage to it will be double!";
+			var frozenString = "The " + opponent.Name + " is frozen. Physical, frost and arcane damage to it will be double!";
 			output.StoreUserOutput(
 				Helper.FormatAttackSuccessText(),
 				Helper.FormatDefaultBackground(),

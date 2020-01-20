@@ -32,7 +32,7 @@ namespace DungeonGame {
 							if (player.InCombat == false && effect.Name == "berserk") {
 								effect.IsEffectExpired = true;
 							}
-							effect.ChangeArmorRound(output);
+							effect.ChangeArmorRound(player, output);
 							break;
 						case Effect.EffectType.AbsorbDamage:
 							break;

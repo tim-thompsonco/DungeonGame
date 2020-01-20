@@ -609,6 +609,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(baseArmor + 25, augmentedArmor);
 			// Check for 6 rounds, should only augment armor for first 3 rounds then expire
 			for (var i = 1; i < 6; i++) {
+				Thread.Sleep(TimeSpan.FromSeconds(1));
 				Assert.AreEqual(
 					GearHelper.CheckArmorRating(player, output), i <= 2 ? augmentedArmor : baseArmor);
 			}
