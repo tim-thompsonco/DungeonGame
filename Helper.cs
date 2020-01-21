@@ -85,9 +85,8 @@ namespace DungeonGame {
 				}
 			}
 		}
-		public static string[] GetFormattedInput() {
-			var input = Console.ReadLine();
-			var inputFormatted = input.ToLower().Trim();
+		public static string[] GetFormattedInput(string userInput) {
+			var inputFormatted = userInput.ToLower().Trim();
 			var inputParse = inputFormatted.Split(' ');
 			return inputParse;
 		}
@@ -246,7 +245,7 @@ namespace DungeonGame {
 					FormatAnnounceText(), FormatDefaultBackground(), playerNameString);
 				output.RetrieveUserOutput();
 				RequestCommand(output);
-				var input = GetFormattedInput();
+				var input = GetFormattedInput(Console.ReadLine());
 				output.ClearUserOutput();
 				if (input[0] == "y") {
 					break;
@@ -263,7 +262,7 @@ namespace DungeonGame {
 				sameLineOutputClass.Add("Player class: ");
 				output.StoreUserOutput(sameLineOutputClass);
 				output.RetrieveUserOutput();
-				var userInput = GetFormattedInput();
+				var userInput = GetFormattedInput(Console.ReadLine());
 				output.ClearUserOutput();
 				var playerClassInput = textInfo.ToTitleCase(userInput[0].ToString());
 				if (playerClassInput != "Mage" && playerClassInput != "Warrior" && playerClassInput != "Archer") {
@@ -280,7 +279,7 @@ namespace DungeonGame {
 					FormatAnnounceText(), FormatDefaultBackground(), playerClassString);
 				RequestCommand(output);
 				output.RetrieveUserOutput();
-				var input = GetFormattedInput();
+				var input = GetFormattedInput(Console.ReadLine());
 				if (input[0] == "y") {
 					output.ClearUserOutput();
 					switch(playerClass) {
@@ -398,7 +397,7 @@ namespace DungeonGame {
 				"Are you sure you want to quit?");
 			output.RetrieveUserOutput();
 			output.ClearUserOutput();
-			var input = GetFormattedInput();
+			var input = GetFormattedInput(Console.ReadLine());
 			if (input[0] == "yes" || input[0] == "y") {
 				output.StoreUserOutput(
 					FormatAnnounceText(), FormatDefaultBackground(), "Quitting the game.");
@@ -655,6 +654,9 @@ namespace DungeonGame {
 			if (monster.InCombat) return;
 			if (monster.HitPoints == monster.MaxHitPoints) return;
 			monster.HitPoints += 1;
+		}
+		public static bool IsWholeNumber(string value) {
+			return value.All(char.IsNumber);
 		}
 	}
 }

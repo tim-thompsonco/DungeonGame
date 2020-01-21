@@ -32,7 +32,7 @@ namespace DungeonGame {
 				output.RetrieveUserOutput(mapOutput);
 				output.ClearUserOutput();
 				Helper.RequestCommand(output);
-				var input = Helper.GetFormattedInput();
+				var input = Helper.GetFormattedInput(Console.ReadLine());
 				Console.Clear();
 				if (player.Effects.Any()) {
 					Helper.RemovedExpiredEffects(player);

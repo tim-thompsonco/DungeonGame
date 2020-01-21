@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace DungeonGame {
@@ -110,33 +111,111 @@ namespace DungeonGame {
 			player.Level += 1;
 			player.Experience -= player.ExperienceToLevel;
 			player.ExperienceToLevel *= 2;
-			// Increase stats from level
-			switch (player.PlayerClass) {
-				case Player.PlayerClassType.Mage:
-					player.MaxHitPoints += 15;
-					player.MaxManaPoints += 35;
-					break;
-				case Player.PlayerClassType.Warrior:
-					player.MaxHitPoints += 35;
-					player.MaxRagePoints += 15;
-					break;
-				case Player.PlayerClassType.Archer:
-					player.MaxHitPoints += 25;
-					player.MaxComboPoints += 25;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-			// Leveling sets player back to max stats
-			player.HitPoints = player.MaxHitPoints;
-			player.RagePoints = player.MaxRagePoints;
-			player.ComboPoints = player.MaxComboPoints;
-			player.ManaPoints = player.MaxManaPoints;
 			var levelUpString = "You have leveled! You are now level " + player.Level + ".";
 			output.StoreUserOutput(
 				Helper.FormatLevelUpText(), 
 				Helper.FormatDefaultBackground(), 
 				levelUpString); 
+			var statsToAssign = 5;
+			while (statsToAssign > 0) {
+				var levelUpStatString = "Please choose " + statsToAssign + 
+				                        " stats to raise. Your choices are: str, dex, int, const.";
+				var levelupStatInfo = "You may raise a stat more than once by putting a number after the stat, IE str 2.";
+				DisplayPlayerStats(player, output);
+				output.StoreUserOutput(
+					Helper.FormatAnnounceText(),
+					Helper.FormatDefaultBackground(),
+					levelUpStatString);
+				output.StoreUserOutput(
+					Helper.FormatAnnounceText(),
+					Helper.FormatDefaultBackground(),
+					levelupStatInfo);
+				output.RetrieveUserOutput();
+				output.ClearUserOutput();
+				var statNumber = 0;
+				try {
+					var input = Helper.GetFormattedInput(Console.ReadLine());
+					if (input.Length > 1) {
+						if (Helper.IsWholeNumber(input[1]) == false) continue;
+						statNumber = Convert.ToInt32(input[1]);
+					} 
+					switch (input[0]) {
+						case "str":
+							if (statNumber > 0 && statNumber <= statsToAssign) {
+								player.Strength += statNumber;
+								statsToAssign -= statNumber;
+							}
+							else {
+								player.Strength++;
+								statsToAssign--;
+							}
+							break;
+						case "dex":
+							if (statNumber > 0 && statNumber <= statsToAssign) {
+								player.Dexterity += statNumber;
+								statsToAssign -= statNumber;
+							}
+							else {
+								player.Dexterity++;
+								statsToAssign--;
+							}
+							break;
+						case "int":
+							if (statNumber > 0 && statNumber <= statsToAssign) {
+								player.Intelligence += statNumber;
+								statsToAssign -= statNumber;
+							}
+							else {
+								player.Intelligence++;
+								statsToAssign--;
+							}
+							break;
+						case "const":
+							if (statNumber > 0 && statNumber <= statsToAssign) {
+								player.Constitution += statNumber;
+								statsToAssign -= statNumber;
+							}
+							else {
+								player.Constitution++;
+								statsToAssign--;
+							}
+							break;
+					}
+				}
+				catch (IndexOutOfRangeException) {
+					output.StoreUserOutput(
+						Helper.FormatAnnounceText(),
+						Helper.FormatDefaultBackground(),
+						"You did not select an appropriate stat!");
+				}
+			}
+			output.StoreUserOutput(
+				Helper.FormatAnnounceText(),
+				Helper.FormatDefaultBackground(),
+				"All stats have been assigned!");
+			// Increase stats from level
+			switch (player.PlayerClass) {
+				case Player.PlayerClassType.Mage:
+					player.MaxManaPoints = player.Intelligence * 10;
+					break;
+				case Player.PlayerClassType.Warrior:
+					player.MaxRagePoints = player.Strength * 10;
+					break;
+				case Player.PlayerClassType.Archer:
+					player.MaxComboPoints = player.Dexterity * 10;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+			player.MaxHitPoints = player.Constitution * 10;
+			player.MaxCarryWeight = player.Strength * 6;
+			player.DodgeChance = player.Dexterity * 1.5;
+			// Leveling sets player back to max stats
+			player.HitPoints = player.MaxHitPoints;
+			player.RagePoints = player.MaxRagePoints;
+			player.ComboPoints = player.MaxComboPoints;
+			player.ManaPoints = player.MaxManaPoints;
+			
 		}
 		public static void DisplayPlayerStats(Player player, UserOutput output) {
 			Helper.FormatGeneralInfoText();

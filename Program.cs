@@ -71,7 +71,7 @@ namespace DungeonGame {
 				output.RetrieveUserOutput(mapOutput);
 				output.ClearUserOutput();
 				while (!isGameOver) {
-					var input = Helper.GetFormattedInput();
+					var input = Helper.GetFormattedInput(Console.ReadLine());
 					var isTownRoom = spawnedRooms[roomIndex] as TownRoom;
 					Console.Clear();
 					// Obtain player command and process command
