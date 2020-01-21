@@ -54,7 +54,7 @@ namespace DungeonGame {
 					roomObject => roomObject.GetType() == typeof(Monster))) {
 					var monster = (Monster) roomObject;
 					RemovedExpiredEffects(monster);
-					if (gameTicks % monster.StatReplenishInterval == 0) ReplenishStatsOverTime(monster);
+					if (gameTicks % monster.StatReplenishInterval == 0 && monster.HitPoints > 0) ReplenishStatsOverTime(monster);
 					if (!monster.Effects.Any()) continue;
 						foreach (var effect in monster.Effects.Where(effect => gameTicks % effect.TickDuration == 0)) {
 							switch (effect.EffectGroup) {

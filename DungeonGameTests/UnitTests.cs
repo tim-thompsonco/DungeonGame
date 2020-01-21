@@ -565,6 +565,7 @@ namespace DungeonGameTests {
 			var input = new string[2] {"cast", "frostbolt"};
 			var spellName = Helper.ParseInput(input);
 			Assert.AreEqual("frostbolt", spellName);
+			player.PlayerWeapon.Durability = 100;
 			var baseDamage = (double) player.Attack(monster, output);
 			player.CastSpell(monster, spellName, output);
 			Assert.AreEqual(85, monster.HitPoints);
@@ -577,6 +578,7 @@ namespace DungeonGameTests {
 			for (var i = 2; i < 4; i++) {
 				monster.Effects[0].FrozenRound(monster, output);
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
+				player.PlayerWeapon.Durability = 100;
 				var frozenDamage = (double) player.Attack(monster, output);
 				Assert.AreEqual(frozenDamage, baseDamage * multiplier, 1);
 				monster.TakeDamage((int) frozenDamage);

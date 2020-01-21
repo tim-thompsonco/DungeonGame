@@ -120,7 +120,13 @@ namespace DungeonGame {
 			while (statsToAssign > 0) {
 				var levelUpStatString = "Please choose " + statsToAssign + 
 				                        " stats to raise. Your choices are: str, dex, int, const.";
-				var levelupStatInfo = "You may raise a stat more than once by putting a number after the stat, IE str 2.";
+				const string levelUpStatInfo = 
+					"You may raise a stat more than once by putting a number after the stat, IE str 2.";
+				const string levelUpStatStr = "Str will increase your max carrying weight and warrior abilities.";
+				const string levelUpStatDex = "Dex will increase your dodge chance and archer abilities";
+				const string levelUpStatInt = 
+					"Int will increase your mana and decrease your training cost for spells and abilities.";
+				const string levelUpStatConst = "Const will increase your max hit points.";
 				DisplayPlayerStats(player, output);
 				output.StoreUserOutput(
 					Helper.FormatAnnounceText(),
@@ -129,7 +135,23 @@ namespace DungeonGame {
 				output.StoreUserOutput(
 					Helper.FormatAnnounceText(),
 					Helper.FormatDefaultBackground(),
-					levelupStatInfo);
+					levelUpStatInfo);
+				output.StoreUserOutput(
+					Helper.FormatAnnounceText(),
+					Helper.FormatDefaultBackground(),
+					levelUpStatStr);
+				output.StoreUserOutput(
+					Helper.FormatAnnounceText(),
+					Helper.FormatDefaultBackground(),
+					levelUpStatDex);
+				output.StoreUserOutput(
+					Helper.FormatAnnounceText(),
+					Helper.FormatDefaultBackground(),
+					levelUpStatInt);
+				output.StoreUserOutput(
+					Helper.FormatAnnounceText(),
+					Helper.FormatDefaultBackground(),
+					levelUpStatConst);
 				output.RetrieveUserOutput();
 				output.ClearUserOutput();
 				var statNumber = 0;
