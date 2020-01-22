@@ -618,5 +618,43 @@ namespace DungeonGameTests {
 			Helper.RemovedExpiredEffects(player);
 			Assert.AreEqual(false, player.Effects.Any());
 		}
+		[Test]
+		public void UpgradeSpellTest() {
+			var player = new Player("placeholder", Player.PlayerClassType.Mage);
+			var output = new UserOutput();
+			var trainer = new Trainer("some name", "some desc");
+			player.PlayerClass = Player.PlayerClassType.Archer;
+			trainer.UpgradeSpell(player, "fireball", output);
+			var expectedOutput =output.Output[0][2]; 
+			Assert.AreEqual("You can't upgrade spells. You're not a mage!",expectedOutput);
+			player.PlayerClass = Player.PlayerClassType.Mage;
+			var spellIndex = player.Spellbook.FindIndex(
+				f => f.GetName() == "fireball");
+			Assert.AreEqual(25, player.Spellbook[spellIndex].FireOffense.BlastDamage);
+			Assert.AreEqual(5, player.Spellbook[spellIndex].FireOffense.BurnDamage);
+			player.Gold = 0;
+			trainer.UpgradeSpell(player, "fireball", output);
+			Assert.AreEqual(25, player.Spellbook[spellIndex].FireOffense.BlastDamage);
+			Assert.AreEqual(5, player.Spellbook[spellIndex].FireOffense.BurnDamage);
+			var expectedOutputTwo = output.Output[1][2];
+			Assert.AreEqual("You are not ready to upgrade that spell. You need to level up first!", 
+				expectedOutputTwo);
+			trainer.UpgradeSpell(player, "not a spell", output);
+			var expectedOutputThree = output.Output[2][2];
+			Assert.AreEqual("You don't have that spell to train!", expectedOutputThree);
+			player.Intelligence = 20;
+			player.Level = 2;
+			trainer.UpgradeSpell(player, "fireball", output);
+			var expectedOutputFour = output.Output[3][2];
+			Assert.AreEqual("You can't afford that!",expectedOutputFour);
+			player.Gold = 100;
+			trainer.UpgradeSpell(player, "fireball", output);
+			Assert.AreEqual(2, player.Spellbook[spellIndex].Rank);
+			Assert.AreEqual(35, player.Spellbook[spellIndex].FireOffense.BlastDamage);
+			Assert.AreEqual(10, player.Spellbook[spellIndex].FireOffense.BurnDamage);
+			Assert.AreEqual(60, player.Gold);
+			var expectedOutputFive = output.Output[4][2];
+			Assert.AreEqual("You upgraded fireball to level 2 for 40 gold.", expectedOutputFive);
+		}
 	}
 }

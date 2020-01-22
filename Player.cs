@@ -68,7 +68,7 @@ using System.Linq;
 			this.PlayerClass = playerClass;
 			this.StatReplenishInterval = 3;
 			this.Level = 1;
-			this.Experience = 450; // remove me.
+			this.Experience = 450;
 			this.ExperienceToLevel = 500;
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();

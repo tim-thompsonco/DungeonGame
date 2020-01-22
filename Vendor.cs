@@ -318,8 +318,6 @@ namespace DungeonGame {
 							Helper.FormatDefaultBackground(),
 							noRepairString);
 						break;
-					default:
-						break;
 				}
 				return;
 			}
@@ -329,7 +327,7 @@ namespace DungeonGame {
 				"That item is not in your inventory.");
 		}
 		public string GetName() {
-			return this.Name.ToString();
+			return this.Name;
 		}
 		public void RestorePlayer(Player player, UserOutput output) {
 			if (this.BuySellType == "Healer") {
