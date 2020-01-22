@@ -622,7 +622,7 @@ namespace DungeonGameTests {
 		public void UpgradeSpellTest() {
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			var output = new UserOutput();
-			var trainer = new Trainer("some name", "some desc");
+			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Mage);
 			player.PlayerClass = Player.PlayerClassType.Archer;
 			trainer.UpgradeSpell(player, "fireball", output);
 			var expectedOutput =output.Output[0][2]; 
@@ -655,6 +655,44 @@ namespace DungeonGameTests {
 			Assert.AreEqual(60, player.Gold);
 			var expectedOutputFive = output.Output[4][2];
 			Assert.AreEqual("You upgraded fireball to level 2 for 40 gold.", expectedOutputFive);
+		}
+		[Test]
+		public void UpgradeAbilityTest() {
+			var player = new Player("placeholder", Player.PlayerClassType.Archer);
+			var output = new UserOutput();
+			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Archer);
+			player.PlayerClass = Player.PlayerClassType.Mage;
+			trainer.UpgradeAbility(player, "distance", output);
+			var expectedOutput =output.Output[0][2]; 
+			Assert.AreEqual("You can't upgrade abilities. You're not a warrior or archer!",expectedOutput);
+			player.PlayerClass = Player.PlayerClassType.Archer;
+			var abilityIndex = player.Abilities.FindIndex(
+				f => f.GetName() == "distance" || f.GetName().Contains("distance"));
+			Assert.AreEqual(25, player.Abilities[abilityIndex].Offensive.Amount);
+			Assert.AreEqual(50, player.Abilities[abilityIndex].Offensive.ChanceToSucceed);
+			player.Gold = 0;
+			trainer.UpgradeAbility(player, "distance", output);
+			Assert.AreEqual(25, player.Abilities[abilityIndex].Offensive.Amount);
+			Assert.AreEqual(50, player.Abilities[abilityIndex].Offensive.ChanceToSucceed);
+			var expectedOutputTwo = output.Output[1][2];
+			Assert.AreEqual("You are not ready to upgrade that ability. You need to level up first!", 
+				expectedOutputTwo);
+			trainer.UpgradeAbility(player, "not an ability", output);
+			var expectedOutputThree = output.Output[2][2];
+			Assert.AreEqual("You don't have that ability to train!", expectedOutputThree);
+			player.Intelligence = 20;
+			player.Level = 2;
+			trainer.UpgradeAbility(player, "distance", output);
+			var expectedOutputFour = output.Output[3][2];
+			Assert.AreEqual("You can't afford that!",expectedOutputFour);
+			player.Gold = 100;
+			trainer.UpgradeAbility(player, "distance", output);
+			Assert.AreEqual(2, player.Abilities[abilityIndex].Rank);
+			Assert.AreEqual(35, player.Abilities[abilityIndex].Offensive.Amount);
+			Assert.AreEqual(55, player.Abilities[abilityIndex].Offensive.ChanceToSucceed);
+			Assert.AreEqual(60, player.Gold);
+			var expectedOutputFive = output.Output[4][2];
+			Assert.AreEqual("You upgraded distance shot to level 2 for 40 gold.", expectedOutputFive);
 		}
 	}
 }

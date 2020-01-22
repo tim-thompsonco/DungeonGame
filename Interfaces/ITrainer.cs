@@ -8,6 +8,7 @@ namespace DungeonGame {
 		List<Ability> TrainableAbilities { get; set; }
 		List<Spell> TrainableSpells { get; set; }
 
+		void DisplayAvailableUpgrades(Player player, UserOutput output);
 		void TrainAbility(Player player, string inputName, UserOutput output);
 		void TrainSpell(Player player, string inputName, UserOutput output);
 		void UpgradeSpell(Player player, string inputName, UserOutput output);

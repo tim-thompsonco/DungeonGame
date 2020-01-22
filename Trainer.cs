@@ -1,23 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace DungeonGame {
 	public class Trainer : ITrainer {
+		public enum TrainerCategory {
+			Archer,
+			Warrior,
+			Mage
+		}
 		public string Name { get; set; }
 		public string Desc { get; set; }
+		public TrainerCategory TrainerGroup { get; set; }
 		public int BaseCost { get; set; }
 		public List<Ability> TrainableAbilities { get; set; }
 		public List<Spell> TrainableSpells { get; set; }
 
-		public Trainer(string name, string desc) {
+		public Trainer(string name, string desc, TrainerCategory trainerCategory) {
 			this.Name = name;
 			this.Desc = desc;
 			this.BaseCost = 25;
+			this.TrainerGroup = trainerCategory;
+			switch (this.TrainerGroup) {
+				case TrainerCategory.Archer:
+					this.TrainableAbilities = new List<Ability>();
+					this.TrainableAbilities.Add(new Ability(
+						"bandage", 25, 1, Ability.ArcherAbility.Bandage));
+					break;
+				case TrainerCategory.Warrior:
+					this.TrainableAbilities = new List<Ability>();
+					this.TrainableAbilities.Add(new Ability(
+						"bandage", 25, 1, Ability.WarriorAbility.Bandage));
+					break;
+				case TrainerCategory.Mage:
+					this.TrainableSpells = new List<Spell>();
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 
 		public string GetName() {
 			return this.Name;
+		}
+		public void DisplayAvailableUpgrades(Player player, UserOutput output) {
+			var forSaleString = "The " + this.Name + " has the following upgrades available:"; 
+			output.StoreUserOutput(
+				Helper.FormatInfoText(),
+				Helper.FormatDefaultBackground(),
+				forSaleString);
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			if (this.TrainerGroup == TrainerCategory.Mage) {
+				foreach (var spell in this.TrainableSpells) {
+					var spellName = textInfo.ToTitleCase(spell.GetName() + " (Rank: " + spell.Rank + ")");
+					output.StoreUserOutput(
+						Helper.FormatInfoText(),
+						Helper.FormatDefaultBackground(),
+						spellName);
+				}
+			}
+			else {
+				foreach (var ability in this.TrainableAbilities) {
+					var abilityName = textInfo.ToTitleCase(ability.GetName() + " (Rank: " + ability.Rank + ")");
+					output.StoreUserOutput(
+						Helper.FormatInfoText(),
+						Helper.FormatDefaultBackground(),
+						abilityName);
+				}
+			}
 		}
 		public void TrainAbility(Player player, string inputName, UserOutput output) {
 		}
