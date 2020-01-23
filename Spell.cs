@@ -17,14 +17,16 @@ namespace DungeonGame {
 		public FrostOffense FrostOffense { get; set; }
 		public ArcaneOffense ArcaneOffense { get; set; }
 		public Healing Healing { get; set; }
+		public int MinLevel { get; set; }
 		public int ManaCost { get; set; }
 		public int Rank { get; set; }
 
-		public Spell(string name, int manaCost, int rank, SpellType spellType) {
+		public Spell(string name, int manaCost, int rank, SpellType spellType, int minLevel) {
 			this.Name = name;
 			this.ManaCost = manaCost;
 			this.Rank = rank;
 			this.SpellCategory = spellType;
+			this.MinLevel = minLevel;
 			switch(this.SpellCategory) {
 				case SpellType.Fireball:
 					this.FireOffense = new FireOffense(25, 5, 1, 3);

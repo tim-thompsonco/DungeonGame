@@ -95,12 +95,18 @@ using System.Linq;
 						1, Armor.ArmorType.Cloth, Armor.ArmorSlot.Chest));
 					this.Inventory.Add(new Armor(
 						1, Armor.ArmorType.Cloth, Armor.ArmorSlot.Legs));
-					this.Spellbook.Add(new Spell("fireball", 35, 1, Spell.SpellType.Fireball));
-					this.Spellbook.Add(new Spell("heal", 25, 1, Spell.SpellType.Heal));
-					this.Spellbook.Add(new Spell("diamondskin", 25, 1, Spell.SpellType.Diamondskin));
-					this.Spellbook.Add(new Spell("frostbolt", 25, 1, Spell.SpellType.Frostbolt));
-					this.Spellbook.Add(new Spell("lightning", 25, 1, Spell.SpellType.Lightning));
-					this.Spellbook.Add(new Spell("rejuvenate", 25, 1, Spell.SpellType.Rejuvenate));
+					this.Spellbook.Add(new Spell(
+						"fireball", 35, 1, Spell.SpellType.Fireball, 1));
+					this.Spellbook.Add(new Spell(
+						"heal", 25, 1, Spell.SpellType.Heal, 1));
+					this.Spellbook.Add(new Spell(
+						"diamondskin", 25, 1, Spell.SpellType.Diamondskin, 1));
+					this.Spellbook.Add(new Spell(
+						"frostbolt", 25, 1, Spell.SpellType.Frostbolt, 1));
+					this.Spellbook.Add(new Spell(
+						"lightning", 25, 1, Spell.SpellType.Lightning, 1));
+					this.Spellbook.Add(new Spell(
+						"rejuvenate", 25, 1, Spell.SpellType.Rejuvenate, 1));
 					break;
 				case PlayerClassType.Warrior:
 					for (var i = 0; i < 3; i++) {
@@ -128,12 +134,18 @@ using System.Linq;
 						1, Armor.ArmorType.Plate, Armor.ArmorSlot.Chest));
 					this.Inventory.Add(new Armor(
 						1, Armor.ArmorType.Plate, Armor.ArmorSlot.Legs));
-					this.Abilities.Add(new Ability("charge", 25, 1, Ability.WarriorAbility.Charge));
-					this.Abilities.Add(new Ability("slash", 40, 1, Ability.WarriorAbility.Slash));
-					this.Abilities.Add(new Ability("rend", 25, 1, Ability.WarriorAbility.Rend));
-					this.Abilities.Add(new Ability("block", 25, 1, Ability.WarriorAbility.Block));
-					this.Abilities.Add(new Ability("berserk", 40, 1, Ability.WarriorAbility.Berserk));
-					this.Abilities.Add(new Ability("disarm", 25, 1, Ability.WarriorAbility.Disarm));
+					this.Abilities.Add(new Ability(
+						"charge", 25, 1, Ability.WarriorAbility.Charge, 1));
+					this.Abilities.Add(new Ability(
+						"slash", 40, 1, Ability.WarriorAbility.Slash, 1));
+					this.Abilities.Add(new Ability(
+						"rend", 25, 1, Ability.WarriorAbility.Rend, 1));
+					this.Abilities.Add(new Ability(
+						"block", 25, 1, Ability.WarriorAbility.Block, 1));
+					this.Abilities.Add(new Ability(
+						"berserk", 40, 1, Ability.WarriorAbility.Berserk, 1));
+					this.Abilities.Add(new Ability(
+						"disarm", 25, 1, Ability.WarriorAbility.Disarm, 1));
 					break;
 				case PlayerClassType.Archer:
 					for (var i = 0; i < 3; i++) {
@@ -160,15 +172,17 @@ using System.Linq;
 						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Legs));
 					this.Inventory.Add( new Quiver("basic quiver", 50, 50, 15));
 					this.Abilities.Add(new Ability("precision shot", 40, 1, 
-						Ability.ArcherAbility.Precise));
-					this.Abilities.Add(new Ability("gut shot", 25, 1, Ability.ArcherAbility.Gut));
-					this.Abilities.Add(new Ability("stun shot", 25, 1, Ability.ArcherAbility.Stun));
+						Ability.ArcherAbility.Precise, 1));
+					this.Abilities.Add(new Ability(
+						"gut shot", 25, 1, Ability.ArcherAbility.Gut, 1));
+					this.Abilities.Add(new Ability(
+						"stun shot", 25, 1, Ability.ArcherAbility.Stun, 1));
 					this.Abilities.Add(new Ability("double shot", 25, 1,
-						Ability.ArcherAbility.Double));
+						Ability.ArcherAbility.Double, 1));
 					this.Abilities.Add(new Ability("wound shot", 40, 1,
-						Ability.ArcherAbility.Wound));
+						Ability.ArcherAbility.Wound, 1));
 					this.Abilities.Add(new Ability("distance shot", 25, 1,
-						Ability.ArcherAbility.Distance));
+						Ability.ArcherAbility.Distance, 1));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

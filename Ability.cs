@@ -29,6 +29,7 @@ namespace DungeonGame {
 		public Offensive Offensive { get; set; }
 		public ChangeArmor ChangeArmor { get; set; }
 		public Stun Stun { get; set; }
+		public int MinLevel { get; set; }
 		public int RageCost { get; set; }
 		public int ComboCost { get; set; }
 		public int Rank { get; set; }
@@ -36,11 +37,12 @@ namespace DungeonGame {
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public Ability() {}
 
-		public Ability(string name, int rageCost, int rank, WarriorAbility warAbility) {
+		public Ability(string name, int rageCost, int rank, WarriorAbility warAbility, int minLevel) {
 			this.Name = name;
 			this.RageCost = rageCost;
 			this.Rank = rank;
 			this.WarAbilityCategory = warAbility;
+			this.MinLevel = minLevel;
 			switch (this.WarAbilityCategory) {
 				case WarriorAbility.Slash:
 					this.Offensive = new Offensive(50);
@@ -68,11 +70,12 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		public Ability(string name, int comboCost, int rank, ArcherAbility archerAbility) {
+		public Ability(string name, int comboCost, int rank, ArcherAbility archerAbility, int minLevel) {
 			this.Name = name;
 			this.ComboCost = comboCost;
 			this.Rank = rank;
 			this.ArcAbilityCategory = archerAbility;
+			this.MinLevel = minLevel;
 			switch (this.ArcAbilityCategory) {
 				case ArcherAbility.Distance:
 					this.Offensive = new Offensive(25, 50);

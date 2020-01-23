@@ -27,12 +27,12 @@ namespace DungeonGame {
 				case TrainerCategory.Archer:
 					this.TrainableAbilities = new List<Ability>();
 					this.TrainableAbilities.Add(new Ability(
-						"bandage", 25, 1, Ability.ArcherAbility.Bandage));
+						"bandage", 25, 1, Ability.ArcherAbility.Bandage, 2));
 					break;
 				case TrainerCategory.Warrior:
 					this.TrainableAbilities = new List<Ability>();
 					this.TrainableAbilities.Add(new Ability(
-						"bandage", 25, 1, Ability.WarriorAbility.Bandage));
+						"bandage", 25, 1, Ability.WarriorAbility.Bandage, 2));
 					break;
 				case TrainerCategory.Mage:
 					this.TrainableSpells = new List<Spell>();
@@ -53,8 +53,17 @@ namespace DungeonGame {
 				forSaleString);
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (this.TrainerGroup == TrainerCategory.Mage) {
-				foreach (var spell in this.TrainableSpells) {
-					var spellName = textInfo.ToTitleCase(spell.GetName() + " (Rank: " + spell.Rank + ")");
+				foreach (var spellName in from spell in this.TrainableSpells
+					where player.Level >= spell.MinLevel select textInfo.ToTitleCase(
+						spell.GetName() + " (Rank: " + spell.Rank + ")")) {
+					output.StoreUserOutput(
+						Helper.FormatInfoText(),
+						Helper.FormatDefaultBackground(),
+						spellName);
+				}
+				foreach (var spellName in from spell in player.Spellbook
+					where player.Level >= spell.MinLevel select textInfo.ToTitleCase(
+						spell.GetName() + " (Rank: " + spell.Rank + ")")) {
 					output.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
@@ -62,8 +71,17 @@ namespace DungeonGame {
 				}
 			}
 			else {
-				foreach (var ability in this.TrainableAbilities) {
-					var abilityName = textInfo.ToTitleCase(ability.GetName() + " (Rank: " + ability.Rank + ")");
+				foreach (var abilityName in from ability in this.TrainableAbilities where 
+					player.Level >= ability.MinLevel select textInfo.ToTitleCase(
+					ability.GetName() + " (Rank: " + ability.Rank + ")")) {
+					output.StoreUserOutput(
+						Helper.FormatInfoText(),
+						Helper.FormatDefaultBackground(),
+						abilityName);
+				}
+				foreach (var abilityName in from ability in player.Abilities where 
+					player.Level >= ability.MinLevel select textInfo.ToTitleCase(
+					ability.GetName() + " (Rank: " + ability.Rank + ")")) {
 					output.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
