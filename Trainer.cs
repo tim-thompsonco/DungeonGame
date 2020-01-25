@@ -46,24 +46,88 @@ namespace DungeonGame {
 			return this.Name;
 		}
 		public void DisplayAvailableUpgrades(Player player, UserOutput output) {
+			switch (player.PlayerClass) {
+				case Player.PlayerClassType.Mage:
+					if (this.TrainerGroup != TrainerCategory.Mage) {
+						output.StoreUserOutput(
+							Helper.FormatFailureOutputText(),
+							Helper.FormatDefaultBackground(),
+							"They are not a trainer for your class. Go find a mage grandmaster!");
+						return;
+					}
+					break;
+				case Player.PlayerClassType.Warrior:
+					if (this.TrainerGroup != TrainerCategory.Warrior) {
+						output.StoreUserOutput(
+							Helper.FormatFailureOutputText(),
+							Helper.FormatDefaultBackground(),
+							"They are not a trainer for your class. Go find a warrior grandmaster!");
+						return;
+					}
+					break;
+				case Player.PlayerClassType.Archer:
+					if (this.TrainerGroup != TrainerCategory.Archer) {
+						output.StoreUserOutput(
+							Helper.FormatFailureOutputText(),
+							Helper.FormatDefaultBackground(),
+							"They are not a trainer for your class. Go find a archer grandmaster!");
+						return;
+					}
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 			var forSaleString = "The " + this.Name + " has the following upgrades available:"; 
 			output.StoreUserOutput(
 				Helper.FormatInfoText(),
 				Helper.FormatDefaultBackground(),
 				forSaleString);
+			output.StoreUserOutput(
+				Helper.FormatInfoText(),
+				Helper.FormatDefaultBackground(),
+				"");
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (this.TrainerGroup == TrainerCategory.Mage) {
-				foreach (var spellName in from spell in this.TrainableSpells
-					where player.Level >= spell.MinLevel select textInfo.ToTitleCase(
-						spell.GetName() + " (Rank: " + spell.Rank + ")")) {
+				output.StoreUserOutput(
+					Helper.FormatInfoText(),
+					Helper.FormatDefaultBackground(),
+					"New Spells: ");
+				output.StoreUserOutput(
+					Helper.FormatInfoText(),
+					Helper.FormatDefaultBackground(),
+					"");
+				try {
+					foreach (var spellName in from spell in this.TrainableSpells
+						where player.Level >= spell.MinLevel
+						select textInfo.ToTitleCase(
+							spell.GetName() + " (Rank: " + spell.Rank + ")")) {
+						output.StoreUserOutput(
+							Helper.FormatInfoText(),
+							Helper.FormatDefaultBackground(),
+							spellName);
+					}
+				}
+				catch (ArgumentNullException) {
 					output.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
-						spellName);
+						"None.");
 				}
+				output.StoreUserOutput(
+					Helper.FormatInfoText(),
+					Helper.FormatDefaultBackground(),
+					"");
+				output.StoreUserOutput(
+					Helper.FormatInfoText(),
+					Helper.FormatDefaultBackground(),
+					"Existing Spells: ");
+				output.StoreUserOutput(
+					Helper.FormatInfoText(),
+					Helper.FormatDefaultBackground(),
+					"");
 				foreach (var spellName in from spell in player.Spellbook
-					where player.Level >= spell.MinLevel select textInfo.ToTitleCase(
-						spell.GetName() + " (Rank: " + spell.Rank + ")")) {
+					where player.Level >= spell.MinLevel && player.Level > spell.Rank select textInfo.ToTitleCase(
+						spell.GetName() + " (Rank: " + (spell.Rank + 1) + ")")) {
 					output.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
@@ -71,17 +135,45 @@ namespace DungeonGame {
 				}
 			}
 			else {
-				foreach (var abilityName in from ability in this.TrainableAbilities where 
-					player.Level >= ability.MinLevel select textInfo.ToTitleCase(
-					ability.GetName() + " (Rank: " + ability.Rank + ")")) {
+				output.StoreUserOutput(
+					Helper.FormatInfoText(),
+					Helper.FormatDefaultBackground(),
+					"New Abilities: ");
+				output.StoreUserOutput(
+					Helper.FormatInfoText(),
+					Helper.FormatDefaultBackground(),
+					"");
+				try {
+					foreach (var abilityName in from ability in this.TrainableAbilities where 
+						player.Level >= ability.MinLevel select textInfo.ToTitleCase(
+						ability.GetName() + " (Rank: " + ability.Rank + ")")) {
+						output.StoreUserOutput(
+							Helper.FormatInfoText(),
+							Helper.FormatDefaultBackground(),
+							abilityName);
+					}
+				}
+				catch (ArgumentNullException) {
 					output.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
-						abilityName);
+						"None.");
 				}
+				output.StoreUserOutput(
+					Helper.FormatInfoText(),
+					Helper.FormatDefaultBackground(),
+					"");
+				output.StoreUserOutput(
+					Helper.FormatInfoText(),
+					Helper.FormatDefaultBackground(),
+					"Existing Abilities: ");
+				output.StoreUserOutput(
+					Helper.FormatInfoText(),
+					Helper.FormatDefaultBackground(),
+					"");
 				foreach (var abilityName in from ability in player.Abilities where 
-					player.Level >= ability.MinLevel select textInfo.ToTitleCase(
-					ability.GetName() + " (Rank: " + ability.Rank + ")")) {
+					player.Level >= ability.MinLevel && player.Level > ability.Rank select textInfo.ToTitleCase(
+					ability.GetName() + " (Rank: " + (ability.Rank + 1) + ")")) {
 					output.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),

@@ -425,6 +425,32 @@ namespace DungeonGame {
 										"There is no vendor here!");
 							}
 							break;
+						case "upgrade":
+							try {
+								if (input[1] != null) {
+									if (isTownRoom != null) {
+										if (player.PlayerClass == Player.PlayerClassType.Mage) {
+											isTownRoom.Trainer.UpgradeSpell(player, Helper.ParseInput(input), output);
+										}
+										else {
+											isTownRoom.Trainer.UpgradeAbility(player, Helper.ParseInput(input), output);
+										}
+									}
+								}
+							}
+							catch (IndexOutOfRangeException) {
+								output.StoreUserOutput(
+									Helper.FormatFailureOutputText(), 
+									Helper.FormatDefaultBackground(), 
+									"Repair what?");
+							}
+							catch (NullReferenceException) {
+								output.StoreUserOutput(
+									Helper.FormatFailureOutputText(), 
+									Helper.FormatDefaultBackground(), 
+									"There is no vendor here!");
+							}
+							break;
 						case "show":
 							try {
 								if (input[1] == "forsale") {
@@ -436,6 +462,17 @@ namespace DungeonGame {
 										Helper.FormatFailureOutputText(), 
 										Helper.FormatDefaultBackground(), 
 										"There is no vendor in the room to show inventory available for sale.");
+									}
+								}
+								if (input[1] == "upgrades") {
+									try {
+										isTownRoom?.Trainer.DisplayAvailableUpgrades(player, output);
+									}
+									catch (NullReferenceException) {
+										output.StoreUserOutput(
+											Helper.FormatFailureOutputText(), 
+											Helper.FormatDefaultBackground(), 
+											"There is no trainer in the room to show available upgrades.");
 									}
 								}
 							}

@@ -26,6 +26,7 @@ namespace DungeonGame {
 		// List of objects in room (including Vendors)
 		public List<IRoomInteraction> RoomObjects { get; set; }
 		public IVendor Vendor;
+		public ITrainer Trainer;
 		public IMonster Monster { get; set; }
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
@@ -103,6 +104,42 @@ namespace DungeonGame {
 				goDown) {
 			this.Vendor = vendor;
 			this.RoomObjects.Add(this.Vendor);
+		}
+		public TownRoom(
+			string name,
+			string desc,
+			int x,
+			int y,
+			int z,
+			bool goNorth,
+			bool goSouth,
+			bool goEast,
+			bool goWest,
+			bool goNorthWest,
+			bool goSouthWest,
+			bool goNorthEast,
+			bool goSouthEast,
+			bool goUp,
+			bool goDown,
+			ITrainer trainer
+		)
+			: this(name, 
+				desc, 
+				x, 
+				y, 
+				z,
+				goNorth,
+				goSouth, 
+				goEast,
+				goWest,
+				goNorthWest, 
+				goSouthWest,
+				goNorthEast, 
+				goSouthEast, 
+				goUp, 
+				goDown) {
+			this.Trainer = trainer;
+			this.RoomObjects.Add(this.Trainer);
 		}
 
 		public IMonster GetMonster() {

@@ -491,6 +491,36 @@
     {
       "$id": "80",
       "$type": "DungeonGame.TownRoom, DungeonGame",
+      "Trainer": {
+        "$id": "96",
+        "$type": "DungeonGame.Trainer, DungeonGame",
+        "Name": "Warrior Grandmaster",
+        "Desc": "TBD",
+        "TrainerGroup": 1,
+        "BaseCost": 25,
+        "TrainableAbilities": {
+          "$id": "97",
+          "$values": [
+            {
+              "$id": "98",
+              "Name": "bandage",
+              "ArcAbilityCategory": 6,
+              "WarAbilityCategory": 0,
+              "Bandage": {
+                "$id": "99",
+                "HealAmount": 25,
+                "HealOverTime": 5,
+                "HealCurRounds": 1,
+                "HealMaxRounds": 3
+              },
+              "MinLevel": 2,
+              "RageCost": 0,
+              "ComboCost": 25,
+              "Rank": 1
+            }
+          ]
+        }
+      },
       "IsDiscovered": false,
       "GoNorth": false,
       "GoSouth": false,
@@ -517,12 +547,30 @@
       },
       "RoomObjects": {
         "$id": "82",
-        "$values": []
+        "$values": [
+          {
+            "$ref": "96"
+          }
+        ]
       }
     },
     {
       "$id": "83",
       "$type": "DungeonGame.TownRoom, DungeonGame",
+      "$id": "93",
+      "$type": "DungeonGame.TownRoom, DungeonGame",
+      "Trainer": {
+        "$id": "94",
+        "$type": "DungeonGame.Trainer, DungeonGame",
+        "Name": "Mage Grandmaster",
+        "Desc": "TBD",
+        "TrainerGroup": 2,
+        "BaseCost": 25,
+        "TrainableAbilities": {
+          "$id": "95",
+          "$values": []
+        }
+      },
       "IsDiscovered": false,
       "GoNorth": true,
       "GoSouth": false,
@@ -549,12 +597,46 @@
       },
       "RoomObjects": {
         "$id": "85",
-        "$values": []
+        "$values": [
+          {
+            "$ref": "94"
+          }
+        ]
       }
     },
     {
       "$id": "86",
       "$type": "DungeonGame.TownRoom, DungeonGame",
+      "Trainer": {
+        "$id": "89",
+        "$type": "DungeonGame.Trainer, DungeonGame",
+        "Name": "Archer Grandmaster",
+        "Desc": "TBD",
+        "TrainerGroup": 0,
+        "BaseCost": 25,
+        "TrainableAbilities": {
+          "$id": "90",
+          "$values": [
+            {
+              "$id": "91",
+              "Name": "bandage",
+              "ArcAbilityCategory": 6,
+              "WarAbilityCategory": 0,
+              "Bandage": {
+                "$id": "92",
+                "HealAmount": 25,
+                "HealOverTime": 5,
+                "HealCurRounds": 1,
+                "HealMaxRounds": 3
+              },
+              "MinLevel": 2,
+              "RageCost": 0,
+              "ComboCost": 25,
+              "Rank": 1
+            }
+          ]
+        }
+      },
       "IsDiscovered": false,
       "GoNorth": false,
       "GoSouth": false,
@@ -581,7 +663,11 @@
       },
       "RoomObjects": {
         "$id": "88",
-        "$values": []
+        "$values": [
+          {
+            "$ref": "89"
+          }
+        ]
       }
     }
   ]

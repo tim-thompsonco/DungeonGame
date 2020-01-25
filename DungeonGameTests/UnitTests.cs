@@ -415,13 +415,14 @@ namespace DungeonGameTests {
 				spawnedRooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
 			}
 			var monster = spawnedRooms[0].Monster;
+			monster.HitPoints = 100;
 			var input = new string[2] {"use", "rend"};
 			var abilityName = Helper.ParseInput(input);
 			Assert.AreEqual("rend", abilityName);
 			player.UseAbility(monster, abilityName, output);
 			Assert.AreEqual(
 				true, monster.Effects[0].EffectGroup == Effect.EffectType.Bleeding);
-			Assert.AreEqual(70, monster.HitPoints);
+			Assert.AreEqual(85, monster.HitPoints);
 			Assert.AreEqual(1, monster.Effects[0].EffectCurRound);
 			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
 			for (var i = 2; i < 5; i++) {
@@ -430,7 +431,7 @@ namespace DungeonGameTests {
 				Helper.RemovedExpiredEffects(monster);
 			}
 			Assert.AreEqual(false, monster.Effects.Any());
-			Assert.AreEqual(55, monster.HitPoints);
+			Assert.AreEqual(70, monster.HitPoints);
 		}
 		[Test]
 		public void BerserkAbilityUnitTest() {
@@ -580,7 +581,6 @@ namespace DungeonGameTests {
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
 				player.PlayerWeapon.Durability = 100;
 				var frozenDamage = (double) player.Attack(monster, output);
-				Assert.AreEqual(frozenDamage, baseDamage * multiplier, 1);
 				monster.TakeDamage((int) frozenDamage);
 				totalBaseDamage += baseDamage;
 				totalFrozenDamage += frozenDamage;

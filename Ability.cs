@@ -48,7 +48,7 @@ namespace DungeonGame {
 					this.Offensive = new Offensive(50);
 					break;
 				case WarriorAbility.Rend:
-					this.Offensive = new Offensive(10, 5, 1, 3);
+					this.Offensive = new Offensive(15, 5, 1, 3);
 					break;
 				case WarriorAbility.Charge:
 					this.Stun = new Stun(15, 1, 2);
