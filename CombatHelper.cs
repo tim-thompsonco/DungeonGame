@@ -93,7 +93,6 @@ namespace DungeonGame {
 								player.CastSpell(opponent, spellName, output);
 								if (opponent.IsMonsterDead(player, output)) return true;
 							}
-
 							break;
 						}
 						catch (IndexOutOfRangeException) {
@@ -278,6 +277,7 @@ namespace DungeonGame {
 						Helper.InvalidCommand(output);
 						continue;
 				}
+				var isOpponentStunned = false;
 				if (opponent.Effects.Any()) {
 					Helper.RemovedExpiredEffects(opponent);
 					foreach (var effect in opponent.Effects) {
@@ -298,7 +298,8 @@ namespace DungeonGame {
 								break;
 							case Effect.EffectType.Stunned:
 								effect.StunnedRound(opponent, output);
-								continue;
+								isOpponentStunned = true;
+								break;
 							case Effect.EffectType.Frozen:
 								break;
 							default:
@@ -307,6 +308,7 @@ namespace DungeonGame {
 						if (opponent.IsMonsterDead(player, output)) return true;
 					}
 				}
+				if (isOpponentStunned) continue;
 				var attackDamageM = opponent.Attack(player);
 				var defenseMoveString = "Your defensive move blocked " + player.AbsorbDamageAmount + " damage!";
 				if (attackDamageM > player.AbsorbDamageAmount && player.AbsorbDamageAmount > 0) {

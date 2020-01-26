@@ -491,7 +491,15 @@ using System.Threading;
 						return;
 					case Ability.ArcherAbility.Double:
 						for (var i = 0; i < 2; i++) {
-							Ability.UseOffenseDamageAbility(opponent, this, index, output);
+							if (this.ComboPoints >= this.Abilities[index].ComboCost) {
+								Ability.UseOffenseDamageAbility(opponent, this, index, output);
+							}
+							else {
+								output.StoreUserOutput(
+									Helper.FormatAttackFailText(),
+									Helper.FormatDefaultBackground(),
+									"You didn't have enough combo points for the second shot!");
+							}
 						}
 						return;
 					case Ability.ArcherAbility.Wound:

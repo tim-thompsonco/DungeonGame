@@ -398,7 +398,7 @@ namespace DungeonGame {
 				output.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
-					"Two arrows are fired which each cause instant damage.");
+					"Two arrows are fired which each cause instant damage. Cost and damage are per arrow.");
 			}
 			if (player.Abilities[index].Offensive.AmountOverTime <= 0) return;
 			var dmgOverTimeString = "Damage Over Time: " + player.Abilities[index].Offensive.AmountOverTime;
