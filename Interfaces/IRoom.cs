@@ -22,12 +22,8 @@ namespace DungeonGame {
 		IMonster Monster { get; set; }
 
 		IMonster GetMonster();
-		bool AttackOpponent(
-			Player player,
-			string[] input,
-			UserOutput output,
-			UserOutput mapOutput,
-			List<IRoom> roomList);
+		bool AttackOpponent(Player player, string[] input, UserOutput output, UserOutput mapOutput, 
+			UserOutput effectOutput, List<IRoom> roomList);
 		void LootCorpse(Player player, string[] input, UserOutput output);
 		void ShowDirections(UserOutput output);
 		void ShowCommands(UserOutput output);

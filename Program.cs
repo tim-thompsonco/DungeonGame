@@ -17,6 +17,7 @@ namespace DungeonGame {
 				// Game loading commands
 				var output = new UserOutput();
 				var mapOutput = new UserOutput();
+				var effectOutput = new UserOutput();
 				Helper.GameIntro(output);
 				Player player;
 				List<IRoom> spawnedRooms;
@@ -65,10 +66,11 @@ namespace DungeonGame {
 				var roomIndex = Helper.ChangeRoom(spawnedRooms, player, 0, 0, 0, output);
 				// While loop to continue obtaining input from player
 				var isGameOver = false;
-				mapOutput = Helper.ShowMap(spawnedRooms, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
+				mapOutput = MapOutput.BuildMap(spawnedRooms, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
+				effectOutput = EffectOutput.ShowEffects(player);
 				PlayerHelper.DisplayPlayerStats(player, output);
 				spawnedRooms[roomIndex].ShowCommands(output);
-				output.RetrieveUserOutput(mapOutput);
+				output.RetrieveUserOutput(mapOutput, effectOutput);
 				output.ClearUserOutput();
 				while (!isGameOver) {
 					var input = Helper.GetFormattedInput(Console.ReadLine());
@@ -84,7 +86,7 @@ namespace DungeonGame {
 									try {
 										globalTimer.Dispose();
 										var outcome = spawnedRooms[roomIndex].AttackOpponent(
-											player, input, output, mapOutput, spawnedRooms);
+											player, input, output, mapOutput, effectOutput, spawnedRooms);
 										if (!outcome && player.HitPoints <= 0) {
 											isGameOver = true;
 										}
@@ -657,8 +659,9 @@ namespace DungeonGame {
 				roomIndex = Helper.GetPlayerLocation(spawnedRooms, player);
 				PlayerHelper.DisplayPlayerStats(player, output);
 				spawnedRooms[roomIndex].ShowCommands(output);
-				mapOutput = Helper.ShowMap(spawnedRooms, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
-				output.RetrieveUserOutput(mapOutput);
+				mapOutput = MapOutput.BuildMap(spawnedRooms, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
+				effectOutput = EffectOutput.ShowEffects(player);
+				output.RetrieveUserOutput(mapOutput, effectOutput);
 				output.ClearUserOutput();
 				}
 			}

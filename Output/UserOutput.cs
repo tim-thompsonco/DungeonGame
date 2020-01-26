@@ -64,7 +64,7 @@ namespace DungeonGame {
 				Console.WriteLine();
 			}
 		}
-		public void RetrieveUserOutput(UserOutput mapOutput) {
+		public void RetrieveUserOutput(UserOutput mapOutput, UserOutput effectOutput) {
 			// Var i is iterating through each row of output
 			for (var i = 0; i < mapOutput.Output.Count; i++) {
 				var lineCount = 0;
@@ -94,6 +94,39 @@ namespace DungeonGame {
 					this.Output[i].Add(mapOutput?.Output[i][j]);
 					this.Output[i].Add(mapOutput?.Output[i][j + 1]);
 					this.Output[i].Add(mapOutput?.Output[i][j + 2]);
+				}
+			}
+			var lc = 0;
+			// Var k is iterating through each row of output
+			for (var k = mapOutput.Output.Count; k < effectOutput.Output.Count + mapOutput.Output.Count; k++) {
+				var lineCount = 0;
+				if (k < this.Output.Count) {
+					for (var d = 2; d < this.Output[k].Count; d += 3) {
+						lineCount += this.Output[k][d].Length;
+					}
+				}
+				var bufferAmount = Helper.GetGameWidth() - lineCount + Helper.GetBufferGap();
+				var bufferStringBuilder = new StringBuilder();
+				for (var e = 0; e < bufferAmount; e++) {
+					bufferStringBuilder.Append(" ");
+				}
+				if (k < this.Output.Count) {
+					this.Output[k].Add(Helper.FormatGeneralInfoText());
+					this.Output[k].Add(Helper.FormatDefaultBackground());
+					this.Output[k].Add(bufferStringBuilder.ToString());
+				}
+				else {
+					this.StoreUserOutput(
+						Helper.FormatGeneralInfoText(),
+						Helper.FormatDefaultBackground(),
+						bufferStringBuilder.ToString());
+				}
+				// var j is iterating through each column of each row of output
+				for (var l = 0; l < effectOutput.Output[lc].Count; l += 3) {
+					this.Output[k].Add(effectOutput?.Output[lc][l]);
+					this.Output[k].Add(effectOutput?.Output[lc][l + 1]);
+					this.Output[k].Add(effectOutput?.Output[lc][l + 2]);
+					if ((lc + 1) < effectOutput.Output.Count) lc++;
 				}
 			}
 			this.RetrieveUserOutput();

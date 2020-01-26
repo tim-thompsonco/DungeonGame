@@ -83,7 +83,8 @@ namespace DungeonGame {
 			return this.Monster;
 		}
 		public bool AttackOpponent(
-			Player player, string[] input, UserOutput output, UserOutput mapOutput, List<IRoom> roomList) {
+			Player player, string[] input, UserOutput output, UserOutput mapOutput, UserOutput effectOutput,
+			List<IRoom> roomList) {
 			var inputString = new StringBuilder();
 			for (var i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
@@ -94,7 +95,8 @@ namespace DungeonGame {
 			if (monsterName.Last() == inputName || this.Monster.GetName() == inputName) {
 				if (this.Monster.HitPoints > 0) {
 					var fightEvent = new CombatHelper();
-					var outcome = fightEvent.SingleCombat(this.Monster, player, output, mapOutput, roomList);
+					var outcome = fightEvent.SingleCombat(this.Monster, player, output, mapOutput, effectOutput,
+						roomList);
 					switch (outcome) {
 						case false when player.HitPoints <= 0:
 							Helper.PlayerDeath(output);

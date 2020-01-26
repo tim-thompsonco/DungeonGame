@@ -46,6 +46,9 @@
     <Compile Include="Interfaces\IEquipment.cs" />
     <Compile Include="Interfaces\ITrainer.cs" />
     <Compile Include="Interfaces\IVendor.cs" />
+    <Compile Include="Output\EffectOutput.cs" />
+    <Compile Include="Output\MapOutput.cs" />
+    <Compile Include="Output\UserOutput.cs" />
     <Compile Include="PlayerHelper.cs" />
     <Compile Include="Quiver.cs" />
     <Compile Include="RoomBuilderHelper.cs" />
@@ -55,7 +58,6 @@
     <Compile Include="Spell Properties\Healing.cs" />
     <Compile Include="Spell Properties\Portal.cs" />
     <Compile Include="Trainer.cs" />
-    <Compile Include="UserOutput.cs" />
     <Compile Include="Vendor.cs" />
     <Compile Include="Spell Properties\FireOffense.cs" />
     <Compile Include="Loot.cs" />

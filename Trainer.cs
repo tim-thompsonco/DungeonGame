@@ -36,6 +36,8 @@ namespace DungeonGame {
 					break;
 				case TrainerCategory.Mage:
 					this.TrainableSpells = new List<Spell>();
+					this.TrainableSpells.Add(new Spell(
+						"town portal", 100, 1, Spell.SpellType.TownPortal, 2));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -346,6 +348,9 @@ namespace DungeonGame {
 							break;
 						case Spell.SpellType.Diamondskin:
 							player.Spellbook[spellIndex].Defense.AugmentAmount += 10;
+							break;
+						case Spell.SpellType.TownPortal:
+							player.Spellbook[spellIndex].ManaCost -= 5;
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();

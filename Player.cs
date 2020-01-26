@@ -108,8 +108,6 @@ using System.Linq;
 						"lightning", 25, 1, Spell.SpellType.Lightning, 1));
 					this.Spellbook.Add(new Spell(
 						"rejuvenate", 25, 1, Spell.SpellType.Rejuvenate, 1));
-					this.Spellbook.Add(new Spell(
-						"town portal", 50, 1, Spell.SpellType.TownPortal, 1));
 					break;
 				case PlayerClassType.Warrior:
 					for (var i = 0; i < 3; i++) {

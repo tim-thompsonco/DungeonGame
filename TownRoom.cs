@@ -146,7 +146,8 @@ namespace DungeonGame {
 			return this.Monster;
 		}
 		public bool AttackOpponent(
-			Player player, string[] input, UserOutput output, UserOutput mapOutput, List<IRoom> roomList) {
+			Player player, string[] input, UserOutput output, UserOutput mapOutput, 
+			UserOutput effectOutput, List<IRoom> roomList) {
 			return true;
 		}
 		public void LootCorpse(Player player, string[] input, UserOutput output) { }

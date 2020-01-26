@@ -9,12 +9,8 @@ namespace DungeonGame {
 		private string[] Commands { get; set; } = new string[3] {
 		"[F]ight", "[I]nventory", "Flee" };
 
-		public bool SingleCombat(
-			IMonster opponent, 
-			Player player, 
-			UserOutput output, 
-			UserOutput mapOutput,
-			List<IRoom> roomList) {
+		public bool SingleCombat(IMonster opponent, Player player, UserOutput output, UserOutput mapOutput, 
+			UserOutput effectOutput, List<IRoom> roomList) {
 			player.InCombat = true;
 			opponent.InCombat = true;
 			var fightStartString = player.Name + ", you have encountered a " + opponent.Name + ". Time to fight!";
@@ -28,8 +24,9 @@ namespace DungeonGame {
 				PlayerHelper.DisplayPlayerStats(player, output);
 				opponent.DisplayStats(output);
 				this.ShowCommands(output);
-				mapOutput = Helper.ShowMap(roomList, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
-				output.RetrieveUserOutput(mapOutput);
+				mapOutput = MapOutput.BuildMap(roomList, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
+				effectOutput = EffectOutput.ShowEffects(player);
+				output.RetrieveUserOutput(mapOutput, effectOutput);
 				output.ClearUserOutput();
 				Helper.RequestCommand(output);
 				var input = Helper.GetFormattedInput(Console.ReadLine());
