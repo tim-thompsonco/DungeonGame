@@ -13,20 +13,52 @@ namespace DungeonGame {
 				"Player Effects:");
 			var activeEffects = 0;
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (var effect in player.Effects) {
-				var effectOutput = "(" + (effect.EffectMaxRound + 1 - effect.EffectCurRound) + ") " + 
-				                   textInfo.ToTitleCase(effect.Name);
-				activeEffects++;
-				output.StoreUserOutput(
-					Helper.FormatGeneralInfoText(), 
-					Helper.FormatDefaultBackground(), 
-					effectOutput);
+			string effectOutput;
+			if (player.InCombat) {
+				foreach (var effect in player.Effects) {
+					if (effect.EffectMaxRound + 1 - effect.EffectCurRound > 1) {
+						effectOutput = "(" + (effect.EffectMaxRound + 1 - effect.EffectCurRound) + " rounds) " + 
+						               textInfo.ToTitleCase(effect.Name);
+					}
+					else {
+						effectOutput = "(" + (effect.EffectMaxRound + 1 - effect.EffectCurRound) + " round) " + 
+						               textInfo.ToTitleCase(effect.Name);
+					}
+					activeEffects++;
+					output.StoreUserOutput(
+						Helper.FormatGeneralInfoText(), 
+						Helper.FormatDefaultBackground(), 
+						effectOutput);
+				}
+				if (activeEffects == 0) {
+					output.StoreUserOutput(
+						Helper.FormatInfoText(),
+						Helper.FormatDefaultBackground(),
+						"None.");
+				}
 			}
-			if (activeEffects == 0) {
-				output.StoreUserOutput(
-					Helper.FormatInfoText(),
-					Helper.FormatDefaultBackground(),
-					"None.");
+			else {
+				foreach (var effect in player.Effects) {
+					if (effect.EffectMaxRound + 1 - effect.EffectCurRound > 1) {
+						effectOutput = "(" + ((effect.EffectMaxRound + 1 - effect.EffectCurRound) * effect.TickDuration) + 
+						               " seconds) " + textInfo.ToTitleCase(effect.Name);
+					}
+					else {
+						effectOutput = "(" + ((effect.EffectMaxRound + 1 - effect.EffectCurRound) * effect.TickDuration) + 
+						               " second) " + textInfo.ToTitleCase(effect.Name);
+					}
+					activeEffects++;
+					output.StoreUserOutput(
+						Helper.FormatGeneralInfoText(), 
+						Helper.FormatDefaultBackground(), 
+						effectOutput);
+				}
+				if (activeEffects == 0) {
+					output.StoreUserOutput(
+						Helper.FormatInfoText(),
+						Helper.FormatDefaultBackground(),
+						"None.");
+				}
 			}
 			// Create bottom border for effects area
 			var effectsBorder = new StringBuilder();

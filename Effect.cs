@@ -67,7 +67,7 @@ namespace DungeonGame {
 			this.IsEffectExpired = true;
 		}
 		public void ChangeArmorRound(Player player, UserOutput output) {
-			if (this.IsEffectExpired || player.InCombat == false) return;
+			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var augmentString = "Your armor is augmented by " + this.EffectAmountOverTime + ".";
 			output.StoreUserOutput(
