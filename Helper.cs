@@ -24,12 +24,12 @@ namespace DungeonGame {
 							effect.HealingRound(player, output);
 							break;
 						case Effect.EffectType.ChangeDamage:
-							if (player.InCombat == false && effect.Name == "berserk") {
+							if (player.InCombat == false && effect.Name.Contains("berserk")) {
 								effect.IsEffectExpired = true;
 							}
 							break;
 						case Effect.EffectType.ChangeArmor:
-							if (player.InCombat == false && effect.Name == "berserk") {
+							if (player.InCombat == false && effect.Name.Contains("berserk")) {
 								effect.IsEffectExpired = true;
 							}
 							if (player.InCombat == false) effect.ChangeArmorRound(player, output);

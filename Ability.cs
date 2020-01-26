@@ -186,11 +186,11 @@ namespace DungeonGame {
 		}
 		public static void UseBerserkAbility(Player player, int index) {
 			DeductAbilityCost(player, index);
-			player.Effects.Add(new Effect(player.Abilities[index].Name,
+			player.Effects.Add(new Effect(player.Abilities[index].Name + " Damage Increase",
 				Effect.EffectType.ChangeDamage, player.Abilities[index].Offensive.Amount,
 				player.Abilities[index].ChangeArmor.ChangeCurRound, player.Abilities[index].ChangeArmor.ChangeMaxRound, 
 				1, 1));
-			player.Effects.Add(new Effect(player.Abilities[index].Name,
+			player.Effects.Add(new Effect(player.Abilities[index].Name + " Armor Decrease",
 				Effect.EffectType.ChangeArmor, player.Abilities[index].ChangeArmor.ChangeArmorAmount,
 				player.Abilities[index].ChangeArmor.ChangeCurRound, player.Abilities[index].ChangeArmor.ChangeMaxRound, 
 				1, 1));
