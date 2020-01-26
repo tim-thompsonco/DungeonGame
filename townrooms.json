@@ -494,8 +494,8 @@
       "Trainer": {
         "$id": "96",
         "$type": "DungeonGame.Trainer, DungeonGame",
-        "Name": "Warrior Grandmaster",
-        "Desc": "TBD",
+        "Name": "warrior grandmaster",
+        "Desc": "A grizzled old man in a leather vest and plate gauntlets looks you up and down and wonders if you have what it takes to be a warrior. If you're ready, he can let you train <abilityname> to learn something new or upgrade <abilityname> to increase the rank on an ability that you already have. You can <show upgrades> to see the full list of options.",
         "TrainerGroup": 1,
         "BaseCost": 25,
         "TrainableAbilities": {
@@ -562,8 +562,8 @@
       "Trainer": {
         "$id": "94",
         "$type": "DungeonGame.Trainer, DungeonGame",
-        "Name": "Mage Grandmaster",
-        "Desc": "TBD",
+        "Name": "mage grandmaster",
+        "Desc": "A middle-aged woman in an expensive-looking robe, holding a staff upright, looks you up and down and wonders if you have the intelligence to be a mage. If you're ready, she can let you train <spellname> to learn a new spell or upgrade <spellname> to increase the rank on a spell that you already have. You can <show upgrades> to see the full list of options.",
         "TrainerGroup": 2,
         "BaseCost": 25,
         "TrainableAbilities": {
@@ -610,8 +610,8 @@
       "Trainer": {
         "$id": "89",
         "$type": "DungeonGame.Trainer, DungeonGame",
-        "Name": "Archer Grandmaster",
-        "Desc": "TBD",
+        "Name": "archer grandmaster",
+        "Desc": "A young woman in leather armor glances at you while keeping a keen eye on her students. She looks like she has extremely fast reflexes but that glance suggested that she thought you did not. She can let you train <abilityname> to learn something new or upgrade <abilityname> to increase the rank on an ability that you already have. You can <show upgrades> to see the full list of options.",
         "TrainerGroup": 0,
         "BaseCost": 25,
         "TrainableAbilities": {

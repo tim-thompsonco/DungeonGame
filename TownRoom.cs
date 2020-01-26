@@ -302,46 +302,75 @@ namespace DungeonGame {
 				inputString.Append(' ');
 			}
 			var inputName = inputString.ToString().Trim();
-			var vendorName = this.Vendor.GetName().Split(' ');
-			if (vendorName.Last() == inputName || this.Vendor.GetName() == inputName) {
-				for (var i = 0; i < this.Vendor.Desc.Length; i += Helper.GetGameWidth()) {
-					if (this.Vendor.Desc.Length - i < Helper.GetGameWidth()) {
+			var nameIndex = this.RoomObjects.FindIndex(
+				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+			if (this.RoomObjects[nameIndex].GetType() == typeof(Vendor)) {
+				var vendorName = this.Vendor.GetName().Split(' ');
+				if (vendorName.Last() == inputName || this.Vendor.GetName() == inputName) {
+					for (var i = 0; i < this.Vendor.Desc.Length; i += Helper.GetGameWidth()) {
+						if (this.Vendor.Desc.Length - i < Helper.GetGameWidth()) {
+							output.StoreUserOutput(
+								Helper.FormatRoomOutputText(), 
+								Helper.FormatDefaultBackground(), 
+								this.Vendor.Desc.Substring(i, this.Vendor.Desc.Length - i));
+							continue;
+						}
 						output.StoreUserOutput(
 							Helper.FormatRoomOutputText(), 
 							Helper.FormatDefaultBackground(), 
-							this.Vendor.Desc.Substring(i, this.Vendor.Desc.Length - i));
-						continue;
+							this.Vendor.Desc.Substring(i, Helper.GetGameWidth()));
 					}
-					output.StoreUserOutput(
-						Helper.FormatRoomOutputText(), 
-						Helper.FormatDefaultBackground(), 
-						this.Vendor.Desc.Substring(i, Helper.GetGameWidth()));
+					var sameLineOutput = new List<string>() {
+						Helper.FormatRoomOutputText(),
+						Helper.FormatDefaultBackground(),
+						"The vendor is carrying: "};
+					output.StoreUserOutput(sameLineOutput);
+					var objCount = this.Vendor.VendorItems.Count;
+					var textInfo = new CultureInfo("en-US", false).TextInfo;
+					foreach (var itemForSale in this.Vendor.VendorItems) {
+						var sameLineOutputItem = new List<string>();
+						var sb = new StringBuilder();
+						var itemTitle = itemForSale.GetName();
+						itemTitle = textInfo.ToTitleCase(itemTitle);
+						sb.Append(itemTitle);
+						sameLineOutputItem.Add(Helper.FormatRoomOutputText());
+						sameLineOutputItem.Add(Helper.FormatDefaultBackground());
+						sameLineOutputItem.Add(sb.ToString());
+						output.StoreUserOutput(sameLineOutputItem);
+					}
 				}
-				var sameLineOutput = new List<string>() {
-					Helper.FormatRoomOutputText(),
-					Helper.FormatDefaultBackground(),
-					"He is carrying: "};
-				output.StoreUserOutput(sameLineOutput);
-				var objCount = this.Vendor.VendorItems.Count;
-				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				foreach (var itemForSale in this.Vendor.VendorItems) {
-					var sameLineOutputItem = new List<string>();
-					var sb = new StringBuilder();
-					var itemTitle = itemForSale.GetName();
-					itemTitle = textInfo.ToTitleCase(itemTitle);
-					sb.Append(itemTitle);
-					sameLineOutputItem.Add(Helper.FormatRoomOutputText());
-					sameLineOutputItem.Add(Helper.FormatDefaultBackground());
-					sameLineOutputItem.Add(sb.ToString());
-					output.StoreUserOutput(sameLineOutputItem);
+				else {
+					var noVendorString = "There is no " + inputName + " in the room!";
+					output.StoreUserOutput(
+						Helper.FormatFailureOutputText(),
+						Helper.FormatDefaultBackground(),
+						noVendorString);
 				}
 			}
 			else {
-				var noVendorString = "There is no " + inputName + " in the room!";
-				output.StoreUserOutput(
-					Helper.FormatFailureOutputText(),
-					Helper.FormatDefaultBackground(),
-					noVendorString);
+				var trainerName = this.Trainer.GetName().Split(' ');
+				if (trainerName.Last() == inputName || this.Trainer.GetName() == inputName) {
+					for (var i = 0; i < this.Trainer.Desc.Length; i += Helper.GetGameWidth()) {
+						if (this.Trainer.Desc.Length - i < Helper.GetGameWidth()) {
+							output.StoreUserOutput(
+								Helper.FormatRoomOutputText(), 
+								Helper.FormatDefaultBackground(), 
+								this.Trainer.Desc.Substring(i, this.Trainer.Desc.Length - i));
+							continue;
+						}
+						output.StoreUserOutput(
+							Helper.FormatRoomOutputText(), 
+							Helper.FormatDefaultBackground(), 
+							this.Trainer.Desc.Substring(i, Helper.GetGameWidth()));
+					}
+				}
+				else {
+					var noTrainerString = "There is no " + inputName + " in the room!";
+					output.StoreUserOutput(
+						Helper.FormatFailureOutputText(),
+						Helper.FormatDefaultBackground(),
+						noTrainerString);
+				}
 			}
 		}
 	}

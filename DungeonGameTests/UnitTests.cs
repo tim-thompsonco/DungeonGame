@@ -654,7 +654,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(10, player.Spellbook[spellIndex].FireOffense.BurnDamage);
 			Assert.AreEqual(60, player.Gold);
 			var expectedOutputFive = output.Output[4][2];
-			Assert.AreEqual("You upgraded fireball to level 2 for 40 gold.", expectedOutputFive);
+			Assert.AreEqual("You upgraded Fireball to rank 2 for 40 gold.", expectedOutputFive);
 		}
 		[Test]
 		public void UpgradeAbilityTest() {
@@ -692,7 +692,45 @@ namespace DungeonGameTests {
 			Assert.AreEqual(55, player.Abilities[abilityIndex].Offensive.ChanceToSucceed);
 			Assert.AreEqual(60, player.Gold);
 			var expectedOutputFive = output.Output[4][2];
-			Assert.AreEqual("You upgraded distance shot to level 2 for 40 gold.", expectedOutputFive);
+			Assert.AreEqual("You upgraded Distance Shot to rank 2 for 40 gold.", expectedOutputFive);
+		}
+		[Test]
+		public void TrainAbilityTest() {
+			var player = new Player("placeholder", Player.PlayerClassType.Archer);
+			var output = new UserOutput();
+			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Archer);
+			player.PlayerClass = Player.PlayerClassType.Mage;
+			trainer.TrainAbility(player, "bandage", output);
+			var expectedOutput = output.Output[0][2]; 
+			Assert.AreEqual("You can't train abilities. You're not a warrior or archer!",expectedOutput);
+			player.PlayerClass = Player.PlayerClassType.Archer;
+			var abilityIndex = player.Abilities.FindIndex(
+				f => f.GetName() == "bandage" || f.GetName().Contains("bandage"));
+			Assert.AreEqual(-1, abilityIndex);
+			player.Gold = 0;
+			output.ClearUserOutput();
+			trainer.TrainAbility(player, "bandage", output);
+			abilityIndex = player.Abilities.FindIndex(
+				f => f.GetName() == "bandage" || f.GetName().Contains("bandage"));
+			Assert.AreEqual(-1, abilityIndex);
+			expectedOutput = output.Output[0][2]; 
+			Assert.AreEqual("You are not ready to train that ability. You need to level up first!", 
+				expectedOutput);
+			player.Intelligence = 20;
+			player.Level = 2;
+			output.ClearUserOutput();
+			trainer.TrainAbility(player, "bandage", output);
+			expectedOutput = output.Output[0][2]; 
+			Assert.AreEqual("You can't afford that!",expectedOutput);
+			player.Gold = 100;
+			output.ClearUserOutput();
+			trainer.TrainAbility(player, "bandage", output);
+			expectedOutput = output.Output[0][2]; 
+			abilityIndex = player.Abilities.FindIndex(
+				f => f.GetName() == "bandage" || f.GetName().Contains("bandage"));
+			Assert.AreNotEqual(-1, abilityIndex);
+			Assert.AreEqual(60, player.Gold);
+			Assert.AreEqual("You purchased Bandage (Rank 1) for 40 gold.", expectedOutput);
 		}
 	}
 }

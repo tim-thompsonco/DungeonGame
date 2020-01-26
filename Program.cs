@@ -442,13 +442,39 @@ namespace DungeonGame {
 								output.StoreUserOutput(
 									Helper.FormatFailureOutputText(), 
 									Helper.FormatDefaultBackground(), 
-									"Repair what?");
+									"Upgrade what?");
 							}
 							catch (NullReferenceException) {
 								output.StoreUserOutput(
 									Helper.FormatFailureOutputText(), 
 									Helper.FormatDefaultBackground(), 
-									"There is no vendor here!");
+									"There is no trainer here!");
+							}
+							break;
+						case "train":
+							try {
+								if (input[1] != null) {
+									if (isTownRoom != null) {
+										if (player.PlayerClass == Player.PlayerClassType.Mage) {
+											isTownRoom.Trainer.TrainSpell(player, Helper.ParseInput(input), output);
+										}
+										else {
+											isTownRoom.Trainer.TrainAbility(player, Helper.ParseInput(input), output);
+										}
+									}
+								}
+							}
+							catch (IndexOutOfRangeException) {
+								output.StoreUserOutput(
+									Helper.FormatFailureOutputText(), 
+									Helper.FormatDefaultBackground(), 
+									"Train what?");
+							}
+							catch (NullReferenceException) {
+								output.StoreUserOutput(
+									Helper.FormatFailureOutputText(), 
+									Helper.FormatDefaultBackground(), 
+									"There is no trainer here!");
 							}
 							break;
 						case "show":
