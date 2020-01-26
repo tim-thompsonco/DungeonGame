@@ -29,19 +29,19 @@ namespace DungeonGameTests {
 			Assert.AreEqual(0, monster.ExperienceProvided % 10);
 			// Test consumable potion creation
 			var potion = new Consumable(3, Consumable.PotionType.Health);
-			Assert.AreEqual(9, potion.ItemValue);
+			Assert.AreEqual(25, potion.ItemValue);
 			Assert.AreEqual("minor health potion", potion.Name);
 			Assert.AreEqual(50, potion.RestoreHealth.RestoreHealthAmt);
 			var potionTwo = new Consumable(4, Consumable.PotionType.Health);
-			Assert.AreEqual(12, potionTwo.ItemValue);
+			Assert.AreEqual(50, potionTwo.ItemValue);
 			Assert.AreEqual("health potion", potionTwo.Name);
 			Assert.AreEqual(100, potionTwo.RestoreHealth.RestoreHealthAmt);
 			var potionThree = new Consumable(6, Consumable.PotionType.Health);
-			Assert.AreEqual(18, potionThree.ItemValue);
+			Assert.AreEqual(50, potionThree.ItemValue);
 			Assert.AreEqual("health potion", potionThree.Name);
 			Assert.AreEqual(100, potionThree.RestoreHealth.RestoreHealthAmt);
 			var potionFour = new Consumable(7, Consumable.PotionType.Health);
-			Assert.AreEqual(21, potionFour.ItemValue);
+			Assert.AreEqual(75, potionFour.ItemValue);
 			Assert.AreEqual("greater health potion", potionFour.Name);
 			Assert.AreEqual(150, potionFour.RestoreHealth.RestoreHealthAmt);
 			// Test consumable gem creation
@@ -697,14 +697,14 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void TrainAbilityTest() {
-			var player = new Player("placeholder", Player.PlayerClassType.Archer);
+			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
 			var output = new UserOutput();
-			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Archer);
+			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Warrior);
 			player.PlayerClass = Player.PlayerClassType.Mage;
 			trainer.TrainAbility(player, "bandage", output);
 			var expectedOutput = output.Output[0][2]; 
 			Assert.AreEqual("You can't train abilities. You're not a warrior or archer!",expectedOutput);
-			player.PlayerClass = Player.PlayerClassType.Archer;
+			player.PlayerClass = Player.PlayerClassType.Warrior;
 			var abilityIndex = player.Abilities.FindIndex(
 				f => f.GetName() == "bandage" || f.GetName().Contains("bandage"));
 			Assert.AreEqual(-1, abilityIndex);

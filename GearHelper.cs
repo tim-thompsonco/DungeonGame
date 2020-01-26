@@ -145,7 +145,8 @@ namespace DungeonGame {
 			foreach (var item in player.Inventory) {
 				var itemName = item.GetName().Split(' ');
 				var itemType = item.GetType().Name;
-				var itemFound = (itemName.Last() == inputName || item.GetName() == inputName);
+				var itemFound = (itemName.Last() == inputName || item.GetName() == inputName ||
+				                 itemName.Contains(inputName));
 				switch (itemFound) {
 					case true when input[0] == "equip": {
 						if (Helper.IsWearable(item) && item.IsEquipped() == false) {

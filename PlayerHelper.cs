@@ -230,7 +230,7 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 			player.MaxHitPoints = player.Constitution * 10;
-			player.MaxCarryWeight = player.Strength * 6;
+			player.MaxCarryWeight = player.Strength * 2;
 			player.DodgeChance = player.Dexterity * 1.5;
 			// Leveling sets player back to max stats
 			player.HitPoints = player.MaxHitPoints;

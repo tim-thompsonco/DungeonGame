@@ -283,7 +283,7 @@ namespace DungeonGame {
 			var spellIndex = this.TrainableSpells.FindIndex(
 				f => f.GetName() == inputName || f.GetName().Contains(inputName));
 			if (spellIndex != -1 && player.Level >= this.TrainableSpells[spellIndex].MinLevel) {
-				var trainingCost = (int)((this.TrainableSpells[spellIndex].Rank) * this.BaseCost * 
+				var trainingCost = (int)((this.TrainableSpells[spellIndex].MinLevel) * this.BaseCost * 
 				                      (1.0 - (player.Intelligence / 100.0)));
 				if (player.Gold >= trainingCost) {
 					player.Gold -= trainingCost;

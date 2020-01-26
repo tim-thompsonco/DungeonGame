@@ -1,9 +1,9 @@
-	using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-	using System.Security.Cryptography.X509Certificates;
-	using System.Threading;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 	namespace DungeonGame {
 	public class Player {
@@ -68,8 +68,6 @@ using System.Linq;
 			this.PlayerClass = playerClass;
 			this.StatReplenishInterval = 3;
 			this.Level = 1;
-			this.Gold = 100; // remove after testing
-			this.Experience = 450; // remove after testing
 			this.ExperienceToLevel = 500;
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();
@@ -80,7 +78,7 @@ using System.Linq;
 						this.Consumables.Add(new Consumable(1, Consumable.PotionType.Mana));
 					}
 					this.Spellbook = new List<Spell>();
-					this.Strength = 5;
+					this.Strength = 10;
 					this.Dexterity = 5;
 					this.Intelligence = 15;
 					this.Constitution = 10;
@@ -117,7 +115,7 @@ using System.Linq;
 					this.Strength = 15;
 					this.Dexterity = 5;
 					this.Intelligence = 5;
-					this.Constitution = 10;
+					this.Constitution = 15;
 					this.MaxRagePoints = this.Strength * 10;
 					this.RagePoints = this.MaxRagePoints;
 					this.CanWearCloth = true;
@@ -153,7 +151,7 @@ using System.Linq;
 						this.Consumables.Add(new Consumable(1, Consumable.PotionType.Health));
 					}
 					this.Abilities = new List<Ability>();
-					this.Strength = 5;
+					this.Strength = 10;
 					this.Dexterity = 15;
 					this.Intelligence = 5;
 					this.Constitution = 10;
@@ -190,7 +188,7 @@ using System.Linq;
 			}
 			this.MaxHitPoints = this.Constitution * 10;
 			this.HitPoints = this.MaxHitPoints;
-			this.MaxCarryWeight = this.Strength * 6;
+			this.MaxCarryWeight = this.Strength * 2;
 			this.DodgeChance = this.Dexterity * 1.5;
 		}
 		

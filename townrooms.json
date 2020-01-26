@@ -311,7 +311,7 @@
               "$id": "63",
               "$type": "DungeonGame.Consumable, DungeonGame",
               "Name": "minor health potion",
-              "ItemValue": 3,
+              "ItemValue": 25,
               "Equipped": false,
               "ArrowCategory": 0,
               "PotionCategory": 0,
@@ -328,7 +328,7 @@
               "$id": "65",
               "$type": "DungeonGame.Consumable, DungeonGame",
               "Name": "minor mana potion",
-              "ItemValue": 3,
+              "ItemValue": 25,
               "Equipped": false,
               "ArrowCategory": 0,
               "PotionCategory": 1,
@@ -504,8 +504,8 @@
             {
               "$id": "98",
               "Name": "bandage",
-              "ArcAbilityCategory": 6,
-              "WarAbilityCategory": 0,
+              "ArcAbilityCategory": 0,
+              "WarAbilityCategory": 6,
               "Bandage": {
                 "$id": "99",
                 "HealAmount": 25,
@@ -514,8 +514,8 @@
                 "HealMaxRounds": 3
               },
               "MinLevel": 2,
-              "RageCost": 0,
-              "ComboCost": 25,
+              "RageCost": 25,
+              "ComboCost": 0,
               "Rank": 1
             }
           ]

@@ -132,20 +132,18 @@ namespace DungeonGame {
 							break;
 						case "cast":
 							try {
-								if (input[1] != null && (input[1].Contains("portal") || input[1].Contains("town"))) {
+								if (input[1] != null &&  input[1].Contains("town")) {
 									player.CastSpell(spawnedRooms, Helper.ParseInput(input), output);
 								}
 								else if (input[1] != null) {
 									player.CastSpell(Helper.ParseInput(input), output);
 								}
-								break;
 							}
 							catch (IndexOutOfRangeException) {
 								output.StoreUserOutput(
 									Helper.FormatFailureOutputText(),
 									Helper.FormatDefaultBackground(),
 									"You don't have that spell.");
-								continue;
 							}
 							catch (NullReferenceException) {
 								if (player.PlayerClass != Player.PlayerClassType.Mage) {
@@ -154,7 +152,6 @@ namespace DungeonGame {
 										Helper.FormatDefaultBackground(), 
 										"You can't cast spells. You're not a mage!");
 								}
-								continue;
 							}
 							catch (InvalidOperationException) {
 								if (player.PlayerClass != Player.PlayerClassType.Mage) {
@@ -162,14 +159,13 @@ namespace DungeonGame {
 										Helper.FormatFailureOutputText(), 
 										Helper.FormatDefaultBackground(), 
 										"You can't cast spells. You're not a mage!");
-									continue;
 								}
 								output.StoreUserOutput(
 										Helper.FormatFailureOutputText(), 
 										Helper.FormatDefaultBackground(), 
 										"You do not have enough mana to cast that spell!");
-								continue;
 							}
+							break;
 						case "drop":
 							GearHelper.DropItem(player, input, output, spawnedRooms);
 							break;		
@@ -181,12 +177,9 @@ namespace DungeonGame {
 								if (input.Contains("distance")) {
 									player.UseAbility(spawnedRooms, input, output);
 								}
-
 								if (input[1] != null) {
 									player.UseAbility(Helper.ParseInput(input), output);
 								}
-
-								break;
 							}
 							catch (IndexOutOfRangeException) {
 								output.StoreUserOutput(
@@ -194,14 +187,12 @@ namespace DungeonGame {
 									Helper.FormatDefaultBackground(),
 									"You don't have that ability.");
 								Console.WriteLine();
-								continue;
 							}
 							catch (ArgumentOutOfRangeException) {
 								output.StoreUserOutput(
 									Helper.FormatFailureOutputText(),
 									Helper.FormatDefaultBackground(),
 									"You don't have that ability.");
-								continue;
 							}
 							catch (NullReferenceException) {
 								if (player.PlayerClass == Player.PlayerClassType.Mage) {
@@ -209,9 +200,7 @@ namespace DungeonGame {
 										Helper.FormatFailureOutputText(), 
 										Helper.FormatDefaultBackground(), 
 										"You can't use abilities. You're not a warrior or archer!");
-									
 								}
-								continue;
 							}
 							catch (InvalidOperationException) {
 								if (player.PlayerClass == Player.PlayerClassType.Mage) {
@@ -219,34 +208,31 @@ namespace DungeonGame {
 										Helper.FormatFailureOutputText(), 
 										Helper.FormatDefaultBackground(), 
 										"You can't use abilities. You're not a warrior or archer!");
-									continue;
 								}
 								switch (player.PlayerClass) {
-									case Player.PlayerClassType.Mage:
-										continue;
 									case Player.PlayerClassType.Warrior:
 										output.StoreUserOutput(
 											Helper.FormatFailureOutputText(), 
 											Helper.FormatDefaultBackground(), 
 											"You do not have enough rage to use that ability!");
-										continue;
+										break;
 									case Player.PlayerClassType.Archer:
 										if (player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
 											output.StoreUserOutput(
 												Helper.FormatFailureOutputText(), 
 												Helper.FormatDefaultBackground(), 
 												"You do not have a bow equipped!");
-											continue;
 										}
 										output.StoreUserOutput(
 											Helper.FormatFailureOutputText(), 
 											Helper.FormatDefaultBackground(), 
 											"You do not have enough combo points to use that ability!");
-										continue;
+										break;
 									default:
 										throw new ArgumentOutOfRangeException();
 								}
 							}
+							break;
 						case "equip":
 						case "unequip":
 							GearHelper.EquipItem(player, input, output);

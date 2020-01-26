@@ -235,7 +235,7 @@ namespace DungeonGame {
 							sb.Append("plate leggings");
 							break;
 						case ArmorSlot.Hands:
-							sb.Append("gauntlets");
+							sb.Append("plate gauntlets");
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();

@@ -44,7 +44,6 @@ namespace DungeonGame {
 		public Consumable() {}
 		public Consumable(int level, PotionType potionType) {
 			this.PotionCategory = potionType;
-			this.ItemValue = level * 3;
 			this.Weight = 1;
 			int amount;
 			string name;
@@ -63,6 +62,7 @@ namespace DungeonGame {
 				name = potionType + " potion";
 				amount = 100;
 			}
+			this.ItemValue = amount / 2;
 			this.Name = name.ToLower();
 			switch (this.PotionCategory) {
 				case PotionType.Health:
