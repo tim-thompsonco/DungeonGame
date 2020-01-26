@@ -522,7 +522,8 @@ namespace DungeonGame {
 			}
 		}
 		public static void SpellInfo(Player player, string input, UserOutput output) {
-			var index = player.Spellbook.FindIndex(f => f.GetName() == input);
+			var index = player.Spellbook.FindIndex(f => f.GetName() == input || 
+			                                            f.SpellCategory == Spell.SpellType.TownPortal);
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (index != -1 && player.PlayerClass == Player.PlayerClassType.Mage) {
 				output.StoreUserOutput(
@@ -557,6 +558,9 @@ namespace DungeonGame {
 						break;
 					case Spell.SpellType.Diamondskin:
 						Spell.DefenseSpellInfo(player, index, output);
+						break;
+					case Spell.SpellType.TownPortal:
+						Spell.PortalSpellInfo(player, index, output);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

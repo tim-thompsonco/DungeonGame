@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
-using System.Xml;
 using System.Xml.Schema;
 using DungeonGame;
 using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace DungeonGameTests {
@@ -731,6 +732,29 @@ namespace DungeonGameTests {
 			Assert.AreNotEqual(-1, abilityIndex);
 			Assert.AreEqual(60, player.Gold);
 			Assert.AreEqual("You purchased Bandage (Rank 1) for 40 gold.", expectedOutput);
+		}
+		[Test]
+		public void TownPortalSpellUnitTest() {
+			/* Town Portal should change location of player to where portal is set to */
+			var player = new Player("placeholder", Player.PlayerClassType.Mage);
+			var output = new UserOutput();
+			var spawnedRooms = new RoomBuilder(
+				100, 5, 1, 3, 
+				0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
+			player.Spellbook.Add(new Spell(
+				"town portal", 50, 1, Spell.SpellType.TownPortal, 1));
+			player.X = -2;
+			player.Y = 6;
+			player.Z = 0;
+			Assert.AreEqual(-2, player.X);
+			Assert.AreEqual(6, player.Y);
+			Assert.AreEqual(0, player.Z);
+			player.CastSpell(spawnedRooms, "town portal", output);
+			Assert.AreEqual(0, player.X);
+			Assert.AreEqual(7, player.Y);
+			Assert.AreEqual(0, player.Z);
+			var expectedOutput = output.Output[0][2]; 
+			Assert.AreEqual("You open a portal and step through it.",expectedOutput);
 		}
 	}
 }

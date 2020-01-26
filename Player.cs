@@ -108,6 +108,8 @@ using System.Linq;
 						"lightning", 25, 1, Spell.SpellType.Lightning, 1));
 					this.Spellbook.Add(new Spell(
 						"rejuvenate", 25, 1, Spell.SpellType.Rejuvenate, 1));
+					this.Spellbook.Add(new Spell(
+						"town portal", 50, 1, Spell.SpellType.TownPortal, 1));
 					break;
 				case PlayerClassType.Warrior:
 					for (var i = 0; i < 3; i++) {
@@ -513,6 +515,24 @@ using System.Linq;
 				throw new IndexOutOfRangeException();
 			}
 		}
+		public void CastSpell(List<IRoom> roomList, string inputName, UserOutput output) {
+			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
+			if (index != -1 &&
+			    this.ManaPoints >= this.Spellbook[index].ManaCost &&
+			    this.PlayerClass == PlayerClassType.Mage) {
+				switch (this.Spellbook[index].SpellCategory) {
+					case Spell.SpellType.TownPortal:
+						Spell.CastTownPortal(roomList, this, index, output);
+						return;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+			if (index != -1) {
+				throw new InvalidOperationException();
+			}
+			throw new IndexOutOfRangeException();
+		}
 		public void CastSpell(string inputName, UserOutput output) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
 			if (index != -1 &&
@@ -527,12 +547,6 @@ using System.Linq;
 						return;
 					case Spell.SpellType.Diamondskin:
 						Spell.CastDefense(this, index, output);
-						return;
-					case Spell.SpellType.Fireball:
-						return;
-					case Spell.SpellType.Frostbolt:
-						return;
-					case Spell.SpellType.Lightning:
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();

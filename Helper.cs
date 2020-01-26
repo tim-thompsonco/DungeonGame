@@ -380,6 +380,10 @@ namespace DungeonGame {
 			player.CanSave = roomType != "DungeonRoom";
 			return roomIndex;
 		}
+		public static int GetPlayerLocation(List<IRoom> roomList, Player player) {
+			var room = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
+			return roomList.IndexOf(room);
+		}
 		public static void InvalidDirection(UserOutput output) {
 			const string outputString = "You can't go that way!";
 			output.StoreUserOutput(

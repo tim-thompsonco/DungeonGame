@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace DungeonGame {
 	public class Spell {
@@ -8,7 +10,8 @@ namespace DungeonGame {
 			Lightning,
 			Heal,
 			Rejuvenate,
-			Diamondskin
+			Diamondskin,
+			TownPortal
 		}
 		public string Name { get; set; }
 		public SpellType SpellCategory { get; set; }
@@ -17,10 +20,13 @@ namespace DungeonGame {
 		public FrostOffense FrostOffense { get; set; }
 		public ArcaneOffense ArcaneOffense { get; set; }
 		public Healing Healing { get; set; }
+		public Portal Portal { get; set; }
 		public int MinLevel { get; set; }
 		public int ManaCost { get; set; }
 		public int Rank { get; set; }
 
+		// Default constructor for JSON serialization to work since there isn't 1 main constructor
+		public Spell() {}
 		public Spell(string name, int manaCost, int rank, SpellType spellType, int minLevel) {
 			this.Name = name;
 			this.ManaCost = manaCost;
@@ -45,6 +51,9 @@ namespace DungeonGame {
 					break;
 				case SpellType.Diamondskin:
 					this.Defense = new Defense(25, 1, 3);
+					break;
+				case SpellType.TownPortal:
+					this.Portal = new Portal();
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -268,7 +277,6 @@ namespace DungeonGame {
 				Helper.FormatDefaultBackground(),
 				healInfoString);
 		}
-
 		public static void CastHealing(Player player, int index, UserOutput output) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var healAmount = player.Spellbook[index].Healing.HealAmount;
@@ -286,6 +294,24 @@ namespace DungeonGame {
 				Effect.EffectType.Healing, player.Spellbook[index].Healing.HealOverTime,
 				player.Spellbook[index].Healing.HealCurRounds, player.Spellbook[index].Healing.HealMaxRounds,
 				1, 10));
+		}
+		public static void PortalSpellInfo(Player player, int index, UserOutput output) {
+			const string portalString = "This spell will create a portal and return you to town.";
+			output.StoreUserOutput(
+				Helper.FormatGeneralInfoText(),
+				Helper.FormatDefaultBackground(),
+				portalString);
+		}
+		public static void CastTownPortal(List<IRoom> roomList, Player player, int index, UserOutput output) {
+			player.ManaPoints -= player.Spellbook[index].ManaCost;
+			var roomIndex = Helper.SetPlayerLocation(roomList, player, player.Spellbook[index].Portal.CoordX, player.Spellbook[index].Portal.CoordY,
+				player.Spellbook[index].Portal.CoordZ);
+			const string portalString = "You open a portal and step through it.";
+			output.StoreUserOutput(
+				Helper.FormatAttackSuccessText(),
+				Helper.FormatDefaultBackground(),
+				portalString);
+			roomList[roomIndex].LookRoom(output);
 		}
 	}
 }
