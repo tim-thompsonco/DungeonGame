@@ -533,5 +533,14 @@ namespace DungeonGame {
 		public static bool IsWholeNumber(string value) {
 			return value.All(char.IsNumber);
 		}
+		public static void ShowUserOutput(List<IRoom> spawnedRooms, Player player, UserOutput output, 
+			UserOutput mapOutput, UserOutput effectOutput, int roomIndex) {
+			PlayerHelper.DisplayPlayerStats(player, output);
+			spawnedRooms[roomIndex].ShowCommands(output);
+			mapOutput = MapOutput.BuildMap(spawnedRooms, player, GetMiniMapHeight(), GetMiniMapWidth());
+			effectOutput = EffectOutput.ShowEffects(player);
+			output.RetrieveUserOutput(mapOutput, effectOutput);
+			output.ClearUserOutput();
+		}
 	}
 }

@@ -68,10 +68,7 @@ namespace DungeonGame {
 				var isGameOver = false;
 				mapOutput = MapOutput.BuildMap(spawnedRooms, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
 				effectOutput = EffectOutput.ShowEffects(player);
-				PlayerHelper.DisplayPlayerStats(player, output);
-				spawnedRooms[roomIndex].ShowCommands(output);
-				output.RetrieveUserOutput(mapOutput, effectOutput);
-				output.ClearUserOutput();
+				Helper.ShowUserOutput(spawnedRooms, player, output, mapOutput, effectOutput, roomIndex);
 				while (!isGameOver) {
 					var input = Helper.GetFormattedInput(Console.ReadLine());
 					var isTownRoom = spawnedRooms[roomIndex] as TownRoom;
@@ -657,12 +654,7 @@ namespace DungeonGame {
 							break;
 					}
 				roomIndex = Helper.GetPlayerLocation(spawnedRooms, player);
-				PlayerHelper.DisplayPlayerStats(player, output);
-				spawnedRooms[roomIndex].ShowCommands(output);
-				mapOutput = MapOutput.BuildMap(spawnedRooms, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
-				effectOutput = EffectOutput.ShowEffects(player);
-				output.RetrieveUserOutput(mapOutput, effectOutput);
-				output.ClearUserOutput();
+				Helper.ShowUserOutput(spawnedRooms, player, output, mapOutput, effectOutput, roomIndex);
 				}
 			}
 		}
