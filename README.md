@@ -7,16 +7,20 @@
 <p>Whenever possible, I tried to include game commands in the game itself. However, here is a list of the most common commands that as a player you will need to remember.</p>
 
 <p>i - This will display the player's inventory</p>
-<p>drop <item> - This will drop an item from the player's inventory onto the ground</p>
-<p>pickup <item> - This will pick up an item on the ground and deposit it in the player's inventory</p>
-<p>cast <spell> - This will cast a spell if the player is a Mage</p>
-<p>use <ability> - This will use an ability if the player is a Warrior or Archer</p>
-<p>kill <monster> / attack <monster> - This will initiate combat against the monster</p>
-<p>loot <monster> - This will loot a monster that has been defeated</p>
-<p>equip/unequip <item> - This will equip or unequip an item in the player's inventory if the item is wearable</p>
-<p>drink <potion> - This will consume an item such as a potion if it is in the player's inventory</p>
-<p>buy/sell <item> - This will buy or sell an item if the player is in the same room as a vendor</p>
-<p>repair <item> - This will repair an item if the player is in the same room as a vendor who can repair that type of item</p>
+<p>drop [item] - This will drop an item from the player's inventory onto the ground</p>
+<p>pickup [item] - This will pick up an item on the ground and deposit it in the player's inventory</p>
+<p>cast [spell] - This will cast a spell if the player is a Mage</p>
+<p>use [ability] - This will use an ability if the player is a Warrior or Archer</p>
+<p>kill [monster] / attack <monster> - This will initiate combat against the monster</p>
+<p>loot [monster] - This will loot a monster that has been defeated</p>
+<p>equip/unequip [item] - This will equip or unequip an item in the player's inventory if the item is wearable</p>
+<p>drink [potion] - This will consume an item such as a potion if it is in the player's inventory</p>
+<p>show forsale - This will show available items for sale at a vendor</p>
+<p>buy/sell [item] - This will buy or sell an item if the player is in the same room as a vendor</p>
+<p>show upgrades - This will show available abilities/spells that can be upgraded at the appropriate class trainer</p>
+<p>train [spell/ability] - This will train a new spell or ability at the appropriate class trainer</p>
+<p>upgrade [spell/ability] - This will upgrade an existing spell or ability at the appropriate class trainer</p>
+<p>repair [item] - This will repair an item if the player is in the same room as a vendor who can repair that type of item</p>
 <p>repair all - This will attempt to repair all items equipped by a player if the player is in the same room as a vendor</p>
 <p>restore - This will restore all player stats if the player is in the same room as a healer</p>
 <p>e/w/s/n/u/d/ne/se/nw/sw - This will move the player in the specified direction</p>
