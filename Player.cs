@@ -198,14 +198,14 @@ using System.Threading;
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;
 		}
-		public int ArmorRating(IMonster opponent, UserOutput output) {
-			var totalArmorRating = GearHelper.CheckArmorRating(this, output);
+		public int ArmorRating(IMonster opponent) {
+			var totalArmorRating = GearHelper.CheckArmorRating(this);
 			var levelDiff = opponent.Level - this.Level;
 			var armorMultiplier = 1.00 + (-(double)levelDiff / 5);
 			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
-		public int Attack(IMonster opponent, UserOutput output) {
+		public int Attack(IMonster opponent) {
 			var attackAmount = this.PlayerWeapon.Attack();
 			Helper.RemovedExpiredEffects(this);
 			foreach (var effect in this.Effects) {
@@ -214,7 +214,7 @@ using System.Threading;
 						break;
 					case Effect.EffectType.ChangeDamage:
 						attackAmount += effect.EffectAmountOverTime;
-						effect.ChangeDamageRound(this, output);
+						effect.ChangeDamageRound(this);
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
@@ -251,7 +251,7 @@ using System.Threading;
 					case Effect.EffectType.Frozen:
 						var frozenAttackAmount = attackAmount * effect.EffectMultiplier;
 						attackAmount = (int)frozenAttackAmount;
-						effect.FrozenRound(opponent, output);
+						effect.FrozenRound(opponent);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -268,17 +268,17 @@ using System.Threading;
 					this.PlayerQuiver.UseArrow();
 					return attackAmount;
 				}
-				this.PlayerQuiver.OutOfArrows(output);
+				this.PlayerQuiver.OutOfArrows();
 			}
 			catch (NullReferenceException) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"Your weapon is not equipped! Going hand to hand!");
 			}
 			return 5;
 		}
-		public void DrinkPotion(string[] userInput, UserOutput output) {
+		public void DrinkPotion(string[] userInput) {
 			var index = 0;
 			switch (userInput[1]) {
 				case "health":
@@ -288,14 +288,14 @@ using System.Threading;
 						this.Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
 						var drankHealthString = "You drank a potion and replenished " +
 						                  this.Consumables[index].RestoreHealth.RestoreHealthAmt + " health.";
-						output.StoreUserOutput(
+						Helper.Display.StoreUserOutput(
 							Helper.FormatSuccessOutputText(),
 							Helper.FormatDefaultBackground(),
 							drankHealthString);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
-						output.StoreUserOutput(
+						Helper.Display.StoreUserOutput(
 							Helper.FormatFailureOutputText(),
 							Helper.FormatDefaultBackground(),
 							"You don't have any health potions!");
@@ -308,47 +308,47 @@ using System.Threading;
 						this.Consumables[index].RestoreMana.RestoreManaPlayer(this);
 						var drankManaString = "You drank a potion and replenished " +
 						                      this.Consumables[index].RestoreMana.RestoreManaAmt + " mana.";
-						output.StoreUserOutput(
+						Helper.Display.StoreUserOutput(
 							Helper.FormatSuccessOutputText(),
 							Helper.FormatDefaultBackground(),
 							drankManaString);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
-						output.StoreUserOutput(
+						Helper.Display.StoreUserOutput(
 							Helper.FormatFailureOutputText(),
 							Helper.FormatDefaultBackground(),
 							"You don't have any mana potions!");
 					}
 					break;
 				default:
-					output.StoreUserOutput(
+					Helper.Display.StoreUserOutput(
 						Helper.FormatFailureOutputText(),
 						Helper.FormatDefaultBackground(),
 						"What potion did you want to drink?");
 					break;
 			}
 		}
-		public void ReloadQuiver(UserOutput output) {
+		public void ReloadQuiver() {
 			var index = 0;
 			index = this.Consumables.FindIndex(
 				f => f.ArrowCategory == Consumable.ArrowType.Standard && f.Name.Contains("arrow"));
 			if (index != -1) {
-				this.Consumables[index].Arrow.LoadArrowsPlayer(this, output);
-				output.StoreUserOutput(
+				this.Consumables[index].Arrow.LoadArrowsPlayer(this);
+				Helper.Display.StoreUserOutput(
 					Helper.FormatSuccessOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You reloaded your quiver.");
 				if (this.Consumables[index].Arrow.Quantity == 0) this.Consumables.RemoveAt(index);
 			}
 			else {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You don't have any arrows!");
 			}
 		}
-		public void UseAbility(List<IRoom> spawnedRooms, string[] input, UserOutput output) {
+		public void UseAbility(List<IRoom> spawnedRooms, string[] input) {
 			var index = this.Abilities.FindIndex(
 				f => f.GetName() == input[1] || f.GetName().Contains(input[1]));
 			var direction = input.Last();
@@ -380,7 +380,7 @@ using System.Threading;
 			    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
 				switch (this.Abilities[index].ArcAbilityCategory) {
 					case Ability.ArcherAbility.Distance:
-						Ability.UseDistanceAbility(spawnedRooms, this, index, direction, output);
+						Ability.UseDistanceAbility(spawnedRooms, this, index, direction);
 						return;
 					case Ability.ArcherAbility.Gut:
 						return;
@@ -403,7 +403,7 @@ using System.Threading;
 			}
 			throw new IndexOutOfRangeException();
 		}
-		public void UseAbility(string inputName, UserOutput output) {
+		public void UseAbility(string inputName) {
 			var index = this.Abilities.FindIndex(
 				f => f.GetName() == inputName || f.GetName().Contains(inputName));
 			if (index != -1 && 
@@ -423,7 +423,7 @@ using System.Threading;
 					case Ability.WarriorAbility.Disarm:
 						return;
 					case Ability.WarriorAbility.Bandage:
-						Ability.UseBandageAbility(this, index, output);
+						Ability.UseBandageAbility(this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -433,7 +433,7 @@ using System.Threading;
 			    this.ComboPoints >= this.Abilities[index].ComboCost &&
 			    this.PlayerClass == PlayerClassType.Archer &&
 			    this.Abilities[index].ArcAbilityCategory == Ability.ArcherAbility.Bandage) {
-				Ability.UseBandageAbility(this, index, output);
+				Ability.UseBandageAbility(this, index);
 			}
 			else if (index != -1) {
 				throw new InvalidOperationException();
@@ -442,7 +442,7 @@ using System.Threading;
 				throw new IndexOutOfRangeException();
 			}
 		}
-		public void UseAbility(IMonster opponent, string inputName, UserOutput output) {
+		public void UseAbility(IMonster opponent, string inputName) {
 			var index = this.Abilities.FindIndex(
 				f => f.GetName() == inputName || f.GetName().Contains(inputName));
 			if (index != -1 && 
@@ -450,13 +450,13 @@ using System.Threading;
 			    this.PlayerClass == PlayerClassType.Warrior) {
 				switch (this.Abilities[index].WarAbilityCategory) {
 					case Ability.WarriorAbility.Slash:
-						Ability.UseOffenseDamageAbility(opponent, this, index, output);
+						Ability.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case Ability.WarriorAbility.Rend:
-						Ability.UseOffenseDamageAbility(opponent, this, index, output);
+						Ability.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case Ability.WarriorAbility.Charge:
-						Ability.UseStunAbility(opponent, this, index, output);
+						Ability.UseStunAbility(opponent, this, index);
 						return;
 					case Ability.WarriorAbility.Block:
 						this.AbsorbDamageAmount = Ability.UseDefenseAbility(this, index);
@@ -465,7 +465,7 @@ using System.Threading;
 						Ability.UseBerserkAbility(this, index);
 						return;
 					case Ability.WarriorAbility.Disarm:
-						Ability.UseDisarmAbility(opponent, this, index, output);
+						Ability.UseDisarmAbility(opponent, this, index);
 						return;
 					case Ability.WarriorAbility.Bandage:
 						break;
@@ -481,21 +481,21 @@ using System.Threading;
 					case Ability.ArcherAbility.Distance:
 						return;
 					case Ability.ArcherAbility.Gut:
-						Ability.UseOffenseDamageAbility(opponent, this, index, output);
+						Ability.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case Ability.ArcherAbility.Precise:
-						Ability.UseOffenseDamageAbility(opponent, this, index, output);
+						Ability.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case Ability.ArcherAbility.Stun:
-						Ability.UseStunAbility(opponent, this, index, output);
+						Ability.UseStunAbility(opponent, this, index);
 						return;
 					case Ability.ArcherAbility.Double:
 						for (var i = 0; i < 2; i++) {
 							if (this.ComboPoints >= this.Abilities[index].ComboCost) {
-								Ability.UseOffenseDamageAbility(opponent, this, index, output);
+								Ability.UseOffenseDamageAbility(opponent, this, index);
 							}
 							else {
-								output.StoreUserOutput(
+								Helper.Display.StoreUserOutput(
 									Helper.FormatAttackFailText(),
 									Helper.FormatDefaultBackground(),
 									"You didn't have enough combo points for the second shot!");
@@ -503,10 +503,10 @@ using System.Threading;
 						}
 						return;
 					case Ability.ArcherAbility.Wound:
-						Ability.UseOffenseDamageAbility(opponent, this, index, output);
+						Ability.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case Ability.ArcherAbility.Bandage:
-						Ability.UseBandageAbility(this, index, output);
+						Ability.UseBandageAbility(this, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -519,14 +519,14 @@ using System.Threading;
 				throw new IndexOutOfRangeException();
 			}
 		}
-		public void CastSpell(List<IRoom> roomList, string inputName, UserOutput output) {
+		public void CastSpell(List<IRoom> roomList, string inputName) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
 			if (index != -1 &&
 			    this.ManaPoints >= this.Spellbook[index].ManaCost &&
 			    this.PlayerClass == PlayerClassType.Mage) {
 				switch (this.Spellbook[index].SpellCategory) {
 					case Spell.SpellType.TownPortal:
-						Spell.CastTownPortal(roomList, this, index, output);
+						Spell.CastTownPortal(roomList, this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -537,20 +537,20 @@ using System.Threading;
 			}
 			throw new IndexOutOfRangeException();
 		}
-		public void CastSpell(string inputName, UserOutput output) {
+		public void CastSpell(string inputName) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
 			if (index != -1 &&
 			    this.ManaPoints >= this.Spellbook[index].ManaCost &&
 			    this.PlayerClass == PlayerClassType.Mage) {
 				switch (this.Spellbook[index].SpellCategory) {
 					case Spell.SpellType.Heal:
-						Spell.CastHealing(this, index, output);
+						Spell.CastHealing(this, index);
 						return;
 					case Spell.SpellType.Rejuvenate:
-						Spell.CastHealing(this, index, output);
+						Spell.CastHealing(this, index);
 						return;
 					case Spell.SpellType.Diamondskin:
-						Spell.CastDefense(this, index, output);
+						Spell.CastDefense(this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -561,29 +561,29 @@ using System.Threading;
 			}
 			throw new IndexOutOfRangeException();
 		}
-		public void CastSpell(IMonster opponent, string inputName, UserOutput output) {
+		public void CastSpell(IMonster opponent, string inputName) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
 			if (index != -1 && 
 			    this.ManaPoints >= this.Spellbook[index].ManaCost && 
 			    this.PlayerClass == PlayerClassType.Mage) {
 				switch (this.Spellbook[index].SpellCategory) {
 					case Spell.SpellType.Fireball:
-						Spell.CastFireOffense(opponent, this, index, output);
+						Spell.CastFireOffense(opponent, this, index);
 						return;
 					case Spell.SpellType.Frostbolt:
-						Spell.CastFrostOffense(opponent, this, index, output);
+						Spell.CastFrostOffense(opponent, this, index);
 						return;
 					case Spell.SpellType.Lightning:
-						Spell.CastArcaneOffense(opponent, this, index, output);
+						Spell.CastArcaneOffense(opponent, this, index);
 						return;
 					case Spell.SpellType.Heal:
-						Spell.CastHealing(this, index, output);
+						Spell.CastHealing(this, index);
 						return;
 					case Spell.SpellType.Rejuvenate:
-						Spell.CastHealing(this, index, output);
+						Spell.CastHealing(this, index);
 						return;
 					case Spell.SpellType.Diamondskin:
-						Spell.CastDefense(this, index, output);
+						Spell.CastDefense(this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();

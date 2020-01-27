@@ -64,9 +64,9 @@ namespace DungeonGame {
 				Console.WriteLine();
 			}
 		}
-		public void RetrieveUserOutput(UserOutput mapOutput, UserOutput effectOutput) {
+		public void BuildUserOutput() {
 			// Var i is iterating through each row of output
-			for (var i = 0; i < mapOutput.Output.Count; i++) {
+			for (var i = 0; i < Helper.MapDisplay.Output.Count; i++) {
 				var lineCount = 0;
 				if (i < this.Output.Count) {
 					for (var c = 2; c < this.Output[i].Count; c += 3) {
@@ -90,15 +90,15 @@ namespace DungeonGame {
 						bufferStringBuilder.ToString());
 				}
 				// var j is iterating through each column of each row of output
-				for (var j = 0; j < mapOutput.Output[i].Count; j += 3) {
-					this.Output[i].Add(mapOutput?.Output[i][j]);
-					this.Output[i].Add(mapOutput?.Output[i][j + 1]);
-					this.Output[i].Add(mapOutput?.Output[i][j + 2]);
+				for (var j = 0; j < Helper.MapDisplay.Output[i].Count; j += 3) {
+					this.Output[i].Add(Helper.MapDisplay?.Output[i][j]);
+					this.Output[i].Add(Helper.MapDisplay?.Output[i][j + 1]);
+					this.Output[i].Add(Helper.MapDisplay?.Output[i][j + 2]);
 				}
 			}
 			var lc = 0;
 			// Var k is iterating through each row of output
-			for (var k = mapOutput.Output.Count; k < effectOutput.Output.Count + mapOutput.Output.Count; k++) {
+			for (var k = Helper.MapDisplay.Output.Count; k < Helper.EffectDisplay.Output.Count + Helper.MapDisplay.Output.Count; k++) {
 				var lineCount = 0;
 				if (k < this.Output.Count) {
 					for (var d = 2; d < this.Output[k].Count; d += 3) {
@@ -122,14 +122,13 @@ namespace DungeonGame {
 						bufferStringBuilder.ToString());
 				}
 				// var j is iterating through each column of each row of output
-				for (var l = 0; l < effectOutput.Output[lc].Count; l += 3) {
-					this.Output[k].Add(effectOutput?.Output[lc][l]);
-					this.Output[k].Add(effectOutput?.Output[lc][l + 1]);
-					this.Output[k].Add(effectOutput?.Output[lc][l + 2]);
-					if ((lc + 1) < effectOutput.Output.Count) lc++;
+				for (var l = 0; l < Helper.EffectDisplay.Output[lc].Count; l += 3) {
+					this.Output[k].Add(Helper.EffectDisplay?.Output[lc][l]);
+					this.Output[k].Add(Helper.EffectDisplay?.Output[lc][l + 1]);
+					this.Output[k].Add(Helper.EffectDisplay?.Output[lc][l + 2]);
+					if ((lc + 1) < Helper.EffectDisplay.Output.Count) lc++;
 				}
 			}
-			this.RetrieveUserOutput();
 		}
 		public void ClearUserOutput() {
 			var removeLines = this.Output.Count;

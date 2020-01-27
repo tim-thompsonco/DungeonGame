@@ -30,8 +30,8 @@ namespace DungeonGame {
 			this.Quantity -= 1;
 		}
 
-		public void OutOfArrows(UserOutput output) {
-			output.StoreUserOutput(
+		public void OutOfArrows() {
+			Helper.Display.StoreUserOutput(
 				Helper.FormatAttackFailText(),
 				Helper.FormatDefaultBackground(),
 				"You ran out of arrows! Going hand to hand!");

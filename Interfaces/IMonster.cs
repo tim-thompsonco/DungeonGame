@@ -27,11 +27,11 @@ namespace DungeonGame {
 		List<Effect> Effects { get; set; }
 
 		void TakeDamage(int weaponDamage);
-		void DisplayStats(UserOutput output);
+		void DisplayStats();
 		int Attack(Player player);
 		int CheckArmorRating();
-		void MonsterDeath(Player player, UserOutput output);
-		bool IsMonsterDead(Player player, UserOutput output);
+		void MonsterDeath(Player player);
+		bool IsMonsterDead(Player player);
 		int ArmorRating(Player player);
 	}
 }

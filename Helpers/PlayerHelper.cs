@@ -16,8 +16,8 @@ namespace DungeonGame {
 			}
 			return weight;
 		}
-		public static void ShowInventory(Player player, UserOutput output) {
-			output.StoreUserOutput(
+		public static void ShowInventory(Player player) {
+			Helper.Display.StoreUserOutput(
 				Helper.FormatInfoText(), 
 				Helper.FormatDefaultBackground(),
 				"Your inventory contains:" );
@@ -29,7 +29,7 @@ namespace DungeonGame {
 				if (itemName.Contains("Quiver"))
 					itemInfo.Append(" (Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity + ")");
 				itemInfo.Append(" <Equipped>");
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(), 
 					Helper.FormatDefaultBackground(),
 					itemInfo.ToString());
@@ -40,7 +40,7 @@ namespace DungeonGame {
 				var itemInfo = new StringBuilder(itemName);
 				if (player.PlayerQuiver?.Name == itemName)
 					itemInfo.Append("Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity);
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(), 
 					Helper.FormatDefaultBackground(),
 					itemInfo.ToString());
@@ -75,18 +75,18 @@ namespace DungeonGame {
 			}
 			foreach (var consumable in consumableDict) {
 				var consumableString = consumable.Key + " (Quantity: " + consumable.Value + ")";
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(), 
 					Helper.FormatDefaultBackground(),
 					consumableString);
 			}
 			var goldString = "Gold: " + player.Gold + " coins.";
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatInfoText(), 
 				Helper.FormatDefaultBackground(),
 				goldString);
 			var weightString = "Weight: " + GetInventoryWeight(player) + "/" + player.MaxCarryWeight;
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatInfoText(), 
 				Helper.FormatDefaultBackground(),
 				weightString);
@@ -106,13 +106,13 @@ namespace DungeonGame {
 			var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 			return itemName;
 		}
-		public static void LevelUpCheck(Player player, UserOutput output) {
+		public static void LevelUpCheck(Player player) {
 			if (player.Experience < player.ExperienceToLevel) return;
 			player.Level += 1;
 			player.Experience -= player.ExperienceToLevel;
 			player.ExperienceToLevel *= 2;
 			var levelUpString = "You have leveled! You are now level " + player.Level + ".";
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatLevelUpText(), 
 				Helper.FormatDefaultBackground(), 
 				levelUpString); 
@@ -127,33 +127,33 @@ namespace DungeonGame {
 				const string levelUpStatInt = 
 					"Int will increase your mana and decrease your training cost for spells and abilities.";
 				const string levelUpStatConst = "Const will increase your max hit points.";
-				DisplayPlayerStats(player, output);
-				output.StoreUserOutput(
+				DisplayPlayerStats(player);
+				Helper.Display.StoreUserOutput(
 					Helper.FormatAnnounceText(),
 					Helper.FormatDefaultBackground(),
 					levelUpStatString);
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatAnnounceText(),
 					Helper.FormatDefaultBackground(),
 					levelUpStatInfo);
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatAnnounceText(),
 					Helper.FormatDefaultBackground(),
 					levelUpStatStr);
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatAnnounceText(),
 					Helper.FormatDefaultBackground(),
 					levelUpStatDex);
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatAnnounceText(),
 					Helper.FormatDefaultBackground(),
 					levelUpStatInt);
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatAnnounceText(),
 					Helper.FormatDefaultBackground(),
 					levelUpStatConst);
-				output.RetrieveUserOutput();
-				output.ClearUserOutput();
+				Helper.Display.BuildUserOutput();
+				Helper.Display.ClearUserOutput();
 				var statNumber = 0;
 				try {
 					var input = Helper.GetFormattedInput(Console.ReadLine());
@@ -205,13 +205,13 @@ namespace DungeonGame {
 					}
 				}
 				catch (IndexOutOfRangeException) {
-					output.StoreUserOutput(
+					Helper.Display.StoreUserOutput(
 						Helper.FormatAnnounceText(),
 						Helper.FormatDefaultBackground(),
 						"You did not select an appropriate stat!");
 				}
 			}
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatAnnounceText(),
 				Helper.FormatDefaultBackground(),
 				"All stats have been assigned!");
@@ -239,9 +239,9 @@ namespace DungeonGame {
 			player.ManaPoints = player.MaxManaPoints;
 			
 		}
-		public static void DisplayPlayerStats(Player player, UserOutput output) {
+		public static void DisplayPlayerStats(Player player) {
 			Helper.FormatGeneralInfoText();
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatGeneralInfoText(),
 				Helper.FormatDefaultBackground(),
 				Helper.FormatTextBorder());
@@ -257,7 +257,7 @@ namespace DungeonGame {
 				healLineOutput.Add(Helper.FormatHealthBackground());
 				healLineOutput.Add("    ");
 			}
-			output.StoreUserOutput(healLineOutput);
+			Helper.Display.StoreUserOutput(healLineOutput);
 			switch (player.PlayerClass) {
 				case Player.PlayerClassType.Mage:
 					var playerManaString = "Mana: " + player.ManaPoints + "/" + player.MaxManaPoints + " ";
@@ -280,7 +280,7 @@ namespace DungeonGame {
 						manaLineOutput.Add(Helper.FormatManaBackground());
 						manaLineOutput.Add("    ");
 					}
-					output.StoreUserOutput(manaLineOutput);
+					Helper.Display.StoreUserOutput(manaLineOutput);
 					break;
 				case Player.PlayerClassType.Warrior:
 					var playerRageString = "Rage: " + player.RagePoints + "/" + player.MaxRagePoints + " ";
@@ -303,7 +303,7 @@ namespace DungeonGame {
 						rageLineOutput.Add(Helper.FormatRageBackground());
 						rageLineOutput.Add("    ");
 					}
-					output.StoreUserOutput(rageLineOutput);
+					Helper.Display.StoreUserOutput(rageLineOutput);
 					break;
 				case Player.PlayerClassType.Archer:
 					var playerComboString = "Combo: " + player.ComboPoints + "/" + player.MaxComboPoints + " ";
@@ -326,7 +326,7 @@ namespace DungeonGame {
 						comboLineOutput.Add(Helper.FormatComboBackground());
 						comboLineOutput.Add("    ");
 					}
-					output.StoreUserOutput(comboLineOutput);
+					Helper.Display.StoreUserOutput(comboLineOutput);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -351,229 +351,229 @@ namespace DungeonGame {
 				expLineOutput.Add(Helper.FormatExpBackground());
 				expLineOutput.Add("    ");
 			}
-			output.StoreUserOutput(expLineOutput);
+			Helper.Display.StoreUserOutput(expLineOutput);
 			var statsString =  "Str: " + player.Strength + " Int: " + player.Intelligence +
 			                  " Dex: " + player.Dexterity + " Level: " + player.Level;
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatGeneralInfoText(),
 				Helper.FormatDefaultBackground(),
 				statsString);
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatGeneralInfoText(),
 				Helper.FormatDefaultBackground(),
 				Helper.FormatTextBorder());
 		}
-		public static void ListAbilities(Player player, UserOutput output) {
+		public static void ListAbilities(Player player) {
 			if (player.PlayerClass != Player.PlayerClassType.Mage) {
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(), 
 					Helper.FormatDefaultBackground(), 
 					"You have the following abilities:");
 				foreach (var ability in player.Abilities) {
 					var abilityName = textInfo.ToTitleCase(ability.GetName());
 					var abilityString = abilityName + ", Rank " + ability.Rank;
-					output.StoreUserOutput(
+					Helper.Display.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
 						abilityString);
 				}
 			}
 			else if (player.PlayerClass == Player.PlayerClassType.Mage) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(), 
 					Helper.FormatDefaultBackground(), 
 					"You're not a warrior or archer!");
 			}
 			else {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(), 
 					Helper.FormatDefaultBackground(), 
 					"You can't list that.");
 			}
 		}
-		public static void ListSpells(Player player, UserOutput output) {
+		public static void ListSpells(Player player) {
 			if (player.PlayerClass == Player.PlayerClassType.Mage) {
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(), 
 					Helper.FormatDefaultBackground(), 
 					"Your spellbook contains:");
 				foreach (var spell in player.Spellbook) {
 					var spellName = textInfo.ToTitleCase(spell.GetName());
 					var spellString = spellName + ", Rank " + spell.Rank;
-					output.StoreUserOutput(
+					Helper.Display.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
 						spellString);
 				}
 			}
 			else if (player.PlayerClass != Player.PlayerClassType.Mage) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(), 
 					Helper.FormatDefaultBackground(), 
 					"You're not a mage!");
 			}
 			else {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(), 
 					Helper.FormatDefaultBackground(), 
 					"You can't list that.");
 			}
 		}
-		public static void AbilityInfo(Player player, string[] input, UserOutput output) {
+		public static void AbilityInfo(Player player, string[] input) {
 			var inputName = Helper.ParseInput(input);
 			var index = player.Abilities.FindIndex(
 				f => f.GetName() == inputName || f.GetName().Contains(inputName));
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (index != -1 && player.PlayerClass == Player.PlayerClassType.Warrior) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(), 
 					Helper.FormatDefaultBackground(), 
 					textInfo.ToTitleCase(player.Abilities[index].Name));
 				var rankString = "Rank: " + player.Abilities[index].Rank;
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					rankString);
 				var rageCostString = "Rage Cost: " + player.Abilities[index].RageCost;
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					rageCostString);
 				switch (player.Abilities[index].WarAbilityCategory) {
 					case Ability.WarriorAbility.Slash:
-						Ability.OffenseDamageAbilityInfo(player, index, output);
+						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
 					case Ability.WarriorAbility.Rend:
-						Ability.OffenseDamageAbilityInfo(player, index, output);
+						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
 					case Ability.WarriorAbility.Charge:
-						Ability.StunAbilityInfo(player, index, output);
+						Ability.StunAbilityInfo(player, index);
 						break;
 					case Ability.WarriorAbility.Block:
-						Ability.DefenseAbilityInfo(player, index, output);
+						Ability.DefenseAbilityInfo(player, index);
 						break;
 					case Ability.WarriorAbility.Berserk:
-						Ability.BerserkAbilityInfo(player, index, output);
+						Ability.BerserkAbilityInfo(player, index);
 						break;
 					case Ability.WarriorAbility.Disarm:
-						Ability.DisarmAbilityInfo(player, index, output);
+						Ability.DisarmAbilityInfo(player, index);
 						break;
 					case Ability.WarriorAbility.Bandage:
-						Ability.BandageAbilityInfo(player, index, output);
+						Ability.BandageAbilityInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 			}
 			else if (index != -1 && player.PlayerClass == Player.PlayerClassType.Archer) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(), 
 					Helper.FormatDefaultBackground(), 
 					textInfo.ToTitleCase(player.Abilities[index].Name));
 				var rankString = "Rank: " + player.Abilities[index].Rank;
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					rankString);
 				var comboCostString = "Combo Cost: " + player.Abilities[index].ComboCost;
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					comboCostString);
 				switch (player.Abilities[index].ArcAbilityCategory) {
 					case Ability.ArcherAbility.Distance:
-						Ability.DistanceAbilityInfo(player, index, output);
+						Ability.DistanceAbilityInfo(player, index);
 						break;
 					case Ability.ArcherAbility.Gut:
-						Ability.OffenseDamageAbilityInfo(player, index, output);
+						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
 					case Ability.ArcherAbility.Precise:
-						Ability.OffenseDamageAbilityInfo(player, index, output);
+						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
 					case Ability.ArcherAbility.Stun:
-						Ability.StunAbilityInfo(player, index, output);
+						Ability.StunAbilityInfo(player, index);
 						break;
 					case Ability.ArcherAbility.Double:
-						Ability.OffenseDamageAbilityInfo(player, index, output);
+						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
 					case Ability.ArcherAbility.Wound:
-						Ability.OffenseDamageAbilityInfo(player, index, output);
+						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
 					case Ability.ArcherAbility.Bandage:
-						Ability.BandageAbilityInfo(player, index, output);
+						Ability.BandageAbilityInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 			}
 			else if (index != -1 && player.PlayerClass == Player.PlayerClassType.Mage) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(), 
 					Helper.FormatDefaultBackground(), 
 					"You're not a warrior or archer!");
 			}
 			else {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(), 
 					Helper.FormatDefaultBackground(), 
 					"You don't have that ability.");
 			}
 		}
-		public static void SpellInfo(Player player, string input, UserOutput output) {
+		public static void SpellInfo(Player player, string input) {
 			var index = player.Spellbook.FindIndex(f => f.GetName() == input || 
 			                                            f.SpellCategory == Spell.SpellType.TownPortal);
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (index != -1 && player.PlayerClass == Player.PlayerClassType.Mage) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(), 
 					Helper.FormatDefaultBackground(), 
 					textInfo.ToTitleCase(player.Spellbook[index].Name));
 				var rankString = "Rank: " + player.Spellbook[index].Rank;
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					rankString);
 				var manaCostString = "ManaCost: " + player.Spellbook[index].ManaCost;
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					manaCostString);
 				switch(player.Spellbook[index].SpellCategory) {
 					case Spell.SpellType.Fireball:
-						Spell.FireOffenseSpellInfo(player, index, output);
+						Spell.FireOffenseSpellInfo(player, index);
 						break;
 					case Spell.SpellType.Frostbolt:
-						Spell.FrostOffenseSpellInfo(player, index, output);
+						Spell.FrostOffenseSpellInfo(player, index);
 						break;
 					case Spell.SpellType.Lightning:
-						Spell.ArcaneOffenseSpellInfo(player, index, output);
+						Spell.ArcaneOffenseSpellInfo(player, index);
 						break;
 					case Spell.SpellType.Heal:
-						Spell.HealingSpellInfo(player, index, output);
+						Spell.HealingSpellInfo(player, index);
 						break;
 					case Spell.SpellType.Rejuvenate:
-						Spell.HealingSpellInfo(player, index, output);
+						Spell.HealingSpellInfo(player, index);
 						break;
 					case Spell.SpellType.Diamondskin:
-						Spell.DefenseSpellInfo(player, index, output);
+						Spell.DefenseSpellInfo(player, index);
 						break;
 					case Spell.SpellType.TownPortal:
-						Spell.PortalSpellInfo(player, index, output);
+						Spell.PortalSpellInfo();
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 			}
 			else if (index != -1 && player.PlayerClass != Player.PlayerClassType.Mage) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(), 
 					Helper.FormatDefaultBackground(), 
 					"You're not a mage!");
 			}
 			else {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(), 
 					Helper.FormatDefaultBackground(), 
 					"You don't have that spell.");

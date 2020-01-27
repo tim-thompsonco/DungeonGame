@@ -22,12 +22,11 @@ namespace DungeonGame {
 		IMonster Monster { get; set; }
 
 		IMonster GetMonster();
-		bool AttackOpponent(Player player, string[] input, UserOutput output, UserOutput mapOutput, 
-			UserOutput effectOutput, List<IRoom> roomList);
-		void LootCorpse(Player player, string[] input, UserOutput output);
-		void ShowDirections(UserOutput output);
-		void ShowCommands(UserOutput output);
-		void LookRoom(UserOutput output);
-		void LookNpc(string[] input, UserOutput output);
+		bool AttackOpponent(Player player, string[] input, List<IRoom> roomList);
+		void LootCorpse(Player player, string[] input);
+		void ShowDirections();
+		void ShowCommands();
+		void LookRoom();
+		void LookNpc(string[] input);
 	}
 }

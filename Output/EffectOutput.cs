@@ -5,9 +5,9 @@ using System.Text;
 namespace DungeonGame {
 	public static class EffectOutput {
 		public static UserOutput ShowEffects(Player player) {
-			var output = new UserOutput();
+			var effectUserOutput = new UserOutput();
 			// Draw title to show for player effects
-			output.StoreUserOutput(
+			effectUserOutput.StoreUserOutput(
 				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 
 				"Player Effects:");
@@ -25,13 +25,13 @@ namespace DungeonGame {
 						               textInfo.ToTitleCase(effect.Name);
 					}
 					activeEffects++;
-					output.StoreUserOutput(
+					effectUserOutput.StoreUserOutput(
 						Helper.FormatGeneralInfoText(), 
 						Helper.FormatDefaultBackground(), 
 						effectOutput);
 				}
 				if (activeEffects == 0) {
-					output.StoreUserOutput(
+					effectUserOutput.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
 						"None.");
@@ -48,13 +48,13 @@ namespace DungeonGame {
 						               " second) " + textInfo.ToTitleCase(effect.Name);
 					}
 					activeEffects++;
-					output.StoreUserOutput(
+					effectUserOutput.StoreUserOutput(
 						Helper.FormatGeneralInfoText(), 
 						Helper.FormatDefaultBackground(), 
 						effectOutput);
 				}
 				if (activeEffects == 0) {
-					output.StoreUserOutput(
+					effectUserOutput.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
 						"None.");
@@ -66,11 +66,11 @@ namespace DungeonGame {
 			for (var b = 0; b < Helper.GetMiniMapBorderWidth(); b++) {
 				effectsBorder.Append("=");
 			}
-			output.StoreUserOutput(
+			effectUserOutput.StoreUserOutput(
 				Helper.FormatGeneralInfoText(), 
 				Helper.FormatDefaultBackground(), 
 				effectsBorder.ToString());
-			return output;
+			return effectUserOutput;
 		}
 	}
 }

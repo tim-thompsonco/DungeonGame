@@ -234,9 +234,9 @@ namespace DungeonGame {
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;
 		}
-		public void DisplayStats(UserOutput output) {
+		public void DisplayStats() {
 			var opponentHealthString = "Opponent HP: " + this.HitPoints + " / " + this.MaxHitPoints;
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatGeneralInfoText(),
 				Helper.FormatDefaultBackground(),
 				opponentHealthString);
@@ -248,8 +248,8 @@ namespace DungeonGame {
 				healLineOutput.Add(Helper.FormatHealthBackground());
 				healLineOutput.Add("    ");
 			}
-			output.StoreUserOutput(healLineOutput);
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(healLineOutput);
+			Helper.Display.StoreUserOutput(
 				Helper.FormatGeneralInfoText(),
 				Helper.FormatDefaultBackground(),
 				"==================================================");
@@ -284,21 +284,21 @@ namespace DungeonGame {
 		public string GetName() {
 			return this.Name;
 		}
-		public bool IsMonsterDead(Player player, UserOutput output) {
-			if (this.HitPoints <= 0) this.MonsterDeath(player, output);
+		public bool IsMonsterDead(Player player) {
+			if (this.HitPoints <= 0) this.MonsterDeath(player);
 			return this.HitPoints <= 0;
 		}
-		public void MonsterDeath(Player player, UserOutput output) {
+		public void MonsterDeath(Player player) {
 			player.InCombat = false;
 			this.InCombat = false;
 			this.Effects.Clear();
 			var defeatString = "You have defeated the " + this.Name + "!";
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatSuccessOutputText(),
 				Helper.FormatDefaultBackground(),
 				defeatString);
 			var expGainString = "You have gained " + this.ExperienceProvided + " experience!";
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatSuccessOutputText(),
 				Helper.FormatDefaultBackground(),
 				expGainString);
@@ -308,7 +308,7 @@ namespace DungeonGame {
 			this.Name = "Dead " + this.GetName();
 			this.Desc = "A corpse of a monster you killed.";
 			player.GainExperience(this.ExperienceProvided);
-			PlayerHelper.LevelUpCheck(player, output);
+			PlayerHelper.LevelUpCheck(player);
 		}
 	}
 }

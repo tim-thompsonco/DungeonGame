@@ -339,7 +339,7 @@ namespace DungeonGameTests {
 					false, 1, 1)
 			};
 			var globalTimer = new Timer(
-				e => Helper.CheckStatus(player, spawnedRooms, output), 
+				e => Helper.CheckStatus(player, spawnedRooms), 
 				null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 			player.Abilities.Add(
 				new Ability("use bandage", 25, 1, Ability.ArcherAbility.Bandage, 1));
@@ -350,12 +350,12 @@ namespace DungeonGameTests {
 			var input = new string[2] {"use", "bandage"};
 			var abilityName = Helper.ParseInput(input);
 			Assert.AreEqual("bandage", abilityName);
-			player.UseAbility(abilityName, output);
-			player.UseAbility(abilityName, output);
+			player.UseAbility(abilityName);
+			player.UseAbility(abilityName);
 			Assert.AreEqual(60, player.HitPoints);
 			for (var i = 0; i < 5; i++) {
-				player.Effects[0].HealingRound(player, output);
-				player.Effects[1].HealingRound(player, output);
+				player.Effects[0].HealingRound(player);
+				player.Effects[1].HealingRound(player);
 				if (i <= 2) Assert.AreEqual(60 + ((i + 1) * 10), player.HitPoints);
 			}
 			Assert.AreEqual(90, player.HitPoints);
@@ -365,8 +365,8 @@ namespace DungeonGameTests {
 			var inputTwo = new string[2] {"use", "bandage"};
 			var abilityNameTwo = Helper.ParseInput(inputTwo);
 			Assert.AreEqual("bandage", abilityName);
-			player.UseAbility(abilityNameTwo, output);
-			player.UseAbility(abilityNameTwo, output);
+			player.UseAbility(abilityNameTwo);
+			player.UseAbility(abilityNameTwo);
 			Assert.AreEqual(60, player.HitPoints);
 			Thread.Sleep(TimeSpan.FromSeconds(30)); // Should finish ticking after 30 seconds
 			Assert.AreEqual(90, player.HitPoints);
@@ -392,12 +392,12 @@ namespace DungeonGameTests {
 			var input = new string[2] {"use", "charge"};
 			var abilityName = Helper.ParseInput(input);
 			Assert.AreEqual("charge", abilityName);
-			player.UseAbility(monster, abilityName, output);
+			player.UseAbility(monster, abilityName);
 			Assert.AreEqual(
 				true, monster.Effects[0].EffectGroup == Effect.EffectType.Stunned);
 			Assert.AreEqual(2, monster.Effects[0].EffectMaxRound);
 			for (var i = 2; i < 4; i++) {
-				monster.Effects[0].StunnedRound(monster, output);
+				monster.Effects[0].StunnedRound(monster);
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
 				Helper.RemovedExpiredEffects(monster);
 			}
@@ -420,14 +420,14 @@ namespace DungeonGameTests {
 			var input = new string[2] {"use", "rend"};
 			var abilityName = Helper.ParseInput(input);
 			Assert.AreEqual("rend", abilityName);
-			player.UseAbility(monster, abilityName, output);
+			player.UseAbility(monster, abilityName);
 			Assert.AreEqual(
 				true, monster.Effects[0].EffectGroup == Effect.EffectType.Bleeding);
 			Assert.AreEqual(85, monster.HitPoints);
 			Assert.AreEqual(1, monster.Effects[0].EffectCurRound);
 			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
 			for (var i = 2; i < 5; i++) {
-				monster.Effects[0].BleedingRound(monster, output);
+				monster.Effects[0].BleedingRound(monster);
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
 				Helper.RemovedExpiredEffects(monster);
 			}
@@ -439,7 +439,7 @@ namespace DungeonGameTests {
 		// Berserk should create a change damage and change armor effect, which should expire when combat ends
 		var player = new Player("placeholder", Player.PlayerClassType.Warrior);
 		var output = new UserOutput();
-		GearHelper.EquipInitialGear(player, output);
+		GearHelper.EquipInitialGear(player);
 		var spawnedRooms = new List<IRoom> {
 			new DungeonRoom(0, 0, 0, false, false, false,
 				false, false, false, false, false, false,
@@ -449,13 +449,13 @@ namespace DungeonGameTests {
 			spawnedRooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
 		}
 		var globalTimer = new Timer(
-			e => Helper.CheckStatus(player, spawnedRooms, output), 
+			e => Helper.CheckStatus(player, spawnedRooms), 
 			null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 		var monster = spawnedRooms[0].Monster;
 		var input = new string[2] {"use", "berserk"};
 		var abilityName = Helper.ParseInput(input);
 		Assert.AreEqual("berserk", abilityName);
-		player.UseAbility(monster, abilityName, output);
+		player.UseAbility(monster, abilityName);
 		Assert.AreEqual(2, player.Effects.Count);
 		player.InCombat = false;
 		Thread.Sleep(TimeSpan.FromSeconds(3));
@@ -466,7 +466,7 @@ namespace DungeonGameTests {
 			var player = new Player("placeholder", Player.PlayerClassType.Archer);
 			player.StatReplenishInterval = 9999999; // Disable stat replenish over time method
 			var output = new UserOutput();
-			GearHelper.EquipInitialGear(player, output);
+			GearHelper.EquipInitialGear(player);
 			var spawnedRooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
 					false, false, false, false, false, false,
@@ -484,11 +484,11 @@ namespace DungeonGameTests {
 			var input = new string[2] {"use", "stun"};
 			var abilityName = Helper.ParseInput(input);
 			Assert.AreEqual("stun", abilityName);
-			player.UseAbility(monster, abilityName, output);
+			player.UseAbility(monster, abilityName);
 			Assert.AreEqual(35, monster.HitPoints);
 			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
 			for (var i = 2; i < 5; i++) {
-				monster.Effects[0].StunnedRound(monster, output);
+				monster.Effects[0].StunnedRound(monster);
 				Assert.AreEqual(i , monster.Effects[0].EffectCurRound);
 				Helper.RemovedExpiredEffects(monster);
 			}
@@ -497,12 +497,12 @@ namespace DungeonGameTests {
 			var inputTwo = new string[2] {"use", "gut"};
 			var abilityNameTwo = Helper.ParseInput(inputTwo);
 			Assert.AreEqual("gut", abilityNameTwo);
-			player.UseAbility(monster, abilityNameTwo, output);
+			player.UseAbility(monster, abilityNameTwo);
 			Assert.AreEqual(65, monster.HitPoints);
 			Assert.AreEqual(1, monster.Effects[0].EffectCurRound);
 			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
 			for (var i = 2; i < 5; i++) {
-				monster.Effects[0].BleedingRound(monster, output);
+				monster.Effects[0].BleedingRound(monster);
 				Assert.AreEqual(i , monster.Effects[0].EffectCurRound);
 				Helper.RemovedExpiredEffects(monster);
 			}
@@ -515,7 +515,7 @@ namespace DungeonGameTests {
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			player.StatReplenishInterval = 9999999; // Disable stat replenish over time method
 			var output = new UserOutput();
-			GearHelper.EquipInitialGear(player, output);
+			GearHelper.EquipInitialGear(player);
 			var spawnedRooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
 					false, false, false, false, false, false,
@@ -534,11 +534,11 @@ namespace DungeonGameTests {
 			var input = new string[2] {"cast", "fireball"};
 			var spellName = Helper.ParseInput(input);
 			Assert.AreEqual("fireball", spellName);
-			player.CastSpell(monster, spellName, output);
+			player.CastSpell(monster, spellName);
 			Assert.AreEqual(25, monster.HitPoints);
 			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
 			for (var i = 2; i < 5; i++) {
-				monster.Effects[0].OnFireRound(monster, output);
+				monster.Effects[0].OnFireRound(monster);
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
 				Helper.RemovedExpiredEffects(monster);
 			}
@@ -550,7 +550,7 @@ namespace DungeonGameTests {
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			player.StatReplenishInterval = 9999999; // Disable stat replenish over time method
 			var output = new UserOutput();
-			GearHelper.EquipInitialGear(player, output);
+			GearHelper.EquipInitialGear(player);
 			var spawnedRooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
 					false, false, false, false, false, false,
@@ -568,8 +568,8 @@ namespace DungeonGameTests {
 			var spellName = Helper.ParseInput(input);
 			Assert.AreEqual("frostbolt", spellName);
 			player.PlayerWeapon.Durability = 100;
-			var baseDamage = (double) player.Attack(monster, output);
-			player.CastSpell(monster, spellName, output);
+			var baseDamage = (double) player.Attack(monster);
+			player.CastSpell(monster, spellName);
 			Assert.AreEqual(85, monster.HitPoints);
 			Assert.AreEqual(1, monster.Effects[0].EffectCurRound);
 			Assert.AreEqual(2, monster.Effects[0].EffectMaxRound);
@@ -578,10 +578,10 @@ namespace DungeonGameTests {
 			var totalFrozenDamage = 0.0;
 			var multiplier = monster.Effects[0].EffectMultiplier;
 			for (var i = 2; i < 4; i++) {
-				monster.Effects[0].FrozenRound(monster, output);
+				monster.Effects[0].FrozenRound(monster);
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
 				player.PlayerWeapon.Durability = 100;
-				var frozenDamage = (double) player.Attack(monster, output);
+				var frozenDamage = (double) player.Attack(monster);
 				monster.TakeDamage((int) frozenDamage);
 				totalBaseDamage += baseDamage;
 				totalFrozenDamage += frozenDamage;
@@ -598,23 +598,23 @@ namespace DungeonGameTests {
 			/* Diamondskin should augment armor by 25 points, 1 cur round, 3 max round */
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			var output = new UserOutput();
-			GearHelper.EquipInitialGear(player, output);
+			GearHelper.EquipInitialGear(player);
 			player.InCombat = true;
 			var inputThree = new string[2] {"cast", "diamondskin"};
 			var spellName = Helper.ParseInput(inputThree);
 			Assert.AreEqual("diamondskin", spellName);
-			var baseArmor = GearHelper.CheckArmorRating(player, output);
-			player.CastSpell(spellName, output);
+			var baseArmor = GearHelper.CheckArmorRating(player);
+			player.CastSpell(spellName);
 			Assert.AreEqual(true, player.Effects.Any());
 			Assert.AreEqual(
 				true, player.Effects[0].EffectGroup == Effect.EffectType.ChangeArmor);
-			var augmentedArmor = GearHelper.CheckArmorRating(player, output);
+			var augmentedArmor = GearHelper.CheckArmorRating(player);
 			Assert.AreEqual(baseArmor + 25, augmentedArmor);
 			// Check for 6 rounds, should only augment armor for first 3 rounds then expire
 			for (var i = 1; i < 6; i++) {
 				Thread.Sleep(TimeSpan.FromSeconds(1));
 				Assert.AreEqual(
-					GearHelper.CheckArmorRating(player, output), i <= 2 ? augmentedArmor : baseArmor);
+					GearHelper.CheckArmorRating(player), i <= 2 ? augmentedArmor : baseArmor);
 			}
 			Helper.RemovedExpiredEffects(player);
 			Assert.AreEqual(false, player.Effects.Any());
@@ -625,7 +625,7 @@ namespace DungeonGameTests {
 			var output = new UserOutput();
 			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Mage);
 			player.PlayerClass = Player.PlayerClassType.Archer;
-			trainer.UpgradeSpell(player, "fireball", output);
+			trainer.UpgradeSpell(player, "fireball");
 			var expectedOutput =output.Output[0][2]; 
 			Assert.AreEqual("You can't upgrade spells. You're not a mage!",expectedOutput);
 			player.PlayerClass = Player.PlayerClassType.Mage;
@@ -634,22 +634,22 @@ namespace DungeonGameTests {
 			Assert.AreEqual(25, player.Spellbook[spellIndex].FireOffense.BlastDamage);
 			Assert.AreEqual(5, player.Spellbook[spellIndex].FireOffense.BurnDamage);
 			player.Gold = 0;
-			trainer.UpgradeSpell(player, "fireball", output);
+			trainer.UpgradeSpell(player, "fireball");
 			Assert.AreEqual(25, player.Spellbook[spellIndex].FireOffense.BlastDamage);
 			Assert.AreEqual(5, player.Spellbook[spellIndex].FireOffense.BurnDamage);
 			var expectedOutputTwo = output.Output[1][2];
 			Assert.AreEqual("You are not ready to upgrade that spell. You need to level up first!", 
 				expectedOutputTwo);
-			trainer.UpgradeSpell(player, "not a spell", output);
+			trainer.UpgradeSpell(player, "not a spell");
 			var expectedOutputThree = output.Output[2][2];
 			Assert.AreEqual("You don't have that spell to train!", expectedOutputThree);
 			player.Intelligence = 20;
 			player.Level = 2;
-			trainer.UpgradeSpell(player, "fireball", output);
+			trainer.UpgradeSpell(player, "fireball");
 			var expectedOutputFour = output.Output[3][2];
 			Assert.AreEqual("You can't afford that!",expectedOutputFour);
 			player.Gold = 100;
-			trainer.UpgradeSpell(player, "fireball", output);
+			trainer.UpgradeSpell(player, "fireball");
 			Assert.AreEqual(2, player.Spellbook[spellIndex].Rank);
 			Assert.AreEqual(35, player.Spellbook[spellIndex].FireOffense.BlastDamage);
 			Assert.AreEqual(10, player.Spellbook[spellIndex].FireOffense.BurnDamage);
@@ -663,7 +663,7 @@ namespace DungeonGameTests {
 			var output = new UserOutput();
 			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Archer);
 			player.PlayerClass = Player.PlayerClassType.Mage;
-			trainer.UpgradeAbility(player, "distance", output);
+			trainer.UpgradeAbility(player, "distance");
 			var expectedOutput =output.Output[0][2]; 
 			Assert.AreEqual("You can't upgrade abilities. You're not a warrior or archer!",expectedOutput);
 			player.PlayerClass = Player.PlayerClassType.Archer;
@@ -672,22 +672,22 @@ namespace DungeonGameTests {
 			Assert.AreEqual(25, player.Abilities[abilityIndex].Offensive.Amount);
 			Assert.AreEqual(50, player.Abilities[abilityIndex].Offensive.ChanceToSucceed);
 			player.Gold = 0;
-			trainer.UpgradeAbility(player, "distance", output);
+			trainer.UpgradeAbility(player, "distance");
 			Assert.AreEqual(25, player.Abilities[abilityIndex].Offensive.Amount);
 			Assert.AreEqual(50, player.Abilities[abilityIndex].Offensive.ChanceToSucceed);
 			var expectedOutputTwo = output.Output[1][2];
 			Assert.AreEqual("You are not ready to upgrade that ability. You need to level up first!", 
 				expectedOutputTwo);
-			trainer.UpgradeAbility(player, "not an ability", output);
+			trainer.UpgradeAbility(player, "not an ability");
 			var expectedOutputThree = output.Output[2][2];
 			Assert.AreEqual("You don't have that ability to train!", expectedOutputThree);
 			player.Intelligence = 20;
 			player.Level = 2;
-			trainer.UpgradeAbility(player, "distance", output);
+			trainer.UpgradeAbility(player, "distance");
 			var expectedOutputFour = output.Output[3][2];
 			Assert.AreEqual("You can't afford that!",expectedOutputFour);
 			player.Gold = 100;
-			trainer.UpgradeAbility(player, "distance", output);
+			trainer.UpgradeAbility(player, "distance");
 			Assert.AreEqual(2, player.Abilities[abilityIndex].Rank);
 			Assert.AreEqual(35, player.Abilities[abilityIndex].Offensive.Amount);
 			Assert.AreEqual(55, player.Abilities[abilityIndex].Offensive.ChanceToSucceed);
@@ -701,7 +701,7 @@ namespace DungeonGameTests {
 			var output = new UserOutput();
 			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Warrior);
 			player.PlayerClass = Player.PlayerClassType.Mage;
-			trainer.TrainAbility(player, "bandage", output);
+			trainer.TrainAbility(player, "bandage");
 			var expectedOutput = output.Output[0][2]; 
 			Assert.AreEqual("You can't train abilities. You're not a warrior or archer!",expectedOutput);
 			player.PlayerClass = Player.PlayerClassType.Warrior;
@@ -710,7 +710,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(-1, abilityIndex);
 			player.Gold = 0;
 			output.ClearUserOutput();
-			trainer.TrainAbility(player, "bandage", output);
+			trainer.TrainAbility(player, "bandage");
 			abilityIndex = player.Abilities.FindIndex(
 				f => f.GetName() == "bandage" || f.GetName().Contains("bandage"));
 			Assert.AreEqual(-1, abilityIndex);
@@ -720,12 +720,12 @@ namespace DungeonGameTests {
 			player.Intelligence = 20;
 			player.Level = 2;
 			output.ClearUserOutput();
-			trainer.TrainAbility(player, "bandage", output);
+			trainer.TrainAbility(player, "bandage");
 			expectedOutput = output.Output[0][2]; 
 			Assert.AreEqual("You can't afford that!",expectedOutput);
 			player.Gold = 100;
 			output.ClearUserOutput();
-			trainer.TrainAbility(player, "bandage", output);
+			trainer.TrainAbility(player, "bandage");
 			expectedOutput = output.Output[0][2]; 
 			abilityIndex = player.Abilities.FindIndex(
 				f => f.GetName() == "bandage" || f.GetName().Contains("bandage"));
@@ -749,7 +749,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(-2, player.X);
 			Assert.AreEqual(6, player.Y);
 			Assert.AreEqual(0, player.Z);
-			player.CastSpell(spawnedRooms, "town portal", output);
+			player.CastSpell(spawnedRooms, "town portal");
 			Assert.AreEqual(0, player.X);
 			Assert.AreEqual(7, player.Y);
 			Assert.AreEqual(0, player.Z);

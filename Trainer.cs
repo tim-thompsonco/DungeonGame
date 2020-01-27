@@ -47,11 +47,11 @@ namespace DungeonGame {
 		public string GetName() {
 			return this.Name;
 		}
-		public void DisplayAvailableUpgrades(Player player, UserOutput output) {
+		public void DisplayAvailableUpgrades(Player player) {
 			switch (player.PlayerClass) {
 				case Player.PlayerClassType.Mage:
 					if (this.TrainerGroup != TrainerCategory.Mage) {
-						output.StoreUserOutput(
+						Helper.Display.StoreUserOutput(
 							Helper.FormatFailureOutputText(),
 							Helper.FormatDefaultBackground(),
 							"They are not a trainer for your class. Go find a mage grandmaster!");
@@ -60,7 +60,7 @@ namespace DungeonGame {
 					break;
 				case Player.PlayerClassType.Warrior:
 					if (this.TrainerGroup != TrainerCategory.Warrior) {
-						output.StoreUserOutput(
+						Helper.Display.StoreUserOutput(
 							Helper.FormatFailureOutputText(),
 							Helper.FormatDefaultBackground(),
 							"They are not a trainer for your class. Go find a warrior grandmaster!");
@@ -69,7 +69,7 @@ namespace DungeonGame {
 					break;
 				case Player.PlayerClassType.Archer:
 					if (this.TrainerGroup != TrainerCategory.Archer) {
-						output.StoreUserOutput(
+						Helper.Display.StoreUserOutput(
 							Helper.FormatFailureOutputText(),
 							Helper.FormatDefaultBackground(),
 							"They are not a trainer for your class. Go find a archer grandmaster!");
@@ -80,26 +80,26 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 			var forSaleString = "The " + this.Name + " has the following upgrades available:"; 
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatInfoText(),
 				Helper.FormatDefaultBackground(),
 				forSaleString);
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatInfoText(),
 				Helper.FormatDefaultBackground(),
 				"");
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (this.TrainerGroup == TrainerCategory.Mage) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					"New Spells: ");
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					"");
 				if (this.TrainableSpells?.Count == 0) {
-					output.StoreUserOutput(
+					Helper.Display.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
 						"None.");
@@ -112,34 +112,34 @@ namespace DungeonGame {
 							select textInfo.ToTitleCase(
 								spell.GetName() + " (Rank: " + spell.Rank + ")")) {
 							newSpellsToTrain++;
-							output.StoreUserOutput(
+							Helper.Display.StoreUserOutput(
 								Helper.FormatInfoText(),
 								Helper.FormatDefaultBackground(),
 								spellName);
 						}
 						if (newSpellsToTrain == 0) {
-							output.StoreUserOutput(
+							Helper.Display.StoreUserOutput(
 								Helper.FormatInfoText(),
 								Helper.FormatDefaultBackground(),
 								"None.");
 						}
 					}
 					catch (ArgumentNullException) {
-						output.StoreUserOutput(
+						Helper.Display.StoreUserOutput(
 							Helper.FormatInfoText(),
 							Helper.FormatDefaultBackground(),
 							"None.");
 					}
 				}
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					"");
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					"Existing Spells: ");
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					"");
@@ -148,29 +148,29 @@ namespace DungeonGame {
 					where player.Level >= spell.MinLevel && player.Level > spell.Rank select textInfo.ToTitleCase(
 						spell.GetName() + " (Rank: " + (spell.Rank + 1) + ")")) {
 					spellsToTrain++;
-					output.StoreUserOutput(
+					Helper.Display.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
 						spellName);
 				}
 				if (spellsToTrain == 0) {
-					output.StoreUserOutput(
+					Helper.Display.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
 						"None.");
 				}
 			}
 			else {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					"New Abilities: ");
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					"");
 				if (this.TrainableAbilities?.Count == 0) {
-					output.StoreUserOutput(
+					Helper.Display.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
 						"None.");
@@ -183,34 +183,34 @@ namespace DungeonGame {
 							select textInfo.ToTitleCase(
 								ability.GetName() + " (Rank: " + ability.Rank + ")")) {
 							newAbilitiesToTrain++;
-							output.StoreUserOutput(
+							Helper.Display.StoreUserOutput(
 								Helper.FormatInfoText(),
 								Helper.FormatDefaultBackground(),
 								abilityName);
 						}
 						if (newAbilitiesToTrain == 0) {
-							output.StoreUserOutput(
+							Helper.Display.StoreUserOutput(
 								Helper.FormatInfoText(),
 								Helper.FormatDefaultBackground(),
 								"None.");
 						}
 					}
 					catch (ArgumentNullException) {
-						output.StoreUserOutput(
+						Helper.Display.StoreUserOutput(
 							Helper.FormatInfoText(),
 							Helper.FormatDefaultBackground(),
 							"None.");
 					}
 				}
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					"");
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					"Existing Abilities: ");
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					"");
@@ -219,22 +219,22 @@ namespace DungeonGame {
 					player.Level >= ability.MinLevel && player.Level > ability.Rank select textInfo.ToTitleCase(
 					ability.GetName() + " (Rank: " + (ability.Rank + 1) + ")")) {
 					abilitiesToTrain++;
-					output.StoreUserOutput(
+					Helper.Display.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
 						abilityName);
 				}
 				if (abilitiesToTrain == 0) {
-					output.StoreUserOutput(
+					Helper.Display.StoreUserOutput(
 						Helper.FormatInfoText(),
 						Helper.FormatDefaultBackground(),
 						"None.");
 				}
 			}
 		}
-		public void TrainAbility(Player player, string inputName, UserOutput output) {
+		public void TrainAbility(Player player, string inputName) {
 			if (player.PlayerClass == Player.PlayerClassType.Mage) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You can't train abilities. You're not a warrior or archer!");
@@ -253,28 +253,28 @@ namespace DungeonGame {
 					var abilityName = textInfo.ToTitleCase(player.Abilities[player.Abilities.Count - 1].Name);
 					var purchaseString = "You purchased " + abilityName + " (Rank " + 
 					                     player.Abilities[player.Abilities.Count - 1].Rank + ") for " + trainingCost + " gold.";
-					output.StoreUserOutput(
+					Helper.Display.StoreUserOutput(
 						Helper.FormatSuccessOutputText(),
 						Helper.FormatDefaultBackground(),
 						purchaseString);
 					return;
 				}
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You can't afford that!");
 				return;
 			}
 			if (abilityIndex != -1) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You are not ready to train that ability. You need to level up first!");
 			}
 		}
-		public void TrainSpell(Player player, string inputName, UserOutput output) {
+		public void TrainSpell(Player player, string inputName) {
 			if (player.PlayerClass != Player.PlayerClassType.Mage) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You can't train spells. You're not a mage!");
@@ -293,27 +293,27 @@ namespace DungeonGame {
 					var spellName = textInfo.ToTitleCase(player.Spellbook[player.Spellbook.Count - 1].Name);
 					var purchaseString = "You purchased " + spellName + " (Rank " + 
 					                     player.Spellbook[player.Spellbook.Count - 1].Rank + ") for " + trainingCost + " gold.";
-					output.StoreUserOutput(
+					Helper.Display.StoreUserOutput(
 						Helper.FormatSuccessOutputText(),
 						Helper.FormatDefaultBackground(),
 						purchaseString);
 					return;
 				}
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You can't afford that!");
 				return;
 			}
 			if (spellIndex == -1) return;
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatFailureOutputText(),
 				Helper.FormatDefaultBackground(),
 				"You are not ready to train that spell. You need to level up first!");
 		}
-		public void UpgradeSpell(Player player, string inputName, UserOutput output) {
+		public void UpgradeSpell(Player player, string inputName) {
 			if (player.PlayerClass != Player.PlayerClassType.Mage) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You can't upgrade spells. You're not a mage!");
@@ -359,33 +359,33 @@ namespace DungeonGame {
 					var spellName = textInfo.ToTitleCase(player.Spellbook[spellIndex].Name);
 					var purchaseString = "You upgraded " + spellName + " to rank " + 
 					                     player.Spellbook[spellIndex].Rank + " for " + trainingCost + " gold.";
-					output.StoreUserOutput(
+					Helper.Display.StoreUserOutput(
 						Helper.FormatSuccessOutputText(),
 						Helper.FormatDefaultBackground(),
 						purchaseString);
 					return;
 				}
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You can't afford that!");
 				return;
 			}
 			if (spellIndex != -1) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You are not ready to upgrade that spell. You need to level up first!");
 				return;
 			}
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatFailureOutputText(),
 				Helper.FormatDefaultBackground(),
 				"You don't have that spell to train!");
 		}
-		public void UpgradeAbility(Player player, string inputName, UserOutput output) {
+		public void UpgradeAbility(Player player, string inputName) {
 			if (player.PlayerClass == Player.PlayerClassType.Mage) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You can't upgrade abilities. You're not a warrior or archer!");
@@ -433,7 +433,7 @@ namespace DungeonGame {
 						var abilityName = textInfo.ToTitleCase(player.Abilities[abilityIndex].Name);
 						var purchaseString = "You upgraded " + abilityName + " to rank " + 
 						                     player.Abilities[abilityIndex].Rank + " for " + trainingCost + " gold.";
-						output.StoreUserOutput(
+						Helper.Display.StoreUserOutput(
 							Helper.FormatSuccessOutputText(),
 							Helper.FormatDefaultBackground(),
 							purchaseString);
@@ -470,20 +470,20 @@ namespace DungeonGame {
 						}
 					}
 				}
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You can't afford that!");
 				return;
 			}
 			if (abilityIndex != -1) {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"You are not ready to upgrade that ability. You need to level up first!");
 				return;
 			}
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatFailureOutputText(),
 				Helper.FormatDefaultBackground(),
 				"You don't have that ability to train!");

@@ -37,9 +37,9 @@ namespace DungeonGame {
 			}
 		}
 
-		public void DisplayGearForSale(Player player, UserOutput output) {
+		public void DisplayGearForSale(Player player) {
 			var forSaleString = "The " + this.Name + " has the following items for sale:"; 
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatInfoText(),
 				Helper.FormatDefaultBackground(),
 				forSaleString);
@@ -66,13 +66,13 @@ namespace DungeonGame {
 						break;
 				}
 				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatInfoText(),
 					Helper.FormatDefaultBackground(),
 					itemName);
 			}
 		}
-		public void BuyItemCheck(Player player, string[] userInput, UserOutput output) {
+		public void BuyItemCheck(Player player, string[] userInput) {
 			var inputName = Helper.ParseInput(userInput);
 			var index = 0;
 			if (this.BuySellType == "Healer") {
@@ -90,67 +90,67 @@ namespace DungeonGame {
 				switch (this.BuySellType) {
 					case "Armor":
 						if (buyArmor != null) {
-							this.BuyItem(player, userInput, buyArmor, index, output);
+							this.BuyItem(player, userInput, buyArmor, index);
 						}
 						break;
 					case "Weapon":
 						if (buyWeapon != null) {
-							this.BuyItem(player, userInput, buyWeapon, index, output);
+							this.BuyItem(player, userInput, buyWeapon, index);
 						}
 						if (buyConsumable != null) {
-							this.BuyItem(player, userInput, buyConsumable, index, inputName, output);
+							this.BuyItem(player, userInput, buyConsumable, index, inputName);
 						}
 						break;
 					case "Healer":
 						if (buyConsumable != null) {
-							this.BuyItem(player, userInput, buyConsumable, index, inputName, output);
+							this.BuyItem(player, userInput, buyConsumable, index, inputName);
 						}
 						break;
 					case "Shopkeeper":
 						if (buyArmor != null) {
-							this.BuyItem(player, userInput, buyArmor, index, output);
+							this.BuyItem(player, userInput, buyArmor, index);
 						}
 						if (buyWeapon != null) {
-							this.BuyItem(player, userInput, buyWeapon, index, output);
+							this.BuyItem(player, userInput, buyWeapon, index);
 						}
 						if (buyConsumable != null) {
-							this.BuyItem(player, userInput, buyConsumable, index, output);
+							this.BuyItem(player, userInput, buyConsumable, index);
 						}
 						break;
 				}
 			}
 			else {
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatFailureOutputText(),
 					Helper.FormatDefaultBackground(),
 					"The vendor doesn't have that available for sale!");
 			}
 		}
-		public void BuyItem(Player player, string[] userInput, IEquipment buyItem, int index, UserOutput output) {
+		public void BuyItem(Player player, string[] userInput, IEquipment buyItem, int index) {
 			if (player.Gold >= buyItem.ItemValue) {
 				player.Gold -= buyItem.ItemValue;
 				player.Inventory.Add(buyItem);
 				this.VendorItems.RemoveAt(index);
 				var purchaseString = "You purchased " + buyItem.Name + " from the vendor for " + buyItem.ItemValue + " gold.";
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatSuccessOutputText(),
 					Helper.FormatDefaultBackground(),
 					purchaseString);
 				return;
 			}
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatFailureOutputText(),
 				Helper.FormatDefaultBackground(),
 				"You can't afford that!");
 		}
 		public void BuyItem(
-			Player player, string[] userInput, IEquipment buyItem, int index, string inputName, UserOutput output) {
+			Player player, string[] userInput, IEquipment buyItem, int index, string inputName) {
 			if (player.Gold >= buyItem.ItemValue) {
 				player.Gold -= buyItem.ItemValue;
 				player.Consumables.Add(buyItem as Consumable);
 				this.VendorItems.RemoveAt(index);
 				var purchaseString = "You purchased " + buyItem.Name + " from the vendor for " + buyItem.ItemValue + " gold.";
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatSuccessOutputText(),
 					Helper.FormatDefaultBackground(),
 					purchaseString);
@@ -162,12 +162,12 @@ namespace DungeonGame {
 				}
 				return;
 			}
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatFailureOutputText(),
 				Helper.FormatDefaultBackground(),
 				"You can't afford that!");
 		}
-		public void SellItemCheck(Player player, string[] userInput, UserOutput output) {
+		public void SellItemCheck(Player player, string[] userInput) {
 			var inputName = Helper.ParseInput(userInput);
 			var invIndex = player.Inventory.FindIndex(
 				f => f.GetName() == inputName || f.GetName().Contains(inputName) && f.IsEquipped() == false);
@@ -178,14 +178,14 @@ namespace DungeonGame {
 				switch (this.BuySellType) {
 					case "Healer":
 						if (sellConsumable != null) {
-							this.SellItem(player, userInput, sellConsumable, conIndex, output);
+							this.SellItem(player, userInput, sellConsumable, conIndex);
 							break;
 						}
-						Helper.InvalidVendorSell(output);
+						Helper.InvalidVendorSell();
 						break;
 					case "Shopkeeper":
 						if (sellConsumable != null) {
-							this.SellItem(player, userInput, sellConsumable, conIndex, output);
+							this.SellItem(player, userInput, sellConsumable, conIndex);
 						}
 						break;
 				}
@@ -197,38 +197,38 @@ namespace DungeonGame {
 				switch (this.BuySellType) {
 					case "Armor":
 						if (sellArmor != null) {
-							this.SellItem(player, userInput, sellArmor, invIndex, output);
+							this.SellItem(player, userInput, sellArmor, invIndex);
 							break;
 						}
-						Helper.InvalidVendorSell(output);
+						Helper.InvalidVendorSell();
 						break;
 					case "Weapon":
 						if (sellWeapon != null) {
-							this.SellItem(player, userInput, sellWeapon, invIndex, output);
+							this.SellItem(player, userInput, sellWeapon, invIndex);
 							break;
 						}
-						Helper.InvalidVendorSell(output);
+						Helper.InvalidVendorSell();
 						break;
 					case "Shopkeeper":
 						if (sellArmor != null) {
-							this.SellItem(player, userInput, sellArmor, invIndex, output);
+							this.SellItem(player, userInput, sellArmor, invIndex);
 						}
 						if (sellWeapon != null) {
-							this.SellItem(player, userInput, sellWeapon, invIndex, output);
+							this.SellItem(player, userInput, sellWeapon, invIndex);
 						}
 						if (sellLoot != null) {
-							this.SellItem(player, userInput, sellLoot, invIndex, output);
+							this.SellItem(player, userInput, sellLoot, invIndex);
 						}
 						break;
 				}
 			}
 			if (invIndex != -1 || conIndex != -1) return;
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatFailureOutputText(),
 				Helper.FormatDefaultBackground(),
 				"You don't have that to sell!");
 		}
-		public void SellItem(Player player, string[] userInput, IEquipment sellItem, int index, UserOutput output) {
+		public void SellItem(Player player, string[] userInput, IEquipment sellItem, int index) {
 			if (!sellItem.IsEquipped()) {
 				player.Gold += sellItem.ItemValue;
 				if (sellItem.GetType().Name == "Consumable") {
@@ -239,18 +239,18 @@ namespace DungeonGame {
 				}
 				this.VendorItems.Add(sellItem);
 				var soldString = "You sold " + sellItem.Name + " to the vendor for " + sellItem.ItemValue + " gold.";
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatSuccessOutputText(),
 					Helper.FormatDefaultBackground(),
 					soldString);
 				return;
 			}
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatFailureOutputText(),
 				Helper.FormatDefaultBackground(),
 				"You have to unequip that first!");
 		}
-		public void RepairItem(Player player, string[] userInput, UserOutput output) {
+		public void RepairItem(Player player, string[] userInput) {
 			var parsedInput = Helper.ParseInput(userInput);
 			var index = player.Inventory.FindIndex(
 				f => f.GetName() == parsedInput || f.GetName().Contains(userInput.Last()));
@@ -266,19 +266,19 @@ namespace DungeonGame {
 								repairArmor.Durability = 100;
 								var repairArmorString = "Your " + repairArmor.Name + " has been repaired for " + (int) repairCostArmor +
 								                   " gold."; 
-								output.StoreUserOutput(
+								Helper.Display.StoreUserOutput(
 									Helper.FormatSuccessOutputText(),
 									Helper.FormatDefaultBackground(),
 									repairArmorString);
 								break;
 							}
 							var cantAffordArmorString = "You can't afford to repair " + repairArmor.Name;
-							output.StoreUserOutput(
+							Helper.Display.StoreUserOutput(
 								Helper.FormatFailureOutputText(),
 								Helper.FormatDefaultBackground(),
 								cantAffordArmorString);
 						}
-						output.StoreUserOutput(
+						Helper.Display.StoreUserOutput(
 							Helper.FormatFailureOutputText(),
 							Helper.FormatDefaultBackground(),
 							"The vendor doesn't repair that type of equipment.");
@@ -293,19 +293,19 @@ namespace DungeonGame {
 								repairWeapon.Durability = 100;
 								var repairWeaponString = "Your " + repairWeapon.Name + " has been repaired for " + 
 								                         (int)repairCostWeapon + " gold.";
-								output.StoreUserOutput(
+								Helper.Display.StoreUserOutput(
 									Helper.FormatSuccessOutputText(),
 									Helper.FormatDefaultBackground(),
 									repairWeaponString);
 								break;
 							}
 							var cantAffordWeaponString = "You can't afford to repair " + repairWeapon.Name;
-							output.StoreUserOutput(
+							Helper.Display.StoreUserOutput(
 								Helper.FormatFailureOutputText(),
 								Helper.FormatDefaultBackground(),
 								cantAffordWeaponString);
 						}
-						output.StoreUserOutput(
+						Helper.Display.StoreUserOutput(
 							Helper.FormatFailureOutputText(),
 							Helper.FormatDefaultBackground(),
 							"The vendor doesn't repair that type of equipment.");
@@ -313,7 +313,7 @@ namespace DungeonGame {
 					case "Healer":
 					case "Shopkeeper":
 						var noRepairString = this.BuySellType + "s don't repair equipment.";
-						output.StoreUserOutput(
+						Helper.Display.StoreUserOutput(
 							Helper.FormatFailureOutputText(),
 							Helper.FormatDefaultBackground(),
 							noRepairString);
@@ -321,7 +321,7 @@ namespace DungeonGame {
 				}
 				return;
 			}
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatFailureOutputText(),
 				Helper.FormatDefaultBackground(),
 				"That item is not in your inventory.");
@@ -329,21 +329,21 @@ namespace DungeonGame {
 		public string GetName() {
 			return this.Name;
 		}
-		public void RestorePlayer(Player player, UserOutput output) {
+		public void RestorePlayer(Player player) {
 			if (this.BuySellType == "Healer") {
 				player.HitPoints = player.MaxHitPoints;
 				player.RagePoints = player.MaxRagePoints;
 				player.ManaPoints = player.MaxManaPoints;
 				player.ComboPoints = player.MaxComboPoints;
 				var restoreString = "You have been restored by the " + this.Name + ".";
-				output.StoreUserOutput(
+				Helper.Display.StoreUserOutput(
 					Helper.FormatSuccessOutputText(),
 					Helper.FormatDefaultBackground(),
 					restoreString);
 				return;
 			}
 			var noRestoreString = "The " + this.Name + " cannot restore you!";
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatFailureOutputText(),
 				Helper.FormatDefaultBackground(),
 				noRestoreString);

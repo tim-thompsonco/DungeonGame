@@ -40,83 +40,83 @@ namespace DungeonGame {
 			this.EffectAmountOverTime = effectAmountOverTime;
 		}
 
-		public void HealingRound(Player player, UserOutput output) {
+		public void HealingRound(Player player) {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			player.HitPoints += this.EffectAmountOverTime;
 			if (player.HitPoints > player.MaxHitPoints) player.HitPoints = player.MaxHitPoints;
 			var healAmtString = "You have been healed for " + this.EffectAmountOverTime + " health."; 
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatSuccessOutputText(),
 				Helper.FormatDefaultBackground(),
 				healAmtString);
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void ChangeDamageRound(Player player, UserOutput output) {
+		public void ChangeDamageRound(Player player) {
 			if (this.IsEffectExpired || player.InCombat == false) return;
 			this.EffectCurRound += 1;
 			var changeDmgString = this.EffectAmountOverTime > 0 ?
 				"Your damage is increased by " + this.EffectAmountOverTime + "."
 				: "Your damage is decreased by " + this.EffectAmountOverTime + ".";
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatSuccessOutputText(),
 				Helper.FormatDefaultBackground(),
 				changeDmgString);
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void ChangeArmorRound(Player player, UserOutput output) {
+		public void ChangeArmorRound(Player player) {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var augmentString = "Your armor is augmented by " + this.EffectAmountOverTime + ".";
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatSuccessOutputText(),
 				Helper.FormatDefaultBackground(),
 				augmentString);
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void OnFireRound(IMonster opponent, UserOutput output) {
+		public void OnFireRound(IMonster opponent) {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			opponent.HitPoints -= this.EffectAmountOverTime;
 			var burnString = "The " + opponent.Name + " burns for " + this.EffectAmountOverTime + " fire damage.";
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatOnFireText(),
 				Helper.FormatDefaultBackground(),
 				burnString);
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void BleedingRound(IMonster opponent, UserOutput output) {
+		public void BleedingRound(IMonster opponent) {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			opponent.HitPoints -= this.EffectAmountOverTime;
 			var bleedString = "The " + opponent.Name + " bleeds for " + this.EffectAmountOverTime + " physical damage.";
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatAttackSuccessText(),
 				Helper.FormatDefaultBackground(),
 				bleedString);
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void StunnedRound(IMonster opponent, UserOutput output) {
+		public void StunnedRound(IMonster opponent) {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var stunnedString = "The " + opponent.Name + " is stunned and cannot attack.";
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatAttackSuccessText(),
 				Helper.FormatDefaultBackground(),
 				stunnedString);
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void FrozenRound(IMonster opponent, UserOutput output) {
+		public void FrozenRound(IMonster opponent) {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var frozenString = "The " + opponent.Name + " is frozen. Physical, frost and arcane damage to it will be double!";
-			output.StoreUserOutput(
+			Helper.Display.StoreUserOutput(
 				Helper.FormatAttackSuccessText(),
 				Helper.FormatDefaultBackground(),
 				frozenString);
