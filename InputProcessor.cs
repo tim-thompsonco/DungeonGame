@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 
 namespace DungeonGame {
-	public static class InputHelper {
+	public static class InputProcessor {
 		public static void ProcessUserInput(List<IRoom> spawnedRooms, Player player, string[] input, Timer globalTimer) {
 			var isTownRoom = spawnedRooms[Helper.RoomIndex] as TownRoom;
 			switch (input[0]) {

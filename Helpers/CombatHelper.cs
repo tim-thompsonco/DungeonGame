@@ -9,13 +9,13 @@ namespace DungeonGame {
 		private string[] Commands { get; set; } = new string[3] {
 		"[F]ight", "[I]nventory", "Flee" };
 
-		public bool SingleCombat(IMonster opponent, Player player, List<IRoom> roomList) {
+		public bool SingleCombat(IMonster opponent, Player player) {
 			player.InCombat = true;
 			opponent.InCombat = true;
 			var fightStartString = player.Name + ", you have encountered a " + opponent.Name + ". Time to fight!";
 			Helper.Display.StoreUserOutput(
-				Helper.FormatSuccessOutputText(),
-				Helper.FormatDefaultBackground(),
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
 				fightStartString);
 			Helper.Display.BuildUserOutput();
 			Helper.Display.ClearUserOutput();
@@ -23,7 +23,7 @@ namespace DungeonGame {
 				PlayerHelper.DisplayPlayerStats(player);
 				opponent.DisplayStats();
 				this.ShowCommands();
-				Helper.MapDisplay = MapOutput.BuildMap(roomList, player, Helper.GetMiniMapHeight(), Helper.GetMiniMapWidth());
+				Helper.MapDisplay = MapOutput.BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 				Helper.EffectDisplay = EffectOutput.ShowEffects(player);
 				Helper.Display.BuildUserOutput();
 				Helper.Display.ClearUserOutput();
@@ -63,23 +63,23 @@ namespace DungeonGame {
 						if (attackDamage - opponent.ArmorRating(player) < 0) {
 							var armorAbsorbString = "The " + opponent.Name + "'s armor absorbed all of your attack!";
 							Helper.Display.StoreUserOutput(
-								Helper.FormatAttackFailText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatAttackFailText(),
+								Settings.FormatDefaultBackground(),
 								armorAbsorbString);
 						}
 						else if (attackDamage == 0) {
 							var attackFailString = "You missed " + opponent.Name + "!";
 							Helper.Display.StoreUserOutput(
-								Helper.FormatAttackFailText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatAttackFailText(),
+								Settings.FormatDefaultBackground(),
 								attackFailString);
 						}
 						else {
 							var attackAmount = attackDamage - opponent.ArmorRating(player);
 							var attackSucceedString = "You hit the " + opponent.Name + " for " + attackAmount + " physical damage.";
 							Helper.Display.StoreUserOutput(
-								Helper.FormatAttackSuccessText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatAttackSuccessText(),
+								Settings.FormatDefaultBackground(),
 								attackSucceedString);
 							opponent.TakeDamage(attackAmount);
 						}
@@ -96,16 +96,16 @@ namespace DungeonGame {
 						}
 						catch (IndexOutOfRangeException) {
 							Helper.Display.StoreUserOutput(
-								Helper.FormatFailureOutputText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
 								"You don't have that spell.");
 							continue;
 						}
 						catch (NullReferenceException) {
 							if (player.PlayerClass != Player.PlayerClassType.Mage) {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"You can't cast spells. You're not a mage!");
 							}
 							continue;
@@ -113,14 +113,14 @@ namespace DungeonGame {
 						catch (InvalidOperationException) {
 							if (player.PlayerClass != Player.PlayerClassType.Mage) {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"You can't cast spells. You're not a mage!");
 								continue;
 							}
 							Helper.Display.StoreUserOutput(
-								Helper.FormatFailureOutputText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
 								"You do not have enough mana to cast that spell!");
 							continue;
 						}
@@ -141,23 +141,23 @@ namespace DungeonGame {
 						}
 						catch (IndexOutOfRangeException) {
 							Helper.Display.StoreUserOutput(
-								Helper.FormatFailureOutputText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
 								"You don't have that ability.");
 							continue;
 						}
 						catch (ArgumentOutOfRangeException) {
 							Helper.Display.StoreUserOutput(
-								Helper.FormatFailureOutputText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
 								"You don't have that ability.");
 							continue;
 						}
 						catch (NullReferenceException) {
 							if (player.PlayerClass == Player.PlayerClassType.Mage) {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"You can't use abilities. You're not a warrior or archer!");
 							}
 							continue;
@@ -165,8 +165,8 @@ namespace DungeonGame {
 						catch (InvalidOperationException) {
 							if (player.PlayerClass == Player.PlayerClassType.Mage) {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"You can't use abilities. You're not a warrior or archer!");
 								continue;
 							}
@@ -175,21 +175,21 @@ namespace DungeonGame {
 									continue;
 								case Player.PlayerClassType.Warrior:
 									Helper.Display.StoreUserOutput(
-										Helper.FormatFailureOutputText(),
-										Helper.FormatDefaultBackground(),
+										Settings.FormatFailureOutputText(),
+										Settings.FormatDefaultBackground(),
 										"You do not have enough rage to use that ability!");
 									continue;
 								case Player.PlayerClassType.Archer:
 									if (player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
 										Helper.Display.StoreUserOutput(
-											Helper.FormatFailureOutputText(),
-											Helper.FormatDefaultBackground(),
+											Settings.FormatFailureOutputText(),
+											Settings.FormatDefaultBackground(),
 											"You do not have a bow equipped!");
 										continue;
 									}
 									Helper.Display.StoreUserOutput(
-										Helper.FormatFailureOutputText(),
-										Helper.FormatDefaultBackground(),
+										Settings.FormatFailureOutputText(),
+										Settings.FormatDefaultBackground(),
 										"You do not have enough combo points to use that ability!");
 									continue;
 								default:
@@ -212,8 +212,8 @@ namespace DungeonGame {
 						}
 						else {
 							Helper.Display.StoreUserOutput(
-								Helper.FormatFailureOutputText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
 								"You can't drink that!");
 						}
 						continue;
@@ -232,8 +232,8 @@ namespace DungeonGame {
 								}
 								catch (IndexOutOfRangeException) {
 									Helper.Display.StoreUserOutput(
-										Helper.FormatFailureOutputText(),
-										Helper.FormatDefaultBackground(),
+										Settings.FormatFailureOutputText(),
+										Settings.FormatDefaultBackground(),
 										"List what?");
 								}
 								continue;
@@ -243,8 +243,8 @@ namespace DungeonGame {
 								}
 								catch (IndexOutOfRangeException) {
 									Helper.Display.StoreUserOutput(
-										Helper.FormatFailureOutputText(),
-										Helper.FormatDefaultBackground(),
+										Settings.FormatFailureOutputText(),
+										Settings.FormatDefaultBackground(),
 										"List what?");
 								}
 								continue;
@@ -256,8 +256,8 @@ namespace DungeonGame {
 						}
 						catch (IndexOutOfRangeException) {
 							Helper.Display.StoreUserOutput(
-								Helper.FormatFailureOutputText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
 								"What ability did you want to know about?");
 						}
 						continue;
@@ -267,8 +267,8 @@ namespace DungeonGame {
 						}
 						catch (IndexOutOfRangeException) {
 							Helper.Display.StoreUserOutput(
-								Helper.FormatFailureOutputText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
 								"What spell did you want to know about?");
 						}
 						continue;
@@ -312,16 +312,16 @@ namespace DungeonGame {
 				var defenseMoveString = "Your defensive move blocked " + player.AbsorbDamageAmount + " damage!";
 				if (attackDamageM > player.AbsorbDamageAmount && player.AbsorbDamageAmount > 0) {
 					Helper.Display.StoreUserOutput(
-						Helper.FormatAttackFailText(),
-						Helper.FormatDefaultBackground(),
+						Settings.FormatAttackFailText(),
+						Settings.FormatDefaultBackground(),
 						defenseMoveString);
 					attackDamageM -= player.AbsorbDamageAmount;
 					player.AbsorbDamageAmount = 0;
 				}
 				else if (attackDamageM < player.AbsorbDamageAmount && player.AbsorbDamageAmount > 0) {
 					Helper.Display.StoreUserOutput(
-						Helper.FormatAttackFailText(),
-						Helper.FormatDefaultBackground(),
+						Settings.FormatAttackFailText(),
+						Settings.FormatDefaultBackground(),
 						defenseMoveString);
 					player.AbsorbDamageAmount -= attackDamageM;
 					attackDamageM = 0;
@@ -329,15 +329,15 @@ namespace DungeonGame {
 				if (attackDamageM == 0) {
 					var missString = "The " + opponent.Name + " missed you!"; 
 					Helper.Display.StoreUserOutput(
-						Helper.FormatAttackFailText(),
-						Helper.FormatDefaultBackground(),
+						Settings.FormatAttackFailText(),
+						Settings.FormatDefaultBackground(),
 						missString);
 				}
 				else if (attackDamageM - player.ArmorRating(opponent) < 0) {
 					var armorAbsorbString = "Your armor absorbed all of " + opponent.Name + "'s attack!"; 
 					Helper.Display.StoreUserOutput(
-						Helper.FormatAttackFailText(),
-						Helper.FormatDefaultBackground(),
+						Settings.FormatAttackFailText(),
+						Settings.FormatDefaultBackground(),
 						armorAbsorbString);
 					GearHelper.DecreaseArmorDurability(player);
 				}
@@ -345,8 +345,8 @@ namespace DungeonGame {
 					var hitAmount = attackDamageM - player.ArmorRating(opponent);
 					var hitString = "The " + opponent.Name + " hits you for " + hitAmount + " physical damage.";
 					Helper.Display.StoreUserOutput(
-						Helper.FormatAttackSuccessText(),
-						Helper.FormatDefaultBackground(),
+						Settings.FormatAttackSuccessText(),
+						Settings.FormatDefaultBackground(),
 						hitString);
 					player.TakeDamage(hitAmount);
 					GearHelper.DecreaseArmorDurability(player);
@@ -360,22 +360,22 @@ namespace DungeonGame {
 			var randomNum = Helper.GetRandomNumber(1, 10);
 			if (randomNum > 5) {
 				Helper.Display.StoreUserOutput(
-					Helper.FormatSuccessOutputText(),
-					Helper.FormatDefaultBackground(),
+					Settings.FormatSuccessOutputText(),
+					Settings.FormatDefaultBackground(),
 					"You have fled combat successfully!");
 				player.InCombat = false;
 				opponent.InCombat = false;
 				return true;
 			}
 			Helper.Display.StoreUserOutput(
-				Helper.FormatFailureOutputText(),
-				Helper.FormatDefaultBackground(),
+				Settings.FormatFailureOutputText(),
+				Settings.FormatDefaultBackground(),
 				"You tried to flee combat but failed!");
 			return false;
 		}
 		public void ShowCommands() {
 			var sameLineOutput = new List<string> {
-				Helper.FormatGeneralInfoText(), Helper.FormatDefaultBackground(), "Available Commands: "};
+				Settings.FormatGeneralInfoText(), Settings.FormatDefaultBackground(), "Available Commands: "};
 			var objCount = this.Commands.Length;
 			foreach (var command in this.Commands) {
 				var sb = new StringBuilder();
@@ -384,8 +384,8 @@ namespace DungeonGame {
 					sb.Append(", ");
 				}
 				if (this.Commands[objCount - 1] == command) sb.Append(".");
-				sameLineOutput.Add(Helper.FormatInfoText());
-				sameLineOutput.Add(Helper.FormatDefaultBackground());
+				sameLineOutput.Add(Settings.FormatInfoText());
+				sameLineOutput.Add(Settings.FormatDefaultBackground());
 				sameLineOutput.Add(sb.ToString());
 			}
 			Helper.Display.StoreUserOutput(sameLineOutput);

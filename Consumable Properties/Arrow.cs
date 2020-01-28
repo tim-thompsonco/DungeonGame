@@ -11,8 +11,8 @@ namespace DungeonGame {
 		public void LoadArrowsPlayer(Player player) {
 			if (player.PlayerQuiver == null) {
 				Helper.Display.StoreUserOutput(
-					Helper.FormatFailureOutputText(),
-					Helper.FormatDefaultBackground(),
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
 					"You don't have a quiver to reload!");
 				return;
 			}

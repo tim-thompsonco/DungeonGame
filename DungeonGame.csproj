@@ -48,8 +48,8 @@
     <Compile Include="Helpers\CombatHelper.cs" />
     <Compile Include="Helpers\GearHelper.cs" />
     <Compile Include="Helpers\Helper.cs" />
-    <Compile Include="Helpers\InputHelper.cs" />
     <Compile Include="Helpers\PlayerHelper.cs" />
+    <Compile Include="InputProcessor.cs" />
     <Compile Include="Interfaces\IEquipment.cs" />
     <Compile Include="Interfaces\ITrainer.cs" />
     <Compile Include="Interfaces\IVendor.cs" />
@@ -57,6 +57,7 @@
     <Compile Include="Output\MapOutput.cs" />
     <Compile Include="Output\UserOutput.cs" />
     <Compile Include="Quiver.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Spell Properties\ArcaneOffense.cs" />
     <Compile Include="Spell Properties\Defense.cs" />
     <Compile Include="Spell Properties\FrostOffense.cs" />

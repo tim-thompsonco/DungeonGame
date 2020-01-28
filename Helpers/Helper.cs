@@ -14,11 +14,12 @@ namespace DungeonGame {
 		public static UserOutput Display = new UserOutput();
 		public static UserOutput MapDisplay = new UserOutput();
 		public static UserOutput EffectDisplay = new UserOutput();
+		public static List<IRoom> Rooms { get; set; }
 		public static bool IsGameOver { get; set; }
 		public static int RoomIndex { get; set;}
 		public static int GameTicks { get; set; }
 
-		public static void CheckStatus(Player player, List<IRoom> spawnedRooms) {
+		public static void CheckStatus(Player player) {
 			GameTicks++;
 			RemovedExpiredEffects(player);
 			if (GameTicks % player.StatReplenishInterval == 0) ReplenishStatsOverTime(player);
@@ -54,7 +55,7 @@ namespace DungeonGame {
 					}
 				}
 			}
-			foreach (var room in spawnedRooms) {
+			foreach (var room in Rooms) {
 				foreach (var roomObject in room.RoomObjects.Where(
 					roomObject => roomObject.GetType() == typeof(Monster))) {
 					var monster = (Monster) roomObject;
@@ -95,84 +96,7 @@ namespace DungeonGame {
 			var inputParse = inputFormatted.Split(' ');
 			return inputParse;
 		}
-		public static int GetGameWidth() {
-			return 100 - GetBufferGap();
-		}
-		public static int GetMiniMapHeight() {
-			return 5;
-		}
-		public static int GetMiniMapWidth() {
-			return 10;
-		}
-		public static int GetBufferGap() {
-			return 5;
-		}
-		public static int GetMiniMapBorderWidth() {
-			return (GetMiniMapWidth() * 4) + 6;
-		}
-		public static string FormatDefaultBackground() {
-			return "black";
-		}
-		public static string FormatHealthBackground() {
-			return "darkred";
-		}
-		public static string FormatManaBackground() {
-			return "darkblue";
-		}
-		public static string FormatRageBackground() {
-			return "darkyellow";
-		}
-		public static string FormatComboBackground() {
-			return "darkyellow";
-		}
-		public static string FormatExpBackground() {
-			return "darkcyan";
-		}
-		public static string FormatSuccessOutputText() {
-			return "green";
-		}
-		public static string FormatHiddenOutputText() {
-			return "black";
-		}
-		public static string FormatFailureOutputText() {
-			return "darkcyan";
-		}
-		public static string FormatRoomOutputText() {
-			return "darkcyan";
-		}
-		public static string FormatOnFireText() {
-			return "yellow";
-		}
-		public static string FormatAttackSuccessText() {
-			return "red";
-		}
-		public static string FormatAttackFailText() {
-			return "darkred";
-		}
-		public static string FormatInfoText() {
-			return "white";
-		}
-		public static string FormatLevelUpText() {
-			return "cyan";
-		}
-		public static string FormatGeneralInfoText() {
-			return "darkgreen";
-		}
-		public static string FormatUpDownIndicator() {
-			return "black";
-		}
-		public static string FormatAnnounceText() {
-			return "gray";
-		}
-		public static string FormatPlayerTile() {
-			return "green";
-		}
-		public static string FormatDiscoveredTile() {
-			return "darkgray";
-		}
-		public static string FormatTextBorder() {
-			return "========================================================";
-		}
+		
 		public static string ParseInput(string[] userInput) {
 			var inputString = new StringBuilder();
 			for (var i = 1; i < userInput.Length; i++) {
@@ -183,28 +107,28 @@ namespace DungeonGame {
 			return parsedInput;
 		}
 		public static void RequestCommand() {
-			Display.StoreUserOutput("gray", "black", "Your command: ");
+			Display.StoreUserOutput(Settings.FormatAnnounceText(), 
+				Settings.FormatDefaultBackground(), "Your command: ");
 		}
 		public static void PlayerDeath() {
-			Display.StoreUserOutput("gray", "black", "You have died. Game over.");
+			Display.StoreUserOutput(Settings.FormatAnnounceText(), 
+				Settings.FormatDefaultBackground(), "You have died. Game over.");
 		}
 		public static void GameIntro() {
 			var gameIntroString =
 				"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot" +
 				"and explore dungeons. Stuff you've probably done a million times already across various RPG games. At any time " +
 				"you can get help on commands by typing 'help'.";
-			for (var i = 0; i < gameIntroString.Length; i += GetGameWidth()) {
-				if (gameIntroString.Length - i < Helper.GetGameWidth()) {
+			for (var i = 0; i < gameIntroString.Length; i += Settings.GetGameWidth()) {
+				if (gameIntroString.Length - i < Settings.GetGameWidth()) {
 					Display.StoreUserOutput(
-						FormatAnnounceText(), 
-						FormatDefaultBackground(), 
+						Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), 
 						gameIntroString.Substring(i, gameIntroString.Length - i));
 					continue;
 				}
 				Display.StoreUserOutput(
-					FormatAnnounceText(), 
-					FormatDefaultBackground(), 
-					gameIntroString.Substring(i, GetGameWidth()));
+					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), 
+					gameIntroString.Substring(i, Settings.GetGameWidth()));
 			}
 		}
 		public static void ShowCommandHelp() {
@@ -217,75 +141,74 @@ namespace DungeonGame {
 				"commands will be shown to the player. Any object that is consumable, such as a potion, can be drank " +
 				"by typing 'drink' and then the name of the potion or object. To use armor or weapons, you must 'equip' " +
 				"them. You can 'unequip' them as well.";
-			for (var i = 0; i < commandHelpString.Length; i += GetGameWidth()) {
-				if (commandHelpString.Length - i < Helper.GetGameWidth()) {
+			for (var i = 0; i < commandHelpString.Length; i += Settings.GetGameWidth()) {
+				if (commandHelpString.Length - i < Settings.GetGameWidth()) {
 					Display.StoreUserOutput(
-						FormatAnnounceText(), 
-						FormatDefaultBackground(), 
+						Settings.FormatAnnounceText(),Settings.FormatDefaultBackground(), 
 						commandHelpString.Substring(i, commandHelpString.Length - i));
 					continue;
 				}
 				Display.StoreUserOutput(
-					FormatAnnounceText(), 
-					FormatDefaultBackground(), 
-					commandHelpString.Substring(i, GetGameWidth()));
+					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), 
+					commandHelpString.Substring(i, Settings.GetGameWidth()));
 			}
 		}
 		
 		public static void InvalidCommand() {
 			Display.StoreUserOutput(
-				FormatFailureOutputText(), FormatDefaultBackground(), "Not a valid command.");
+				Settings.FormatFailureOutputText(), 
+				Settings.FormatDefaultBackground(),"Not a valid command.");
 		}
-		public static void ChangeRoom(List<IRoom> roomList, Player player, int x, int y, int z) {
+		public static void ChangeRoom(Player player, int x, int y, int z) {
 			// Player location is changed to the new coordinates
 			player.X += x;
 			player.Y += y;
 			player.Z += z;
 			// Room at new coordinates is found and room description displayed for user
-			var room = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
-			var changeRoomIndex = roomList.IndexOf(room);
-			roomList[changeRoomIndex].LookRoom();
-			if (!roomList[changeRoomIndex].IsDiscovered) roomList[changeRoomIndex].IsDiscovered = true;
-			var roomType = roomList[changeRoomIndex].GetType().Name;
+			var room = Rooms.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
+			var changeRoomIndex = Rooms.IndexOf(room);
+			Rooms[changeRoomIndex].LookRoom();
+			if (!Rooms[changeRoomIndex].IsDiscovered) Rooms[changeRoomIndex].IsDiscovered = true;
+			var roomType = Rooms[changeRoomIndex].GetType().Name;
 			player.CanSave = roomType != "DungeonRoom"; 
 			RoomIndex = changeRoomIndex;
 		}
-		public static void SetPlayerLocation(List<IRoom> roomList, Player player, int x, int y, int z) {
+		public static void SetPlayerLocation(Player player, int x, int y, int z) {
 			player.X = x;
 			player.Y = y;
 			player.Z = z;
 			// Room at new coordinates is found and room description displayed for user
-			var room = roomList.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
-			var setRoomIndex = roomList.IndexOf(room);
+			var room = Rooms.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
+			var setRoomIndex = Rooms.IndexOf(room);
 			if (setRoomIndex == -1) return;
-			if (!roomList[setRoomIndex].IsDiscovered) roomList[setRoomIndex].IsDiscovered = true;
-			var roomType = roomList[setRoomIndex].GetType().Name;
+			if (!Rooms[setRoomIndex].IsDiscovered) Rooms[setRoomIndex].IsDiscovered = true;
+			var roomType = Rooms[setRoomIndex].GetType().Name;
 			player.CanSave = roomType != "DungeonRoom";
 			RoomIndex = setRoomIndex;
 		}
 		public static void InvalidDirection() {
 			const string outputString = "You can't go that way!";
 			Display.StoreUserOutput(
-				FormatFailureOutputText(), FormatDefaultBackground(), outputString);
+				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
 		}
 		public static void InvalidVendorSell() {
 			const string outputString = "The vendor doesn't want that.";
 			Display.StoreUserOutput(
-				FormatFailureOutputText(), FormatDefaultBackground(), outputString);
+				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
 		}
-		public static bool QuitGame(Player player, List<IRoom> spawnedRooms) {
+		public static bool QuitGame(Player player) {
 			Display.StoreUserOutput(
-				FormatAnnounceText(),
-				FormatDefaultBackground(),
-				"Are you sure you want to quit?");
+				Settings.FormatAnnounceText(),
+				Settings.FormatDefaultBackground(), "Are you sure you want to quit?");
 			Display.BuildUserOutput();
 			Display.ClearUserOutput();
 			var input = GetFormattedInput(Console.ReadLine());
 			if (input[0] == "yes" || input[0] == "y") {
 				Display.StoreUserOutput(
-					FormatAnnounceText(), FormatDefaultBackground(), "Quitting the game.");
+					Settings.FormatAnnounceText(), 
+					Settings.FormatDefaultBackground(), "Quitting the game.");
 				player.CanSave = true;
-				SaveGame(player, spawnedRooms);
+				SaveGame(player);
 				return true;
 			}
 			return false;
@@ -293,7 +216,7 @@ namespace DungeonGame {
 		public static bool IsWearable(IEquipment item) {
 			return item.GetType().Name == "Armor" || item.GetType().Name == "Weapon" || item.GetType().Name == "Quiver";
 		}
-		public static void SaveGame(Player player, List<IRoom> spawnedRooms) {
+		public static void SaveGame(Player player) {
 			string outputString;
 			if (player.CanSave == true) {
 				var serializerPlayer = new JsonSerializer();
@@ -314,49 +237,49 @@ namespace DungeonGame {
 				serializerRooms.PreserveReferencesHandling = PreserveReferencesHandling.All;
 				using (var sw = new StreamWriter("gamesave.json"))
 				using (var writer = new JsonTextWriter(sw)) {
-					serializerPlayer.Serialize(writer, spawnedRooms, typeof(List<IRoom>));
+					serializerPlayer.Serialize(writer, typeof(List<IRoom>));
 				}
 				outputString = "Your game has been saved.";
 				Display.StoreUserOutput(
-					FormatAnnounceText(), FormatDefaultBackground(), outputString);
+					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), outputString);
 				Display.BuildUserOutput();
 				Display.ClearUserOutput();
 				return;
 			}
 			outputString = "You can't save inside a dungeon! Go outside first.";
 			Display.StoreUserOutput(
-				FormatAnnounceText(), FormatDefaultBackground(), outputString);
+				Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), outputString);
 		}
-		public static void FleeRoom(List<IRoom> roomList, Player player) {
-			if (roomList[RoomIndex].GoDown) {
-				ChangeRoom(roomList, player, 0, 0, -1);
+		public static void FleeRoom(Player player) {
+			if (Rooms[RoomIndex].GoDown) {
+				ChangeRoom(player, 0, 0, -1);
 			}
-			else if (roomList[RoomIndex].GoUp) {
-				ChangeRoom(roomList, player, 0, 0, 1);
+			else if (Rooms[RoomIndex].GoUp) {
+				ChangeRoom(player, 0, 0, 1);
 			}
-			else if (roomList[RoomIndex].GoNorth) {
-				ChangeRoom(roomList, player, 0, 1, 0);
+			else if (Rooms[RoomIndex].GoNorth) {
+				ChangeRoom(player, 0, 1, 0);
 			}
-			else if (roomList[RoomIndex].GoSouth) {
-				ChangeRoom(roomList, player, 0, -1, 0);
+			else if (Rooms[RoomIndex].GoSouth) {
+				ChangeRoom(player, 0, -1, 0);
 			}
-			else if (roomList[RoomIndex].GoEast) {
-				ChangeRoom(roomList, player, 1, 0, 0);
+			else if (Rooms[RoomIndex].GoEast) {
+				ChangeRoom(player, 1, 0, 0);
 			}
-			else if (roomList[RoomIndex].GoWest) {
-				ChangeRoom(roomList, player, -1, 0, 0);
+			else if (Rooms[RoomIndex].GoWest) {
+				ChangeRoom(player, -1, 0, 0);
 			}
-			else if (roomList[RoomIndex].GoNorthEast) {
-				ChangeRoom(roomList, player, 1, 1, 0);
+			else if (Rooms[RoomIndex].GoNorthEast) {
+				ChangeRoom(player, 1, 1, 0);
 			}
-			else if (roomList[RoomIndex].GoNorthWest) {
-				ChangeRoom(roomList, player, -1, 1, 0);
+			else if (Rooms[RoomIndex].GoNorthWest) {
+				ChangeRoom(player, -1, 1, 0);
 			}
-			else if (roomList[RoomIndex].GoSouthEast) {
-				ChangeRoom(roomList, player, 1, -1, 0);
+			else if (Rooms[RoomIndex].GoSouthEast) {
+				ChangeRoom(player, 1, -1, 0);
 			}
-			else if (roomList[RoomIndex].GoSouthWest) {
-				ChangeRoom(roomList, player, -1, -1, 0);
+			else if (Rooms[RoomIndex].GoSouthWest) {
+				ChangeRoom(player, -1, -1, 0);
 			}
 		}
 		public static int GetRandomNumber(int lowNum, int highNum) {
@@ -409,10 +332,10 @@ namespace DungeonGame {
 		public static bool IsWholeNumber(string value) {
 			return value.All(char.IsNumber);
 		}
-		public static void ShowUserOutput(List<IRoom> spawnedRooms, Player player) {
+		public static void ShowUserOutput(Player player) {
 			PlayerHelper.DisplayPlayerStats(player);
-			spawnedRooms[RoomIndex].ShowCommands();
-			MapDisplay = MapOutput.BuildMap(spawnedRooms, player, GetMiniMapHeight(), GetMiniMapWidth());
+			Rooms[RoomIndex].ShowCommands();
+			MapDisplay = MapOutput.BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = EffectOutput.ShowEffects(player);
 			Display.BuildUserOutput();
 			Display.RetrieveUserOutput();

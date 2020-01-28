@@ -348,7 +348,7 @@ using System.Threading;
 					"You don't have any arrows!");
 			}
 		}
-		public void UseAbility(List<IRoom> spawnedRooms, string[] input) {
+		public void UseAbility(string[] input) {
 			var index = this.Abilities.FindIndex(
 				f => f.GetName() == input[1] || f.GetName().Contains(input[1]));
 			var direction = input.Last();
@@ -380,7 +380,7 @@ using System.Threading;
 			    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
 				switch (this.Abilities[index].ArcAbilityCategory) {
 					case Ability.ArcherAbility.Distance:
-						Ability.UseDistanceAbility(spawnedRooms, this, index, direction);
+						Ability.UseDistanceAbility(this, index, direction);
 						return;
 					case Ability.ArcherAbility.Gut:
 						return;
@@ -519,7 +519,7 @@ using System.Threading;
 				throw new IndexOutOfRangeException();
 			}
 		}
-		public void CastSpell(List<IRoom> roomList, string inputName) {
+		public void CastSpell(string inputName) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
 			if (index != -1 &&
 			    this.ManaPoints >= this.Spellbook[index].ManaCost &&

@@ -7,12 +7,12 @@ namespace DungeonGame {
 		public Player BuildNewPlayer() {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			Helper.Display.StoreUserOutput(
-				Helper.FormatAnnounceText(), Helper.FormatDefaultBackground(), "Please enter a player name.");
+				Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), "Please enter a player name.");
 			string playerName;
 			while (true) {
 				var sameLineOutput = new List<string>();
-				sameLineOutput.Add(Helper.FormatAnnounceText());
-				sameLineOutput.Add(Helper.FormatDefaultBackground());
+				sameLineOutput.Add(Settings.FormatAnnounceText());
+				sameLineOutput.Add(Settings.FormatDefaultBackground());
 				sameLineOutput.Add("Player name: ");
 				Helper.Display.StoreUserOutput(sameLineOutput);
 				Helper.Display.RetrieveUserOutput();
@@ -20,7 +20,7 @@ namespace DungeonGame {
 				Helper.Display.ClearUserOutput();
 				var playerNameString = "Your player name is " + playerName + ", is that correct? [Y] or [N].";
 				Helper.Display.StoreUserOutput(
-					Helper.FormatAnnounceText(), Helper.FormatDefaultBackground(), playerNameString);
+					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), playerNameString);
 				Helper.Display.RetrieveUserOutput();
 				Helper.RequestCommand();
 				var input = Helper.GetFormattedInput(Console.ReadLine());
@@ -31,12 +31,12 @@ namespace DungeonGame {
 			}
 			while (true) {
 				Helper.Display.StoreUserOutput(
-					Helper.FormatAnnounceText(),
-					Helper.FormatDefaultBackground(),
+					Settings.FormatAnnounceText(),
+					Settings.FormatDefaultBackground(),
 					"Please enter your class. You can select Mage, Warrior, or Archer.");
 				var sameLineOutputClass = new List<string>();
-				sameLineOutputClass.Add(Helper.FormatAnnounceText());
-				sameLineOutputClass.Add(Helper.FormatDefaultBackground());
+				sameLineOutputClass.Add(Settings.FormatAnnounceText());
+				sameLineOutputClass.Add(Settings.FormatDefaultBackground());
 				sameLineOutputClass.Add("Player class: ");
 				Helper.Display.StoreUserOutput(sameLineOutputClass);
 				Helper.Display.RetrieveUserOutput();
@@ -45,8 +45,8 @@ namespace DungeonGame {
 				var playerClassInput = textInfo.ToTitleCase(userInput[0].ToString());
 				if (playerClassInput != "Mage" && playerClassInput != "Warrior" && playerClassInput != "Archer") {
 					Helper.Display.StoreUserOutput(
-						Helper.FormatAnnounceText(), 
-						Helper.FormatDefaultBackground(), 
+						Settings.FormatAnnounceText(), 
+						Settings.FormatDefaultBackground(), 
 						"Invalid selection. Please enter Mage, Warrior, or Archer for your class.");
 					Helper.Display.RetrieveUserOutput();
 					continue;
@@ -54,7 +54,7 @@ namespace DungeonGame {
 				var playerClass = playerClassInput;
 				var playerClassString = "Your player class is " + playerClass + ", is that correct? [Y] or [N].";
 				Helper.Display.StoreUserOutput(
-					Helper.FormatAnnounceText(), Helper.FormatDefaultBackground(), playerClassString);
+					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), playerClassString);
 				Helper.RequestCommand();
 				Helper.Display.RetrieveUserOutput();
 				var input = Helper.GetFormattedInput(Console.ReadLine());
@@ -69,18 +69,18 @@ namespace DungeonGame {
 							                  "about an ability, you can 'ability' the ability name. For example, 'ability distance'. " +
 							                  "To use a bow, you must have a quiver equipped, and it must not be empty. To reload " +
 							                  "your quiver, you can 'reload'.";
-							for (var i = 0; i < archerString.Length; i += Helper.GetGameWidth()) {
-								if (archerString.Length - i < Helper.GetGameWidth()) {
+							for (var i = 0; i < archerString.Length; i += Settings.GetGameWidth()) {
+								if (archerString.Length - i < Settings.GetGameWidth()) {
 									Helper.Display.StoreUserOutput(
-										Helper.FormatAnnounceText(), 
-										Helper.FormatDefaultBackground(), 
+										Settings.FormatAnnounceText(), 
+										Settings.FormatDefaultBackground(), 
 										archerString.Substring(i, archerString.Length - i));
 									continue;
 								}
 								Helper.Display.StoreUserOutput(
-									Helper.FormatAnnounceText(), 
-									Helper.FormatDefaultBackground(), 
-									archerString.Substring(i, Helper.GetGameWidth()));
+									Settings.FormatAnnounceText(), 
+									Settings.FormatDefaultBackground(), 
+									archerString.Substring(i, Settings.GetGameWidth()));
 							}
 							return playerArcher;
 						case "Mage":
@@ -89,18 +89,18 @@ namespace DungeonGame {
 							                  "'cast fireball', if you have a spell named fireball in your spellbook. To see " +
 							                  "the list of spells in your spellbook, you can 'list spells'. To view info " +
 							                  "about a spell, you can 'spell' the spell name. For example, 'spell fireball'.";
-							for (var i = 0; i < mageString.Length; i += Helper.GetGameWidth()) {
-								if (mageString.Length - i < Helper.GetGameWidth()) {
+							for (var i = 0; i < mageString.Length; i += Settings.GetGameWidth()) {
+								if (mageString.Length - i < Settings.GetGameWidth()) {
 									Helper.Display.StoreUserOutput(
-										Helper.FormatAnnounceText(), 
-										Helper.FormatDefaultBackground(), 
+										Settings.FormatAnnounceText(), 
+										Settings.FormatDefaultBackground(), 
 										mageString.Substring(i, mageString.Length - i));
 									continue;
 								}
 								Helper.Display.StoreUserOutput(
-									Helper.FormatAnnounceText(), 
-									Helper.FormatDefaultBackground(), 
-									mageString.Substring(i, Helper.GetGameWidth()));
+									Settings.FormatAnnounceText(), 
+									Settings.FormatDefaultBackground(), 
+									mageString.Substring(i, Settings.GetGameWidth()));
 							}
 							return playerMage;
 							case "Warrior":
@@ -109,18 +109,18 @@ namespace DungeonGame {
 							                  "'use charge', if you have an ability named charge in your abilities. To see " +
 							                  "the list of abilities you have available, you can 'list abilities'. To view info " +
 							                  "about an ability, you can 'ability' the ability name. For example, 'ability charge'.";
-							for (var i = 0; i < warriorString.Length; i += Helper.GetGameWidth()) {
-								if (warriorString.Length - i < Helper.GetGameWidth()) {
+							for (var i = 0; i < warriorString.Length; i += Settings.GetGameWidth()) {
+								if (warriorString.Length - i < Settings.GetGameWidth()) {
 									Helper.Display.StoreUserOutput(
-										Helper.FormatAnnounceText(), 
-										Helper.FormatDefaultBackground(), 
+										Settings.FormatAnnounceText(), 
+										Settings.FormatDefaultBackground(), 
 										warriorString.Substring(i, warriorString.Length - i));
 									continue;
 								}
 								Helper.Display.StoreUserOutput(
-									Helper.FormatAnnounceText(), 
-									Helper.FormatDefaultBackground(), 
-									warriorString.Substring(i, Helper.GetGameWidth()));
+									Settings.FormatAnnounceText(), 
+									Settings.FormatDefaultBackground(), 
+									warriorString.Substring(i, Settings.GetGameWidth()));
 							}
 							return playerWarrior;
 					}

@@ -8,8 +8,8 @@ namespace DungeonGame {
 			var effectUserOutput = new UserOutput();
 			// Draw title to show for player effects
 			effectUserOutput.StoreUserOutput(
-				Helper.FormatGeneralInfoText(), 
-				Helper.FormatDefaultBackground(), 
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(), 
 				"Player Effects:");
 			var activeEffects = 0;
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
@@ -26,14 +26,14 @@ namespace DungeonGame {
 					}
 					activeEffects++;
 					effectUserOutput.StoreUserOutput(
-						Helper.FormatGeneralInfoText(), 
-						Helper.FormatDefaultBackground(), 
+						Settings.FormatGeneralInfoText(), 
+						Settings.FormatDefaultBackground(), 
 						effectOutput);
 				}
 				if (activeEffects == 0) {
 					effectUserOutput.StoreUserOutput(
-						Helper.FormatInfoText(),
-						Helper.FormatDefaultBackground(),
+						Settings.FormatInfoText(),
+						Settings.FormatDefaultBackground(),
 						"None.");
 				}
 			}
@@ -49,26 +49,26 @@ namespace DungeonGame {
 					}
 					activeEffects++;
 					effectUserOutput.StoreUserOutput(
-						Helper.FormatGeneralInfoText(), 
-						Helper.FormatDefaultBackground(), 
+						Settings.FormatGeneralInfoText(), 
+						Settings.FormatDefaultBackground(), 
 						effectOutput);
 				}
 				if (activeEffects == 0) {
 					effectUserOutput.StoreUserOutput(
-						Helper.FormatInfoText(),
-						Helper.FormatDefaultBackground(),
+						Settings.FormatInfoText(),
+						Settings.FormatDefaultBackground(),
 						"None.");
 				}
 			}
 			// Create bottom border for effects area
 			var effectsBorder = new StringBuilder();
 			// Effects border needs to extend same width as minimap itself in either direction
-			for (var b = 0; b < Helper.GetMiniMapBorderWidth(); b++) {
+			for (var b = 0; b < Settings.GetMiniMapBorderWidth(); b++) {
 				effectsBorder.Append("=");
 			}
 			effectUserOutput.StoreUserOutput(
-				Helper.FormatGeneralInfoText(), 
-				Helper.FormatDefaultBackground(), 
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(), 
 				effectsBorder.ToString());
 			return effectUserOutput;
 		}

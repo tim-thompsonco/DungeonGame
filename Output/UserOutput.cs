@@ -73,20 +73,20 @@ namespace DungeonGame {
 						lineCount += this.Output[i][c].Length;
 					}
 				}
-				var bufferAmount = Helper.GetGameWidth() - lineCount + Helper.GetBufferGap();
+				var bufferAmount = Settings.GetGameWidth() - lineCount + Settings.GetBufferGap();
 				var bufferStringBuilder = new StringBuilder();
 				for (var b = 0; b < bufferAmount; b++) {
 					bufferStringBuilder.Append(" ");
 				}
 				if (i < this.Output.Count) {
-					this.Output[i].Add(Helper.FormatGeneralInfoText());
-					this.Output[i].Add(Helper.FormatDefaultBackground());
+					this.Output[i].Add(Settings.FormatGeneralInfoText());
+					this.Output[i].Add(Settings.FormatDefaultBackground());
 					this.Output[i].Add(bufferStringBuilder.ToString());
 				}
 				else {
 					this.StoreUserOutput(
-						Helper.FormatGeneralInfoText(),
-						Helper.FormatDefaultBackground(),
+						Settings.FormatGeneralInfoText(),
+						Settings.FormatDefaultBackground(),
 						bufferStringBuilder.ToString());
 				}
 				// var j is iterating through each column of each row of output
@@ -105,20 +105,20 @@ namespace DungeonGame {
 						lineCount += this.Output[k][d].Length;
 					}
 				}
-				var bufferAmount = Helper.GetGameWidth() - lineCount + Helper.GetBufferGap();
+				var bufferAmount = Settings.GetGameWidth() - lineCount + Settings.GetBufferGap();
 				var bufferStringBuilder = new StringBuilder();
 				for (var e = 0; e < bufferAmount; e++) {
 					bufferStringBuilder.Append(" ");
 				}
 				if (k < this.Output.Count) {
-					this.Output[k].Add(Helper.FormatGeneralInfoText());
-					this.Output[k].Add(Helper.FormatDefaultBackground());
+					this.Output[k].Add(Settings.FormatGeneralInfoText());
+					this.Output[k].Add(Settings.FormatDefaultBackground());
 					this.Output[k].Add(bufferStringBuilder.ToString());
 				}
 				else {
 					this.StoreUserOutput(
-						Helper.FormatGeneralInfoText(),
-						Helper.FormatDefaultBackground(),
+						Settings.FormatGeneralInfoText(),
+						Settings.FormatDefaultBackground(),
 						bufferStringBuilder.ToString());
 				}
 				// var j is iterating through each column of each row of output
