@@ -38,7 +38,7 @@ namespace DungeonGame {
 							if (player.InCombat == false && effect.Name.Contains("berserk")) {
 								effect.IsEffectExpired = true;
 							}
-							if (player.InCombat == false) effect.ChangeArmorRound(player);
+							if (player.InCombat == false) effect.ChangeArmorRound();
 							break;
 						case Effect.EffectType.AbsorbDamage:
 							break;
@@ -96,7 +96,6 @@ namespace DungeonGame {
 			var inputParse = inputFormatted.Split(' ');
 			return inputParse;
 		}
-		
 		public static string ParseInput(string[] userInput) {
 			var inputString = new StringBuilder();
 			for (var i = 1; i < userInput.Length; i++) {
@@ -106,59 +105,6 @@ namespace DungeonGame {
 			var parsedInput = inputString.ToString().Trim();
 			return parsedInput;
 		}
-		public static void RequestCommand() {
-			Display.StoreUserOutput(Settings.FormatAnnounceText(), 
-				Settings.FormatDefaultBackground(), "Your command: ");
-		}
-		public static void PlayerDeath() {
-			Display.StoreUserOutput(Settings.FormatAnnounceText(), 
-				Settings.FormatDefaultBackground(), "You have died. Game over.");
-		}
-		public static void GameIntro() {
-			var gameIntroString =
-				"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot" +
-				"and explore dungeons. Stuff you've probably done a million times already across various RPG games. At any time " +
-				"you can get help on commands by typing 'help'.";
-			for (var i = 0; i < gameIntroString.Length; i += Settings.GetGameWidth()) {
-				if (gameIntroString.Length - i < Settings.GetGameWidth()) {
-					Display.StoreUserOutput(
-						Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), 
-						gameIntroString.Substring(i, gameIntroString.Length - i));
-					continue;
-				}
-				Display.StoreUserOutput(
-					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), 
-					gameIntroString.Substring(i, Settings.GetGameWidth()));
-			}
-		}
-		public static void ShowCommandHelp() {
-			var commandHelpString = 
-				"Commands: Players may move in any direction of the game using a shortkey or the full direction name. " +
-				"For example, if you wish to go north, you may type either 'N' or 'North'. If a player wishes to look " +
-				"at something, they can use 'l' or 'look' and then the name of what they want to look at. For example " +
-				"'l zombie' or 'look zombie' would allow you to look at a zombie in the room. The same commands will  " +
-				"work to loot a monster that you have killed. Look or 'L' by itself will look at the room. Other common " +
-				"commands will be shown to the player. Any object that is consumable, such as a potion, can be drank " +
-				"by typing 'drink' and then the name of the potion or object. To use armor or weapons, you must 'equip' " +
-				"them. You can 'unequip' them as well.";
-			for (var i = 0; i < commandHelpString.Length; i += Settings.GetGameWidth()) {
-				if (commandHelpString.Length - i < Settings.GetGameWidth()) {
-					Display.StoreUserOutput(
-						Settings.FormatAnnounceText(),Settings.FormatDefaultBackground(), 
-						commandHelpString.Substring(i, commandHelpString.Length - i));
-					continue;
-				}
-				Display.StoreUserOutput(
-					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), 
-					commandHelpString.Substring(i, Settings.GetGameWidth()));
-			}
-		}
-		
-		public static void InvalidCommand() {
-			Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(), 
-				Settings.FormatDefaultBackground(),"Not a valid command.");
-		}
 		public static void ChangeRoom(Player player, int x, int y, int z) {
 			// Player location is changed to the new coordinates
 			player.X += x;
@@ -166,12 +112,11 @@ namespace DungeonGame {
 			player.Z += z;
 			// Room at new coordinates is found and room description displayed for user
 			var room = Rooms.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
-			var changeRoomIndex = Rooms.IndexOf(room);
-			Rooms[changeRoomIndex].LookRoom();
-			if (!Rooms[changeRoomIndex].IsDiscovered) Rooms[changeRoomIndex].IsDiscovered = true;
-			var roomType = Rooms[changeRoomIndex].GetType().Name;
+			if (Rooms.IndexOf(room) != -1) RoomIndex = Rooms.IndexOf(room);
+			Rooms[RoomIndex].LookRoom();
+			if (!Rooms[RoomIndex].IsDiscovered) Rooms[RoomIndex].IsDiscovered = true;
+			var roomType = Rooms[RoomIndex].GetType().Name;
 			player.CanSave = roomType != "DungeonRoom"; 
-			RoomIndex = changeRoomIndex;
 		}
 		public static void SetPlayerLocation(Player player, int x, int y, int z) {
 			player.X = x;
@@ -185,16 +130,6 @@ namespace DungeonGame {
 			var roomType = Rooms[setRoomIndex].GetType().Name;
 			player.CanSave = roomType != "DungeonRoom";
 			RoomIndex = setRoomIndex;
-		}
-		public static void InvalidDirection() {
-			const string outputString = "You can't go that way!";
-			Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
-		}
-		public static void InvalidVendorSell() {
-			const string outputString = "The vendor doesn't want that.";
-			Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
 		}
 		public static bool QuitGame(Player player) {
 			Display.StoreUserOutput(
@@ -250,38 +185,6 @@ namespace DungeonGame {
 			Display.StoreUserOutput(
 				Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), outputString);
 		}
-		public static void FleeRoom(Player player) {
-			if (Rooms[RoomIndex].GoDown) {
-				ChangeRoom(player, 0, 0, -1);
-			}
-			else if (Rooms[RoomIndex].GoUp) {
-				ChangeRoom(player, 0, 0, 1);
-			}
-			else if (Rooms[RoomIndex].GoNorth) {
-				ChangeRoom(player, 0, 1, 0);
-			}
-			else if (Rooms[RoomIndex].GoSouth) {
-				ChangeRoom(player, 0, -1, 0);
-			}
-			else if (Rooms[RoomIndex].GoEast) {
-				ChangeRoom(player, 1, 0, 0);
-			}
-			else if (Rooms[RoomIndex].GoWest) {
-				ChangeRoom(player, -1, 0, 0);
-			}
-			else if (Rooms[RoomIndex].GoNorthEast) {
-				ChangeRoom(player, 1, 1, 0);
-			}
-			else if (Rooms[RoomIndex].GoNorthWest) {
-				ChangeRoom(player, -1, 1, 0);
-			}
-			else if (Rooms[RoomIndex].GoSouthEast) {
-				ChangeRoom(player, 1, -1, 0);
-			}
-			else if (Rooms[RoomIndex].GoSouthWest) {
-				ChangeRoom(player, -1, -1, 0);
-			}
-		}
 		public static int GetRandomNumber(int lowNum, int highNum) {
 			return RndGenerate.Next(lowNum, highNum + 1);
 		}
@@ -334,6 +237,16 @@ namespace DungeonGame {
 		}
 		public static void ShowUserOutput(Player player) {
 			PlayerHelper.DisplayPlayerStats(player);
+			Rooms[RoomIndex].ShowCommands();
+			MapDisplay = MapOutput.BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
+			EffectDisplay = EffectOutput.ShowEffects(player);
+			Display.BuildUserOutput();
+			Display.RetrieveUserOutput();
+			Display.ClearUserOutput();
+		}
+		public static void ShowUserOutput(Player player, IMonster opponent) {
+			PlayerHelper.DisplayPlayerStats(player);
+			opponent.DisplayStats();
 			Rooms[RoomIndex].ShowCommands();
 			MapDisplay = MapOutput.BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = EffectOutput.ShowEffects(player);

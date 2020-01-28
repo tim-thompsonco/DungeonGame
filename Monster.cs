@@ -237,21 +237,21 @@ namespace DungeonGame {
 		public void DisplayStats() {
 			var opponentHealthString = "Opponent HP: " + this.HitPoints + " / " + this.MaxHitPoints;
 			Helper.Display.StoreUserOutput(
-				Helper.FormatGeneralInfoText(),
-				Helper.FormatDefaultBackground(),
+				Settings.FormatGeneralInfoText(),
+				Settings.FormatDefaultBackground(),
 				opponentHealthString);
 			var healLineOutput = new List<string>();
 			var hitPointMaxUnits = this.MaxHitPoints / 10;
 			var hitPointUnits = this.HitPoints / hitPointMaxUnits;
 			for (var i = 0; i < hitPointUnits; i++) {
-				healLineOutput.Add(Helper.FormatGeneralInfoText());
-				healLineOutput.Add(Helper.FormatHealthBackground());
+				healLineOutput.Add(Settings.FormatGeneralInfoText());
+				healLineOutput.Add(Settings.FormatHealthBackground());
 				healLineOutput.Add("    ");
 			}
 			Helper.Display.StoreUserOutput(healLineOutput);
 			Helper.Display.StoreUserOutput(
-				Helper.FormatGeneralInfoText(),
-				Helper.FormatDefaultBackground(),
+				Settings.FormatGeneralInfoText(),
+				Settings.FormatDefaultBackground(),
 				"==================================================");
 		}
 		public int Attack(Player player) {
@@ -294,13 +294,13 @@ namespace DungeonGame {
 			this.Effects.Clear();
 			var defeatString = "You have defeated the " + this.Name + "!";
 			Helper.Display.StoreUserOutput(
-				Helper.FormatSuccessOutputText(),
-				Helper.FormatDefaultBackground(),
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
 				defeatString);
 			var expGainString = "You have gained " + this.ExperienceProvided + " experience!";
 			Helper.Display.StoreUserOutput(
-				Helper.FormatSuccessOutputText(),
-				Helper.FormatDefaultBackground(),
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
 				expGainString);
 			foreach (var loot in this.MonsterItems) {
 				loot.Equipped = false;

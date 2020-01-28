@@ -6,9 +6,6 @@ using System.Text;
 
 namespace DungeonGame {
 	public class CombatHelper {
-		private string[] Commands { get; set; } = new string[3] {
-		"[F]ight", "[I]nventory", "Flee" };
-
 		public bool SingleCombat(IMonster opponent, Player player) {
 			player.InCombat = true;
 			opponent.InCombat = true;
@@ -17,19 +14,11 @@ namespace DungeonGame {
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				fightStartString);
-			Helper.Display.BuildUserOutput();
-			Helper.Display.ClearUserOutput();
+			Helper.ShowUserOutput(player);
 			while (true) {
-				PlayerHelper.DisplayPlayerStats(player);
-				opponent.DisplayStats();
-				this.ShowCommands();
-				Helper.MapDisplay = MapOutput.BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
-				Helper.EffectDisplay = EffectOutput.ShowEffects(player);
-				Helper.Display.BuildUserOutput();
-				Helper.Display.ClearUserOutput();
-				Helper.RequestCommand();
 				var input = Helper.GetFormattedInput(Console.ReadLine());
 				Console.Clear();
+				Helper.ShowUserOutput(player, opponent);
 				if (player.Effects.Any()) {
 					Helper.RemovedExpiredEffects(player);
 					foreach (var effect in player.Effects) {
@@ -273,7 +262,7 @@ namespace DungeonGame {
 						}
 						continue;
 					default:
-						Helper.InvalidCommand();
+						Messages.InvalidCommand();
 						continue;
 				}
 				var isOpponentStunned = false;
@@ -372,23 +361,6 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				"You tried to flee combat but failed!");
 			return false;
-		}
-		public void ShowCommands() {
-			var sameLineOutput = new List<string> {
-				Settings.FormatGeneralInfoText(), Settings.FormatDefaultBackground(), "Available Commands: "};
-			var objCount = this.Commands.Length;
-			foreach (var command in this.Commands) {
-				var sb = new StringBuilder();
-				sb.Append(command);
-				if (this.Commands[objCount - 1] != command) {
-					sb.Append(", ");
-				}
-				if (this.Commands[objCount - 1] == command) sb.Append(".");
-				sameLineOutput.Add(Settings.FormatInfoText());
-				sameLineOutput.Add(Settings.FormatDefaultBackground());
-				sameLineOutput.Add(sb.ToString());
-			}
-			Helper.Display.StoreUserOutput(sameLineOutput);
 		}
 	}
 }

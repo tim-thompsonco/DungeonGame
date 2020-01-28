@@ -272,8 +272,8 @@ using System.Threading;
 			}
 			catch (NullReferenceException) {
 				Helper.Display.StoreUserOutput(
-					Helper.FormatFailureOutputText(),
-					Helper.FormatDefaultBackground(),
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
 					"Your weapon is not equipped! Going hand to hand!");
 			}
 			return 5;
@@ -289,15 +289,15 @@ using System.Threading;
 						var drankHealthString = "You drank a potion and replenished " +
 						                  this.Consumables[index].RestoreHealth.RestoreHealthAmt + " health.";
 						Helper.Display.StoreUserOutput(
-							Helper.FormatSuccessOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatSuccessOutputText(),
+							Settings.FormatDefaultBackground(),
 							drankHealthString);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"You don't have any health potions!");
 					}
 					break;
@@ -309,22 +309,22 @@ using System.Threading;
 						var drankManaString = "You drank a potion and replenished " +
 						                      this.Consumables[index].RestoreMana.RestoreManaAmt + " mana.";
 						Helper.Display.StoreUserOutput(
-							Helper.FormatSuccessOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatSuccessOutputText(),
+							Settings.FormatDefaultBackground(),
 							drankManaString);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"You don't have any mana potions!");
 					}
 					break;
 				default:
 					Helper.Display.StoreUserOutput(
-						Helper.FormatFailureOutputText(),
-						Helper.FormatDefaultBackground(),
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
 						"What potion did you want to drink?");
 					break;
 			}
@@ -336,15 +336,15 @@ using System.Threading;
 			if (index != -1) {
 				this.Consumables[index].Arrow.LoadArrowsPlayer(this);
 				Helper.Display.StoreUserOutput(
-					Helper.FormatSuccessOutputText(),
-					Helper.FormatDefaultBackground(),
+					Settings.FormatSuccessOutputText(),
+					Settings.FormatDefaultBackground(),
 					"You reloaded your quiver.");
 				if (this.Consumables[index].Arrow.Quantity == 0) this.Consumables.RemoveAt(index);
 			}
 			else {
 				Helper.Display.StoreUserOutput(
-					Helper.FormatFailureOutputText(),
-					Helper.FormatDefaultBackground(),
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
 					"You don't have any arrows!");
 			}
 		}
@@ -496,8 +496,8 @@ using System.Threading;
 							}
 							else {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatAttackFailText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatAttackFailText(),
+									Settings.FormatDefaultBackground(),
 									"You didn't have enough combo points for the second shot!");
 							}
 						}
@@ -525,24 +525,6 @@ using System.Threading;
 			    this.ManaPoints >= this.Spellbook[index].ManaCost &&
 			    this.PlayerClass == PlayerClassType.Mage) {
 				switch (this.Spellbook[index].SpellCategory) {
-					case Spell.SpellType.TownPortal:
-						Spell.CastTownPortal(roomList, this, index);
-						return;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
-			if (index != -1) {
-				throw new InvalidOperationException();
-			}
-			throw new IndexOutOfRangeException();
-		}
-		public void CastSpell(string inputName) {
-			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
-			if (index != -1 &&
-			    this.ManaPoints >= this.Spellbook[index].ManaCost &&
-			    this.PlayerClass == PlayerClassType.Mage) {
-				switch (this.Spellbook[index].SpellCategory) {
 					case Spell.SpellType.Heal:
 						Spell.CastHealing(this, index);
 						return;
@@ -551,6 +533,9 @@ using System.Threading;
 						return;
 					case Spell.SpellType.Diamondskin:
 						Spell.CastDefense(this, index);
+						return;
+					case Spell.SpellType.TownPortal:
+						Spell.CastTownPortal(this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();

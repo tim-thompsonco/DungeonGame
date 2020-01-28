@@ -22,7 +22,7 @@ namespace DungeonGame {
 				Helper.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), playerNameString);
 				Helper.Display.RetrieveUserOutput();
-				Helper.RequestCommand();
+				Messages.RequestCommand();
 				var input = Helper.GetFormattedInput(Console.ReadLine());
 				Helper.Display.ClearUserOutput();
 				if (input[0] == "y") {
@@ -55,7 +55,7 @@ namespace DungeonGame {
 				var playerClassString = "Your player class is " + playerClass + ", is that correct? [Y] or [N].";
 				Helper.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), playerClassString);
-				Helper.RequestCommand();
+				Messages.RequestCommand();
 				Helper.Display.RetrieveUserOutput();
 				var input = Helper.GetFormattedInput(Console.ReadLine());
 				if (input[0] == "y") {

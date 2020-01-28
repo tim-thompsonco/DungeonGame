@@ -18,7 +18,7 @@ namespace DungeonGame {
 			}
 			while (true) {
 				// Game loading commands
-				Helper.GameIntro();
+				Messages.GameIntro();
 				Player player;
 				try {
 					player = Newtonsoft.Json.JsonConvert.DeserializeObject<Player>(File.ReadAllText(

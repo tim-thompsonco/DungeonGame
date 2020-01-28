@@ -339,7 +339,7 @@ namespace DungeonGameTests {
 					false, 1, 1)
 			};
 			var globalTimer = new Timer(
-				e => Helper.CheckStatus(player, spawnedRooms), 
+				e => Helper.CheckStatus(player), 
 				null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 			player.Abilities.Add(
 				new Ability("use bandage", 25, 1, Ability.ArcherAbility.Bandage, 1));
@@ -449,7 +449,7 @@ namespace DungeonGameTests {
 			spawnedRooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
 		}
 		var globalTimer = new Timer(
-			e => Helper.CheckStatus(player, spawnedRooms), 
+			e => Helper.CheckStatus(player), 
 			null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 		var monster = spawnedRooms[0].Monster;
 		var input = new string[2] {"use", "berserk"};
@@ -749,7 +749,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(-2, player.X);
 			Assert.AreEqual(6, player.Y);
 			Assert.AreEqual(0, player.Z);
-			player.CastSpell(spawnedRooms, "town portal");
+			player.CastSpell("town portal");
 			Assert.AreEqual(0, player.X);
 			Assert.AreEqual(7, player.Y);
 			Assert.AreEqual(0, player.Z);

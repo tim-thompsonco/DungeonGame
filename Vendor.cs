@@ -40,8 +40,8 @@ namespace DungeonGame {
 		public void DisplayGearForSale(Player player) {
 			var forSaleString = "The " + this.Name + " has the following items for sale:"; 
 			Helper.Display.StoreUserOutput(
-				Helper.FormatInfoText(),
-				Helper.FormatDefaultBackground(),
+				Settings.FormatInfoText(),
+				Settings.FormatDefaultBackground(),
 				forSaleString);
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (var item in this.VendorItems) {
@@ -67,8 +67,8 @@ namespace DungeonGame {
 				}
 				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 				Helper.Display.StoreUserOutput(
-					Helper.FormatInfoText(),
-					Helper.FormatDefaultBackground(),
+					Settings.FormatInfoText(),
+					Settings.FormatDefaultBackground(),
 					itemName);
 			}
 		}
@@ -121,8 +121,8 @@ namespace DungeonGame {
 			}
 			else {
 				Helper.Display.StoreUserOutput(
-					Helper.FormatFailureOutputText(),
-					Helper.FormatDefaultBackground(),
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
 					"The vendor doesn't have that available for sale!");
 			}
 		}
@@ -133,14 +133,14 @@ namespace DungeonGame {
 				this.VendorItems.RemoveAt(index);
 				var purchaseString = "You purchased " + buyItem.Name + " from the vendor for " + buyItem.ItemValue + " gold.";
 				Helper.Display.StoreUserOutput(
-					Helper.FormatSuccessOutputText(),
-					Helper.FormatDefaultBackground(),
+					Settings.FormatSuccessOutputText(),
+					Settings.FormatDefaultBackground(),
 					purchaseString);
 				return;
 			}
 			Helper.Display.StoreUserOutput(
-				Helper.FormatFailureOutputText(),
-				Helper.FormatDefaultBackground(),
+				Settings.FormatFailureOutputText(),
+				Settings.FormatDefaultBackground(),
 				"You can't afford that!");
 		}
 		public void BuyItem(
@@ -151,8 +151,8 @@ namespace DungeonGame {
 				this.VendorItems.RemoveAt(index);
 				var purchaseString = "You purchased " + buyItem.Name + " from the vendor for " + buyItem.ItemValue + " gold.";
 				Helper.Display.StoreUserOutput(
-					Helper.FormatSuccessOutputText(),
-					Helper.FormatDefaultBackground(),
+					Settings.FormatSuccessOutputText(),
+					Settings.FormatDefaultBackground(),
 					purchaseString);
 				if (this.BuySellType == "Healer") {
 					this.RepopulateHealerPotion(inputName);
@@ -163,8 +163,8 @@ namespace DungeonGame {
 				return;
 			}
 			Helper.Display.StoreUserOutput(
-				Helper.FormatFailureOutputText(),
-				Helper.FormatDefaultBackground(),
+				Settings.FormatFailureOutputText(),
+				Settings.FormatDefaultBackground(),
 				"You can't afford that!");
 		}
 		public void SellItemCheck(Player player, string[] userInput) {
@@ -181,7 +181,7 @@ namespace DungeonGame {
 							this.SellItem(player, userInput, sellConsumable, conIndex);
 							break;
 						}
-						Helper.InvalidVendorSell();
+						Messages.InvalidVendorSell();
 						break;
 					case "Shopkeeper":
 						if (sellConsumable != null) {
@@ -200,14 +200,14 @@ namespace DungeonGame {
 							this.SellItem(player, userInput, sellArmor, invIndex);
 							break;
 						}
-						Helper.InvalidVendorSell();
+						Messages.InvalidVendorSell();
 						break;
 					case "Weapon":
 						if (sellWeapon != null) {
 							this.SellItem(player, userInput, sellWeapon, invIndex);
 							break;
 						}
-						Helper.InvalidVendorSell();
+						Messages.InvalidVendorSell();
 						break;
 					case "Shopkeeper":
 						if (sellArmor != null) {
@@ -224,8 +224,8 @@ namespace DungeonGame {
 			}
 			if (invIndex != -1 || conIndex != -1) return;
 			Helper.Display.StoreUserOutput(
-				Helper.FormatFailureOutputText(),
-				Helper.FormatDefaultBackground(),
+				Settings.FormatFailureOutputText(),
+				Settings.FormatDefaultBackground(),
 				"You don't have that to sell!");
 		}
 		public void SellItem(Player player, string[] userInput, IEquipment sellItem, int index) {
@@ -240,14 +240,14 @@ namespace DungeonGame {
 				this.VendorItems.Add(sellItem);
 				var soldString = "You sold " + sellItem.Name + " to the vendor for " + sellItem.ItemValue + " gold.";
 				Helper.Display.StoreUserOutput(
-					Helper.FormatSuccessOutputText(),
-					Helper.FormatDefaultBackground(),
+					Settings.FormatSuccessOutputText(),
+					Settings.FormatDefaultBackground(),
 					soldString);
 				return;
 			}
 			Helper.Display.StoreUserOutput(
-				Helper.FormatFailureOutputText(),
-				Helper.FormatDefaultBackground(),
+				Settings.FormatFailureOutputText(),
+				Settings.FormatDefaultBackground(),
 				"You have to unequip that first!");
 		}
 		public void RepairItem(Player player, string[] userInput) {
@@ -267,20 +267,20 @@ namespace DungeonGame {
 								var repairArmorString = "Your " + repairArmor.Name + " has been repaired for " + (int) repairCostArmor +
 								                   " gold."; 
 								Helper.Display.StoreUserOutput(
-									Helper.FormatSuccessOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatSuccessOutputText(),
+									Settings.FormatDefaultBackground(),
 									repairArmorString);
 								break;
 							}
 							var cantAffordArmorString = "You can't afford to repair " + repairArmor.Name;
 							Helper.Display.StoreUserOutput(
-								Helper.FormatFailureOutputText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
 								cantAffordArmorString);
 						}
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"The vendor doesn't repair that type of equipment.");
 						break;
 					case "Weapon":
@@ -294,36 +294,36 @@ namespace DungeonGame {
 								var repairWeaponString = "Your " + repairWeapon.Name + " has been repaired for " + 
 								                         (int)repairCostWeapon + " gold.";
 								Helper.Display.StoreUserOutput(
-									Helper.FormatSuccessOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatSuccessOutputText(),
+									Settings.FormatDefaultBackground(),
 									repairWeaponString);
 								break;
 							}
 							var cantAffordWeaponString = "You can't afford to repair " + repairWeapon.Name;
 							Helper.Display.StoreUserOutput(
-								Helper.FormatFailureOutputText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
 								cantAffordWeaponString);
 						}
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"The vendor doesn't repair that type of equipment.");
 						break;
 					case "Healer":
 					case "Shopkeeper":
 						var noRepairString = this.BuySellType + "s don't repair equipment.";
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							noRepairString);
 						break;
 				}
 				return;
 			}
 			Helper.Display.StoreUserOutput(
-				Helper.FormatFailureOutputText(),
-				Helper.FormatDefaultBackground(),
+				Settings.FormatFailureOutputText(),
+				Settings.FormatDefaultBackground(),
 				"That item is not in your inventory.");
 		}
 		public string GetName() {
@@ -337,15 +337,15 @@ namespace DungeonGame {
 				player.ComboPoints = player.MaxComboPoints;
 				var restoreString = "You have been restored by the " + this.Name + ".";
 				Helper.Display.StoreUserOutput(
-					Helper.FormatSuccessOutputText(),
-					Helper.FormatDefaultBackground(),
+					Settings.FormatSuccessOutputText(),
+					Settings.FormatDefaultBackground(),
 					restoreString);
 				return;
 			}
 			var noRestoreString = "The " + this.Name + " cannot restore you!";
 			Helper.Display.StoreUserOutput(
-				Helper.FormatFailureOutputText(),
-				Helper.FormatDefaultBackground(),
+				Settings.FormatFailureOutputText(),
+				Settings.FormatDefaultBackground(),
 				noRestoreString);
 		}
 		public void RepopulateHealerPotion(string inputName) {

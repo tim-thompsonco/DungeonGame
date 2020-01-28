@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
 namespace DungeonGame {
 	public static class InputProcessor {
-		public static void ProcessUserInput(List<IRoom> spawnedRooms, Player player, string[] input, Timer globalTimer) {
-			var isTownRoom = spawnedRooms[Helper.RoomIndex] as TownRoom;
+		public static void ProcessUserInput(Player player, string[] input, Timer globalTimer) {
+			var isTownRoom = Helper.Rooms[Helper.RoomIndex] as TownRoom;
 			switch (input[0]) {
 				case "a":
 				case "attack":
@@ -15,7 +14,7 @@ namespace DungeonGame {
 						if (input[1] != null) {
 							try {
 								globalTimer.Change(Timeout.Infinite, Timeout.Infinite);
-								var outcome = spawnedRooms[Helper.RoomIndex].AttackOpponent(player, input, spawnedRooms);
+								var outcome = Helper.Rooms[Helper.RoomIndex].AttackOpponent(player, input);
 								if (!outcome && player.HitPoints <= 0) {
 									Helper.IsGameOver = true;
 								}
@@ -23,16 +22,16 @@ namespace DungeonGame {
 							}
 							catch (Exception) {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"An error has occurred while attacking.");
 							}
 						}
 					}
 					catch (IndexOutOfRangeException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"You can't attack that.");
 					}
 
@@ -45,16 +44,16 @@ namespace DungeonGame {
 							}
 							catch (NullReferenceException) {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"There is no vendor in the room to buy an item from.");
 							}
 						}
 					}
 					catch (IndexOutOfRangeException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"Buy what?");
 					}
 
@@ -62,7 +61,7 @@ namespace DungeonGame {
 				case "cast":
 					try {
 						if (input[1] != null && input[1].Contains("town")) {
-							player.CastSpell(spawnedRooms, Helper.ParseInput(input));
+							player.CastSpell(Helper.ParseInput(input));
 						}
 						else if (input[1] != null) {
 							player.CastSpell(Helper.ParseInput(input));
@@ -70,43 +69,43 @@ namespace DungeonGame {
 					}
 					catch (IndexOutOfRangeException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"You don't have that spell.");
 					}
 					catch (NullReferenceException) {
 						if (player.PlayerClass != Player.PlayerClassType.Mage) {
 							Helper.Display.StoreUserOutput(
-								Helper.FormatFailureOutputText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
 								"You can't cast spells. You're not a mage!");
 						}
 					}
 					catch (InvalidOperationException) {
 						if (player.PlayerClass != Player.PlayerClassType.Mage) {
 							Helper.Display.StoreUserOutput(
-								Helper.FormatFailureOutputText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
 								"You can't cast spells. You're not a mage!");
 						}
 
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"You do not have enough mana to cast that spell!");
 					}
 
 					break;
 				case "drop":
-					GearHelper.DropItem(player, input, spawnedRooms);
+					GearHelper.DropItem(player, input);
 					break;
 				case "pickup":
-					GearHelper.PickupItem(player, input, spawnedRooms);
+					GearHelper.PickupItem(player, input);
 					break;
 				case "use":
 					try {
 						if (input.Contains("distance")) {
-							player.UseAbility(spawnedRooms, input);
+							player.UseAbility(input);
 						}
 
 						if (input[1] != null) {
@@ -115,51 +114,51 @@ namespace DungeonGame {
 					}
 					catch (IndexOutOfRangeException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"You don't have that ability.");
 						Console.WriteLine();
 					}
 					catch (ArgumentOutOfRangeException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"You don't have that ability.");
 					}
 					catch (NullReferenceException) {
 						if (player.PlayerClass == Player.PlayerClassType.Mage) {
 							Helper.Display.StoreUserOutput(
-								Helper.FormatFailureOutputText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
 								"You can't use abilities. You're not a warrior or archer!");
 						}
 					}
 					catch (InvalidOperationException) {
 						if (player.PlayerClass == Player.PlayerClassType.Mage) {
 							Helper.Display.StoreUserOutput(
-								Helper.FormatFailureOutputText(),
-								Helper.FormatDefaultBackground(),
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
 								"You can't use abilities. You're not a warrior or archer!");
 						}
 
 						switch (player.PlayerClass) {
 							case Player.PlayerClassType.Warrior:
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"You do not have enough rage to use that ability!");
 								break;
 							case Player.PlayerClassType.Archer:
 								if (player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
 									Helper.Display.StoreUserOutput(
-										Helper.FormatFailureOutputText(),
-										Helper.FormatDefaultBackground(),
+										Settings.FormatFailureOutputText(),
+										Settings.FormatDefaultBackground(),
 										"You do not have a bow equipped!");
 								}
 
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"You do not have enough combo points to use that ability!");
 								break;
 							default:
@@ -181,7 +180,7 @@ namespace DungeonGame {
 					break;
 				case "q":
 				case "quit":
-					var quitConfirm = Helper.QuitGame(player, spawnedRooms);
+					var quitConfirm = Helper.QuitGame(player);
 					if (quitConfirm) {
 						globalTimer.Dispose();
 						return;
@@ -196,8 +195,8 @@ namespace DungeonGame {
 							}
 							catch (IndexOutOfRangeException) {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"List what?");
 							}
 
@@ -208,8 +207,8 @@ namespace DungeonGame {
 							}
 							catch (IndexOutOfRangeException) {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"List what?");
 							}
 
@@ -223,8 +222,8 @@ namespace DungeonGame {
 					}
 					catch (IndexOutOfRangeException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"What ability did you want to know about?");
 					}
 
@@ -235,8 +234,8 @@ namespace DungeonGame {
 					}
 					catch (IndexOutOfRangeException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"What spell did you want to know about?");
 					}
 
@@ -246,18 +245,18 @@ namespace DungeonGame {
 					try {
 						if (input[1] != null) {
 							try {
-								spawnedRooms[Helper.RoomIndex].LookNpc(input);
+								Helper.Rooms[Helper.RoomIndex].LookNpc(input);
 							}
 							catch (Exception) {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"An error has occurred while looking.");
 							}
 						}
 					}
 					catch (IndexOutOfRangeException) {
-						spawnedRooms[Helper.RoomIndex].LookRoom();
+						Helper.Rooms[Helper.RoomIndex].LookRoom();
 					}
 
 					break;
@@ -265,20 +264,20 @@ namespace DungeonGame {
 					try {
 						if (input[1] != null) {
 							try {
-								spawnedRooms[Helper.RoomIndex].LootCorpse(player, input);
+								Helper.Rooms[Helper.RoomIndex].LootCorpse(player, input);
 							}
 							catch (Exception) {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"An error has occurred while looting.");
 							}
 						}
 					}
 					catch (IndexOutOfRangeException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"Loot what?");
 					}
 
@@ -289,20 +288,20 @@ namespace DungeonGame {
 					}
 					else {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"You can't drink that!");
 					}
 
 					break;
 				case "save":
-					Helper.SaveGame(player, spawnedRooms);
+					Helper.SaveGame(player);
 					break;
 				case "restore":
 					isTownRoom?.Vendor.RestorePlayer(player);
 					break;
 				case "help":
-					Helper.ShowCommandHelp();
+					Messages.ShowCommandHelp();
 					break;
 				case "sell":
 					try {
@@ -312,16 +311,16 @@ namespace DungeonGame {
 							}
 							catch (NullReferenceException) {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"The vendor doesn't want that.");
 							}
 						}
 					}
 					catch (IndexOutOfRangeException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"Sell what?");
 					}
 
@@ -346,14 +345,14 @@ namespace DungeonGame {
 					}
 					catch (IndexOutOfRangeException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"Repair what?");
 					}
 					catch (NullReferenceException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"There is no vendor here!");
 					}
 
@@ -373,14 +372,14 @@ namespace DungeonGame {
 					}
 					catch (IndexOutOfRangeException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"Upgrade what?");
 					}
 					catch (NullReferenceException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"There is no trainer here!");
 					}
 
@@ -400,14 +399,14 @@ namespace DungeonGame {
 					}
 					catch (IndexOutOfRangeException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"Train what?");
 					}
 					catch (NullReferenceException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"There is no trainer here!");
 					}
 
@@ -420,8 +419,8 @@ namespace DungeonGame {
 							}
 							catch (NullReferenceException) {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"There is no vendor in the room to show inventory available for sale.");
 							}
 						}
@@ -432,173 +431,173 @@ namespace DungeonGame {
 							}
 							catch (NullReferenceException) {
 								Helper.Display.StoreUserOutput(
-									Helper.FormatFailureOutputText(),
-									Helper.FormatDefaultBackground(),
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
 									"There is no trainer in the room to show available upgrades.");
 							}
 						}
 					}
 					catch (IndexOutOfRangeException) {
 						Helper.Display.StoreUserOutput(
-							Helper.FormatFailureOutputText(),
-							Helper.FormatDefaultBackground(),
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
 							"Show what?");
 					}
 
 					break;
 				case "n":
 				case "north":
-					if (spawnedRooms[Helper.RoomIndex].GoNorth) {
+					if (Helper.Rooms[Helper.RoomIndex].GoNorth) {
 						try {
-							Helper.ChangeRoom(spawnedRooms, player, 0, 1, 0);
+							Helper.ChangeRoom(player, 0, 1, 0);
 						}
 						catch (ArgumentOutOfRangeException) {
-							Helper.InvalidDirection();
+							Messages.InvalidDirection();
 						}
 					}
 					else {
-						Helper.InvalidDirection();
+						Messages.InvalidDirection();
 					}
 
 					break;
 				case "s":
 				case "south":
-					if (spawnedRooms[Helper.RoomIndex].GoSouth) {
+					if (Helper.Rooms[Helper.RoomIndex].GoSouth) {
 						try {
-							Helper.ChangeRoom(spawnedRooms, player, 0, -1, 0);
+							Helper.ChangeRoom(player, 0, -1, 0);
 
 						}
 						catch (ArgumentOutOfRangeException) {
-							Helper.InvalidDirection();
+							Messages.InvalidDirection();
 						}
 					}
 					else {
-						Helper.InvalidDirection();
+						Messages.InvalidDirection();
 					}
 
 					break;
 				case "e":
 				case "east":
-					if (spawnedRooms[Helper.RoomIndex].GoEast) {
+					if (Helper.Rooms[Helper.RoomIndex].GoEast) {
 						try {
-							Helper.ChangeRoom(spawnedRooms, player, 1, 0, 0);
+							Helper.ChangeRoom(player, 1, 0, 0);
 						}
 						catch (ArgumentOutOfRangeException) {
-							Helper.InvalidDirection();
+							Messages.InvalidDirection();
 						}
 					}
 					else {
-						Helper.InvalidDirection();
+						Messages.InvalidDirection();
 					}
 
 					break;
 				case "w":
 				case "west":
-					if (spawnedRooms[Helper.RoomIndex].GoWest) {
+					if (Helper.Rooms[Helper.RoomIndex].GoWest) {
 						try {
-							Helper.ChangeRoom(spawnedRooms, player, -1, 0, 0);
+							Helper.ChangeRoom(player, -1, 0, 0);
 						}
 						catch (ArgumentOutOfRangeException) {
-							Helper.InvalidDirection();
+							Messages.InvalidDirection();
 						}
 					}
 					else {
-						Helper.InvalidDirection();
+						Messages.InvalidDirection();
 					}
 
 					break;
 				case "ne":
 				case "northeast":
-					if (spawnedRooms[Helper.RoomIndex].GoNorthEast) {
+					if (Helper.Rooms[Helper.RoomIndex].GoNorthEast) {
 						try {
-							Helper.ChangeRoom(spawnedRooms, player, 1, 1, 0);
+							Helper.ChangeRoom(player, 1, 1, 0);
 						}
 						catch (ArgumentOutOfRangeException) {
-							Helper.InvalidDirection();
+							Messages.InvalidDirection();
 						}
 					}
 					else {
-						Helper.InvalidDirection();
+						Messages.InvalidDirection();
 					}
 
 					break;
 				case "nw":
 				case "northwest":
-					if (spawnedRooms[Helper.RoomIndex].GoNorthWest) {
+					if (Helper.Rooms[Helper.RoomIndex].GoNorthWest) {
 						try {
-							Helper.ChangeRoom(spawnedRooms, player, -1, 1, 0);
+							Helper.ChangeRoom(player, -1, 1, 0);
 						}
 						catch (ArgumentOutOfRangeException) {
-							Helper.InvalidDirection();
+							Messages.InvalidDirection();
 						}
 					}
 					else {
-						Helper.InvalidDirection();
+						Messages.InvalidDirection();
 					}
 
 					break;
 				case "se":
 				case "southeast":
-					if (spawnedRooms[Helper.RoomIndex].GoSouthEast) {
+					if (Helper.Rooms[Helper.RoomIndex].GoSouthEast) {
 						try {
-							Helper.ChangeRoom(spawnedRooms, player, 1, -1, 0);
+							Helper.ChangeRoom(player, 1, -1, 0);
 						}
 						catch (ArgumentOutOfRangeException) {
-							Helper.InvalidDirection();
+							Messages.InvalidDirection();
 						}
 					}
 					else {
-						Helper.InvalidDirection();
+						Messages.InvalidDirection();
 					}
 
 					break;
 				case "sw":
 				case "southwest":
-					if (spawnedRooms[Helper.RoomIndex].GoSouthWest) {
+					if (Helper.Rooms[Helper.RoomIndex].GoSouthWest) {
 						try {
-							Helper.ChangeRoom(spawnedRooms, player, -1, -1, 0);
+							Helper.ChangeRoom(player, -1, -1, 0);
 						}
 						catch (ArgumentOutOfRangeException) {
-							Helper.InvalidDirection();
+							Messages.InvalidDirection();
 						}
 					}
 					else {
-						Helper.InvalidDirection();
+						Messages.InvalidDirection();
 					}
 
 					break;
 				case "u":
 				case "up":
-					if (spawnedRooms[Helper.RoomIndex].GoUp) {
+					if (Helper.Rooms[Helper.RoomIndex].GoUp) {
 						try {
-							Helper.ChangeRoom(spawnedRooms, player, 0, 0, 1);
+							Helper.ChangeRoom(player, 0, 0, 1);
 						}
 						catch (ArgumentOutOfRangeException) {
-							Helper.InvalidDirection();
+							Messages.InvalidDirection();
 						}
 					}
 					else {
-						Helper.InvalidDirection();
+						Messages.InvalidDirection();
 					}
 
 					break;
 				case "d":
 				case "down":
-					if (spawnedRooms[Helper.RoomIndex].GoDown) {
+					if (Helper.Rooms[Helper.RoomIndex].GoDown) {
 						try {
-							Helper.ChangeRoom(spawnedRooms, player, 0, 0, -1);
+							Helper.ChangeRoom(player, 0, 0, -1);
 						}
 						catch (ArgumentOutOfRangeException) {
-							Helper.InvalidDirection();
+							Messages.InvalidDirection();
 						}
 					}
 					else {
-						Helper.InvalidDirection();
+						Messages.InvalidDirection();
 					}
 
 					break;
 				default:
-					Helper.InvalidCommand();
+					Messages.InvalidCommand();
 					break;
 			}
 		}

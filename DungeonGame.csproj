@@ -53,6 +53,7 @@
     <Compile Include="Interfaces\IEquipment.cs" />
     <Compile Include="Interfaces\ITrainer.cs" />
     <Compile Include="Interfaces\IVendor.cs" />
+    <Compile Include="Messages.cs" />
     <Compile Include="Output\EffectOutput.cs" />
     <Compile Include="Output\MapOutput.cs" />
     <Compile Include="Output\UserOutput.cs" />

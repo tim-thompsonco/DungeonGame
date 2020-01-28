@@ -24,7 +24,7 @@ namespace DungeonGame {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (var item in player.Inventory) {
 				if (!item.IsEquipped()) continue;
-				var itemName = GetInventoryName(player, item);
+				var itemName = GetInventoryName(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (itemName.Contains("Quiver"))
 					itemInfo.Append(" (Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity + ")");
@@ -36,7 +36,7 @@ namespace DungeonGame {
 			}
 			foreach (var item in player.Inventory) {
 				if (item.IsEquipped()) continue;
-				var itemName = GetInventoryName(player, item);
+				var itemName = GetInventoryName(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (player.PlayerQuiver?.Name == itemName)
 					itemInfo.Append("Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity);
