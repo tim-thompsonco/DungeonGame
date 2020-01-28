@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DungeonGame {
+﻿namespace DungeonGame {
 	public class Quiver : IEquipment {
 		public bool Equipped { get; set; }
 		public int ItemValue { get; set; }
@@ -31,7 +29,7 @@ namespace DungeonGame {
 		}
 
 		public void OutOfArrows() {
-			Helper.Display.StoreUserOutput(
+			RoomHandler.Display.StoreUserOutput(
 				Settings.FormatAttackFailText(),
 				Settings.FormatDefaultBackground(),
 				"You ran out of arrows! Going hand to hand!");

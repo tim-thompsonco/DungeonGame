@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -111,10 +110,10 @@ namespace DungeonGame {
 		}
 		private void GenerateRandomCoords() {
 			while (true) {
-				this.xCoord = Helper.GetRandomNumber(
+				this.xCoord = GameHandler.GetRandomNumber(
 					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].X - 1, 
 					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].X + 1);
-				this.yCoord = Helper.GetRandomNumber(
+				this.yCoord = GameHandler.GetRandomNumber(
 					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Y - 1, 
 					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Y + 1);
 				this.zCoord = this.CurrentLevel;

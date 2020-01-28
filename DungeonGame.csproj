@@ -42,20 +42,25 @@
     <Compile Include="Builders\RoomBuilderHelper.cs" />
     <Compile Include="Consumable Properties\Arrow.cs" />
     <Compile Include="Consumable Properties\RestoreMana.cs" />
-    <Compile Include="Consumable.cs" />
     <Compile Include="Consumable Properties\RestoreHealth.cs" />
     <Compile Include="Effect.cs" />
-    <Compile Include="Helpers\CombatHelper.cs" />
-    <Compile Include="Helpers\GearHelper.cs" />
-    <Compile Include="Helpers\Helper.cs" />
-    <Compile Include="Helpers\PlayerHelper.cs" />
-    <Compile Include="InputProcessor.cs" />
+    <Compile Include="Handlers\CombatHandler.cs" />
+    <Compile Include="Handlers\GameHandler.cs" />
+    <Compile Include="Handlers\GearHandler.cs" />
+    <Compile Include="Handlers\RoomHandler.cs" />
+    <Compile Include="Handlers\InputHandler.cs" />
+    <Compile Include="Handlers\PlayerHandler.cs" />
+    <Compile Include="Handlers\SaveQuitHandler.cs" />
     <Compile Include="Interfaces\IEquipment.cs" />
+    <Compile Include="Items\Armor.cs" />
+    <Compile Include="Items\Consumable.cs" />
+    <Compile Include="Items\Loot.cs" />
+    <Compile Include="Items\Quiver.cs" />
+    <Compile Include="Items\Weapon.cs" />
     <Compile Include="Messages.cs" />
     <Compile Include="Output\EffectOutput.cs" />
     <Compile Include="Output\MapOutput.cs" />
     <Compile Include="Output\UserOutput.cs" />
-    <Compile Include="Quiver.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Spell Properties\ArcaneOffense.cs" />
     <Compile Include="Spell Properties\Defense.cs" />
@@ -65,18 +70,15 @@
     <Compile Include="Trainer.cs" />
     <Compile Include="Vendor.cs" />
     <Compile Include="Spell Properties\FireOffense.cs" />
-    <Compile Include="Loot.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Spell.cs" />
-    <Compile Include="Armor.cs" />
     <Compile Include="DungeonRoom.cs" />
     <Compile Include="Interfaces\IRoom.cs" />
     <Compile Include="Interfaces\IRoomInteraction.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="TownRoom.cs" />
-    <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">

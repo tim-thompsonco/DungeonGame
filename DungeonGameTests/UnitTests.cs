@@ -19,9 +19,9 @@ namespace DungeonGameTests {
 		[Test]
 		public void ValueUnitTests() {
 			// Test RoundNumber method in Helper class
-			Assert.AreEqual(110, Helper.RoundNumber(107));
-			Assert.AreEqual(110, Helper.RoundNumber(105));
-			Assert.AreEqual(100, Helper.RoundNumber(104));
+			Assert.AreEqual(110, GameHandler.RoundNumber(107));
+			Assert.AreEqual(110, GameHandler.RoundNumber(105));
+			Assert.AreEqual(100, GameHandler.RoundNumber(104));
 			/* Test Monster constructor HP and exp smoothing
 			if values smoothed correctly, % should be 0 */
 			var monster = new Monster(1, Monster.MonsterType.Skeleton);
@@ -339,7 +339,7 @@ namespace DungeonGameTests {
 					false, 1, 1)
 			};
 			var globalTimer = new Timer(
-				e => Helper.CheckStatus(player), 
+				e => GameHandler.CheckStatus(player), 
 				null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 			player.Abilities.Add(
 				new Ability("use bandage", 25, 1, Ability.ArcherAbility.Bandage, 1));
@@ -348,7 +348,7 @@ namespace DungeonGameTests {
 			Make sure stacked healing effects only tick for 3 rounds in combat */
 			player.InCombat = true;
 			var input = new string[2] {"use", "bandage"};
-			var abilityName = Helper.ParseInput(input);
+			var abilityName = RoomHandler.ParseInput(input);
 			Assert.AreEqual("bandage", abilityName);
 			player.UseAbility(abilityName);
 			player.UseAbility(abilityName);
@@ -363,7 +363,7 @@ namespace DungeonGameTests {
 			// Make sure stacked healing effects tick properly outside of combat		
 			player.HitPoints = 10;
 			var inputTwo = new string[2] {"use", "bandage"};
-			var abilityNameTwo = Helper.ParseInput(inputTwo);
+			var abilityNameTwo = RoomHandler.ParseInput(inputTwo);
 			Assert.AreEqual("bandage", abilityName);
 			player.UseAbility(abilityNameTwo);
 			player.UseAbility(abilityNameTwo);
@@ -390,7 +390,7 @@ namespace DungeonGameTests {
 			player.InCombat = true;
 			monster.InCombat = true;
 			var input = new string[2] {"use", "charge"};
-			var abilityName = Helper.ParseInput(input);
+			var abilityName = RoomHandler.ParseInput(input);
 			Assert.AreEqual("charge", abilityName);
 			player.UseAbility(monster, abilityName);
 			Assert.AreEqual(
@@ -399,7 +399,7 @@ namespace DungeonGameTests {
 			for (var i = 2; i < 4; i++) {
 				monster.Effects[0].StunnedRound(monster);
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
-				Helper.RemovedExpiredEffects(monster);
+				GameHandler.RemovedExpiredEffects(monster);
 			}
 			Assert.AreEqual(false, monster.Effects.Any());
 		}
@@ -418,7 +418,7 @@ namespace DungeonGameTests {
 			var monster = spawnedRooms[0].Monster;
 			monster.HitPoints = 100;
 			var input = new string[2] {"use", "rend"};
-			var abilityName = Helper.ParseInput(input);
+			var abilityName = RoomHandler.ParseInput(input);
 			Assert.AreEqual("rend", abilityName);
 			player.UseAbility(monster, abilityName);
 			Assert.AreEqual(
@@ -429,7 +429,7 @@ namespace DungeonGameTests {
 			for (var i = 2; i < 5; i++) {
 				monster.Effects[0].BleedingRound(monster);
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
-				Helper.RemovedExpiredEffects(monster);
+				GameHandler.RemovedExpiredEffects(monster);
 			}
 			Assert.AreEqual(false, monster.Effects.Any());
 			Assert.AreEqual(70, monster.HitPoints);
@@ -439,7 +439,7 @@ namespace DungeonGameTests {
 		// Berserk should create a change damage and change armor effect, which should expire when combat ends
 		var player = new Player("placeholder", Player.PlayerClassType.Warrior);
 		var output = new UserOutput();
-		GearHelper.EquipInitialGear(player);
+		GearHandler.EquipInitialGear(player);
 		var spawnedRooms = new List<IRoom> {
 			new DungeonRoom(0, 0, 0, false, false, false,
 				false, false, false, false, false, false,
@@ -449,11 +449,11 @@ namespace DungeonGameTests {
 			spawnedRooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
 		}
 		var globalTimer = new Timer(
-			e => Helper.CheckStatus(player), 
+			e => GameHandler.CheckStatus(player), 
 			null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 		var monster = spawnedRooms[0].Monster;
 		var input = new string[2] {"use", "berserk"};
-		var abilityName = Helper.ParseInput(input);
+		var abilityName = RoomHandler.ParseInput(input);
 		Assert.AreEqual("berserk", abilityName);
 		player.UseAbility(monster, abilityName);
 		Assert.AreEqual(2, player.Effects.Count);
@@ -466,7 +466,7 @@ namespace DungeonGameTests {
 			var player = new Player("placeholder", Player.PlayerClassType.Archer);
 			player.StatReplenishInterval = 9999999; // Disable stat replenish over time method
 			var output = new UserOutput();
-			GearHelper.EquipInitialGear(player);
+			GearHandler.EquipInitialGear(player);
 			var spawnedRooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
 					false, false, false, false, false, false,
@@ -482,7 +482,7 @@ namespace DungeonGameTests {
 			monster.HitPoints = 50;
 			monster.MaxHitPoints = 100;
 			var input = new string[2] {"use", "stun"};
-			var abilityName = Helper.ParseInput(input);
+			var abilityName = RoomHandler.ParseInput(input);
 			Assert.AreEqual("stun", abilityName);
 			player.UseAbility(monster, abilityName);
 			Assert.AreEqual(35, monster.HitPoints);
@@ -490,12 +490,12 @@ namespace DungeonGameTests {
 			for (var i = 2; i < 5; i++) {
 				monster.Effects[0].StunnedRound(monster);
 				Assert.AreEqual(i , monster.Effects[0].EffectCurRound);
-				Helper.RemovedExpiredEffects(monster);
+				GameHandler.RemovedExpiredEffects(monster);
 			}
 			Assert.AreEqual(false, monster.Effects.Any());
 			monster.HitPoints = 80;
 			var inputTwo = new string[2] {"use", "gut"};
-			var abilityNameTwo = Helper.ParseInput(inputTwo);
+			var abilityNameTwo = RoomHandler.ParseInput(inputTwo);
 			Assert.AreEqual("gut", abilityNameTwo);
 			player.UseAbility(monster, abilityNameTwo);
 			Assert.AreEqual(65, monster.HitPoints);
@@ -504,7 +504,7 @@ namespace DungeonGameTests {
 			for (var i = 2; i < 5; i++) {
 				monster.Effects[0].BleedingRound(monster);
 				Assert.AreEqual(i , monster.Effects[0].EffectCurRound);
-				Helper.RemovedExpiredEffects(monster);
+				GameHandler.RemovedExpiredEffects(monster);
 			}
 			Assert.AreEqual(false, monster.Effects.Any());
 			Assert.AreEqual(50, monster.HitPoints);
@@ -515,7 +515,7 @@ namespace DungeonGameTests {
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			player.StatReplenishInterval = 9999999; // Disable stat replenish over time method
 			var output = new UserOutput();
-			GearHelper.EquipInitialGear(player);
+			GearHandler.EquipInitialGear(player);
 			var spawnedRooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
 					false, false, false, false, false, false,
@@ -532,7 +532,7 @@ namespace DungeonGameTests {
 			monster.HitPoints = 50;
 			monster.MaxHitPoints = 100;
 			var input = new string[2] {"cast", "fireball"};
-			var spellName = Helper.ParseInput(input);
+			var spellName = RoomHandler.ParseInput(input);
 			Assert.AreEqual("fireball", spellName);
 			player.CastSpell(monster, spellName);
 			Assert.AreEqual(25, monster.HitPoints);
@@ -540,7 +540,7 @@ namespace DungeonGameTests {
 			for (var i = 2; i < 5; i++) {
 				monster.Effects[0].OnFireRound(monster);
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
-				Helper.RemovedExpiredEffects(monster);
+				GameHandler.RemovedExpiredEffects(monster);
 			}
 			Assert.AreEqual(false, monster.Effects.Any());
 			Assert.AreEqual(10, monster.HitPoints);
@@ -550,7 +550,7 @@ namespace DungeonGameTests {
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			player.StatReplenishInterval = 9999999; // Disable stat replenish over time method
 			var output = new UserOutput();
-			GearHelper.EquipInitialGear(player);
+			GearHandler.EquipInitialGear(player);
 			var spawnedRooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
 					false, false, false, false, false, false,
@@ -565,7 +565,7 @@ namespace DungeonGameTests {
 			}
 			monster.HitPoints = 100;
 			var input = new string[2] {"cast", "frostbolt"};
-			var spellName = Helper.ParseInput(input);
+			var spellName = RoomHandler.ParseInput(input);
 			Assert.AreEqual("frostbolt", spellName);
 			player.PlayerWeapon.Durability = 100;
 			var baseDamage = (double) player.Attack(monster);
@@ -586,7 +586,7 @@ namespace DungeonGameTests {
 				totalBaseDamage += baseDamage;
 				totalFrozenDamage += frozenDamage;
 			}
-			Helper.RemovedExpiredEffects(monster);
+			GameHandler.RemovedExpiredEffects(monster);
 			Assert.AreEqual(false, monster.Effects.Any());
 			var finalBaseDamageWithMod = (int) (totalBaseDamage * multiplier);
 			var finalTotalFrozenDamage = (int) totalFrozenDamage;
@@ -598,25 +598,25 @@ namespace DungeonGameTests {
 			/* Diamondskin should augment armor by 25 points, 1 cur round, 3 max round */
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			var output = new UserOutput();
-			GearHelper.EquipInitialGear(player);
+			GearHandler.EquipInitialGear(player);
 			player.InCombat = true;
 			var inputThree = new string[2] {"cast", "diamondskin"};
-			var spellName = Helper.ParseInput(inputThree);
+			var spellName = RoomHandler.ParseInput(inputThree);
 			Assert.AreEqual("diamondskin", spellName);
-			var baseArmor = GearHelper.CheckArmorRating(player);
+			var baseArmor = GearHandler.CheckArmorRating(player);
 			player.CastSpell(spellName);
 			Assert.AreEqual(true, player.Effects.Any());
 			Assert.AreEqual(
 				true, player.Effects[0].EffectGroup == Effect.EffectType.ChangeArmor);
-			var augmentedArmor = GearHelper.CheckArmorRating(player);
+			var augmentedArmor = GearHandler.CheckArmorRating(player);
 			Assert.AreEqual(baseArmor + 25, augmentedArmor);
 			// Check for 6 rounds, should only augment armor for first 3 rounds then expire
 			for (var i = 1; i < 6; i++) {
 				Thread.Sleep(TimeSpan.FromSeconds(1));
 				Assert.AreEqual(
-					GearHelper.CheckArmorRating(player), i <= 2 ? augmentedArmor : baseArmor);
+					GearHandler.CheckArmorRating(player), i <= 2 ? augmentedArmor : baseArmor);
 			}
-			Helper.RemovedExpiredEffects(player);
+			GameHandler.RemovedExpiredEffects(player);
 			Assert.AreEqual(false, player.Effects.Any());
 		}
 		[Test]

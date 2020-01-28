@@ -2,8 +2,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 
 	namespace DungeonGame {
 	public class Player {
@@ -199,7 +197,7 @@ using System.Threading;
 			this.HitPoints -= weaponDamage;
 		}
 		public int ArmorRating(Monster opponent) {
-			var totalArmorRating = GearHelper.CheckArmorRating(this);
+			var totalArmorRating = GearHandler.CheckArmorRating(this);
 			var levelDiff = opponent.Level - this.Level;
 			var armorMultiplier = 1.00 + (-(double)levelDiff / 5);
 			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
@@ -207,7 +205,7 @@ using System.Threading;
 		}
 		public int Attack(Monster opponent) {
 			var attackAmount = this.PlayerWeapon.Attack();
-			Helper.RemovedExpiredEffects(this);
+			GameHandler.RemovedExpiredEffects(this);
 			foreach (var effect in this.Effects) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
@@ -256,7 +254,7 @@ using System.Threading;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-				Helper.RemovedExpiredEffects(this);
+				GameHandler.RemovedExpiredEffects(this);
 			}
 			try {
 				if (this.PlayerWeapon.IsEquipped() && this.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
@@ -271,7 +269,7 @@ using System.Threading;
 				this.PlayerQuiver.OutOfArrows();
 			}
 			catch (NullReferenceException) {
-				Helper.Display.StoreUserOutput(
+				RoomHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"Your weapon is not equipped! Going hand to hand!");
@@ -288,14 +286,14 @@ using System.Threading;
 						this.Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
 						var drankHealthString = "You drank a potion and replenished " +
 						                  this.Consumables[index].RestoreHealth.RestoreHealthAmt + " health.";
-						Helper.Display.StoreUserOutput(
+						RoomHandler.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
 							drankHealthString);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
-						Helper.Display.StoreUserOutput(
+						RoomHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have any health potions!");
@@ -308,21 +306,21 @@ using System.Threading;
 						this.Consumables[index].RestoreMana.RestoreManaPlayer(this);
 						var drankManaString = "You drank a potion and replenished " +
 						                      this.Consumables[index].RestoreMana.RestoreManaAmt + " mana.";
-						Helper.Display.StoreUserOutput(
+						RoomHandler.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
 							drankManaString);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
-						Helper.Display.StoreUserOutput(
+						RoomHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have any mana potions!");
 					}
 					break;
 				default:
-					Helper.Display.StoreUserOutput(
+					RoomHandler.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"What potion did you want to drink?");
@@ -335,14 +333,14 @@ using System.Threading;
 				f => f.ArrowCategory == Consumable.ArrowType.Standard && f.Name.Contains("arrow"));
 			if (index != -1) {
 				this.Consumables[index].Arrow.LoadArrowsPlayer(this);
-				Helper.Display.StoreUserOutput(
+				RoomHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You reloaded your quiver.");
 				if (this.Consumables[index].Arrow.Quantity == 0) this.Consumables.RemoveAt(index);
 			}
 			else {
-				Helper.Display.StoreUserOutput(
+				RoomHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You don't have any arrows!");
@@ -495,7 +493,7 @@ using System.Threading;
 								Ability.UseOffenseDamageAbility(opponent, this, index);
 							}
 							else {
-								Helper.Display.StoreUserOutput(
+								RoomHandler.Display.StoreUserOutput(
 									Settings.FormatAttackFailText(),
 									Settings.FormatDefaultBackground(),
 									"You didn't have enough combo points for the second shot!");

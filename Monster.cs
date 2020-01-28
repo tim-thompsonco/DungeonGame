@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace DungeonGame {
 	public class Monster : IRoomInteraction {
@@ -42,25 +40,25 @@ namespace DungeonGame {
 			this.Level = level;
 			this.MonsterCategory = monsterType;
 			this.BuildMonsterNameDesc();
-			var randomNumHitPoint = Helper.GetRandomNumber(20, 40);
+			var randomNumHitPoint = GameHandler.GetRandomNumber(20, 40);
 			var maxHitPoints = 80 + ((this.Level - 1) * randomNumHitPoint);
-			this.MaxHitPoints = Helper.RoundNumber(maxHitPoints);
+			this.MaxHitPoints = GameHandler.RoundNumber(maxHitPoints);
 			this.HitPoints = this.MaxHitPoints;
 			if (this.MonsterCategory == MonsterType.Spider) {
 				this.Gold = 0;
 			}
 			else {
-				var randomNumGold = Helper.GetRandomNumber(5, 10);
+				var randomNumGold = GameHandler.GetRandomNumber(5, 10);
 				this.Gold = 10 + ((this.Level - 1) * randomNumGold);
 			}
-			var randomNumExp = Helper.GetRandomNumber(20, 40);
+			var randomNumExp = GameHandler.GetRandomNumber(20, 40);
 			var expProvided = this.MaxHitPoints + randomNumExp;
-			this.ExperienceProvided = Helper.RoundNumber(expProvided);
+			this.ExperienceProvided = GameHandler.RoundNumber(expProvided);
 			this.BuildMonsterGear();
 		}
 
 		private void BuildMonsterGear() {
-			var randomGearNum = Helper.GetRandomNumber(1, 10);
+			var randomGearNum = GameHandler.GetRandomNumber(1, 10);
 			switch (this.MonsterCategory) {
 				case MonsterType.Skeleton:
 					this.MonsterWeapon = randomGearNum switch {
@@ -75,7 +73,7 @@ namespace DungeonGame {
 					};
 					this.BuildMonsterArmor();
 					if (randomGearNum <= 4) {
-						var randomPotionNum = Helper.GetRandomNumber(1, 10);
+						var randomPotionNum = GameHandler.GetRandomNumber(1, 10);
 						this.MonsterItems.Add(randomPotionNum <= 5
 							? new Consumable(this.Level, Consumable.PotionType.Health)
 							: new Consumable(this.Level, Consumable.PotionType.Mana));
@@ -112,7 +110,7 @@ namespace DungeonGame {
 			this.MonsterItems.Add(this.MonsterWeapon);
 		}
 		private void BuildMonsterGem() {
-			var randomGemNum = Helper.GetRandomNumber(1, 6);
+			var randomGemNum = GameHandler.GetRandomNumber(1, 6);
 			switch (randomGemNum) {
 				case 1:
 					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Amethyst));
@@ -137,7 +135,7 @@ namespace DungeonGame {
 			}
 		}
 		private void BuildMonsterArmor() {
-			var randomCatNum = Helper.GetRandomNumber(1, 7);
+			var randomCatNum = GameHandler.GetRandomNumber(1, 7);
 			switch(randomCatNum){
 				case 1:
 					this.MonsterBackArmor = new Armor(this.Level, Armor.ArmorSlot.Back);
@@ -236,7 +234,7 @@ namespace DungeonGame {
 		}
 		public void DisplayStats() {
 			var opponentHealthString = "Opponent HP: " + this.HitPoints + " / " + this.MaxHitPoints;
-			Helper.Display.StoreUserOutput(
+			RoomHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				opponentHealthString);
@@ -248,15 +246,15 @@ namespace DungeonGame {
 				healLineOutput.Add(Settings.FormatHealthBackground());
 				healLineOutput.Add("    ");
 			}
-			Helper.Display.StoreUserOutput(healLineOutput);
-			Helper.Display.StoreUserOutput(
+			RoomHandler.Display.StoreUserOutput(healLineOutput);
+			RoomHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				"==================================================");
 		}
 		public int Attack(Player player) {
 			var attackDamage = this.MonsterWeapon.Attack();
-			var randomChanceToHit = Helper.GetRandomNumber(1, 100);
+			var randomChanceToHit = GameHandler.GetRandomNumber(1, 100);
 			var chanceToDodge = player.DodgeChance;
 			if (chanceToDodge > 50) chanceToDodge = 50;
 			return randomChanceToHit <= chanceToDodge ? 0 : attackDamage;
@@ -293,12 +291,12 @@ namespace DungeonGame {
 			this.InCombat = false;
 			this.Effects.Clear();
 			var defeatString = "You have defeated the " + this.Name + "!";
-			Helper.Display.StoreUserOutput(
+			RoomHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				defeatString);
 			var expGainString = "You have gained " + this.ExperienceProvided + " experience!";
-			Helper.Display.StoreUserOutput(
+			RoomHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				expGainString);
@@ -308,7 +306,7 @@ namespace DungeonGame {
 			this.Name = "Dead " + this.GetName();
 			this.Desc = "A corpse of a monster you killed.";
 			player.GainExperience(this.ExperienceProvided);
-			PlayerHelper.LevelUpCheck(player);
+			PlayerHandler.LevelUpCheck(player);
 		}
 	}
 }

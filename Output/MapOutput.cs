@@ -25,13 +25,13 @@ namespace DungeonGame {
 					var mapX = j;
 					var mapY = i;
 					var mapZ = player.Z;
-					var roomName = Helper.Rooms.Find(f => f.X == mapX && f.Y == mapY && f.Z == mapZ);
-					var roomIndex = Helper.Rooms.IndexOf(roomName);
+					var roomName = RoomHandler.Rooms.Find(f => f.X == mapX && f.Y == mapY && f.Z == mapZ);
+					var roomIndex = RoomHandler.Rooms.IndexOf(roomName);
 					if (roomIndex != -1 &&
 					    mapX == player.X &&
 					    mapY == player.Y &&
 					    mapZ == player.Z) {
-						if (Helper.Rooms[roomIndex].GoUp || Helper.Rooms[roomIndex].GoDown) {
+						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
 							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
 							sameLineOutput.Add("OO"); // What prints to display
@@ -47,7 +47,7 @@ namespace DungeonGame {
 					    mapY == player.Y &&
 					    mapZ == player.Z &&
 					    j == endRightPos) {
-						if (Helper.Rooms[roomIndex].GoUp || Helper.Rooms[roomIndex].GoDown) {
+						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
 							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
 							sameLineOutput.Add("OO |"); // What prints to display
@@ -63,7 +63,7 @@ namespace DungeonGame {
 					    mapY == player.Y &&
 					    mapZ == player.Z &&
 					    j == startLeftPos) {
-						if (Helper.Rooms[roomIndex].GoUp || Helper.Rooms[roomIndex].GoDown) {
+						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
 							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
 							sameLineOutput.Add("| OO"); // What prints to display
@@ -74,8 +74,8 @@ namespace DungeonGame {
 						sameLineOutput.Add("|   "); // What prints to display
 						continue;
 					}
-					if (roomIndex != -1 && Helper.Rooms[roomIndex].IsDiscovered) {
-						if (Helper.Rooms[roomIndex].GoUp || Helper.Rooms[roomIndex].GoDown) {
+					if (roomIndex != -1 && RoomHandler.Rooms[roomIndex].IsDiscovered) {
+						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
 							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 							sameLineOutput.Add("OO"); // What prints to display
@@ -86,8 +86,8 @@ namespace DungeonGame {
 						sameLineOutput.Add("  "); // What prints to display
 						continue;
 					}
-					if (roomIndex != -1 && Helper.Rooms[roomIndex].IsDiscovered && j == endRightPos) {
-						if (Helper.Rooms[roomIndex].GoUp || Helper.Rooms[roomIndex].GoDown) {
+					if (roomIndex != -1 && RoomHandler.Rooms[roomIndex].IsDiscovered && j == endRightPos) {
+						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
 							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 							sameLineOutput.Add("OO |"); // What prints to display
@@ -98,8 +98,8 @@ namespace DungeonGame {
 						sameLineOutput.Add("   |"); // What prints to display
 						continue;
 					}
-					if (roomIndex != -1 && Helper.Rooms[roomIndex].IsDiscovered && j == startLeftPos) {
-						if (Helper.Rooms[roomIndex].GoUp || Helper.Rooms[roomIndex].GoDown) {
+					if (roomIndex != -1 && RoomHandler.Rooms[roomIndex].IsDiscovered && j == startLeftPos) {
+						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
 							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 							sameLineOutput.Add("| OO"); // What prints to display

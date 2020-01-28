@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using Newtonsoft.Json.Linq;
 
 namespace DungeonGame {
 	public class UserOutput {
@@ -66,7 +64,7 @@ namespace DungeonGame {
 		}
 		public void BuildUserOutput() {
 			// Var i is iterating through each row of output
-			for (var i = 0; i < Helper.MapDisplay.Output.Count; i++) {
+			for (var i = 0; i < RoomHandler.MapDisplay.Output.Count; i++) {
 				var lineCount = 0;
 				if (i < this.Output.Count) {
 					for (var c = 2; c < this.Output[i].Count; c += 3) {
@@ -90,15 +88,15 @@ namespace DungeonGame {
 						bufferStringBuilder.ToString());
 				}
 				// var j is iterating through each column of each row of output
-				for (var j = 0; j < Helper.MapDisplay.Output[i].Count; j += 3) {
-					this.Output[i].Add(Helper.MapDisplay?.Output[i][j]);
-					this.Output[i].Add(Helper.MapDisplay?.Output[i][j + 1]);
-					this.Output[i].Add(Helper.MapDisplay?.Output[i][j + 2]);
+				for (var j = 0; j < RoomHandler.MapDisplay.Output[i].Count; j += 3) {
+					this.Output[i].Add(RoomHandler.MapDisplay?.Output[i][j]);
+					this.Output[i].Add(RoomHandler.MapDisplay?.Output[i][j + 1]);
+					this.Output[i].Add(RoomHandler.MapDisplay?.Output[i][j + 2]);
 				}
 			}
 			var lc = 0;
 			// Var k is iterating through each row of output
-			for (var k = Helper.MapDisplay.Output.Count; k < Helper.EffectDisplay.Output.Count + Helper.MapDisplay.Output.Count; k++) {
+			for (var k = RoomHandler.MapDisplay.Output.Count; k < RoomHandler.EffectDisplay.Output.Count + RoomHandler.MapDisplay.Output.Count; k++) {
 				var lineCount = 0;
 				if (k < this.Output.Count) {
 					for (var d = 2; d < this.Output[k].Count; d += 3) {
@@ -122,11 +120,11 @@ namespace DungeonGame {
 						bufferStringBuilder.ToString());
 				}
 				// var j is iterating through each column of each row of output
-				for (var l = 0; l < Helper.EffectDisplay.Output[lc].Count; l += 3) {
-					this.Output[k].Add(Helper.EffectDisplay?.Output[lc][l]);
-					this.Output[k].Add(Helper.EffectDisplay?.Output[lc][l + 1]);
-					this.Output[k].Add(Helper.EffectDisplay?.Output[lc][l + 2]);
-					if ((lc + 1) < Helper.EffectDisplay.Output.Count) lc++;
+				for (var l = 0; l < RoomHandler.EffectDisplay.Output[lc].Count; l += 3) {
+					this.Output[k].Add(RoomHandler.EffectDisplay?.Output[lc][l]);
+					this.Output[k].Add(RoomHandler.EffectDisplay?.Output[lc][l + 1]);
+					this.Output[k].Add(RoomHandler.EffectDisplay?.Output[lc][l + 2]);
+					if ((lc + 1) < RoomHandler.EffectDisplay.Output.Count) lc++;
 				}
 			}
 		}

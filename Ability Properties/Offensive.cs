@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace DungeonGame {
 	public class Offensive {
 		public int Amount { get; set;  }

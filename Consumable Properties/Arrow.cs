@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DungeonGame {
+﻿namespace DungeonGame {
 	public class Arrow {
 		public int Quantity { get; set; }
 
@@ -10,7 +8,7 @@ namespace DungeonGame {
 
 		public void LoadArrowsPlayer(Player player) {
 			if (player.PlayerQuiver == null) {
-				Helper.Display.StoreUserOutput(
+				RoomHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You don't have a quiver to reload!");

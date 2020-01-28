@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace DungeonGame {
+﻿namespace DungeonGame {
 	public class Bandage {
 		public int HealAmount { get; set; }
 		public int HealOverTime { get; set; }

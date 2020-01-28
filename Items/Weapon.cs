@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 
 namespace DungeonGame {
@@ -28,8 +27,8 @@ namespace DungeonGame {
 			this.WeaponGroup = weaponType;
 			this.Weight = this.WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
 			this.Durability = 100;
-			var randomNum = Helper.GetRandomNumber(1, 100);
-			var randomWeaponDmg = Helper.GetRandomNumber(18, 24);
+			var randomNum = GameHandler.GetRandomNumber(1, 100);
+			var randomWeaponDmg = GameHandler.GetRandomNumber(18, 24);
 			if (randomNum < 5) {
 				this.RegDamage = randomWeaponDmg + ((level - 1) * 3);
 				this.CritMultiplier = 1.3;
@@ -109,7 +108,7 @@ namespace DungeonGame {
 		public int Attack() {
 			if (!this.Equipped) return 0;
 			double attackDamage = this.RegDamage;
-			var chanceToCrit = Helper.GetRandomNumber(1, 100);
+			var chanceToCrit = GameHandler.GetRandomNumber(1, 100);
 			if (chanceToCrit <= 25) attackDamage *= this.CritMultiplier;
 			this.Durability -= 1;
 			attackDamage *= this.Durability / (double)100;

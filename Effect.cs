@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using Newtonsoft.Json;
-
-namespace DungeonGame {
+﻿namespace DungeonGame {
 	public class Effect {
 		public enum EffectType {
 			Healing,
@@ -46,7 +42,7 @@ namespace DungeonGame {
 			player.HitPoints += this.EffectAmountOverTime;
 			if (player.HitPoints > player.MaxHitPoints) player.HitPoints = player.MaxHitPoints;
 			var healAmtString = "You have been healed for " + this.EffectAmountOverTime + " health."; 
-			Helper.Display.StoreUserOutput(
+			RoomHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				healAmtString);
@@ -59,7 +55,7 @@ namespace DungeonGame {
 			var changeDmgString = this.EffectAmountOverTime > 0 ?
 				"Your damage is increased by " + this.EffectAmountOverTime + "."
 				: "Your damage is decreased by " + this.EffectAmountOverTime + ".";
-			Helper.Display.StoreUserOutput(
+			RoomHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				changeDmgString);
@@ -70,7 +66,7 @@ namespace DungeonGame {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var augmentString = "Your armor is augmented by " + this.EffectAmountOverTime + ".";
-			Helper.Display.StoreUserOutput(
+			RoomHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				augmentString);
@@ -82,7 +78,7 @@ namespace DungeonGame {
 			this.EffectCurRound += 1;
 			opponent.HitPoints -= this.EffectAmountOverTime;
 			var burnString = "The " + opponent.Name + " burns for " + this.EffectAmountOverTime + " fire damage.";
-			Helper.Display.StoreUserOutput(
+			RoomHandler.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				burnString);
@@ -94,7 +90,7 @@ namespace DungeonGame {
 			this.EffectCurRound += 1;
 			opponent.HitPoints -= this.EffectAmountOverTime;
 			var bleedString = "The " + opponent.Name + " bleeds for " + this.EffectAmountOverTime + " physical damage.";
-			Helper.Display.StoreUserOutput(
+			RoomHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				bleedString);
@@ -105,7 +101,7 @@ namespace DungeonGame {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var stunnedString = "The " + opponent.Name + " is stunned and cannot attack.";
-			Helper.Display.StoreUserOutput(
+			RoomHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				stunnedString);
@@ -116,7 +112,7 @@ namespace DungeonGame {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var frozenString = "The " + opponent.Name + " is frozen. Physical, frost and arcane damage to it will be double!";
-			Helper.Display.StoreUserOutput(
+			RoomHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				frozenString);
