@@ -104,7 +104,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				frostInfoString);
 		}
-		public static void CastFrostOffense(IMonster opponent, Player player, int index) {
+		public static void CastFrostOffense(Monster opponent, Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var frostSpellDamage = player.Spellbook[index].FrostOffense.FrostDamage;
 			foreach (var effect in opponent.Effects) {
@@ -180,7 +180,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				fireInfoString);
 		}
-		public static void CastFireOffense(IMonster opponent, Player player, int index) {
+		public static void CastFireOffense(Monster opponent, Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var fireSpellDamage = player.Spellbook[index].FireOffense.BlastDamage;
 			if (fireSpellDamage == 0) {
@@ -215,7 +215,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				arcaneAmountString);
 		}
-		public static void CastArcaneOffense(IMonster opponent, Player player, int index) {
+		public static void CastArcaneOffense(Monster opponent, Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var arcaneSpellDamage = player.Spellbook[index].ArcaneOffense.ArcaneDamage;
 			foreach (var effect in opponent.Effects) {

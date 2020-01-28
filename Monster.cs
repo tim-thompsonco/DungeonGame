@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace DungeonGame {
-	public class Monster : IMonster {
+	public class Monster : IRoomInteraction {
 		public enum MonsterType {
 			Skeleton,
 			Zombie,
@@ -263,13 +263,13 @@ namespace DungeonGame {
 		}
 		public int CheckArmorRating() {
 			var totalArmorRating = 0;
-			if (this.MonsterChestArmor != null && this.MonsterChestArmor.IsEquipped()) {
+			if (this.MonsterChestArmor != null && this.MonsterChestArmor.Equipped) {
 				totalArmorRating += this.MonsterChestArmor.ArmorRating;
 			}
-			if (this.MonsterHeadArmor != null && this.MonsterHeadArmor.IsEquipped()) {
+			if (this.MonsterHeadArmor != null && this.MonsterHeadArmor.Equipped) {
 				totalArmorRating += this.MonsterHeadArmor.ArmorRating;
 			}
-			if (this.MonsterLegArmor != null && this.MonsterLegArmor.IsEquipped()) {
+			if (this.MonsterLegArmor != null && this.MonsterLegArmor.Equipped) {
 				totalArmorRating += this.MonsterLegArmor.ArmorRating;
 			}
 			return totalArmorRating;

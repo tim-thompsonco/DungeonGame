@@ -198,14 +198,14 @@ using System.Threading;
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;
 		}
-		public int ArmorRating(IMonster opponent) {
+		public int ArmorRating(Monster opponent) {
 			var totalArmorRating = GearHelper.CheckArmorRating(this);
 			var levelDiff = opponent.Level - this.Level;
 			var armorMultiplier = 1.00 + (-(double)levelDiff / 5);
 			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
-		public int Attack(IMonster opponent) {
+		public int Attack(Monster opponent) {
 			var attackAmount = this.PlayerWeapon.Attack();
 			Helper.RemovedExpiredEffects(this);
 			foreach (var effect in this.Effects) {
@@ -350,7 +350,7 @@ using System.Threading;
 		}
 		public void UseAbility(string[] input) {
 			var index = this.Abilities.FindIndex(
-				f => f.GetName() == input[1] || f.GetName().Contains(input[1]));
+				f => f.Name == input[1] || f.Name.Contains(input[1]));
 			var direction = input.Last();
 			if (index != -1 && 
 			    this.RagePoints >= this.Abilities[index].RageCost && 
@@ -405,7 +405,7 @@ using System.Threading;
 		}
 		public void UseAbility(string inputName) {
 			var index = this.Abilities.FindIndex(
-				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (index != -1 && 
 			    this.RagePoints >= this.Abilities[index].RageCost && 
 			    this.PlayerClass == PlayerClassType.Warrior) {
@@ -442,9 +442,9 @@ using System.Threading;
 				throw new IndexOutOfRangeException();
 			}
 		}
-		public void UseAbility(IMonster opponent, string inputName) {
+		public void UseAbility(Monster opponent, string inputName) {
 			var index = this.Abilities.FindIndex(
-				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (index != -1 && 
 			    this.RagePoints >= this.Abilities[index].RageCost && 
 			    this.PlayerClass == PlayerClassType.Warrior) {
@@ -546,7 +546,7 @@ using System.Threading;
 			}
 			throw new IndexOutOfRangeException();
 		}
-		public void CastSpell(IMonster opponent, string inputName) {
+		public void CastSpell(Monster opponent, string inputName) {
 			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
 			if (index != -1 && 
 			    this.ManaPoints >= this.Spellbook[index].ManaCost && 

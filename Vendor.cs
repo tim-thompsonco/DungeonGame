@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 
 namespace DungeonGame {
-	public class Vendor : IVendor {
+	public class Vendor : IRoomInteraction {
 		public string Name { get; set; }
 		public string Desc { get; set; }
 		public string BuySellType { get; set; }
@@ -46,8 +46,8 @@ namespace DungeonGame {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (var item in this.VendorItems) {
 				var itemInfo = new StringBuilder();
-				itemInfo.Append(item.GetName().ToString());
-				if (item.IsEquipped()) {
+				itemInfo.Append(item.Name.ToString());
+				if (item.Equipped) {
 					itemInfo.Append(" <Equipped>");
 				}
 				switch (item) {
@@ -77,11 +77,11 @@ namespace DungeonGame {
 			var index = 0;
 			if (this.BuySellType == "Healer") {
 				index = this.VendorItems.FindIndex(
-					f => f.GetName() == inputName || f.GetName().Contains(inputName));
+					f => f.Name == inputName || f.Name.Contains(inputName));
 			}
 			else {
 				index = this.VendorItems.FindIndex(
-					f => f.GetName() == inputName || f.GetName().Contains(userInput.Last()));
+					f => f.Name == inputName || f.Name.Contains(userInput.Last()));
 			}
 			if (index != -1) {
 				var buyArmor = this.VendorItems[index] as Armor;
@@ -170,9 +170,9 @@ namespace DungeonGame {
 		public void SellItemCheck(Player player, string[] userInput) {
 			var inputName = Helper.ParseInput(userInput);
 			var invIndex = player.Inventory.FindIndex(
-				f => f.GetName() == inputName || f.GetName().Contains(inputName) && f.IsEquipped() == false);
+				f => f.Name == inputName || f.Name.Contains(inputName) && f.Equipped == false);
 			var conIndex = player.Consumables.FindIndex(
-				f => f.GetName() == inputName || f.GetName().Contains(inputName) && f.IsEquipped() == false);
+				f => f.Name == inputName || f.Name.Contains(inputName) && f.Equipped == false);
 			if (conIndex != -1) {
 				var sellConsumable = player.Consumables[conIndex] as Consumable;
 				switch (this.BuySellType) {
@@ -229,7 +229,7 @@ namespace DungeonGame {
 				"You don't have that to sell!");
 		}
 		public void SellItem(Player player, string[] userInput, IEquipment sellItem, int index) {
-			if (!sellItem.IsEquipped()) {
+			if (!sellItem.Equipped) {
 				player.Gold += sellItem.ItemValue;
 				if (sellItem.GetType().Name == "Consumable") {
 					player.Consumables.RemoveAt(index);
@@ -253,12 +253,12 @@ namespace DungeonGame {
 		public void RepairItem(Player player, string[] userInput) {
 			var parsedInput = Helper.ParseInput(userInput);
 			var index = player.Inventory.FindIndex(
-				f => f.GetName() == parsedInput || f.GetName().Contains(userInput.Last()));
+				f => f.Name == parsedInput || f.Name.Contains(userInput.Last()));
 			if (index != -1) {
 				switch (this.BuySellType) {
 					case "Armor":
 						var repairArmor = player.Inventory[index] as Armor;
-						if (repairArmor != null && repairArmor.IsEquipped()) {
+						if (repairArmor != null && repairArmor.Equipped) {
 							var durabilityRepairArmor = 100 - repairArmor.Durability;
 							var repairCostArmor = repairArmor.ItemValue * (durabilityRepairArmor / 100f);
 							if (player.Gold >= (int)repairCostArmor) {
@@ -285,7 +285,7 @@ namespace DungeonGame {
 						break;
 					case "Weapon":
 						var repairWeapon = player.Inventory[index] as Weapon;
-						if (repairWeapon != null && repairWeapon.IsEquipped()) {
+						if (repairWeapon != null && repairWeapon.Equipped) {
 							var durabilityRepairWeapon = 100 - repairWeapon.Durability;
 							var repairCostWeapon = repairWeapon.ItemValue * (durabilityRepairWeapon / 100f);
 							if (player.Gold >= repairCostWeapon) {
@@ -350,7 +350,7 @@ namespace DungeonGame {
 		}
 		public void RepopulateHealerPotion(string inputName) {
 			var potionIndex = this.VendorItems.FindIndex(
-				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (potionIndex != -1) return;
 			if (inputName.Contains("mana")) {
 				this.VendorItems.Add(new Consumable(1, Consumable.PotionType.Mana));
@@ -361,7 +361,7 @@ namespace DungeonGame {
 		}
 		public void RepopulateArrows(string inputName) {
 			var arrowIndex = this.VendorItems.FindIndex(
-				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (arrowIndex != -1) return;
 			this.VendorItems.Add(new Consumable("arrows", 15, Consumable.ArrowType.Standard));
 		}

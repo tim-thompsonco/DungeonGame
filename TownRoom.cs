@@ -25,9 +25,9 @@ namespace DungeonGame {
 		public List<string> Commands { get; set; }
 		// List of objects in room (including Vendors)
 		public List<IRoomInteraction> RoomObjects { get; set; }
-		public IVendor Vendor;
-		public ITrainer Trainer;
-		public IMonster Monster { get; set; }
+		public Vendor Vendor;
+		public Trainer Trainer;
+		public Monster Monster { get; set; }
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public TownRoom() {}
@@ -85,7 +85,7 @@ namespace DungeonGame {
 			bool goSouthEast,
 			bool goUp,
 			bool goDown,
-			IVendor vendor
+			Vendor vendor
 			)
 			: this(name, 
 				desc, 
@@ -121,7 +121,7 @@ namespace DungeonGame {
 			bool goSouthEast,
 			bool goUp,
 			bool goDown,
-			ITrainer trainer
+			Trainer trainer
 		)
 			: this(name, 
 				desc, 
@@ -142,7 +142,7 @@ namespace DungeonGame {
 			this.RoomObjects.Add(this.Trainer);
 		}
 
-		public IMonster GetMonster() {
+		public Monster GetMonster() {
 			return this.Monster;
 		}
 		public bool AttackOpponent(Player player, string[] input) {
@@ -270,7 +270,7 @@ namespace DungeonGame {
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (var item in this.RoomObjects) {
 					var sb = new StringBuilder();
-					var itemTitle = item.GetName();
+					var itemTitle = item.Name;
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
 					if (this.RoomObjects[objCount - 1] != item) {
@@ -298,10 +298,10 @@ namespace DungeonGame {
 			}
 			var inputName = inputString.ToString().Trim();
 			var nameIndex = this.RoomObjects.FindIndex(
-				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (this.RoomObjects[nameIndex].GetType() == typeof(Vendor)) {
-				var vendorName = this.Vendor.GetName().Split(' ');
-				if (vendorName.Last() == inputName || this.Vendor.GetName() == inputName) {
+				var vendorName = this.Vendor.Name.Split(' ');
+				if (vendorName.Last() == inputName || this.Vendor.Name == inputName) {
 					for (var i = 0; i < this.Vendor.Desc.Length; i += Settings.GetGameWidth()) {
 						if (this.Vendor.Desc.Length - i < Settings.GetGameWidth()) {
 							Helper.Display.StoreUserOutput(
@@ -325,7 +325,7 @@ namespace DungeonGame {
 					foreach (var itemForSale in this.Vendor.VendorItems) {
 						var sameLineOutputItem = new List<string>();
 						var sb = new StringBuilder();
-						var itemTitle = itemForSale.GetName();
+						var itemTitle = itemForSale.Name;
 						itemTitle = textInfo.ToTitleCase(itemTitle);
 						sb.Append(itemTitle);
 						sameLineOutputItem.Add(Settings.FormatRoomOutputText());
@@ -343,8 +343,8 @@ namespace DungeonGame {
 				}
 			}
 			else {
-				var trainerName = this.Trainer.GetName().Split(' ');
-				if (trainerName.Last() == inputName || this.Trainer.GetName() == inputName) {
+				var trainerName = this.Trainer.Name.Split(' ');
+				if (trainerName.Last() == inputName || this.Trainer.Name == inputName) {
 					for (var i = 0; i < this.Trainer.Desc.Length; i += Settings.GetGameWidth()) {
 						if (this.Trainer.Desc.Length - i < Settings.GetGameWidth()) {
 							Helper.Display.StoreUserOutput(

@@ -77,7 +77,7 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void OnFireRound(IMonster opponent) {
+		public void OnFireRound(Monster opponent) {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			opponent.HitPoints -= this.EffectAmountOverTime;
@@ -89,7 +89,7 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void BleedingRound(IMonster opponent) {
+		public void BleedingRound(Monster opponent) {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			opponent.HitPoints -= this.EffectAmountOverTime;
@@ -101,7 +101,7 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void StunnedRound(IMonster opponent) {
+		public void StunnedRound(Monster opponent) {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var stunnedString = "The " + opponent.Name + " is stunned and cannot attack.";
@@ -112,7 +112,7 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void FrozenRound(IMonster opponent) {
+		public void FrozenRound(Monster opponent) {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var frozenString = "The " + opponent.Name + " is frozen. Physical, frost and arcane damage to it will be double!";

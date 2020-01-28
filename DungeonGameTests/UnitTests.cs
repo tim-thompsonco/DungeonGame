@@ -383,7 +383,7 @@ namespace DungeonGameTests {
 					false, false, false, false, false, false,
 					false, 1, 1)
 			};
-			if (spawnedRooms[0].GetMonster() == null) {
+			if (spawnedRooms[0].Monster == null) {
 				spawnedRooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
 			}
 			var monster = spawnedRooms[0].Monster;
@@ -412,7 +412,7 @@ namespace DungeonGameTests {
 					false, false, false, false, false, false,
 					false, 1, 1)
 			};
-			if (spawnedRooms[0].GetMonster() == null) {
+			if (spawnedRooms[0].Monster == null) {
 				spawnedRooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
 			}
 			var monster = spawnedRooms[0].Monster;
@@ -445,7 +445,7 @@ namespace DungeonGameTests {
 				false, false, false, false, false, false,
 				false, 1, 1)
 		};
-		if (spawnedRooms[0].GetMonster() == null) {
+		if (spawnedRooms[0].Monster == null) {
 			spawnedRooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
 		}
 		var globalTimer = new Timer(
@@ -472,7 +472,7 @@ namespace DungeonGameTests {
 					false, false, false, false, false, false,
 					false, 1, 1)
 			};
-			if (spawnedRooms[0].GetMonster() == null) {
+			if (spawnedRooms[0].Monster == null) {
 				spawnedRooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
 			}
 			var monster = spawnedRooms[0].Monster;
@@ -521,7 +521,7 @@ namespace DungeonGameTests {
 					false, false, false, false, false, false,
 					false, 1, 1)
 			};
-			if (spawnedRooms[0].GetMonster() == null) {
+			if (spawnedRooms[0].Monster == null) {
 				spawnedRooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
 			}
 			var monster = spawnedRooms[0].Monster;
@@ -556,11 +556,11 @@ namespace DungeonGameTests {
 					false, false, false, false, false, false,
 					false, 1, 1)
 			};
-			if (spawnedRooms[0].GetMonster() == null) {
+			if (spawnedRooms[0].Monster == null) {
 				spawnedRooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
 			}
 			var monster = spawnedRooms[0].Monster;
-			foreach (var item in monster.MonsterItems.Where(item => item.IsEquipped())) {
+			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}
 			monster.HitPoints = 100;
@@ -630,7 +630,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("You can't upgrade spells. You're not a mage!",expectedOutput);
 			player.PlayerClass = Player.PlayerClassType.Mage;
 			var spellIndex = player.Spellbook.FindIndex(
-				f => f.GetName() == "fireball");
+				f => f.Name == "fireball");
 			Assert.AreEqual(25, player.Spellbook[spellIndex].FireOffense.BlastDamage);
 			Assert.AreEqual(5, player.Spellbook[spellIndex].FireOffense.BurnDamage);
 			player.Gold = 0;
@@ -668,7 +668,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("You can't upgrade abilities. You're not a warrior or archer!",expectedOutput);
 			player.PlayerClass = Player.PlayerClassType.Archer;
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.GetName() == "distance" || f.GetName().Contains("distance"));
+				f => f.Name == "distance" || f.Name.Contains("distance"));
 			Assert.AreEqual(25, player.Abilities[abilityIndex].Offensive.Amount);
 			Assert.AreEqual(50, player.Abilities[abilityIndex].Offensive.ChanceToSucceed);
 			player.Gold = 0;
@@ -706,13 +706,13 @@ namespace DungeonGameTests {
 			Assert.AreEqual("You can't train abilities. You're not a warrior or archer!",expectedOutput);
 			player.PlayerClass = Player.PlayerClassType.Warrior;
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.GetName() == "bandage" || f.GetName().Contains("bandage"));
+				f => f.Name == "bandage" || f.Name.Contains("bandage"));
 			Assert.AreEqual(-1, abilityIndex);
 			player.Gold = 0;
 			output.ClearUserOutput();
 			trainer.TrainAbility(player, "bandage");
 			abilityIndex = player.Abilities.FindIndex(
-				f => f.GetName() == "bandage" || f.GetName().Contains("bandage"));
+				f => f.Name == "bandage" || f.Name.Contains("bandage"));
 			Assert.AreEqual(-1, abilityIndex);
 			expectedOutput = output.Output[0][2]; 
 			Assert.AreEqual("You are not ready to train that ability. You need to level up first!", 
@@ -728,7 +728,7 @@ namespace DungeonGameTests {
 			trainer.TrainAbility(player, "bandage");
 			expectedOutput = output.Output[0][2]; 
 			abilityIndex = player.Abilities.FindIndex(
-				f => f.GetName() == "bandage" || f.GetName().Contains("bandage"));
+				f => f.Name == "bandage" || f.Name.Contains("bandage"));
 			Assert.AreNotEqual(-1, abilityIndex);
 			Assert.AreEqual(60, player.Gold);
 			Assert.AreEqual("You purchased Bandage (Rank 1) for 40 gold.", expectedOutput);

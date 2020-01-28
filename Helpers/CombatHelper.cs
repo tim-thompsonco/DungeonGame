@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DungeonGame {
 	public class CombatHelper {
-		public bool SingleCombat(IMonster opponent, Player player) {
+		public bool SingleCombat(Monster opponent, Player player) {
 			player.InCombat = true;
 			opponent.InCombat = true;
 			var fightStartString = player.Name + ", you have encountered a " + opponent.Name + ". Time to fight!";
@@ -345,7 +345,7 @@ namespace DungeonGame {
 				}
 			}
 		}
-		private bool CanFleeCombat(Player player, IMonster opponent) {
+		private bool CanFleeCombat(Player player, Monster opponent) {
 			var randomNum = Helper.GetRandomNumber(1, 10);
 			if (randomNum > 5) {
 				Helper.Display.StoreUserOutput(

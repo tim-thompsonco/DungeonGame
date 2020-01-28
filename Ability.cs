@@ -103,9 +103,6 @@ namespace DungeonGame {
 			}
 		}
 		
-		public string GetName() {
-			return this.Name;
-		}
 		public static void DeductAbilityCost(Player player, int index) {
 			if (player.PlayerClass == Player.PlayerClassType.Warrior) {
 				player.RagePoints -= player.Abilities[index].RageCost;
@@ -130,7 +127,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				abilityInfoString);
 		}
-		public static void UseStunAbility(IMonster opponent, Player player, int index) {
+		public static void UseStunAbility(Monster opponent, Player player, int index) {
 			if (player.PlayerClass == Player.PlayerClassType.Archer && OutOfArrows(player)) {
 				/* If quiver is empty, player can only do a normal attack, and attack() also checks for
 				 arrow count and informs player that they are out of arrows */
@@ -271,7 +268,8 @@ namespace DungeonGame {
 				return;
 			}
 			var roomIndex = Helper.Rooms.IndexOf(roomName);
-			var opponent = Helper.Rooms[roomIndex].GetMonster();
+			var opponentRoom = Helper.Rooms[roomIndex] as DungeonRoom;
+			var opponent = opponentRoom?.Monster;
 			if (opponent == null) {
 				Helper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -364,7 +362,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				abilityString);
 		}
-		public static void UseDisarmAbility(IMonster opponent, Player player, int index) {
+		public static void UseDisarmAbility(Monster opponent, Player player, int index) {
 			DeductAbilityCost(player, index);
 			var successChance = Helper.GetRandomNumber(1, 100);
 			if (successChance > player.Abilities[index].Offensive.Amount) {
@@ -408,7 +406,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				bleedOverTimeString);
 		}
-		public static void UseOffenseDamageAbility(IMonster opponent, Player player, int index) {
+		public static void UseOffenseDamageAbility(Monster opponent, Player player, int index) {
 			if (player.PlayerClass == Player.PlayerClassType.Archer && OutOfArrows(player)) {
 				/* If quiver is empty, player can only do a normal attack, and attack() also checks for
 				 arrow count and informs player that they are out of arrows */

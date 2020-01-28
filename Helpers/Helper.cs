@@ -201,7 +201,7 @@ namespace DungeonGame {
 				if (player.Effects[i].IsEffectExpired) player.Effects.RemoveAt(i);				
 			}
 		}
-		public static void RemovedExpiredEffects(IMonster monster) {
+		public static void RemovedExpiredEffects(Monster monster) {
 			for (var i = 0; i < monster.Effects.Count; i++) {
 				if (monster.Effects[i].IsEffectExpired) monster.Effects.RemoveAt(i);				
 			}
@@ -227,7 +227,7 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		private static void ReplenishStatsOverTime(IMonster monster) {
+		private static void ReplenishStatsOverTime(Monster monster) {
 			if (monster.InCombat) return;
 			if (monster.HitPoints == monster.MaxHitPoints) return;
 			monster.HitPoints += 1;
@@ -244,7 +244,7 @@ namespace DungeonGame {
 			Display.RetrieveUserOutput();
 			Display.ClearUserOutput();
 		}
-		public static void ShowUserOutput(Player player, IMonster opponent) {
+		public static void ShowUserOutput(Player player, Monster opponent) {
 			PlayerHelper.DisplayPlayerStats(player);
 			opponent.DisplayStats();
 			Rooms[RoomIndex].ShowCommands();

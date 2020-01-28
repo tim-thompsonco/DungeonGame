@@ -51,8 +51,6 @@
     <Compile Include="Helpers\PlayerHelper.cs" />
     <Compile Include="InputProcessor.cs" />
     <Compile Include="Interfaces\IEquipment.cs" />
-    <Compile Include="Interfaces\ITrainer.cs" />
-    <Compile Include="Interfaces\IVendor.cs" />
     <Compile Include="Messages.cs" />
     <Compile Include="Output\EffectOutput.cs" />
     <Compile Include="Output\MapOutput.cs" />
@@ -74,7 +72,6 @@
     <Compile Include="Spell.cs" />
     <Compile Include="Armor.cs" />
     <Compile Include="DungeonRoom.cs" />
-    <Compile Include="Interfaces\IMonster.cs" />
     <Compile Include="Interfaces\IRoom.cs" />
     <Compile Include="Interfaces\IRoomInteraction.cs" />
     <Compile Include="Monster.cs" />

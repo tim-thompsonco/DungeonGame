@@ -10,12 +10,5 @@
 			this.Weight = weight;
 			this.ItemValue = 15 + ((level - 1) * 5);
 		}
-
-		public string GetName() {
-			return this.Name;
-		}
-		public bool IsEquipped() {
-			return this.Equipped;
-		}
 	}
 }

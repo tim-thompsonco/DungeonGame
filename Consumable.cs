@@ -101,12 +101,5 @@ namespace DungeonGame {
 			}
 			this.Name = name.ToLower();
 		}
-
-		public string GetName() {
-			return this.Name;
-		}
-		public bool IsEquipped() {
-			return this.Equipped;
-		}
 	}
 }

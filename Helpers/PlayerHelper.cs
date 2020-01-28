@@ -23,7 +23,7 @@ namespace DungeonGame {
 				"Your inventory contains:" );
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (var item in player.Inventory) {
-				if (!item.IsEquipped()) continue;
+				if (!item.Equipped) continue;
 				var itemName = GetInventoryName(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (itemName.Contains("Quiver"))
@@ -35,7 +35,7 @@ namespace DungeonGame {
 					itemInfo.ToString());
 			}
 			foreach (var item in player.Inventory) {
-				if (item.IsEquipped()) continue;
+				if (item.Equipped) continue;
 				var itemName = GetInventoryName(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (player.PlayerQuiver?.Name == itemName)
@@ -48,7 +48,7 @@ namespace DungeonGame {
 			var consumableDict = new Dictionary<string, int>();
 			foreach (var item in player.Consumables) {
 				var itemInfo = new StringBuilder();
-				itemInfo.Append(item.GetName());
+				itemInfo.Append(item.Name);
 				if (item.Name.Contains("potion")) {
 					switch (item.PotionCategory.ToString()) {
 						case "Health":
@@ -94,7 +94,7 @@ namespace DungeonGame {
 		public static string GetInventoryName(IEquipment item) {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			var itemInfo = new StringBuilder();
-			itemInfo.Append(item.GetName());
+			itemInfo.Append(item.Name);
 			var isItemArmor = item as Armor;
 			if (isItemArmor != null) {
 				itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + ")");
@@ -371,7 +371,7 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(), 
 					"You have the following abilities:");
 				foreach (var ability in player.Abilities) {
-					var abilityName = textInfo.ToTitleCase(ability.GetName());
+					var abilityName = textInfo.ToTitleCase(ability.Name);
 					var abilityString = abilityName + ", Rank " + ability.Rank;
 					Helper.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
@@ -400,7 +400,7 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(), 
 					"Your spellbook contains:");
 				foreach (var spell in player.Spellbook) {
-					var spellName = textInfo.ToTitleCase(spell.GetName());
+					var spellName = textInfo.ToTitleCase(spell.Name);
 					var spellString = spellName + ", Rank " + spell.Rank;
 					Helper.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
@@ -424,7 +424,7 @@ namespace DungeonGame {
 		public static void AbilityInfo(Player player, string[] input) {
 			var inputName = Helper.ParseInput(input);
 			var index = player.Abilities.FindIndex(
-				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+				f => f.Name == inputName || f.Name.Contains(inputName));
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (index != -1 && player.PlayerClass == Player.PlayerClassType.Warrior) {
 				Helper.Display.StoreUserOutput(
@@ -522,7 +522,7 @@ namespace DungeonGame {
 			}
 		}
 		public static void SpellInfo(Player player, string input) {
-			var index = player.Spellbook.FindIndex(f => f.GetName() == input || 
+			var index = player.Spellbook.FindIndex(f => f.Name == input || 
 			                                            f.SpellCategory == Spell.SpellType.TownPortal);
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (index != -1 && player.PlayerClass == Player.PlayerClassType.Mage) {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 
 namespace DungeonGame {
-	public class Trainer : ITrainer {
+	public class Trainer : IRoomInteraction {
 		public enum TrainerCategory {
 			Archer,
 			Warrior,
@@ -181,7 +181,7 @@ namespace DungeonGame {
 						foreach (var abilityName in from ability in this.TrainableAbilities where 
 								player.Level >= ability.MinLevel 
 							select textInfo.ToTitleCase(
-								ability.GetName() + " (Rank: " + ability.Rank + ")")) {
+								ability.Name + " (Rank: " + ability.Rank + ")")) {
 							newAbilitiesToTrain++;
 							Helper.Display.StoreUserOutput(
 								Settings.FormatInfoText(),
@@ -217,7 +217,7 @@ namespace DungeonGame {
 				var abilitiesToTrain = 0;
 				foreach (var abilityName in from ability in player.Abilities where 
 					player.Level >= ability.MinLevel && player.Level > ability.Rank select textInfo.ToTitleCase(
-					ability.GetName() + " (Rank: " + (ability.Rank + 1) + ")")) {
+					ability.Name + " (Rank: " + (ability.Rank + 1) + ")")) {
 					abilitiesToTrain++;
 					Helper.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
@@ -241,7 +241,7 @@ namespace DungeonGame {
 				return;
 			}
 			var abilityIndex = this.TrainableAbilities.FindIndex(
-				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (abilityIndex != -1 && player.Level >= this.TrainableAbilities[abilityIndex].MinLevel) {
 				var trainingCost = (int)((this.TrainableAbilities[abilityIndex].MinLevel) * this.BaseCost * 
 				                         (1.0 - (player.Intelligence / 100.0)));
@@ -392,7 +392,7 @@ namespace DungeonGame {
 				return;
 			}
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (abilityIndex != -1 && player.Level >= player.Abilities[abilityIndex].Rank + 1) {
 				var trainingCost = (int)((player.Abilities[abilityIndex].Rank + 1.0) * this.BaseCost * 
 				                      (1.0 - (player.Intelligence / 100.0)));

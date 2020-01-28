@@ -246,12 +246,6 @@ namespace DungeonGame {
 			}
 			this.Name = sb.ToString();
 		}
-		public string GetName() {
-			return this.Name;
-		}
-		public bool IsEquipped() {
-			return this.Equipped;
-		}
 		public void DecreaseDurability() {
 			this.Durability -= 1;
 		}

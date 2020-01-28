@@ -34,7 +34,7 @@ namespace DungeonGame {
 		public List<string> Commands { get; set; }
 		public List<string> CombatCommands { get; set; } = new List<string> {"[F]ight", "[I]nventory", "Flee"};
 		public List<IRoomInteraction> RoomObjects { get; set; }
-		public IMonster Monster { get; set; }
+		public Monster Monster { get; set; }
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public DungeonRoom() {}
@@ -80,9 +80,6 @@ namespace DungeonGame {
 			}
 		}
 		
-		public IMonster GetMonster() {
-			return this.Monster;
-		}
 		public bool AttackOpponent(Player player, string[] input) {
 			var inputString = new StringBuilder();
 			for (var i = 1; i < input.Length; i++) {
@@ -90,8 +87,8 @@ namespace DungeonGame {
 				inputString.Append(' ');
 			}
 			var inputName = inputString.ToString().Trim();
-			var monsterName = this.Monster.GetName().Split(' ');
-			if (monsterName.Last() == inputName || this.Monster.GetName() == inputName) {
+			var monsterName = this.Monster.Name.Split(' ');
+			if (monsterName.Last() == inputName || this.Monster.Name == inputName) {
 				if (this.Monster.HitPoints > 0) {
 					var fightEvent = new CombatHelper();
 					var outcome = fightEvent.SingleCombat(this.Monster, player);
@@ -256,7 +253,7 @@ namespace DungeonGame {
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (var item in this.RoomObjects) {
 					var sb = new StringBuilder();
-					var itemTitle = item.GetName();
+					var itemTitle = item.Name;
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
 					if (this.RoomObjects[objCount - 1] != item) {
@@ -283,8 +280,8 @@ namespace DungeonGame {
 				inputString.Append(' ');
 			}
 			var inputName = inputString.ToString().Trim();
-			var monsterName = this.Monster.GetName().Split(' ');
-			if (monsterName.Last() == inputName || this.Monster.GetName() == inputName) {
+			var monsterName = this.Monster.Name.Split(' ');
+			if (monsterName.Last() == inputName || this.Monster.Name == inputName) {
 				if (this.Monster.HitPoints <= 0 && this.Monster.WasLooted == false) {
 					var goldLooted = this.Monster.Gold;
 					player.Gold += this.Monster.Gold;
@@ -312,7 +309,7 @@ namespace DungeonGame {
 							else {
 								player.Inventory.Add(this.Monster.MonsterItems[i]);
 							}
-							var lootItemString = "You looted " + this.Monster.MonsterItems[i].GetName() + " from the " +
+							var lootItemString = "You looted " + this.Monster.MonsterItems[i].Name + " from the " +
 							                     this.Monster.Name + "!";
 							Helper.Display.StoreUserOutput(
 								Settings.FormatSuccessOutputText(),
@@ -323,7 +320,7 @@ namespace DungeonGame {
 						this.Monster.MonsterItems.Clear();
 						this.Monster.WasLooted = true;
 						var monsterIndex = this.RoomObjects.FindIndex(
-							f => f.GetName() == this.Monster.Name);
+							f => f.Name == this.Monster.Name);
 						if (monsterIndex != -1) this.RoomObjects.RemoveAt(monsterIndex);
 					}
 					catch (InvalidOperationException) {
@@ -358,8 +355,8 @@ namespace DungeonGame {
 				inputString.Append(' ');
 			}
 			var inputName = inputString.ToString().Trim();
-			var monsterName = this.Monster.GetName().Split(' ');
-			if (monsterName.Last() == inputName || this.Monster.GetName() == inputName) {
+			var monsterName = this.Monster.Name.Split(' ');
+			if (monsterName.Last() == inputName || this.Monster.Name == inputName) {
 				for (var i = 0; i < this.Monster.Desc.Length; i += Settings.GetGameWidth()) {
 					if (this.Monster.Desc.Length - i < Settings.GetGameWidth()) {
 						Helper.Display.StoreUserOutput(
@@ -383,7 +380,7 @@ namespace DungeonGame {
 				foreach (var item in this.Monster.MonsterItems) {
 					var sameLineOutputItem = new List<string>();
 					var sb = new StringBuilder();
-					var itemTitle = item.GetName();
+					var itemTitle = item.Name;
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
 					sameLineOutputItem.Add(Settings.FormatRoomOutputText());
