@@ -13,7 +13,7 @@ namespace DungeonGame {
 				fightStartString);
 			RoomHandler.ShowUserOutput(player);
 			while (true) {
-				var input = RoomHandler.GetFormattedInput(Console.ReadLine());
+				var input = InputHandler.GetFormattedInput(Console.ReadLine());
 				Console.Clear();
 				RoomHandler.ShowUserOutput(player, opponent);
 				if (player.Effects.Any()) {
@@ -74,7 +74,7 @@ namespace DungeonGame {
 					case "cast":
 						try {
 							if (input[1] != null) {
-								var spellName = RoomHandler.ParseInput(input);
+								var spellName = InputHandler.ParseInput(input);
 								player.CastSpell(opponent, spellName);
 								if (opponent.IsMonsterDead(player)) return true;
 							}
@@ -113,13 +113,13 @@ namespace DungeonGame {
 					case "use":
 						try {
 							if (input[1] != null && input[1] != "bandage") {
-								var abilityName = RoomHandler.ParseInput(input);
+								var abilityName = InputHandler.ParseInput(input);
 								player.UseAbility(opponent, abilityName);
 								if (opponent.IsMonsterDead(player)) return true;
 							}
 
 							if (input[1] != null && input[1] == "bandage") {
-								var abilityName = RoomHandler.ParseInput(input);
+								var abilityName = InputHandler.ParseInput(input);
 								player.UseAbility(abilityName);
 							}
 

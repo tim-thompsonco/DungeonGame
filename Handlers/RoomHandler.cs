@@ -9,20 +9,6 @@ namespace DungeonGame {
 		public static List<IRoom> Rooms { get; set; }
 		public static int RoomIndex { get; set;}
 		
-		public static string[] GetFormattedInput(string userInput) {
-			var inputFormatted = userInput.ToLower().Trim();
-			var inputParse = inputFormatted.Split(' ');
-			return inputParse;
-		}
-		public static string ParseInput(string[] userInput) {
-			var inputString = new StringBuilder();
-			for (var i = 1; i < userInput.Length; i++) {
-				inputString.Append(userInput[i]);
-				inputString.Append(' ');
-			}
-			var parsedInput = inputString.ToString().Trim();
-			return parsedInput;
-		}
 		public static void ChangeRoom(Player player, int x, int y, int z) {
 			// Player location is changed to the new coordinates
 			player.X += x;
@@ -48,9 +34,6 @@ namespace DungeonGame {
 			var roomType = Rooms[setRoomIndex].GetType().Name;
 			player.CanSave = roomType != "DungeonRoom";
 			RoomIndex = setRoomIndex;
-		}
-		public static bool IsWearable(IEquipment item) {
-			return item.GetType().Name == "Armor" || item.GetType().Name == "Weapon" || item.GetType().Name == "Quiver";
 		}
 		public static void ShowUserOutput(Player player, Monster opponent) {
 			PlayerHandler.DisplayPlayerStats(player);

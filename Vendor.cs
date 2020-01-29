@@ -72,7 +72,7 @@ namespace DungeonGame {
 			}
 		}
 		public void BuyItemCheck(Player player, string[] userInput) {
-			var inputName = RoomHandler.ParseInput(userInput);
+			var inputName = InputHandler.ParseInput(userInput);
 			var index = 0;
 			if (this.BuySellType == "Healer") {
 				index = this.VendorItems.FindIndex(
@@ -167,7 +167,7 @@ namespace DungeonGame {
 				"You can't afford that!");
 		}
 		public void SellItemCheck(Player player, string[] userInput) {
-			var inputName = RoomHandler.ParseInput(userInput);
+			var inputName = InputHandler.ParseInput(userInput);
 			var invIndex = player.Inventory.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName) && f.Equipped == false);
 			var conIndex = player.Consumables.FindIndex(
@@ -250,7 +250,7 @@ namespace DungeonGame {
 				"You have to unequip that first!");
 		}
 		public void RepairItem(Player player, string[] userInput) {
-			var parsedInput = RoomHandler.ParseInput(userInput);
+			var parsedInput = InputHandler.ParseInput(userInput);
 			var index = player.Inventory.FindIndex(
 				f => f.Name == parsedInput || f.Name.Contains(userInput.Last()));
 			if (index != -1) {

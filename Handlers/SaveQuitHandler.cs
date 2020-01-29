@@ -12,7 +12,7 @@ namespace DungeonGame {
 			RoomHandler.Display.BuildUserOutput();
 			RoomHandler.Display.RetrieveUserOutput();
 			RoomHandler.Display.ClearUserOutput();
-			var input = RoomHandler.GetFormattedInput(Console.ReadLine());
+			var input = InputHandler.GetFormattedInput(Console.ReadLine());
 			if (input[0] == "yes" || input[0] == "y") {
 				RoomHandler.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), 

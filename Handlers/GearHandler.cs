@@ -4,6 +4,9 @@ using System.Text;
 
 namespace DungeonGame {
 	public static class GearHandler {
+		public static bool IsWearable(IEquipment item) {
+			return item.GetType().Name == "Armor" || item.GetType().Name == "Weapon" || item.GetType().Name == "Quiver";
+		}
 		public static void EquipInitialGear(Player player) {
 			EquipWeapon(player, player.Inventory[0] as Weapon);
 			EquipArmor(player, player.Inventory[1] as Armor);
@@ -148,7 +151,7 @@ namespace DungeonGame {
 				                 itemName.Contains(inputName));
 				switch (itemFound) {
 					case true when input[0] == "equip": {
-						if (RoomHandler.IsWearable(item) && item.Equipped == false) {
+						if (IsWearable(item) && item.Equipped == false) {
 							switch (itemType) {
 								case "Weapon":
 									EquipWeapon(player, (Weapon)item);
@@ -162,7 +165,7 @@ namespace DungeonGame {
 							}
 							return;
 						}
-						if (RoomHandler.IsWearable(item)) {
+						if (IsWearable(item)) {
 							RoomHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -176,7 +179,7 @@ namespace DungeonGame {
 						return;
 					}
 					case true when input[0] == "unequip": {
-						if (!RoomHandler.IsWearable(item)) return;
+						if (!IsWearable(item)) return;
 						switch (itemType) {
 							case "Weapon":
 								UnequipWeapon(player, (Weapon)item);

@@ -23,7 +23,7 @@ namespace DungeonGame {
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), playerNameString);
 				RoomHandler.Display.RetrieveUserOutput();
 				Messages.RequestCommand();
-				var input = RoomHandler.GetFormattedInput(Console.ReadLine());
+				var input = InputHandler.GetFormattedInput(Console.ReadLine());
 				RoomHandler.Display.ClearUserOutput();
 				if (input[0] == "y") {
 					break;
@@ -40,7 +40,7 @@ namespace DungeonGame {
 				sameLineOutputClass.Add("Player class: ");
 				RoomHandler.Display.StoreUserOutput(sameLineOutputClass);
 				RoomHandler.Display.RetrieveUserOutput();
-				var userInput = RoomHandler.GetFormattedInput(Console.ReadLine());
+				var userInput = InputHandler.GetFormattedInput(Console.ReadLine());
 				RoomHandler.Display.ClearUserOutput();
 				var playerClassInput = textInfo.ToTitleCase(userInput[0].ToString());
 				if (playerClassInput != "Mage" && playerClassInput != "Warrior" && playerClassInput != "Archer") {
@@ -57,7 +57,7 @@ namespace DungeonGame {
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), playerClassString);
 				Messages.RequestCommand();
 				RoomHandler.Display.RetrieveUserOutput();
-				var input = RoomHandler.GetFormattedInput(Console.ReadLine());
+				var input = InputHandler.GetFormattedInput(Console.ReadLine());
 				if (input[0] == "y") {
 					RoomHandler.Display.ClearUserOutput();
 					switch(playerClass) {

@@ -65,7 +65,7 @@ namespace DungeonGame {
 					e => GameHandler.CheckStatus(player), 
 					null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 				while (!GameHandler.IsGameOver) {
-					var input = RoomHandler.GetFormattedInput(Console.ReadLine());
+					var input = InputHandler.GetFormattedInput(Console.ReadLine());
 					InputHandler.ProcessUserInput(player, input, globalTimer);
 					Console.Clear();
 					RoomHandler.ShowUserOutput(player);

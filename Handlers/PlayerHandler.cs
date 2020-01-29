@@ -155,7 +155,7 @@ namespace DungeonGame {
 				RoomHandler.Display.ClearUserOutput();
 				var statNumber = 0;
 				try {
-					var input = RoomHandler.GetFormattedInput(Console.ReadLine());
+					var input = InputHandler.GetFormattedInput(Console.ReadLine());
 					if (input.Length > 1) {
 						if (GameHandler.IsWholeNumber(input[1]) == false) continue;
 						statNumber = Convert.ToInt32(input[1]);
@@ -421,7 +421,7 @@ namespace DungeonGame {
 			}
 		}
 		public static void AbilityInfo(Player player, string[] input) {
-			var inputName = RoomHandler.ParseInput(input);
+			var inputName = InputHandler.ParseInput(input);
 			var index = player.Abilities.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
 			var textInfo = new CultureInfo("en-US", false).TextInfo;

@@ -348,7 +348,7 @@ namespace DungeonGameTests {
 			Make sure stacked healing effects only tick for 3 rounds in combat */
 			player.InCombat = true;
 			var input = new string[2] {"use", "bandage"};
-			var abilityName = RoomHandler.ParseInput(input);
+			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("bandage", abilityName);
 			player.UseAbility(abilityName);
 			player.UseAbility(abilityName);
@@ -363,7 +363,7 @@ namespace DungeonGameTests {
 			// Make sure stacked healing effects tick properly outside of combat		
 			player.HitPoints = 10;
 			var inputTwo = new string[2] {"use", "bandage"};
-			var abilityNameTwo = RoomHandler.ParseInput(inputTwo);
+			var abilityNameTwo = InputHandler.ParseInput(inputTwo);
 			Assert.AreEqual("bandage", abilityName);
 			player.UseAbility(abilityNameTwo);
 			player.UseAbility(abilityNameTwo);
@@ -390,7 +390,7 @@ namespace DungeonGameTests {
 			player.InCombat = true;
 			monster.InCombat = true;
 			var input = new string[2] {"use", "charge"};
-			var abilityName = RoomHandler.ParseInput(input);
+			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("charge", abilityName);
 			player.UseAbility(monster, abilityName);
 			Assert.AreEqual(
@@ -418,7 +418,7 @@ namespace DungeonGameTests {
 			var monster = spawnedRooms[0].Monster;
 			monster.HitPoints = 100;
 			var input = new string[2] {"use", "rend"};
-			var abilityName = RoomHandler.ParseInput(input);
+			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("rend", abilityName);
 			player.UseAbility(monster, abilityName);
 			Assert.AreEqual(
@@ -453,7 +453,7 @@ namespace DungeonGameTests {
 			null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 		var monster = spawnedRooms[0].Monster;
 		var input = new string[2] {"use", "berserk"};
-		var abilityName = RoomHandler.ParseInput(input);
+		var abilityName = InputHandler.ParseInput(input);
 		Assert.AreEqual("berserk", abilityName);
 		player.UseAbility(monster, abilityName);
 		Assert.AreEqual(2, player.Effects.Count);
@@ -482,7 +482,7 @@ namespace DungeonGameTests {
 			monster.HitPoints = 50;
 			monster.MaxHitPoints = 100;
 			var input = new string[2] {"use", "stun"};
-			var abilityName = RoomHandler.ParseInput(input);
+			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("stun", abilityName);
 			player.UseAbility(monster, abilityName);
 			Assert.AreEqual(35, monster.HitPoints);
@@ -495,7 +495,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(false, monster.Effects.Any());
 			monster.HitPoints = 80;
 			var inputTwo = new string[2] {"use", "gut"};
-			var abilityNameTwo = RoomHandler.ParseInput(inputTwo);
+			var abilityNameTwo = InputHandler.ParseInput(inputTwo);
 			Assert.AreEqual("gut", abilityNameTwo);
 			player.UseAbility(monster, abilityNameTwo);
 			Assert.AreEqual(65, monster.HitPoints);
@@ -532,7 +532,7 @@ namespace DungeonGameTests {
 			monster.HitPoints = 50;
 			monster.MaxHitPoints = 100;
 			var input = new string[2] {"cast", "fireball"};
-			var spellName = RoomHandler.ParseInput(input);
+			var spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("fireball", spellName);
 			player.CastSpell(monster, spellName);
 			Assert.AreEqual(25, monster.HitPoints);
@@ -565,7 +565,7 @@ namespace DungeonGameTests {
 			}
 			monster.HitPoints = 100;
 			var input = new string[2] {"cast", "frostbolt"};
-			var spellName = RoomHandler.ParseInput(input);
+			var spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("frostbolt", spellName);
 			player.PlayerWeapon.Durability = 100;
 			var baseDamage = (double) player.Attack(monster);
@@ -601,7 +601,7 @@ namespace DungeonGameTests {
 			GearHandler.EquipInitialGear(player);
 			player.InCombat = true;
 			var inputThree = new string[2] {"cast", "diamondskin"};
-			var spellName = RoomHandler.ParseInput(inputThree);
+			var spellName = InputHandler.ParseInput(inputThree);
 			Assert.AreEqual("diamondskin", spellName);
 			var baseArmor = GearHandler.CheckArmorRating(player);
 			player.CastSpell(spellName);

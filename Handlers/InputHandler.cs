@@ -1,9 +1,24 @@
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace DungeonGame {
 	public static class InputHandler {
+		public static string[] GetFormattedInput(string userInput) {
+			var inputFormatted = userInput.ToLower().Trim();
+			var inputParse = inputFormatted.Split(' ');
+			return inputParse;
+		}
+		public static string ParseInput(string[] userInput) {
+			var inputString = new StringBuilder();
+			for (var i = 1; i < userInput.Length; i++) {
+				inputString.Append(userInput[i]);
+				inputString.Append(' ');
+			}
+			var parsedInput = inputString.ToString().Trim();
+			return parsedInput;
+		}
 		public static void ProcessUserInput(Player player, string[] input, Timer globalTimer) {
 			var isTownRoom = RoomHandler.Rooms[RoomHandler.RoomIndex] as TownRoom;
 			switch (input[0]) {
@@ -61,10 +76,10 @@ namespace DungeonGame {
 				case "cast":
 					try {
 						if (input[1] != null && input[1].Contains("town")) {
-							player.CastSpell(RoomHandler.ParseInput(input));
+							player.CastSpell(ParseInput(input));
 						}
 						else if (input[1] != null) {
-							player.CastSpell(RoomHandler.ParseInput(input));
+							player.CastSpell(ParseInput(input));
 						}
 					}
 					catch (IndexOutOfRangeException) {
@@ -109,7 +124,7 @@ namespace DungeonGame {
 						}
 
 						if (input[1] != null) {
-							player.UseAbility(RoomHandler.ParseInput(input));
+							player.UseAbility(ParseInput(input));
 						}
 					}
 					catch (IndexOutOfRangeException) {
@@ -362,10 +377,10 @@ namespace DungeonGame {
 						if (input[1] != null) {
 							if (isTownRoom != null) {
 								if (player.PlayerClass == Player.PlayerClassType.Mage) {
-									isTownRoom.Trainer.UpgradeSpell(player, RoomHandler.ParseInput(input));
+									isTownRoom.Trainer.UpgradeSpell(player, ParseInput(input));
 								}
 								else {
-									isTownRoom.Trainer.UpgradeAbility(player, RoomHandler.ParseInput(input));
+									isTownRoom.Trainer.UpgradeAbility(player, ParseInput(input));
 								}
 							}
 						}
@@ -389,10 +404,10 @@ namespace DungeonGame {
 						if (input[1] != null) {
 							if (isTownRoom != null) {
 								if (player.PlayerClass == Player.PlayerClassType.Mage) {
-									isTownRoom.Trainer.TrainSpell(player, RoomHandler.ParseInput(input));
+									isTownRoom.Trainer.TrainSpell(player, ParseInput(input));
 								}
 								else {
-									isTownRoom.Trainer.TrainAbility(player, RoomHandler.ParseInput(input));
+									isTownRoom.Trainer.TrainAbility(player, ParseInput(input));
 								}
 							}
 						}
