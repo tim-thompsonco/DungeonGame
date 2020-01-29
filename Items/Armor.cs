@@ -109,30 +109,18 @@ namespace DungeonGame {
 					this.Weight = 1;
 					break;
 				case ArmorType.Leather:
-					switch (this.ArmorCategory) {
-						case ArmorSlot.Chest:
-							this.Weight = 3;
-							break;
-						case ArmorSlot.Legs:
-							this.Weight = 2;
-							break;
-						default:
-							this.Weight = 1;
-							break;
-					}
+					this.Weight = this.ArmorCategory switch {
+						ArmorSlot.Chest => 3,
+						ArmorSlot.Legs => 2,
+						_ => 1
+					};
 					break;
 				case ArmorType.Plate:
-					switch (this.ArmorCategory) {
-						case ArmorSlot.Chest:
-							this.Weight = 4;
-							break;
-						case ArmorSlot.Legs:
-							this.Weight = 3;
-							break;
-						default:
-							this.Weight = 2;
-							break;
-					}
+					this.Weight = this.ArmorCategory switch {
+						ArmorSlot.Chest => 4,
+						ArmorSlot.Legs => 3,
+						_ => 2
+					};
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

@@ -45,7 +45,7 @@ namespace DungeonGame {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (var item in this.VendorItems) {
 				var itemInfo = new StringBuilder();
-				itemInfo.Append(item.Name.ToString());
+				itemInfo.Append(item.Name);
 				if (item.Equipped) {
 					itemInfo.Append(" <Equipped>");
 				}

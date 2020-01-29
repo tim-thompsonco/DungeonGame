@@ -198,9 +198,7 @@ namespace DungeonGame {
 					var quitConfirm = SaveQuitHandler.QuitGame(player);
 					if (quitConfirm) {
 						globalTimer.Dispose();
-						return;
 					}
-
 					break;
 				case "list":
 					switch (input[1]) {

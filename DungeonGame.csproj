@@ -59,9 +59,6 @@
     <Compile Include="Items\Quiver.cs" />
     <Compile Include="Items\Weapon.cs" />
     <Compile Include="Messages.cs" />
-    <Compile Include="Output\EffectOutput.cs" />
-    <Compile Include="Output\MapOutput.cs" />
-    <Compile Include="Output\UserOutput.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Spell Properties\ArcaneOffense.cs" />
     <Compile Include="Spell Properties\Defense.cs" />
@@ -69,6 +66,7 @@
     <Compile Include="Spell Properties\Healing.cs" />
     <Compile Include="Spell Properties\Portal.cs" />
     <Compile Include="Trainer.cs" />
+    <Compile Include="UserOutput.cs" />
     <Compile Include="Vendor.cs" />
     <Compile Include="Spell Properties\FireOffense.cs" />
     <Compile Include="Program.cs" />

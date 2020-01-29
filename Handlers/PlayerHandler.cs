@@ -331,10 +331,8 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 			var expString = "EXP: " +  player.Experience;
-			var expLineOutput = new List<string>();
-			expLineOutput.Add(Settings.FormatGeneralInfoText());
-			expLineOutput.Add(Settings.FormatDefaultBackground());
-			expLineOutput.Add(expString);
+			var expLineOutput =
+				new List<string> {Settings.FormatGeneralInfoText(), Settings.FormatDefaultBackground(), expString};
 			var expBufferAmount = playerHealthString.Length - expString.Length;
 			var expBufferStringBuilder = new StringBuilder();
 			for (var b = 0; b < expBufferAmount; b++) {

@@ -10,10 +10,9 @@ namespace DungeonGame {
 				Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), "Please enter a player name.");
 			string playerName;
 			while (true) {
-				var sameLineOutput = new List<string>();
-				sameLineOutput.Add(Settings.FormatAnnounceText());
-				sameLineOutput.Add(Settings.FormatDefaultBackground());
-				sameLineOutput.Add("Player name: ");
+				var sameLineOutput = new List<string> {
+					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), "Player name: "
+				};
 				OutputHandler.Display.StoreUserOutput(sameLineOutput);
 				OutputHandler.Display.RetrieveUserOutput();
 				playerName = textInfo.ToTitleCase(Console.ReadLine());
@@ -34,15 +33,14 @@ namespace DungeonGame {
 					Settings.FormatAnnounceText(),
 					Settings.FormatDefaultBackground(),
 					"Please enter your class. You can select Mage, Warrior, or Archer.");
-				var sameLineOutputClass = new List<string>();
-				sameLineOutputClass.Add(Settings.FormatAnnounceText());
-				sameLineOutputClass.Add(Settings.FormatDefaultBackground());
-				sameLineOutputClass.Add("Player class: ");
+				var sameLineOutputClass = new List<string> {
+					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), "Player class: "
+				};
 				OutputHandler.Display.StoreUserOutput(sameLineOutputClass);
 				OutputHandler.Display.RetrieveUserOutput();
 				var userInput = InputHandler.GetFormattedInput(Console.ReadLine());
 				OutputHandler.Display.ClearUserOutput();
-				var playerClassInput = textInfo.ToTitleCase(userInput[0].ToString());
+				var playerClassInput = textInfo.ToTitleCase(userInput[0]);
 				if (playerClassInput != "Mage" && playerClassInput != "Warrior" && playerClassInput != "Archer") {
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatAnnounceText(), 

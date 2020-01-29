@@ -9,19 +9,18 @@ namespace DungeonGame {
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(), "Are you sure you want to quit?");
-			OutputHandler.Display.BuildUserOutput();
-			OutputHandler.Display.RetrieveUserOutput();
+			OutputHandler.ShowUserOutput(player);
 			OutputHandler.Display.ClearUserOutput();
 			var input = InputHandler.GetFormattedInput(Console.ReadLine());
-			if (input[0] == "yes" || input[0] == "y") {
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAnnounceText(), 
-					Settings.FormatDefaultBackground(), "Quitting the game.");
-				player.CanSave = true;
-				SaveGame(player);
-				return true;
-			}
-			return false;
+			Console.Clear();
+			if (input[0] != "yes" && input[0] != "y") return false;
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAnnounceText(), 
+				Settings.FormatDefaultBackground(), "Quitting the game.");
+			player.CanSave = true;
+			GameHandler.IsGameOver = true;
+			SaveGame(player);
+			return true;
 		}
 		public static void SaveGame(Player player) {
 			string outputString;
@@ -49,9 +48,6 @@ namespace DungeonGame {
 				outputString = "Your game has been saved.";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), outputString);
-				OutputHandler.Display.BuildUserOutput();
-				OutputHandler.Display.RetrieveUserOutput();
-				OutputHandler.Display.ClearUserOutput();
 				return;
 			}
 			outputString = "You can't save inside a dungeon! Go outside first.";
