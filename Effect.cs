@@ -42,7 +42,7 @@
 			player.HitPoints += this.EffectAmountOverTime;
 			if (player.HitPoints > player.MaxHitPoints) player.HitPoints = player.MaxHitPoints;
 			var healAmtString = "You have been healed for " + this.EffectAmountOverTime + " health."; 
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				healAmtString);
@@ -55,7 +55,7 @@
 			var changeDmgString = this.EffectAmountOverTime > 0 ?
 				"Your damage is increased by " + this.EffectAmountOverTime + "."
 				: "Your damage is decreased by " + this.EffectAmountOverTime + ".";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				changeDmgString);
@@ -66,7 +66,7 @@
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var augmentString = "Your armor is augmented by " + this.EffectAmountOverTime + ".";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				augmentString);
@@ -78,7 +78,7 @@
 			this.EffectCurRound += 1;
 			opponent.HitPoints -= this.EffectAmountOverTime;
 			var burnString = "The " + opponent.Name + " burns for " + this.EffectAmountOverTime + " fire damage.";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				burnString);
@@ -90,7 +90,7 @@
 			this.EffectCurRound += 1;
 			opponent.HitPoints -= this.EffectAmountOverTime;
 			var bleedString = "The " + opponent.Name + " bleeds for " + this.EffectAmountOverTime + " physical damage.";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				bleedString);
@@ -101,7 +101,7 @@
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var stunnedString = "The " + opponent.Name + " is stunned and cannot attack.";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				stunnedString);
@@ -112,7 +112,7 @@
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var frozenString = "The " + opponent.Name + " is frozen. Physical, frost and arcane damage to it will be double!";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				frozenString);

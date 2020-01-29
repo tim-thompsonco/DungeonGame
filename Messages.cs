@@ -1,26 +1,26 @@
 namespace DungeonGame {
 	public static class Messages {
 		public static void RequestCommand() {
-			RoomHandler.Display.StoreUserOutput(Settings.FormatAnnounceText(), 
+			OutputHandler.Display.StoreUserOutput(Settings.FormatAnnounceText(), 
 				Settings.FormatDefaultBackground(), "Your command: ");
 		}
 		public static void PlayerDeath() {
-			RoomHandler.Display.StoreUserOutput(Settings.FormatAnnounceText(), 
+			OutputHandler.Display.StoreUserOutput(Settings.FormatAnnounceText(), 
 				Settings.FormatDefaultBackground(), "You have died. Game over.");
 		}
 		public static void InvalidCommand() {
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(), 
 				Settings.FormatDefaultBackground(),"Not a valid command.");
 		}
 		public static void InvalidDirection() {
 			const string outputString = "You can't go that way!";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
 		}
 		public static void InvalidVendorSell() {
 			const string outputString = "The vendor doesn't want that.";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
 		}
 		public static void GameIntro() {
@@ -30,12 +30,12 @@ namespace DungeonGame {
 				"you can get help on commands by typing 'help'.";
 			for (var i = 0; i < gameIntroString.Length; i += Settings.GetGameWidth()) {
 				if (gameIntroString.Length - i < Settings.GetGameWidth()) {
-					RoomHandler.Display.StoreUserOutput(
+					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), 
 						gameIntroString.Substring(i, gameIntroString.Length - i));
 					continue;
 				}
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), 
 					gameIntroString.Substring(i, Settings.GetGameWidth()));
 			}
@@ -52,12 +52,12 @@ namespace DungeonGame {
 				"them. You can 'unequip' them as well.";
 			for (var i = 0; i < commandHelpString.Length; i += Settings.GetGameWidth()) {
 				if (commandHelpString.Length - i < Settings.GetGameWidth()) {
-					RoomHandler.Display.StoreUserOutput(
+					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatAnnounceText(),Settings.FormatDefaultBackground(), 
 						commandHelpString.Substring(i, commandHelpString.Length - i));
 					continue;
 				}
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), 
 					commandHelpString.Substring(i, Settings.GetGameWidth()));
 			}

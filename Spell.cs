@@ -63,13 +63,13 @@ namespace DungeonGame {
 		}
 		public static void DefenseSpellInfo(Player player, int index) {
 			var augmentAmountString = "Augment Armor Amount: " + player.Spellbook[index].Defense.AugmentAmount;
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(), 
 				Settings.FormatDefaultBackground(),
 				augmentAmountString);
 			var augmentInfoString = "Armor will be augmented for " + 
 			                        player.Spellbook[index].Defense.AugmentMaxRounds + " rounds.";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(), 
 				Settings.FormatDefaultBackground(),
 				augmentInfoString);
@@ -79,7 +79,7 @@ namespace DungeonGame {
 			var changeArmorAmount = player.Spellbook[index].Defense.AugmentAmount;
 			var augmentString = "You augmented your armor by " + 
 			                    changeArmorAmount + " with " + player.Spellbook[index].Name + ".";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				augmentString);
@@ -90,14 +90,14 @@ namespace DungeonGame {
 		}
 		public static void FrostOffenseSpellInfo(Player player, int index) {
 			var frostAmountString = "Instant Damage: " + player.Spellbook[index].FrostOffense.FrostDamage;
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				frostAmountString);
 			var frostInfoString = "Frost damage will freeze opponent for " + 
 			                      player.Spellbook[index].FrostOffense.FrozenMaxRounds + " rounds, increasing subsequent + " +
 			                      "physical, arcane and frost damage by 1.5x.";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				frostInfoString);
@@ -132,14 +132,14 @@ namespace DungeonGame {
 				}
 			}
 			if (frostSpellDamage == 0) {
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					"You missed!");
 			}
 			else {
 				var attackSuccessString = "You hit the " + opponent.Name + " for " + frostSpellDamage + " frost damage.";
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
 					attackSuccessString);
@@ -148,7 +148,7 @@ namespace DungeonGame {
 				if (frozenEffectIndex == -1) {
 					var frozenString = "The " + opponent.Name +
 					                   " is frozen. Physical, frost and arcane damage to it will be double!";
-					RoomHandler.Display.StoreUserOutput(
+					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatAttackSuccessText(),
 						Settings.FormatDefaultBackground(),
 						frozenString);
@@ -161,19 +161,19 @@ namespace DungeonGame {
 		}
 		public static void FireOffenseSpellInfo(Player player, int index) {
 			var fireAmountString = "Instant Damage: " + player.Spellbook[index].FireOffense.BlastDamage;
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				fireAmountString);
 			if (player.Spellbook[index].FireOffense.BurnDamage <= 0) return;
 			var fireOverTimeString = "Damage Over Time: " + player.Spellbook[index].FireOffense.BurnDamage;
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				fireOverTimeString);
 			var fireInfoString = "Fire damage over time will burn for " +
 			                     player.Spellbook[index].FireOffense.BurnMaxRounds + " rounds.";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				fireInfoString);
@@ -182,21 +182,21 @@ namespace DungeonGame {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var fireSpellDamage = player.Spellbook[index].FireOffense.BlastDamage;
 			if (fireSpellDamage == 0) {
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					"You missed!");
 			}
 			else {
 				var attackSuccessString = "You hit the " + opponent.Name + " for " + fireSpellDamage + " fire damage.";
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
 					attackSuccessString);
 				opponent.TakeDamage(fireSpellDamage);
 				if (player.Spellbook[index].FireOffense.BurnDamage <= 0) return;
 				var onFireString = "The " + opponent.Name + " bursts into flame!";
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatOnFireText(),
 					Settings.FormatDefaultBackground(),
 					onFireString);
@@ -208,7 +208,7 @@ namespace DungeonGame {
 		}
 		public static void ArcaneOffenseSpellInfo(Player player, int index) {
 			var arcaneAmountString = "Instant Damage: " + player.Spellbook[index].ArcaneOffense.ArcaneDamage;
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				arcaneAmountString);
@@ -242,14 +242,14 @@ namespace DungeonGame {
 				}
 			}
 			if (arcaneSpellDamage == 0) {
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					"You missed!");
 			}
 			else {
 				var attackSuccessString = "You hit the " + opponent.Name + " for " + arcaneSpellDamage + " arcane damage.";
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
 					attackSuccessString);
@@ -258,19 +258,19 @@ namespace DungeonGame {
 		}
 		public static void HealingSpellInfo(Player player, int index) {
 			var healAmountString = "Heal Amount: " + player.Spellbook[index].Healing.HealAmount;
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healAmountString);
 			if (player.Spellbook[index].Healing.HealOverTime <= 0) return;
 			var healOverTimeString = "Heal Over Time: " + player.Spellbook[index].Healing.HealOverTime;
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healOverTimeString);
 			var healInfoString = "Heal over time will restore health for " + 
 			                     player.Spellbook[index].Healing.HealMaxRounds + " rounds.";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healInfoString);
@@ -279,7 +279,7 @@ namespace DungeonGame {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var healAmount = player.Spellbook[index].Healing.HealAmount;
 			var healString = "You heal yourself for " + healAmount + " health.";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				healString);
@@ -295,7 +295,7 @@ namespace DungeonGame {
 		}
 		public static void PortalSpellInfo() {
 			const string portalString = "This spell will create a portal and return you to town.";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				portalString);
@@ -305,7 +305,7 @@ namespace DungeonGame {
 			RoomHandler.SetPlayerLocation(player, player.Spellbook[index].Portal.CoordX, 
 				player.Spellbook[index].Portal.CoordY, player.Spellbook[index].Portal.CoordZ);
 			const string portalString = "You open a portal and step through it.";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				portalString);

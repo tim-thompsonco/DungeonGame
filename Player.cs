@@ -269,7 +269,7 @@ using System.Linq;
 				this.PlayerQuiver.OutOfArrows();
 			}
 			catch (NullReferenceException) {
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"Your weapon is not equipped! Going hand to hand!");
@@ -286,14 +286,14 @@ using System.Linq;
 						this.Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
 						var drankHealthString = "You drank a potion and replenished " +
 						                  this.Consumables[index].RestoreHealth.RestoreHealthAmt + " health.";
-						RoomHandler.Display.StoreUserOutput(
+						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
 							drankHealthString);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
-						RoomHandler.Display.StoreUserOutput(
+						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have any health potions!");
@@ -306,21 +306,21 @@ using System.Linq;
 						this.Consumables[index].RestoreMana.RestoreManaPlayer(this);
 						var drankManaString = "You drank a potion and replenished " +
 						                      this.Consumables[index].RestoreMana.RestoreManaAmt + " mana.";
-						RoomHandler.Display.StoreUserOutput(
+						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
 							drankManaString);
 						this.Consumables.RemoveAt(index);
 					}
 					else {
-						RoomHandler.Display.StoreUserOutput(
+						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have any mana potions!");
 					}
 					break;
 				default:
-					RoomHandler.Display.StoreUserOutput(
+					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"What potion did you want to drink?");
@@ -333,14 +333,14 @@ using System.Linq;
 				f => f.ArrowCategory == Consumable.ArrowType.Standard && f.Name.Contains("arrow"));
 			if (index != -1) {
 				this.Consumables[index].Arrow.LoadArrowsPlayer(this);
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You reloaded your quiver.");
 				if (this.Consumables[index].Arrow.Quantity == 0) this.Consumables.RemoveAt(index);
 			}
 			else {
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You don't have any arrows!");
@@ -493,7 +493,7 @@ using System.Linq;
 								Ability.UseOffenseDamageAbility(opponent, this, index);
 							}
 							else {
-								RoomHandler.Display.StoreUserOutput(
+								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatAttackFailText(),
 									Settings.FormatDefaultBackground(),
 									"You didn't have enough combo points for the second shot!");

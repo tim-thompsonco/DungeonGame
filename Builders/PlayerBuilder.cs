@@ -6,7 +6,7 @@ namespace DungeonGame {
 	public class PlayerBuilder {
 		public Player BuildNewPlayer() {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), "Please enter a player name.");
 			string playerName;
 			while (true) {
@@ -14,23 +14,23 @@ namespace DungeonGame {
 				sameLineOutput.Add(Settings.FormatAnnounceText());
 				sameLineOutput.Add(Settings.FormatDefaultBackground());
 				sameLineOutput.Add("Player name: ");
-				RoomHandler.Display.StoreUserOutput(sameLineOutput);
-				RoomHandler.Display.RetrieveUserOutput();
+				OutputHandler.Display.StoreUserOutput(sameLineOutput);
+				OutputHandler.Display.RetrieveUserOutput();
 				playerName = textInfo.ToTitleCase(Console.ReadLine());
-				RoomHandler.Display.ClearUserOutput();
+				OutputHandler.Display.ClearUserOutput();
 				var playerNameString = "Your player name is " + playerName + ", is that correct? [Y] or [N].";
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), playerNameString);
-				RoomHandler.Display.RetrieveUserOutput();
+				OutputHandler.Display.RetrieveUserOutput();
 				Messages.RequestCommand();
 				var input = InputHandler.GetFormattedInput(Console.ReadLine());
-				RoomHandler.Display.ClearUserOutput();
+				OutputHandler.Display.ClearUserOutput();
 				if (input[0] == "y") {
 					break;
 				}
 			}
 			while (true) {
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(),
 					Settings.FormatDefaultBackground(),
 					"Please enter your class. You can select Mage, Warrior, or Archer.");
@@ -38,28 +38,28 @@ namespace DungeonGame {
 				sameLineOutputClass.Add(Settings.FormatAnnounceText());
 				sameLineOutputClass.Add(Settings.FormatDefaultBackground());
 				sameLineOutputClass.Add("Player class: ");
-				RoomHandler.Display.StoreUserOutput(sameLineOutputClass);
-				RoomHandler.Display.RetrieveUserOutput();
+				OutputHandler.Display.StoreUserOutput(sameLineOutputClass);
+				OutputHandler.Display.RetrieveUserOutput();
 				var userInput = InputHandler.GetFormattedInput(Console.ReadLine());
-				RoomHandler.Display.ClearUserOutput();
+				OutputHandler.Display.ClearUserOutput();
 				var playerClassInput = textInfo.ToTitleCase(userInput[0].ToString());
 				if (playerClassInput != "Mage" && playerClassInput != "Warrior" && playerClassInput != "Archer") {
-					RoomHandler.Display.StoreUserOutput(
+					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatAnnounceText(), 
 						Settings.FormatDefaultBackground(), 
 						"Invalid selection. Please enter Mage, Warrior, or Archer for your class.");
-					RoomHandler.Display.RetrieveUserOutput();
+					OutputHandler.Display.RetrieveUserOutput();
 					continue;
 				}
 				var playerClass = playerClassInput;
 				var playerClassString = "Your player class is " + playerClass + ", is that correct? [Y] or [N].";
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), playerClassString);
 				Messages.RequestCommand();
-				RoomHandler.Display.RetrieveUserOutput();
+				OutputHandler.Display.RetrieveUserOutput();
 				var input = InputHandler.GetFormattedInput(Console.ReadLine());
 				if (input[0] == "y") {
-					RoomHandler.Display.ClearUserOutput();
+					OutputHandler.Display.ClearUserOutput();
 					switch(playerClass) {
 						case "Archer":
 							var playerArcher = new Player(playerName, Player.PlayerClassType.Archer);
@@ -71,13 +71,13 @@ namespace DungeonGame {
 							                  "your quiver, you can 'reload'.";
 							for (var i = 0; i < archerString.Length; i += Settings.GetGameWidth()) {
 								if (archerString.Length - i < Settings.GetGameWidth()) {
-									RoomHandler.Display.StoreUserOutput(
+									OutputHandler.Display.StoreUserOutput(
 										Settings.FormatAnnounceText(), 
 										Settings.FormatDefaultBackground(), 
 										archerString.Substring(i, archerString.Length - i));
 									continue;
 								}
-								RoomHandler.Display.StoreUserOutput(
+								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatAnnounceText(), 
 									Settings.FormatDefaultBackground(), 
 									archerString.Substring(i, Settings.GetGameWidth()));
@@ -91,13 +91,13 @@ namespace DungeonGame {
 							                  "about a spell, you can 'spell' the spell name. For example, 'spell fireball'.";
 							for (var i = 0; i < mageString.Length; i += Settings.GetGameWidth()) {
 								if (mageString.Length - i < Settings.GetGameWidth()) {
-									RoomHandler.Display.StoreUserOutput(
+									OutputHandler.Display.StoreUserOutput(
 										Settings.FormatAnnounceText(), 
 										Settings.FormatDefaultBackground(), 
 										mageString.Substring(i, mageString.Length - i));
 									continue;
 								}
-								RoomHandler.Display.StoreUserOutput(
+								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatAnnounceText(), 
 									Settings.FormatDefaultBackground(), 
 									mageString.Substring(i, Settings.GetGameWidth()));
@@ -111,13 +111,13 @@ namespace DungeonGame {
 							                  "about an ability, you can 'ability' the ability name. For example, 'ability charge'.";
 							for (var i = 0; i < warriorString.Length; i += Settings.GetGameWidth()) {
 								if (warriorString.Length - i < Settings.GetGameWidth()) {
-									RoomHandler.Display.StoreUserOutput(
+									OutputHandler.Display.StoreUserOutput(
 										Settings.FormatAnnounceText(), 
 										Settings.FormatDefaultBackground(), 
 										warriorString.Substring(i, warriorString.Length - i));
 									continue;
 								}
-								RoomHandler.Display.StoreUserOutput(
+								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatAnnounceText(), 
 									Settings.FormatDefaultBackground(), 
 									warriorString.Substring(i, Settings.GetGameWidth()));

@@ -47,6 +47,7 @@
     <Compile Include="Handlers\CombatHandler.cs" />
     <Compile Include="Handlers\GameHandler.cs" />
     <Compile Include="Handlers\GearHandler.cs" />
+    <Compile Include="Handlers\OutputHandler.cs" />
     <Compile Include="Handlers\RoomHandler.cs" />
     <Compile Include="Handlers\InputHandler.cs" />
     <Compile Include="Handlers\PlayerHandler.cs" />

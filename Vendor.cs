@@ -36,9 +36,9 @@ namespace DungeonGame {
 			}
 		}
 
-		public void DisplayGearForSale(Player player) {
+		public void DisplayGearForSale() {
 			var forSaleString = "The " + this.Name + " has the following items for sale:"; 
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				forSaleString);
@@ -65,7 +65,7 @@ namespace DungeonGame {
 						break;
 				}
 				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					itemName);
@@ -119,7 +119,7 @@ namespace DungeonGame {
 				}
 			}
 			else {
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"The vendor doesn't have that available for sale!");
@@ -131,13 +131,13 @@ namespace DungeonGame {
 				player.Inventory.Add(buyItem);
 				this.VendorItems.RemoveAt(index);
 				var purchaseString = "You purchased " + buyItem.Name + " from the vendor for " + buyItem.ItemValue + " gold.";
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					purchaseString);
 				return;
 			}
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"You can't afford that!");
@@ -149,7 +149,7 @@ namespace DungeonGame {
 				player.Consumables.Add(buyItem as Consumable);
 				this.VendorItems.RemoveAt(index);
 				var purchaseString = "You purchased " + buyItem.Name + " from the vendor for " + buyItem.ItemValue + " gold.";
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					purchaseString);
@@ -161,7 +161,7 @@ namespace DungeonGame {
 				}
 				return;
 			}
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"You can't afford that!");
@@ -222,7 +222,7 @@ namespace DungeonGame {
 				}
 			}
 			if (invIndex != -1 || conIndex != -1) return;
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"You don't have that to sell!");
@@ -238,13 +238,13 @@ namespace DungeonGame {
 				}
 				this.VendorItems.Add(sellItem);
 				var soldString = "You sold " + sellItem.Name + " to the vendor for " + sellItem.ItemValue + " gold.";
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					soldString);
 				return;
 			}
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"You have to unequip that first!");
@@ -265,19 +265,19 @@ namespace DungeonGame {
 								repairArmor.Durability = 100;
 								var repairArmorString = "Your " + repairArmor.Name + " has been repaired for " + (int) repairCostArmor +
 								                   " gold."; 
-								RoomHandler.Display.StoreUserOutput(
+								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatSuccessOutputText(),
 									Settings.FormatDefaultBackground(),
 									repairArmorString);
 								break;
 							}
 							var cantAffordArmorString = "You can't afford to repair " + repairArmor.Name;
-							RoomHandler.Display.StoreUserOutput(
+							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								cantAffordArmorString);
 						}
-						RoomHandler.Display.StoreUserOutput(
+						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"The vendor doesn't repair that type of equipment.");
@@ -292,19 +292,19 @@ namespace DungeonGame {
 								repairWeapon.Durability = 100;
 								var repairWeaponString = "Your " + repairWeapon.Name + " has been repaired for " + 
 								                         (int)repairCostWeapon + " gold.";
-								RoomHandler.Display.StoreUserOutput(
+								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatSuccessOutputText(),
 									Settings.FormatDefaultBackground(),
 									repairWeaponString);
 								break;
 							}
 							var cantAffordWeaponString = "You can't afford to repair " + repairWeapon.Name;
-							RoomHandler.Display.StoreUserOutput(
+							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								cantAffordWeaponString);
 						}
-						RoomHandler.Display.StoreUserOutput(
+						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"The vendor doesn't repair that type of equipment.");
@@ -312,7 +312,7 @@ namespace DungeonGame {
 					case "Healer":
 					case "Shopkeeper":
 						var noRepairString = this.BuySellType + "s don't repair equipment.";
-						RoomHandler.Display.StoreUserOutput(
+						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							noRepairString);
@@ -320,7 +320,7 @@ namespace DungeonGame {
 				}
 				return;
 			}
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"That item is not in your inventory.");
@@ -335,14 +335,14 @@ namespace DungeonGame {
 				player.ManaPoints = player.MaxManaPoints;
 				player.ComboPoints = player.MaxComboPoints;
 				var restoreString = "You have been restored by the " + this.Name + ".";
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					restoreString);
 				return;
 			}
 			var noRestoreString = "The " + this.Name + " cannot restore you!";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				noRestoreString);

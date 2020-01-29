@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 
 namespace DungeonGame {
 	public static class RoomHandler {
-		public static UserOutput Display = new UserOutput();
-		public static UserOutput MapDisplay = new UserOutput();
-		public static UserOutput EffectDisplay = new UserOutput();
 		public static List<IRoom> Rooms { get; set; }
 		public static int RoomIndex { get; set;}
 		
@@ -34,25 +30,6 @@ namespace DungeonGame {
 			var roomType = Rooms[setRoomIndex].GetType().Name;
 			player.CanSave = roomType != "DungeonRoom";
 			RoomIndex = setRoomIndex;
-		}
-		public static void ShowUserOutput(Player player, Monster opponent) {
-			PlayerHandler.DisplayPlayerStats(player);
-			opponent.DisplayStats();
-			Rooms[RoomIndex].ShowCommands();
-			MapDisplay = MapOutput.BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
-			EffectDisplay = EffectOutput.ShowEffects(player);
-			Display.BuildUserOutput();
-			Display.RetrieveUserOutput();
-			Display.ClearUserOutput();
-		}
-		public static void ShowUserOutput(Player player) {
-			PlayerHandler.DisplayPlayerStats(player);
-			Rooms[RoomIndex].ShowCommands();
-			MapDisplay = MapOutput.BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
-			EffectDisplay = EffectOutput.ShowEffects(player);
-			Display.BuildUserOutput();
-			Display.RetrieveUserOutput();
-			Display.ClearUserOutput();
 		}
 	}
 }

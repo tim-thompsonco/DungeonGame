@@ -10,7 +10,7 @@ namespace DungeonGame {
 				Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
 			}
 			catch (Exception ex) {
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
 					"The game window could not be resized on your computer. Error: " + ex);
@@ -31,16 +31,16 @@ namespace DungeonGame {
 						NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
 					});
 					// Insert blank space before game reload info for formatting
-					RoomHandler.Display.StoreUserOutput(
+					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
 						"");
-					RoomHandler.Display.StoreUserOutput(
+					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(), 
 						Settings.FormatDefaultBackground(), 
 						"Reloading your saved game.");
 					// Insert blank space after game reload info for formatting
-					RoomHandler.Display.StoreUserOutput(
+					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
 						"");
@@ -50,8 +50,7 @@ namespace DungeonGame {
 					RoomHandler.Rooms = new RoomBuilder(
 						100, 5, 1, 3, 
 						0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
-					var playerBuilder = new PlayerBuilder();
-					player = playerBuilder.BuildNewPlayer();
+					player = new PlayerBuilder().BuildNewPlayer();
 					GearHandler.EquipInitialGear(player);
 					// Begin game by putting player at coords 0, 7, 0, town entrance
 					RoomHandler.SetPlayerLocation(player, 0, 7, 0);
@@ -59,7 +58,7 @@ namespace DungeonGame {
 				}
 				/* Set initial room condition for player
 					On loading game, display room that player starts in */
-				RoomHandler.ShowUserOutput(player);
+				OutputHandler.ShowUserOutput(player);
 				// Check every second to see if any effects expired or events need to execute
 				var globalTimer = new Timer(
 					e => GameHandler.CheckStatus(player), 
@@ -68,7 +67,7 @@ namespace DungeonGame {
 					var input = InputHandler.GetFormattedInput(Console.ReadLine());
 					InputHandler.ProcessUserInput(player, input, globalTimer);
 					Console.Clear();
-					RoomHandler.ShowUserOutput(player);
+					OutputHandler.ShowUserOutput(player);
 				}
 			}
 		}

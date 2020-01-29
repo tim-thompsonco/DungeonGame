@@ -29,7 +29,7 @@
 		}
 
 		public void OutOfArrows() {
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackFailText(),
 				Settings.FormatDefaultBackground(),
 				"You ran out of arrows! Going hand to hand!");

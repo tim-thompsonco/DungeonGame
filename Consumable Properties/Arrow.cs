@@ -8,7 +8,7 @@
 
 		public void LoadArrowsPlayer(Player player) {
 			if (player.PlayerQuiver == null) {
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You don't have a quiver to reload!");

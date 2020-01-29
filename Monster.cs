@@ -234,7 +234,7 @@ namespace DungeonGame {
 		}
 		public void DisplayStats() {
 			var opponentHealthString = "Opponent HP: " + this.HitPoints + " / " + this.MaxHitPoints;
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				opponentHealthString);
@@ -246,8 +246,8 @@ namespace DungeonGame {
 				healLineOutput.Add(Settings.FormatHealthBackground());
 				healLineOutput.Add("    ");
 			}
-			RoomHandler.Display.StoreUserOutput(healLineOutput);
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(healLineOutput);
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				"==================================================");
@@ -291,12 +291,12 @@ namespace DungeonGame {
 			this.InCombat = false;
 			this.Effects.Clear();
 			var defeatString = "You have defeated the " + this.Name + "!";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				defeatString);
 			var expGainString = "You have gained " + this.ExperienceProvided + " experience!";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				expGainString);

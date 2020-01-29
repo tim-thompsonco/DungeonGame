@@ -6,15 +6,15 @@ using Newtonsoft.Json;
 namespace DungeonGame {
 	public static class SaveQuitHandler {
 		public static bool QuitGame(Player player) {
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(), "Are you sure you want to quit?");
-			RoomHandler.Display.BuildUserOutput();
-			RoomHandler.Display.RetrieveUserOutput();
-			RoomHandler.Display.ClearUserOutput();
+			OutputHandler.Display.BuildUserOutput();
+			OutputHandler.Display.RetrieveUserOutput();
+			OutputHandler.Display.ClearUserOutput();
 			var input = InputHandler.GetFormattedInput(Console.ReadLine());
 			if (input[0] == "yes" || input[0] == "y") {
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), 
 					Settings.FormatDefaultBackground(), "Quitting the game.");
 				player.CanSave = true;
@@ -47,15 +47,15 @@ namespace DungeonGame {
 					serializerPlayer.Serialize(writer, RoomHandler.Rooms, typeof(List<IRoom>));
 				}
 				outputString = "Your game has been saved.";
-				RoomHandler.Display.StoreUserOutput(
+				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), outputString);
-				RoomHandler.Display.BuildUserOutput();
-				RoomHandler.Display.RetrieveUserOutput();
-				RoomHandler.Display.ClearUserOutput();
+				OutputHandler.Display.BuildUserOutput();
+				OutputHandler.Display.RetrieveUserOutput();
+				OutputHandler.Display.ClearUserOutput();
 				return;
 			}
 			outputString = "You can't save inside a dungeon! Go outside first.";
-			RoomHandler.Display.StoreUserOutput(
+			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), outputString);
 		}
 	}
