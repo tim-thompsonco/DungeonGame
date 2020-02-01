@@ -3,6 +3,8 @@ using System.Linq;
 
 namespace DungeonGame {
 	public class CombatHandler {
+		private string[] Input { get; set; }
+		
 		public bool SingleCombat(Monster opponent, Player player) {
 			player.InCombat = true;
 			opponent.InCombat = true;
@@ -12,8 +14,8 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				fightStartString);
 			OutputHandler.ShowUserOutput(player);
-			while (true) {
-				var input = InputHandler.GetFormattedInput(Console.ReadLine());
+			while (opponent.HitPoints > 0 && player.InCombat && opponent.InCombat) {
+				this.Input = InputHandler.GetFormattedInput(Console.ReadLine());
 				Console.Clear();
 				OutputHandler.ShowUserOutput(player, opponent);
 				if (player.Effects.Any()) {
@@ -42,226 +44,8 @@ namespace DungeonGame {
 						}
 					}
 				}
-				switch (input[0]) {
-					case "f":
-					case "fight":
-						var attackDamage = player.Attack(opponent);
-						if (attackDamage - opponent.ArmorRating(player) < 0) {
-							var armorAbsorbString = "The " + opponent.Name + "'s armor absorbed all of your attack!";
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatAttackFailText(),
-								Settings.FormatDefaultBackground(),
-								armorAbsorbString);
-						}
-						else if (attackDamage == 0) {
-							var attackFailString = "You missed " + opponent.Name + "!";
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatAttackFailText(),
-								Settings.FormatDefaultBackground(),
-								attackFailString);
-						}
-						else {
-							var attackAmount = attackDamage - opponent.ArmorRating(player);
-							var attackSucceedString = "You hit the " + opponent.Name + " for " + attackAmount + " physical damage.";
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatAttackSuccessText(),
-								Settings.FormatDefaultBackground(),
-								attackSucceedString);
-							opponent.TakeDamage(attackAmount);
-						}
-						if (opponent.IsMonsterDead(player)) return true;
-						break;
-					case "cast":
-						try {
-							if (input[1] != null) {
-								var spellName = InputHandler.ParseInput(input);
-								player.CastSpell(opponent, spellName);
-								if (opponent.IsMonsterDead(player)) return true;
-							}
-							break;
-						}
-						catch (IndexOutOfRangeException) {
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatFailureOutputText(),
-								Settings.FormatDefaultBackground(),
-								"You don't have that spell.");
-							continue;
-						}
-						catch (NullReferenceException) {
-							if (player.PlayerClass != Player.PlayerClassType.Mage) {
-								OutputHandler.Display.StoreUserOutput(
-									Settings.FormatFailureOutputText(),
-									Settings.FormatDefaultBackground(),
-									"You can't cast spells. You're not a mage!");
-							}
-							continue;
-						}
-						catch (InvalidOperationException) {
-							if (player.PlayerClass != Player.PlayerClassType.Mage) {
-								OutputHandler.Display.StoreUserOutput(
-									Settings.FormatFailureOutputText(),
-									Settings.FormatDefaultBackground(),
-									"You can't cast spells. You're not a mage!");
-								continue;
-							}
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatFailureOutputText(),
-								Settings.FormatDefaultBackground(),
-								"You do not have enough mana to cast that spell!");
-							continue;
-						}
-					case "use":
-						try {
-							if (input[1] != null && input[1] != "bandage") {
-								var abilityName = InputHandler.ParseInput(input);
-								player.UseAbility(opponent, abilityName);
-								if (opponent.IsMonsterDead(player)) return true;
-							}
-
-							if (input[1] != null && input[1] == "bandage") {
-								var abilityName = InputHandler.ParseInput(input);
-								player.UseAbility(abilityName);
-							}
-
-							break;
-						}
-						catch (IndexOutOfRangeException) {
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatFailureOutputText(),
-								Settings.FormatDefaultBackground(),
-								"You don't have that ability.");
-							continue;
-						}
-						catch (ArgumentOutOfRangeException) {
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatFailureOutputText(),
-								Settings.FormatDefaultBackground(),
-								"You don't have that ability.");
-							continue;
-						}
-						catch (NullReferenceException) {
-							if (player.PlayerClass == Player.PlayerClassType.Mage) {
-								OutputHandler.Display.StoreUserOutput(
-									Settings.FormatFailureOutputText(),
-									Settings.FormatDefaultBackground(),
-									"You can't use abilities. You're not a warrior or archer!");
-							}
-							continue;
-						}
-						catch (InvalidOperationException) {
-							if (player.PlayerClass == Player.PlayerClassType.Mage) {
-								OutputHandler.Display.StoreUserOutput(
-									Settings.FormatFailureOutputText(),
-									Settings.FormatDefaultBackground(),
-									"You can't use abilities. You're not a warrior or archer!");
-								continue;
-							}
-							switch (player.PlayerClass) {
-								case Player.PlayerClassType.Mage:
-									continue;
-								case Player.PlayerClassType.Warrior:
-									OutputHandler.Display.StoreUserOutput(
-										Settings.FormatFailureOutputText(),
-										Settings.FormatDefaultBackground(),
-										"You do not have enough rage to use that ability!");
-									continue;
-								case Player.PlayerClassType.Archer:
-									if (player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
-										OutputHandler.Display.StoreUserOutput(
-											Settings.FormatFailureOutputText(),
-											Settings.FormatDefaultBackground(),
-											"You do not have a bow equipped!");
-										continue;
-									}
-									OutputHandler.Display.StoreUserOutput(
-										Settings.FormatFailureOutputText(),
-										Settings.FormatDefaultBackground(),
-										"You do not have enough combo points to use that ability!");
-									continue;
-								default:
-									throw new ArgumentOutOfRangeException();
-							}
-						}
-					case "equip":
-					case "unequip":
-						GearHandler.EquipItem(player, input);
-						break;
-					case "flee":
-						var canFlee = this.CanFleeCombat(player, opponent);
-						if (canFlee) {
-							return false;
-						}
-						break;
-					case "drink":
-						if (input.Last() == "potion") {
-							player.DrinkPotion(input);
-						}
-						else {
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatFailureOutputText(),
-								Settings.FormatDefaultBackground(),
-								"You can't drink that!");
-						}
-						continue;
-					case "reload":
-						player.ReloadQuiver();
-						break;
-					case "i":
-					case "inventory":
-						PlayerHandler.ShowInventory(player);
-						continue;
-					case "list":
-						switch (input[1]) {
-							case "abilities":
-								try {
-									PlayerHandler.ListAbilities(player);
-								}
-								catch (IndexOutOfRangeException) {
-									OutputHandler.Display.StoreUserOutput(
-										Settings.FormatFailureOutputText(),
-										Settings.FormatDefaultBackground(),
-										"List what?");
-								}
-								continue;
-							case "spells":
-								try {
-									PlayerHandler.ListSpells(player);
-								}
-								catch (IndexOutOfRangeException) {
-									OutputHandler.Display.StoreUserOutput(
-										Settings.FormatFailureOutputText(),
-										Settings.FormatDefaultBackground(),
-										"List what?");
-								}
-								continue;
-						}
-						break;
-					case "ability":
-						try {
-							PlayerHandler.AbilityInfo(player, input);
-						}
-						catch (IndexOutOfRangeException) {
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatFailureOutputText(),
-								Settings.FormatDefaultBackground(),
-								"What ability did you want to know about?");
-						}
-						continue;
-					case "spell":
-						try {
-							PlayerHandler.SpellInfo(player, input[1]);
-						}
-						catch (IndexOutOfRangeException) {
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatFailureOutputText(),
-								Settings.FormatDefaultBackground(),
-								"What spell did you want to know about?");
-						}
-						continue;
-					default:
-						Messages.InvalidCommand();
-						continue;
-				}
+				this.ProcessPlayerInput(player, opponent);
+				if (opponent.IsMonsterDead(player)) return true;
 				var isOpponentStunned = false;
 				if (opponent.Effects.Any()) {
 					GameHandler.RemovedExpiredEffects(opponent);
@@ -341,8 +125,9 @@ namespace DungeonGame {
 					}
 				}
 			}
+			return true;
 		}
-		private bool CanFleeCombat(Player player, Monster opponent) {
+		private void FleeCombat(Player player, Monster opponent) {
 			var randomNum = GameHandler.GetRandomNumber(1, 10);
 			if (randomNum > 5) {
 				OutputHandler.Display.StoreUserOutput(
@@ -351,13 +136,216 @@ namespace DungeonGame {
 					"You have fled combat successfully!");
 				player.InCombat = false;
 				opponent.InCombat = false;
-				return true;
 			}
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"You tried to flee combat but failed!");
-			return false;
+		}
+		private void ProcessPlayerInput(Player player, Monster opponent) {
+			switch (this.Input[0]) {
+				case "f":
+				case "fight":
+					var attackDamage = player.Attack(opponent);
+					if (attackDamage - opponent.ArmorRating(player) < 0) {
+						var armorAbsorbString = "The " + opponent.Name + "'s armor absorbed all of your attack!";
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatAttackFailText(),
+							Settings.FormatDefaultBackground(),
+							armorAbsorbString);
+					}
+					else if (attackDamage == 0) {
+						var attackFailString = "You missed " + opponent.Name + "!";
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatAttackFailText(),
+							Settings.FormatDefaultBackground(),
+							attackFailString);
+					}
+					else {
+						var attackAmount = attackDamage - opponent.ArmorRating(player);
+						var attackSucceedString = "You hit the " + opponent.Name + " for " + attackAmount + " physical damage.";
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatAttackSuccessText(),
+							Settings.FormatDefaultBackground(),
+							attackSucceedString);
+						opponent.TakeDamage(attackAmount);
+					}
+					break;
+				case "cast":
+					try {
+						if (this.Input[1] != null) {
+							var spellName = InputHandler.ParseInput(this.Input);
+							player.CastSpell(opponent, spellName);
+						}
+					}
+					catch (IndexOutOfRangeException) {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"You don't have that spell.");
+					}
+					catch (NullReferenceException) {
+						if (player.PlayerClass != Player.PlayerClassType.Mage) {
+							OutputHandler.Display.StoreUserOutput(
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
+								"You can't cast spells. You're not a mage!");
+						}
+					}
+					catch (InvalidOperationException) {
+						if (player.PlayerClass != Player.PlayerClassType.Mage) {
+							OutputHandler.Display.StoreUserOutput(
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
+								"You can't cast spells. You're not a mage!");
+						}
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"You do not have enough mana to cast that spell!");
+					}
+					break;
+				case "use":
+					try {
+						if (this.Input[1] != null && this.Input[1] != "bandage") {
+							var abilityName = InputHandler.ParseInput(this.Input);
+							player.UseAbility(opponent, abilityName);
+						}
+						if (this.Input[1] != null && this.Input[1] == "bandage") {
+							var abilityName = InputHandler.ParseInput(this.Input);
+							player.UseAbility(abilityName);
+						}
+					}
+					catch (IndexOutOfRangeException) {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"You don't have that ability.");
+					}
+					catch (ArgumentOutOfRangeException) {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"You don't have that ability.");
+					}
+					catch (NullReferenceException) {
+						if (player.PlayerClass == Player.PlayerClassType.Mage) {
+							OutputHandler.Display.StoreUserOutput(
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
+								"You can't use abilities. You're not a warrior or archer!");
+						}
+					}
+					catch (InvalidOperationException) {
+						if (player.PlayerClass == Player.PlayerClassType.Mage) {
+							OutputHandler.Display.StoreUserOutput(
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
+								"You can't use abilities. You're not a warrior or archer!");
+						}
+						switch (player.PlayerClass) {
+							case Player.PlayerClassType.Mage:
+								break;
+							case Player.PlayerClassType.Warrior:
+								OutputHandler.Display.StoreUserOutput(
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
+									"You do not have enough rage to use that ability!");
+								break;
+							case Player.PlayerClassType.Archer:
+								if (player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
+									OutputHandler.Display.StoreUserOutput(
+										Settings.FormatFailureOutputText(),
+										Settings.FormatDefaultBackground(),
+										"You do not have a bow equipped!");
+								}
+								OutputHandler.Display.StoreUserOutput(
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
+									"You do not have enough combo points to use that ability!");
+								break;
+							default:
+								throw new ArgumentOutOfRangeException();
+						}
+					}
+					break;
+				case "equip":
+				case "unequip":
+					GearHandler.EquipItem(player, this.Input);
+					break;
+				case "flee":
+					this.FleeCombat(player, opponent);
+					break;
+				case "drink":
+					if (this.Input.Last() == "potion") {
+						player.DrinkPotion(this.Input);
+					}
+					else {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"You can't drink that!");
+					}
+					break;
+				case "reload":
+					player.ReloadQuiver();
+					break;
+				case "i":
+				case "inventory":
+					PlayerHandler.ShowInventory(player);
+					break;
+				case "list":
+					switch (this.Input[1]) {
+						case "abilities":
+							try {
+								PlayerHandler.ListAbilities(player);
+							}
+							catch (IndexOutOfRangeException) {
+								OutputHandler.Display.StoreUserOutput(
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
+									"List what?");
+							}
+							break;
+						case "spells":
+							try {
+								PlayerHandler.ListSpells(player);
+							}
+							catch (IndexOutOfRangeException) {
+								OutputHandler.Display.StoreUserOutput(
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
+									"List what?");
+							}
+							break;
+					}
+					break;
+				case "ability":
+					try {
+						PlayerHandler.AbilityInfo(player, this.Input);
+					}
+					catch (IndexOutOfRangeException) {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"What ability did you want to know about?");
+					}
+					break;
+				case "spell":
+					try {
+						PlayerHandler.SpellInfo(player, this.Input[1]);
+					}
+					catch (IndexOutOfRangeException) {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"What spell did you want to know about?");
+					}
+					break;
+				default:
+					Messages.InvalidCommand();
+					break;
+			}
 		}
 	}
 }
