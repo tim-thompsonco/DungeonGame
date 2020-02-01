@@ -331,16 +331,6 @@ namespace DungeonGameTests {
 		[Test]
 		public void BandageAbilityUnitTests() {
 			var player = new Player("placeholder", Player.PlayerClassType.Archer);
-			player.StatReplenishInterval = 9999999; // Disable stat replenish over time method
-			var output = new UserOutput();
-			var spawnedRooms = new List<IRoom> {
-				new DungeonRoom(0, 0, 0, false, false, false,
-					false, false, false, false, false, false,
-					false, 1, 1)
-			};
-			var globalTimer = new Timer(
-				e => GameHandler.CheckStatus(player), 
-				null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 			player.Abilities.Add(
 				new Ability("use bandage", 25, 1, Ability.ArcherAbility.Bandage, 1));
 			player.HitPoints = 10;
@@ -368,16 +358,16 @@ namespace DungeonGameTests {
 			player.UseAbility(abilityNameTwo);
 			player.UseAbility(abilityNameTwo);
 			Assert.AreEqual(60, player.HitPoints);
-			Thread.Sleep(TimeSpan.FromSeconds(30)); // Should finish ticking after 30 seconds
-			Assert.AreEqual(90, player.HitPoints);
-			// Make sure additional erroneous ticks don't happen
-			Thread.Sleep(TimeSpan.FromSeconds(15)); // Check additional 15 seconds to make sure no more ticks
+			foreach (var effect in player.Effects.Where(effect => effect.EffectGroup == Effect.EffectType.Healing)) {
+				while (!effect.IsEffectExpired) {
+					effect.HealingRound(player);
+				}
+			}
 			Assert.AreEqual(90, player.HitPoints);
 		}
 		[Test]
 		public void ChargeAbilityUnitTest() {
 			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
-			var output = new UserOutput();
 			var spawnedRooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
 					false, false, false, false, false, false,
@@ -406,7 +396,6 @@ namespace DungeonGameTests {
 		[Test]
 		public void RendAbilityUnitTest() {
 			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
-			var output = new UserOutput();
 			var spawnedRooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
 					false, false, false, false, false, false,
@@ -438,27 +427,23 @@ namespace DungeonGameTests {
 		public void BerserkAbilityUnitTest() {
 		// Berserk should create a change damage and change armor effect, which should expire when combat ends
 		var player = new Player("placeholder", Player.PlayerClassType.Warrior);
-		var output = new UserOutput();
 		GearHandler.EquipInitialGear(player);
-		var spawnedRooms = new List<IRoom> {
+		RoomHandler.Rooms = new List<IRoom> {
 			new DungeonRoom(0, 0, 0, false, false, false,
 				false, false, false, false, false, false,
 				false, 1, 1)
 		};
-		if (spawnedRooms[0].Monster == null) {
-			spawnedRooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
+		if (RoomHandler.Rooms[0].Monster == null) {
+			RoomHandler.Rooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
 		}
-		var globalTimer = new Timer(
-			e => GameHandler.CheckStatus(player), 
-			null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
-		var monster = spawnedRooms[0].Monster;
+		var monster = RoomHandler.Rooms[0].Monster;
 		var input = new string[2] {"use", "berserk"};
 		var abilityName = InputHandler.ParseInput(input);
 		Assert.AreEqual("berserk", abilityName);
 		player.UseAbility(monster, abilityName);
 		Assert.AreEqual(2, player.Effects.Count);
 		player.InCombat = false;
-		Thread.Sleep(TimeSpan.FromSeconds(3));
+		GameHandler.CheckStatus(player);
 		Assert.AreEqual(0, player.Effects.Count);
 		}
 		[Test]

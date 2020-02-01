@@ -78,6 +78,7 @@ namespace DungeonGame {
 						}
 				}
 			}
+			RemovedExpiredEffects(player);
 		}
 		public static int GetRandomNumber(int lowNum, int highNum) {
 			return RndGenerate.Next(lowNum, highNum + 1);
@@ -92,12 +93,16 @@ namespace DungeonGame {
 		}
 		public static void RemovedExpiredEffects(Player player) {
 			for (var i = 0; i < player.Effects.Count; i++) {
-				if (player.Effects[i].IsEffectExpired) player.Effects.RemoveAt(i);				
+				if (!player.Effects[i].IsEffectExpired) continue;
+				player.Effects.RemoveAt(i);
+				i--; // Keep i at same amount, since effects.count will decrease, to keep checking effect list properly
 			}
 		}
 		public static void RemovedExpiredEffects(Monster monster) {
 			for (var i = 0; i < monster.Effects.Count; i++) {
-				if (monster.Effects[i].IsEffectExpired) monster.Effects.RemoveAt(i);				
+				if (!monster.Effects[i].IsEffectExpired) continue; 
+				monster.Effects.RemoveAt(i);
+				i--; // Keep i at same amount, since effects.count will decrease, to keep checking effect list properly
 			}
 		}
 		public static void ReplenishStatsOverTime(Player player) {
