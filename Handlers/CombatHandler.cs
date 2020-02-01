@@ -4,178 +4,197 @@ using System.Linq;
 namespace DungeonGame {
 	public class CombatHandler {
 		private string[] Input { get; set; }
+		private Monster Opponent { get; set; }
+		private Player Player { get; set; }
+		private bool IsOpponentStunned { get; set; }
 		
 		public bool SingleCombat(Monster opponent, Player player) {
-			player.InCombat = true;
-			opponent.InCombat = true;
-			var fightStartString = player.Name + ", you have encountered a " + opponent.Name + ". Time to fight!";
+			this.Player = player;
+			this.Opponent = opponent;
+			this.Player.InCombat = true;
+			this.Opponent.InCombat = true;
+			var fightStartString = this.Player.Name + ", you have encountered a " + this.Opponent.Name + ". Time to fight!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				fightStartString);
-			OutputHandler.ShowUserOutput(player);
-			while (opponent.HitPoints > 0 && player.InCombat && opponent.InCombat) {
+			OutputHandler.ShowUserOutput(this.Player);
+			while (this.Opponent.HitPoints > 0 && this.Player.HitPoints > 0 && 
+			       this.Player.InCombat && this.Opponent.InCombat) {
 				this.Input = InputHandler.GetFormattedInput(Console.ReadLine());
 				Console.Clear();
-				OutputHandler.ShowUserOutput(player, opponent);
-				if (player.Effects.Any()) {
-					GameHandler.RemovedExpiredEffects(player);
-					foreach (var effect in player.Effects) {
-						switch (effect.EffectGroup) {
-							case Effect.EffectType.Healing:
-								effect.HealingRound(player);
-								break;
-							case Effect.EffectType.ChangeDamage:
-								break;
-							case Effect.EffectType.ChangeArmor:
-								break;
-							case Effect.EffectType.AbsorbDamage:
-								break;
-							case Effect.EffectType.OnFire:
-								break;
-							case Effect.EffectType.Bleeding:
-								break;
-							case Effect.EffectType.Stunned:
-								break;
-							case Effect.EffectType.Frozen:
-								break;
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-					}
+				OutputHandler.ShowUserOutput(this.Player, this.Opponent);
+				if (this.Player.Effects.Any()) {
+					this.ProcessPlayerEffects();
 				}
-				this.ProcessPlayerInput(player, opponent);
-				if (opponent.IsMonsterDead(player)) return true;
-				var isOpponentStunned = false;
-				if (opponent.Effects.Any()) {
-					GameHandler.RemovedExpiredEffects(opponent);
-					foreach (var effect in opponent.Effects) {
-						switch (effect.EffectGroup) {
-							case Effect.EffectType.Healing:
-								break;
-							case Effect.EffectType.ChangeDamage:
-								break;
-							case Effect.EffectType.ChangeArmor:
-								break;
-							case Effect.EffectType.AbsorbDamage:
-								break;
-							case Effect.EffectType.OnFire:
-								effect.OnFireRound(opponent);
-								break;
-							case Effect.EffectType.Bleeding:
-								effect.BleedingRound(opponent);
-								break;
-							case Effect.EffectType.Stunned:
-								effect.StunnedRound(opponent);
-								isOpponentStunned = true;
-								break;
-							case Effect.EffectType.Frozen:
-								break;
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-						if (opponent.IsMonsterDead(player)) return true;
-					}
+				this.ProcessPlayerInput(); // Player will attack, use ability, cast spells, etc. to cause damage
+				if (this.Opponent.IsMonsterDead(this.Player)) {
+					this.Player.InCombat = false;
+					this.Opponent.InCombat = false;
+					return true;
 				}
-				if (isOpponentStunned) continue;
-				var attackDamageM = opponent.Attack(player);
-				var defenseMoveString = "Your defensive move blocked " + player.AbsorbDamageAmount + " damage!";
-				if (attackDamageM > player.AbsorbDamageAmount && player.AbsorbDamageAmount > 0) {
-					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatAttackFailText(),
-						Settings.FormatDefaultBackground(),
-						defenseMoveString);
-					attackDamageM -= player.AbsorbDamageAmount;
-					player.AbsorbDamageAmount = 0;
+				if (this.Opponent.Effects.Any()) {
+					this.ProcessOpponentEffects();
 				}
-				else if (attackDamageM < player.AbsorbDamageAmount && player.AbsorbDamageAmount > 0) {
-					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatAttackFailText(),
-						Settings.FormatDefaultBackground(),
-						defenseMoveString);
-					player.AbsorbDamageAmount -= attackDamageM;
-					attackDamageM = 0;
+				if (this.Opponent.IsMonsterDead(this.Player)) {
+					this.Player.InCombat = false;
+					this.Opponent.InCombat = false;
+					return true;
 				}
-				if (attackDamageM == 0) {
-					var missString = "The " + opponent.Name + " missed you!"; 
-					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatAttackFailText(),
-						Settings.FormatDefaultBackground(),
-						missString);
-				}
-				else if (attackDamageM - player.ArmorRating(opponent) < 0) {
-					var armorAbsorbString = "Your armor absorbed all of " + opponent.Name + "'s attack!"; 
-					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatAttackFailText(),
-						Settings.FormatDefaultBackground(),
-						armorAbsorbString);
-					GearHandler.DecreaseArmorDurability(player);
-				}
-				else {
-					var hitAmount = attackDamageM - player.ArmorRating(opponent);
-					var hitString = "The " + opponent.Name + " hits you for " + hitAmount + " physical damage.";
-					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatAttackSuccessText(),
-						Settings.FormatDefaultBackground(),
-						hitString);
-					player.TakeDamage(hitAmount);
-					GearHandler.DecreaseArmorDurability(player);
-					if (player.HitPoints <= 0) {
-						return false;
-					}
-				}
+				if (this.IsOpponentStunned) continue;
+				this.ProcessMonsterAttack();
 			}
-			return true;
+			return player.HitPoints > 0;
 		}
-		private void FleeCombat(Player player, Monster opponent) {
+		private void FleeCombat() {
 			var randomNum = GameHandler.GetRandomNumber(1, 10);
 			if (randomNum > 5) {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You have fled combat successfully!");
-				player.InCombat = false;
-				opponent.InCombat = false;
+				this.Player.InCombat = false;
+				this.Opponent.InCombat = false;
 			}
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"You tried to flee combat but failed!");
 		}
-		private void ProcessPlayerInput(Player player, Monster opponent) {
+		private void ProcessPlayerEffects() {
+			GameHandler.RemovedExpiredEffects(this.Player);
+			foreach (var effect in this.Player.Effects) {
+				switch (effect.EffectGroup) {
+					case Effect.EffectType.Healing:
+						effect.HealingRound(this.Player);
+						break;
+					case Effect.EffectType.ChangeDamage:
+						break;
+					case Effect.EffectType.ChangeArmor:
+						break;
+					case Effect.EffectType.AbsorbDamage:
+						break;
+					case Effect.EffectType.OnFire:
+						break;
+					case Effect.EffectType.Bleeding:
+						break;
+					case Effect.EffectType.Stunned:
+						break;
+					case Effect.EffectType.Frozen:
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+		}
+		private void ProcessOpponentEffects() {
+			GameHandler.RemovedExpiredEffects(this.Opponent);
+			foreach (var effect in this.Opponent.Effects) {
+				switch (effect.EffectGroup) {
+					case Effect.EffectType.Healing:
+						break;
+					case Effect.EffectType.ChangeDamage:
+						break;
+					case Effect.EffectType.ChangeArmor:
+						break;
+					case Effect.EffectType.AbsorbDamage:
+						break;
+					case Effect.EffectType.OnFire:
+						effect.OnFireRound(this.Opponent);
+						break;
+					case Effect.EffectType.Bleeding:
+						effect.BleedingRound(this.Opponent);
+						break;
+					case Effect.EffectType.Stunned:
+						effect.StunnedRound(this.Opponent);
+						this.IsOpponentStunned = true;
+						break;
+					case Effect.EffectType.Frozen:
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+		}
+		private void ProcessMonsterAttack() {
+			var attackDamageM = this.Opponent.Attack(this.Player);
+			var defenseMoveString = "Your defensive move blocked " + this.Player.AbsorbDamageAmount + " damage!";
+			if (attackDamageM > this.Player.AbsorbDamageAmount && this.Player.AbsorbDamageAmount > 0) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAttackFailText(),
+					Settings.FormatDefaultBackground(),
+					defenseMoveString);
+				attackDamageM -= this.Player.AbsorbDamageAmount;
+				this.Player.AbsorbDamageAmount = 0;
+			}
+			else if (attackDamageM < this.Player.AbsorbDamageAmount && this.Player.AbsorbDamageAmount > 0) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAttackFailText(),
+					Settings.FormatDefaultBackground(),
+					defenseMoveString);
+				this.Player.AbsorbDamageAmount -= attackDamageM;
+				attackDamageM = 0;
+			}
+			if (attackDamageM == 0) {
+				var missString = "The " + this.Opponent.Name + " missed you!"; 
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAttackFailText(),
+					Settings.FormatDefaultBackground(),
+					missString);
+			}
+			else if (attackDamageM - this.Player.ArmorRating(this.Opponent) < 0) {
+				var armorAbsorbString = "Your armor absorbed all of " + this.Opponent.Name + "'s attack!"; 
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAttackFailText(),
+					Settings.FormatDefaultBackground(),
+					armorAbsorbString);
+				GearHandler.DecreaseArmorDurability(this.Player);
+			}
+			else {
+				var hitAmount = attackDamageM - this.Player.ArmorRating(this.Opponent);
+				var hitString = "The " + this.Opponent.Name + " hits you for " + hitAmount + " physical damage.";
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAttackSuccessText(),
+					Settings.FormatDefaultBackground(),
+					hitString);
+				this.Player.TakeDamage(hitAmount);
+				GearHandler.DecreaseArmorDurability(this.Player);
+			}
+		}
+		private void ProcessPlayerInput() {
 			switch (this.Input[0]) {
 				case "f":
 				case "fight":
-					var attackDamage = player.Attack(opponent);
-					if (attackDamage - opponent.ArmorRating(player) < 0) {
-						var armorAbsorbString = "The " + opponent.Name + "'s armor absorbed all of your attack!";
+					var attackDamage = this.Player.Attack(this.Opponent);
+					if (attackDamage - this.Opponent.ArmorRating(this.Player) < 0) {
+						var armorAbsorbString = "The " + this.Opponent.Name + "'s armor absorbed all of your attack!";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
 							armorAbsorbString);
 					}
 					else if (attackDamage == 0) {
-						var attackFailString = "You missed " + opponent.Name + "!";
+						var attackFailString = "You missed " + this.Opponent.Name + "!";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
 							attackFailString);
 					}
 					else {
-						var attackAmount = attackDamage - opponent.ArmorRating(player);
-						var attackSucceedString = "You hit the " + opponent.Name + " for " + attackAmount + " physical damage.";
+						var attackAmount = attackDamage - this.Opponent.ArmorRating(this.Player);
+						var attackSucceedString = "You hit the " + this.Opponent.Name + " for " + attackAmount + " physical damage.";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatAttackSuccessText(),
 							Settings.FormatDefaultBackground(),
 							attackSucceedString);
-						opponent.TakeDamage(attackAmount);
+						this.Opponent.TakeDamage(attackAmount);
 					}
 					break;
 				case "cast":
 					try {
 						if (this.Input[1] != null) {
 							var spellName = InputHandler.ParseInput(this.Input);
-							player.CastSpell(opponent, spellName);
+							this.Player.CastSpell(this.Opponent, spellName);
 						}
 					}
 					catch (IndexOutOfRangeException) {
@@ -185,7 +204,7 @@ namespace DungeonGame {
 							"You don't have that spell.");
 					}
 					catch (NullReferenceException) {
-						if (player.PlayerClass != Player.PlayerClassType.Mage) {
+						if (this.Player.PlayerClass != Player.PlayerClassType.Mage) {
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -193,7 +212,7 @@ namespace DungeonGame {
 						}
 					}
 					catch (InvalidOperationException) {
-						if (player.PlayerClass != Player.PlayerClassType.Mage) {
+						if (this.Player.PlayerClass != Player.PlayerClassType.Mage) {
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -209,11 +228,11 @@ namespace DungeonGame {
 					try {
 						if (this.Input[1] != null && this.Input[1] != "bandage") {
 							var abilityName = InputHandler.ParseInput(this.Input);
-							player.UseAbility(opponent, abilityName);
+							this.Player.UseAbility(this.Opponent, abilityName);
 						}
 						if (this.Input[1] != null && this.Input[1] == "bandage") {
 							var abilityName = InputHandler.ParseInput(this.Input);
-							player.UseAbility(abilityName);
+							this.Player.UseAbility(abilityName);
 						}
 					}
 					catch (IndexOutOfRangeException) {
@@ -229,7 +248,7 @@ namespace DungeonGame {
 							"You don't have that ability.");
 					}
 					catch (NullReferenceException) {
-						if (player.PlayerClass == Player.PlayerClassType.Mage) {
+						if (this.Player.PlayerClass == Player.PlayerClassType.Mage) {
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -237,13 +256,13 @@ namespace DungeonGame {
 						}
 					}
 					catch (InvalidOperationException) {
-						if (player.PlayerClass == Player.PlayerClassType.Mage) {
+						if (this.Player.PlayerClass == Player.PlayerClassType.Mage) {
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't use abilities. You're not a warrior or archer!");
 						}
-						switch (player.PlayerClass) {
+						switch (this.Player.PlayerClass) {
 							case Player.PlayerClassType.Mage:
 								break;
 							case Player.PlayerClassType.Warrior:
@@ -253,7 +272,7 @@ namespace DungeonGame {
 									"You do not have enough rage to use that ability!");
 								break;
 							case Player.PlayerClassType.Archer:
-								if (player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
+								if (this.Player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
 									OutputHandler.Display.StoreUserOutput(
 										Settings.FormatFailureOutputText(),
 										Settings.FormatDefaultBackground(),
@@ -271,14 +290,14 @@ namespace DungeonGame {
 					break;
 				case "equip":
 				case "unequip":
-					GearHandler.EquipItem(player, this.Input);
+					GearHandler.EquipItem(this.Player, this.Input);
 					break;
 				case "flee":
-					this.FleeCombat(player, opponent);
+					this.FleeCombat();
 					break;
 				case "drink":
 					if (this.Input.Last() == "potion") {
-						player.DrinkPotion(this.Input);
+						this.Player.DrinkPotion(this.Input);
 					}
 					else {
 						OutputHandler.Display.StoreUserOutput(
@@ -288,17 +307,17 @@ namespace DungeonGame {
 					}
 					break;
 				case "reload":
-					player.ReloadQuiver();
+					this.Player.ReloadQuiver();
 					break;
 				case "i":
 				case "inventory":
-					PlayerHandler.ShowInventory(player);
+					PlayerHandler.ShowInventory(this.Player);
 					break;
 				case "list":
 					switch (this.Input[1]) {
 						case "abilities":
 							try {
-								PlayerHandler.ListAbilities(player);
+								PlayerHandler.ListAbilities(this.Player);
 							}
 							catch (IndexOutOfRangeException) {
 								OutputHandler.Display.StoreUserOutput(
@@ -309,7 +328,7 @@ namespace DungeonGame {
 							break;
 						case "spells":
 							try {
-								PlayerHandler.ListSpells(player);
+								PlayerHandler.ListSpells(this.Player);
 							}
 							catch (IndexOutOfRangeException) {
 								OutputHandler.Display.StoreUserOutput(
@@ -322,7 +341,7 @@ namespace DungeonGame {
 					break;
 				case "ability":
 					try {
-						PlayerHandler.AbilityInfo(player, this.Input);
+						PlayerHandler.AbilityInfo(this.Player, this.Input);
 					}
 					catch (IndexOutOfRangeException) {
 						OutputHandler.Display.StoreUserOutput(
@@ -333,7 +352,7 @@ namespace DungeonGame {
 					break;
 				case "spell":
 					try {
-						PlayerHandler.SpellInfo(player, this.Input[1]);
+						PlayerHandler.SpellInfo(this.Player, this.Input[1]);
 					}
 					catch (IndexOutOfRangeException) {
 						OutputHandler.Display.StoreUserOutput(
