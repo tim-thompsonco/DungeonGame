@@ -7,8 +7,10 @@ namespace DungeonGame {
 		private Monster Opponent { get; set; }
 		private Player Player { get; set; }
 		private bool IsOpponentStunned { get; set; }
+		private bool FleeSuccess { get; set; }
 		
 		public bool SingleCombat(Monster opponent, Player player) {
+			Console.Clear();
 			this.Player = player;
 			this.Opponent = opponent;
 			this.Player.InCombat = true;
@@ -19,30 +21,25 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				fightStartString);
 			OutputHandler.ShowUserOutput(this.Player);
+			OutputHandler.Display.ClearUserOutput();
 			while (this.Opponent.HitPoints > 0 && this.Player.HitPoints > 0 && 
 			       this.Player.InCombat && this.Opponent.InCombat) {
-				this.Input = InputHandler.GetFormattedInput(Console.ReadLine());
-				Console.Clear();
-				OutputHandler.ShowUserOutput(this.Player, this.Opponent);
 				if (this.Player.Effects.Any()) {
 					this.ProcessPlayerEffects();
 				}
+				this.Input = InputHandler.GetFormattedInput(Console.ReadLine());
 				this.ProcessPlayerInput(); // Player will attack, use ability, cast spells, etc. to cause damage
-				if (this.Opponent.IsMonsterDead(this.Player)) {
-					this.Player.InCombat = false;
-					this.Opponent.InCombat = false;
-					return true;
-				}
+				if (this.FleeSuccess) return false;
+				if (this.Opponent.IsMonsterDead(this.Player)) return true;
 				if (this.Opponent.Effects.Any()) {
 					this.ProcessOpponentEffects();
 				}
-				if (this.Opponent.IsMonsterDead(this.Player)) {
-					this.Player.InCombat = false;
-					this.Opponent.InCombat = false;
-					return true;
-				}
+				if (this.Opponent.IsMonsterDead(this.Player)) return true;
 				if (this.IsOpponentStunned) continue;
 				this.ProcessMonsterAttack();
+				Console.Clear();
+				OutputHandler.ShowUserOutput(this.Player, this.Opponent);
+				OutputHandler.Display.ClearUserOutput();
 			}
 			return player.HitPoints > 0;
 		}
@@ -55,6 +52,47 @@ namespace DungeonGame {
 					"You have fled combat successfully!");
 				this.Player.InCombat = false;
 				this.Opponent.InCombat = false;
+				this.FleeSuccess = true;
+				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoUp) {
+					RoomHandler.ChangeRoom(this.Player, 0, 0, 1);
+					return;
+				}
+				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoEast) {
+					RoomHandler.ChangeRoom(this.Player, 1, 0, 0);
+					return;
+				}
+				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoWest) {
+					RoomHandler.ChangeRoom(this.Player, -1, 0, 0);
+					return;
+				}
+				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoNorth) {
+					RoomHandler.ChangeRoom(this.Player, 0, 1, 0);
+					return;
+				}
+				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoSouth) {
+					RoomHandler.ChangeRoom(this.Player, 0, -1, 0);
+					return;
+				}
+				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoNorthEast) {
+					RoomHandler.ChangeRoom(this.Player, 1, 1, 0);
+					return;
+				}
+				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoNorthWest) {
+					RoomHandler.ChangeRoom(this.Player, -1, 1, 0);
+					return;
+				}
+				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoSouthEast) {
+					RoomHandler.ChangeRoom(this.Player, 1, -1, 0);
+					return;
+				}
+				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoSouthWest) {
+					RoomHandler.ChangeRoom(this.Player, -1, -1, 0);
+					return;
+				}
+				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoDown) {
+					RoomHandler.ChangeRoom(this.Player, 0, 0, -1);
+					return;
+				}
 			}
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
