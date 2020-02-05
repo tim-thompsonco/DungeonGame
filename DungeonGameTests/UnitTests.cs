@@ -611,7 +611,7 @@ namespace DungeonGameTests {
 			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Mage);
 			player.PlayerClass = Player.PlayerClassType.Archer;
 			trainer.UpgradeSpell(player, "fireball");
-			var expectedOutput =output.Output[0][2]; 
+			var expectedOutput =OutputHandler.Display.Output[0][2]; 
 			Assert.AreEqual("You can't upgrade spells. You're not a mage!",expectedOutput);
 			player.PlayerClass = Player.PlayerClassType.Mage;
 			var spellIndex = player.Spellbook.FindIndex(
@@ -622,16 +622,16 @@ namespace DungeonGameTests {
 			trainer.UpgradeSpell(player, "fireball");
 			Assert.AreEqual(25, player.Spellbook[spellIndex].FireOffense.BlastDamage);
 			Assert.AreEqual(5, player.Spellbook[spellIndex].FireOffense.BurnDamage);
-			var expectedOutputTwo = output.Output[1][2];
+			var expectedOutputTwo = OutputHandler.Display.Output[1][2];
 			Assert.AreEqual("You are not ready to upgrade that spell. You need to level up first!", 
 				expectedOutputTwo);
 			trainer.UpgradeSpell(player, "not a spell");
-			var expectedOutputThree = output.Output[2][2];
+			var expectedOutputThree = OutputHandler.Display.Output[2][2];
 			Assert.AreEqual("You don't have that spell to train!", expectedOutputThree);
 			player.Intelligence = 20;
 			player.Level = 2;
 			trainer.UpgradeSpell(player, "fireball");
-			var expectedOutputFour = output.Output[3][2];
+			var expectedOutputFour = OutputHandler.Display.Output[3][2];
 			Assert.AreEqual("You can't afford that!",expectedOutputFour);
 			player.Gold = 100;
 			trainer.UpgradeSpell(player, "fireball");
@@ -639,7 +639,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(35, player.Spellbook[spellIndex].FireOffense.BlastDamage);
 			Assert.AreEqual(10, player.Spellbook[spellIndex].FireOffense.BurnDamage);
 			Assert.AreEqual(60, player.Gold);
-			var expectedOutputFive = output.Output[4][2];
+			var expectedOutputFive = OutputHandler.Display.Output[4][2];
 			Assert.AreEqual("You upgraded Fireball to rank 2 for 40 gold.", expectedOutputFive);
 		}
 		[Test]
@@ -649,7 +649,7 @@ namespace DungeonGameTests {
 			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Archer);
 			player.PlayerClass = Player.PlayerClassType.Mage;
 			trainer.UpgradeAbility(player, "distance");
-			var expectedOutput =output.Output[0][2]; 
+			var expectedOutput =OutputHandler.Display.Output[0][2]; 
 			Assert.AreEqual("You can't upgrade abilities. You're not a warrior or archer!",expectedOutput);
 			player.PlayerClass = Player.PlayerClassType.Archer;
 			var abilityIndex = player.Abilities.FindIndex(
@@ -660,16 +660,16 @@ namespace DungeonGameTests {
 			trainer.UpgradeAbility(player, "distance");
 			Assert.AreEqual(25, player.Abilities[abilityIndex].Offensive.Amount);
 			Assert.AreEqual(50, player.Abilities[abilityIndex].Offensive.ChanceToSucceed);
-			var expectedOutputTwo = output.Output[1][2];
+			var expectedOutputTwo = OutputHandler.Display.Output[1][2];
 			Assert.AreEqual("You are not ready to upgrade that ability. You need to level up first!", 
 				expectedOutputTwo);
 			trainer.UpgradeAbility(player, "not an ability");
-			var expectedOutputThree = output.Output[2][2];
+			var expectedOutputThree = OutputHandler.Display.Output[2][2];
 			Assert.AreEqual("You don't have that ability to train!", expectedOutputThree);
 			player.Intelligence = 20;
 			player.Level = 2;
 			trainer.UpgradeAbility(player, "distance");
-			var expectedOutputFour = output.Output[3][2];
+			var expectedOutputFour = OutputHandler.Display.Output[3][2];
 			Assert.AreEqual("You can't afford that!",expectedOutputFour);
 			player.Gold = 100;
 			trainer.UpgradeAbility(player, "distance");
@@ -677,41 +677,40 @@ namespace DungeonGameTests {
 			Assert.AreEqual(35, player.Abilities[abilityIndex].Offensive.Amount);
 			Assert.AreEqual(55, player.Abilities[abilityIndex].Offensive.ChanceToSucceed);
 			Assert.AreEqual(60, player.Gold);
-			var expectedOutputFive = output.Output[4][2];
+			var expectedOutputFive = OutputHandler.Display.Output[4][2];
 			Assert.AreEqual("You upgraded Distance Shot to rank 2 for 40 gold.", expectedOutputFive);
 		}
 		[Test]
 		public void TrainAbilityTest() {
 			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
-			var output = new UserOutput();
 			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Warrior);
 			player.PlayerClass = Player.PlayerClassType.Mage;
 			trainer.TrainAbility(player, "bandage");
-			var expectedOutput = output.Output[0][2]; 
+			var expectedOutput = OutputHandler.Display.Output[0][2]; 
 			Assert.AreEqual("You can't train abilities. You're not a warrior or archer!",expectedOutput);
 			player.PlayerClass = Player.PlayerClassType.Warrior;
 			var abilityIndex = player.Abilities.FindIndex(
 				f => f.Name == "bandage" || f.Name.Contains("bandage"));
 			Assert.AreEqual(-1, abilityIndex);
 			player.Gold = 0;
-			output.ClearUserOutput();
+			OutputHandler.Display.ClearUserOutput();
 			trainer.TrainAbility(player, "bandage");
 			abilityIndex = player.Abilities.FindIndex(
 				f => f.Name == "bandage" || f.Name.Contains("bandage"));
 			Assert.AreEqual(-1, abilityIndex);
-			expectedOutput = output.Output[0][2]; 
+			expectedOutput = OutputHandler.Display.Output[0][2]; 
 			Assert.AreEqual("You are not ready to train that ability. You need to level up first!", 
 				expectedOutput);
 			player.Intelligence = 20;
 			player.Level = 2;
-			output.ClearUserOutput();
+			OutputHandler.Display.ClearUserOutput();
 			trainer.TrainAbility(player, "bandage");
-			expectedOutput = output.Output[0][2]; 
+			expectedOutput = OutputHandler.Display.Output[0][2]; 
 			Assert.AreEqual("You can't afford that!",expectedOutput);
 			player.Gold = 100;
-			output.ClearUserOutput();
+			OutputHandler.Display.ClearUserOutput();
 			trainer.TrainAbility(player, "bandage");
-			expectedOutput = output.Output[0][2]; 
+			expectedOutput = OutputHandler.Display.Output[0][2]; 
 			abilityIndex = player.Abilities.FindIndex(
 				f => f.Name == "bandage" || f.Name.Contains("bandage"));
 			Assert.AreNotEqual(-1, abilityIndex);
@@ -722,8 +721,7 @@ namespace DungeonGameTests {
 		public void TownPortalSpellUnitTest() {
 			/* Town Portal should change location of player to where portal is set to */
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
-			var output = new UserOutput();
-			var spawnedRooms = new RoomBuilder(
+			RoomHandler.Rooms = new RoomBuilder(
 				100, 5, 1, 3, 
 				0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
 			player.Spellbook.Add(new Spell(
@@ -738,7 +736,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(0, player.X);
 			Assert.AreEqual(7, player.Y);
 			Assert.AreEqual(0, player.Z);
-			var expectedOutput = output.Output[0][2]; 
+			var expectedOutput = OutputHandler.Display.Output[0][2]; 
 			Assert.AreEqual("You open a portal and step through it.",expectedOutput);
 		}
 	}
