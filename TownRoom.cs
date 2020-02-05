@@ -289,7 +289,47 @@ namespace DungeonGame {
 			OutputHandler.Display.StoreUserOutput(sameLineOutput); 
 			this.ShowDirections();
 		}
-		public void LookNpc(string[] input) {
+		private string CalculateNpcLevelDiff(Player player) {
+			if (this.Vendor == null) return null;
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			var monsterName = textInfo.ToTitleCase(this.Vendor.Name);
+			var levelDiff = player.Level - this.Vendor.Level;
+			var difficultyStringBuilder = new StringBuilder();
+			difficultyStringBuilder.Append("Difficulty: ");
+			if (levelDiff >= 3) {
+				difficultyStringBuilder.Append("You will crush " + monsterName + " like a bug.");
+			}
+			else switch (levelDiff) {
+				case 2:
+					difficultyStringBuilder.Append("You have an edge over " + monsterName + ".");
+					break;
+				case 1:
+					difficultyStringBuilder.Append("You have a slight edge over " + monsterName + ".");
+					break;
+				case 0:
+					difficultyStringBuilder.Append("You're about even with " + monsterName + ".");
+					break;
+				default: {
+					switch (levelDiff) {
+						case -1:
+							difficultyStringBuilder.Append(monsterName + " has a slight edge over you.");
+							break;
+						case -2:
+							difficultyStringBuilder.Append(monsterName + " has an edge over you.");
+							break;
+						default: {
+							if (levelDiff <= -3) {
+								difficultyStringBuilder.Append(monsterName + " will crush you like a bug.");
+							}
+							break;
+						}
+					}
+					break;
+				}
+			}
+			return difficultyStringBuilder.ToString();
+		}
+		public void LookNpc(string[] input, Player player) {
 			var inputString = new StringBuilder();
 			for (var i = 1; i < input.Length; i++) {
 				inputString.Append(input[i]);
@@ -314,6 +354,10 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(), 
 							this.Vendor.Desc.Substring(i, Settings.GetGameWidth()));
 					}
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatRoomOutputText(), 
+						Settings.FormatDefaultBackground(), 
+						this.CalculateNpcLevelDiff(player));
 					var sameLineOutput = new List<string>() {
 						Settings.FormatRoomOutputText(),
 						Settings.FormatDefaultBackground(),

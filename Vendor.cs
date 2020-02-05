@@ -7,12 +7,14 @@ namespace DungeonGame {
 	public class Vendor : IRoomInteraction {
 		public string Name { get; set; }
 		public string Desc { get; set; }
+		public int Level { get; set; }
 		public string BuySellType { get; set; }
 		public List<IEquipment> VendorItems { get; set; } = new List<IEquipment>();
 
 		public Vendor(string name, string desc, string buySellType) {
 			this.Name = name;
 			this.Desc = desc;
+			this.Level = 10;
 			this.BuySellType = buySellType;
 			switch (name) {
 				case "armorer":

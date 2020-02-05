@@ -49,7 +49,6 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"You can't attack that.");
 					}
-
 					break;
 				case "buy":
 					try {
@@ -71,7 +70,6 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"Buy what?");
 					}
-
 					break;
 				case "cast":
 					try {
@@ -103,13 +101,11 @@ namespace DungeonGame {
 								Settings.FormatDefaultBackground(),
 								"You can't cast spells. You're not a mage!");
 						}
-
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You do not have enough mana to cast that spell!");
 					}
-
 					break;
 				case "drop":
 					GearHandler.DropItem(player, input);
@@ -122,7 +118,6 @@ namespace DungeonGame {
 						if (input.Contains("distance")) {
 							player.UseAbility(input);
 						}
-
 						if (input[1] != null) {
 							player.UseAbility(ParseInput(input));
 						}
@@ -155,7 +150,6 @@ namespace DungeonGame {
 								Settings.FormatDefaultBackground(),
 								"You can't use abilities. You're not a warrior or archer!");
 						}
-
 						switch (player.PlayerClass) {
 							case Player.PlayerClassType.Warrior:
 								OutputHandler.Display.StoreUserOutput(
@@ -170,7 +164,6 @@ namespace DungeonGame {
 										Settings.FormatDefaultBackground(),
 										"You do not have a bow equipped!");
 								}
-
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
@@ -180,7 +173,6 @@ namespace DungeonGame {
 								throw new ArgumentOutOfRangeException();
 						}
 					}
-
 					break;
 				case "equip":
 				case "unequip":
@@ -212,7 +204,6 @@ namespace DungeonGame {
 									Settings.FormatDefaultBackground(),
 									"List what?");
 							}
-
 							break;
 						case "spells":
 							try {
@@ -224,10 +215,8 @@ namespace DungeonGame {
 									Settings.FormatDefaultBackground(),
 									"List what?");
 							}
-
 							break;
 					}
-
 					break;
 				case "ability":
 					try {
@@ -239,7 +228,6 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"What ability did you want to know about?");
 					}
-
 					break;
 				case "spell":
 					try {
@@ -251,14 +239,13 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"What spell did you want to know about?");
 					}
-
 					break;
 				case "l":
 				case "look":
 					try {
 						if (input[1] != null) {
 							try {
-								RoomHandler.Rooms[RoomHandler.RoomIndex].LookNpc(input);
+								RoomHandler.Rooms[RoomHandler.RoomIndex].LookNpc(input, player);
 							}
 							catch (Exception) {
 								OutputHandler.Display.StoreUserOutput(
@@ -271,7 +258,6 @@ namespace DungeonGame {
 					catch (IndexOutOfRangeException) {
 						RoomHandler.Rooms[RoomHandler.RoomIndex].LookRoom();
 					}
-
 					break;
 				case "loot":
 					try {
@@ -293,7 +279,6 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"Loot what?");
 					}
-
 					break;
 				case "drink":
 					if (input.Last() == "potion") {
@@ -305,7 +290,6 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"You can't drink that!");
 					}
-
 					break;
 				case "save":
 					SaveQuitHandler.SaveGame(player);
@@ -336,7 +320,6 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"Sell what?");
 					}
-
 					break;
 				case "repair":
 					try {
@@ -368,7 +351,6 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"There is no vendor here!");
 					}
-
 					break;
 				case "upgrade":
 					try {
@@ -395,7 +377,6 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"There is no trainer here!");
 					}
-
 					break;
 				case "train":
 					try {
@@ -422,7 +403,6 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"There is no trainer here!");
 					}
-
 					break;
 				case "show":
 					try {
@@ -437,7 +417,6 @@ namespace DungeonGame {
 									"There is no vendor in the room to show inventory available for sale.");
 							}
 						}
-
 						if (input[1] == "upgrades") {
 							try {
 								isTownRoom?.Trainer.DisplayAvailableUpgrades(player);
@@ -456,7 +435,6 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"Show what?");
 					}
-
 					break;
 				case "n":
 				case "north":
@@ -471,7 +449,6 @@ namespace DungeonGame {
 					else {
 						Messages.InvalidDirection();
 					}
-
 					break;
 				case "s":
 				case "south":
@@ -487,7 +464,6 @@ namespace DungeonGame {
 					else {
 						Messages.InvalidDirection();
 					}
-
 					break;
 				case "e":
 				case "east":
@@ -502,7 +478,6 @@ namespace DungeonGame {
 					else {
 						Messages.InvalidDirection();
 					}
-
 					break;
 				case "w":
 				case "west":
@@ -517,7 +492,6 @@ namespace DungeonGame {
 					else {
 						Messages.InvalidDirection();
 					}
-
 					break;
 				case "ne":
 				case "northeast":
@@ -532,7 +506,6 @@ namespace DungeonGame {
 					else {
 						Messages.InvalidDirection();
 					}
-
 					break;
 				case "nw":
 				case "northwest":
@@ -547,7 +520,6 @@ namespace DungeonGame {
 					else {
 						Messages.InvalidDirection();
 					}
-
 					break;
 				case "se":
 				case "southeast":
@@ -562,7 +534,6 @@ namespace DungeonGame {
 					else {
 						Messages.InvalidDirection();
 					}
-
 					break;
 				case "sw":
 				case "southwest":
@@ -577,7 +548,6 @@ namespace DungeonGame {
 					else {
 						Messages.InvalidDirection();
 					}
-
 					break;
 				case "u":
 				case "up":
@@ -592,7 +562,6 @@ namespace DungeonGame {
 					else {
 						Messages.InvalidDirection();
 					}
-
 					break;
 				case "d":
 				case "down":
@@ -607,7 +576,6 @@ namespace DungeonGame {
 					else {
 						Messages.InvalidDirection();
 					}
-
 					break;
 				default:
 					Messages.InvalidCommand();

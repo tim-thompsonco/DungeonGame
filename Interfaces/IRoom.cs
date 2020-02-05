@@ -25,6 +25,6 @@ namespace DungeonGame {
 		void ShowDirections();
 		void ShowCommands();
 		void LookRoom();
-		void LookNpc(string[] input);
+		void LookNpc(string[] input, Player player);
 	}
 }
