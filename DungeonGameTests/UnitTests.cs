@@ -739,5 +739,15 @@ namespace DungeonGameTests {
 			var expectedOutput = OutputHandler.Display.Output[0][2]; 
 			Assert.AreEqual("You open a portal and step through it.",expectedOutput);
 		}
+		[Test]
+		public void PlayerMaxLevelUnitTest() {
+			/* Player should not be able to go beyond level 10 */
+			var player = new Player("placeholder", Player.PlayerClassType.Mage);
+			player.Level = 10;
+			player.Experience = player.ExperienceToLevel - 1;
+			player.Experience++;
+			PlayerHandler.LevelUpCheck(player);
+			Assert.AreEqual(10, player.Level);
+		}
 	}
 }

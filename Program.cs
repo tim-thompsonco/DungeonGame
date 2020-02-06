@@ -47,7 +47,7 @@ namespace DungeonGame {
 			catch (FileNotFoundException) {
 				// Create dungeon
 				RoomHandler.Rooms = new RoomBuilder(
-					100, 5, 1, 3, 
+					200, 10, 1, 10, 
 					0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
 				player = new PlayerBuilder().BuildNewPlayer();
 				GearHandler.EquipInitialGear(player);

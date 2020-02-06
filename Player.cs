@@ -257,10 +257,10 @@ using System.Linq;
 				GameHandler.RemovedExpiredEffects(this);
 			}
 			try {
-				if (this.PlayerWeapon.IsEquipped() && this.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
+				if (this.PlayerWeapon.Equipped && this.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
 					return attackAmount;
 				}
-				if (this.PlayerWeapon.IsEquipped() &&
+				if (this.PlayerWeapon.Equipped &&
 				    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
 				    this.PlayerQuiver.HaveArrows()) {
 					this.PlayerQuiver.UseArrow();

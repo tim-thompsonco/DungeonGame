@@ -44,15 +44,20 @@ namespace DungeonGame {
 		public RoomBuilder(int size, int levels, int levelRangeLow, int levelRangeHigh, 
 			int startX, int startY, int startZ, StartDirection startDir)
 			: this() {
-			// Dungeon difficulty settings
+			/* Dungeon difficulty settings
+			Commenting out for now because I am setting each level to be equal to difficulty of i, subject to some
+			variation, and later on if I build out this project more I will reuse this code to make the level ranges
+			dynamic again when I build multiple dungeons
 			this.LevelRangeLow = levelRangeLow;
-			this.LevelRangeHigh = levelRangeHigh;
+			this.LevelRangeHigh = levelRangeHigh; */
 			// Dungeon build settings
 			this.StartDir = startDir;
 			this.Size = size;
 			this.Levels = levels;
 			var levelSize = size / levels;
 			for (var i = 0; i < levels; i++) {
+				var levelRangeLowForLevel = i - 1 >= 1 ? i - 1 : 1;
+				var levelRangeHighForLevel = i + 1 <= 10 ? i + 1: 10;
 				for (var j = 0; j < levelSize; j++) {
 					if (i == 0 && j == 0) {
 						/* To connect static room to dynamic dungeon build, always have first room go down one, and the static
@@ -60,7 +65,7 @@ namespace DungeonGame {
 						this.GenerateStartRoomDirections();
 						var firstRoom = new DungeonRoom(startX, startY,startZ - 1, 
 							this.GoNorth, this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, 
-							this.GoNorthEast, this.GoSouthEast, this.GoUp, this.GoDown, this.LevelRangeLow, this.LevelRangeHigh);
+							this.GoNorthEast, this.GoSouthEast, this.GoUp, this.GoDown, levelRangeLowForLevel, levelRangeHighForLevel);
 						this.SpawnedDungeonRooms.Add(firstRoom);
 						this.ResetRoomDirections();
 						this.CurrentLevel--;
@@ -76,7 +81,7 @@ namespace DungeonGame {
 						this.GenerateStairwayRoomDirections();
 						var firstRoom = new DungeonRoom(this.xCoord, this.yCoord, this.zCoord, this.GoNorth, 
 							this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, this.GoNorthEast, 
-							this.GoSouthEast, this.GoUp, this.GoDown, this.LevelRangeLow, this.LevelRangeHigh);
+							this.GoSouthEast, this.GoUp, this.GoDown, levelRangeLowForLevel, levelRangeHighForLevel);
 						this.SpawnedDungeonRooms.Add(firstRoom);
 						this.ResetRoomDirections();
 						this.CurrentLevel--;
@@ -86,7 +91,7 @@ namespace DungeonGame {
 					this.GenerateRoomDirections();
 					var newRoom = new DungeonRoom(this.xCoord, this.yCoord, this.zCoord, this.GoNorth, 
 						this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, this.GoNorthEast, 
-						this.GoSouthEast, this.GoUp, this.GoDown, this.LevelRangeLow, this.LevelRangeHigh);
+						this.GoSouthEast, this.GoUp, this.GoDown, levelRangeLowForLevel, levelRangeHighForLevel);
 					this.SpawnedDungeonRooms.Add(newRoom);
 					this.ResetRoomDirections();
 				}

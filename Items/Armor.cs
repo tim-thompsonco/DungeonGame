@@ -132,8 +132,15 @@ namespace DungeonGame {
 				case ArmorType.Cloth:
 					sb.Append(this.Level switch {
 						1 => "ripped cloth ",
-						2 => "tattered cloth ",
-						3 => "worn cloth ",
+						2 => "torn cloth ",
+						3 => "tattered cloth ",
+						4 => "frayed cloth ",
+						5 => "worn cloth ",
+						6 => "reinforced cloth ",
+						7 => "fine cloth ",
+						8 => "exceptional cloth ",
+						9 => "magnificent cloth ",
+						10 => "exquisite cloth ",
 						_ => "cloth "
 					});
 					switch (this.ArmorCategory) {
@@ -165,8 +172,15 @@ namespace DungeonGame {
 				case ArmorType.Leather:
 					sb.Append(this.Level switch {
 						1 => "ripped leather ",
-						2 => "tattered leather ",
-						3 => "worn leather ",
+						2 => "torn leather ",
+						3 => "tattered leather ",
+						4 => "frayed leather ",
+						5 => "worn leather ",
+						6 => "reinforced leather ",
+						7 => "fine leather ",
+						8 => "exceptional leather ",
+						9 => "magnificent leather ",
+						10 => "exquisite leather ",
 						_ => "leather "
 					});
 					switch (this.ArmorCategory) {
@@ -200,6 +214,13 @@ namespace DungeonGame {
 						1 => "cracked ",
 						2 => "dented ",
 						3 => "chipped ",
+						4 => "dull ",
+						5 => "polished ",
+						6 => "shining ",
+						7 => "lustrous ",
+						8 => "exceptional ",
+						9 => "magnificent ",
+						10 => "exquisite ",
 						_ => "plate "
 					});
 					switch (this.ArmorCategory) {

@@ -179,8 +179,15 @@ namespace DungeonGame {
 				case MonsterType.Skeleton:
 					this.Name = this.Level switch {
 						1 => "skeleton",
-						2 => "skeleton warrior",
-						3 => "skeleton guardian",
+						2 => "skeleton fighter",
+						3 => "skeleton warrior",
+						4 => "skeleton guardian",
+						5 => "skeleton defender",
+						6 => "skeleton conqueror",
+						7 => "skeleton zealot",
+						8 => "skeleton gladiator",
+						9 => "skeleton knight",
+						10 => "skeleton champion",
 						_ => "skeleton placeholder"
 					};
 					this.Desc =
@@ -193,6 +200,13 @@ namespace DungeonGame {
 						1 => "zombie",
 						2 => "rotting zombie",
 						3 => "vicious zombie",
+						4 => "rabid zombie",
+						5 => "crazed zombie",
+						6 => "frenzied zombie",
+						7 => "virulent zombie",
+						8 => "delirious zombie",
+						9 => "furious zombie",
+						10 => "fanatical zombie",
 						_ => "zombie placeholder"
 					};
 					this.Desc =
@@ -206,6 +220,13 @@ namespace DungeonGame {
 						1 => "spider",
 						2 => "black spider",
 						3 => "huge spider",
+						4 => "ghoulish spider",
+						5 => "menacing spider",
+						6 => "sinister spider",
+						7 => "macabre spider",
+						8 => "gruesome spider",
+						9 => "hideous spider",
+						10 => "abominable spider",
 						_ => "spider placeholder"
 					};
 					this.Desc =
@@ -218,6 +239,13 @@ namespace DungeonGame {
 						1 => "lesser demon",
 						2 => "demon",
 						3 => "horned demon",
+						4 => "greater demon",
+						5 => "hulking demon",
+						6 => "immense demon",
+						7 => "massive demon",
+						8 => "towering demon",
+						9 => "titanic demon",
+						10 => "colossal demon",
 						_ => "demon placeholder"
 					};
 					this.Desc =
@@ -279,9 +307,6 @@ namespace DungeonGame {
 			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
-		public string GetName() {
-			return this.Name;
-		}
 		public bool IsMonsterDead(Player player) {
 			if (this.HitPoints <= 0) this.MonsterDeath(player);
 			return this.HitPoints <= 0;
@@ -303,7 +328,7 @@ namespace DungeonGame {
 			foreach (var loot in this.MonsterItems) {
 				loot.Equipped = false;
 			}
-			this.Name = "Dead " + this.GetName();
+			this.Name = "Dead " + this.Name;
 			this.Desc = "A corpse of a monster you killed.";
 			player.GainExperience(this.ExperienceProvided);
 			PlayerHandler.LevelUpCheck(player);

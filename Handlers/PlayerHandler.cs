@@ -106,7 +106,7 @@ namespace DungeonGame {
 			return itemName;
 		}
 		public static void LevelUpCheck(Player player) {
-			if (player.Experience < player.ExperienceToLevel) return;
+			if (player.Experience < player.ExperienceToLevel || player.Level == 10) return;
 			player.Level += 1;
 			player.Experience -= player.ExperienceToLevel;
 			player.ExperienceToLevel *= 2;

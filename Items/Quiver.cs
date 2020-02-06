@@ -15,19 +15,12 @@
 			this.Weight = 1;
 		}
 		
-		public string GetName() {
-			return this.Name;
-		}
-		public bool IsEquipped() {
-			return this.Equipped;
-		}
 		public bool HaveArrows() {
 			return this.Quantity > 0;
 		}
 		public void UseArrow() {
 			this.Quantity -= 1;
 		}
-
 		public void OutOfArrows() {
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackFailText(),
