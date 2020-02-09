@@ -35,11 +35,11 @@ namespace DungeonGame {
 								}
 								globalTimer.Change(TimeSpan.Zero, TimeSpan.FromSeconds(1));
 							}
-							catch (Exception) {
+							catch (Exception ex) {
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
-									"An error has occurred while attacking.");
+									"An error has occurred while attacking. Error: " + ex);
 							}
 						}
 					}
