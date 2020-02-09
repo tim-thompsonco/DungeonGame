@@ -744,5 +744,57 @@ namespace DungeonGameTests {
 			PlayerHandler.LevelUpCheck(player);
 			Assert.AreEqual(10, player.Level);
 		}
+		[Test]
+		public void CheckStatusUnitTest() {
+			var player = new Player("placeholder", Player.PlayerClassType.Mage);
+			RoomHandler.Rooms = new RoomBuilder(
+				100, 5, 1, 3,
+				0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
+			GameHandler.CheckStatus(player);
+			player.Spellbook.Add(new Spell(
+				"reflect", 100, 1, Spell.SpellType.Reflect, 1));
+			player.CastSpell("reflect");
+			for (var i = 0; i <= 30; i++) {
+				GameHandler.CheckStatus(player);
+			}
+		}
+		[Test]
+		public void ReflectDamageSpellUnitTest() {
+			OutputHandler.Display.ClearUserOutput();
+			var player = new Player("placeholder", Player.PlayerClassType.Mage);
+			RoomHandler.Rooms = new List<IRoom> {
+				new DungeonRoom(0, 0, 0, false, false, false,
+					false, false, false, false, false, false,
+					false, 1, 1)
+			};
+			if (RoomHandler.Rooms[0].Monster == null) {
+				RoomHandler.Rooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
+			}
+			var monster = RoomHandler.Rooms[0].Monster;
+			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
+				item.Equipped = false;
+			}
+			monster.MaxHitPoints = 100;
+			monster.HitPoints = 100;
+			player.Spellbook.Add(new Spell(
+				"reflect", 100, 1, Spell.SpellType.Reflect, 1));
+			player.CastSpell("reflect");
+			Assert.AreEqual(true, player.IsReflectingDamage);
+			var expectedOutput = OutputHandler.Display.Output[0][2];
+			Assert.AreEqual("You create a shield around you that will reflect damage.", expectedOutput);
+			var attackDamageM = monster.Attack(player);
+			var index = player.Effects.FindIndex(
+				f => f.EffectGroup == Effect.EffectType.ReflectDamage);
+			var reflectAmount = player.Effects[index].EffectAmountOverTime < attackDamageM ? 
+			player.Effects[index].EffectAmountOverTime : attackDamageM;
+			Assert.AreEqual(true, reflectAmount <= player.Effects[index].EffectAmountOverTime);
+			monster.HitPoints -= reflectAmount;
+			Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - reflectAmount);
+			OutputHandler.Display.ClearUserOutput();
+			player.Effects[index].ReflectDamageRound(player, reflectAmount);
+			expectedOutput = OutputHandler.Display.Output[0][2];
+			Assert.AreEqual(
+				"You reflected " + reflectAmount + " damage back at your opponent!", expectedOutput);
+		}
 	}
 }
