@@ -61,10 +61,11 @@
     <Compile Include="Messages.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Spell Properties\ArcaneOffense.cs" />
-    <Compile Include="Spell Properties\Defense.cs" />
+    <Compile Include="Spell Properties\AugmentArmor.cs" />
     <Compile Include="Spell Properties\FrostOffense.cs" />
     <Compile Include="Spell Properties\Healing.cs" />
     <Compile Include="Spell Properties\Portal.cs" />
+    <Compile Include="Spell Properties\ReflectDamage.cs" />
     <Compile Include="Trainer.cs" />
     <Compile Include="UserOutput.cs" />
     <Compile Include="Vendor.cs" />

@@ -18,6 +18,7 @@ namespace DungeonGame {
 		public int Gold { get; set; }
 		public bool WasLooted { get; set; }
 		public bool InCombat { get; set; }
+		public bool IsStunned { get; set; }
 		public int StatReplenishInterval { get; set; }
 		public MonsterType MonsterCategory { get; set; }
 		public Loot Item { get; set; }

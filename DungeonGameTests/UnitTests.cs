@@ -79,10 +79,6 @@ namespace DungeonGameTests {
 			var testArmorPlateLegs = new Armor(
 				2, Armor.ArmorType.Plate, Armor.ArmorSlot.Legs);
 			CollectionAssert.Contains(testArrPlateLegs, testArmorPlateLegs.ArmorRating);
-			// Test armor name creation values
-			Assert.AreEqual("ripped cloth cap", testArmorClothHead.Name);
-			Assert.AreEqual("worn leather vest", testArmorLeatherChest.Name);
-			Assert.AreEqual("dented plate leggings", testArmorPlateLegs.Name);
 		}
 		[Test]
 		public void WeaponUnitTests() {
@@ -533,8 +529,6 @@ namespace DungeonGameTests {
 		[Test]
 		public void FrostboltSpellUnitTest() {
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
-			player.StatReplenishInterval = 9999999; // Disable stat replenish over time method
-			var output = new UserOutput();
 			GearHandler.EquipInitialGear(player);
 			var spawnedRooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
@@ -582,7 +576,6 @@ namespace DungeonGameTests {
 		public void DiamondskinSpellUnitTest() {
 			/* Diamondskin should augment armor by 25 points, 1 cur round, 3 max round */
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
-			var output = new UserOutput();
 			GearHandler.EquipInitialGear(player);
 			player.InCombat = true;
 			var inputThree = new string[2] {"cast", "diamondskin"};
@@ -606,8 +599,8 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void UpgradeSpellTest() {
+			OutputHandler.Display.ClearUserOutput();
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
-			var output = new UserOutput();
 			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Mage);
 			player.PlayerClass = Player.PlayerClassType.Archer;
 			trainer.UpgradeSpell(player, "fireball");
@@ -644,8 +637,8 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void UpgradeAbilityTest() {
+			OutputHandler.Display.ClearUserOutput();
 			var player = new Player("placeholder", Player.PlayerClassType.Archer);
-			var output = new UserOutput();
 			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Archer);
 			player.PlayerClass = Player.PlayerClassType.Mage;
 			trainer.UpgradeAbility(player, "distance");
@@ -682,6 +675,7 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void TrainAbilityTest() {
+			OutputHandler.Display.ClearUserOutput();
 			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
 			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Warrior);
 			player.PlayerClass = Player.PlayerClassType.Mage;
@@ -720,9 +714,10 @@ namespace DungeonGameTests {
 		[Test]
 		public void TownPortalSpellUnitTest() {
 			/* Town Portal should change location of player to where portal is set to */
+			OutputHandler.Display.ClearUserOutput();
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			RoomHandler.Rooms = new RoomBuilder(
-				100, 5, 1, 3, 
+				100, 5, 1, 3,
 				0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
 			player.Spellbook.Add(new Spell(
 				"town portal", 50, 1, Spell.SpellType.TownPortal, 1));
@@ -736,8 +731,8 @@ namespace DungeonGameTests {
 			Assert.AreEqual(0, player.X);
 			Assert.AreEqual(7, player.Y);
 			Assert.AreEqual(0, player.Z);
-			var expectedOutput = OutputHandler.Display.Output[0][2]; 
-			Assert.AreEqual("You open a portal and step through it.",expectedOutput);
+			var expectedOutput = OutputHandler.Display.Output[0][2];
+			Assert.AreEqual("You open a portal and step through it.", expectedOutput);
 		}
 		[Test]
 		public void PlayerMaxLevelUnitTest() {

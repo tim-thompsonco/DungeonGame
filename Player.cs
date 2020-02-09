@@ -32,6 +32,7 @@ using System.Linq;
 		public int Y { get; set; }
 		public int Z { get; set; }
 		public bool InCombat { get; set; }
+		public bool IsReflectingDamage { get; set; }
 		public bool CanSave { get; set; }
 		public bool CanWearCloth { get; set; }
 		public bool CanWearLeather { get; set; }
@@ -204,7 +205,31 @@ using System.Linq;
 			return (int)adjArmorRating;
 		}
 		public int Attack(Monster opponent) {
-			var attackAmount = this.PlayerWeapon.Attack();
+			var attackAmount = 0;
+			try {
+				if (this.PlayerWeapon.Equipped && this.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
+					attackAmount = this.PlayerWeapon.Attack();
+				}
+				if (this.PlayerWeapon.Equipped &&
+				    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
+				    this.PlayerQuiver.HaveArrows()) {
+					this.PlayerQuiver.UseArrow();
+					attackAmount = this.PlayerWeapon.Attack();
+				}
+				if (this.PlayerWeapon.Equipped &&
+				    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
+				    !this.PlayerQuiver.HaveArrows()) {
+					this.PlayerQuiver.OutOfArrows();
+					attackAmount = 5;
+				}
+			}
+			catch (NullReferenceException) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"Your weapon is not equipped! Going hand to hand!");
+				attackAmount = 5;
+			}
 			GameHandler.RemovedExpiredEffects(this);
 			foreach (var effect in this.Effects) {
 				switch (effect.EffectGroup) {
@@ -225,6 +250,8 @@ using System.Linq;
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
+						break;
+					case Effect.EffectType.ReflectDamage:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -251,30 +278,14 @@ using System.Linq;
 						attackAmount = (int)frozenAttackAmount;
 						effect.FrozenRound(opponent);
 						break;
+					case Effect.EffectType.ReflectDamage:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 				GameHandler.RemovedExpiredEffects(this);
 			}
-			try {
-				if (this.PlayerWeapon.Equipped && this.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
-					return attackAmount;
-				}
-				if (this.PlayerWeapon.Equipped &&
-				    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
-				    this.PlayerQuiver.HaveArrows()) {
-					this.PlayerQuiver.UseArrow();
-					return attackAmount;
-				}
-				this.PlayerQuiver.OutOfArrows();
-			}
-			catch (NullReferenceException) {
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					"Your weapon is not equipped! Going hand to hand!");
-			}
-			return 5;
+			return attackAmount;
 		}
 		public void DrinkPotion(string[] userInput) {
 			var index = 0;
@@ -518,7 +529,7 @@ using System.Linq;
 			}
 		}
 		public void CastSpell(string inputName) {
-			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
+			var index = this.Spellbook.FindIndex(f => f.Name == inputName);
 			if (index != -1 &&
 			    this.ManaPoints >= this.Spellbook[index].ManaCost &&
 			    this.PlayerClass == PlayerClassType.Mage) {
@@ -530,10 +541,13 @@ using System.Linq;
 						Spell.CastHealing(this, index);
 						return;
 					case Spell.SpellType.Diamondskin:
-						Spell.CastDefense(this, index);
+						Spell.CastAugmentArmor(this, index);
 						return;
 					case Spell.SpellType.TownPortal:
 						Spell.CastTownPortal(this, index);
+						return;
+					case Spell.SpellType.Reflect:
+						Spell.CastReflectDamage(this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -545,7 +559,7 @@ using System.Linq;
 			throw new IndexOutOfRangeException();
 		}
 		public void CastSpell(Monster opponent, string inputName) {
-			var index = this.Spellbook.FindIndex(f => f.GetName() == inputName);
+			var index = this.Spellbook.FindIndex(f => f.Name == inputName);
 			if (index != -1 && 
 			    this.ManaPoints >= this.Spellbook[index].ManaCost && 
 			    this.PlayerClass == PlayerClassType.Mage) {
@@ -566,7 +580,10 @@ using System.Linq;
 						Spell.CastHealing(this, index);
 						return;
 					case Spell.SpellType.Diamondskin:
-						Spell.CastDefense(this, index);
+						Spell.CastAugmentArmor(this, index);
+						return;
+					case Spell.SpellType.Reflect:
+						Spell.CastReflectDamage(this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();

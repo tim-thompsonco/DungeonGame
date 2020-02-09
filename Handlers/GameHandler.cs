@@ -38,6 +38,8 @@ namespace DungeonGame {
 							continue;
 						case Effect.EffectType.Frozen:
 							break;
+						case Effect.EffectType.ReflectDamage:
+							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
@@ -72,6 +74,8 @@ namespace DungeonGame {
 								case Effect.EffectType.Frozen:
 									effect.FrozenRound(monster);
 									break;
+								case Effect.EffectType.ReflectDamage:
+									break;
 								default:
 									throw new ArgumentOutOfRangeException();
 							}
@@ -94,13 +98,59 @@ namespace DungeonGame {
 		public static void RemovedExpiredEffects(Player player) {
 			for (var i = 0; i < player.Effects.Count; i++) {
 				if (!player.Effects[i].IsEffectExpired) continue;
+				switch (player.Effects[i].EffectGroup) {
+					case Effect.EffectType.Healing:
+						break;
+					case Effect.EffectType.ChangeDamage:
+						break;
+					case Effect.EffectType.ChangeArmor:
+						break;
+					case Effect.EffectType.AbsorbDamage:
+						break;
+					case Effect.EffectType.OnFire:
+						break;
+					case Effect.EffectType.Bleeding:
+						break;
+					case Effect.EffectType.Stunned:
+						break;
+					case Effect.EffectType.ReflectDamage:
+						player.IsReflectingDamage = false;
+						break;
+					case Effect.EffectType.Frozen:
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
 				player.Effects.RemoveAt(i);
 				i--; // Keep i at same amount, since effects.count will decrease, to keep checking effect list properly
 			}
 		}
 		public static void RemovedExpiredEffects(Monster monster) {
 			for (var i = 0; i < monster.Effects.Count; i++) {
-				if (!monster.Effects[i].IsEffectExpired) continue; 
+				if (!monster.Effects[i].IsEffectExpired) continue;
+				switch (monster.Effects[i].EffectGroup) {
+					case Effect.EffectType.Healing:
+						break;
+					case Effect.EffectType.ChangeDamage:
+						break;
+					case Effect.EffectType.ChangeArmor:
+						break;
+					case Effect.EffectType.AbsorbDamage:
+						break;
+					case Effect.EffectType.OnFire:
+						break;
+					case Effect.EffectType.Bleeding:
+						break;
+					case Effect.EffectType.Stunned:
+						monster.IsStunned = false;
+						break;
+					case Effect.EffectType.ReflectDamage:
+						break;
+					case Effect.EffectType.Frozen:
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
 				monster.Effects.RemoveAt(i);
 				i--; // Keep i at same amount, since effects.count will decrease, to keep checking effect list properly
 			}

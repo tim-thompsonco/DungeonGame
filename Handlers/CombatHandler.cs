@@ -6,7 +6,6 @@ namespace DungeonGame {
 		private string[] Input { get; set; }
 		private Monster Opponent { get; set; }
 		private Player Player { get; set; }
-		private bool IsOpponentStunned { get; set; }
 		private bool FleeSuccess { get; set; }
 		
 		public bool SingleCombat(Monster opponent, Player player) {
@@ -20,26 +19,34 @@ namespace DungeonGame {
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				fightStartString);
-			OutputHandler.ShowUserOutput(this.Player);
-			OutputHandler.Display.ClearUserOutput();
 			while (this.Opponent.HitPoints > 0 && this.Player.HitPoints > 0 && 
 			       this.Player.InCombat && this.Opponent.InCombat) {
+				var isInputValid = false;
+				// Get input and check to see if input is valid, and if not, keep trying to get input from user
+				while (!isInputValid) {
+					// Show initial output that announces start of fight
+					OutputHandler.ShowUserOutput(this.Player, this.Opponent);
+					OutputHandler.Display.ClearUserOutput();
+					// Player will attack, use ability, cast spells, etc. to cause damage
+					this.Input = InputHandler.GetFormattedInput(Console.ReadLine());
+					Console.Clear();
+					isInputValid = this.ProcessPlayerInput();
+				}
 				if (this.Player.Effects.Any()) {
 					this.ProcessPlayerEffects();
 				}
-				this.Input = InputHandler.GetFormattedInput(Console.ReadLine());
-				this.ProcessPlayerInput(); // Player will attack, use ability, cast spells, etc. to cause damage
 				if (this.FleeSuccess) return false;
+				// Check to see if player attack killed monster
 				if (this.Opponent.IsMonsterDead(this.Player)) return true;
 				if (this.Opponent.Effects.Any()) {
 					this.ProcessOpponentEffects();
 				}
+				// Check to see if damage over time effects killed monster
 				if (this.Opponent.IsMonsterDead(this.Player)) return true;
-				if (this.IsOpponentStunned) continue;
+				if (this.Opponent.IsStunned) continue;
 				this.ProcessMonsterAttack();
-				Console.Clear();
-				OutputHandler.ShowUserOutput(this.Player, this.Opponent);
-				OutputHandler.Display.ClearUserOutput();
+				// In the event player is reflecting damage, check to see if monster killed itself
+				if (this.Opponent.IsMonsterDead(this.Player)) return true;
 			}
 			return player.HitPoints > 0;
 		}
@@ -120,6 +127,8 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.Frozen:
 						break;
+					case Effect.EffectType.ReflectDamage:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -145,7 +154,6 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.Stunned:
 						effect.StunnedRound(this.Opponent);
-						this.IsOpponentStunned = true;
 						break;
 					case Effect.EffectType.Frozen:
 						break;
@@ -156,6 +164,15 @@ namespace DungeonGame {
 		}
 		private void ProcessMonsterAttack() {
 			var attackDamageM = this.Opponent.Attack(this.Player);
+			if (this.Player.IsReflectingDamage) {
+				var index = this.Player.Effects.FindIndex(
+					f => f.EffectGroup == Effect.EffectType.ReflectDamage);
+				var reflectAmount = this.Player.Effects[index].EffectAmountOverTime < attackDamageM ? 
+					this.Player.Effects[index].EffectAmountOverTime : attackDamageM;
+				this.Opponent.HitPoints -= reflectAmount;
+				this.Player.Effects[index].ReflectDamageRound(this.Player, reflectAmount);
+				return;
+			}
 			var defenseMoveString = "Your defensive move blocked " + this.Player.AbsorbDamageAmount + " damage!";
 			if (attackDamageM > this.Player.AbsorbDamageAmount && this.Player.AbsorbDamageAmount > 0) {
 				OutputHandler.Display.StoreUserOutput(
@@ -199,7 +216,7 @@ namespace DungeonGame {
 				GearHandler.DecreaseArmorDurability(this.Player);
 			}
 		}
-		private void ProcessPlayerInput() {
+		private bool ProcessPlayerInput() {
 			switch (this.Input[0]) {
 				case "f":
 				case "fight":
@@ -350,7 +367,7 @@ namespace DungeonGame {
 				case "i":
 				case "inventory":
 					PlayerHandler.ShowInventory(this.Player);
-					break;
+					return false;
 				case "list":
 					switch (this.Input[1]) {
 						case "abilities":
@@ -376,7 +393,7 @@ namespace DungeonGame {
 							}
 							break;
 					}
-					break;
+					return false;
 				case "ability":
 					try {
 						PlayerHandler.AbilityInfo(this.Player, this.Input);
@@ -387,7 +404,7 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"What ability did you want to know about?");
 					}
-					break;
+					return false;
 				case "spell":
 					try {
 						PlayerHandler.SpellInfo(this.Player, this.Input[1]);
@@ -398,11 +415,12 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"What spell did you want to know about?");
 					}
-					break;
+					return false;
 				default:
 					Messages.InvalidCommand();
-					break;
+					return false;
 			}
+			return true;
 		}
 	}
 }

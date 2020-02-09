@@ -8,6 +8,7 @@
 			OnFire,
 			Bleeding,
 			Stunned,
+			ReflectDamage,
 			Frozen
 		}
 		public string Name { get; set; }
@@ -46,6 +47,18 @@
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				healAmtString);
+			if (this.EffectCurRound <= this.EffectMaxRound) return;
+			this.IsEffectExpired = true;
+		}
+		public void ReflectDamageRound(Player player, int reflectAmount) {
+			if (this.IsEffectExpired) return;
+			player.IsReflectingDamage = true;
+			this.EffectCurRound += 1;
+			var reflectString = "You reflected " + reflectAmount + " damage back at your opponent!";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				reflectString);
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
@@ -99,6 +112,7 @@
 		}
 		public void StunnedRound(Monster opponent) {
 			if (this.IsEffectExpired) return;
+			opponent.IsStunned = true;
 			this.EffectCurRound += 1;
 			var stunnedString = "The " + opponent.Name + " is stunned and cannot attack.";
 			OutputHandler.Display.StoreUserOutput(

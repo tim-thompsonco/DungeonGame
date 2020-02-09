@@ -554,10 +554,13 @@ namespace DungeonGame {
 						Spell.HealingSpellInfo(player, index);
 						break;
 					case Spell.SpellType.Diamondskin:
-						Spell.DefenseSpellInfo(player, index);
+						Spell.AugmentArmorSpellInfo(player, index);
 						break;
 					case Spell.SpellType.TownPortal:
 						Spell.PortalSpellInfo();
+						break;
+					case Spell.SpellType.Reflect:
+						Spell.ReflectDamageSpellInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

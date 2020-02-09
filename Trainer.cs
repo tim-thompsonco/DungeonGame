@@ -37,6 +37,8 @@ namespace DungeonGame {
 					this.TrainableSpells = new List<Spell>();
 					this.TrainableSpells.Add(new Spell(
 						"town portal", 100, 1, Spell.SpellType.TownPortal, 2));
+					this.TrainableSpells.Add(new Spell(
+						"reflect", 100, 1, Spell.SpellType.Reflect, 4));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -109,7 +111,7 @@ namespace DungeonGame {
 						foreach (var spellName in from spell in this.TrainableSpells
 							where player.Level >= spell.MinLevel
 							select textInfo.ToTitleCase(
-								spell.GetName() + " (Rank: " + spell.Rank + ")")) {
+								spell.Name + " (Rank: " + spell.Rank + ")")) {
 							newSpellsToTrain++;
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatInfoText(),
@@ -145,7 +147,7 @@ namespace DungeonGame {
 				var spellsToTrain = 0;
 				foreach (var spellName in from spell in player.Spellbook
 					where player.Level >= spell.MinLevel && player.Level > spell.Rank select textInfo.ToTitleCase(
-						spell.GetName() + " (Rank: " + (spell.Rank + 1) + ")")) {
+						spell.Name + " (Rank: " + (spell.Rank + 1) + ")")) {
 					spellsToTrain++;
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
@@ -280,7 +282,7 @@ namespace DungeonGame {
 				return;
 			}
 			var spellIndex = this.TrainableSpells.FindIndex(
-				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (spellIndex != -1 && player.Level >= this.TrainableSpells[spellIndex].MinLevel) {
 				var trainingCost = (int)((this.TrainableSpells[spellIndex].MinLevel) * this.BaseCost * 
 				                      (1.0 - (player.Intelligence / 100.0)));
@@ -319,7 +321,7 @@ namespace DungeonGame {
 				return;
 			}
 			var spellIndex = player.Spellbook.FindIndex(
-				f => f.GetName() == inputName || f.GetName().Contains(inputName));
+				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (spellIndex != -1 && player.Level >= player.Spellbook[spellIndex].Rank + 1) {
 				var trainingCost = (int)((player.Spellbook[spellIndex].Rank + 1.0) * this.BaseCost * 
 				                      (1.0 - (player.Intelligence / 100.0)));
@@ -346,10 +348,13 @@ namespace DungeonGame {
 							player.Spellbook[spellIndex].Healing.HealOverTime += 5;
 							break;
 						case Spell.SpellType.Diamondskin:
-							player.Spellbook[spellIndex].Defense.AugmentAmount += 10;
+							player.Spellbook[spellIndex].AugmentArmor.AugmentAmount += 10;
 							break;
 						case Spell.SpellType.TownPortal:
 							player.Spellbook[spellIndex].ManaCost -= 5;
+							break;
+						case Spell.SpellType.Reflect:
+							player.Spellbook[spellIndex].ReflectDamage.ReflectAmount += 10;
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
