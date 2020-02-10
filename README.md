@@ -39,8 +39,8 @@
 
 <h2>Built With</h2>
 
-<p>C# for OOP</p>
 <p>IntelliJ Rider</p>
+<p>Jira</p>
 
 <h2>Versioning</h2>
 
