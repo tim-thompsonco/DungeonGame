@@ -10,17 +10,17 @@ namespace DungeonGame {
 			Rejuvenate,
 			Diamondskin,
 			TownPortal,
-			Reflect
+			Reflect,
+			ArcaneIntellect
 		}
 		public string Name { get; set; }
 		public SpellType SpellCategory { get; set; }
-		public AugmentArmor AugmentArmor { get; set; }
+		public ChangeAmount ChangeAmount { get; set; }
 		public FireOffense FireOffense { get; set; }
 		public FrostOffense FrostOffense { get; set; }
 		public ArcaneOffense ArcaneOffense { get; set; }
 		public Healing Healing { get; set; }
 		public Portal Portal { get; set; }
-		public ReflectDamage ReflectDamage { get; set; }
 		public int MinLevel { get; set; }
 		public int ManaCost { get; set; }
 		public int Rank { get; set; }
@@ -50,13 +50,16 @@ namespace DungeonGame {
 					this.Healing = new Healing(20, 10, 1, 3);
 					break;
 				case SpellType.Diamondskin:
-					this.AugmentArmor = new AugmentArmor(25, 1, 3);
+					this.ChangeAmount = new ChangeAmount(25, 1, 3);
 					break;
 				case SpellType.TownPortal:
 					this.Portal = new Portal();
 					break;
 				case SpellType.Reflect:
-					this.ReflectDamage = new ReflectDamage(25, 1, 3);
+					this.ChangeAmount = new ChangeAmount(25, 1, 3);
+					break;
+				case SpellType.ArcaneIntellect:
+					this.ChangeAmount = new ChangeAmount(15, 1, 600);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -64,13 +67,13 @@ namespace DungeonGame {
 		}
 		
 		public static void AugmentArmorSpellInfo(Player player, int index) {
-			var augmentAmountString = "Augment Armor Amount: " + player.Spellbook[index].AugmentArmor.AugmentAmount;
+			var augmentAmountString = "Augment Armor Amount: " + player.Spellbook[index].ChangeAmount.Amount;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(), 
 				Settings.FormatDefaultBackground(),
 				augmentAmountString);
 			var augmentInfoString = "Armor will be augmented for " + 
-			                        player.Spellbook[index].AugmentArmor.AugmentMaxRounds + " rounds.";
+			                        player.Spellbook[index].ChangeAmount.ChangeMaxRounds + " rounds.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(), 
 				Settings.FormatDefaultBackground(),
@@ -78,7 +81,7 @@ namespace DungeonGame {
 		}
 		public static void CastAugmentArmor(Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
-			var changeArmorAmount = player.Spellbook[index].AugmentArmor.AugmentAmount;
+			var changeArmorAmount = player.Spellbook[index].ChangeAmount.Amount;
 			var augmentString = "You augmented your armor by " + 
 			                    changeArmorAmount + " with " + player.Spellbook[index].Name + ".";
 			OutputHandler.Display.StoreUserOutput(
@@ -86,23 +89,50 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				augmentString);
 			player.Effects.Add(new Effect(player.Spellbook[index].Name,
-				Effect.EffectType.ChangeArmor, player.Spellbook[index].AugmentArmor.AugmentAmount,
-				player.Spellbook[index].AugmentArmor.AugmentCurRounds, player.Spellbook[index].AugmentArmor.AugmentMaxRounds, 
+				Effect.EffectType.ChangeArmor, player.Spellbook[index].ChangeAmount.Amount,
+				player.Spellbook[index].ChangeAmount.ChangeCurRounds, player.Spellbook[index].ChangeAmount.ChangeMaxRounds, 
 				1, 10, false));
 		}
 		public static void ReflectDamageSpellInfo(Player player, int index) {
-			var reflectDamageString = "Reflect Damage Amount: " + player.Spellbook[index].ReflectDamage.ReflectAmount;
+			var reflectDamageString = "Reflect Damage Amount: " + player.Spellbook[index].ChangeAmount.Amount;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(), 
 				Settings.FormatDefaultBackground(),
 				reflectDamageString);
-			var reflectInfoString = "Damage up to " + player.Spellbook[index].ReflectDamage.ReflectAmount + 
+			var reflectInfoString = "Damage up to " + player.Spellbook[index].ChangeAmount.Amount + 
 			                        " will be reflected for " +
-			                        player.Spellbook[index].ReflectDamage.ReflectMaxRounds + " rounds.";
+			                        player.Spellbook[index].ChangeAmount.ChangeMaxRounds + " rounds.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(), 
 				Settings.FormatDefaultBackground(),
 				reflectInfoString);
+		}
+		public static void CastArcaneIntellect(Player player, int index) {
+			player.ManaPoints -= player.Spellbook[index].ManaCost;
+			const string intellectString = "You cast Arcane Intellect on yourself.";
+			player.Intelligence += player.Spellbook[index].ChangeAmount.Amount;
+			PlayerHandler.CalculatePlayerStats(player);
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				intellectString);
+			player.Effects.Add(new Effect(player.Spellbook[index].Name,
+				Effect.EffectType.ChangeStat, player.Spellbook[index].ChangeAmount.Amount,
+				player.Spellbook[index].ChangeAmount.ChangeCurRounds, player.Spellbook[index].ChangeAmount.ChangeMaxRounds, 
+				1, 1, false));
+		}
+		public static void ArcaneIntellectSpellInfo(Player player, int index) {
+			var arcaneIntString = "Arcane Intellect Amount: " + player.Spellbook[index].ChangeAmount.Amount;
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(),
+				arcaneIntString);
+			var arcaneIntInfoString = "Intelligence is increased by " + player.Spellbook[index].ChangeAmount.Amount + 
+			                        " for " + (player.Spellbook[index].ChangeAmount.ChangeMaxRounds / 60) + " minutes.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(),
+				arcaneIntString);
 		}
 		public static void CastReflectDamage(Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
@@ -113,8 +143,8 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				reflectString);
 			player.Effects.Add(new Effect(player.Spellbook[index].Name,
-				Effect.EffectType.ReflectDamage, player.Spellbook[index].ReflectDamage.ReflectAmount,
-				player.Spellbook[index].ReflectDamage.ReflectCurRounds, player.Spellbook[index].ReflectDamage.ReflectMaxRounds, 
+				Effect.EffectType.ReflectDamage, player.Spellbook[index].ChangeAmount.Amount,
+				player.Spellbook[index].ChangeAmount.ChangeCurRounds, player.Spellbook[index].ChangeAmount.ChangeMaxRounds, 
 				1, 10, false));
 		}
 		public static void FrostOffenseSpellInfo(Player player, int index) {

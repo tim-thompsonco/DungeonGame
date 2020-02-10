@@ -5,7 +5,7 @@ namespace DungeonGame {
 	public static class GameHandler {
 		private static readonly Random RndGenerate = new Random();
 		public static bool IsGameOver { get; set; }
-		public static int GameTicks { get; set; }
+		private static int GameTicks { get; set; }
 		
 		public static void CheckStatus(Player player) {
 			GameTicks++;
@@ -40,6 +40,9 @@ namespace DungeonGame {
 							break;
 						case Effect.EffectType.ReflectDamage:
 							effect.ReflectDamageRound(player);
+							break;
+						case Effect.EffectType.ChangeStat:
+							effect.ArcaneIntellectRound(player);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -76,6 +79,8 @@ namespace DungeonGame {
 									effect.FrozenRound(monster);
 									break;
 								case Effect.EffectType.ReflectDamage:
+									break;
+								case Effect.EffectType.ChangeStat:
 									break;
 								default:
 									throw new ArgumentOutOfRangeException();
@@ -119,6 +124,8 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.Frozen:
 						break;
+					case Effect.EffectType.ChangeStat:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -149,6 +156,8 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.Frozen:
 						break;
+					case Effect.EffectType.ChangeStat:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -156,7 +165,7 @@ namespace DungeonGame {
 				i--; // Keep i at same amount, since effects.count will decrease, to keep checking effect list properly
 			}
 		}
-		public static void ReplenishStatsOverTime(Player player) {
+		private static void ReplenishStatsOverTime(Player player) {
 			if (player.InCombat) return;
 			if (player.HitPoints == player.MaxHitPoints) return;
 			player.HitPoints += 1;

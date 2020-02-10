@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DungeonGame {
@@ -214,7 +215,14 @@ namespace DungeonGame {
 				Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(),
 				"All stats have been assigned!");
-			// Increase stats from level
+			CalculatePlayerStats(player);
+			// Leveling sets player back to max stats
+			player.HitPoints = player.MaxHitPoints;
+			player.RagePoints = player.MaxRagePoints;
+			player.ComboPoints = player.MaxComboPoints;
+			player.ManaPoints = player.MaxManaPoints;
+		}
+		public static void CalculatePlayerStats(Player player) {
 			switch (player.PlayerClass) {
 				case Player.PlayerClassType.Mage:
 					player.MaxManaPoints = player.Intelligence * 10;
@@ -230,13 +238,7 @@ namespace DungeonGame {
 			}
 			player.MaxHitPoints = player.Constitution * 10;
 			player.MaxCarryWeight = player.Strength * 2;
-			player.DodgeChance = player.Dexterity * 1.5;
-			// Leveling sets player back to max stats
-			player.HitPoints = player.MaxHitPoints;
-			player.RagePoints = player.MaxRagePoints;
-			player.ComboPoints = player.MaxComboPoints;
-			player.ManaPoints = player.MaxManaPoints;
-			
+			player.DodgeChance = player.Dexterity * 1.5;			
 		}
 		public static void DisplayPlayerStats(Player player) {
 			Settings.FormatGeneralInfoText();

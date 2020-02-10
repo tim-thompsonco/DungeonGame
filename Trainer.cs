@@ -39,6 +39,8 @@ namespace DungeonGame {
 						"town portal", 100, 1, Spell.SpellType.TownPortal, 2));
 					this.TrainableSpells.Add(new Spell(
 						"reflect", 100, 1, Spell.SpellType.Reflect, 4));
+					this.TrainableSpells.Add(new Spell(
+						"arcane intellect", 150, 1, Spell.SpellType.ArcaneIntellect, 6));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -348,13 +350,16 @@ namespace DungeonGame {
 							player.Spellbook[spellIndex].Healing.HealOverTime += 5;
 							break;
 						case Spell.SpellType.Diamondskin:
-							player.Spellbook[spellIndex].AugmentArmor.AugmentAmount += 10;
+							player.Spellbook[spellIndex].ChangeAmount.Amount += 10;
 							break;
 						case Spell.SpellType.TownPortal:
 							player.Spellbook[spellIndex].ManaCost -= 5;
 							break;
 						case Spell.SpellType.Reflect:
-							player.Spellbook[spellIndex].ReflectDamage.ReflectAmount += 10;
+							player.Spellbook[spellIndex].ChangeAmount.Amount += 10;
+							break;
+						case Spell.SpellType.ArcaneIntellect:
+							player.Spellbook[spellIndex].ChangeAmount.Amount += 5;
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();

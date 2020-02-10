@@ -832,5 +832,37 @@ namespace DungeonGameTests {
 		Assert.AreEqual(Settings.FormatAttackFailText(), defaultEffectOutput.Output[3][0]);
 		Assert.AreEqual("(30 seconds) Burning", defaultEffectOutput.Output[3][2]);
 		}
+		[Test]
+		public void ArcaneIntellectSpellUnitTest() {
+			OutputHandler.Display.ClearUserOutput();
+			var player = new Player("placeholder", Player.PlayerClassType.Mage);
+			RoomHandler.Rooms = new List<IRoom> {
+				new DungeonRoom(0, 0, 0, false, false, false,
+					false, false, false, false, false, false,
+					false, 1, 1)
+			};
+			player.Spellbook.Add(new Spell(
+				"arcane intellect", 150, 1, Spell.SpellType.ArcaneIntellect, 1));
+			var baseInt = player.Intelligence;
+			var baseMana = player.ManaPoints;
+			var baseMaxMana = player.MaxManaPoints;
+			const string inputName = "arcane intellect";
+			var spellIndex = player.Spellbook.FindIndex(f => f.Name == inputName);
+			player.CastSpell(inputName);
+			Assert.AreEqual(player.Intelligence, baseInt + player.Spellbook[spellIndex].ChangeAmount.Amount);
+			Assert.AreEqual(
+				baseMana - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
+			Assert.AreEqual(
+				player.MaxManaPoints, baseMaxMana + (player.Spellbook[spellIndex].ChangeAmount.Amount * 10));
+			var expectedOutput = OutputHandler.Display.Output[0][2];
+			Assert.AreEqual("You cast Arcane Intellect on yourself.", expectedOutput);
+			for (var i = 0; i < 10; i++) {
+				GameHandler.CheckStatus(player);
+			}
+			var defaultEffectOutput = OutputHandler.ShowEffects(player);
+			Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
+			Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
+			Assert.AreEqual("(590 seconds) Arcane Intellect", defaultEffectOutput.Output[1][2]);
+		}
 	}
 }

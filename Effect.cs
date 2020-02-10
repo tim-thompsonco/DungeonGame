@@ -9,7 +9,8 @@
 			Bleeding,
 			Stunned,
 			ReflectDamage,
-			Frozen
+			Frozen,
+			ChangeStat
 		}
 		public string Name { get; set; }
 		public EffectType EffectGroup { get; set; }
@@ -64,11 +65,22 @@
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
+		public void ArcaneIntellectRound(Player player) {
+			if (this.IsEffectExpired) {
+				var index = player.Spellbook.FindIndex(
+					f => f.SpellCategory == Spell.SpellType.ArcaneIntellect);
+				player.Intelligence -= player.Spellbook[index].ChangeAmount.Amount;
+				return;
+			}
+			this.EffectCurRound += 1;
+			if (this.EffectCurRound <= this.EffectMaxRound) return;
+			this.IsEffectExpired = true;
+		}
 		public void ReflectDamageRound(Player player, int reflectAmount) {
 			if (this.IsEffectExpired) return;
 			player.IsReflectingDamage = true;
 			this.EffectCurRound += 1;
-			string reflectString = "You reflected " + reflectAmount + " damage back at your opponent!";
+			var reflectString = "You reflected " + reflectAmount + " damage back at your opponent!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),

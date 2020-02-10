@@ -253,6 +253,8 @@ using System.Linq;
 						break;
 					case Effect.EffectType.ReflectDamage:
 						break;
+					case Effect.EffectType.ChangeStat:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -279,6 +281,8 @@ using System.Linq;
 						effect.FrozenRound(opponent);
 						break;
 					case Effect.EffectType.ReflectDamage:
+						break;
+					case Effect.EffectType.ChangeStat:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -548,6 +552,15 @@ using System.Linq;
 						return;
 					case Spell.SpellType.Reflect:
 						Spell.CastReflectDamage(this, index);
+						return;
+					case Spell.SpellType.Fireball:
+						break;
+					case Spell.SpellType.Frostbolt:
+						break;
+					case Spell.SpellType.Lightning:
+						break;
+					case Spell.SpellType.ArcaneIntellect:
+						Spell.CastArcaneIntellect(this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
