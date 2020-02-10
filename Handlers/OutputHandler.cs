@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace DungeonGame {
@@ -139,6 +140,8 @@ namespace DungeonGame {
 		}
 		public static UserOutput ShowEffects(Player player) {
 			var effectUserOutput = new UserOutput();
+			var badEffectUserOutput = new UserOutput();
+			var goodEffectUserOutput = new UserOutput();
 			// Draw title to show for player effects
 			effectUserOutput.StoreUserOutput(
 				Settings.FormatGeneralInfoText(), 
@@ -146,9 +149,9 @@ namespace DungeonGame {
 				"Player Effects:");
 			var activeEffects = 0;
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			string effectOutput;
-			if (player.InCombat) {
-				foreach (var effect in player.Effects) {
+			foreach (var effect in player.Effects) {
+				string effectOutput;
+				if (player.InCombat) {
 					if (effect.EffectMaxRound + 1 - effect.EffectCurRound > 1) {
 						effectOutput = "(" + (effect.EffectMaxRound + 1 - effect.EffectCurRound) + " rounds) " + 
 						               textInfo.ToTitleCase(effect.Name);
@@ -157,21 +160,8 @@ namespace DungeonGame {
 						effectOutput = "(" + (effect.EffectMaxRound + 1 - effect.EffectCurRound) + " round) " + 
 						               textInfo.ToTitleCase(effect.Name);
 					}
-					activeEffects++;
-					effectUserOutput.StoreUserOutput(
-						Settings.FormatGeneralInfoText(), 
-						Settings.FormatDefaultBackground(), 
-						effectOutput);
 				}
-				if (activeEffects == 0) {
-					effectUserOutput.StoreUserOutput(
-						Settings.FormatInfoText(),
-						Settings.FormatDefaultBackground(),
-						"None.");
-				}
-			}
-			else {
-				foreach (var effect in player.Effects) {
+				else {
 					if (effect.EffectMaxRound + 1 - effect.EffectCurRound > 1) {
 						effectOutput = "(" + ((effect.EffectMaxRound + 1 - effect.EffectCurRound) * effect.TickDuration) + 
 						               " seconds) " + textInfo.ToTitleCase(effect.Name);
@@ -180,18 +170,34 @@ namespace DungeonGame {
 						effectOutput = "(" + ((effect.EffectMaxRound + 1 - effect.EffectCurRound) * effect.TickDuration) + 
 						               " second) " + textInfo.ToTitleCase(effect.Name);
 					}
-					activeEffects++;
-					effectUserOutput.StoreUserOutput(
+				}
+				activeEffects++;
+				if (effect.IsHarmful) {
+					badEffectUserOutput.StoreUserOutput(
+						Settings.FormatAttackFailText(), 
+						Settings.FormatDefaultBackground(), 
+						effectOutput);
+				}
+				else {
+					goodEffectUserOutput.StoreUserOutput(
 						Settings.FormatGeneralInfoText(), 
 						Settings.FormatDefaultBackground(), 
 						effectOutput);
 				}
-				if (activeEffects == 0) {
-					effectUserOutput.StoreUserOutput(
-						Settings.FormatInfoText(),
-						Settings.FormatDefaultBackground(),
-						"None.");
-				}
+			}
+			if (activeEffects == 0) {
+				effectUserOutput.StoreUserOutput(
+					Settings.FormatInfoText(),
+					Settings.FormatDefaultBackground(),
+					"None.");
+			}
+			goodEffectUserOutput.Output.OrderBy(output => output[2]);
+			foreach (var output in goodEffectUserOutput.Output) {
+				effectUserOutput.Output.Add(output);
+			}
+			badEffectUserOutput.Output.OrderBy(output => output[2]);
+			foreach (var output in badEffectUserOutput.Output) {
+				effectUserOutput.Output.Add(output);
 			}
 			// Create bottom border for effects area
 			var effectsBorder = new StringBuilder();

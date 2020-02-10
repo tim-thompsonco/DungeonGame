@@ -18,22 +18,24 @@
 		public int EffectMaxRound { get; set; }
 		public double EffectMultiplier { get; set; }
 		public bool IsEffectExpired { get; set; }
+		public bool IsHarmful { get; set; }
 		public int TickDuration { get; set; }
 
 		// Default constructor for JSON serialization
 		public Effect() {}
 		public Effect(string name, EffectType effectGroup, int effectCurRound, int effectMaxRound, 
-			double effectMultiplier, int tickDuration) {
+			double effectMultiplier, int tickDuration, bool harmful) {
 			this.Name = name;
 			this.EffectGroup = effectGroup;
 			this.EffectCurRound = effectCurRound;
 			this.EffectMaxRound = effectMaxRound;
 			this.TickDuration = tickDuration;
 			this.EffectMultiplier = effectMultiplier;
+			this.IsHarmful = harmful;
 		}
 		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
-			int effectMaxRound, double effectMultiplier, int tickDuration)
-			: this(name, effectGroup, effectCurRound, effectMaxRound, effectMultiplier, tickDuration) {
+			int effectMaxRound, double effectMultiplier, int tickDuration, bool harmful)
+			: this(name, effectGroup, effectCurRound, effectMaxRound, effectMultiplier, tickDuration, harmful) {
 			this.EffectAmountOverTime = effectAmountOverTime;
 		}
 
@@ -50,11 +52,23 @@
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
+		public void ReflectDamageRound(Player player) {
+			if (this.IsEffectExpired) return;
+			player.IsReflectingDamage = true;
+			this.EffectCurRound += 1;
+			const string reflectString = "Your spell reflect is slowly fading away.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				reflectString);
+			if (this.EffectCurRound <= this.EffectMaxRound) return;
+			this.IsEffectExpired = true;
+		}
 		public void ReflectDamageRound(Player player, int reflectAmount) {
 			if (this.IsEffectExpired) return;
 			player.IsReflectingDamage = true;
 			this.EffectCurRound += 1;
-			var reflectString = "You reflected " + reflectAmount + " damage back at your opponent!";
+			string reflectString = "You reflected " + reflectAmount + " damage back at your opponent!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),

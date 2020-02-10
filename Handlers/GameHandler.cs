@@ -39,6 +39,7 @@ namespace DungeonGame {
 						case Effect.EffectType.Frozen:
 							break;
 						case Effect.EffectType.ReflectDamage:
+							effect.ReflectDamageRound(player);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();

@@ -159,7 +159,7 @@ namespace DungeonGame {
 					stunString);
 				opponent.Effects.Add(new Effect(player.Abilities[index].Name, Effect.EffectType.Stunned, 
 					player.Abilities[index].Stun.StunCurRounds, player.Abilities[index].Stun.StunMaxRounds, 
-					1, 1));
+					1, 1, true));
 			}
 		}
 		public static void BerserkAbilityInfo(Player player, int index) {
@@ -185,11 +185,11 @@ namespace DungeonGame {
 			player.Effects.Add(new Effect(player.Abilities[index].Name + " Damage Increase",
 				Effect.EffectType.ChangeDamage, player.Abilities[index].Offensive.Amount,
 				player.Abilities[index].ChangeArmor.ChangeCurRound, player.Abilities[index].ChangeArmor.ChangeMaxRound, 
-				1, 1));
+				1, 1, false));
 			player.Effects.Add(new Effect(player.Abilities[index].Name + " Armor Decrease",
 				Effect.EffectType.ChangeArmor, player.Abilities[index].ChangeArmor.ChangeArmorAmount,
 				player.Abilities[index].ChangeArmor.ChangeCurRound, player.Abilities[index].ChangeArmor.ChangeMaxRound, 
-				1, 1));
+				1, 1, true));
 		}
 		public static void DistanceAbilityInfo(Player player, int index) {
 			var abilityDmgString = "Instant Damage: " + player.Abilities[index].Offensive.Amount;
@@ -352,7 +352,7 @@ namespace DungeonGame {
 			player.Effects.Add(new Effect(player.Abilities[index].Name,
 				Effect.EffectType.Healing, player.Abilities[index].Bandage.HealOverTime,
 				player.Abilities[index].Bandage.HealCurRounds, player.Abilities[index].Bandage.HealMaxRounds,
-				1, 10));
+				1, 10, false));
 		}
 		public static void DisarmAbilityInfo(Player player, int index) {
 			var abilityString = player.Abilities[index].Offensive.Amount + "% chance to disarm opponent's weapon.";
@@ -441,7 +441,7 @@ namespace DungeonGame {
 				opponent.Effects.Add(new Effect(player.Abilities[index].Name,
 					Effect.EffectType.Bleeding, player.Abilities[index].Offensive.AmountOverTime, 
 					player.Abilities[index].Offensive.AmountCurRounds, player.Abilities[index].Offensive.AmountMaxRounds, 
-					1, 1));
+					1, 1, true));
 			}
 		}
 	}

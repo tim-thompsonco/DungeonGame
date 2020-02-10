@@ -88,7 +88,7 @@ namespace DungeonGame {
 			player.Effects.Add(new Effect(player.Spellbook[index].Name,
 				Effect.EffectType.ChangeArmor, player.Spellbook[index].AugmentArmor.AugmentAmount,
 				player.Spellbook[index].AugmentArmor.AugmentCurRounds, player.Spellbook[index].AugmentArmor.AugmentMaxRounds, 
-				1, 10));
+				1, 10, false));
 		}
 		public static void ReflectDamageSpellInfo(Player player, int index) {
 			var reflectDamageString = "Reflect Damage Amount: " + player.Spellbook[index].ReflectDamage.ReflectAmount;
@@ -115,7 +115,7 @@ namespace DungeonGame {
 			player.Effects.Add(new Effect(player.Spellbook[index].Name,
 				Effect.EffectType.ReflectDamage, player.Spellbook[index].ReflectDamage.ReflectAmount,
 				player.Spellbook[index].ReflectDamage.ReflectCurRounds, player.Spellbook[index].ReflectDamage.ReflectMaxRounds, 
-				1, 10));
+				1, 10, false));
 		}
 		public static void FrostOffenseSpellInfo(Player player, int index) {
 			var frostAmountString = "Instant Damage: " + player.Spellbook[index].FrostOffense.FrostDamage;
@@ -185,7 +185,7 @@ namespace DungeonGame {
 				opponent.TakeDamage(frostSpellDamage);
 				opponent.Effects.Add(new Effect(player.Spellbook[index].Name,Effect.EffectType.Frozen, 
 					player.Spellbook[index].FrostOffense.FrozenCurRounds, player.Spellbook[index].FrostOffense.FrozenMaxRounds, 
-					1.5, 1));
+					1.5, 1, true));
 			}
 		}
 		public static void FireOffenseSpellInfo(Player player, int index) {
@@ -232,7 +232,7 @@ namespace DungeonGame {
 				opponent.Effects.Add(new Effect(player.Spellbook[index].Name,
 					Effect.EffectType.OnFire, player.Spellbook[index].FireOffense.BurnDamage,
 					player.Spellbook[index].FireOffense.BurnCurRounds, player.Spellbook[index].FireOffense.BurnMaxRounds, 
-					1, 1));
+					1, 1, true));
 			}
 		}
 		public static void ArcaneOffenseSpellInfo(Player player, int index) {
@@ -320,7 +320,7 @@ namespace DungeonGame {
 			player.Effects.Add(new Effect(player.Spellbook[index].Name,
 				Effect.EffectType.Healing, player.Spellbook[index].Healing.HealOverTime,
 				player.Spellbook[index].Healing.HealCurRounds, player.Spellbook[index].Healing.HealMaxRounds,
-				1, 10));
+				1, 10, false));
 		}
 		public static void PortalSpellInfo() {
 			const string portalString = "This spell will create a portal and return you to town.";
