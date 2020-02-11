@@ -26,14 +26,14 @@ namespace DungeonGame {
 				case TrainerCategory.Archer:
 					this.TrainableAbilities = new List<Ability>();
 					this.TrainableAbilities.Add(new Ability(
-						"bandage", 25, 1, Ability.ArcherAbility.Bandage, 2));
+						"bandage", 25, 1, Ability.ArcherAbility.Healing, 2));
 					this.TrainableAbilities.Add(new Ability(
 						"swift aura", 150, 1, Ability.ArcherAbility.SwiftAura, 6));
 					break;
 				case TrainerCategory.Warrior:
 					this.TrainableAbilities = new List<Ability>();
 					this.TrainableAbilities.Add(new Ability(
-						"bandage", 25, 1, Ability.WarriorAbility.Bandage, 2));
+						"bandage", 25, 1, Ability.WarriorAbility.Healing, 2));
 					break;
 				case TrainerCategory.Mage:
 					this.TrainableSpells = new List<Spell>();
@@ -334,14 +334,14 @@ namespace DungeonGame {
 					player.Spellbook[spellIndex].Rank++;
 					switch (player.Spellbook[spellIndex].SpellCategory) {
 						case Spell.SpellType.Fireball:
-							player.Spellbook[spellIndex].FireOffense.BlastDamage += 10;
-							player.Spellbook[spellIndex].FireOffense.BurnDamage += 5;
+							player.Spellbook[spellIndex].Offensive.Amount += 10;
+							player.Spellbook[spellIndex].Offensive.AmountOverTime += 5;
 							break;
 						case Spell.SpellType.Frostbolt:
-							player.Spellbook[spellIndex].FrostOffense.FrostDamage += 10;
+							player.Spellbook[spellIndex].Offensive.Amount += 10;
 							break;
 						case Spell.SpellType.Lightning:
-							player.Spellbook[spellIndex].ArcaneOffense.ArcaneDamage += 10;
+							player.Spellbook[spellIndex].Offensive.Amount += 10;
 							break;
 						case Spell.SpellType.Heal:
 							player.Spellbook[spellIndex].Healing.HealAmount += 10;
@@ -352,16 +352,16 @@ namespace DungeonGame {
 							player.Spellbook[spellIndex].Healing.HealOverTime += 5;
 							break;
 						case Spell.SpellType.Diamondskin:
-							player.Spellbook[spellIndex].ChangeSpellAmount.Amount += 10;
+							player.Spellbook[spellIndex].ChangeAmount.Amount += 10;
 							break;
 						case Spell.SpellType.TownPortal:
 							player.Spellbook[spellIndex].ManaCost -= 5;
 							break;
 						case Spell.SpellType.Reflect:
-							player.Spellbook[spellIndex].ChangeSpellAmount.Amount += 10;
+							player.Spellbook[spellIndex].ChangeAmount.Amount += 10;
 							break;
 						case Spell.SpellType.ArcaneIntellect:
-							player.Spellbook[spellIndex].ChangeSpellAmount.Amount += 5;
+							player.Spellbook[spellIndex].ChangeAmount.Amount += 5;
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -433,9 +433,9 @@ namespace DungeonGame {
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								player.Abilities[abilityIndex].Offensive.AmountOverTime += 5;
 								break;
-							case Ability.ArcherAbility.Bandage:
-								player.Abilities[abilityIndex].Bandage.HealAmount += 10;
-								player.Abilities[abilityIndex].Bandage.HealOverTime += 5;
+							case Ability.ArcherAbility.Healing:
+								player.Abilities[abilityIndex].Healing.HealAmount += 10;
+								player.Abilities[abilityIndex].Healing.HealOverTime += 5;
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();
@@ -467,14 +467,14 @@ namespace DungeonGame {
 								break;
 							case Ability.WarriorAbility.Berserk:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
-								player.Abilities[abilityIndex].ChangeAbilityAmount.Amount += 10;
+								player.Abilities[abilityIndex].ChangeAmount.Amount += 10;
 								break;
 							case Ability.WarriorAbility.Disarm:
 								player.Abilities[abilityIndex].Offensive.ChanceToSucceed += 10;
 								break;
-							case Ability.WarriorAbility.Bandage:
-								player.Abilities[abilityIndex].Bandage.HealAmount += 10;
-								player.Abilities[abilityIndex].Bandage.HealOverTime += 5;
+							case Ability.WarriorAbility.Healing:
+								player.Abilities[abilityIndex].Healing.HealAmount += 10;
+								player.Abilities[abilityIndex].Healing.HealOverTime += 5;
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();

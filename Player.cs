@@ -380,7 +380,7 @@ using System.Linq;
 						return;
 					case Ability.WarriorAbility.Disarm:
 						return;
-					case Ability.WarriorAbility.Bandage:
+					case Ability.WarriorAbility.Healing:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -404,7 +404,7 @@ using System.Linq;
 						return;
 					case Ability.ArcherAbility.Wound:
 						return;
-					case Ability.ArcherAbility.Bandage:
+					case Ability.ArcherAbility.Healing:
 						break;
 					case Ability.ArcherAbility.SwiftAura:
 						Ability.UseSwiftAura(this, index);
@@ -437,7 +437,7 @@ using System.Linq;
 						return;
 					case Ability.WarriorAbility.Disarm:
 						return;
-					case Ability.WarriorAbility.Bandage:
+					case Ability.WarriorAbility.Healing:
 						Ability.UseBandageAbility(this, index);
 						return;
 					default:
@@ -460,7 +460,7 @@ using System.Linq;
 						return;
 					case Ability.ArcherAbility.Wound:
 						return;
-					case Ability.ArcherAbility.Bandage:
+					case Ability.ArcherAbility.Healing:
 						Ability.UseBandageAbility(this, index);
 						return;
 					case Ability.ArcherAbility.SwiftAura:
@@ -502,7 +502,7 @@ using System.Linq;
 					case Ability.WarriorAbility.Disarm:
 						Ability.UseDisarmAbility(opponent, this, index);
 						return;
-					case Ability.WarriorAbility.Bandage:
+					case Ability.WarriorAbility.Healing:
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -540,7 +540,7 @@ using System.Linq;
 					case Ability.ArcherAbility.Wound:
 						Ability.UseOffenseDamageAbility(opponent, this, index);
 						return;
-					case Ability.ArcherAbility.Bandage:
+					case Ability.ArcherAbility.Healing:
 						Ability.UseBandageAbility(this, index);
 						return;
 					case Ability.ArcherAbility.SwiftAura:

@@ -31,11 +31,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Ability Properties\ChangeAbilityAmount.cs" />
-    <Compile Include="Ability Properties\Defensive.cs" />
-    <Compile Include="Ability Properties\Bandage.cs" />
-    <Compile Include="Ability Properties\Offensive.cs" />
-    <Compile Include="Ability Properties\Stun.cs" />
     <Compile Include="Ability.cs" />
     <Compile Include="Builders\PlayerBuilder.cs" />
     <Compile Include="Builders\RoomBuilder.cs" />
@@ -60,15 +55,15 @@
     <Compile Include="Items\Weapon.cs" />
     <Compile Include="Messages.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Spell Properties\ArcaneOffense.cs" />
-    <Compile Include="Spell Properties\ChangeSpellAmount.cs" />
-    <Compile Include="Spell Properties\FrostOffense.cs" />
-    <Compile Include="Spell Properties\Healing.cs" />
-    <Compile Include="Spell Properties\Portal.cs" />
+    <Compile Include="Skill Properties\ChangeAmount.cs" />
+    <Compile Include="Skill Properties\Defensive.cs" />
+    <Compile Include="Skill Properties\Healing.cs" />
+    <Compile Include="Skill Properties\Offensive.cs" />
+    <Compile Include="Skill Properties\Portal.cs" />
+    <Compile Include="Skill Properties\Stun.cs" />
     <Compile Include="Trainer.cs" />
     <Compile Include="UserOutput.cs" />
     <Compile Include="Vendor.cs" />
-    <Compile Include="Spell Properties\FireOffense.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Player.cs" />

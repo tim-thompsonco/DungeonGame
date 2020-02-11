@@ -6,7 +6,7 @@ namespace DungeonGame {
 		public int HealOverTime { get; set; }
 		public int HealCurRounds { get; set; }
 		public int HealMaxRounds { get; set; }
-
+		
 		public Healing(int healAmount) {
 			this.HealAmount = healAmount;
 		}

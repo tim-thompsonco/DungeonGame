@@ -15,6 +15,11 @@ namespace DungeonGame {
 			this.Amount = amount;
 			this.ChanceToSucceed = chanceToSucceed;
 		}
+		public Offensive(int amount, int amountCurRounds, int amountMaxRounds) {
+			this.Amount = amount;
+			this.AmountCurRounds = amountCurRounds;
+			this.AmountMaxRounds = amountMaxRounds;
+		}
 		public Offensive(int amount, int amountOverTime, int amountCurRounds, int amountMaxRounds) {
 			this.Amount = amount;
 			this.AmountOverTime = amountOverTime;

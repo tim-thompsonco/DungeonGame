@@ -9,7 +9,7 @@ namespace DungeonGame {
 			Block,
 			Berserk,
 			Disarm,
-			Bandage
+			Healing
 		}
 		public enum ArcherAbility {
 			Distance,
@@ -18,16 +18,16 @@ namespace DungeonGame {
 			Stun,
 			Double,
 			Wound,
-			Bandage,
+			Healing,
 			SwiftAura
 		}
 		public string Name { get; set; }
 		public ArcherAbility ArcAbilityCategory { get; set; }
 		public WarriorAbility WarAbilityCategory { get; set; }
-		public Bandage Bandage { get; set; }
+		public Healing Healing { get; set; }
 		public Defensive Defensive { get; set; }
 		public Offensive Offensive { get; set; }
-		public ChangeAbilityAmount ChangeAbilityAmount { get; set; }
+		public ChangeAmount ChangeAmount { get; set; }
 		public Stun Stun { get; set; }
 		public int MinLevel { get; set; }
 		public int RageCost { get; set; }
@@ -58,13 +58,13 @@ namespace DungeonGame {
 					break;
 				case WarriorAbility.Berserk:
 					this.Offensive = new Offensive(20);
-					this.ChangeAbilityAmount = new ChangeAbilityAmount(15, 1, 4);
+					this.ChangeAmount = new ChangeAmount(15, 1, 4);
 					break;
 				case WarriorAbility.Disarm:
 					this.Offensive = new Offensive(35);
 					break;
-				case WarriorAbility.Bandage:
-					this.Bandage = new Bandage(25, 5, 1, 3);
+				case WarriorAbility.Healing:
+					this.Healing = new Healing(25, 5, 1, 3);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -95,11 +95,11 @@ namespace DungeonGame {
 				case ArcherAbility.Double:
 					this.Offensive = new Offensive(25);
 					break;
-				case ArcherAbility.Bandage:
-					this.Bandage = new Bandage(25, 5, 1, 3);
+				case ArcherAbility.Healing:
+					this.Healing = new Healing(25, 5, 1, 3);
 					break;
 				case ArcherAbility.SwiftAura:
-					this.ChangeAbilityAmount = new ChangeAbilityAmount(15, 1, 600);
+					this.ChangeAmount = new ChangeAmount(15, 1, 600);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -118,13 +118,13 @@ namespace DungeonGame {
 			return !player.PlayerQuiver.HaveArrows();
 		}
 		public static void SwiftAuraAbilityInfo(Player player, int index) {
-			var swiftAuraString = "Swift Aura Amount: " + player.Abilities[index].ChangeAbilityAmount.Amount;
+			var swiftAuraString = "Swift Aura Amount: " + player.Abilities[index].ChangeAmount.Amount;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(), 
 				Settings.FormatDefaultBackground(),
 				swiftAuraString);
-			var swiftAuraInfoString = "Dexterity is increased by " + player.Abilities[index].ChangeAbilityAmount.Amount + 
-			                          " for " + (player.Abilities[index].ChangeAbilityAmount.ChangeMaxRound / 60) + " minutes.";
+			var swiftAuraInfoString = "Dexterity is increased by " + player.Abilities[index].ChangeAmount.Amount + 
+			                          " for " + (player.Abilities[index].ChangeAmount.ChangeMaxRound / 60) + " minutes.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(), 
 				Settings.FormatDefaultBackground(),
@@ -133,15 +133,15 @@ namespace DungeonGame {
 		public static void UseSwiftAura(Player player, int index) {
 			player.ComboPoints -= player.Abilities[index].ComboCost;
 			const string swiftAuraString = "You generate a Swift Aura around yourself.";
-			player.Dexterity += player.Abilities[index].ChangeAbilityAmount.Amount;
+			player.Dexterity += player.Abilities[index].ChangeAmount.Amount;
 			PlayerHandler.CalculatePlayerStats(player);
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				swiftAuraString);
 			player.Effects.Add(new Effect(player.Abilities[index].Name,
-				Effect.EffectType.ChangeStat, player.Abilities[index].ChangeAbilityAmount.Amount,
-				player.Abilities[index].ChangeAbilityAmount.ChangeCurRound, player.Abilities[index].ChangeAbilityAmount.ChangeMaxRound, 
+				Effect.EffectType.ChangeStat, player.Abilities[index].ChangeAmount.Amount,
+				player.Abilities[index].ChangeAmount.ChangeCurRound, player.Abilities[index].ChangeAmount.ChangeMaxRound, 
 				1, 1, false));
 		}
 		public static void StunAbilityInfo(Player player, int index) {
@@ -199,13 +199,13 @@ namespace DungeonGame {
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				dmgIncreaseString);
-			var armIncreaseString = "Armor Decrease: " + player.Abilities[index].ChangeAbilityAmount.Amount;
+			var armIncreaseString = "Armor Decrease: " + player.Abilities[index].ChangeAmount.Amount;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				armIncreaseString);
 			var dmgInfoString = "Damage increased at cost of armor decrease for " +
-			                    player.Abilities[index].ChangeAbilityAmount.ChangeMaxRound + " rounds";
+			                    player.Abilities[index].ChangeAmount.ChangeMaxRound + " rounds";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -215,11 +215,11 @@ namespace DungeonGame {
 			DeductAbilityCost(player, index);
 			player.Effects.Add(new Effect(player.Abilities[index].Name + " Damage Increase",
 				Effect.EffectType.ChangeDamage, player.Abilities[index].Offensive.Amount,
-				player.Abilities[index].ChangeAbilityAmount.ChangeCurRound, player.Abilities[index].ChangeAbilityAmount.ChangeMaxRound, 
+				player.Abilities[index].ChangeAmount.ChangeCurRound, player.Abilities[index].ChangeAmount.ChangeMaxRound, 
 				1, 1, false));
 			player.Effects.Add(new Effect(player.Abilities[index].Name + " Armor Decrease",
-				Effect.EffectType.ChangeArmor, player.Abilities[index].ChangeAbilityAmount.Amount,
-				player.Abilities[index].ChangeAbilityAmount.ChangeCurRound, player.Abilities[index].ChangeAbilityAmount.ChangeMaxRound, 
+				Effect.EffectType.ChangeArmor, player.Abilities[index].ChangeAmount.Amount,
+				player.Abilities[index].ChangeAmount.ChangeCurRound, player.Abilities[index].ChangeAmount.ChangeMaxRound, 
 				1, 1, true));
 		}
 		public static void DistanceAbilityInfo(Player player, int index) {
@@ -343,25 +343,25 @@ namespace DungeonGame {
 			return player.Abilities[index].Defensive.AbsorbDamage;
 		}
 		public static void BandageAbilityInfo(Player player, int index) {
-			var healAmountString = "Heal Amount: " + player.Abilities[index].Bandage.HealAmount;
+			var healAmountString = "Heal Amount: " + player.Abilities[index].Healing.HealAmount;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healAmountString);
-			if (player.Abilities[index].Bandage.HealOverTime <= 0) return;
-			var healOverTimeString = "Heal Over Time: " + player.Abilities[index].Bandage.HealOverTime;
+			if (player.Abilities[index].Healing.HealOverTime <= 0) return;
+			var healOverTimeString = "Heal Over Time: " + player.Abilities[index].Healing.HealOverTime;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healOverTimeString);
 			var healInfoStringCombat = "Heal over time will restore health for " + 
-			                     player.Abilities[index].Bandage.HealMaxRounds + " rounds in combat.";
+			                     player.Abilities[index].Healing.HealMaxRounds + " rounds in combat.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healInfoStringCombat);
 			var healInfoStringNonCombat = "Heal over time will restore health " + 
-			                           player.Abilities[index].Bandage.HealMaxRounds + " times every 10 seconds.";
+			                           player.Abilities[index].Healing.HealMaxRounds + " times every 10 seconds.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -369,7 +369,7 @@ namespace DungeonGame {
 		}
 		public static void UseBandageAbility(Player player, int index) {
 			DeductAbilityCost(player, index);
-			var healAmount = player.Abilities[index].Bandage.HealAmount;
+			var healAmount = player.Abilities[index].Healing.HealAmount;
 			var healString = "You heal yourself for " + healAmount + " health.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
@@ -379,10 +379,10 @@ namespace DungeonGame {
 			if (player.HitPoints > player.MaxHitPoints) {
 				player.HitPoints = player.MaxHitPoints;
 			}
-			if (player.Abilities[index].Bandage.HealOverTime <= 0) return;
+			if (player.Abilities[index].Healing.HealOverTime <= 0) return;
 			player.Effects.Add(new Effect(player.Abilities[index].Name,
-				Effect.EffectType.Healing, player.Abilities[index].Bandage.HealOverTime,
-				player.Abilities[index].Bandage.HealCurRounds, player.Abilities[index].Bandage.HealMaxRounds,
+				Effect.EffectType.Healing, player.Abilities[index].Healing.HealOverTime,
+				player.Abilities[index].Healing.HealCurRounds, player.Abilities[index].Healing.HealMaxRounds,
 				1, 10, false));
 		}
 		public static void DisarmAbilityInfo(Player player, int index) {

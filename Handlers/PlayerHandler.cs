@@ -459,7 +459,7 @@ namespace DungeonGame {
 					case Ability.WarriorAbility.Disarm:
 						Ability.DisarmAbilityInfo(player, index);
 						break;
-					case Ability.WarriorAbility.Bandage:
+					case Ability.WarriorAbility.Healing:
 						Ability.BandageAbilityInfo(player, index);
 						break;
 					default:
@@ -500,7 +500,7 @@ namespace DungeonGame {
 					case Ability.ArcherAbility.Wound:
 						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
-					case Ability.ArcherAbility.Bandage:
+					case Ability.ArcherAbility.Healing:
 						Ability.BandageAbilityInfo(player, index);
 						break;
 					case Ability.ArcherAbility.SwiftAura:

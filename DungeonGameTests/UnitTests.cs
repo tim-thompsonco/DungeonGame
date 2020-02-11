@@ -328,7 +328,7 @@ namespace DungeonGameTests {
 		public void BandageAbilityUnitTests() {
 			var player = new Player("placeholder", Player.PlayerClassType.Archer);
 			player.Abilities.Add(
-				new Ability("use bandage", 25, 1, Ability.ArcherAbility.Bandage, 1));
+				new Ability("use bandage", 25, 1, Ability.ArcherAbility.Healing, 1));
 			player.HitPoints = 10;
 			/* Bandage should heal 25 immediately, 5 over time, cur round 1, max round 3
 			Make sure stacked healing effects only tick for 3 rounds in combat */
@@ -609,12 +609,12 @@ namespace DungeonGameTests {
 			player.PlayerClass = Player.PlayerClassType.Mage;
 			var spellIndex = player.Spellbook.FindIndex(
 				f => f.Name == "fireball");
-			Assert.AreEqual(25, player.Spellbook[spellIndex].FireOffense.BlastDamage);
-			Assert.AreEqual(5, player.Spellbook[spellIndex].FireOffense.BurnDamage);
+			Assert.AreEqual(25, player.Spellbook[spellIndex].Offensive.Amount);
+			Assert.AreEqual(5, player.Spellbook[spellIndex].Offensive.AmountOverTime);
 			player.Gold = 0;
 			trainer.UpgradeSpell(player, "fireball");
-			Assert.AreEqual(25, player.Spellbook[spellIndex].FireOffense.BlastDamage);
-			Assert.AreEqual(5, player.Spellbook[spellIndex].FireOffense.BurnDamage);
+			Assert.AreEqual(25, player.Spellbook[spellIndex].Offensive.Amount);
+			Assert.AreEqual(5, player.Spellbook[spellIndex].Offensive.AmountOverTime);
 			var expectedOutputTwo = OutputHandler.Display.Output[1][2];
 			Assert.AreEqual("You are not ready to upgrade that spell. You need to level up first!", 
 				expectedOutputTwo);
@@ -629,8 +629,8 @@ namespace DungeonGameTests {
 			player.Gold = 100;
 			trainer.UpgradeSpell(player, "fireball");
 			Assert.AreEqual(2, player.Spellbook[spellIndex].Rank);
-			Assert.AreEqual(35, player.Spellbook[spellIndex].FireOffense.BlastDamage);
-			Assert.AreEqual(10, player.Spellbook[spellIndex].FireOffense.BurnDamage);
+			Assert.AreEqual(35, player.Spellbook[spellIndex].Offensive.Amount);
+			Assert.AreEqual(10, player.Spellbook[spellIndex].Offensive.AmountOverTime);
 			Assert.AreEqual(60, player.Gold);
 			var expectedOutputFive = OutputHandler.Display.Output[4][2];
 			Assert.AreEqual("You upgraded Fireball to rank 2 for 40 gold.", expectedOutputFive);
@@ -856,11 +856,11 @@ namespace DungeonGameTests {
 			const string inputName = "arcane intellect";
 			var spellIndex = player.Spellbook.FindIndex(f => f.Name == inputName);
 			player.CastSpell(inputName);
-			Assert.AreEqual(player.Intelligence, baseInt + player.Spellbook[spellIndex].ChangeSpellAmount.Amount);
+			Assert.AreEqual(player.Intelligence, baseInt + player.Spellbook[spellIndex].ChangeAmount.Amount);
 			Assert.AreEqual(
 				baseMana - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
 			Assert.AreEqual(
-				player.MaxManaPoints, baseMaxMana + (player.Spellbook[spellIndex].ChangeSpellAmount.Amount * 10));
+				player.MaxManaPoints, baseMaxMana + (player.Spellbook[spellIndex].ChangeAmount.Amount * 10));
 			var expectedOutput = OutputHandler.Display.Output[0][2];
 			Assert.AreEqual("You cast Arcane Intellect on yourself.", expectedOutput);
 			for (var i = 0; i < 10; i++) {
@@ -896,11 +896,11 @@ namespace DungeonGameTests {
 			const string inputName = "swift aura";
 			var abilityIndex = player.Abilities.FindIndex(f => f.Name == inputName);
 			player.UseAbility(inputName);
-			Assert.AreEqual(player.Dexterity, baseDex + player.Abilities[abilityIndex].ChangeAbilityAmount.Amount);
+			Assert.AreEqual(player.Dexterity, baseDex + player.Abilities[abilityIndex].ChangeAmount.Amount);
 			Assert.AreEqual(
 				baseCombo - player.Abilities[abilityIndex].ComboCost, player.ComboPoints);
 			Assert.AreEqual(
-				player.MaxComboPoints, baseMaxCombo + (player.Abilities[abilityIndex].ChangeAbilityAmount.Amount * 10));
+				player.MaxComboPoints, baseMaxCombo + (player.Abilities[abilityIndex].ChangeAmount.Amount * 10));
 			var expectedOutput = OutputHandler.Display.Output[0][2];
 			Assert.AreEqual("You generate a Swift Aura around yourself.", expectedOutput);
 			for (var i = 0; i < 10; i++) {
