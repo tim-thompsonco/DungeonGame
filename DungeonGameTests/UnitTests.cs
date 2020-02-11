@@ -871,5 +871,45 @@ namespace DungeonGameTests {
 			Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
 			Assert.AreEqual("(590 seconds) Arcane Intellect", defaultEffectOutput.Output[1][2]);
 		}
+		[Test]
+		public void SwiftAuraAbilityUnitTest() {
+			OutputHandler.Display.ClearUserOutput();
+			var player = new Player("placeholder", Player.PlayerClassType.Archer);
+			RoomHandler.Rooms = new List<IRoom> {
+				new DungeonRoom(0, 0, 0, false, false, false,
+					false, false, false, false, false, false,
+					false, 1, 1)
+			};
+			player.Abilities.Add(new Ability(
+				"swift aura", 150, 1, Ability.ArcherAbility.SwiftAura, 6));
+			var input = new[] {"swift", "aura"};
+			PlayerHandler.AbilityInfo(player, input);
+			Assert.AreEqual("Swift Aura", OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual("Combo Cost: 150", OutputHandler.Display.Output[2][2]);
+			Assert.AreEqual("Swift Aura Amount: 15", OutputHandler.Display.Output[3][2]);
+			Assert.AreEqual("Dexterity is increased by 15 for 10 minutes.", OutputHandler.Display.Output[4][2]);
+			OutputHandler.Display.ClearUserOutput();
+			var baseDex = player.Dexterity;
+			var baseCombo = player.ComboPoints;
+			var baseMaxCombo = player.MaxComboPoints;
+			const string inputName = "swift aura";
+			var abilityIndex = player.Abilities.FindIndex(f => f.Name == inputName);
+			player.UseAbility(inputName);
+			Assert.AreEqual(player.Dexterity, baseDex + player.Abilities[abilityIndex].ChangeAbilityAmount.Amount);
+			Assert.AreEqual(
+				baseCombo - player.Abilities[abilityIndex].ComboCost, player.ComboPoints);
+			Assert.AreEqual(
+				player.MaxComboPoints, baseMaxCombo + (player.Abilities[abilityIndex].ChangeAbilityAmount.Amount * 10));
+			var expectedOutput = OutputHandler.Display.Output[0][2];
+			Assert.AreEqual("You generate a Swift Aura around yourself.", expectedOutput);
+			for (var i = 0; i < 10; i++) {
+				GameHandler.CheckStatus(player);
+			}
+			var defaultEffectOutput = OutputHandler.ShowEffects(player);
+			Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
+			Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
+			Assert.AreEqual("(590 seconds) Swift Aura", defaultEffectOutput.Output[1][2]);
+		}
 	}
 }

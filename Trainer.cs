@@ -12,10 +12,10 @@ namespace DungeonGame {
 		}
 		public string Name { get; set; }
 		public string Desc { get; set; }
-		public TrainerCategory TrainerGroup { get; set; }
-		public int BaseCost { get; set; }
-		public List<Ability> TrainableAbilities { get; set; }
-		public List<Spell> TrainableSpells { get; set; }
+		private TrainerCategory TrainerGroup { get; set; }
+		private int BaseCost { get; set; }
+		private List<Ability> TrainableAbilities { get; set; }
+		private List<Spell> TrainableSpells { get; set; }
 
 		public Trainer(string name, string desc, TrainerCategory trainerCategory) {
 			this.Name = name;

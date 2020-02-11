@@ -446,9 +446,29 @@ using System.Linq;
 			}
 			if (index != -1 &&
 			    this.ComboPoints >= this.Abilities[index].ComboCost &&
-			    this.PlayerClass == PlayerClassType.Archer &&
-			    this.Abilities[index].ArcAbilityCategory == Ability.ArcherAbility.Bandage) {
-				Ability.UseBandageAbility(this, index);
+			    this.PlayerClass == PlayerClassType.Archer) {
+				switch (this.Abilities[index].ArcAbilityCategory) {
+					case Ability.ArcherAbility.Distance:
+						return;
+					case Ability.ArcherAbility.Gut:
+						return;
+					case Ability.ArcherAbility.Precise:
+						return;
+					case Ability.ArcherAbility.Stun:
+						return;
+					case Ability.ArcherAbility.Double:
+						return;
+					case Ability.ArcherAbility.Wound:
+						return;
+					case Ability.ArcherAbility.Bandage:
+						Ability.UseBandageAbility(this, index);
+						return;
+					case Ability.ArcherAbility.SwiftAura:
+						Ability.UseSwiftAura(this, index);
+						return;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
 			}
 			else if (index != -1) {
 				throw new InvalidOperationException();
@@ -483,7 +503,7 @@ using System.Linq;
 						Ability.UseDisarmAbility(opponent, this, index);
 						return;
 					case Ability.WarriorAbility.Bandage:
-						break;
+						return;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -522,10 +542,10 @@ using System.Linq;
 						return;
 					case Ability.ArcherAbility.Bandage:
 						Ability.UseBandageAbility(this, index);
-						break;
+						return;
 					case Ability.ArcherAbility.SwiftAura:
 						Ability.UseSwiftAura(this, index);
-						break;
+						return;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}

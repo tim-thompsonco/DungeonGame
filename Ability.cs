@@ -106,7 +106,7 @@ namespace DungeonGame {
 			}
 		}
 		
-		public static void DeductAbilityCost(Player player, int index) {
+		private static void DeductAbilityCost(Player player, int index) {
 			if (player.PlayerClass == Player.PlayerClassType.Warrior) {
 				player.RagePoints -= player.Abilities[index].RageCost;
 			}
@@ -114,7 +114,7 @@ namespace DungeonGame {
 				player.ComboPoints -= player.Abilities[index].ComboCost;
 			}
 		}
-		public static bool OutOfArrows(Player player) {
+		private static bool OutOfArrows(Player player) {
 			return !player.PlayerQuiver.HaveArrows();
 		}
 		public static void SwiftAuraAbilityInfo(Player player, int index) {
@@ -132,7 +132,7 @@ namespace DungeonGame {
 		}
 		public static void UseSwiftAura(Player player, int index) {
 			player.ComboPoints -= player.Abilities[index].ComboCost;
-			const string swiftAuraString = "You generate a swift aura around yourself.";
+			const string swiftAuraString = "You generate a Swift Aura around yourself.";
 			player.Dexterity += player.Abilities[index].ChangeAbilityAmount.Amount;
 			PlayerHandler.CalculatePlayerStats(player);
 			OutputHandler.Display.StoreUserOutput(
