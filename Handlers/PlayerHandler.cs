@@ -503,6 +503,9 @@ namespace DungeonGame {
 					case Ability.ArcherAbility.Bandage:
 						Ability.BandageAbilityInfo(player, index);
 						break;
+					case Ability.ArcherAbility.SwiftAura:
+						Ability.SwiftAuraAbilityInfo(player, index);
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -534,7 +537,7 @@ namespace DungeonGame {
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					rankString);
-				var manaCostString = "ManaCost: " + player.Spellbook[index].ManaCost;
+				var manaCostString = "Mana Cost: " + player.Spellbook[index].ManaCost;
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
@@ -563,6 +566,9 @@ namespace DungeonGame {
 						break;
 					case Spell.SpellType.Reflect:
 						Spell.ReflectDamageSpellInfo(player, index);
+						break;
+					case Spell.SpellType.ArcaneIntellect:
+						Spell.ArcaneIntellectSpellInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

@@ -843,17 +843,24 @@ namespace DungeonGameTests {
 			};
 			player.Spellbook.Add(new Spell(
 				"arcane intellect", 150, 1, Spell.SpellType.ArcaneIntellect, 1));
+			PlayerHandler.SpellInfo(player, "arcane intellect");
+			Assert.AreEqual("Arcane Intellect", OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual("Mana Cost: 150", OutputHandler.Display.Output[2][2]);
+			Assert.AreEqual("Arcane Intellect Amount: 15", OutputHandler.Display.Output[3][2]);
+			Assert.AreEqual("Intelligence is increased by 15 for 10 minutes.", OutputHandler.Display.Output[4][2]);
+			OutputHandler.Display.ClearUserOutput();
 			var baseInt = player.Intelligence;
 			var baseMana = player.ManaPoints;
 			var baseMaxMana = player.MaxManaPoints;
 			const string inputName = "arcane intellect";
 			var spellIndex = player.Spellbook.FindIndex(f => f.Name == inputName);
 			player.CastSpell(inputName);
-			Assert.AreEqual(player.Intelligence, baseInt + player.Spellbook[spellIndex].ChangeAmount.Amount);
+			Assert.AreEqual(player.Intelligence, baseInt + player.Spellbook[spellIndex].ChangeSpellAmount.Amount);
 			Assert.AreEqual(
 				baseMana - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
 			Assert.AreEqual(
-				player.MaxManaPoints, baseMaxMana + (player.Spellbook[spellIndex].ChangeAmount.Amount * 10));
+				player.MaxManaPoints, baseMaxMana + (player.Spellbook[spellIndex].ChangeSpellAmount.Amount * 10));
 			var expectedOutput = OutputHandler.Display.Output[0][2];
 			Assert.AreEqual("You cast Arcane Intellect on yourself.", expectedOutput);
 			for (var i = 0; i < 10; i++) {

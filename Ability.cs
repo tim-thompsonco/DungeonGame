@@ -18,7 +18,8 @@ namespace DungeonGame {
 			Stun,
 			Double,
 			Wound,
-			Bandage
+			Bandage,
+			SwiftAura
 		}
 		public string Name { get; set; }
 		public ArcherAbility ArcAbilityCategory { get; set; }
@@ -26,7 +27,7 @@ namespace DungeonGame {
 		public Bandage Bandage { get; set; }
 		public Defensive Defensive { get; set; }
 		public Offensive Offensive { get; set; }
-		public ChangeArmor ChangeArmor { get; set; }
+		public ChangeAbilityAmount ChangeAbilityAmount { get; set; }
 		public Stun Stun { get; set; }
 		public int MinLevel { get; set; }
 		public int RageCost { get; set; }
@@ -57,7 +58,7 @@ namespace DungeonGame {
 					break;
 				case WarriorAbility.Berserk:
 					this.Offensive = new Offensive(20);
-					this.ChangeArmor = new ChangeArmor(15, 1, 4);
+					this.ChangeAbilityAmount = new ChangeAbilityAmount(15, 1, 4);
 					break;
 				case WarriorAbility.Disarm:
 					this.Offensive = new Offensive(35);
@@ -97,6 +98,9 @@ namespace DungeonGame {
 				case ArcherAbility.Bandage:
 					this.Bandage = new Bandage(25, 5, 1, 3);
 					break;
+				case ArcherAbility.SwiftAura:
+					this.ChangeAbilityAmount = new ChangeAbilityAmount(15, 1, 600);
+					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
@@ -112,6 +116,33 @@ namespace DungeonGame {
 		}
 		public static bool OutOfArrows(Player player) {
 			return !player.PlayerQuiver.HaveArrows();
+		}
+		public static void SwiftAuraAbilityInfo(Player player, int index) {
+			var swiftAuraString = "Swift Aura Amount: " + player.Abilities[index].ChangeAbilityAmount.Amount;
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(),
+				swiftAuraString);
+			var swiftAuraInfoString = "Dexterity is increased by " + player.Abilities[index].ChangeAbilityAmount.Amount + 
+			                          " for " + (player.Abilities[index].ChangeAbilityAmount.ChangeMaxRound / 60) + " minutes.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(),
+				swiftAuraInfoString);
+		}
+		public static void UseSwiftAura(Player player, int index) {
+			player.ComboPoints -= player.Abilities[index].ComboCost;
+			const string swiftAuraString = "You generate a swift aura around yourself.";
+			player.Dexterity += player.Abilities[index].ChangeAbilityAmount.Amount;
+			PlayerHandler.CalculatePlayerStats(player);
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				swiftAuraString);
+			player.Effects.Add(new Effect(player.Abilities[index].Name,
+				Effect.EffectType.ChangeStat, player.Abilities[index].ChangeAbilityAmount.Amount,
+				player.Abilities[index].ChangeAbilityAmount.ChangeCurRound, player.Abilities[index].ChangeAbilityAmount.ChangeMaxRound, 
+				1, 1, false));
 		}
 		public static void StunAbilityInfo(Player player, int index) {
 			var abilityDmgString = "Instant Damage: " + player.Abilities[index].Stun.DamageAmount;
@@ -168,13 +199,13 @@ namespace DungeonGame {
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				dmgIncreaseString);
-			var armIncreaseString = "Armor Decrease: " + player.Abilities[index].ChangeArmor.ChangeArmorAmount;
+			var armIncreaseString = "Armor Decrease: " + player.Abilities[index].ChangeAbilityAmount.Amount;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				armIncreaseString);
 			var dmgInfoString = "Damage increased at cost of armor decrease for " +
-			                    player.Abilities[index].ChangeArmor.ChangeMaxRound + " rounds";
+			                    player.Abilities[index].ChangeAbilityAmount.ChangeMaxRound + " rounds";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -184,11 +215,11 @@ namespace DungeonGame {
 			DeductAbilityCost(player, index);
 			player.Effects.Add(new Effect(player.Abilities[index].Name + " Damage Increase",
 				Effect.EffectType.ChangeDamage, player.Abilities[index].Offensive.Amount,
-				player.Abilities[index].ChangeArmor.ChangeCurRound, player.Abilities[index].ChangeArmor.ChangeMaxRound, 
+				player.Abilities[index].ChangeAbilityAmount.ChangeCurRound, player.Abilities[index].ChangeAbilityAmount.ChangeMaxRound, 
 				1, 1, false));
 			player.Effects.Add(new Effect(player.Abilities[index].Name + " Armor Decrease",
-				Effect.EffectType.ChangeArmor, player.Abilities[index].ChangeArmor.ChangeArmorAmount,
-				player.Abilities[index].ChangeArmor.ChangeCurRound, player.Abilities[index].ChangeArmor.ChangeMaxRound, 
+				Effect.EffectType.ChangeArmor, player.Abilities[index].ChangeAbilityAmount.Amount,
+				player.Abilities[index].ChangeAbilityAmount.ChangeCurRound, player.Abilities[index].ChangeAbilityAmount.ChangeMaxRound, 
 				1, 1, true));
 		}
 		public static void DistanceAbilityInfo(Player player, int index) {

@@ -292,7 +292,7 @@ using System.Linq;
 			return attackAmount;
 		}
 		public void DrinkPotion(string[] userInput) {
-			var index = 0;
+			int index;
 			switch (userInput[1]) {
 				case "health":
 					index = this.Consumables.FindIndex(
@@ -343,8 +343,7 @@ using System.Linq;
 			}
 		}
 		public void ReloadQuiver() {
-			var index = 0;
-			index = this.Consumables.FindIndex(
+			var index = this.Consumables.FindIndex(
 				f => f.ArrowCategory == Consumable.ArrowType.Standard && f.Name.Contains("arrow"));
 			if (index != -1) {
 				this.Consumables[index].Arrow.LoadArrowsPlayer(this);
@@ -406,6 +405,9 @@ using System.Linq;
 					case Ability.ArcherAbility.Wound:
 						return;
 					case Ability.ArcherAbility.Bandage:
+						break;
+					case Ability.ArcherAbility.SwiftAura:
+						Ability.UseSwiftAura(this, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -521,6 +523,9 @@ using System.Linq;
 					case Ability.ArcherAbility.Bandage:
 						Ability.UseBandageAbility(this, index);
 						break;
+					case Ability.ArcherAbility.SwiftAura:
+						Ability.UseSwiftAura(this, index);
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -598,6 +603,10 @@ using System.Linq;
 					case Spell.SpellType.Reflect:
 						Spell.CastReflectDamage(this, index);
 						return;
+					case Spell.SpellType.TownPortal:
+						break;
+					case Spell.SpellType.ArcaneIntellect:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}

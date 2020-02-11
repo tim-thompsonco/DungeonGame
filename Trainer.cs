@@ -27,6 +27,8 @@ namespace DungeonGame {
 					this.TrainableAbilities = new List<Ability>();
 					this.TrainableAbilities.Add(new Ability(
 						"bandage", 25, 1, Ability.ArcherAbility.Bandage, 2));
+					this.TrainableAbilities.Add(new Ability(
+						"swift aura", 150, 1, Ability.ArcherAbility.SwiftAura, 6));
 					break;
 				case TrainerCategory.Warrior:
 					this.TrainableAbilities = new List<Ability>();
@@ -350,16 +352,16 @@ namespace DungeonGame {
 							player.Spellbook[spellIndex].Healing.HealOverTime += 5;
 							break;
 						case Spell.SpellType.Diamondskin:
-							player.Spellbook[spellIndex].ChangeAmount.Amount += 10;
+							player.Spellbook[spellIndex].ChangeSpellAmount.Amount += 10;
 							break;
 						case Spell.SpellType.TownPortal:
 							player.Spellbook[spellIndex].ManaCost -= 5;
 							break;
 						case Spell.SpellType.Reflect:
-							player.Spellbook[spellIndex].ChangeAmount.Amount += 10;
+							player.Spellbook[spellIndex].ChangeSpellAmount.Amount += 10;
 							break;
 						case Spell.SpellType.ArcaneIntellect:
-							player.Spellbook[spellIndex].ChangeAmount.Amount += 5;
+							player.Spellbook[spellIndex].ChangeSpellAmount.Amount += 5;
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -465,7 +467,7 @@ namespace DungeonGame {
 								break;
 							case Ability.WarriorAbility.Berserk:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
-								player.Abilities[abilityIndex].ChangeArmor.ChangeArmorAmount += 10;
+								player.Abilities[abilityIndex].ChangeAbilityAmount.Amount += 10;
 								break;
 							case Ability.WarriorAbility.Disarm:
 								player.Abilities[abilityIndex].Offensive.ChanceToSucceed += 10;

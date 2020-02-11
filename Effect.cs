@@ -69,7 +69,7 @@
 			if (this.IsEffectExpired) {
 				var index = player.Spellbook.FindIndex(
 					f => f.SpellCategory == Spell.SpellType.ArcaneIntellect);
-				player.Intelligence -= player.Spellbook[index].ChangeAmount.Amount;
+				player.Intelligence -= player.Spellbook[index].ChangeSpellAmount.Amount;
 				return;
 			}
 			this.EffectCurRound += 1;

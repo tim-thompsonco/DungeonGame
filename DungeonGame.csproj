@@ -31,7 +31,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Ability Properties\ChangeArmor.cs" />
+    <Compile Include="Ability Properties\ChangeAbilityAmount.cs" />
     <Compile Include="Ability Properties\Defensive.cs" />
     <Compile Include="Ability Properties\Bandage.cs" />
     <Compile Include="Ability Properties\Offensive.cs" />
@@ -61,7 +61,7 @@
     <Compile Include="Messages.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Spell Properties\ArcaneOffense.cs" />
-    <Compile Include="Spell Properties\ChangeAmount.cs" />
+    <Compile Include="Spell Properties\ChangeSpellAmount.cs" />
     <Compile Include="Spell Properties\FrostOffense.cs" />
     <Compile Include="Spell Properties\Healing.cs" />
     <Compile Include="Spell Properties\Portal.cs" />
