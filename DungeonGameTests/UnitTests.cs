@@ -328,7 +328,7 @@ namespace DungeonGameTests {
 		public void BandageAbilityUnitTests() {
 			var player = new Player("placeholder", Player.PlayerClassType.Archer);
 			player.Abilities.Add(
-				new Ability("use bandage", 25, 1, Ability.ArcherAbility.Healing, 1));
+				new Ability("use bandage", 25, 1, Ability.ArcherAbility.Bandage, 1));
 			player.HitPoints = 10;
 			/* Bandage should heal 25 immediately, 5 over time, cur round 1, max round 3
 			Make sure stacked healing effects only tick for 3 rounds in combat */

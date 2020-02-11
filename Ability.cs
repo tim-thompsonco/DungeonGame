@@ -9,7 +9,7 @@ namespace DungeonGame {
 			Block,
 			Berserk,
 			Disarm,
-			Healing
+			Bandage
 		}
 		public enum ArcherAbility {
 			Distance,
@@ -18,7 +18,7 @@ namespace DungeonGame {
 			Stun,
 			Double,
 			Wound,
-			Healing,
+			Bandage,
 			SwiftAura
 		}
 		public string Name { get; set; }
@@ -63,7 +63,7 @@ namespace DungeonGame {
 				case WarriorAbility.Disarm:
 					this.Offensive = new Offensive(35);
 					break;
-				case WarriorAbility.Healing:
+				case WarriorAbility.Bandage:
 					this.Healing = new Healing(25, 5, 1, 3);
 					break;
 				default:
@@ -95,7 +95,7 @@ namespace DungeonGame {
 				case ArcherAbility.Double:
 					this.Offensive = new Offensive(25);
 					break;
-				case ArcherAbility.Healing:
+				case ArcherAbility.Bandage:
 					this.Healing = new Healing(25, 5, 1, 3);
 					break;
 				case ArcherAbility.SwiftAura:

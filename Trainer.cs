@@ -26,14 +26,14 @@ namespace DungeonGame {
 				case TrainerCategory.Archer:
 					this.TrainableAbilities = new List<Ability>();
 					this.TrainableAbilities.Add(new Ability(
-						"bandage", 25, 1, Ability.ArcherAbility.Healing, 2));
+						"bandage", 25, 1, Ability.ArcherAbility.Bandage, 2));
 					this.TrainableAbilities.Add(new Ability(
 						"swift aura", 150, 1, Ability.ArcherAbility.SwiftAura, 6));
 					break;
 				case TrainerCategory.Warrior:
 					this.TrainableAbilities = new List<Ability>();
 					this.TrainableAbilities.Add(new Ability(
-						"bandage", 25, 1, Ability.WarriorAbility.Healing, 2));
+						"bandage", 25, 1, Ability.WarriorAbility.Bandage, 2));
 					break;
 				case TrainerCategory.Mage:
 					this.TrainableSpells = new List<Spell>();
@@ -433,7 +433,7 @@ namespace DungeonGame {
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								player.Abilities[abilityIndex].Offensive.AmountOverTime += 5;
 								break;
-							case Ability.ArcherAbility.Healing:
+							case Ability.ArcherAbility.Bandage:
 								player.Abilities[abilityIndex].Healing.HealAmount += 10;
 								player.Abilities[abilityIndex].Healing.HealOverTime += 5;
 								break;
@@ -472,7 +472,7 @@ namespace DungeonGame {
 							case Ability.WarriorAbility.Disarm:
 								player.Abilities[abilityIndex].Offensive.ChanceToSucceed += 10;
 								break;
-							case Ability.WarriorAbility.Healing:
+							case Ability.WarriorAbility.Bandage:
 								player.Abilities[abilityIndex].Healing.HealAmount += 10;
 								player.Abilities[abilityIndex].Healing.HealOverTime += 5;
 								break;
