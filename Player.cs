@@ -440,6 +440,9 @@ using System.Linq;
 					case Ability.WarriorAbility.Bandage:
 						Ability.UseBandageAbility(this, index);
 						return;
+					case Ability.WarriorAbility.PowerAura:
+						Ability.UsePowerAura(this, index);
+						return;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}

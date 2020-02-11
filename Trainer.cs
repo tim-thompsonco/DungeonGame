@@ -34,6 +34,8 @@ namespace DungeonGame {
 					this.TrainableAbilities = new List<Ability>();
 					this.TrainableAbilities.Add(new Ability(
 						"bandage", 25, 1, Ability.WarriorAbility.Bandage, 2));
+					this.TrainableAbilities.Add(new Ability(
+						"power aura", 150, 1, Ability.WarriorAbility.PowerAura, 6));
 					break;
 				case TrainerCategory.Mage:
 					this.TrainableSpells = new List<Spell>();

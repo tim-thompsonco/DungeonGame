@@ -462,6 +462,9 @@ namespace DungeonGame {
 					case Ability.WarriorAbility.Bandage:
 						Ability.BandageAbilityInfo(player, index);
 						break;
+					case Ability.WarriorAbility.PowerAura:
+						Ability.PowerAuraAbilityInfo(player, index);
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}

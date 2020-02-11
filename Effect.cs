@@ -1,4 +1,6 @@
-﻿namespace DungeonGame {
+﻿using System;
+
+namespace DungeonGame {
 	public class Effect {
 		public enum EffectType {
 			Healing,
@@ -65,13 +67,8 @@
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void ArcaneIntellectRound(Player player) {
-			if (this.IsEffectExpired) {
-				var index = player.Spellbook.FindIndex(
-					f => f.SpellCategory == Spell.SpellType.ArcaneIntellect);
-				player.Intelligence -= player.Spellbook[index].ChangeAmount.Amount;
-				return;
-			}
+		public void ChangeStatRound() {
+			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;

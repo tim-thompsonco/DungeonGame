@@ -9,7 +9,8 @@ namespace DungeonGame {
 			Block,
 			Berserk,
 			Disarm,
-			Bandage
+			Bandage,
+			PowerAura
 		}
 		public enum ArcherAbility {
 			Distance,
@@ -66,6 +67,9 @@ namespace DungeonGame {
 				case WarriorAbility.Bandage:
 					this.Healing = new Healing(25, 5, 1, 3);
 					break;
+				case WarriorAbility.PowerAura:
+					this.ChangeAmount = new ChangeAmount(15, 1, 600);
+					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
@@ -116,6 +120,33 @@ namespace DungeonGame {
 		}
 		private static bool OutOfArrows(Player player) {
 			return !player.PlayerQuiver.HaveArrows();
+		}
+		public static void PowerAuraAbilityInfo(Player player, int index) {
+			var powerAuraString = "Power Aura Amount: " + player.Abilities[index].ChangeAmount.Amount;
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(),
+				powerAuraString);
+			var powerAuraInfoString = "Strength is increased by " + player.Abilities[index].ChangeAmount.Amount + 
+			                          " for " + (player.Abilities[index].ChangeAmount.ChangeMaxRound / 60) + " minutes.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(),
+				powerAuraInfoString);
+		}
+		public static void UsePowerAura(Player player, int index) {
+			player.RagePoints -= player.Abilities[index].RageCost;
+			const string powerAuraString = "You generate a Power Aura around yourself.";
+			player.Strength += player.Abilities[index].ChangeAmount.Amount;
+			PlayerHandler.CalculatePlayerStats(player);
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				powerAuraString);
+			player.Effects.Add(new Effect(player.Abilities[index].Name,
+				Effect.EffectType.ChangeStat, player.Abilities[index].ChangeAmount.Amount,
+				player.Abilities[index].ChangeAmount.ChangeCurRound, player.Abilities[index].ChangeAmount.ChangeMaxRound, 
+				1, 1, false));
 		}
 		public static void SwiftAuraAbilityInfo(Player player, int index) {
 			var swiftAuraString = "Swift Aura Amount: " + player.Abilities[index].ChangeAmount.Amount;

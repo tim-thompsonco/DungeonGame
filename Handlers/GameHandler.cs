@@ -42,7 +42,7 @@ namespace DungeonGame {
 							effect.ReflectDamageRound(player);
 							break;
 						case Effect.EffectType.ChangeStat:
-							effect.ArcaneIntellectRound(player);
+							effect.ChangeStatRound();
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -125,6 +125,20 @@ namespace DungeonGame {
 					case Effect.EffectType.Frozen:
 						break;
 					case Effect.EffectType.ChangeStat:
+						switch (player.PlayerClass) {
+							case Player.PlayerClassType.Mage:
+								player.Intelligence -= player.Effects[i].EffectAmountOverTime;
+								break;
+							case Player.PlayerClassType.Warrior:
+								player.Strength -= player.Effects[i].EffectAmountOverTime;
+								break;
+							case Player.PlayerClassType.Archer:
+								player.Dexterity -= player.Effects[i].EffectAmountOverTime;
+								break;
+							default:
+								throw new ArgumentOutOfRangeException();
+						}
+						PlayerHandler.CalculatePlayerStats(player);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
