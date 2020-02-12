@@ -322,7 +322,6 @@ namespace DungeonGame {
 						Settings.FormatDefaultBackground(),
 						"The vendor is carrying: "};
 					OutputHandler.Display.StoreUserOutput(sameLineOutput);
-					var objCount = this.Vendor.VendorItems.Count;
 					var textInfo = new CultureInfo("en-US", false).TextInfo;
 					foreach (var itemForSale in this.Vendor.VendorItems) {
 						var sameLineOutputItem = new List<string>();

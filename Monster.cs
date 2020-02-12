@@ -305,7 +305,7 @@ namespace DungeonGame {
 			var totalArmorRating = this.CheckArmorRating();
 			var levelDiff = player.Level - this.Level;
 			var armorMultiplier = 1.00 + (-(double)levelDiff / 5);
-			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
+			var adjArmorRating = totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
 		public bool IsMonsterDead(Player player) {

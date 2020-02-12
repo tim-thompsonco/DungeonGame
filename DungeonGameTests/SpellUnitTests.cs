@@ -11,7 +11,6 @@ namespace DungeonGameTests {
 		public void FireballSpellUnitTest() {
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			player.StatReplenishInterval = 9999999; // Disable stat replenish over time method
-			var output = new UserOutput();
 			GearHandler.EquipInitialGear(player);
 			var spawnedRooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
@@ -28,7 +27,7 @@ namespace DungeonGameTests {
 			monster.InCombat = true;
 			monster.HitPoints = 50;
 			monster.MaxHitPoints = 100;
-			var input = new string[2] {"cast", "fireball"};
+			var input = new [] {"cast", "fireball"};
 			var spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("fireball", spellName);
 			player.CastSpell(monster, spellName);
@@ -59,7 +58,7 @@ namespace DungeonGameTests {
 				item.Equipped = false;
 			}
 			monster.HitPoints = 100;
-			var input = new string[2] {"cast", "frostbolt"};
+			var input = new [] {"cast", "frostbolt"};
 			var spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("frostbolt", spellName);
 			player.PlayerWeapon.Durability = 100;
@@ -94,7 +93,7 @@ namespace DungeonGameTests {
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			GearHandler.EquipInitialGear(player);
 			player.InCombat = true;
-			var inputThree = new string[2] {"cast", "diamondskin"};
+			var inputThree = new [] {"cast", "diamondskin"};
 			var spellName = InputHandler.ParseInput(inputThree);
 			Assert.AreEqual("diamondskin", spellName);
 			var baseArmor = GearHandler.CheckArmorRating(player);

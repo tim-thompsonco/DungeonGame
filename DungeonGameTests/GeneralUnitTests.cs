@@ -57,17 +57,17 @@ namespace DungeonGameTests {
 		public void ArmorUnitTests() {
 			// Test armor creation values
 			// Test case 1, level 1 head cloth armor, armor rating should be 4 to 6
-			var testArrClothHead = new int[3] {4, 5, 6};
+			var testArrClothHead = new [] {4, 5, 6};
 			var testArmorClothHead = new Armor(
 				1, Armor.ArmorType.Cloth, Armor.ArmorSlot.Head);
 			CollectionAssert.Contains(testArrClothHead, testArmorClothHead.ArmorRating);
 			// Test case 2, level 3 chest leather armor, armor rating should be 15 to 17
-			var testArrLeatherChest = new int[3] {15, 16, 17};
+			var testArrLeatherChest = new [] {15, 16, 17};
 			var testArmorLeatherChest = new Armor(
 				3, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest);
 			CollectionAssert.Contains(testArrLeatherChest, testArmorLeatherChest.ArmorRating);
 			// Test case 3, level 2 legs plate armor, armor rating should be 12 to 14
-			var testArrPlateLegs = new int[3] {12, 13, 14};
+			var testArrPlateLegs = new [] {12, 13, 14};
 			var testArmorPlateLegs = new Armor(
 				2, Armor.ArmorType.Plate, Armor.ArmorSlot.Legs);
 			CollectionAssert.Contains(testArrPlateLegs, testArmorPlateLegs.ArmorRating);

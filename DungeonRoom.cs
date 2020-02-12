@@ -63,19 +63,19 @@ namespace DungeonGame {
 			var randomNumLevel = GameHandler.GetRandomNumber(levelRangeLow, levelRangeHigh);
 			// Reserving numbers 80-100 for chance of room not having a monster
 			if (randomNum < 25) {
-				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Zombie);
+				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Zombie);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum < 50) {
-				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Skeleton);
+				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Skeleton);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum < 70) {
-				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Spider);
+				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Spider);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum < 80) {
-				this.Monster = new Monster(randomNumLevel, DungeonGame.Monster.MonsterType.Demon);
+				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Demon);
 				this.RoomObjects.Add(this.Monster);
 			}
 		}
@@ -419,7 +419,6 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(),
 					"It is carrying: "};
 				OutputHandler.Display.StoreUserOutput(sameLineOutput);
-				var objCount = this.Monster.MonsterItems.Count;
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (var item in this.Monster.MonsterItems) {
 					var sameLineOutputItem = new List<string>();

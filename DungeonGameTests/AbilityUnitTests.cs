@@ -14,7 +14,7 @@ namespace DungeonGameTests {
 			/* Bandage should heal 25 immediately, 5 over time, cur round 1, max round 3
 			Make sure stacked healing effects only tick for 3 rounds in combat */
 			player.InCombat = true;
-			var input = new string[2] {"use", "bandage"};
+			var input = new [] {"use", "bandage"};
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("bandage", abilityName);
 			player.UseAbility(abilityName);
@@ -29,7 +29,7 @@ namespace DungeonGameTests {
 			player.InCombat = false;
 			// Make sure stacked healing effects tick properly outside of combat		
 			player.HitPoints = 10;
-			var inputTwo = new string[2] {"use", "bandage"};
+			var inputTwo = new [] {"use", "bandage"};
 			var abilityNameTwo = InputHandler.ParseInput(inputTwo);
 			Assert.AreEqual("bandage", abilityName);
 			player.UseAbility(abilityNameTwo);
@@ -56,7 +56,7 @@ namespace DungeonGameTests {
 			var monster = spawnedRooms[0].Monster;
 			player.InCombat = true;
 			monster.InCombat = true;
-			var input = new string[2] {"use", "charge"};
+			var input = new [] {"use", "charge"};
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("charge", abilityName);
 			player.UseAbility(monster, abilityName);
@@ -83,7 +83,7 @@ namespace DungeonGameTests {
 			}
 			var monster = spawnedRooms[0].Monster;
 			monster.HitPoints = 100;
-			var input = new string[2] {"use", "rend"};
+			var input = new [] {"use", "rend"};
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("rend", abilityName);
 			player.UseAbility(monster, abilityName);
@@ -114,7 +114,7 @@ namespace DungeonGameTests {
 			RoomHandler.Rooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
 		}
 		var monster = RoomHandler.Rooms[0].Monster;
-		var input = new string[2] {"use", "berserk"};
+		var input = new [] {"use", "berserk"};
 		var abilityName = InputHandler.ParseInput(input);
 		Assert.AreEqual("berserk", abilityName);
 		player.UseAbility(monster, abilityName);
@@ -127,7 +127,6 @@ namespace DungeonGameTests {
 		public void ArcherAbilityUnitTests() {
 			var player = new Player("placeholder", Player.PlayerClassType.Archer);
 			player.StatReplenishInterval = 9999999; // Disable stat replenish over time method
-			var output = new UserOutput();
 			GearHandler.EquipInitialGear(player);
 			var spawnedRooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
@@ -143,7 +142,7 @@ namespace DungeonGameTests {
 			monster.InCombat = true;
 			monster.HitPoints = 50;
 			monster.MaxHitPoints = 100;
-			var input = new string[2] {"use", "stun"};
+			var input = new [] {"use", "stun"};
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("stun", abilityName);
 			player.UseAbility(monster, abilityName);
@@ -156,7 +155,7 @@ namespace DungeonGameTests {
 			}
 			Assert.AreEqual(false, monster.Effects.Any());
 			monster.HitPoints = 80;
-			var inputTwo = new string[2] {"use", "gut"};
+			var inputTwo = new [] {"use", "gut"};
 			var abilityNameTwo = InputHandler.ParseInput(inputTwo);
 			Assert.AreEqual("gut", abilityNameTwo);
 			player.UseAbility(monster, abilityNameTwo);

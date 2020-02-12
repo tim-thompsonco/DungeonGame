@@ -328,7 +328,7 @@ namespace DungeonGame {
 								if (input[1] == "all") {
 									foreach (var item in player.Inventory) {
 										if (!item.Equipped) continue;
-										var itemNameArray = new string[2] {input[0], item.Name};
+										var itemNameArray = new [] {input[0], item.Name};
 										isTownRoom.Vendor.RepairItem(player, itemNameArray);
 									}
 

@@ -201,7 +201,7 @@ using System.Linq;
 			var totalArmorRating = GearHandler.CheckArmorRating(this);
 			var levelDiff = opponent.Level - this.Level;
 			var armorMultiplier = 1.00 + (-(double)levelDiff / 5);
-			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
+			var adjArmorRating = totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
 		public int Attack(Monster opponent) {

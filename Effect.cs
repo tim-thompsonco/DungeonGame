@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DungeonGame {
+﻿namespace DungeonGame {
 	public class Effect {
 		public enum EffectType {
 			Healing,
