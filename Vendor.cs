@@ -173,7 +173,7 @@ namespace DungeonGame {
 			var conIndex = player.Consumables.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName) && f.Equipped == false);
 			if (conIndex != -1) {
-				var sellConsumable = player.Consumables[conIndex] as Consumable;
+				var sellConsumable = player.Consumables[conIndex];
 				switch (this.BuySellType) {
 					case "Healer":
 						if (sellConsumable != null) {
