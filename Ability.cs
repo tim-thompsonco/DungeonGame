@@ -128,7 +128,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				powerAuraString);
 			var powerAuraInfoString = "Strength is increased by " + player.Abilities[index].ChangeAmount.Amount + 
-			                          " for " + (player.Abilities[index].ChangeAmount.ChangeMaxRound / 60) + " minutes.";
+			                          " for " + player.Abilities[index].ChangeAmount.ChangeMaxRound / 60 + " minutes.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(), 
 				Settings.FormatDefaultBackground(),
@@ -155,7 +155,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				swiftAuraString);
 			var swiftAuraInfoString = "Dexterity is increased by " + player.Abilities[index].ChangeAmount.Amount + 
-			                          " for " + (player.Abilities[index].ChangeAmount.ChangeMaxRound / 60) + " minutes.";
+			                          " for " + player.Abilities[index].ChangeAmount.ChangeMaxRound / 60 + " minutes.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(), 
 				Settings.FormatDefaultBackground(),

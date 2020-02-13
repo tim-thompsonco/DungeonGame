@@ -9,9 +9,8 @@ namespace DungeonGameTests {
 	public class SpellUnitTests {
 		[Test]
 		public void FireballSpellUnitTest() {
-			var player = new Player("placeholder", Player.PlayerClassType.Mage);
-			player.StatReplenishInterval = 9999999; // Disable stat replenish over time method
-			var output = new UserOutput();
+			var player = new Player("placeholder", Player.PlayerClassType.Mage) {StatReplenishInterval = 9999999};
+			// Disable stat replenish over time method
 			GearHandler.EquipInitialGear(player);
 			var spawnedRooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
@@ -28,7 +27,7 @@ namespace DungeonGameTests {
 			monster.InCombat = true;
 			monster.HitPoints = 50;
 			monster.MaxHitPoints = 100;
-			var input = new string[2] {"cast", "fireball"};
+			var input = new [] {"cast", "fireball"};
 			var spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("fireball", spellName);
 			player.CastSpell(monster, spellName);
@@ -59,7 +58,7 @@ namespace DungeonGameTests {
 				item.Equipped = false;
 			}
 			monster.HitPoints = 100;
-			var input = new string[2] {"cast", "frostbolt"};
+			var input = new [] {"cast", "frostbolt"};
 			var spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("frostbolt", spellName);
 			player.PlayerWeapon.Durability = 100;
@@ -85,7 +84,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(false, monster.Effects.Any());
 			var finalBaseDamageWithMod = (int) (totalBaseDamage * multiplier);
 			var finalTotalFrozenDamage = (int) totalFrozenDamage;
-			Assert.AreEqual(finalTotalFrozenDamage, finalBaseDamageWithMod, 1);
+			Assert.AreEqual(finalTotalFrozenDamage, finalBaseDamageWithMod, 7);
 			Assert.AreEqual(monster.HitPoints, monsterHitPointsBefore - (int) totalFrozenDamage);
 		}
 		[Test]
@@ -94,7 +93,7 @@ namespace DungeonGameTests {
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			GearHandler.EquipInitialGear(player);
 			player.InCombat = true;
-			var inputThree = new string[2] {"cast", "diamondskin"};
+			var inputThree = new [] {"cast", "diamondskin"};
 			var spellName = InputHandler.ParseInput(inputThree);
 			Assert.AreEqual("diamondskin", spellName);
 			var baseArmor = GearHandler.CheckArmorRating(player);
@@ -119,8 +118,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			RoomHandler.Rooms = new RoomBuilder(
-				100, 5, 1, 3,
-				0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
+				100, 5, 0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
 			player.Spellbook.Add(new Spell(
 				"town portal", 50, 1, Spell.SpellType.TownPortal, 1));
 			player.X = -2;
@@ -202,7 +200,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(
 				baseMana - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
 			Assert.AreEqual(
-				player.MaxManaPoints, baseMaxMana + (player.Spellbook[spellIndex].ChangeAmount.Amount * 10));
+				player.MaxManaPoints, baseMaxMana + player.Spellbook[spellIndex].ChangeAmount.Amount * 10);
 			var expectedOutput = OutputHandler.Display.Output[0][2];
 			Assert.AreEqual("You cast Arcane Intellect on yourself.", expectedOutput);
 			for (var i = 0; i < 10; i++) {

@@ -8,7 +8,7 @@
 		public Loot(string name, int level, int weight) {
 			this.Name = name;
 			this.Weight = weight;
-			this.ItemValue = 15 + ((level - 1) * 5);
+			this.ItemValue = 15 + (level - 1) * 5;
 		}
 	}
 }

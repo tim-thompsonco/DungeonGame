@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DungeonGame {
@@ -95,13 +94,13 @@ namespace DungeonGame {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			var itemInfo = new StringBuilder();
 			itemInfo.Append(item.Name);
-			var isItemArmor = item as Armor;
-			if (isItemArmor != null) {
-				itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + ")");
-			}
-			var isItemWeapon = item as Weapon;
-			if (isItemWeapon != null) {
-				itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + ")");
+			switch (item) {
+				case Armor isItemArmor:
+					itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + ")");
+					break;
+				case Weapon isItemWeapon:
+					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + ")");
+					break;
 			}
 			var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 			return itemName;

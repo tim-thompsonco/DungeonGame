@@ -163,11 +163,11 @@ namespace DungeonGame {
 				}
 				else {
 					if (effect.EffectMaxRound + 1 - effect.EffectCurRound > 1) {
-						effectOutput = "(" + ((effect.EffectMaxRound + 1 - effect.EffectCurRound) * effect.TickDuration) + 
+						effectOutput = "(" + (effect.EffectMaxRound + 1 - effect.EffectCurRound) * effect.TickDuration + 
 						               " seconds) " + textInfo.ToTitleCase(effect.Name);
 					}
 					else {
-						effectOutput = "(" + ((effect.EffectMaxRound + 1 - effect.EffectCurRound) * effect.TickDuration) + 
+						effectOutput = "(" + (effect.EffectMaxRound + 1 - effect.EffectCurRound) * effect.TickDuration + 
 						               " second) " + textInfo.ToTitleCase(effect.Name);
 					}
 				}

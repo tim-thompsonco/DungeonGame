@@ -124,7 +124,7 @@ namespace DungeonGame {
 					this.Output[k].Add(OutputHandler.EffectDisplay?.Output[lc][l]);
 					this.Output[k].Add(OutputHandler.EffectDisplay?.Output[lc][l + 1]);
 					this.Output[k].Add(OutputHandler.EffectDisplay?.Output[lc][l + 2]);
-					if ((lc + 1) < OutputHandler.EffectDisplay.Output.Count) lc++;
+					if (lc + 1 < OutputHandler.EffectDisplay.Output.Count) lc++;
 				}
 			}
 		}

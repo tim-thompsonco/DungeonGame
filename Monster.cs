@@ -42,7 +42,7 @@ namespace DungeonGame {
 			this.MonsterCategory = monsterType;
 			this.BuildMonsterNameDesc();
 			var randomNumHitPoint = GameHandler.GetRandomNumber(20, 40);
-			var maxHitPoints = 80 + ((this.Level - 1) * randomNumHitPoint);
+			var maxHitPoints = 80 + (this.Level - 1) * randomNumHitPoint;
 			this.MaxHitPoints = GameHandler.RoundNumber(maxHitPoints);
 			this.HitPoints = this.MaxHitPoints;
 			if (this.MonsterCategory == MonsterType.Spider) {
@@ -50,7 +50,7 @@ namespace DungeonGame {
 			}
 			else {
 				var randomNumGold = GameHandler.GetRandomNumber(5, 10);
-				this.Gold = 10 + ((this.Level - 1) * randomNumGold);
+				this.Gold = 10 + (this.Level - 1) * randomNumGold;
 			}
 			var randomNumExp = GameHandler.GetRandomNumber(20, 40);
 			var expProvided = this.MaxHitPoints + randomNumExp;
@@ -304,7 +304,7 @@ namespace DungeonGame {
 		public int ArmorRating(Player player) {
 			var totalArmorRating = this.CheckArmorRating();
 			var levelDiff = player.Level - this.Level;
-			var armorMultiplier = 1.00 + (-(double)levelDiff / 5);
+			var armorMultiplier = 1.00 + -(double)levelDiff / 5;
 			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}

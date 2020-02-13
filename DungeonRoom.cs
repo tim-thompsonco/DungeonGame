@@ -55,7 +55,7 @@ namespace DungeonGame {
 			this.GoSouthEast = goSouthEast;
 			this.GoUp = goUp;
 			this.GoDown = goDown;
-			this.Commands = new List<string>() {
+			this.Commands = new List<string> {
 				"[I]nventory",
 				"Save",
 				"[Q]uit"};
@@ -414,12 +414,11 @@ namespace DungeonGame {
 					Settings.FormatRoomOutputText(), 
 					Settings.FormatDefaultBackground(), 
 					this.CalculateNpcLevelDiff(player));
-				var sameLineOutput = new List<string>() {
+				var sameLineOutput = new List<string> {
 					Settings.FormatRoomOutputText(),
 					Settings.FormatDefaultBackground(),
 					"It is carrying: "};
 				OutputHandler.Display.StoreUserOutput(sameLineOutput);
-				var objCount = this.Monster.MonsterItems.Count;
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (var item in this.Monster.MonsterItems) {
 					var sameLineOutputItem = new List<string>();

@@ -126,7 +126,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				arcaneIntString);
 			var arcaneIntInfoString = "Intelligence is increased by " + player.Spellbook[index].ChangeAmount.Amount + 
-			                        " for " + (player.Spellbook[index].ChangeAmount.ChangeMaxRound / 60) + " minutes.";
+			                        " for " + player.Spellbook[index].ChangeAmount.ChangeMaxRound / 60 + " minutes.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(), 
 				Settings.FormatDefaultBackground(),

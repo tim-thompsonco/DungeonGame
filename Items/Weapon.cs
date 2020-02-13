@@ -30,17 +30,17 @@ namespace DungeonGame {
 			var randomNum = GameHandler.GetRandomNumber(1, 100);
 			var randomWeaponDmg = GameHandler.GetRandomNumber(18, 24);
 			if (randomNum < 5) {
-				this.RegDamage = randomWeaponDmg + ((level - 1) * 3);
+				this.RegDamage = randomWeaponDmg + (level - 1) * 3;
 				this.CritMultiplier = 1.3;
 				this.Quality = 3;
 			}
 			else if (randomNum < 40) {
-				this.RegDamage = randomWeaponDmg + ((level - 1) * 2);
+				this.RegDamage = randomWeaponDmg + (level - 1) * 2;
 				this.CritMultiplier = 1.2;
 				this.Quality = 2;
 			}
 			else if (randomNum <= 100) {
-				this.RegDamage = randomWeaponDmg + ((level - 1) * 1);
+				this.RegDamage = randomWeaponDmg + (level - 1) * 1;
 				this.CritMultiplier = 1.1;
 				this.Quality = 1;
 			}
@@ -113,12 +113,6 @@ namespace DungeonGame {
 			this.Durability -= 1;
 			attackDamage *= this.Durability / (double)100;
 			return (int)attackDamage;
-		}
-		public string GetName() {
-			return this.Name;
-		}
-		public bool IsEquipped() {
-			return this.Equipped;
 		}
 	}
 }

@@ -22,12 +22,12 @@ namespace DungeonGame {
 				player = Newtonsoft.Json.JsonConvert.DeserializeObject<Player>(File.ReadAllText(
 					"playersave.json"), new Newtonsoft.Json.JsonSerializerSettings {
 					TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
-					NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
+					NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
 				});
 				RoomHandler.Rooms = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IRoom>>(File.ReadAllText(
 					"gamesave.json"), new Newtonsoft.Json.JsonSerializerSettings {
 					TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
-					NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
+					NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
 				});
 				// Insert blank space before game reload info for formatting
 				OutputHandler.Display.StoreUserOutput(
@@ -47,8 +47,7 @@ namespace DungeonGame {
 			catch (FileNotFoundException) {
 				// Create dungeon
 				RoomHandler.Rooms = new RoomBuilder(
-					200, 10, 1, 10, 
-					0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
+					200, 10,0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
 				player = new PlayerBuilder().BuildNewPlayer();
 				GearHandler.EquipInitialGear(player);
 				// Begin game by putting player at coords 0, 7, 0, town entrance

@@ -12,8 +12,6 @@ namespace DungeonGame {
 		public StartDirection StartDir { get; set; }
 		public int Size { get; set; }
 		public int Levels { get; set; }
-		public int LevelRangeLow { get; set; }
-		public int LevelRangeHigh { get; set; }
 		public int xCoord { get; set; }
 		public int yCoord { get; set; }
 		public int zCoord { get; set; }
@@ -35,14 +33,13 @@ namespace DungeonGame {
 			var townRooms = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IRoom>>(File.ReadAllText(
 				"townrooms.json"), new Newtonsoft.Json.JsonSerializerSettings {
 				TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
-				NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
+				NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
 			});
 			foreach (var room in townRooms) {
 				this.SpawnedDungeonRooms.Add(room);
 			}
 		}
-		public RoomBuilder(int size, int levels, int levelRangeLow, int levelRangeHigh, 
-			int startX, int startY, int startZ, StartDirection startDir)
+		public RoomBuilder(int size, int levels, int startX, int startY, int startZ, StartDirection startDir)
 			: this() {
 			/* Dungeon difficulty settings
 			Commenting out for now because I am setting each level to be equal to difficulty of i, subject to some
@@ -98,7 +95,7 @@ namespace DungeonGame {
 			}
 			foreach (var room in this.SpawnedDungeonRooms.Where(
 				room => room.GetType() == typeof(DungeonRoom))) {
-				this.DetermineDungeonRoomCategory(room);
+				DetermineDungeonRoomCategory(room);
 				room.Name = RoomBuilderHelper.PopulateDungeonRoomName(room);
 				room.Desc = RoomBuilderHelper.PopulateDungeonRoomDesc(room);
 			}
@@ -175,10 +172,9 @@ namespace DungeonGame {
 				this.GoSouth = true;
 			}
 			var checkSouthWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord - 1, this.zCoord);
-			if (checkSouthWest != -1) {
-				this.SpawnedDungeonRooms[checkSouthWest].GoNorthEast = true;
-				this.GoSouthWest = true;
-			}
+			if (checkSouthWest == -1) return;
+			this.SpawnedDungeonRooms[checkSouthWest].GoNorthEast = true;
+			this.GoSouthWest = true;
 		}
 		private void GenerateStairwayRoomDirections() {
 			var checkWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord, this.zCoord);
@@ -227,10 +223,9 @@ namespace DungeonGame {
 				this.GoUp = true;
 			}
 			var checkDown = this.FindRoomCordsIndex(this.xCoord, this.yCoord, this.zCoord - 1);
-			if (checkDown != -1) {
-				this.SpawnedDungeonRooms[checkDown].GoUp = true;
-				this.GoDown = true;
-			}
+			if (checkDown == -1) return;
+			this.SpawnedDungeonRooms[checkDown].GoUp = true;
+			this.GoDown = true;
 		}
 		private void ResetRoomDirections() {
 			this.GoEast = false;
@@ -244,7 +239,7 @@ namespace DungeonGame {
 			this.GoUp = false;
 			this.GoDown = false;
 		}
-		private void DetermineDungeonRoomCategory(IRoom originalRoom) {
+		private static void DetermineDungeonRoomCategory(IRoom originalRoom) {
 			var castedRoom = originalRoom as DungeonRoom;
 			var directionCount = 0;
 			if (castedRoom.GoUp) directionCount++;

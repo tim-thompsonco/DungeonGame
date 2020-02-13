@@ -24,7 +24,7 @@ namespace DungeonGame {
 				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
 		}
 		public static void GameIntro() {
-			var gameIntroString =
+			const string gameIntroString = 
 				"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot" +
 				"and explore dungeons. Stuff you've probably done a million times already across various RPG games. At any time " +
 				"you can get help on commands by typing 'help'.";
@@ -41,7 +41,7 @@ namespace DungeonGame {
 			}
 		}
 		public static void ShowCommandHelp() {
-			var commandHelpString = 
+			const string commandHelpString = 
 				"Commands: Players may move in any direction of the game using a shortkey or the full direction name. " +
 				"For example, if you wish to go north, you may type either 'N' or 'North'. If a player wishes to look " +
 				"at something, they can use 'l' or 'look' and then the name of what they want to look at. For example " +

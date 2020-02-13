@@ -24,8 +24,8 @@ namespace DungeonGame {
 		public List<string> Commands { get; set; }
 		// List of objects in room (including Vendors)
 		public List<IRoomInteraction> RoomObjects { get; set; }
-		public Vendor Vendor;
-		public Trainer Trainer;
+		public readonly Vendor Vendor;
+		public readonly Trainer Trainer;
 		public Monster Monster { get; set; }
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
@@ -63,7 +63,7 @@ namespace DungeonGame {
 			this.GoSouthEast = goSouthEast;
 			this.GoUp = goUp;
 			this.GoDown = goDown;
-			this.Commands = new List<string>() {
+			this.Commands = new List<string> {
 				"[I]nventory",
 				"Save",
 				"[Q]uit"};
@@ -141,9 +141,6 @@ namespace DungeonGame {
 			this.RoomObjects.Add(this.Trainer);
 		}
 
-		public Monster GetMonster() {
-			return this.Monster;
-		}
 		public bool AttackOpponent(Player player, string[] input) {
 			return true;
 		}
@@ -317,12 +314,11 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(), 
 							this.Vendor.Desc.Substring(i, Settings.GetGameWidth()));
 					}
-					var sameLineOutput = new List<string>() {
+					var sameLineOutput = new List<string> {
 						Settings.FormatRoomOutputText(),
 						Settings.FormatDefaultBackground(),
 						"The vendor is carrying: "};
 					OutputHandler.Display.StoreUserOutput(sameLineOutput);
-					var objCount = this.Vendor.VendorItems.Count;
 					var textInfo = new CultureInfo("en-US", false).TextInfo;
 					foreach (var itemForSale in this.Vendor.VendorItems) {
 						var sameLineOutputItem = new List<string>();
