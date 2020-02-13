@@ -201,7 +201,7 @@ using System.Linq;
 			var totalArmorRating = GearHandler.CheckArmorRating(this);
 			var levelDiff = opponent.Level - this.Level;
 			var armorMultiplier = 1.00 + -(double)levelDiff / 5;
-			var adjArmorRating = (double)totalArmorRating * armorMultiplier;
+			var adjArmorRating = totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
 		public int Attack(Monster opponent) {
@@ -473,12 +473,10 @@ using System.Linq;
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			else if (index != -1) {
+			if (index != -1) {
 				throw new InvalidOperationException();
 			}
-			else {
-				throw new IndexOutOfRangeException();
-			}
+			throw new IndexOutOfRangeException();
 		}
 		public void UseAbility(Monster opponent, string inputName) {
 			var index = this.Abilities.FindIndex(
@@ -553,12 +551,10 @@ using System.Linq;
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			else if (index != -1) {
+			if (index != -1) {
 				throw new InvalidOperationException();
 			}
-			else {
-				throw new IndexOutOfRangeException();
-			}
+			throw new IndexOutOfRangeException();
 		}
 		public void CastSpell(string inputName) {
 			var index = this.Spellbook.FindIndex(f => f.Name == inputName);

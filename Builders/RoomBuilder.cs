@@ -12,9 +12,9 @@ namespace DungeonGame {
 		public StartDirection StartDir { get; set; }
 		public int Size { get; set; }
 		public int Levels { get; set; }
-		public int xCoord { get; set; }
-		public int yCoord { get; set; }
-		public int zCoord { get; set; }
+		public int XCoord { get; set; }
+		public int YCoord { get; set; }
+		public int ZCoord { get; set; }
 		public int CurrentLevel { get; set; }
 		public bool GoNorth { get; set; }
 		public bool GoSouth { get; set; }
@@ -72,11 +72,11 @@ namespace DungeonGame {
 						/* To connect upper level to lower level, always have first room go down one, and the upper level
 						 room must always be up by one for the two to connect, so X/Y coords are same but Z coord is -1
 						 from beginning Z coord */
-						this.xCoord = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].X;
-						this.yCoord = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Y;
-						this.zCoord = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Z - 1;
+						this.XCoord = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].X;
+						this.YCoord = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Y;
+						this.ZCoord = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Z - 1;
 						this.GenerateStairwayRoomDirections();
-						var firstRoom = new DungeonRoom(this.xCoord, this.yCoord, this.zCoord, this.GoNorth, 
+						var firstRoom = new DungeonRoom(this.XCoord, this.YCoord, this.ZCoord, this.GoNorth, 
 							this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, this.GoNorthEast, 
 							this.GoSouthEast, this.GoUp, this.GoDown, levelRangeLowForLevel, levelRangeHighForLevel);
 						this.SpawnedDungeonRooms.Add(firstRoom);
@@ -86,7 +86,7 @@ namespace DungeonGame {
 					}
 					this.GenerateRandomCoords();
 					this.GenerateRoomDirections();
-					var newRoom = new DungeonRoom(this.xCoord, this.yCoord, this.zCoord, this.GoNorth, 
+					var newRoom = new DungeonRoom(this.XCoord, this.YCoord, this.ZCoord, this.GoNorth, 
 						this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, this.GoNorthEast, 
 						this.GoSouthEast, this.GoUp, this.GoDown, levelRangeLowForLevel, levelRangeHighForLevel);
 					this.SpawnedDungeonRooms.Add(newRoom);
@@ -112,14 +112,14 @@ namespace DungeonGame {
 		}
 		private void GenerateRandomCoords() {
 			while (true) {
-				this.xCoord = GameHandler.GetRandomNumber(
+				this.XCoord = GameHandler.GetRandomNumber(
 					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].X - 1, 
 					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].X + 1);
-				this.yCoord = GameHandler.GetRandomNumber(
+				this.YCoord = GameHandler.GetRandomNumber(
 					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Y - 1, 
 					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Y + 1);
-				this.zCoord = this.CurrentLevel;
-				if (this.FindRoomCordsIndex(this.xCoord, this.yCoord, this.zCoord) != -1) continue;
+				this.ZCoord = this.CurrentLevel;
+				if (this.FindRoomCordsIndex(this.XCoord, this.YCoord, this.ZCoord) != -1) continue;
 				break;
 			}
 		}
@@ -136,93 +136,93 @@ namespace DungeonGame {
 			}			
 		}
 		private void GenerateRoomDirections() {
-			var checkWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord, this.zCoord);
+			var checkWest = this.FindRoomCordsIndex(this.XCoord - 1, this.YCoord, this.ZCoord);
 			if (checkWest != -1) {
 				this.SpawnedDungeonRooms[checkWest].GoEast = true;
 				this.GoWest = true;
 			}
-			var checkNorthWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord + 1, this.zCoord);
+			var checkNorthWest = this.FindRoomCordsIndex(this.XCoord - 1, this.YCoord + 1, this.ZCoord);
 			if (checkNorthWest != -1) {
 				this.SpawnedDungeonRooms[checkNorthWest].GoSouthEast = true;
 				this.GoNorthWest = true;
 			}
-			var checkNorth = this.FindRoomCordsIndex(this.xCoord, this.yCoord + 1, this.zCoord);
+			var checkNorth = this.FindRoomCordsIndex(this.XCoord, this.YCoord + 1, this.ZCoord);
 			if (checkNorth != -1) {
 				this.SpawnedDungeonRooms[checkNorth].GoSouth = true;
 				this.GoNorth = true;
 			}
-			var checkNorthEast = this.FindRoomCordsIndex(this.xCoord + 1, this.yCoord + 1, this.zCoord);
+			var checkNorthEast = this.FindRoomCordsIndex(this.XCoord + 1, this.YCoord + 1, this.ZCoord);
 			if (checkNorthEast != -1) {
 				this.SpawnedDungeonRooms[checkNorthEast].GoSouthWest = true;
 				this.GoNorthEast = true;
 			}
-			var checkEast = this.FindRoomCordsIndex(this.xCoord + 1, this.yCoord, this.zCoord);
+			var checkEast = this.FindRoomCordsIndex(this.XCoord + 1, this.YCoord, this.ZCoord);
 			if (checkEast != -1) {
 				this.SpawnedDungeonRooms[checkEast].GoWest = true;
 				this.GoEast = true;
 			}
-			var checkSouthEast = this.FindRoomCordsIndex(this.xCoord + 1, this.yCoord - 1, this.zCoord);
+			var checkSouthEast = this.FindRoomCordsIndex(this.XCoord + 1, this.YCoord - 1, this.ZCoord);
 			if (checkSouthEast != -1) {
 				this.SpawnedDungeonRooms[checkSouthEast].GoNorthWest = true;
 				this.GoSouthEast = true;
 			}
-			var checkSouth = this.FindRoomCordsIndex(this.xCoord, this.yCoord - 1, this.zCoord);
+			var checkSouth = this.FindRoomCordsIndex(this.XCoord, this.YCoord - 1, this.ZCoord);
 			if (checkSouth != -1) {
 				this.SpawnedDungeonRooms[checkSouth].GoNorth = true;
 				this.GoSouth = true;
 			}
-			var checkSouthWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord - 1, this.zCoord);
+			var checkSouthWest = this.FindRoomCordsIndex(this.XCoord - 1, this.YCoord - 1, this.ZCoord);
 			if (checkSouthWest == -1) return;
 			this.SpawnedDungeonRooms[checkSouthWest].GoNorthEast = true;
 			this.GoSouthWest = true;
 		}
 		private void GenerateStairwayRoomDirections() {
-			var checkWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord, this.zCoord);
+			var checkWest = this.FindRoomCordsIndex(this.XCoord - 1, this.YCoord, this.ZCoord);
 			if (checkWest != -1) {
 				this.SpawnedDungeonRooms[checkWest].GoEast = true;
 				this.GoWest = true;
 			}
-			var checkNorthWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord + 1, this.zCoord);
+			var checkNorthWest = this.FindRoomCordsIndex(this.XCoord - 1, this.YCoord + 1, this.ZCoord);
 			if (checkNorthWest != -1) {
 				this.SpawnedDungeonRooms[checkNorthWest].GoSouthEast = true;
 				this.GoNorthWest = true;
 			}
-			var checkNorth = this.FindRoomCordsIndex(this.xCoord, this.yCoord + 1, this.zCoord);
+			var checkNorth = this.FindRoomCordsIndex(this.XCoord, this.YCoord + 1, this.ZCoord);
 			if (checkNorth != -1) {
 				this.SpawnedDungeonRooms[checkNorth].GoSouth = true;
 				this.GoNorth = true;
 			}
-			var checkNorthEast = this.FindRoomCordsIndex(this.xCoord + 1, this.yCoord + 1, this.zCoord);
+			var checkNorthEast = this.FindRoomCordsIndex(this.XCoord + 1, this.YCoord + 1, this.ZCoord);
 			if (checkNorthEast != -1) {
 				this.SpawnedDungeonRooms[checkNorthEast].GoSouthWest = true;
 				this.GoNorthEast = true;
 			}
-			var checkEast = this.FindRoomCordsIndex(this.xCoord + 1, this.yCoord, this.zCoord);
+			var checkEast = this.FindRoomCordsIndex(this.XCoord + 1, this.YCoord, this.ZCoord);
 			if (checkEast != -1) {
 				this.SpawnedDungeonRooms[checkEast].GoWest = true;
 				this.GoEast = true;
 			}
-			var checkSouthEast = this.FindRoomCordsIndex(this.xCoord + 1, this.yCoord - 1, this.zCoord);
+			var checkSouthEast = this.FindRoomCordsIndex(this.XCoord + 1, this.YCoord - 1, this.ZCoord);
 			if (checkSouthEast != -1) {
 				this.SpawnedDungeonRooms[checkSouthEast].GoNorthWest = true;
 				this.GoSouthEast = true;
 			}
-			var checkSouth = this.FindRoomCordsIndex(this.xCoord, this.yCoord - 1, this.zCoord);
+			var checkSouth = this.FindRoomCordsIndex(this.XCoord, this.YCoord - 1, this.ZCoord);
 			if (checkSouth != -1) {
 				this.SpawnedDungeonRooms[checkSouth].GoNorth = true;
 				this.GoSouth = true;
 			}
-			var checkSouthWest = this.FindRoomCordsIndex(this.xCoord - 1, this.yCoord - 1, this.zCoord);
+			var checkSouthWest = this.FindRoomCordsIndex(this.XCoord - 1, this.YCoord - 1, this.ZCoord);
 			if (checkSouthWest != -1) {
 				this.SpawnedDungeonRooms[checkSouthWest].GoNorthEast = true;
 				this.GoSouthWest = true;
 			}
-			var checkUp = this.FindRoomCordsIndex(this.xCoord, this.yCoord, this.zCoord + 1);
+			var checkUp = this.FindRoomCordsIndex(this.XCoord, this.YCoord, this.ZCoord + 1);
 			if (checkUp != -1) {
 				this.SpawnedDungeonRooms[checkUp].GoDown = true;
 				this.GoUp = true;
 			}
-			var checkDown = this.FindRoomCordsIndex(this.xCoord, this.yCoord, this.zCoord - 1);
+			var checkDown = this.FindRoomCordsIndex(this.XCoord, this.YCoord, this.ZCoord - 1);
 			if (checkDown == -1) return;
 			this.SpawnedDungeonRooms[checkDown].GoUp = true;
 			this.GoDown = true;

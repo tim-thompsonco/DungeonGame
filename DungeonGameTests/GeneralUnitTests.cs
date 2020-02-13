@@ -319,8 +319,7 @@ namespace DungeonGameTests {
 		[Test]
 		public void PlayerMaxLevelUnitTest() {
 			/* Player should not be able to go beyond level 10 */
-			var player = new Player("placeholder", Player.PlayerClassType.Mage);
-			player.Level = 10;
+			var player = new Player("placeholder", Player.PlayerClassType.Mage) {Level = 10};
 			player.Experience = player.ExperienceToLevel - 1;
 			player.Experience++;
 			PlayerHandler.LevelUpCheck(player);
@@ -330,8 +329,7 @@ namespace DungeonGameTests {
 		public void CheckStatusUnitTest() {
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			RoomHandler.Rooms = new RoomBuilder(
-				100, 5, 1, 3,
-				0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
+				100, 5, 0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
 			GameHandler.CheckStatus(player);
 			player.Spellbook.Add(new Spell(
 				"reflect", 100, 1, Spell.SpellType.Reflect, 1));
