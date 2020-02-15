@@ -17,16 +17,16 @@ namespace DungeonGame {
 						case Effect.EffectType.Healing:
 							effect.HealingRound(player);
 							break;
-						case Effect.EffectType.ChangeDamage:
-							if (player.InCombat == false && effect.Name.Contains("berserk")) {
+						case Effect.EffectType.ChangePlayerDamage:
+							if (!player.InCombat && effect.Name.Contains("berserk")) {
 								effect.IsEffectExpired = true;
 							}
 							break;
 						case Effect.EffectType.ChangeArmor:
-							if (player.InCombat == false && effect.Name.Contains("berserk")) {
+							if (!player.InCombat && effect.Name.Contains("berserk")) {
 								effect.IsEffectExpired = true;
 							}
-							if (player.InCombat == false) effect.ChangeArmorRound();
+							if (!player.InCombat) effect.ChangeArmorRound();
 							break;
 						case Effect.EffectType.AbsorbDamage:
 							break;
@@ -44,6 +44,10 @@ namespace DungeonGame {
 						case Effect.EffectType.ChangeStat:
 							effect.ChangeStatRound();
 							break;
+						case Effect.EffectType.ChangeOpponentDamage:
+							if (!player.InCombat) effect.IsEffectExpired = true;
+							effect.ChangeOpponentDamageRound(player);
+							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
@@ -60,7 +64,7 @@ namespace DungeonGame {
 							switch (effect.EffectGroup) {
 								case Effect.EffectType.Healing:
 									break;
-								case Effect.EffectType.ChangeDamage:
+								case Effect.EffectType.ChangePlayerDamage:
 									break;
 								case Effect.EffectType.ChangeArmor:
 									break;
@@ -81,6 +85,8 @@ namespace DungeonGame {
 								case Effect.EffectType.ReflectDamage:
 									break;
 								case Effect.EffectType.ChangeStat:
+									break;
+								case Effect.EffectType.ChangeOpponentDamage:
 									break;
 								default:
 									throw new ArgumentOutOfRangeException();
@@ -107,7 +113,7 @@ namespace DungeonGame {
 				switch (player.Effects[i].EffectGroup) {
 					case Effect.EffectType.Healing:
 						break;
-					case Effect.EffectType.ChangeDamage:
+					case Effect.EffectType.ChangePlayerDamage:
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
@@ -140,6 +146,8 @@ namespace DungeonGame {
 						}
 						PlayerHandler.CalculatePlayerStats(player);
 						break;
+					case Effect.EffectType.ChangeOpponentDamage:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -153,7 +161,7 @@ namespace DungeonGame {
 				switch (monster.Effects[i].EffectGroup) {
 					case Effect.EffectType.Healing:
 						break;
-					case Effect.EffectType.ChangeDamage:
+					case Effect.EffectType.ChangePlayerDamage:
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
@@ -171,6 +179,8 @@ namespace DungeonGame {
 					case Effect.EffectType.Frozen:
 						break;
 					case Effect.EffectType.ChangeStat:
+						break;
+					case Effect.EffectType.ChangeOpponentDamage:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

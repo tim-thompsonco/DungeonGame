@@ -113,7 +113,7 @@ namespace DungeonGame {
 					case Effect.EffectType.Healing:
 						effect.HealingRound(this.Player);
 						break;
-					case Effect.EffectType.ChangeDamage:
+					case Effect.EffectType.ChangePlayerDamage:
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
@@ -127,7 +127,7 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.Frozen:
 						break;
-					case Effect.EffectType.ReflectDamage:
+					case Effect.EffectType.ChangeStat:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -140,7 +140,7 @@ namespace DungeonGame {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
 						break;
-					case Effect.EffectType.ChangeDamage:
+					case Effect.EffectType.ChangePlayerDamage:
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
@@ -157,6 +157,12 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.Frozen:
 						break;
+					case Effect.EffectType.ChangeOpponentDamage:
+						break;
+					case Effect.EffectType.ReflectDamage:
+						break;
+					case Effect.EffectType.ChangeStat:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -164,6 +170,14 @@ namespace DungeonGame {
 		}
 		private void ProcessMonsterAttack() {
 			var attackDamageM = this.Opponent.Attack(this.Player);
+			var indexDamageChange = this.Player.Effects.FindIndex(
+				f => f.EffectGroup == Effect.EffectType.ChangeOpponentDamage);
+			if (indexDamageChange != -1) {
+				var changeDamageAmount = this.Player.Effects[indexDamageChange].EffectAmountOverTime < attackDamageM ? 
+					this.Player.Effects[indexDamageChange].EffectAmountOverTime : attackDamageM;
+				attackDamageM += changeDamageAmount;
+				if (attackDamageM < 0) attackDamageM = 0;
+			}
 			if (this.Player.IsReflectingDamage) {
 				var index = this.Player.Effects.FindIndex(
 					f => f.EffectGroup == Effect.EffectType.ReflectDamage);

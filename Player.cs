@@ -2,8 +2,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
-	namespace DungeonGame {
+namespace DungeonGame {
 	public class Player {
 		public enum PlayerClassType {
 			Mage,
@@ -235,9 +236,9 @@ using System.Linq;
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
 						break;
-					case Effect.EffectType.ChangeDamage:
+					case Effect.EffectType.ChangePlayerDamage:
 						attackAmount += effect.EffectAmountOverTime;
-						effect.ChangeDamageRound(this);
+						effect.ChangePlayerDamageRound(this);
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
@@ -255,6 +256,8 @@ using System.Linq;
 						break;
 					case Effect.EffectType.ChangeStat:
 						break;
+					case Effect.EffectType.ChangeOpponentDamage:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -263,7 +266,7 @@ using System.Linq;
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
 						break;
-					case Effect.EffectType.ChangeDamage:
+					case Effect.EffectType.ChangePlayerDamage:
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
@@ -283,6 +286,8 @@ using System.Linq;
 					case Effect.EffectType.ReflectDamage:
 						break;
 					case Effect.EffectType.ChangeStat:
+						break;
+					case Effect.EffectType.ChangeOpponentDamage:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -382,6 +387,10 @@ using System.Linq;
 						return;
 					case Ability.WarriorAbility.Bandage:
 						break;
+					case Ability.WarriorAbility.PowerAura:
+						break;
+					case Ability.WarriorAbility.WarCry:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -442,6 +451,9 @@ using System.Linq;
 						return;
 					case Ability.WarriorAbility.PowerAura:
 						Ability.UsePowerAura(this, index);
+						return;
+					case Ability.WarriorAbility.WarCry:
+						Ability.UseWarCry(this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -504,6 +516,13 @@ using System.Linq;
 						Ability.UseDisarmAbility(opponent, this, index);
 						return;
 					case Ability.WarriorAbility.Bandage:
+						Ability.UseBandageAbility(this, index);
+						return;
+					case Ability.WarriorAbility.PowerAura:
+						Ability.UsePowerAura(this, index);
+						return;
+					case Ability.WarriorAbility.WarCry:
+						Ability.UseWarCry(this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -623,9 +642,14 @@ using System.Linq;
 						Spell.CastReflectDamage(this, index);
 						return;
 					case Spell.SpellType.TownPortal:
-						break;
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatAttackSuccessText(),
+							Settings.FormatDefaultBackground(),
+							"You cannot cast a portal during combat!");
+						return;
 					case Spell.SpellType.ArcaneIntellect:
-						break;
+						Spell.CastArcaneIntellect(this, index);
+						return;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}

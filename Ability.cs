@@ -10,7 +10,8 @@ namespace DungeonGame {
 			Berserk,
 			Disarm,
 			Bandage,
-			PowerAura
+			PowerAura,
+			WarCry
 		}
 		public enum ArcherAbility {
 			Distance,
@@ -69,6 +70,9 @@ namespace DungeonGame {
 					break;
 				case WarriorAbility.PowerAura:
 					this.ChangeAmount = new ChangeAmount(15, 1, 600);
+					break;
+				case WarriorAbility.WarCry:
+					this.ChangeAmount = new ChangeAmount(-25, 1, 3);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -175,6 +179,31 @@ namespace DungeonGame {
 				player.Abilities[index].ChangeAmount.ChangeCurRound, player.Abilities[index].ChangeAmount.ChangeMaxRound, 
 				1, 1, false));
 		}
+		public static void WarCryAbilityInfo(Player player, int index) {
+			var warCryString = "War Cry Amount: " + -1 * player.Abilities[index].ChangeAmount.Amount;
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(),
+				warCryString);
+			var warCryInfoString = "Opponent's attacks are decreased by " + -1 * player.Abilities[index].ChangeAmount.Amount 
+			                        + " for " + player.Abilities[index].ChangeAmount.ChangeMaxRound + " rounds.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(),
+				warCryInfoString);
+		}
+		public static void UseWarCry(Player player, int index) {
+			player.RagePoints -= player.Abilities[index].RageCost;
+			const string warCryString = "You shout a War Cry, intimidating your opponent, and decreasing incoming damage.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				warCryString);
+			player.Effects.Add(new Effect(player.Abilities[index].Name,
+				Effect.EffectType.ChangeOpponentDamage, player.Abilities[index].ChangeAmount.Amount,
+				player.Abilities[index].ChangeAmount.ChangeCurRound, player.Abilities[index].ChangeAmount.ChangeMaxRound, 
+				1, 1, false));
+		}
 		public static void StunAbilityInfo(Player player, int index) {
 			var abilityDmgString = "Instant Damage: " + player.Abilities[index].Stun.DamageAmount;
 			OutputHandler.Display.StoreUserOutput(
@@ -245,7 +274,7 @@ namespace DungeonGame {
 		public static void UseBerserkAbility(Player player, int index) {
 			DeductAbilityCost(player, index);
 			player.Effects.Add(new Effect(player.Abilities[index].Name + " Damage Increase",
-				Effect.EffectType.ChangeDamage, player.Abilities[index].Offensive.Amount,
+				Effect.EffectType.ChangePlayerDamage, player.Abilities[index].Offensive.Amount,
 				player.Abilities[index].ChangeAmount.ChangeCurRound, player.Abilities[index].ChangeAmount.ChangeMaxRound, 
 				1, 1, false));
 			player.Effects.Add(new Effect(player.Abilities[index].Name + " Armor Decrease",

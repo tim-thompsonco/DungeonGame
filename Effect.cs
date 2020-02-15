@@ -2,7 +2,8 @@
 	public class Effect {
 		public enum EffectType {
 			Healing,
-			ChangeDamage,
+			ChangePlayerDamage,
+			ChangeOpponentDamage,
 			ChangeArmor,
 			AbsorbDamage,
 			OnFire,
@@ -83,7 +84,20 @@
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void ChangeDamageRound(Player player) {
+		public void ChangeOpponentDamageRound(Player player) {
+			if (this.IsEffectExpired || player.InCombat == false) return;
+			this.EffectCurRound += 1;
+			var changeDmgString = this.EffectAmountOverTime > 0 ?
+				"Incoming damage is increased by " + this.EffectAmountOverTime + "."
+				: "Incoming damage is decreased by " + this.EffectAmountOverTime + ".";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				changeDmgString);
+			if (this.EffectCurRound <= this.EffectMaxRound) return;
+			this.IsEffectExpired = true;
+		}
+		public void ChangePlayerDamageRound(Player player) {
 			if (this.IsEffectExpired || player.InCombat == false) return;
 			this.EffectCurRound += 1;
 			var changeDmgString = this.EffectAmountOverTime > 0 ?

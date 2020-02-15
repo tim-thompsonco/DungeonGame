@@ -35,6 +35,8 @@ namespace DungeonGame {
 					this.TrainableAbilities.Add(new Ability(
 						"bandage", 25, 1, Ability.WarriorAbility.Bandage, 2));
 					this.TrainableAbilities.Add(new Ability(
+						"war cry", 50, 1, Ability.WarriorAbility.WarCry, 4));
+					this.TrainableAbilities.Add(new Ability(
 						"power aura", 150, 1, Ability.WarriorAbility.PowerAura, 6));
 					break;
 				case TrainerCategory.Mage:
@@ -436,6 +438,9 @@ namespace DungeonGame {
 								player.Abilities[abilityIndex].Healing.HealAmount += 10;
 								player.Abilities[abilityIndex].Healing.HealOverTime += 5;
 								break;
+							case Ability.ArcherAbility.SwiftAura:
+								player.Abilities[abilityIndex].ChangeAmount.Amount += 5;
+								break;
 							default:
 								throw new ArgumentOutOfRangeException();
 						}
@@ -474,6 +479,12 @@ namespace DungeonGame {
 							case Ability.WarriorAbility.Bandage:
 								player.Abilities[abilityIndex].Healing.HealAmount += 10;
 								player.Abilities[abilityIndex].Healing.HealOverTime += 5;
+								break;
+							case Ability.WarriorAbility.PowerAura:
+								player.Abilities[abilityIndex].ChangeAmount.Amount += 5;
+								break;
+							case Ability.WarriorAbility.WarCry:
+								player.Abilities[abilityIndex].ChangeAmount.Amount += 10;
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();

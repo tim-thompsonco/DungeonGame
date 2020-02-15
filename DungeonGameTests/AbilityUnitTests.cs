@@ -270,5 +270,69 @@ namespace DungeonGameTests {
 			Assert.AreEqual(Settings.FormatInfoText(), defaultEffectOutput.Output[1][0]);
 			Assert.AreEqual("None.", defaultEffectOutput.Output[1][2]);
 		}
+		[Test]
+		public void WarCryAbilityUnitTest() {
+			OutputHandler.Display.ClearUserOutput();
+			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
+			RoomHandler.Rooms = new List<IRoom> {
+				new DungeonRoom(0, 0, 0, false, false, false,
+					false, false, false, false, false, false,
+					false, 1, 1)
+			};
+			player.Abilities.Add(new Ability(
+				"war cry", 50, 1, Ability.WarriorAbility.WarCry, 4));
+			if (RoomHandler.Rooms[0].Monster == null) {
+				RoomHandler.Rooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
+			}
+			var monster = RoomHandler.Rooms[0].Monster;
+			monster.StatReplenishInterval = 9999999; // Disable stat replenish over time method
+			player.InCombat = true;
+			monster.InCombat = true;
+			var input = new[] {"war", "cry"};
+			PlayerHandler.AbilityInfo(player, input);
+			Assert.AreEqual("War Cry", OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual("Rage Cost: 50", OutputHandler.Display.Output[2][2]);
+			Assert.AreEqual("War Cry Amount: 25", OutputHandler.Display.Output[3][2]);
+			Assert.AreEqual("Opponent's attacks are decreased by 25 for 3 rounds.", 
+				OutputHandler.Display.Output[4][2]);
+			OutputHandler.Display.ClearUserOutput();
+			player.UseAbility("war cry");
+			Assert.AreEqual("You shout a War Cry, intimidating your opponent, and decreasing incoming damage.", 
+				OutputHandler.Display.Output[0][2]);
+			var baseAttackDamageM = monster.Attack(player);
+			var attackDamageM = baseAttackDamageM;
+			var indexDamageChange = player.Effects.FindIndex(
+				f => f.EffectGroup == Effect.EffectType.ChangeOpponentDamage);
+			if (indexDamageChange != -1) {
+				var changeDamageAmount = player.Effects[indexDamageChange].EffectAmountOverTime < attackDamageM ? 
+					player.Effects[indexDamageChange].EffectAmountOverTime : attackDamageM;
+				attackDamageM += changeDamageAmount;
+				if (attackDamageM < 0) attackDamageM = 0;
+			}
+			Assert.AreEqual(attackDamageM, baseAttackDamageM - 25 >= 0 ? baseAttackDamageM - 25 : 0);
+			var defaultEffectOutput = OutputHandler.ShowEffects(player);
+			Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
+			Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
+			Assert.AreEqual("(3 rounds) War Cry", defaultEffectOutput.Output[1][2]);
+			for (var i = 0; i < 3; i++) {
+				GameHandler.CheckStatus(player);
+			}
+			OutputHandler.Display.ClearUserOutput();
+			defaultEffectOutput = OutputHandler.ShowEffects(player);
+			Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
+			Assert.AreEqual(Settings.FormatInfoText(), defaultEffectOutput.Output[1][0]);
+			Assert.AreEqual("None.", defaultEffectOutput.Output[1][2]);
+			baseAttackDamageM = monster.Attack(player);
+			indexDamageChange = player.Effects.FindIndex(
+				f => f.EffectGroup == Effect.EffectType.ChangeOpponentDamage);
+			attackDamageM = baseAttackDamageM;
+			if (indexDamageChange != -1) {
+				var changeDamageAmount = player.Effects[indexDamageChange].EffectAmountOverTime < attackDamageM ? 
+					player.Effects[indexDamageChange].EffectAmountOverTime : attackDamageM;
+				attackDamageM -= changeDamageAmount;
+			}
+			Assert.AreEqual(attackDamageM, baseAttackDamageM);
+		}
 	}
 }

@@ -166,7 +166,7 @@ namespace DungeonGame {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
 						break;
-					case Effect.EffectType.ChangeDamage:
+					case Effect.EffectType.ChangePlayerDamage:
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
@@ -277,7 +277,7 @@ namespace DungeonGame {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
 						break;
-					case Effect.EffectType.ChangeDamage:
+					case Effect.EffectType.ChangePlayerDamage:
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
