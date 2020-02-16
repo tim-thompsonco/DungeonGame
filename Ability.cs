@@ -11,7 +11,8 @@ namespace DungeonGame {
 			Disarm,
 			Bandage,
 			PowerAura,
-			WarCry
+			WarCry,
+			Onslaught
 		}
 		public enum ArcherAbility {
 			Distance,
@@ -73,6 +74,9 @@ namespace DungeonGame {
 					break;
 				case WarriorAbility.WarCry:
 					this.ChangeAmount = new ChangeAmount(-25, 1, 3);
+					break;
+				case WarriorAbility.Onslaught:
+					this.Offensive = new Offensive(25);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -139,7 +143,7 @@ namespace DungeonGame {
 				powerAuraInfoString);
 		}
 		public static void UsePowerAura(Player player, int index) {
-			player.RagePoints -= player.Abilities[index].RageCost;
+			DeductAbilityCost(player, index);
 			const string powerAuraString = "You generate a Power Aura around yourself.";
 			player.Strength += player.Abilities[index].ChangeAmount.Amount;
 			PlayerHandler.CalculatePlayerStats(player);
@@ -166,7 +170,7 @@ namespace DungeonGame {
 				swiftAuraInfoString);
 		}
 		public static void UseSwiftAura(Player player, int index) {
-			player.ComboPoints -= player.Abilities[index].ComboCost;
+			DeductAbilityCost(player, index);
 			const string swiftAuraString = "You generate a Swift Aura around yourself.";
 			player.Dexterity += player.Abilities[index].ChangeAmount.Amount;
 			PlayerHandler.CalculatePlayerStats(player);
@@ -193,7 +197,7 @@ namespace DungeonGame {
 				warCryInfoString);
 		}
 		public static void UseWarCry(Player player, int index) {
-			player.RagePoints -= player.Abilities[index].RageCost;
+			DeductAbilityCost(player, index);
 			const string warCryString = "You shout a War Cry, intimidating your opponent, and decreasing incoming damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
@@ -482,6 +486,12 @@ namespace DungeonGame {
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"Two arrows are fired which each cause instant damage. Cost and damage are per arrow.");
+			}
+			if (player.Abilities[index].WarAbilityCategory == WarriorAbility.Onslaught) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatInfoText(),
+					Settings.FormatDefaultBackground(),
+					"Two attacks are launched which each cause instant damage. Cost and damage are per attack.");
 			}
 			if (player.Abilities[index].Offensive.AmountOverTime <= 0) return;
 			var dmgOverTimeString = "Damage Over Time: " + player.Abilities[index].Offensive.AmountOverTime;

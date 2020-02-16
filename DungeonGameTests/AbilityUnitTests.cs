@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DungeonGame;
 using NUnit.Framework;
@@ -333,6 +334,59 @@ namespace DungeonGameTests {
 				attackDamageM -= changeDamageAmount;
 			}
 			Assert.AreEqual(attackDamageM, baseAttackDamageM);
+		}
+		[Test]
+		public void OnslaughtAbilityUnitTest() {
+			OutputHandler.Display.ClearUserOutput();
+			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
+			RoomHandler.Rooms = new List<IRoom> {
+				new DungeonRoom(0, 0, 0, false, false, false,
+					false, false, false, false, false, false,
+					false, 1, 1)
+			};
+			player.Abilities.Add(new Ability(
+				"onslaught", 25, 1, Ability.WarriorAbility.Onslaught, 8));
+			if (RoomHandler.Rooms[0].Monster == null) {
+				RoomHandler.Rooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
+			}
+			var monster = RoomHandler.Rooms[0].Monster;
+			monster.MaxHitPoints = 100;
+			monster.HitPoints = monster.MaxHitPoints;
+			player.MaxRagePoints = 100;
+			player.RagePoints = player.MaxRagePoints;
+			monster.StatReplenishInterval = 9999999; // Disable stat replenish over time method
+			player.InCombat = true;
+			monster.InCombat = true;
+			var input = new[] {"use", "onslaught"};
+			PlayerHandler.AbilityInfo(player, input);
+			Assert.AreEqual("Onslaught", OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual("Rage Cost: 25", OutputHandler.Display.Output[2][2]);
+			Assert.AreEqual("Instant Damage: 25", OutputHandler.Display.Output[3][2]);
+			Assert.AreEqual("Two attacks are launched which each cause instant damage. Cost and damage are per attack.", 
+				OutputHandler.Display.Output[4][2]);
+			OutputHandler.Display.ClearUserOutput();
+			player.UseAbility(monster, InputHandler.ParseInput(input));
+			var index = player.Abilities.FindIndex(
+				f => f.WarAbilityCategory == Ability.WarriorAbility.Onslaught);
+			Assert.AreEqual(monster.HitPoints, 
+				monster.MaxHitPoints - 2 * player.Abilities[index].Offensive.Amount);
+			Assert.AreEqual(player.RagePoints, player.MaxRagePoints - 2 * player.Abilities[index].RageCost);
+			var attackString = "You onslaught the " + monster.Name + " for 25" + " physical damage.";
+			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual(attackString, OutputHandler.Display.Output[1][2]);
+			player.MaxRagePoints = 25;
+			player.RagePoints = player.MaxRagePoints;
+			monster.MaxHitPoints = 100;
+			monster.HitPoints = monster.MaxHitPoints;
+			OutputHandler.Display.ClearUserOutput();
+			player.UseAbility(monster, InputHandler.ParseInput(input));
+			const string outOfRageString = "You didn't have enough rage points for the second attack!";
+			Assert.AreEqual(monster.HitPoints, 
+				monster.MaxHitPoints - player.Abilities[index].Offensive.Amount);
+			Assert.AreEqual(player.RagePoints, player.MaxRagePoints - player.Abilities[index].RageCost);
+			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual(outOfRageString, OutputHandler.Display.Output[1][2]);
 		}
 	}
 }

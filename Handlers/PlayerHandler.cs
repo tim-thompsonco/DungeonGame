@@ -467,6 +467,9 @@ namespace DungeonGame {
 					case Ability.WarriorAbility.WarCry:
 						Ability.WarCryAbilityInfo(player, index);
 						break;
+					case Ability.WarriorAbility.Onslaught:
+						Ability.OffenseDamageAbilityInfo(player, index);
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}

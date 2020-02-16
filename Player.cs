@@ -524,6 +524,19 @@ namespace DungeonGame {
 					case Ability.WarriorAbility.WarCry:
 						Ability.UseWarCry(this, index);
 						return;
+					case Ability.WarriorAbility.Onslaught:
+						for (var i = 0; i < 2; i++) {
+							if (this.RagePoints >= this.Abilities[index].RageCost) {
+								Ability.UseOffenseDamageAbility(opponent, this, index);
+							}
+							else {
+								OutputHandler.Display.StoreUserOutput(
+									Settings.FormatAttackFailText(),
+									Settings.FormatDefaultBackground(),
+									"You didn't have enough rage points for the second attack!");
+							}
+						}
+						return;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}

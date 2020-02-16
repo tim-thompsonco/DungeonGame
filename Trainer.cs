@@ -38,6 +38,8 @@ namespace DungeonGame {
 						"war cry", 50, 1, Ability.WarriorAbility.WarCry, 4));
 					this.TrainableAbilities.Add(new Ability(
 						"power aura", 150, 1, Ability.WarriorAbility.PowerAura, 6));
+					this.TrainableAbilities.Add(new Ability(
+						"onslaught", 25, 1, Ability.WarriorAbility.Onslaught, 8));
 					break;
 				case TrainerCategory.Mage:
 					this.TrainableSpells = new List<Spell>();
