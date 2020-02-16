@@ -39,7 +39,7 @@
 
 <h2>Built With</h2>
 
-<p>IntelliJ Rider</p>
+<p>JetBrains Rider</p>
 <p>Jira</p>
 
 <h2>Versioning</h2>
