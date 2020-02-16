@@ -29,6 +29,8 @@ namespace DungeonGame {
 						"bandage", 25, 1, Ability.ArcherAbility.Bandage, 2));
 					this.TrainableAbilities.Add(new Ability(
 						"swift aura", 150, 1, Ability.ArcherAbility.SwiftAura, 6));
+					this.TrainableAbilities.Add(new Ability(
+						"immolating arrow", 35, 1, Ability.ArcherAbility.ImmolatingArrow, 8));
 					break;
 				case TrainerCategory.Warrior:
 					this.TrainableAbilities = new List<Ability>();

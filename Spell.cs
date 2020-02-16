@@ -33,7 +33,8 @@ namespace DungeonGame {
 			this.MinLevel = minLevel;
 			switch(this.SpellCategory) {
 				case SpellType.Fireball:
-					this.Offensive = new Offensive(25, 5, 1, 3);
+					this.Offensive = new Offensive(
+						25, 5, 1, 3, Offensive.OffensiveType.Fire);
 					break;
 				case SpellType.Frostbolt:
 					this.Offensive = new Offensive(15, 1, 2);

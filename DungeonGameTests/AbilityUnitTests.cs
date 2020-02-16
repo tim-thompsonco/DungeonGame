@@ -388,5 +388,59 @@ namespace DungeonGameTests {
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual(outOfRageString, OutputHandler.Display.Output[1][2]);
 		}
+		[Test]
+		public void ImmolatingArrowAbilityUnitTest() {
+			var player = new Player("placeholder", Player.PlayerClassType.Archer);
+			RoomHandler.Rooms = new List<IRoom> {
+				new DungeonRoom(0, 0, 0, false, false, false,
+					false, false, false, false, false, false,
+					false, 1, 1)
+			};
+			GearHandler.EquipInitialGear(player);
+			OutputHandler.Display.ClearUserOutput();
+			player.PlayerWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
+			player.Abilities.Add(new Ability(
+				"immolating arrow", 35, 1, Ability.ArcherAbility.ImmolatingArrow, 8));
+			if (RoomHandler.Rooms[0].Monster == null) {
+				RoomHandler.Rooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
+			}
+			var monster = RoomHandler.Rooms[0].Monster;
+			monster.MaxHitPoints = 100;
+			monster.HitPoints = monster.MaxHitPoints;
+			player.MaxRagePoints = 100;
+			player.RagePoints = player.MaxRagePoints;
+			monster.StatReplenishInterval = 9999999; // Disable stat replenish over time method
+			player.InCombat = true;
+			monster.InCombat = true;
+			var input = new[] {"use", "immolating", "arrow"};
+			PlayerHandler.AbilityInfo(player, input);
+			Assert.AreEqual("Immolating Arrow", OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual("Combo Cost: 35", OutputHandler.Display.Output[2][2]);
+			Assert.AreEqual("Instant Damage: 25", OutputHandler.Display.Output[3][2]);
+			Assert.AreEqual("Damage Over Time: 5",OutputHandler.Display.Output[4][2]);
+			Assert.AreEqual("Fire damage over time for 3 rounds.", OutputHandler.Display.Output[5][2]);
+			player.UseAbility(monster, InputHandler.ParseInput(input));
+			var attackString = "Your immolating arrow hit the " + monster.Name + " for 25 physical damage.";
+			Assert.AreEqual(attackString,OutputHandler.Display.Output[6][2]);
+			var index = player.Abilities.FindIndex(
+				f => f.ArcAbilityCategory == Ability.ArcherAbility.ImmolatingArrow);
+			Assert.AreEqual(monster.HitPoints, 
+				monster.MaxHitPoints - player.Abilities[index].Offensive.Amount);
+			OutputHandler.Display.ClearUserOutput();
+			Assert.AreEqual(Effect.EffectType.OnFire, monster.Effects[0].EffectGroup);
+			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
+			for (var i = 0; i < 3; i++) {
+				var baseHitPoints = monster.HitPoints;
+				monster.Effects[0].OnFireRound(monster);
+				Assert.AreEqual(i + 2, monster.Effects[0].EffectCurRound);
+				Assert.AreEqual(monster.HitPoints, baseHitPoints - monster.Effects[0].EffectAmountOverTime);
+				var burnString = "The " + monster.Name + " burns for " + 
+				                 monster.Effects[0].EffectAmountOverTime + " fire damage.";
+				Assert.AreEqual(burnString, OutputHandler.Display.Output[i][2]);
+				GameHandler.RemovedExpiredEffects(monster);
+			}
+			Assert.AreEqual(false, monster.Effects.Any());
+		}
 	}
 }

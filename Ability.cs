@@ -22,7 +22,8 @@ namespace DungeonGame {
 			Double,
 			Wound,
 			Bandage,
-			SwiftAura
+			SwiftAura,
+			ImmolatingArrow
 		}
 		public string Name { get; set; }
 		public ArcherAbility ArcAbilityCategory { get; set; }
@@ -51,7 +52,8 @@ namespace DungeonGame {
 					this.Offensive = new Offensive(50);
 					break;
 				case WarriorAbility.Rend:
-					this.Offensive = new Offensive(15, 5, 1, 3);
+					this.Offensive = new Offensive(
+						15, 5, 1, 3, Offensive.OffensiveType.Bleed);
 					break;
 				case WarriorAbility.Charge:
 					this.Stun = new Stun(15, 1, 2);
@@ -93,7 +95,8 @@ namespace DungeonGame {
 					this.Offensive = new Offensive(25, 50);
 					break;
 				case ArcherAbility.Gut:
-					this.Offensive = new Offensive(15, 5, 1, 3);
+					this.Offensive = new Offensive(
+						15, 5, 1, 3, Offensive.OffensiveType.Bleed);
 					break;
 				case ArcherAbility.Precise:
 					this.Offensive = new Offensive(50);
@@ -102,7 +105,8 @@ namespace DungeonGame {
 					this.Stun = new Stun(15, 1, 3);
 					break;
 				case ArcherAbility.Wound:
-					this.Offensive = new Offensive(5, 10, 1, 5);
+					this.Offensive = new Offensive(
+						5, 10, 1, 5, Offensive.OffensiveType.Bleed);
 					break;
 				case ArcherAbility.Double:
 					this.Offensive = new Offensive(25);
@@ -112,6 +116,10 @@ namespace DungeonGame {
 					break;
 				case ArcherAbility.SwiftAura:
 					this.ChangeAmount = new ChangeAmount(15, 1, 600);
+					break;
+				case ArcherAbility.ImmolatingArrow:
+					this.Offensive = new Offensive(
+						25, 5, 1, 3, Offensive.OffensiveType.Fire);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -499,12 +507,28 @@ namespace DungeonGame {
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				dmgOverTimeString);
-			var bleedOverTimeString = "Bleeding damage over time for " + 
-			                          player.Abilities[index].Offensive.AmountMaxRounds + " rounds.";
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatInfoText(),
-				Settings.FormatDefaultBackground(),
-				bleedOverTimeString);
+			switch (player.Abilities[index].Offensive.OffensiveGroup) {
+				case Offensive.OffensiveType.Normal:
+					break;
+				case Offensive.OffensiveType.Bleed:
+					var bleedOverTimeString = "Bleeding damage over time for " + 
+					                          player.Abilities[index].Offensive.AmountMaxRounds + " rounds.";
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatInfoText(),
+						Settings.FormatDefaultBackground(),
+						bleedOverTimeString);
+					break;
+				case Offensive.OffensiveType.Fire:
+					var onFireString = "Fire damage over time for " + 
+					                   player.Abilities[index].Offensive.AmountMaxRounds + " rounds.";
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatInfoText(),
+						Settings.FormatDefaultBackground(),
+						onFireString);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 		public static void UseOffenseDamageAbility(Monster opponent, Player player, int index) {
 			if (player.PlayerClass == Player.PlayerClassType.Archer && OutOfArrows(player)) {
@@ -524,25 +548,43 @@ namespace DungeonGame {
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					abilityFailString);
+				return;
 			}
-			else {
-				var abilitySuccessString = "You " + player.Abilities[index].Name + " the " + opponent.Name + " for " +
-				                           abilityDamage + " physical damage.";
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackSuccessText(),
-					Settings.FormatDefaultBackground(),
-					abilitySuccessString);
-				opponent.TakeDamage(abilityDamage);
-				if (player.Abilities[index].Offensive.AmountOverTime <= 0) return;
-				var bleedString = "The " + opponent.Name + " is bleeding!";
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackSuccessText(),
-					Settings.FormatDefaultBackground(),
-					bleedString);
-				opponent.Effects.Add(new Effect(player.Abilities[index].Name,
-					Effect.EffectType.Bleeding, player.Abilities[index].Offensive.AmountOverTime, 
-					player.Abilities[index].Offensive.AmountCurRounds, player.Abilities[index].Offensive.AmountMaxRounds, 
-					1, 1, true));
+			opponent.TakeDamage(abilityDamage);
+			var abilitySuccessString = "Your " + player.Abilities[index].Name + " hit the " + opponent.Name + " for " +
+			                           abilityDamage + " physical damage.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				abilitySuccessString);
+			if (player.Abilities[index].Offensive.AmountOverTime <= 0) return;
+			switch (player.Abilities[index].Offensive.OffensiveGroup) {
+				case Offensive.OffensiveType.Normal:
+					break;
+				case Offensive.OffensiveType.Bleed:
+					var bleedString = "The " + opponent.Name + " is bleeding!";
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatAttackSuccessText(),
+						Settings.FormatDefaultBackground(),
+						bleedString);
+					opponent.Effects.Add(new Effect(player.Abilities[index].Name,
+						Effect.EffectType.Bleeding, player.Abilities[index].Offensive.AmountOverTime, 
+						player.Abilities[index].Offensive.AmountCurRounds, player.Abilities[index].Offensive.AmountMaxRounds, 
+						1, 1, true));
+					break;
+				case Offensive.OffensiveType.Fire:
+					var onFireString = "The " + opponent.Name + " bursts into flame!";
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatOnFireText(),
+						Settings.FormatDefaultBackground(),
+						onFireString);
+					opponent.Effects.Add(new Effect(player.Abilities[index].Name,
+						Effect.EffectType.OnFire, player.Abilities[index].Offensive.AmountOverTime, 
+						player.Abilities[index].Offensive.AmountCurRounds, player.Abilities[index].Offensive.AmountMaxRounds, 
+						1, 1, true));
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
 		}
 	}

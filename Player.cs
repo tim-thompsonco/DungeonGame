@@ -579,6 +579,9 @@ namespace DungeonGame {
 					case Ability.ArcherAbility.SwiftAura:
 						Ability.UseSwiftAura(this, index);
 						return;
+					case Ability.ArcherAbility.ImmolatingArrow:
+						Ability.UseOffenseDamageAbility(opponent, this, index);
+						return;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}

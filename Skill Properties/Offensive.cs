@@ -1,5 +1,11 @@
 namespace DungeonGame {
 	public class Offensive {
+		public enum OffensiveType {
+			Normal,
+			Bleed,
+			Fire
+		}
+		public OffensiveType OffensiveGroup { get; set; }
 		public int Amount { get; set;  }
 		public int ChanceToSucceed { get; set; }
 		public int AmountOverTime { get; set;  }
@@ -20,11 +26,13 @@ namespace DungeonGame {
 			this.AmountCurRounds = amountCurRounds;
 			this.AmountMaxRounds = amountMaxRounds;
 		}
-		public Offensive(int amount, int amountOverTime, int amountCurRounds, int amountMaxRounds) {
+		public Offensive(int amount, int amountOverTime, int amountCurRounds, int amountMaxRounds, 
+			OffensiveType offenseType) {
 			this.Amount = amount;
 			this.AmountOverTime = amountOverTime;
 			this.AmountCurRounds = amountCurRounds;
 			this.AmountMaxRounds = amountMaxRounds;
+			this.OffensiveGroup = offenseType;
 		}
 	}
 }
