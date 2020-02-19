@@ -372,7 +372,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(monster.HitPoints, 
 				monster.MaxHitPoints - 2 * player.Abilities[index].Offensive.Amount);
 			Assert.AreEqual(player.RagePoints, player.MaxRagePoints - 2 * player.Abilities[index].RageCost);
-			var attackString = "You onslaught the " + monster.Name + " for 25" + " physical damage.";
+			var attackString = "Your onslaught hit the " + monster.Name + " for 25" + " physical damage.";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[1][2]);
 			player.MaxRagePoints = 25;

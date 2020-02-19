@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace DungeonGame {
@@ -217,6 +219,52 @@ namespace DungeonGame {
 		}
 		public static bool IsWholeNumber(string value) {
 			return value.All(char.IsNumber);
+		}
+		public static Player LoadPlayer() {
+			Player player;
+			try {
+				player = Newtonsoft.Json.JsonConvert.DeserializeObject<Player>(File.ReadAllText(
+					"playersave.json"), new Newtonsoft.Json.JsonSerializerSettings {
+					TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
+					NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+				});
+			}
+			catch (FileNotFoundException) {
+				player = new PlayerBuilder().BuildNewPlayer();
+				GearHandler.EquipInitialGear(player);
+				/* Set initial room condition for player
+				Begin game by putting player at coords 0, 7, 0, town entrance */
+				RoomHandler.SetPlayerLocation(player, 0, 7, 0);
+			}
+			return player;
+		}
+		public static void LoadGame() {
+			try {
+				RoomHandler.Rooms = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IRoom>>(File.ReadAllText(
+					"gamesave.json"), new Newtonsoft.Json.JsonSerializerSettings {
+					TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
+					NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+				});
+				// Insert blank space before game reload info for formatting
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatGeneralInfoText(),
+					Settings.FormatDefaultBackground(),
+					"");
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatGeneralInfoText(), 
+					Settings.FormatDefaultBackground(), 
+					"Reloading your saved game.");
+				// Insert blank space after game reload info for formatting
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatGeneralInfoText(),
+					Settings.FormatDefaultBackground(),
+					"");
+			}
+			catch (FileNotFoundException) {
+				// Create dungeon
+				RoomHandler.Rooms = new RoomBuilder(
+					200, 10,0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
+			}
 		}
 	}
 }

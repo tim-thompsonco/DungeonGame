@@ -17,44 +17,12 @@ namespace DungeonGame {
 			}
 			// Game loading commands
 			Messages.GameIntro();
-			Player player;
-			try {
-				player = Newtonsoft.Json.JsonConvert.DeserializeObject<Player>(File.ReadAllText(
-					"playersave.json"), new Newtonsoft.Json.JsonSerializerSettings {
-					TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
-					NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
-				});
-				RoomHandler.Rooms = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IRoom>>(File.ReadAllText(
-					"gamesave.json"), new Newtonsoft.Json.JsonSerializerSettings {
-					TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
-					NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
-				});
-				// Insert blank space before game reload info for formatting
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatGeneralInfoText(),
-					Settings.FormatDefaultBackground(),
-					"");
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatGeneralInfoText(), 
-					Settings.FormatDefaultBackground(), 
-					"Reloading your saved game.");
-				// Insert blank space after game reload info for formatting
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatGeneralInfoText(),
-					Settings.FormatDefaultBackground(),
-					"");
-			}
-			catch (FileNotFoundException) {
-				// Create dungeon
-				RoomHandler.Rooms = new RoomBuilder(
-					200, 10,0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
-				player = new PlayerBuilder().BuildNewPlayer();
-				GearHandler.EquipInitialGear(player);
-				// Begin game by putting player at coords 0, 7, 0, town entrance
-				RoomHandler.SetPlayerLocation(player, 0, 7, 0);
-			}
-			/* Set initial room condition for player
-				On loading game, display room that player starts in */
+			/* Load game if save game exists, and if not, build new game
+			this method must run first so rooms exists to place player in */
+			GameHandler.LoadGame();
+			// Load player if save game exists, and if not, create a new player
+			var player = GameHandler.LoadPlayer();
+			// On loading game, display room that player starts in
 			OutputHandler.ShowUserOutput(player);
 			OutputHandler.Display.ClearUserOutput();
 			// Check every second to see if any effects expired or events need to execute
