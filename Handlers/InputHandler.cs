@@ -119,7 +119,7 @@ namespace DungeonGame {
 							player.UseAbility(input);
 						}
 						if (input[1] != null) {
-							player.UseAbility(ParseInput(input));
+							player.UseAbility(input);
 						}
 					}
 					catch (IndexOutOfRangeException) {

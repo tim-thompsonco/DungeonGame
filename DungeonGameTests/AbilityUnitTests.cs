@@ -9,6 +9,7 @@ namespace DungeonGameTests {
 		[Test]
 		public void BandageAbilityUnitTests() {
 			var player = new Player("placeholder", Player.PlayerClassType.Archer);
+			GearHandler.EquipInitialGear(player);
 			player.Abilities.Add(
 				new Ability("use bandage", 25, 1, Ability.ArcherAbility.Bandage, 1));
 			player.HitPoints = 10;
@@ -18,8 +19,8 @@ namespace DungeonGameTests {
 			var input = new [] {"use", "bandage"};
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("bandage", abilityName);
-			player.UseAbility(abilityName);
-			player.UseAbility(abilityName);
+			player.UseAbility(input);
+			player.UseAbility(input);
 			Assert.AreEqual(60, player.HitPoints);
 			for (var i = 0; i < 5; i++) {
 				player.Effects[0].HealingRound(player);
@@ -33,8 +34,8 @@ namespace DungeonGameTests {
 			var inputTwo = new [] {"use", "bandage"};
 			var abilityNameTwo = InputHandler.ParseInput(inputTwo);
 			Assert.AreEqual("bandage", abilityName);
-			player.UseAbility(abilityNameTwo);
-			player.UseAbility(abilityNameTwo);
+			player.UseAbility(inputTwo);
+			player.UseAbility(inputTwo);
 			Assert.AreEqual(60, player.HitPoints);
 			foreach (var effect in player.Effects.Where(effect => effect.EffectGroup == Effect.EffectType.Healing)) {
 				while (!effect.IsEffectExpired) {
@@ -60,7 +61,7 @@ namespace DungeonGameTests {
 			var input = new [] {"use", "charge"};
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("charge", abilityName);
-			player.UseAbility(monster, abilityName);
+			player.UseAbility(monster, input);
 			Assert.AreEqual(
 				true, monster.Effects[0].EffectGroup == Effect.EffectType.Stunned);
 			Assert.AreEqual(2, monster.Effects[0].EffectMaxRound);
@@ -87,7 +88,7 @@ namespace DungeonGameTests {
 			var input = new [] {"use", "rend"};
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("rend", abilityName);
-			player.UseAbility(monster, abilityName);
+			player.UseAbility(monster, input);
 			Assert.AreEqual(
 				true, monster.Effects[0].EffectGroup == Effect.EffectType.Bleeding);
 			Assert.AreEqual(85, monster.HitPoints);
@@ -118,7 +119,7 @@ namespace DungeonGameTests {
 		var input = new [] {"use", "berserk"};
 		var abilityName = InputHandler.ParseInput(input);
 		Assert.AreEqual("berserk", abilityName);
-		player.UseAbility(monster, abilityName);
+		player.UseAbility(monster, input);
 		Assert.AreEqual(2, player.Effects.Count);
 		player.InCombat = false;
 		GameHandler.CheckStatus(player);
@@ -146,7 +147,7 @@ namespace DungeonGameTests {
 			var input = new [] {"use", "stun"};
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("stun", abilityName);
-			player.UseAbility(monster, abilityName);
+			player.UseAbility(monster, input);
 			Assert.AreEqual(35, monster.HitPoints);
 			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
 			for (var i = 2; i < 5; i++) {
@@ -159,7 +160,7 @@ namespace DungeonGameTests {
 			var inputTwo = new [] {"use", "gut"};
 			var abilityNameTwo = InputHandler.ParseInput(inputTwo);
 			Assert.AreEqual("gut", abilityNameTwo);
-			player.UseAbility(monster, abilityNameTwo);
+			player.UseAbility(monster, inputTwo);
 			Assert.AreEqual(65, monster.HitPoints);
 			Assert.AreEqual(1, monster.Effects[0].EffectCurRound);
 			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
@@ -175,6 +176,8 @@ namespace DungeonGameTests {
 		public void SwiftAuraAbilityUnitTest() {
 			OutputHandler.Display.ClearUserOutput();
 			var player = new Player("placeholder", Player.PlayerClassType.Archer);
+			GearHandler.EquipInitialGear(player);
+			OutputHandler.Display.ClearUserOutput();
 			RoomHandler.Rooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
 					false, false, false, false, false, false,
@@ -182,7 +185,7 @@ namespace DungeonGameTests {
 			};
 			player.Abilities.Add(new Ability(
 				"swift aura", 150, 1, Ability.ArcherAbility.SwiftAura, 6));
-			var input = new[] {"swift", "aura"};
+			var input = new [] {"use", "swift", "aura"};
 			PlayerHandler.AbilityInfo(player, input);
 			Assert.AreEqual("Swift Aura", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -193,9 +196,8 @@ namespace DungeonGameTests {
 			var baseDex = player.Dexterity;
 			var baseCombo = player.ComboPoints;
 			var baseMaxCombo = player.MaxComboPoints;
-			const string inputName = "swift aura";
-			var abilityIndex = player.Abilities.FindIndex(f => f.Name == inputName);
-			player.UseAbility(inputName);
+			var abilityIndex = player.Abilities.FindIndex(f => f.Name == InputHandler.ParseInput(input));
+			player.UseAbility(input);
 			Assert.AreEqual(player.Dexterity, baseDex + player.Abilities[abilityIndex].ChangeAmount.Amount);
 			Assert.AreEqual(
 				baseCombo - player.Abilities[abilityIndex].ComboCost, player.ComboPoints);
@@ -232,7 +234,7 @@ namespace DungeonGameTests {
 			};
 			player.Abilities.Add(new Ability(
 				"power aura", 150, 1, Ability.WarriorAbility.PowerAura, 6));
-			var input = new[] {"power", "aura"};
+			var input = new [] {"use", "power", "aura"};
 			PlayerHandler.AbilityInfo(player, input);
 			Assert.AreEqual("Power Aura", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -243,9 +245,8 @@ namespace DungeonGameTests {
 			var baseStr = player.Strength;
 			var baseRage = player.RagePoints;
 			var baseMaxRage = player.MaxRagePoints;
-			const string inputName = "power aura";
-			var abilityIndex = player.Abilities.FindIndex(f => f.Name == inputName);
-			player.UseAbility(inputName);
+			var abilityIndex = player.Abilities.FindIndex(f => f.Name == InputHandler.ParseInput(input));
+			player.UseAbility(input);
 			Assert.AreEqual(player.Strength, baseStr + player.Abilities[abilityIndex].ChangeAmount.Amount);
 			Assert.AreEqual(
 				baseRage - player.Abilities[abilityIndex].RageCost, player.RagePoints);
@@ -289,7 +290,7 @@ namespace DungeonGameTests {
 			monster.StatReplenishInterval = 9999999; // Disable stat replenish over time method
 			player.InCombat = true;
 			monster.InCombat = true;
-			var input = new[] {"war", "cry"};
+			var input = new[] {"use", "war", "cry"};
 			PlayerHandler.AbilityInfo(player, input);
 			Assert.AreEqual("War Cry", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -298,7 +299,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("Opponent's attacks are decreased by 25 for 3 rounds.", 
 				OutputHandler.Display.Output[4][2]);
 			OutputHandler.Display.ClearUserOutput();
-			player.UseAbility("war cry");
+			player.UseAbility(input);
 			Assert.AreEqual("You shout a War Cry, intimidating your opponent, and decreasing incoming damage.", 
 				OutputHandler.Display.Output[0][2]);
 			var baseAttackDamageM = monster.Attack(player);
@@ -366,7 +367,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("Two attacks are launched which each cause instant damage. Cost and damage are per attack.", 
 				OutputHandler.Display.Output[4][2]);
 			OutputHandler.Display.ClearUserOutput();
-			player.UseAbility(monster, InputHandler.ParseInput(input));
+			player.UseAbility(monster, input);
 			var index = player.Abilities.FindIndex(
 				f => f.WarAbilityCategory == Ability.WarriorAbility.Onslaught);
 			Assert.AreEqual(monster.HitPoints, 
@@ -380,7 +381,7 @@ namespace DungeonGameTests {
 			monster.MaxHitPoints = 100;
 			monster.HitPoints = monster.MaxHitPoints;
 			OutputHandler.Display.ClearUserOutput();
-			player.UseAbility(monster, InputHandler.ParseInput(input));
+			player.UseAbility(monster, input);
 			const string outOfRageString = "You didn't have enough rage points for the second attack!";
 			Assert.AreEqual(monster.HitPoints, 
 				monster.MaxHitPoints - player.Abilities[index].Offensive.Amount);
@@ -391,6 +392,7 @@ namespace DungeonGameTests {
 		[Test]
 		public void ImmolatingArrowAbilityUnitTest() {
 			var player = new Player("placeholder", Player.PlayerClassType.Archer);
+			GearHandler.EquipInitialGear(player);
 			RoomHandler.Rooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
 					false, false, false, false, false, false,
@@ -420,7 +422,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("Instant Damage: 25", OutputHandler.Display.Output[3][2]);
 			Assert.AreEqual("Damage Over Time: 5",OutputHandler.Display.Output[4][2]);
 			Assert.AreEqual("Fire damage over time for 3 rounds.", OutputHandler.Display.Output[5][2]);
-			player.UseAbility(monster, InputHandler.ParseInput(input));
+			player.UseAbility(monster, input);
 			var attackString = "Your immolating arrow hit the " + monster.Name + " for 25 physical damage.";
 			Assert.AreEqual(attackString,OutputHandler.Display.Output[6][2]);
 			var index = player.Abilities.FindIndex(

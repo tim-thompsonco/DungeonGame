@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace DungeonGame {
@@ -366,70 +367,13 @@ namespace DungeonGame {
 			}
 		}
 		public void UseAbility(string[] input) {
+			var inputName = new StringBuilder();
+			for (var i = 1; i < input.Length; i++) {
+				inputName.Append(input[i]);
+			}
 			var index = this.Abilities.FindIndex(
-				f => f.Name == input[1] || f.Name.Contains(input[1]));
+				f => f.Name == inputName.ToString() || f.Name.Contains(input[1]));
 			var direction = input.Last();
-			if (index != -1 && 
-			    this.RagePoints >= this.Abilities[index].RageCost && 
-			    this.PlayerClass == PlayerClassType.Warrior) {
-				switch (this.Abilities[index].WarAbilityCategory) {
-					case Ability.WarriorAbility.Slash:
-						return;
-					case Ability.WarriorAbility.Rend:
-						return;
-					case Ability.WarriorAbility.Charge:
-						return;
-					case Ability.WarriorAbility.Block:
-						return;
-					case Ability.WarriorAbility.Berserk:
-						return;
-					case Ability.WarriorAbility.Disarm:
-						return;
-					case Ability.WarriorAbility.Bandage:
-						break;
-					case Ability.WarriorAbility.PowerAura:
-						break;
-					case Ability.WarriorAbility.WarCry:
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
-			if (index != -1 &&
-			    this.ComboPoints >= this.Abilities[index].ComboCost && 
-			    this.PlayerClass == PlayerClassType.Archer && 
-			    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
-				switch (this.Abilities[index].ArcAbilityCategory) {
-					case Ability.ArcherAbility.Distance:
-						Ability.UseDistanceAbility(this, index, direction);
-						return;
-					case Ability.ArcherAbility.Gut:
-						return;
-					case Ability.ArcherAbility.Precise:
-						return;
-					case Ability.ArcherAbility.Stun:
-						return;
-					case Ability.ArcherAbility.Double:
-						return;
-					case Ability.ArcherAbility.Wound:
-						return;
-					case Ability.ArcherAbility.Bandage:
-						break;
-					case Ability.ArcherAbility.SwiftAura:
-						Ability.UseSwiftAura(this, index);
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
-			if (index != -1) {
-				throw new InvalidOperationException();
-			}
-			throw new IndexOutOfRangeException();
-		}
-		public void UseAbility(string inputName) {
-			var index = this.Abilities.FindIndex(
-				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (index != -1 && 
 			    this.RagePoints >= this.Abilities[index].RageCost && 
 			    this.PlayerClass == PlayerClassType.Warrior) {
@@ -455,15 +399,19 @@ namespace DungeonGame {
 					case Ability.WarriorAbility.WarCry:
 						Ability.UseWarCry(this, index);
 						return;
+					case Ability.WarriorAbility.Onslaught:
+						return;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 			}
 			if (index != -1 &&
-			    this.ComboPoints >= this.Abilities[index].ComboCost &&
-			    this.PlayerClass == PlayerClassType.Archer) {
+			    this.ComboPoints >= this.Abilities[index].ComboCost && 
+			    this.PlayerClass == PlayerClassType.Archer && 
+			    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
 				switch (this.Abilities[index].ArcAbilityCategory) {
 					case Ability.ArcherAbility.Distance:
+						Ability.UseDistanceAbility(this, index, direction);
 						return;
 					case Ability.ArcherAbility.Gut:
 						return;
@@ -481,6 +429,8 @@ namespace DungeonGame {
 					case Ability.ArcherAbility.SwiftAura:
 						Ability.UseSwiftAura(this, index);
 						return;
+					case Ability.ArcherAbility.ImmolatingArrow:
+						return;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -490,9 +440,14 @@ namespace DungeonGame {
 			}
 			throw new IndexOutOfRangeException();
 		}
-		public void UseAbility(Monster opponent, string inputName) {
+		public void UseAbility(Monster opponent, string[] input) {
+			var inputName = new StringBuilder();
+			for (var i = 1; i < input.Length; i++) {
+				inputName.Append(input[i]);
+				if (i != input.Length - 1) inputName.Append(" ");
+			}
 			var index = this.Abilities.FindIndex(
-				f => f.Name == inputName || f.Name.Contains(inputName));
+				f => f.Name == inputName.ToString() || f.Name.Contains(inputName.ToString()));
 			if (index != -1 && 
 			    this.RagePoints >= this.Abilities[index].RageCost && 
 			    this.PlayerClass == PlayerClassType.Warrior) {

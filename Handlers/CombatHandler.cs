@@ -296,12 +296,10 @@ namespace DungeonGame {
 				case "use":
 					try {
 						if (this.Input[1] != null && this.Input[1] != "bandage") {
-							var abilityName = InputHandler.ParseInput(this.Input);
-							this.Player.UseAbility(this.Opponent, abilityName);
+							this.Player.UseAbility(this.Opponent, this.Input);
 						}
 						if (this.Input[1] != null && this.Input[1] == "bandage") {
-							var abilityName = InputHandler.ParseInput(this.Input);
-							this.Player.UseAbility(abilityName);
+							this.Player.UseAbility(this.Input);
 						}
 					}
 					catch (IndexOutOfRangeException) {
