@@ -271,6 +271,7 @@ namespace DungeonGame {
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have that spell.");
+						return false;
 					}
 					catch (NullReferenceException) {
 						if (this.Player.PlayerClass != Player.PlayerClassType.Mage) {
@@ -278,6 +279,7 @@ namespace DungeonGame {
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't cast spells. You're not a mage!");
+							return false;
 						}
 					}
 					catch (InvalidOperationException) {
@@ -291,6 +293,7 @@ namespace DungeonGame {
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You do not have enough mana to cast that spell!");
+						return false;
 					}
 					break;
 				case "use":
@@ -307,12 +310,14 @@ namespace DungeonGame {
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have that ability.");
+						return false;
 					}
 					catch (ArgumentOutOfRangeException) {
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have that ability.");
+						return false;
 					}
 					catch (NullReferenceException) {
 						if (this.Player.PlayerClass == Player.PlayerClassType.Mage) {
@@ -320,6 +325,7 @@ namespace DungeonGame {
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't use abilities. You're not a warrior or archer!");
+							return false;
 						}
 					}
 					catch (InvalidOperationException) {
@@ -353,6 +359,7 @@ namespace DungeonGame {
 							default:
 								throw new ArgumentOutOfRangeException();
 						}
+						return false;
 					}
 					break;
 				case "equip":
@@ -371,6 +378,7 @@ namespace DungeonGame {
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You can't drink that!");
+						return false;
 					}
 					break;
 				case "reload":
@@ -391,6 +399,7 @@ namespace DungeonGame {
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"List what?");
+								return false;
 							}
 							break;
 						case "spells":
@@ -402,6 +411,7 @@ namespace DungeonGame {
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"List what?");
+								return false;
 							}
 							break;
 					}
@@ -415,19 +425,39 @@ namespace DungeonGame {
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"What ability did you want to know about?");
+						return false;
 					}
-					return false;
+					catch (NullReferenceException) {
+						if (this.Player.PlayerClass == Player.PlayerClassType.Mage) {
+							OutputHandler.Display.StoreUserOutput(
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
+								"You can't use abilities. You're not a warrior or archer!");
+							return false;
+						}
+					}
+					break;
 				case "spell":
 					try {
-						PlayerHandler.SpellInfo(this.Player, this.Input[1]);
+						PlayerHandler.SpellInfo(this.Player, this.Input);
 					}
 					catch (IndexOutOfRangeException) {
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"What spell did you want to know about?");
+						return false;
 					}
-					return false;
+					catch (NullReferenceException) {
+						if (this.Player.PlayerClass != Player.PlayerClassType.Mage) {
+							OutputHandler.Display.StoreUserOutput(
+								Settings.FormatFailureOutputText(),
+								Settings.FormatDefaultBackground(),
+								"You can't use spells. You're not a mage!");
+							return false;
+						}
+					}
+					break;
 				default:
 					Messages.InvalidCommand();
 					return false;

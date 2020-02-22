@@ -106,6 +106,10 @@ namespace DungeonGame {
 						"lightning", 25, 1, Spell.SpellType.Lightning, 1));
 					this.Spellbook.Add(new Spell(
 						"rejuvenate", 25, 1, Spell.SpellType.Rejuvenate, 1));
+					
+					this.Spellbook.Add(new Spell(
+						"frost nova", 40, 1, Spell.SpellType.FrostNova, 1));
+					
 					break;
 				case PlayerClassType.Warrior:
 					for (var i = 0; i < 3; i++) {
@@ -631,6 +635,9 @@ namespace DungeonGame {
 						return;
 					case Spell.SpellType.ArcaneIntellect:
 						Spell.CastArcaneIntellect(this, index);
+						return;
+					case Spell.SpellType.FrostNova:
+						Spell.CastFrostOffense(opponent, this, index);
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();

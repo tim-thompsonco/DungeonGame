@@ -11,7 +11,8 @@ namespace DungeonGame {
 			Diamondskin,
 			TownPortal,
 			Reflect,
-			ArcaneIntellect
+			ArcaneIntellect,
+			FrostNova
 		}
 		public string Name { get; set; }
 		public SpellType SpellCategory { get; set; }
@@ -59,6 +60,9 @@ namespace DungeonGame {
 					break;
 				case SpellType.ArcaneIntellect:
 					this.ChangeAmount = new ChangeAmount(15, 1, 600);
+					break;
+				case SpellType.FrostNova:
+					this.Offensive = new Offensive(15, 1, 2);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -152,13 +156,24 @@ namespace DungeonGame {
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				frostAmountString);
-			var frostInfoString = "Frost damage will freeze opponent for " + 
-			                      player.Spellbook[index].Offensive.AmountMaxRounds + " rounds, increasing subsequent + " +
-			                      "physical, arcane and frost damage by 1.5x.";
+			var frostInfoString = "Frost damage will freeze opponent for " +
+			                      player.Spellbook[index].Offensive.AmountMaxRounds + " rounds.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				frostInfoString);
+			const string frostDmgInfoString = "Frozen opponents take 1.5x physical, arcane and frost damage.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(),
+				Settings.FormatDefaultBackground(),
+				frostDmgInfoString);
+			if (player.Spellbook[index].SpellCategory != SpellType.FrostNova) return;
+			var frostNovaInfoString = "Opponent will be stunned for " + 
+			                          player.Spellbook[index].Offensive.AmountMaxRounds + " rounds.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(),
+				Settings.FormatDefaultBackground(),
+				frostNovaInfoString);
 		}
 		public static void CastFrostOffense(Monster opponent, Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
@@ -215,6 +230,10 @@ namespace DungeonGame {
 				opponent.Effects.Add(new Effect(player.Spellbook[index].Name,Effect.EffectType.Frozen, 
 					player.Spellbook[index].Offensive.AmountCurRounds, player.Spellbook[index].Offensive.AmountMaxRounds, 
 					1.5, 1, true));
+				if (player.Spellbook[index].SpellCategory != SpellType.FrostNova) return;
+				opponent.Effects.Add(new Effect(player.Spellbook[index].Name,Effect.EffectType.Stunned, 
+					player.Spellbook[index].Offensive.AmountCurRounds, player.Spellbook[index].Offensive.AmountMaxRounds, 
+					1, 1, true));
 			}
 		}
 		public static void FireOffenseSpellInfo(Player player, int index) {

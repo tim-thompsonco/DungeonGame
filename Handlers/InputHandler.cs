@@ -212,7 +212,7 @@ namespace DungeonGame {
 					break;
 				case "spell":
 					try {
-						PlayerHandler.SpellInfo(player, input[1]);
+						PlayerHandler.SpellInfo(player, input);
 					}
 					catch (IndexOutOfRangeException) {
 						OutputHandler.Display.StoreUserOutput(

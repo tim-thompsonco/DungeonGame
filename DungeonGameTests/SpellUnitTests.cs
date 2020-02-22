@@ -183,7 +183,8 @@ namespace DungeonGameTests {
 			};
 			player.Spellbook.Add(new Spell(
 				"arcane intellect", 150, 1, Spell.SpellType.ArcaneIntellect, 1));
-			PlayerHandler.SpellInfo(player, "arcane intellect");
+			var infoInput = new [] {"spell", "arcane", "intellect"};
+			PlayerHandler.SpellInfo(player, infoInput);
 			Assert.AreEqual("Arcane Intellect", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
 			Assert.AreEqual("Mana Cost: 150", OutputHandler.Display.Output[2][2]);
@@ -220,6 +221,84 @@ namespace DungeonGameTests {
 			Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
 			Assert.AreEqual(Settings.FormatInfoText(), defaultEffectOutput.Output[1][0]);
 			Assert.AreEqual("None.", defaultEffectOutput.Output[1][2]);
+		}
+		[Test]
+		public void FrostNovaSpellUnitTest() {
+			var player = new Player("placeholder", Player.PlayerClassType.Mage);
+			GearHandler.EquipInitialGear(player);
+			OutputHandler.Display.ClearUserOutput();
+			var spawnedRooms = new List<IRoom> {
+				new DungeonRoom(0, 0, 0, false, false, false,
+					false, false, false, false, false, false,
+					false, 1, 1)
+			};
+			if (spawnedRooms[0].Monster == null) {
+				spawnedRooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
+			}
+			var monster = spawnedRooms[0].Monster;
+			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
+				item.Equipped = false;
+			}
+			player.Spellbook.Add(new Spell(
+				"frost nova", 40, 1, Spell.SpellType.FrostNova, 8));
+			var spellIndex = player.Spellbook.FindIndex(
+				f => f.SpellCategory == Spell.SpellType.FrostNova);
+			monster.HitPoints = 100;
+			var infoInput = new[] {"spell", "frost", "nova"};
+			PlayerHandler.SpellInfo(player, infoInput);
+			Assert.AreEqual("Frost Nova", OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual("Mana Cost: 40", OutputHandler.Display.Output[2][2]);
+			Assert.AreEqual("Instant Damage: 15", OutputHandler.Display.Output[3][2]);
+			Assert.AreEqual("Frost damage will freeze opponent for " +
+			                player.Spellbook[spellIndex].Offensive.AmountMaxRounds + " rounds.",
+				OutputHandler.Display.Output[4][2]);
+			Assert.AreEqual( "Frozen opponents take 1.5x physical, arcane and frost damage.", 
+				OutputHandler.Display.Output[5][2]);
+			Assert.AreEqual("Opponent will be stunned for " + 
+			                player.Spellbook[spellIndex].Offensive.AmountMaxRounds + " rounds.", 
+				OutputHandler.Display.Output[6][2]);
+			var input = new [] {"cast", "frost", "nova"};
+			var spellName = InputHandler.ParseInput(input);
+			Assert.AreEqual("frost nova", spellName);
+			player.PlayerWeapon.Durability = 100;
+			player.MaxManaPoints = 100;
+			player.ManaPoints = player.MaxManaPoints;
+			var baseDamage = (double) player.Attack(monster);
+			player.CastSpell(monster, spellName);
+			Assert.AreEqual(player.ManaPoints, player.MaxManaPoints - player.Spellbook[spellIndex].ManaCost);
+			var frostIndex = monster.Effects.FindIndex(
+				f => f.EffectGroup == Effect.EffectType.Frozen);
+			var stunIndex = monster.Effects.FindIndex(
+				f => f.EffectGroup == Effect.EffectType.Stunned);
+			Assert.AreEqual(85, monster.HitPoints);
+			Assert.AreEqual(1, monster.Effects[frostIndex].EffectCurRound);
+			Assert.AreEqual(1, monster.Effects[stunIndex].EffectCurRound);
+			Assert.AreEqual(2, monster.Effects[frostIndex].EffectMaxRound);
+			Assert.AreEqual(2, monster.Effects[stunIndex].EffectMaxRound);
+			var monsterHitPointsBefore = monster.HitPoints;
+			var totalBaseDamage = 0.0;
+			var totalFrozenDamage = 0.0;
+			var multiplier = monster.Effects[frostIndex].EffectMultiplier;
+			for (var i = 2; i < 4; i++) {
+				monster.Effects[frostIndex].FrozenRound(monster);
+				monster.Effects[stunIndex].StunnedRound(monster);
+				Assert.AreEqual(true, monster.IsStunned);
+				Assert.AreEqual(i, monster.Effects[frostIndex].EffectCurRound);
+				Assert.AreEqual(i, monster.Effects[stunIndex].EffectCurRound);
+				player.PlayerWeapon.Durability = 100;
+				var frozenDamage = (double) player.Attack(monster);
+				monster.TakeDamage((int) frozenDamage);
+				totalBaseDamage += baseDamage;
+				totalFrozenDamage += frozenDamage;
+			}
+			GameHandler.RemovedExpiredEffects(monster);
+			Assert.AreEqual(false, monster.Effects.Any());
+			Assert.AreEqual(false, monster.IsStunned);
+			var finalBaseDamageWithMod = (int) (totalBaseDamage * multiplier);
+			var finalTotalFrozenDamage = (int) totalFrozenDamage;
+			Assert.AreEqual(finalTotalFrozenDamage, finalBaseDamageWithMod, 7);
+			Assert.AreEqual(monster.HitPoints, monsterHitPointsBefore - (int) totalFrozenDamage);
 		}
 	}
 }

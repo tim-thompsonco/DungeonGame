@@ -537,9 +537,14 @@ namespace DungeonGame {
 					"You don't have that ability.");
 			}
 		}
-		public static void SpellInfo(Player player, string input) {
-			var index = player.Spellbook.FindIndex(f => f.Name == input || 
-			                                            f.SpellCategory == Spell.SpellType.TownPortal);
+		public static void SpellInfo(Player player, string[] input) {
+			var inputName = new StringBuilder();
+			for (var i = 1; i < input.Length; i++) {
+				inputName.Append(input[i]);
+				if (i != input.Length - 1) inputName.Append(" ");
+			}
+			var index = player.Spellbook.FindIndex(f =>
+				f.Name == inputName.ToString() || f.Name == input[1] || f.Name.Contains(inputName.ToString()));
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (index != -1 && player.PlayerClass == Player.PlayerClassType.Mage) {
 				OutputHandler.Display.StoreUserOutput(
@@ -583,6 +588,9 @@ namespace DungeonGame {
 						break;
 					case Spell.SpellType.ArcaneIntellect:
 						Spell.ArcaneIntellectSpellInfo(player, index);
+						break;
+					case Spell.SpellType.FrostNova:
+						Spell.FrostOffenseSpellInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

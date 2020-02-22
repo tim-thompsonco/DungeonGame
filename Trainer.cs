@@ -53,6 +53,8 @@ namespace DungeonGame {
 						"reflect", 100, 1, Spell.SpellType.Reflect, 4));
 					this.TrainableSpells.Add(new Spell(
 						"arcane intellect", 150, 1, Spell.SpellType.ArcaneIntellect, 6));
+					this.TrainableSpells.Add(new Spell(
+						"frost nova", 40, 1, Spell.SpellType.FrostNova, 8));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
