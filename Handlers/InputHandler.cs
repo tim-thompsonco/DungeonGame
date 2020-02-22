@@ -25,30 +25,7 @@ namespace DungeonGame {
 				case "a":
 				case "attack":
 				case "kill":
-					try {
-						if (input[1] != null) {
-							try {
-								globalTimer.Change(Timeout.Infinite, Timeout.Infinite);
-								var outcome = RoomHandler.Rooms[RoomHandler.RoomIndex].AttackOpponent(player, input);
-								if (!outcome && player.HitPoints <= 0) {
-									GameHandler.IsGameOver = true;
-								}
-								globalTimer.Change(TimeSpan.Zero, TimeSpan.FromSeconds(1));
-							}
-							catch (Exception ex) {
-								OutputHandler.Display.StoreUserOutput(
-									Settings.FormatFailureOutputText(),
-									Settings.FormatDefaultBackground(),
-									"An error has occurred while attacking. Error: " + ex);
-							}
-						}
-					}
-					catch (IndexOutOfRangeException) {
-						OutputHandler.Display.StoreUserOutput(
-							Settings.FormatFailureOutputText(),
-							Settings.FormatDefaultBackground(),
-							"You can't attack that.");
-					}
+					RoomHandler.Rooms[RoomHandler.RoomIndex].AttackOpponent(player, input, globalTimer);
 					break;
 				case "buy":
 					try {
@@ -118,7 +95,11 @@ namespace DungeonGame {
 						if (input.Contains("distance")) {
 							player.UseAbility(input);
 						}
-						if (input[1] != null) {
+						else if (input.Contains("ambush")) {
+							player.UseAbility(RoomHandler.Rooms[RoomHandler.RoomIndex].Monster, input);
+							RoomHandler.Rooms[RoomHandler.RoomIndex].AttackOpponent(player, input, globalTimer);
+						}
+						else if (input[1] != null) {
 							player.UseAbility(input);
 						}
 					}

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 
 namespace DungeonGame {
 	public interface IRoom : IRoomInteraction {
@@ -20,7 +21,7 @@ namespace DungeonGame {
 		List<IRoomInteraction> RoomObjects { get; set; }
 		Monster Monster { get; set; }
 
-		bool AttackOpponent(Player player, string[] input);
+		void AttackOpponent(Player player, string[] input, Timer globalTimer);
 		void LootCorpse(Player player, string[] input);
 		void ShowDirections();
 		void ShowCommands();

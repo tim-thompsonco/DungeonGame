@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace DungeonGame {
 	public class TownRoom : IRoom {
@@ -141,9 +142,7 @@ namespace DungeonGame {
 			this.RoomObjects.Add(this.Trainer);
 		}
 
-		public bool AttackOpponent(Player player, string[] input) {
-			return true;
-		}
+		public void AttackOpponent(Player player, string[] input, Timer globalTimer) {}
 		public void LootCorpse(Player player, string[] input) { }
 		public void ShowCommands() {
 			var sameLineOutput = new List<string> {

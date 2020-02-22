@@ -447,7 +447,8 @@ namespace DungeonGame {
 				if (i != input.Length - 1) inputName.Append(" ");
 			}
 			var index = this.Abilities.FindIndex(
-				f => f.Name == inputName.ToString() || f.Name.Contains(inputName.ToString()));
+				f => f.Name == inputName.ToString() || f.Name == input[1] || 
+				     f.Name.Contains(inputName.ToString()));
 			if (index != -1 && 
 			    this.RagePoints >= this.Abilities[index].RageCost && 
 			    this.PlayerClass == PlayerClassType.Warrior) {
@@ -536,6 +537,17 @@ namespace DungeonGame {
 						return;
 					case Ability.ArcherAbility.ImmolatingArrow:
 						Ability.UseOffenseDamageAbility(opponent, this, index);
+						return;
+					case Ability.ArcherAbility.Ambush:
+						if (!this.InCombat) {
+							Ability.UseOffenseDamageAbility(opponent, this, index);
+						}
+						else {
+							OutputHandler.Display.StoreUserOutput(
+								Settings.FormatAttackFailText(),
+								Settings.FormatDefaultBackground(),
+								"You can't ambush " + opponent.Name + ", you're already in combat!");
+						}
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();

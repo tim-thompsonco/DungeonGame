@@ -517,6 +517,9 @@ namespace DungeonGame {
 					case Ability.ArcherAbility.ImmolatingArrow:
 						Ability.OffenseDamageAbilityInfo(player, index);
 						break;
+					case Ability.ArcherAbility.Ambush:
+						Ability.OffenseDamageAbilityInfo(player, index);
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}

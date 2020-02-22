@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace DungeonGame {
 	public class DungeonRoom : IRoom {
@@ -13,7 +14,6 @@ namespace DungeonGame {
 			Intersection,
 			Stairs
 		}
-
 		public RoomType RoomCategory { get; set; }
 		public bool IsDiscovered { get; set; }
 		public bool GoNorth { get; set; }
@@ -80,42 +80,49 @@ namespace DungeonGame {
 			}
 		}
 		
-		public bool AttackOpponent(Player player, string[] input) {
-			var inputString = new StringBuilder();
-			for (var i = 1; i < input.Length; i++) {
-				inputString.Append(input[i]);
-				inputString.Append(' ');
-			}
-			var inputName = inputString.ToString().Trim();
-			var monsterName = this.Monster.Name.Split(' ');
-			if (monsterName.Last() == inputName || this.Monster.Name == inputName) {
-				if (this.Monster.HitPoints > 0) {
-					var fightEvent = new CombatHandler();
-					var outcome = fightEvent.SingleCombat(this.Monster, player);
-					switch (outcome) {
-						case false when player.HitPoints <= 0:
+		public void AttackOpponent(Player player, string[] input, Timer globalTimer) {
+			globalTimer.Change(Timeout.Infinite, Timeout.Infinite);
+			try {
+				var inputString = new StringBuilder();
+				for (var i = 1; i < input.Length; i++) {
+					inputString.Append(input[i]);
+					inputString.Append(' ');
+				}
+				var inputName = inputString.ToString().Trim();
+				var monsterName = this.Monster.Name.Split(' ');
+				if (monsterName.Last() == inputName || this.Monster.Name == inputName || 
+				    this.Monster.Name.Contains(input.Last())) {
+					if (this.Monster.HitPoints > 0) {
+						var fightEvent = new CombatHandler();
+						var outcome = fightEvent.SingleCombat(this.Monster, player);
+						if (!outcome && player.HitPoints <= 0) {
 							Messages.PlayerDeath();
-							return false;
-						case false:
-							return false;
+							GameHandler.IsGameOver = true;
+						}
+					}
+					else {
+						var monsterDeadString = "The " + this.Monster.Name + " is already dead."; 
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							monsterDeadString);
 					}
 				}
 				else {
-					var monsterDeadString = "The " + this.Monster.Name + " is already dead."; 
+					var noMonsterString = "There is no " + inputName + " to attack.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
-						monsterDeadString);
+						noMonsterString);
 				}
 			}
-			else {
-				var noMonsterString = "There is no " + inputName + " to attack.";
+			catch (IndexOutOfRangeException) {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
-					noMonsterString);
+					"You can't attack that.");
 			}
-			return true;
+			globalTimer.Change(TimeSpan.Zero, TimeSpan.FromSeconds(1));
 		}
 		public void ShowCommands() {
 			var sameLineOutput = new List<string> {

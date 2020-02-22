@@ -23,7 +23,8 @@ namespace DungeonGame {
 			Wound,
 			Bandage,
 			SwiftAura,
-			ImmolatingArrow
+			ImmolatingArrow,
+			Ambush
 		}
 		public string Name { get; set; }
 		public ArcherAbility ArcAbilityCategory { get; set; }
@@ -120,6 +121,9 @@ namespace DungeonGame {
 				case ArcherAbility.ImmolatingArrow:
 					this.Offensive = new Offensive(
 						25, 5, 1, 3, Offensive.OffensiveType.Fire);
+					break;
+				case ArcherAbility.Ambush:
+					this.Offensive = new Offensive(50);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -501,6 +505,12 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(),
 					"Two attacks are launched which each cause instant damage. Cost and damage are per attack.");
 			}
+			if (player.Abilities[index].ArcAbilityCategory == ArcherAbility.Ambush) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatInfoText(),
+					Settings.FormatDefaultBackground(),
+					"A surprise attack is launched, which initiates combat.");
+			}
 			if (player.Abilities[index].Offensive.AmountOverTime <= 0) return;
 			var dmgOverTimeString = "Damage Over Time: " + player.Abilities[index].Offensive.AmountOverTime;
 			OutputHandler.Display.StoreUserOutput(
@@ -546,7 +556,7 @@ namespace DungeonGame {
 				var abilityFailString = "Your " + player.Abilities[index].Name + " missed!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
-					Settings.FormatDefaultBackground(),
+					Settings.FormatDefaultBackground(),	
 					abilityFailString);
 				return;
 			}

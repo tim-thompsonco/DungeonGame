@@ -409,8 +409,8 @@ namespace DungeonGameTests {
 			var monster = RoomHandler.Rooms[0].Monster;
 			monster.MaxHitPoints = 100;
 			monster.HitPoints = monster.MaxHitPoints;
-			player.MaxRagePoints = 100;
-			player.RagePoints = player.MaxRagePoints;
+			player.MaxComboPoints = 100;
+			player.ComboPoints = player.MaxComboPoints;
 			monster.StatReplenishInterval = 9999999; // Disable stat replenish over time method
 			player.InCombat = true;
 			monster.InCombat = true;
@@ -423,10 +423,11 @@ namespace DungeonGameTests {
 			Assert.AreEqual("Damage Over Time: 5",OutputHandler.Display.Output[4][2]);
 			Assert.AreEqual("Fire damage over time for 3 rounds.", OutputHandler.Display.Output[5][2]);
 			player.UseAbility(monster, input);
-			var attackString = "Your immolating arrow hit the " + monster.Name + " for 25 physical damage.";
-			Assert.AreEqual(attackString,OutputHandler.Display.Output[6][2]);
 			var index = player.Abilities.FindIndex(
 				f => f.ArcAbilityCategory == Ability.ArcherAbility.ImmolatingArrow);
+			Assert.AreEqual(player.ComboPoints,player.MaxComboPoints - player.Abilities[index].ComboCost);
+			var attackString = "Your immolating arrow hit the " + monster.Name + " for 25 physical damage.";
+			Assert.AreEqual(attackString,OutputHandler.Display.Output[6][2]);
 			Assert.AreEqual(monster.HitPoints, 
 				monster.MaxHitPoints - player.Abilities[index].Offensive.Amount);
 			OutputHandler.Display.ClearUserOutput();
@@ -443,6 +444,50 @@ namespace DungeonGameTests {
 				GameHandler.RemovedExpiredEffects(monster);
 			}
 			Assert.AreEqual(false, monster.Effects.Any());
+		}
+		[Test]
+		public void AmbushAbilityUnitTest() {
+			var player = new Player("placeholder", Player.PlayerClassType.Archer);
+			GearHandler.EquipInitialGear(player);
+			RoomHandler.Rooms = new List<IRoom> {
+				new DungeonRoom(0, 0, 0, false, false, false,
+					false, false, false, false, false, false,
+					false, 1, 1)
+			};
+			GearHandler.EquipInitialGear(player);
+			OutputHandler.Display.ClearUserOutput();
+			player.Abilities.Add(new Ability(
+				"ambush", 75, 1, Ability.ArcherAbility.Ambush, 4));
+			if (RoomHandler.Rooms[0].Monster == null) {
+				RoomHandler.Rooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
+			}
+			var monster = RoomHandler.Rooms[0].Monster;
+			monster.MaxHitPoints = 100;
+			monster.HitPoints = monster.MaxHitPoints;
+			player.MaxComboPoints = 100;
+			player.ComboPoints = player.MaxComboPoints;
+			monster.StatReplenishInterval = 9999999; // Disable stat replenish over time method
+			var inputInfo = new[] {"ability", "ambush"};
+			PlayerHandler.AbilityInfo(player, inputInfo);
+			Assert.AreEqual("Ambush", OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual("Combo Cost: 75", OutputHandler.Display.Output[2][2]);
+			Assert.AreEqual("Instant Damage: 50", OutputHandler.Display.Output[3][2]);
+			Assert.AreEqual("A surprise attack is launched, which initiates combat.",
+				OutputHandler.Display.Output[4][2]);
+			var input = new[] {"use", "ambush", monster.Name};
+			player.InCombat = true;
+			player.UseAbility(monster, input);
+			Assert.AreEqual("You can't ambush " + monster.Name + ", you're already in combat!", 
+				OutputHandler.Display.Output[5][2]);
+			player.InCombat = false;
+			player.UseAbility(monster, input);
+			var index = player.Abilities.FindIndex(
+				f => f.ArcAbilityCategory == Ability.ArcherAbility.Ambush);
+			var abilityDamage = player.Abilities[index].Offensive.Amount;
+			var attackString = "Your ambush hit the " + monster.Name + " for " + abilityDamage + " physical damage.";
+			Assert.AreEqual(attackString,OutputHandler.Display.Output[6][2]);
+			Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - abilityDamage);
 		}
 	}
 }
