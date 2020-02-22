@@ -168,7 +168,7 @@ namespace DungeonGame {
 					break;
 				case "q":
 				case "quit":
-					var quitConfirm = SaveQuitHandler.QuitGame(player);
+					var quitConfirm = GameHandler.QuitGame(player);
 					if (quitConfirm) {
 						globalTimer.Dispose();
 					}
@@ -273,7 +273,7 @@ namespace DungeonGame {
 					}
 					break;
 				case "save":
-					SaveQuitHandler.SaveGame(player);
+					GameHandler.SaveGame(player);
 					break;
 				case "restore":
 					isTownRoom?.Vendor.RestorePlayer(player);

@@ -46,7 +46,6 @@
     <Compile Include="Handlers\RoomHandler.cs" />
     <Compile Include="Handlers\InputHandler.cs" />
     <Compile Include="Handlers\PlayerHandler.cs" />
-    <Compile Include="Handlers\SaveQuitHandler.cs" />
     <Compile Include="Interfaces\IEquipment.cs" />
     <Compile Include="Items\Armor.cs" />
     <Compile Include="Items\Consumable.cs" />
