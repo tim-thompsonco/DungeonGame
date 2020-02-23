@@ -31,8 +31,6 @@ namespace DungeonGame {
 							}
 							if (!player.InCombat) effect.ChangeArmorRound();
 							break;
-						case Effect.EffectType.AbsorbDamage:
-							break;
 						case Effect.EffectType.OnFire:
 							break;
 						case Effect.EffectType.Bleeding:
@@ -42,7 +40,7 @@ namespace DungeonGame {
 						case Effect.EffectType.Frozen:
 							break;
 						case Effect.EffectType.ReflectDamage:
-							effect.ReflectDamageRound(player);
+							effect.ReflectDamageRound();
 							break;
 						case Effect.EffectType.ChangeStat:
 							effect.ChangeStatRound();
@@ -50,6 +48,9 @@ namespace DungeonGame {
 						case Effect.EffectType.ChangeOpponentDamage:
 							if (!player.InCombat) effect.IsEffectExpired = true;
 							effect.ChangeOpponentDamageRound(player);
+							break;
+						case Effect.EffectType.BlockDamage:
+							effect.BlockDamageRound();
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -71,8 +72,6 @@ namespace DungeonGame {
 									break;
 								case Effect.EffectType.ChangeArmor:
 									break;
-								case Effect.EffectType.AbsorbDamage:
-									break;
 								case Effect.EffectType.OnFire:
 									effect.OnFireRound(monster);
 									break;
@@ -90,6 +89,8 @@ namespace DungeonGame {
 								case Effect.EffectType.ChangeStat:
 									break;
 								case Effect.EffectType.ChangeOpponentDamage:
+									break;
+								case Effect.EffectType.BlockDamage:
 									break;
 								default:
 									throw new ArgumentOutOfRangeException();
@@ -120,8 +121,6 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
-					case Effect.EffectType.AbsorbDamage:
-						break;
 					case Effect.EffectType.OnFire:
 						break;
 					case Effect.EffectType.Bleeding:
@@ -129,7 +128,6 @@ namespace DungeonGame {
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.ReflectDamage:
-						player.IsReflectingDamage = false;
 						break;
 					case Effect.EffectType.Frozen:
 						break;
@@ -151,6 +149,8 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
 						break;
+					case Effect.EffectType.BlockDamage:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -168,8 +168,6 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
-					case Effect.EffectType.AbsorbDamage:
-						break;
 					case Effect.EffectType.OnFire:
 						break;
 					case Effect.EffectType.Bleeding:
@@ -184,6 +182,8 @@ namespace DungeonGame {
 					case Effect.EffectType.ChangeStat:
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
+						break;
+					case Effect.EffectType.BlockDamage:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

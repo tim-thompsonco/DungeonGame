@@ -245,29 +245,21 @@ namespace DungeonGame {
 				player.PlayerQuiver.UseArrow();
 			}
 			var abilityDamage = player.Abilities[index].Stun.DamageAmount;
-			if (abilityDamage == 0) {
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackFailText(),
-					Settings.FormatDefaultBackground(),
-					"You missed!");
-			}
-			else {
-				var attackSuccessString = "You " +  player.Abilities[index].Name  + " the " + opponent.Name + " for " +
-				                          abilityDamage + " physical damage.";
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackSuccessText(),
-					Settings.FormatDefaultBackground(),
-					attackSuccessString);
-				opponent.TakeDamage(abilityDamage);
-				var stunString = "The " + opponent.Name + " is stunned!";
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackSuccessText(),
-					Settings.FormatDefaultBackground(),
-					stunString);
-				opponent.Effects.Add(new Effect(player.Abilities[index].Name, Effect.EffectType.Stunned, 
-					player.Abilities[index].Stun.StunCurRounds, player.Abilities[index].Stun.StunMaxRounds, 
-					1, 1, true));
-			}
+			var attackSuccessString = "You " +  player.Abilities[index].Name  + " the " + opponent.Name + " for " +
+			                          abilityDamage + " physical damage.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				attackSuccessString);
+			opponent.TakeDamage(abilityDamage);
+			var stunString = "The " + opponent.Name + " is stunned!";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				stunString);
+			opponent.Effects.Add(new Effect(player.Abilities[index].Name, Effect.EffectType.Stunned, 
+				player.Abilities[index].Stun.StunCurRounds, player.Abilities[index].Stun.StunMaxRounds, 
+				1, 1, true));
 		}
 		public static void BerserkAbilityInfo(Player player, int index) {
 			var dmgIncreaseString = "Damage Increase: " + player.Abilities[index].Offensive.Amount;
@@ -408,15 +400,28 @@ namespace DungeonGame {
 			}
 		}
 		public static void DefenseAbilityInfo(Player player, int index) {
-			var abilityDmgString = "Absorb Damage: " + player.Abilities[index].Defensive.AbsorbDamage;
+			var abilityDmgString = "Block Damage: " + player.Abilities[index].Defensive.BlockDamage;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				abilityDmgString);
+			const string blockInfoString =
+				"Block damage will prevent incoming damage from opponent until block damage is used up.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(),
+				Settings.FormatDefaultBackground(),
+				blockInfoString);
 		}
-		public static int UseDefenseAbility(Player player, int index) {
+		public static void UseDefenseAbility(Player player, int index) {
 			DeductAbilityCost(player, index);
-			return player.Abilities[index].Defensive.AbsorbDamage;
+			var blockAmount = player.Abilities[index].Defensive.BlockDamage;
+			var blockString = "You start blocking your opponent's attacks! You will block " + blockAmount + " damage.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				blockString);
+			player.Effects.Add(new Effect(player.Abilities[index].Name,
+				Effect.EffectType.BlockDamage, blockAmount, 10));
 		}
 		public static void BandageAbilityInfo(Player player, int index) {
 			var healAmountString = "Heal Amount: " + player.Abilities[index].Healing.HealAmount;
@@ -552,14 +557,6 @@ namespace DungeonGame {
 				player.PlayerQuiver.UseArrow();
 			}
 			var abilityDamage = player.Abilities[index].Offensive.Amount;
-			if (abilityDamage == 0) {
-				var abilityFailString = "Your " + player.Abilities[index].Name + " missed!";
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackFailText(),
-					Settings.FormatDefaultBackground(),	
-					abilityFailString);
-				return;
-			}
 			opponent.TakeDamage(abilityDamage);
 			var abilitySuccessString = "Your " + player.Abilities[index].Name + " hit the " + opponent.Name + " for " +
 			                           abilityDamage + " physical damage.";

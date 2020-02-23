@@ -301,7 +301,6 @@ namespace DungeonGameTests {
 			Assert.AreEqual("reflect", spellName);
 			player.CastSpell(spellName);
 			Assert.AreEqual(player.MaxManaPoints - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
-			Assert.AreEqual(true, player.IsReflectingDamage);
 			Assert.AreEqual("You create a shield around you that will reflect damage.", 
 				OutputHandler.Display.Output[5][2]);
 			Assert.AreEqual(true, player.Effects.Any());
@@ -316,7 +315,7 @@ namespace DungeonGameTests {
 				Assert.AreEqual(true, reflectAmount <= player.Effects[index].EffectAmountOverTime);
 				monster.HitPoints -= reflectAmount;
 				Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - reflectAmount);
-				player.Effects[index].ReflectDamageRound(player, reflectAmount);
+				player.Effects[index].ReflectDamageRound(reflectAmount);
 				Assert.AreEqual(
 					"You reflected " + reflectAmount + " damage back at your opponent!", 
 					OutputHandler.Display.Output[i - 2][2]);

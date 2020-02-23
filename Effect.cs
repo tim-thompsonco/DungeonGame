@@ -5,16 +5,17 @@
 			ChangePlayerDamage,
 			ChangeOpponentDamage,
 			ChangeArmor,
-			AbsorbDamage,
+			BlockDamage,
 			OnFire,
 			Bleeding,
 			Stunned,
 			ReflectDamage,
 			Frozen,
-			ChangeStat
+			ChangeStat,
 		}
 		public string Name { get; set; }
 		public EffectType EffectGroup { get; set; }
+		public int EffectAmount { get; set; }
 		public int EffectAmountOverTime { get; set; }
 		public int EffectCurRound { get; set; }
 		public int EffectMaxRound { get; set; }
@@ -25,6 +26,12 @@
 
 		// Default constructor for JSON serialization
 		public Effect() {}
+		public Effect(string name, EffectType effectGroup, int effectAmount, int tickDuration) {
+			this.Name = name;
+			this.EffectGroup = effectGroup;
+			this.EffectAmount = effectAmount;
+			this.TickDuration = tickDuration;
+		}
 		public Effect(string name, EffectType effectGroup, int effectCurRound, int effectMaxRound, 
 			double effectMultiplier, int tickDuration, bool harmful) {
 			this.Name = name;
@@ -54,9 +61,45 @@
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void ReflectDamageRound(Player player) {
+		public void ChangeStatRound() {
 			if (this.IsEffectExpired) return;
-			player.IsReflectingDamage = true;
+			this.EffectCurRound += 1;
+			if (this.EffectCurRound <= this.EffectMaxRound) return;
+			this.IsEffectExpired = true;
+		}
+		public void BlockDamageRound() {
+			if (this.IsEffectExpired) return;
+			const string blockString = "Your block effect is slowly fading away.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				blockString);
+			if (this.TickDuration > 0) return;
+			const string blockEndString = "You are no longer blocking damage!";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				blockEndString);
+			this.IsEffectExpired = true;
+		}
+		public void BlockDamageRound(int blockAmount) {
+			if (this.IsEffectExpired) return;
+			var blockString = "Your defensive move blocked " + blockAmount + " damage!";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				blockString);
+			this.EffectAmount -= blockAmount;
+			if (this.EffectAmount > 0) return;
+			const string blockEndString = "You are no longer blocking damage!";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				blockEndString);
+			this.IsEffectExpired = true;
+		}
+		public void ReflectDamageRound() {
+			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			const string reflectString = "Your spell reflect is slowly fading away.";
 			OutputHandler.Display.StoreUserOutput(
@@ -66,15 +109,8 @@
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void ChangeStatRound() {
+		public void ReflectDamageRound(int reflectAmount) {
 			if (this.IsEffectExpired) return;
-			this.EffectCurRound += 1;
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
-		}
-		public void ReflectDamageRound(Player player, int reflectAmount) {
-			if (this.IsEffectExpired) return;
-			player.IsReflectingDamage = true;
 			this.EffectCurRound += 1;
 			var reflectString = "You reflected " + reflectAmount + " damage back at your opponent!";
 			OutputHandler.Display.StoreUserOutput(

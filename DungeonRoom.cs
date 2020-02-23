@@ -93,9 +93,9 @@ namespace DungeonGame {
 				if (monsterName.Last() == inputName || this.Monster.Name == inputName || 
 				    this.Monster.Name.Contains(input.Last())) {
 					if (this.Monster.HitPoints > 0) {
-						var fightEvent = new CombatHandler();
-						var outcome = fightEvent.SingleCombat(this.Monster, player);
-						if (!outcome && player.HitPoints <= 0) {
+						var fightEvent = new CombatHandler(this.Monster, player);
+						fightEvent.StartCombat();
+						if (player.HitPoints <= 0) {
 							Messages.PlayerDeath();
 						}
 					}

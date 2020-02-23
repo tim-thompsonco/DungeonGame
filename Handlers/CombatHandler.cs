@@ -7,13 +7,16 @@ namespace DungeonGame {
 		private Monster Opponent { get; set; }
 		private Player Player { get; set; }
 		private bool FleeSuccess { get; set; }
-		
-		public bool SingleCombat(Monster opponent, Player player) {
-			Console.Clear();
+
+		public CombatHandler(Monster opponent, Player player) {
 			this.Player = player;
 			this.Opponent = opponent;
 			this.Player.InCombat = true;
 			this.Opponent.InCombat = true;
+		}
+		
+		public void StartCombat() {
+			Console.Clear();
 			var fightStartString = this.Player.Name + ", you have encountered a " + this.Opponent.Name + ". Time to fight!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
@@ -35,20 +38,19 @@ namespace DungeonGame {
 				if (this.Player.Effects.Any()) {
 					this.ProcessPlayerEffects();
 				}
-				if (this.FleeSuccess) return false;
+				if (this.FleeSuccess) return;
 				// Check to see if player attack killed monster
-				if (this.Opponent.IsMonsterDead(this.Player)) return true;
+				if (this.Opponent.IsMonsterDead(this.Player)) return;
 				if (this.Opponent.Effects.Any()) {
 					this.ProcessOpponentEffects();
 				}
 				// Check to see if damage over time effects killed monster
-				if (this.Opponent.IsMonsterDead(this.Player)) return true;
+				if (this.Opponent.IsMonsterDead(this.Player)) return;
 				if (this.Opponent.IsStunned) continue;
 				this.ProcessMonsterAttack();
 				// In the event player is reflecting damage, check to see if monster killed itself
-				if (this.Opponent.IsMonsterDead(this.Player)) return true;
+				if (this.Opponent.IsMonsterDead(this.Player)) return;
 			}
-			return player.HitPoints > 0;
 		}
 		private void FleeCombat() {
 			var randomNum = GameHandler.GetRandomNumber(1, 10);
@@ -117,8 +119,6 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
-					case Effect.EffectType.AbsorbDamage:
-						break;
 					case Effect.EffectType.OnFire:
 						break;
 					case Effect.EffectType.Bleeding:
@@ -128,6 +128,12 @@ namespace DungeonGame {
 					case Effect.EffectType.Frozen:
 						break;
 					case Effect.EffectType.ChangeStat:
+						break;
+					case Effect.EffectType.ChangeOpponentDamage:
+						break;
+					case Effect.EffectType.BlockDamage:
+						break;
+					case Effect.EffectType.ReflectDamage:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -143,8 +149,6 @@ namespace DungeonGame {
 					case Effect.EffectType.ChangePlayerDamage:
 						break;
 					case Effect.EffectType.ChangeArmor:
-						break;
-					case Effect.EffectType.AbsorbDamage:
 						break;
 					case Effect.EffectType.OnFire:
 						effect.OnFireRound(this.Opponent);
@@ -163,12 +167,14 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.ChangeStat:
 						break;
+					case Effect.EffectType.BlockDamage:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 			}
 		}
-		private void ProcessMonsterAttack() {
+		public void ProcessMonsterAttack() {
 			var attackDamageM = this.Opponent.Attack(this.Player);
 			var indexDamageChange = this.Player.Effects.FindIndex(
 				f => f.EffectGroup == Effect.EffectType.ChangeOpponentDamage);
@@ -178,33 +184,24 @@ namespace DungeonGame {
 				attackDamageM += changeDamageAmount;
 				if (attackDamageM < 0) attackDamageM = 0;
 			}
-			if (this.Player.IsReflectingDamage) {
-				var index = this.Player.Effects.FindIndex(
-					f => f.EffectGroup == Effect.EffectType.ReflectDamage);
-				var reflectAmount = this.Player.Effects[index].EffectAmountOverTime < attackDamageM ? 
-					this.Player.Effects[index].EffectAmountOverTime : attackDamageM;
+			var indexReflect = this.Player.Effects.FindIndex(
+				f => f.EffectGroup == Effect.EffectType.ReflectDamage);
+			if (indexReflect != -1 && attackDamageM > 0) {
+				var reflectAmount = this.Player.Effects[indexReflect].EffectAmountOverTime < attackDamageM ? 
+					this.Player.Effects[indexReflect].EffectAmountOverTime : attackDamageM;
 				this.Opponent.HitPoints -= reflectAmount;
-				this.Player.Effects[index].ReflectDamageRound(this.Player, reflectAmount);
+				this.Player.Effects[indexReflect].ReflectDamageRound(reflectAmount);
 				return;
 			}
-			var defenseMoveString = "Your defensive move blocked " + this.Player.AbsorbDamageAmount + " damage!";
-			if (attackDamageM > this.Player.AbsorbDamageAmount && this.Player.AbsorbDamageAmount > 0) {
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackFailText(),
-					Settings.FormatDefaultBackground(),
-					defenseMoveString);
-				attackDamageM -= this.Player.AbsorbDamageAmount;
-				this.Player.AbsorbDamageAmount = 0;
+			var indexBlock = this.Player.Effects.FindIndex(
+				f => f.EffectGroup == Effect.EffectType.BlockDamage);
+			if (indexBlock != -1 && attackDamageM > 0) {
+				var blockAmount = this.Player.Effects[indexBlock].EffectAmount < attackDamageM ?
+					this.Player.Effects[indexBlock].EffectAmount : attackDamageM;
+				this.Player.Effects[indexBlock].BlockDamageRound(blockAmount);
+				attackDamageM -= blockAmount;
 			}
-			else if (attackDamageM < this.Player.AbsorbDamageAmount && this.Player.AbsorbDamageAmount > 0) {
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackFailText(),
-					Settings.FormatDefaultBackground(),
-					defenseMoveString);
-				this.Player.AbsorbDamageAmount -= attackDamageM;
-				attackDamageM = 0;
-			}
-			if (attackDamageM == 0) {
+			if (attackDamageM == 0 && indexBlock == -1 && indexReflect == -1) {
 				var missString = "The " + this.Opponent.Name + " missed you!"; 
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
@@ -219,7 +216,7 @@ namespace DungeonGame {
 					armorAbsorbString);
 				GearHandler.DecreaseArmorDurability(this.Player);
 			}
-			else {
+			else if (indexBlock == -1 && indexReflect == -1) {
 				var hitAmount = attackDamageM - this.Player.ArmorRating(this.Opponent);
 				var hitString = "The " + this.Opponent.Name + " hits you for " + hitAmount + " physical damage.";
 				OutputHandler.Display.StoreUserOutput(

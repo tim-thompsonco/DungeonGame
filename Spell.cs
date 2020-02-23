@@ -140,7 +140,6 @@ namespace DungeonGame {
 		public static void CastReflectDamage(Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			const string reflectString = "You create a shield around you that will reflect damage.";
-			player.IsReflectingDamage = true;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -186,8 +185,6 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
-					case Effect.EffectType.AbsorbDamage:
-						break;
 					case Effect.EffectType.OnFire:
 						break;
 					case Effect.EffectType.Bleeding:
@@ -199,6 +196,14 @@ namespace DungeonGame {
 						frostSpellDamage = (int)frozenAttackAmount;
 						effect.FrozenRound(opponent);
 						effect.IsEffectExpired = true;
+						break;
+					case Effect.EffectType.ChangeOpponentDamage:
+						break;
+					case Effect.EffectType.BlockDamage:
+						break;
+					case Effect.EffectType.ReflectDamage:
+						break;
+					case Effect.EffectType.ChangeStat:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -285,8 +290,6 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
-					case Effect.EffectType.AbsorbDamage:
-						break;
 					case Effect.EffectType.OnFire:
 						break;
 					case Effect.EffectType.Bleeding:
@@ -297,6 +300,14 @@ namespace DungeonGame {
 						var frozenAttackAmount = arcaneSpellDamage * effect.EffectMultiplier;
 						arcaneSpellDamage = (int)frozenAttackAmount;
 						effect.FrozenRound(opponent);
+						break;
+					case Effect.EffectType.ChangeOpponentDamage:
+						break;
+					case Effect.EffectType.BlockDamage:
+						break;
+					case Effect.EffectType.ReflectDamage:
+						break;
+					case Effect.EffectType.ChangeStat:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

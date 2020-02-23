@@ -485,7 +485,7 @@ namespace DungeonGame {
 								player.Abilities[abilityIndex].Stun.DamageAmount += 10;
 								break;
 							case Ability.WarriorAbility.Block:
-								player.Abilities[abilityIndex].Defensive.AbsorbDamage += 10;
+								player.Abilities[abilityIndex].Defensive.BlockDamage += 10;
 								break;
 							case Ability.WarriorAbility.Berserk:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;

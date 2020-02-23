@@ -33,7 +33,6 @@ namespace DungeonGame {
 		public int Y { get; set; }
 		public int Z { get; set; }
 		public bool InCombat { get; set; }
-		public bool IsReflectingDamage { get; set; }
 		public bool CanSave { get; set; }
 		public bool CanWearCloth { get; set; }
 		public bool CanWearLeather { get; set; }
@@ -43,7 +42,6 @@ namespace DungeonGame {
 		public bool CanUseTwoHandedSword { get; set; }
 		public bool CanUseAxe { get; set; }
 		public bool CanUseBow { get; set; }
-		public int AbsorbDamageAmount { get; set; }
 		public int StatReplenishInterval { get; set; }
 		public double DodgeChance { get; set; }
 		public PlayerClassType PlayerClass { get; set; }
@@ -242,8 +240,6 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
-					case Effect.EffectType.AbsorbDamage:
-						break;
 					case Effect.EffectType.OnFire:
 						break;
 					case Effect.EffectType.Bleeding:
@@ -258,6 +254,8 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
 						break;
+					case Effect.EffectType.BlockDamage:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -269,8 +267,6 @@ namespace DungeonGame {
 					case Effect.EffectType.ChangePlayerDamage:
 						break;
 					case Effect.EffectType.ChangeArmor:
-						break;
-					case Effect.EffectType.AbsorbDamage:
 						break;
 					case Effect.EffectType.OnFire:
 						break;
@@ -288,6 +284,8 @@ namespace DungeonGame {
 					case Effect.EffectType.ChangeStat:
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
+						break;
+					case Effect.EffectType.BlockDamage:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -462,7 +460,7 @@ namespace DungeonGame {
 						Ability.UseStunAbility(opponent, this, index);
 						return;
 					case Ability.WarriorAbility.Block:
-						this.AbsorbDamageAmount = Ability.UseDefenseAbility(this, index);
+						Ability.UseDefenseAbility(this, index);
 						return;
 					case Ability.WarriorAbility.Berserk:
 						Ability.UseBerserkAbility(this, index);

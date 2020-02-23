@@ -1,9 +1,9 @@
 namespace DungeonGame {
 	public class Defensive {
-		public int AbsorbDamage { get; set; }
+		public int BlockDamage { get; set; }
 
-		public Defensive(int absorbDamage) {
-			this.AbsorbDamage = absorbDamage;
+		public Defensive(int blockDamage) {
+			this.BlockDamage = blockDamage;
 		}
 	}
 }
