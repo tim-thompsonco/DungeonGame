@@ -1,4 +1,6 @@
-﻿namespace DungeonGame {
+﻿using System;
+
+namespace DungeonGame {
 	public class Effect {
 		public enum EffectType {
 			Healing,
@@ -136,9 +138,10 @@
 		public void ChangePlayerDamageRound(Player player) {
 			if (this.IsEffectExpired || player.InCombat == false) return;
 			this.EffectCurRound += 1;
+			var changeAmount = Math.Abs(this.EffectAmountOverTime);
 			var changeDmgString = this.EffectAmountOverTime > 0 ?
-				"Your damage is increased by " + this.EffectAmountOverTime + "."
-				: "Your damage is decreased by " + this.EffectAmountOverTime + ".";
+				"Your damage is increased by " + changeAmount + "."
+				: "Your damage is decreased by " + changeAmount + ".";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
@@ -149,11 +152,14 @@
 		public void ChangeArmorRound() {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
-			var augmentString = "Your armor is augmented by " + this.EffectAmountOverTime + ".";
+			var changeAmount = Math.Abs(this.EffectAmountOverTime);
+			var changeArmorString = this.EffectAmountOverTime > 0 ?
+				"Your armor is increased by " + changeAmount + "."
+				: "Your armor is decreased by " + changeAmount + ".";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
-				augmentString);
+				changeArmorString);
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}

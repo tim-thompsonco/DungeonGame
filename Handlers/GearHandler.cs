@@ -34,11 +34,9 @@ namespace DungeonGame {
 			}
 			if (!player.InCombat) return totalArmorRating;
 			GameHandler.RemovedExpiredEffects(player);
-			foreach (var effect in player.Effects.Where(effect => effect.EffectGroup == Effect.EffectType.ChangeArmor)) {
-				totalArmorRating += effect.EffectAmountOverTime;
-				effect.ChangeArmorRound();
-			}
-			return totalArmorRating;
+			totalArmorRating += player.Effects.Where(
+				effect => effect.EffectGroup == Effect.EffectType.ChangeArmor).Sum(effect => effect.EffectAmountOverTime);
+			return totalArmorRating < 0 ? 0 : totalArmorRating;
 		}
 		public static void DropItem(Player player, string[] input) {
 			if (input[1] == null) {

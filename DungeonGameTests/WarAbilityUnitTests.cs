@@ -190,26 +190,57 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void BerserkAbilityUnitTest() {
-			// Berserk should create a change damage and change armor effect, which should expire when combat ends
-			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
+			var player = new Player("test", Player.PlayerClassType.Warrior) {MaxRagePoints = 100, RagePoints = 100,
+				InCombat = true, MaxHitPoints = 100, HitPoints = 100, DodgeChance = 0};
 			GearHandler.EquipInitialGear(player);
-			RoomHandler.Rooms = new List<IRoom> {
-				new DungeonRoom(0, 0, 0, false, false, false,
-					false, false, false, false, false, false,
-					false, 1, 1)
-			};
-			if (RoomHandler.Rooms[0].Monster == null) {
-				RoomHandler.Rooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
+			OutputHandler.Display.ClearUserOutput();
+			var monster = new Monster(3, Monster.MonsterType.Demon) 
+				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
+			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
+				item.Equipped = false;
 			}
-			var monster = RoomHandler.Rooms[0].Monster;
+			var abilityIndex = player.Abilities.FindIndex(
+				f => f.WarAbilityCategory == Ability.WarriorAbility.Berserk);
+			var inputInfo = new[] {"ability", "berserk"};
+			PlayerHandler.AbilityInfo(player, inputInfo);
+			Assert.AreEqual("Berserk", OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual("Rage Cost: 40", OutputHandler.Display.Output[2][2]);
+			var dmgIncreaseString = "Damage Increase: " + player.Abilities[abilityIndex].Offensive.Amount;
+			Assert.AreEqual(dmgIncreaseString, OutputHandler.Display.Output[3][2]);
+			var armDecreaseString = "Armor Decrease: " + player.Abilities[abilityIndex].ChangeAmount.Amount;
+			Assert.AreEqual(armDecreaseString, OutputHandler.Display.Output[4][2]);
+			var dmgInfoString = "Damage increased at cost of armor decrease for " +
+			                    player.Abilities[abilityIndex].ChangeAmount.ChangeMaxRound + " rounds";
+			Assert.AreEqual(dmgInfoString, OutputHandler.Display.Output[5][2]);
 			var input = new [] {"use", "berserk"};
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("berserk", abilityName);
+			var baseArmorRating = GearHandler.CheckArmorRating(player);
+			var baseDamage = player.Attack(monster);
 			player.UseAbility(monster, input);
 			Assert.AreEqual(2, player.Effects.Count);
-			player.InCombat = false;
-			GameHandler.CheckStatus(player);
-			Assert.AreEqual(0, player.Effects.Count);
+			Assert.AreEqual(Effect.EffectType.ChangePlayerDamage, player.Effects[0].EffectGroup);
+			Assert.AreEqual(Effect.EffectType.ChangeArmor, player.Effects[1].EffectGroup);
+			const string berserkString = "You go into a berserk rage!";
+			Assert.AreEqual(berserkString, OutputHandler.Display.Output[6][2]);
+			for (var i = 2; i < 6; i++) {
+				OutputHandler.Display.ClearUserOutput();
+				var berserkArmorAmount = player.Abilities[abilityIndex].ChangeAmount.Amount;
+				var berserkDamageAmount = player.Abilities[abilityIndex].Offensive.Amount;
+				var berserkArmorRating = GearHandler.CheckArmorRating(player);
+				var berserkDamage = player.Attack(monster);
+				Assert.AreEqual(berserkArmorRating, baseArmorRating + berserkArmorAmount);
+				Assert.AreEqual(berserkDamage, baseDamage + berserkDamageAmount, 5);
+				player.Effects[0].ChangePlayerDamageRound(player);
+				var changeDmgString = "Your damage is increased by " + berserkDamageAmount + ".";
+				Assert.AreEqual(changeDmgString, OutputHandler.Display.Output[0][2]);
+				player.Effects[1].ChangeArmorRound();
+				var changeArmorString = "Your armor is decreased by " + berserkArmorAmount + ".";
+				Assert.AreEqual(changeArmorString, OutputHandler.Display.Output[1][2]);
+				GameHandler.RemovedExpiredEffects(player);
+			}
+			Assert.AreEqual(false, player.Effects.Any());
 		}
 		[Test]
 		public void BandageAbilityUnitTests() {

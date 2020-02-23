@@ -63,8 +63,8 @@ namespace DungeonGame {
 					this.Defensive = new Defensive(50);
 					break;
 				case WarriorAbility.Berserk:
-					this.Offensive = new Offensive(20);
-					this.ChangeAmount = new ChangeAmount(15, 1, 4);
+					this.Offensive = new Offensive(20, 1, 4);
+					this.ChangeAmount = new ChangeAmount(-15, 1, 4);
 					break;
 				case WarriorAbility.Disarm:
 					this.Offensive = new Offensive(35);
@@ -267,11 +267,11 @@ namespace DungeonGame {
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				dmgIncreaseString);
-			var armIncreaseString = "Armor Decrease: " + player.Abilities[index].ChangeAmount.Amount;
+			var armDecreaseString = "Armor Decrease: " + player.Abilities[index].ChangeAmount.Amount;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
-				armIncreaseString);
+				armDecreaseString);
 			var dmgInfoString = "Damage increased at cost of armor decrease for " +
 			                    player.Abilities[index].ChangeAmount.ChangeMaxRound + " rounds";
 			OutputHandler.Display.StoreUserOutput(
@@ -281,6 +281,11 @@ namespace DungeonGame {
 		}
 		public static void UseBerserkAbility(Player player, int index) {
 			DeductAbilityCost(player, index);
+			const string berserkString = "You go into a berserk rage!";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				berserkString);
 			player.Effects.Add(new Effect(player.Abilities[index].Name + " Damage Increase",
 				Effect.EffectType.ChangePlayerDamage, player.Abilities[index].Offensive.Amount,
 				player.Abilities[index].ChangeAmount.ChangeCurRound, player.Abilities[index].ChangeAmount.ChangeMaxRound, 

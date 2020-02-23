@@ -236,7 +236,6 @@ namespace DungeonGame {
 						break;
 					case Effect.EffectType.ChangePlayerDamage:
 						attackAmount += effect.EffectAmountOverTime;
-						effect.ChangePlayerDamageRound(this);
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;

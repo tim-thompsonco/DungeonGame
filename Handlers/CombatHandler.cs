@@ -116,8 +116,10 @@ namespace DungeonGame {
 						effect.HealingRound(this.Player);
 						break;
 					case Effect.EffectType.ChangePlayerDamage:
+						effect.ChangePlayerDamageRound(this.Player);
 						break;
 					case Effect.EffectType.ChangeArmor:
+						effect.ChangeArmorRound();
 						break;
 					case Effect.EffectType.OnFire:
 						break;
