@@ -224,10 +224,10 @@ namespace DungeonGame {
 		public static Player LoadPlayer() {
 			Player player;
 			try {
-				player = Newtonsoft.Json.JsonConvert.DeserializeObject<Player>(File.ReadAllText(
-					"playersave.json"), new Newtonsoft.Json.JsonSerializerSettings {
-					TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
-					NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+				player = JsonConvert.DeserializeObject<Player>(File.ReadAllText(
+					"playersave.json"), new JsonSerializerSettings {
+					TypeNameHandling = TypeNameHandling.Auto,
+					NullValueHandling = NullValueHandling.Ignore
 				});
 			}
 			catch (FileNotFoundException) {
@@ -241,10 +241,10 @@ namespace DungeonGame {
 		}
 		public static void LoadGame() {
 			try {
-				RoomHandler.Rooms = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IRoom>>(File.ReadAllText(
-					"gamesave.json"), new Newtonsoft.Json.JsonSerializerSettings {
-					TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
-					NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+				RoomHandler.Rooms = JsonConvert.DeserializeObject<List<IRoom>>(File.ReadAllText(
+					"gamesave.json"), new JsonSerializerSettings {
+					TypeNameHandling = TypeNameHandling.Auto,
+					NullValueHandling = NullValueHandling.Ignore
 				});
 				// Insert blank space before game reload info for formatting
 				OutputHandler.Display.StoreUserOutput(
@@ -280,7 +280,7 @@ namespace DungeonGame {
 				Settings.FormatAnnounceText(), 
 				Settings.FormatDefaultBackground(), "Quitting the game.");
 			player.CanSave = true;
-			GameHandler.IsGameOver = true;
+			IsGameOver = true;
 			SaveGame(player);
 			return true;
 		}
@@ -315,6 +315,26 @@ namespace DungeonGame {
 			outputString = "You can't save inside a dungeon! Go outside first.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), outputString);
+		}
+		public static bool ContinuePlaying() {
+			while (true) {
+				const string continuePlayingMessage = "Do you want to keep playing? [Y/N]";
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAnnounceText(), 
+					Settings.FormatDefaultBackground(), 
+					continuePlayingMessage);
+				OutputHandler.Display.RetrieveUserOutput();
+				OutputHandler.Display.ClearUserOutput();
+				var input = InputHandler.GetFormattedInput(Console.ReadLine());
+				OutputHandler.Display.RetrieveUserOutput();
+				OutputHandler.Display.ClearUserOutput();
+				switch (input[0]) {
+					case "y":
+						return true;
+					case "n":
+						return false;
+				}
+			}
 		}
 	}
 }

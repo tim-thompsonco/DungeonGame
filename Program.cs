@@ -33,6 +33,23 @@ namespace DungeonGame {
 				Console.Clear();
 				OutputHandler.ShowUserOutput(player);
 				OutputHandler.Display.ClearUserOutput();
+				if (player.HitPoints > 0) continue;
+				/* If player dies, provide option to continue playing. If there is a saved game, player can reload
+				 from it. Otherwise, player can start over and create a new game. */
+				if (GameHandler.ContinuePlaying()) {
+					GameHandler.LoadGame();
+					player = GameHandler.LoadPlayer();
+					RoomHandler.SetPlayerLocation(player, player.X, player.Y, player.Z);
+					RoomHandler.Rooms[RoomHandler.RoomIndex].LookRoom();
+					OutputHandler.ShowUserOutput(player);
+					OutputHandler.Display.ClearUserOutput();
+				}
+				else {
+					GameHandler.IsGameOver = true;
+					Messages.GameOver();
+					OutputHandler.Display.RetrieveUserOutput();
+					OutputHandler.Display.ClearUserOutput();
+				}
 			}
 		}
 	}

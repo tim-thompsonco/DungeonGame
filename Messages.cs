@@ -6,7 +6,11 @@ namespace DungeonGame {
 		}
 		public static void PlayerDeath() {
 			OutputHandler.Display.StoreUserOutput(Settings.FormatAnnounceText(), 
-				Settings.FormatDefaultBackground(), "You have died. Game over.");
+				Settings.FormatDefaultBackground(), "You have died.");
+		}
+		public static void GameOver() {
+			OutputHandler.Display.StoreUserOutput(Settings.FormatAnnounceText(), 
+				Settings.FormatDefaultBackground(), "Game over.");
 		}
 		public static void InvalidCommand() {
 			OutputHandler.Display.StoreUserOutput(

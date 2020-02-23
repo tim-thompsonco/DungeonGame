@@ -97,7 +97,6 @@ namespace DungeonGame {
 						var outcome = fightEvent.SingleCombat(this.Monster, player);
 						if (!outcome && player.HitPoints <= 0) {
 							Messages.PlayerDeath();
-							GameHandler.IsGameOver = true;
 						}
 					}
 					else {
