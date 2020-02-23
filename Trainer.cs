@@ -54,7 +54,7 @@ namespace DungeonGame {
 					this.TrainableSpells.Add(new Spell(
 						"arcane intellect", 150, 1, Spell.SpellType.ArcaneIntellect, 6));
 					this.TrainableSpells.Add(new Spell(
-						"frost nova", 40, 1, Spell.SpellType.FrostNova, 8));
+						"frost nova", 50, 1, Spell.SpellType.FrostNova, 8));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -372,6 +372,9 @@ namespace DungeonGame {
 						case Spell.SpellType.ArcaneIntellect:
 							player.Spellbook[spellIndex].ChangeAmount.Amount += 5;
 							break;
+						case Spell.SpellType.FrostNova:
+							player.Spellbook[spellIndex].Offensive.Amount += 10;
+							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
@@ -449,6 +452,13 @@ namespace DungeonGame {
 							case Ability.ArcherAbility.SwiftAura:
 								player.Abilities[abilityIndex].ChangeAmount.Amount += 5;
 								break;
+							case Ability.ArcherAbility.ImmolatingArrow:
+								player.Abilities[abilityIndex].Offensive.Amount += 10;
+								player.Abilities[abilityIndex].Offensive.AmountOverTime += 5;
+								break;
+							case Ability.ArcherAbility.Ambush:
+								player.Abilities[abilityIndex].Offensive.Amount += 10;
+								break;
 							default:
 								throw new ArgumentOutOfRangeException();
 						}
@@ -493,6 +503,9 @@ namespace DungeonGame {
 								break;
 							case Ability.WarriorAbility.WarCry:
 								player.Abilities[abilityIndex].ChangeAmount.Amount += 10;
+								break;
+							case Ability.WarriorAbility.Onslaught:
+								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();

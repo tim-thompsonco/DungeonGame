@@ -204,37 +204,29 @@ namespace DungeonGame {
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			if (frostSpellDamage == 0) {
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackFailText(),
-					Settings.FormatDefaultBackground(),
-					"You missed!");
-			}
-			else {
-				var attackSuccessString = "You hit the " + opponent.Name + " for " + frostSpellDamage + " frost damage.";
+			var attackSuccessString = "You hit the " + opponent.Name + " for " + frostSpellDamage + " frost damage.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				attackSuccessString);
+			var frozenEffectIndex = opponent.Effects.FindIndex(
+				e => e.EffectGroup == Effect.EffectType.Frozen);
+			if (frozenEffectIndex == -1) {
+				var frozenString = "The " + opponent.Name +
+				                   " is frozen. Physical, frost and arcane damage to it will be double!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
-					attackSuccessString);
-				var frozenEffectIndex = opponent.Effects.FindIndex(
-					e => e.EffectGroup == Effect.EffectType.Frozen);
-				if (frozenEffectIndex == -1) {
-					var frozenString = "The " + opponent.Name +
-					                   " is frozen. Physical, frost and arcane damage to it will be double!";
-					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatAttackSuccessText(),
-						Settings.FormatDefaultBackground(),
-						frozenString);
-				} 
-				opponent.TakeDamage(frostSpellDamage);
-				opponent.Effects.Add(new Effect(player.Spellbook[index].Name,Effect.EffectType.Frozen, 
-					player.Spellbook[index].Offensive.AmountCurRounds, player.Spellbook[index].Offensive.AmountMaxRounds, 
-					1.5, 1, true));
-				if (player.Spellbook[index].SpellCategory != SpellType.FrostNova) return;
-				opponent.Effects.Add(new Effect(player.Spellbook[index].Name,Effect.EffectType.Stunned, 
-					player.Spellbook[index].Offensive.AmountCurRounds, player.Spellbook[index].Offensive.AmountMaxRounds, 
-					1, 1, true));
-			}
+					frozenString);
+			} 
+			opponent.TakeDamage(frostSpellDamage);
+			opponent.Effects.Add(new Effect(player.Spellbook[index].Name,Effect.EffectType.Frozen, 
+				player.Spellbook[index].Offensive.AmountCurRounds, player.Spellbook[index].Offensive.AmountMaxRounds, 
+				1.5, 1, true));
+			if (player.Spellbook[index].SpellCategory != SpellType.FrostNova) return;
+			opponent.Effects.Add(new Effect(player.Spellbook[index].Name,Effect.EffectType.Stunned, 
+				player.Spellbook[index].Offensive.AmountCurRounds, player.Spellbook[index].Offensive.AmountMaxRounds, 
+				1, 1, true));
 		}
 		public static void FireOffenseSpellInfo(Player player, int index) {
 			var fireAmountString = "Instant Damage: " + player.Spellbook[index].Offensive.Amount;
@@ -243,7 +235,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				fireAmountString);
 			if (player.Spellbook[index].Offensive.AmountOverTime <= 0) return;
-			var fireOverTimeString = "Damage Over Time: " + player.Spellbook[index].Offensive.Amount;
+			var fireOverTimeString = "Damage Over Time: " + player.Spellbook[index].Offensive.AmountOverTime;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -258,30 +250,22 @@ namespace DungeonGame {
 		public static void CastFireOffense(Monster opponent, Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var fireSpellDamage = player.Spellbook[index].Offensive.Amount;
-			if (fireSpellDamage == 0) {
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackFailText(),
-					Settings.FormatDefaultBackground(),
-					"You missed!");
-			}
-			else {
-				var attackSuccessString = "You hit the " + opponent.Name + " for " + fireSpellDamage + " fire damage.";
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackSuccessText(),
-					Settings.FormatDefaultBackground(),
-					attackSuccessString);
-				opponent.TakeDamage(fireSpellDamage);
-				if (player.Spellbook[index].Offensive.AmountOverTime <= 0) return;
-				var onFireString = "The " + opponent.Name + " bursts into flame!";
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatOnFireText(),
-					Settings.FormatDefaultBackground(),
-					onFireString);
-				opponent.Effects.Add(new Effect(player.Spellbook[index].Name,
-					Effect.EffectType.OnFire, player.Spellbook[index].Offensive.AmountOverTime,
-					player.Spellbook[index].Offensive.AmountCurRounds, player.Spellbook[index].Offensive.AmountMaxRounds, 
-					1, 1, true));
-			}
+			var attackSuccessString = "You hit the " + opponent.Name + " for " + fireSpellDamage + " fire damage.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				attackSuccessString);
+			opponent.TakeDamage(fireSpellDamage);
+			if (player.Spellbook[index].Offensive.AmountOverTime <= 0) return;
+			var onFireString = "The " + opponent.Name + " bursts into flame!";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatOnFireText(),
+				Settings.FormatDefaultBackground(),
+				onFireString);
+			opponent.Effects.Add(new Effect(player.Spellbook[index].Name,
+				Effect.EffectType.OnFire, player.Spellbook[index].Offensive.AmountOverTime,
+				player.Spellbook[index].Offensive.AmountCurRounds, player.Spellbook[index].Offensive.AmountMaxRounds, 
+				1, 1, true));
 		}
 		public static void ArcaneOffenseSpellInfo(Player player, int index) {
 			var arcaneAmountString = "Instant Damage: " + player.Spellbook[index].Offensive.Amount;
@@ -318,20 +302,12 @@ namespace DungeonGame {
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			if (arcaneSpellDamage == 0) {
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackFailText(),
-					Settings.FormatDefaultBackground(),
-					"You missed!");
-			}
-			else {
-				var attackSuccessString = "You hit the " + opponent.Name + " for " + arcaneSpellDamage + " arcane damage.";
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackSuccessText(),
-					Settings.FormatDefaultBackground(),
-					attackSuccessString);
-				opponent.TakeDamage(arcaneSpellDamage);
-			}
+			var attackSuccessString = "You hit the " + opponent.Name + " for " + arcaneSpellDamage + " arcane damage.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				attackSuccessString);
+			opponent.TakeDamage(arcaneSpellDamage);
 		}
 		public static void HealingSpellInfo(Player player, int index) {
 			var healAmountString = "Heal Amount: " + player.Spellbook[index].Healing.HealAmount;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DungeonGame;
+using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
 using NUnit.Framework;
 
 namespace DungeonGameTests {
@@ -373,6 +374,29 @@ namespace DungeonGameTests {
 		Assert.AreEqual("(30 seconds) Rejuvenate", defaultEffectOutput.Output[2][2]);
 		Assert.AreEqual(Settings.FormatAttackFailText(), defaultEffectOutput.Output[3][0]);
 		Assert.AreEqual("(30 seconds) Burning", defaultEffectOutput.Output[3][2]);
+		}
+		[Test]
+		public void SaveGameUnitTest() {
+		var player = new Player("placeholder", Player.PlayerClassType.Mage);
+		GearHandler.EquipInitialGear(player);
+		OutputHandler.Display.ClearUserOutput();
+		RoomHandler.Rooms = new List<IRoom> {
+			new DungeonRoom(0, 0, 0, false, false, false,
+				false, false, false, false, false, false,
+				false, 1, 1)};
+		player.CanSave = true;
+		GameHandler.SaveGame(player);
+		Assert.AreEqual( "Your game has been saved.", OutputHandler.Display.Output[0][2]);
+		}
+		[Test]
+		public void LoadGameUnitTest() {
+			OutputHandler.Display.ClearUserOutput();
+			RoomHandler.Rooms = null;
+			GameHandler.LoadGame();
+			var player = GameHandler.LoadPlayer();
+			Assert.AreEqual("placeholder", player.Name);
+			Assert.NotNull(RoomHandler.Rooms);
+			Assert.AreEqual("Reloading your saved game.", OutputHandler.Display.Output[1][2]);
 		}
 	}
 }
