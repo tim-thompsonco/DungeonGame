@@ -233,7 +233,8 @@ namespace DungeonGameTests {
 			for (var i = 2; i < 5; i++) {
 				var augmentedArmor = GearHandler.CheckArmorRating(player);
 				Assert.AreEqual(baseArmor + 25, augmentedArmor);
-				var augmentRoundString = "Your armor is augmented by " + player.Effects[0].EffectAmountOverTime + ".";
+				player.Effects[0].ChangeArmorRound();
+				var augmentRoundString = "Your armor is increased by " + player.Effects[0].EffectAmountOverTime + ".";
 				Assert.AreEqual(augmentRoundString, OutputHandler.Display.Output[i - 2][2]);
 			}
 			GameHandler.RemovedExpiredEffects(player);

@@ -219,6 +219,8 @@ namespace DungeonGameTests {
 			var baseArmorRating = GearHandler.CheckArmorRating(player);
 			var baseDamage = player.Attack(monster);
 			player.UseAbility(monster, input);
+			var rageCost = player.Abilities[abilityIndex].RageCost;
+			Assert.AreEqual(player.MaxRagePoints - rageCost,player.RagePoints);
 			Assert.AreEqual(2, player.Effects.Count);
 			Assert.AreEqual(Effect.EffectType.ChangePlayerDamage, player.Effects[0].EffectGroup);
 			Assert.AreEqual(Effect.EffectType.ChangeArmor, player.Effects[1].EffectGroup);
@@ -243,208 +245,213 @@ namespace DungeonGameTests {
 			Assert.AreEqual(false, player.Effects.Any());
 		}
 		[Test]
-		public void BandageAbilityUnitTests() {
-			var player = new Player("placeholder", Player.PlayerClassType.Archer);
+		public void DisarmAbilityUnitTest() {
+			var player = new Player("test", Player.PlayerClassType.Warrior) {MaxRagePoints = 100, RagePoints = 100,
+				MaxHitPoints = 100, HitPoints = 100};
 			GearHandler.EquipInitialGear(player);
-			player.Abilities.Add(
-				new Ability("use bandage", 25, 1, Ability.ArcherAbility.Bandage, 1));
-			player.HitPoints = 10;
-			/* Bandage should heal 25 immediately, 5 over time, cur round 1, max round 3
-			Make sure stacked healing effects only tick for 3 rounds in combat */
-			player.InCombat = true;
+			OutputHandler.Display.ClearUserOutput();
+			var monster = new Monster(3, Monster.MonsterType.Demon) 
+				{HitPoints = 100, MaxHitPoints = 100};
+			var abilityIndex = player.Abilities.FindIndex(
+				f => f.WarAbilityCategory == Ability.WarriorAbility.Disarm);
+			var inputInfo = new[] {"ability", "disarm"};
+			PlayerHandler.AbilityInfo(player, inputInfo);
+			Assert.AreEqual("Disarm", OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual("Rage Cost: 25", OutputHandler.Display.Output[2][2]);
+			var abilityString = player.Abilities[abilityIndex].Offensive.Amount + "% chance to disarm opponent's weapon.";
+			Assert.AreEqual(abilityString, OutputHandler.Display.Output[3][2]);
+			player.Abilities[abilityIndex].Offensive.Amount = 0; // Set disarm success chance to 0% for test
+			var input = new [] {"use", "disarm"};
+			var abilityName = InputHandler.ParseInput(input);
+			Assert.AreEqual("disarm", abilityName);
+			player.UseAbility(monster, input);
+			var rageCost = player.Abilities[abilityIndex].RageCost;
+			Assert.AreEqual(player.MaxRagePoints - rageCost,player.RagePoints);
+			Assert.AreEqual(true, monster.MonsterWeapon.Equipped);
+			var disarmFailString = "You tried to disarm " + monster.Name + " but failed!";
+			Assert.AreEqual(disarmFailString, OutputHandler.Display.Output[4][2]);
+			player.Abilities[abilityIndex].Offensive.Amount = 100; // Set disarm success chance to 100% for test
+			player.UseAbility(monster, input);
+			Assert.AreEqual(player.MaxRagePoints - rageCost * 2,player.RagePoints);
+			Assert.AreEqual(false, monster.MonsterWeapon.Equipped);
+			var disarmSuccessString = "You successfully disarmed " + monster.Name + "!";
+			Assert.AreEqual(disarmSuccessString, OutputHandler.Display.Output[5][2]);
+		}
+		[Test]
+		public void BandageAbilityUnitTests() {
+			var player = new Player("test", Player.PlayerClassType.Warrior) {MaxRagePoints = 100, RagePoints = 100,
+				MaxHitPoints = 100, HitPoints = 10};
+			GearHandler.EquipInitialGear(player);
+			player.Abilities.Add(new Ability(
+				"bandage", 25, 1, Ability.WarriorAbility.Bandage, 2));
+			OutputHandler.Display.ClearUserOutput();
+			var abilityIndex = player.Abilities.FindIndex(
+				f => f.WarAbilityCategory == Ability.WarriorAbility.Bandage);
+			var inputInfo = new[] {"ability", "bandage"};
+			PlayerHandler.AbilityInfo(player, inputInfo);
+			Assert.AreEqual("Bandage", OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual("Rage Cost: 25", OutputHandler.Display.Output[2][2]);
+			Assert.AreEqual("Heal Amount: 25", OutputHandler.Display.Output[3][2]);
+			Assert.AreEqual("Heal Over Time: 5", OutputHandler.Display.Output[4][2]);
+			var healInfoStringCombat = "Heal over time will restore health for " + 
+			                           player.Abilities[abilityIndex].Healing.HealMaxRounds + " rounds in combat.";
+			Assert.AreEqual(healInfoStringCombat, OutputHandler.Display.Output[5][2]);
+			var healInfoStringNonCombat = "Heal over time will restore health " + 
+			                              player.Abilities[abilityIndex].Healing.HealMaxRounds + " times every 10 seconds.";
+			Assert.AreEqual(healInfoStringNonCombat, OutputHandler.Display.Output[6][2]);
 			var input = new [] {"use", "bandage"};
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("bandage", abilityName);
+			var baseHitPoints = player.HitPoints;
 			player.UseAbility(input);
-			player.UseAbility(input);
-			Assert.AreEqual(60, player.HitPoints);
-			for (var i = 0; i < 5; i++) {
+			var rageCost = player.Abilities[abilityIndex].RageCost;
+			Assert.AreEqual(player.MaxRagePoints - rageCost,player.RagePoints);
+			var healAmount = player.Abilities[abilityIndex].Healing.HealAmount;
+			var healString = "You heal yourself for " + healAmount + " health.";
+			Assert.AreEqual(healString, OutputHandler.Display.Output[7][2]);
+			Assert.AreEqual(Effect.EffectType.Healing, player.Effects[0].EffectGroup);
+			Assert.AreEqual(baseHitPoints + healAmount, player.HitPoints);
+			baseHitPoints = player.HitPoints;
+			OutputHandler.Display.ClearUserOutput();
+			for (var i = 2; i < 5; i++) {
 				player.Effects[0].HealingRound(player);
-				player.Effects[1].HealingRound(player);
-				if (i <= 2) Assert.AreEqual(60 + (i + 1) * 10, player.HitPoints);
+				var healOverTimeAmt = player.Effects[0].EffectAmountOverTime;
+				var healAmtString = "You have been healed for " + healOverTimeAmt + " health.";
+				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
+				Assert.AreEqual(healAmtString, OutputHandler.Display.Output[i - 2][2]);
+				Assert.AreEqual(baseHitPoints + (i - 1) * healOverTimeAmt, player.HitPoints);
 			}
-			Assert.AreEqual(90, player.HitPoints);
-			player.InCombat = false;
-			// Make sure stacked healing effects tick properly outside of combat		
-			player.HitPoints = 10;
-			var inputTwo = new [] {"use", "bandage"};
-			var abilityNameTwo = InputHandler.ParseInput(inputTwo);
-			Assert.AreEqual("bandage", abilityName);
-			player.UseAbility(inputTwo);
-			player.UseAbility(inputTwo);
-			Assert.AreEqual(60, player.HitPoints);
-			foreach (var effect in player.Effects.Where(effect => effect.EffectGroup == Effect.EffectType.Healing)) {
-				while (!effect.IsEffectExpired) {
-					effect.HealingRound(player);
-				}
-			}
-			Assert.AreEqual(90, player.HitPoints);
+			GameHandler.RemovedExpiredEffects(player);
+			Assert.AreEqual(false, player.Effects.Any());
 		}
 		[Test]
 		public void PowerAuraAbilityUnitTest() {
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
-			RoomHandler.Rooms = new List<IRoom> {
-				new DungeonRoom(0, 0, 0, false, false, false,
-					false, false, false, false, false, false,
-					false, 1, 1)
-			};
+			var player = new Player("test", Player.PlayerClassType.Warrior) {MaxRagePoints = 150, RagePoints = 150};
 			player.Abilities.Add(new Ability(
 				"power aura", 150, 1, Ability.WarriorAbility.PowerAura, 6));
-			var input = new [] {"use", "power", "aura"};
-			PlayerHandler.AbilityInfo(player, input);
+			OutputHandler.Display.ClearUserOutput();
+			var abilityIndex = player.Abilities.FindIndex(
+				f => f.WarAbilityCategory == Ability.WarriorAbility.PowerAura);
+			var inputInfo = new[] {"ability", "power", "aura"};
+			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Power Aura", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
 			Assert.AreEqual("Rage Cost: 150", OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual("Power Aura Amount: 15", OutputHandler.Display.Output[3][2]);
 			Assert.AreEqual("Strength is increased by 15 for 10 minutes.", OutputHandler.Display.Output[4][2]);
-			OutputHandler.Display.ClearUserOutput();
+			var input = new [] {"use", "power", "aura"};
+			var abilityName = InputHandler.ParseInput(input);
+			Assert.AreEqual("power aura", abilityName);
 			var baseStr = player.Strength;
 			var baseRage = player.RagePoints;
 			var baseMaxRage = player.MaxRagePoints;
-			var abilityIndex = player.Abilities.FindIndex(f => f.Name == InputHandler.ParseInput(input));
 			player.UseAbility(input);
-			Assert.AreEqual(player.Strength, baseStr + player.Abilities[abilityIndex].ChangeAmount.Amount);
+			var rageCost = player.Abilities[abilityIndex].RageCost;
+			Assert.AreEqual(baseMaxRage - rageCost,player.RagePoints);
+			Assert.AreEqual("You generate a Power Aura around yourself.", OutputHandler.Display.Output[5][2]);
+			OutputHandler.Display.ClearUserOutput();
 			Assert.AreEqual(
 				baseRage - player.Abilities[abilityIndex].RageCost, player.RagePoints);
+			Assert.AreEqual(player.Strength, baseStr + player.Abilities[abilityIndex].ChangeAmount.Amount);
 			Assert.AreEqual(
 				player.MaxRagePoints, baseMaxRage + player.Abilities[abilityIndex].ChangeAmount.Amount * 10);
-			var expectedOutput = OutputHandler.Display.Output[0][2];
-			Assert.AreEqual("You generate a Power Aura around yourself.", expectedOutput);
-			for (var i = 0; i < 10; i++) {
-				GameHandler.CheckStatus(player);
+			Assert.AreEqual(Effect.EffectType.ChangeStat, player.Effects[0].EffectGroup);
+			for (var i = 0; i < 600; i++) {
+				player.Effects[0].ChangeStatRound();
 			}
-			var defaultEffectOutput = OutputHandler.ShowEffects(player);
-			Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
-			Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
-			Assert.AreEqual("(590 seconds) Power Aura", defaultEffectOutput.Output[1][2]);
-			for (var i = 0; i < 590; i++) {
-				GameHandler.CheckStatus(player);
-			}
+			GameHandler.RemovedExpiredEffects(player);
+			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(baseStr, player.Strength);
-			Assert.AreEqual(0, player.RagePoints);
 			Assert.AreEqual(baseMaxRage, player.MaxRagePoints);
-			defaultEffectOutput = OutputHandler.ShowEffects(player);
-			Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
-			Assert.AreEqual(Settings.FormatInfoText(), defaultEffectOutput.Output[1][0]);
-			Assert.AreEqual("None.", defaultEffectOutput.Output[1][2]);
+			Assert.AreEqual(player.MaxRagePoints - rageCost, player.RagePoints);
 		}
 		[Test]
 		public void WarCryAbilityUnitTest() {
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
-			RoomHandler.Rooms = new List<IRoom> {
-				new DungeonRoom(0, 0, 0, false, false, false,
-					false, false, false, false, false, false,
-					false, 1, 1)
-			};
+			var player = new Player("test", Player.PlayerClassType.Warrior) {MaxRagePoints = 100, RagePoints = 100,
+				InCombat = true};
 			player.Abilities.Add(new Ability(
 				"war cry", 50, 1, Ability.WarriorAbility.WarCry, 4));
-			if (RoomHandler.Rooms[0].Monster == null) {
-				RoomHandler.Rooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
-			}
-			var monster = RoomHandler.Rooms[0].Monster;
-			monster.StatReplenishInterval = 9999999; // Disable stat replenish over time method
-			player.InCombat = true;
-			monster.InCombat = true;
-			var input = new[] {"use", "war", "cry"};
-			PlayerHandler.AbilityInfo(player, input);
+			var monster = new Monster(3, Monster.MonsterType.Demon) 
+				{HitPoints = 100, MaxHitPoints = 100};
+			var abilityIndex = player.Abilities.FindIndex(
+				f => f.WarAbilityCategory == Ability.WarriorAbility.WarCry);
+			var inputInfo = new[] {"ability", "war", "cry"};
+			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("War Cry", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
 			Assert.AreEqual("Rage Cost: 50", OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual("War Cry Amount: 25", OutputHandler.Display.Output[3][2]);
 			Assert.AreEqual("Opponent's attacks are decreased by 25 for 3 rounds.", 
 				OutputHandler.Display.Output[4][2]);
-			OutputHandler.Display.ClearUserOutput();
+			var input = new[] {"use", "war", "cry"};
+			var abilityName = InputHandler.ParseInput(input);
+			Assert.AreEqual("war cry", abilityName);
 			player.UseAbility(input);
+			var rageCost = player.Abilities[abilityIndex].RageCost;
+			Assert.AreEqual(player.MaxRagePoints - rageCost,player.RagePoints);
 			Assert.AreEqual("You shout a War Cry, intimidating your opponent, and decreasing incoming damage.", 
-				OutputHandler.Display.Output[0][2]);
-			var baseAttackDamageM = monster.Attack(player);
-			var attackDamageM = baseAttackDamageM;
-			var indexDamageChange = player.Effects.FindIndex(
-				f => f.EffectGroup == Effect.EffectType.ChangeOpponentDamage);
-			if (indexDamageChange != -1) {
-				var changeDamageAmount = player.Effects[indexDamageChange].EffectAmountOverTime < attackDamageM ? 
-					player.Effects[indexDamageChange].EffectAmountOverTime : attackDamageM;
-				attackDamageM += changeDamageAmount;
-				if (attackDamageM < 0) attackDamageM = 0;
-			}
-			Assert.AreEqual(attackDamageM, baseAttackDamageM - 25 >= 0 ? baseAttackDamageM - 25 : 0);
-			var defaultEffectOutput = OutputHandler.ShowEffects(player);
-			Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
-			Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
-			Assert.AreEqual("(3 rounds) War Cry", defaultEffectOutput.Output[1][2]);
-			for (var i = 0; i < 3; i++) {
-				GameHandler.CheckStatus(player);
-			}
+				OutputHandler.Display.Output[5][2]);
 			OutputHandler.Display.ClearUserOutput();
-			defaultEffectOutput = OutputHandler.ShowEffects(player);
-			Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
-			Assert.AreEqual(Settings.FormatInfoText(), defaultEffectOutput.Output[1][0]);
-			Assert.AreEqual("None.", defaultEffectOutput.Output[1][2]);
-			baseAttackDamageM = monster.Attack(player);
-			indexDamageChange = player.Effects.FindIndex(
-				f => f.EffectGroup == Effect.EffectType.ChangeOpponentDamage);
-			attackDamageM = baseAttackDamageM;
-			if (indexDamageChange != -1) {
-				var changeDamageAmount = player.Effects[indexDamageChange].EffectAmountOverTime < attackDamageM ? 
-					player.Effects[indexDamageChange].EffectAmountOverTime : attackDamageM;
+			Assert.AreEqual(Effect.EffectType.ChangeOpponentDamage, player.Effects[0].EffectGroup);
+			for (var i = 2; i < 5; i++) {
+				var baseAttackDamageM = monster.Attack(player);
+				var attackDamageM = baseAttackDamageM;
+				var changeDamageAmount = player.Effects[0].EffectAmountOverTime < attackDamageM ?
+					player.Effects[0].EffectAmountOverTime : attackDamageM;
 				attackDamageM -= changeDamageAmount;
+				Assert.AreEqual(baseAttackDamageM - changeDamageAmount, attackDamageM);
+				player.Effects[0].ChangeOpponentDamageRound(player);
+				var changeDmgString = "Incoming damage is decreased by " + player.Effects[0].EffectAmountOverTime + ".";
+				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
+				Assert.AreEqual(changeDmgString, OutputHandler.Display.Output[i - 2][2]);
 			}
-			Assert.AreEqual(attackDamageM, baseAttackDamageM);
+			GameHandler.RemovedExpiredEffects(player);
+			Assert.AreEqual(false, player.Effects.Any());
 		}
 		[Test]
 		public void OnslaughtAbilityUnitTest() {
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
-			RoomHandler.Rooms = new List<IRoom> {
-				new DungeonRoom(0, 0, 0, false, false, false,
-					false, false, false, false, false, false,
-					false, 1, 1)
-			};
+			var player = new Player("test", Player.PlayerClassType.Warrior) {MaxRagePoints = 100, RagePoints = 100,
+				InCombat = true};
 			player.Abilities.Add(new Ability(
 				"onslaught", 25, 1, Ability.WarriorAbility.Onslaught, 8));
-			if (RoomHandler.Rooms[0].Monster == null) {
-				RoomHandler.Rooms[0].Monster = new Monster(3, Monster.MonsterType.Demon);
-			}
-			var monster = RoomHandler.Rooms[0].Monster;
-			monster.MaxHitPoints = 100;
-			monster.HitPoints = monster.MaxHitPoints;
-			player.MaxRagePoints = 100;
-			player.RagePoints = player.MaxRagePoints;
-			monster.StatReplenishInterval = 9999999; // Disable stat replenish over time method
-			player.InCombat = true;
-			monster.InCombat = true;
-			var input = new[] {"use", "onslaught"};
-			PlayerHandler.AbilityInfo(player, input);
+			var monster = new Monster(3, Monster.MonsterType.Demon) 
+				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
+			var abilityIndex = player.Abilities.FindIndex(
+				f => f.WarAbilityCategory == Ability.WarriorAbility.Onslaught);
+			var inputInfo = new[] {"ability", "onslaught"};
+			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Onslaught", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
 			Assert.AreEqual("Rage Cost: 25", OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual("Instant Damage: 25", OutputHandler.Display.Output[3][2]);
-			Assert.AreEqual("Two attacks are launched which each cause instant damage. Cost and damage are per attack.", 
+			Assert.AreEqual(
+				"Two attacks are launched which each cause instant damage. Cost and damage are per attack.",
 				OutputHandler.Display.Output[4][2]);
-			OutputHandler.Display.ClearUserOutput();
+			var input = new[] {"use", "onslaught"};
+			var abilityName = InputHandler.ParseInput(input);
+			Assert.AreEqual("onslaught", abilityName);
 			player.UseAbility(monster, input);
-			var index = player.Abilities.FindIndex(
-				f => f.WarAbilityCategory == Ability.WarriorAbility.Onslaught);
-			Assert.AreEqual(monster.HitPoints, 
-				monster.MaxHitPoints - 2 * player.Abilities[index].Offensive.Amount);
-			Assert.AreEqual(player.RagePoints, player.MaxRagePoints - 2 * player.Abilities[index].RageCost);
+			var rageCost = player.Abilities[abilityIndex].RageCost;
+			var hitAmount = player.Abilities[abilityIndex].Offensive.Amount;
+			Assert.AreEqual(monster.MaxHitPoints - 2 * hitAmount,monster.HitPoints);
+			Assert.AreEqual(player.MaxRagePoints - 2 * rageCost, player.RagePoints);
 			var attackString = "Your onslaught hit the " + monster.Name + " for 25" + " physical damage.";
-			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
-			Assert.AreEqual(attackString, OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual(attackString, OutputHandler.Display.Output[5][2]);
+			Assert.AreEqual(attackString, OutputHandler.Display.Output[6][2]);
 			player.MaxRagePoints = 25;
 			player.RagePoints = player.MaxRagePoints;
 			monster.MaxHitPoints = 100;
 			monster.HitPoints = monster.MaxHitPoints;
-			OutputHandler.Display.ClearUserOutput();
 			player.UseAbility(monster, input);
+			Assert.AreEqual(player.MaxRagePoints - rageCost, player.RagePoints);
+			Assert.AreEqual(attackString, OutputHandler.Display.Output[7][2]);
 			const string outOfRageString = "You didn't have enough rage points for the second attack!";
-			Assert.AreEqual(monster.HitPoints, 
-				monster.MaxHitPoints - player.Abilities[index].Offensive.Amount);
-			Assert.AreEqual(player.RagePoints, player.MaxRagePoints - player.Abilities[index].RageCost);
-			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
-			Assert.AreEqual(outOfRageString, OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual(outOfRageString, OutputHandler.Display.Output[8][2]);
 		}
 	}
 }
