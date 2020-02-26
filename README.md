@@ -31,7 +31,7 @@
 
 <h2>Installing</h2>
 
-<p>To install the game, simply download the zip file for the desired release and unzip to a directory of your choose. The executable program can then be ran.</p>
+<p>To install the game, simply download the zip file for the desired release and unzip to a directory of your choice. The executable program can then be ran.</p>
 
 <h2>Deployment</h2>
 
