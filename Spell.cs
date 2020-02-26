@@ -24,8 +24,6 @@ namespace DungeonGame {
 		public int ManaCost { get; set; }
 		public int Rank { get; set; }
 
-		// Default constructor for JSON serialization to work since there isn't 1 main constructor
-		public Spell() {}
 		public Spell(string name, int manaCost, int rank, SpellType spellType, int minLevel) {
 			this.Name = name;
 			this.ManaCost = manaCost;

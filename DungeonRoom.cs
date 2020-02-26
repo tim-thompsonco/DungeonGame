@@ -36,8 +36,6 @@ namespace DungeonGame {
 		public List<IRoomInteraction> RoomObjects { get; set; }
 		public Monster Monster { get; set; }
 
-		// Default constructor for JSON serialization to work since there isn't 1 main constructor
-		public DungeonRoom() {}
 		public DungeonRoom(int x, int y, int z, bool goNorth, bool goSouth, bool goEast, bool goWest, bool goNorthWest,
 			bool goSouthWest, bool goNorthEast, bool goSouthEast, bool goUp, bool goDown, int levelRangeLow,
 			int levelRangeHigh) {

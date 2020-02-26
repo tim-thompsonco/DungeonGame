@@ -60,7 +60,6 @@ namespace DungeonGame {
 		public List<Consumable> Consumables { get; set; }
 		public List<IEquipment> Inventory { get; set; }
 
-		[JsonConstructor]
 		public Player(string name, PlayerClassType playerClass) {
 			this.Name = name;
 			this.PlayerClass = playerClass;
@@ -298,7 +297,7 @@ namespace DungeonGame {
 			switch (userInput[1]) {
 				case "health":
 					index = this.Consumables.FindIndex(
-						f => f.PotionCategory.ToString() == "Health" && f.Name.Contains(userInput[1]));
+						f => f.PotionCategory == Consumable.PotionType.Health && f.Name.Contains(userInput[1]));
 					if (index != -1) {
 						this.Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
 						var drankHealthString = "You drank a potion and replenished " +
@@ -318,7 +317,7 @@ namespace DungeonGame {
 					break;
 				case "mana":
 					index = this.Consumables.FindIndex(
-						f => f.PotionCategory.ToString() == "Mana" && f.Name.Contains(userInput[1]));
+						f => f.PotionCategory == Consumable.PotionType.Mana && f.Name.Contains(userInput[1]));
 					if (index != -1) {
 						this.Consumables[index].RestoreMana.RestoreManaPlayer(this);
 						var drankManaString = "You drank a potion and replenished " +
