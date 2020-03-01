@@ -14,27 +14,12 @@ namespace DungeonGame {
 			Normal,
 			Greater
 		}
-		public enum GemType {
-			Ruby,
-			Emerald,
-			Diamond,
-			Sapphire,
-			Amethyst,
-			Topaz
-		}
-		public enum GemLevel {
-			Chipped,
-			Dull,
-			Normal
-		}
 		public string Name { get; set; }
 		public int ItemValue { get; set; }
 		public bool Equipped { get; set; }
 		public ArrowType ArrowCategory { get; set; }
 		public PotionType PotionCategory { get; set; }
 		public PotionLevel PotionStrength { get; set; }
-		public GemType GemCategory { get; set; }
-		public GemLevel GemStrength { get; set; }
 		public RestoreHealth RestoreHealth { get; set; }
 		public RestoreMana RestoreMana { get; set; }
 		public Arrow Arrow { get; set; }
@@ -81,25 +66,6 @@ namespace DungeonGame {
 			this.ItemValue = itemValue;
 			this.ArrowCategory = arrowType;
 			this.Arrow = new Arrow(50);
-		}
-		public Consumable(int level, GemType gemType) {
-			this.GemCategory = gemType;
-			this.Weight = 1;
-			this.ItemValue = level * 20;
-			string name;
-			if (level <= 3) {
-				this.GemStrength = GemLevel.Chipped;
-				name = GemLevel.Chipped + " " + gemType;
-			}
-			else if (level <= 6) {
-				this.GemStrength = GemLevel.Dull;
-				name = GemLevel.Dull + " " + gemType;
-			}
-			else {
-				this.GemStrength = GemLevel.Normal;
-				name = gemType.ToString();
-			}
-			this.Name = name.ToLower();
 		}
 	}
 }

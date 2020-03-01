@@ -84,6 +84,7 @@ namespace DungeonGame {
 			}
 			if (index != -1) {
 				var buyArmor = this.VendorItems[index] as Armor;
+				var buyLoot = this.VendorItems[index] as Loot;
 				var buyWeapon = this.VendorItems[index] as Weapon;
 				var buyConsumable = this.VendorItems[index] as Consumable;
 				switch (this.BuySellType) {
@@ -114,6 +115,9 @@ namespace DungeonGame {
 						}
 						if (buyConsumable != null) {
 							this.BuyItem(player, buyConsumable, index);
+						}
+						if (buyLoot != null) {
+							this.BuyItem(player, buyLoot, index);
 						}
 						break;
 				}

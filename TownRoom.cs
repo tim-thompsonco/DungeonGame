@@ -280,7 +280,7 @@ namespace DungeonGame {
 			else {
 				sameLineOutput.Add(Settings.FormatInfoText());
 				sameLineOutput.Add(Settings.FormatDefaultBackground());
-				sameLineOutput.Add("There is nothing in the room");
+				sameLineOutput.Add("There is nothing in the room.");
 			}
 			OutputHandler.Display.StoreUserOutput(sameLineOutput); 
 			this.ShowDirections();

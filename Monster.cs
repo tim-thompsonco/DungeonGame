@@ -114,22 +114,22 @@ namespace DungeonGame {
 			var randomGemNum = GameHandler.GetRandomNumber(1, 6);
 			switch (randomGemNum) {
 				case 1:
-					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Amethyst));
+					this.MonsterItems.Add(new Loot(this.Level, Loot.GemType.Amethyst));
 					break;
 				case 2:
-					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Diamond));
+					this.MonsterItems.Add(new Loot(this.Level, Loot.GemType.Diamond));
 					break;
 				case 3:
-					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Emerald));
+					this.MonsterItems.Add(new Loot(this.Level, Loot.GemType.Emerald));
 					break;
 				case 4:
-					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Ruby));
+					this.MonsterItems.Add(new Loot(this.Level, Loot.GemType.Ruby));
 					break;
 				case 5:
-					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Sapphire));
+					this.MonsterItems.Add(new Loot(this.Level, Loot.GemType.Sapphire));
 					break;
 				case 6:
-					this.MonsterItems.Add(new Consumable(this.Level, Consumable.GemType.Topaz));
+					this.MonsterItems.Add(new Loot(this.Level, Loot.GemType.Topaz));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

@@ -37,19 +37,19 @@ namespace DungeonGameTests {
 			Assert.AreEqual("greater health potion", potionFour.Name);
 			Assert.AreEqual(150, potionFour.RestoreHealth.RestoreHealthAmt);
 			// Test consumable gem creation
-			var gem = new Consumable(1, Consumable.GemType.Amethyst);
+			var gem = new Loot(1, Loot.GemType.Amethyst);
 			Assert.AreEqual(20, gem.ItemValue);
 			Assert.AreEqual("chipped amethyst", gem.Name);
-			var gemTwo = new Consumable(3, Consumable.GemType.Amethyst);
+			var gemTwo = new Loot(3, Loot.GemType.Amethyst);
 			Assert.AreEqual(60, gemTwo.ItemValue);
 			Assert.AreEqual("chipped amethyst", gemTwo.Name);
-			var gemThree = new Consumable(4, Consumable.GemType.Amethyst);
+			var gemThree = new Loot(4, Loot.GemType.Amethyst);
 			Assert.AreEqual(80, gemThree.ItemValue);
 			Assert.AreEqual("dull amethyst", gemThree.Name);
-			var gemFour = new Consumable(6, Consumable.GemType.Amethyst);
+			var gemFour = new Loot(6, Loot.GemType.Amethyst);
 			Assert.AreEqual(120, gemFour.ItemValue);
 			Assert.AreEqual("dull amethyst", gemFour.Name);
-			var gemFive = new Consumable(7, Consumable.GemType.Amethyst);
+			var gemFive = new Loot(7, Loot.GemType.Amethyst);
 			Assert.AreEqual(140, gemFive.ItemValue);
 			Assert.AreEqual("amethyst", gemFive.Name);
 		}
