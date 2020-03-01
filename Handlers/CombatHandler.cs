@@ -424,7 +424,6 @@ namespace DungeonGame {
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"What ability did you want to know about?");
-						return false;
 					}
 					catch (NullReferenceException) {
 						if (this.Player.PlayerClass == Player.PlayerClassType.Mage) {
@@ -432,10 +431,9 @@ namespace DungeonGame {
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't use abilities. You're not a warrior or archer!");
-							return false;
 						}
 					}
-					break;
+					return false;
 				case "spell":
 					try {
 						PlayerHandler.SpellInfo(this.Player, this.Input);
@@ -445,7 +443,6 @@ namespace DungeonGame {
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"What spell did you want to know about?");
-						return false;
 					}
 					catch (NullReferenceException) {
 						if (this.Player.PlayerClass != Player.PlayerClassType.Mage) {
@@ -453,10 +450,9 @@ namespace DungeonGame {
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't use spells. You're not a mage!");
-							return false;
 						}
 					}
-					break;
+					return false;
 				default:
 					Messages.InvalidCommand();
 					return false;
