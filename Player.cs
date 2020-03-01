@@ -167,7 +167,7 @@ namespace DungeonGame {
 					this.Inventory.Add(new Armor(
 						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Legs));
 					this.Inventory.Add( new Quiver("basic quiver", 50, 50, 15));
-					this.Abilities.Add(new Ability("precision shot", 40, 1, 
+					this.Abilities.Add(new Ability("precise shot", 40, 1, 
 						Ability.ArcherAbility.Precise, 1));
 					this.Abilities.Add(new Ability(
 						"gut shot", 25, 1, Ability.ArcherAbility.Gut, 1));
@@ -442,7 +442,7 @@ namespace DungeonGame {
 				if (i != input.Length - 1) inputName.Append(" ");
 			}
 			var index = this.Abilities.FindIndex(
-				f => f.Name == inputName.ToString() || f.Name == input[1] || 
+				f => f.Name == inputName.ToString() || f.Name == input[1] || f.Name.Contains(input[1]) || 
 				     f.Name.Contains(inputName.ToString()));
 			if (index != -1 && 
 			    this.RagePoints >= this.Abilities[index].RageCost && 
@@ -495,7 +495,7 @@ namespace DungeonGame {
 			if (index != -1 &&
 			    this.ComboPoints >= this.Abilities[index].ComboCost && 
 			    this.PlayerClass == PlayerClassType.Archer && 
-			    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
+			    this.PlayerWeapon?.WeaponGroup == Weapon.WeaponType.Bow) {
 				switch (this.Abilities[index].ArcAbilityCategory) {
 					case Ability.ArcherAbility.Distance:
 						return;

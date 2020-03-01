@@ -279,7 +279,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(disarmSuccessString, OutputHandler.Display.Output[5][2]);
 		}
 		[Test]
-		public void BandageAbilityUnitTests() {
+		public void BandageAbilityUnitTest() {
 			var player = new Player("test", Player.PlayerClassType.Warrior) {MaxRagePoints = 100, RagePoints = 100,
 				MaxHitPoints = 100, HitPoints = 10};
 			GearHandler.EquipInitialGear(player);
