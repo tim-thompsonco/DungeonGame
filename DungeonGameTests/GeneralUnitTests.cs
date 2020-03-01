@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using DungeonGame;
-using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
 using NUnit.Framework;
 
 namespace DungeonGameTests {

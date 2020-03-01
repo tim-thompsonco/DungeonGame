@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DungeonGame;
-using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using NUnit.Framework;
 
 namespace DungeonGameTests {
