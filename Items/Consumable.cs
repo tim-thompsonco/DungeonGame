@@ -18,15 +18,27 @@ namespace DungeonGame {
 			Normal,
 			Greater
 		}
+		public enum KitLevel {
+			Light,
+			Medium,
+			Heavy
+		}
+		public enum KitType {
+			Armor,
+			Weapon
+		}
 		public string Name { get; set; }
 		public int ItemValue { get; set; }
 		public bool Equipped { get; set; }
 		public ArrowType ArrowCategory { get; set; }
 		public PotionType PotionCategory { get; set; }
 		private PotionLevel PotionStrength { get; set; }
+		public KitLevel KitStrength { get; set; }
+		public KitType KitCategory { get; set; }
 		public RestoreHealth RestoreHealth { get; set; }
 		public RestoreMana RestoreMana { get; set; }
 		public ChangeStat ChangeStat { get; set; }
+		public ChangeArmor ChangeArmor { get; set; }
 		public Arrow Arrow { get; set; }
 		public int Weight { get; set; }
 		
@@ -83,6 +95,32 @@ namespace DungeonGame {
 			this.ItemValue = itemValue;
 			this.ArrowCategory = arrowType;
 			this.Arrow = new Arrow(50);
+		}
+		public Consumable(KitLevel kitLevel, KitType kitType) {
+			this.Name = kitLevel + " " + kitType + " kit";
+			this.Weight = 1;
+			this.KitStrength = kitLevel;
+			var amount = this.KitStrength switch {
+				KitLevel.Light => 1,
+				KitLevel.Medium => 2,
+				KitLevel.Heavy => 3,
+				_ => throw new ArgumentOutOfRangeException()
+			};
+			this.ItemValue = amount * 10;
+			var randomNum = GameHandler.GetRandomNumber(1, 3);
+			switch (this.KitCategory) {
+				case KitType.Armor:
+					this.ChangeArmor = new ChangeArmor(amount, randomNum switch {
+						1 => ChangeArmor.KitType.Cloth,
+						2 => ChangeArmor.KitType.Leather,
+						3 => ChangeArmor.KitType.Plate,
+						_ => throw new ArgumentOutOfRangeException()});
+					break;
+				case KitType.Weapon:
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 	}
 }

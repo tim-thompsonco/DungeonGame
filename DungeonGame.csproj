@@ -36,6 +36,7 @@
     <Compile Include="Builders\RoomBuilder.cs" />
     <Compile Include="Builders\RoomBuilderHelper.cs" />
     <Compile Include="Consumable Properties\Arrow.cs" />
+    <Compile Include="Consumable Properties\ChangeArmor.cs" />
     <Compile Include="Consumable Properties\ChangeStat.cs" />
     <Compile Include="Consumable Properties\RestoreMana.cs" />
     <Compile Include="Consumable Properties\RestoreHealth.cs" />
