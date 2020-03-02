@@ -236,7 +236,7 @@ namespace DungeonGameTests {
 				var changeDmgString = "Your damage is increased by " + berserkDamageAmount + ".";
 				Assert.AreEqual(changeDmgString, OutputHandler.Display.Output[0][2]);
 				player.Effects[1].ChangeArmorRound();
-				var changeArmorString = "Your armor is decreased by " + berserkArmorAmount + ".";
+				var changeArmorString = "Your armor is decreased by " + berserkArmorAmount * -1 + ".";
 				Assert.AreEqual(changeArmorString, OutputHandler.Display.Output[1][2]);
 				GameHandler.RemovedExpiredEffects(player);
 			}

@@ -8,8 +8,8 @@ namespace DungeonGame {
 		public static UserOutput Display = new UserOutput();
 		public static UserOutput MapDisplay = new UserOutput();
 		public static UserOutput EffectDisplay = new UserOutput();
-		
-		public static UserOutput BuildMap(Player player, int height, int width) {
+
+		private static UserOutput BuildMap(Player player, int height, int width) {
 			var output = new UserOutput();
 			// Draw top border of map
 			var mapBorder = new StringBuilder();

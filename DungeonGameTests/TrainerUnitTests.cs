@@ -90,7 +90,6 @@ namespace DungeonGameTests {
 				f => f.Name == abilityName || f.Name.Contains(abilityName));
 			Assert.AreEqual(-1, abilityIndex);
 			player.Gold = 0;
-			OutputHandler.Display.ClearUserOutput();
 			trainer.TrainAbility(player, abilityName);
 			abilityIndex = player.Abilities.FindIndex(
 				f => f.Name == abilityName || f.Name.Contains(abilityName));
@@ -99,11 +98,9 @@ namespace DungeonGameTests {
 				OutputHandler.Display.Output[1][2]);
 			player.Intelligence = 20;
 			player.Level = 2;
-			OutputHandler.Display.ClearUserOutput();
 			trainer.TrainAbility(player, abilityName);
 			Assert.AreEqual("You can't afford that!",OutputHandler.Display.Output[2][2]);
 			player.Gold = 100;
-			OutputHandler.Display.ClearUserOutput();
 			trainer.TrainAbility(player, abilityName);
 			abilityIndex = player.Abilities.FindIndex(
 				f => f.Name == abilityName || f.Name.Contains(abilityName));
@@ -116,8 +113,7 @@ namespace DungeonGameTests {
 		public void TrainSpellTest() {
 			OutputHandler.Display.ClearUserOutput();
 			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
-			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Warrior);
-			player.PlayerClass = Player.PlayerClassType.Mage;
+			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Mage);
 			const string spellName = "frost nova";
 			trainer.TrainSpell(player, spellName);
 			Assert.AreEqual("You can't train spells. You're not a mage!",OutputHandler.Display.Output[0][2]);
@@ -136,13 +132,13 @@ namespace DungeonGameTests {
 			player.Level = 8;
 			trainer.TrainSpell(player, spellName);
 			Assert.AreEqual("You can't afford that!",OutputHandler.Display.Output[2][2]);
-			player.Gold = 100;
-			trainer.TrainAbility(player, spellName);
+			player.Gold = 200;
+			trainer.TrainSpell(player, spellName);
 			spellIndex = player.Spellbook.FindIndex(
 				f => f.Name == spellName || f.Name.Contains(spellName));
 			Assert.AreNotEqual(-1, spellIndex);
-			Assert.AreEqual(60, player.Gold);
-			Assert.AreEqual("You purchased Frost Nova (Rank 1) for 40 gold.", 
+			Assert.AreEqual(40, player.Gold);
+			Assert.AreEqual("You purchased Frost Nova (Rank 1) for 160 gold.", 
 				OutputHandler.Display.Output[3][2]);
 		}
 	}

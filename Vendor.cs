@@ -7,7 +7,7 @@ namespace DungeonGame {
 	public class Vendor : IRoomInteraction {
 		public string Name { get; set; }
 		public string Desc { get; set; }
-		public string BuySellType { get; set; }
+		private string BuySellType { get; set; }
 		public List<IEquipment> VendorItems { get; set; } = new List<IEquipment>();
 
 		public Vendor(string name, string desc, string buySellType) {
@@ -146,7 +146,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				"You can't afford that!");
 		}
-		public void BuyItem(
+		private void BuyItem(
 			Player player, IEquipment buyItem, int index, string inputName) {
 			if (player.Gold >= buyItem.ItemValue) {
 				player.Gold -= buyItem.ItemValue;
@@ -231,7 +231,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				"You don't have that to sell!");
 		}
-		public void SellItem(Player player, IEquipment sellItem, int index) {
+		private void SellItem(Player player, IEquipment sellItem, int index) {
 			if (!sellItem.Equipped) {
 				player.Gold += sellItem.ItemValue;
 				if (sellItem.GetType().Name == "Consumable") {
@@ -346,7 +346,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				noRestoreString);
 		}
-		public void RepopulateHealerPotion(string inputName) {
+		private void RepopulateHealerPotion(string inputName) {
 			var potionIndex = this.VendorItems.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (potionIndex != -1) return;
@@ -357,7 +357,7 @@ namespace DungeonGame {
 				this.VendorItems.Add(new Consumable(1, Consumable.PotionType.Health));
 			}
 		}
-		public void RepopulateArrows(string inputName) {
+		private void RepopulateArrows(string inputName) {
 			var arrowIndex = this.VendorItems.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (arrowIndex != -1) return;

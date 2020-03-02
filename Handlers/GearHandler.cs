@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DungeonGame {
 	public static class GearHandler {
-		public static bool IsWearable(IEquipment item) {
+		private static bool IsWearable(IEquipment item) {
 			return item.GetType().Name == "Armor" || item.GetType().Name == "Weapon" || item.GetType().Name == "Quiver";
 		}
 		public static void EquipInitialGear(Player player) {
@@ -198,7 +198,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				noItemFoundString);
 		}
-		public static void UnequipWeapon(Player player, Weapon weapon) {
+		private static void UnequipWeapon(Player player, Weapon weapon) {
 			if (!weapon.Equipped) {
 				var alreadyUnequipString = "You have already unequipped " + weapon.Name + "."; 
 				OutputHandler.Display.StoreUserOutput(
@@ -215,7 +215,7 @@ namespace DungeonGame {
 				unequipString);
 			player.PlayerWeapon = null;
 		}
-		public static void UnequipQuiver(Player player, Quiver quiver) {
+		private static void UnequipQuiver(Player player, Quiver quiver) {
 			if (!quiver.Equipped) {
 				var alreadyUnequipString = "You have already unequipped " + quiver.Name + "{0}.";
 				OutputHandler.Display.StoreUserOutput(
@@ -232,7 +232,7 @@ namespace DungeonGame {
 				unequipString);
 			player.PlayerQuiver = null;
 		}
-		public static void UnequipArmor(Player player, Armor armor) {
+		private static void UnequipArmor(Player player, Armor armor) {
 			if (!armor.Equipped) {
 				var alreadyUnequipString = "You have already unequipped " + armor.Name + ".";
 				OutputHandler.Display.StoreUserOutput(
@@ -303,7 +303,7 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		public static void EquipWeapon(Player player, Weapon weapon) {
+		private static void EquipWeapon(Player player, Weapon weapon) {
 			if (weapon.Equipped) {
 				var alreadyEquipString = "You have already equipped " + weapon.Name + ".";
 				OutputHandler.Display.StoreUserOutput(
@@ -342,7 +342,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				equipSuccessString);
 		}
-		public static void EquipQuiver(Player player, Quiver quiver) {
+		private static void EquipQuiver(Player player, Quiver quiver) {
 			if (quiver.Equipped) {
 				var alreadyEquipString = "You have already equipped " + quiver.Name + ".";
 				OutputHandler.Display.StoreUserOutput(
@@ -362,7 +362,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				equipString);
 		}
-		public static void EquipArmor(Player player, Armor armor) {
+		private static void EquipArmor(Player player, Armor armor) {
 			if (armor.Equipped) {
 				var alreadyEquipString = "You have already equipped " + armor.Name + ".";
 				OutputHandler.Display.StoreUserOutput(

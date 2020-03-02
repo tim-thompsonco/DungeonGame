@@ -24,7 +24,7 @@ namespace DungeonGame {
 		public int ArmorRating { get; set; }
 		public bool Equipped { get; set; }
 		public int Durability { get; set; }
-		public int Level { get; set; }
+		private int Level { get; set; }
 		public int Weight { get; set; }
 
 		// Default constructor for JSON serialization

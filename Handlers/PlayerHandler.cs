@@ -90,7 +90,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				weightString);
 		}
-		public static string GetInventoryName(IEquipment item) {
+		private static string GetInventoryName(IEquipment item) {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			var itemInfo = new StringBuilder();
 			itemInfo.Append(item.Name);

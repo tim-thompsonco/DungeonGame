@@ -9,26 +9,27 @@ namespace DungeonGame {
 			Up,
 			Down
 		}
-		public StartDirection StartDir { get; set; }
-		public int Size { get; set; }
-		public int Levels { get; set; }
-		public int XCoord { get; set; }
-		public int YCoord { get; set; }
-		public int ZCoord { get; set; }
-		public int CurrentLevel { get; set; }
-		public bool GoNorth { get; set; }
-		public bool GoSouth { get; set; }
-		public bool GoEast { get; set; }
-		public bool GoWest { get; set; }
-		public bool GoNorthWest { get; set; }
-		public bool GoSouthWest { get; set; }
-		public bool GoNorthEast { get; set; }
-		public bool GoSouthEast { get; set; }
-		public bool GoUp { get; set; }
-		public bool GoDown { get; set; }
-		public List<IRoom> SpawnedDungeonRooms { get; set; }
 
-		public RoomBuilder() {
+		private StartDirection StartDir { get; set; }
+		private int Size { get; set; }
+		private int Levels { get; set; }
+		private int XCoord { get; set; }
+		private int YCoord { get; set; }
+		private int ZCoord { get; set; }
+		private int CurrentLevel { get; set; }
+		private bool GoNorth { get; set; }
+		private bool GoSouth { get; set; }
+		private bool GoEast { get; set; }
+		private bool GoWest { get; set; }
+		private bool GoNorthWest { get; set; }
+		private bool GoSouthWest { get; set; }
+		private bool GoNorthEast { get; set; }
+		private bool GoSouthEast { get; set; }
+		private bool GoUp { get; set; }
+		private bool GoDown { get; set; }
+		private List<IRoom> SpawnedDungeonRooms { get; set; }
+
+		private RoomBuilder() {
 			this.SpawnedDungeonRooms = new List<IRoom>();
 			var townRooms = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IRoom>>(File.ReadAllText(
 				"townrooms.json"), new Newtonsoft.Json.JsonSerializerSettings {

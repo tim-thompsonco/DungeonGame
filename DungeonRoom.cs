@@ -31,8 +31,8 @@ namespace DungeonGame {
 		public int X { get; set; }
 		public int Y { get; set; }
 		public int Z { get; set; }
-		public List<string> Commands { get; set; }
-		public List<string> CombatCommands { get; set; } = new List<string> {"[F]ight", "[I]nventory", "Flee"};
+		private List<string> Commands { get; set; }
+		private List<string> CombatCommands { get; set; } = new List<string> {"[F]ight", "[I]nventory", "Flee"};
 		public List<IRoomInteraction> RoomObjects { get; set; }
 		public Monster Monster { get; set; }
 

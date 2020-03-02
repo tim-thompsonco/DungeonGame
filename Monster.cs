@@ -20,17 +20,17 @@ namespace DungeonGame {
 		public bool InCombat { get; set; }
 		public bool IsStunned { get; set; }
 		public int StatReplenishInterval { get; set; }
-		public MonsterType MonsterCategory { get; set; }
+		private MonsterType MonsterCategory { get; set; }
 		public Loot Item { get; set; }
 		public Consumable Consumable { get; set; }
 		public Weapon MonsterWeapon { get; set; }
-		public Armor MonsterHeadArmor { get; set; }
-		public Armor MonsterBackArmor { get; set; }
-		public Armor MonsterChestArmor { get; set; }
-		public Armor MonsterWristArmor { get; set; }
-		public Armor MonsterHandsArmor { get; set; }
-		public Armor MonsterWaistArmor { get; set; }
-		public Armor MonsterLegArmor { get; set; }
+		private Armor MonsterHeadArmor { get; set; }
+		private Armor MonsterBackArmor { get; set; }
+		private Armor MonsterChestArmor { get; set; }
+		private Armor MonsterWristArmor { get; set; }
+		private Armor MonsterHandsArmor { get; set; }
+		private Armor MonsterWaistArmor { get; set; }
+		private Armor MonsterLegArmor { get; set; }
 		public List<IEquipment> MonsterItems { get; set; }
 		public List<Effect> Effects { get; set; }
 
@@ -74,10 +74,16 @@ namespace DungeonGame {
 					};
 					this.BuildMonsterArmor();
 					if (randomGearNum <= 4) {
-						var randomPotionNum = GameHandler.GetRandomNumber(1, 10);
-						this.MonsterItems.Add(randomPotionNum <= 5
-							? new Consumable(this.Level, Consumable.PotionType.Health)
-							: new Consumable(this.Level, Consumable.PotionType.Mana));
+						var randomPotionNum = GameHandler.GetRandomNumber(1, 6);
+						this.MonsterItems.Add(randomPotionNum switch {
+							1 => new Consumable(this.Level, Consumable.PotionType.Health),
+							2 => new Consumable(this.Level, Consumable.PotionType.Mana),
+							3 => new Consumable(this.Level, Consumable.PotionType.Constitution),
+							4 => new Consumable(this.Level, Consumable.PotionType.Dexterity),
+							5 => new Consumable(this.Level, Consumable.PotionType.Intelligence),
+							6 => new Consumable(this.Level, Consumable.PotionType.Strength),
+							_ => throw new ArgumentOutOfRangeException()
+						});
 					}
 					break;
 				case MonsterType.Zombie:
@@ -288,7 +294,7 @@ namespace DungeonGame {
 			if (chanceToDodge > 50) chanceToDodge = 50;
 			return randomChanceToHit <= chanceToDodge ? 0 : attackDamage;
 		}
-		public int CheckArmorRating() {
+		private int CheckArmorRating() {
 			var totalArmorRating = 0;
 			if (this.MonsterChestArmor != null && this.MonsterChestArmor.Equipped) {
 				totalArmorRating += this.MonsterChestArmor.ArmorRating;
@@ -312,7 +318,7 @@ namespace DungeonGame {
 			if (this.HitPoints <= 0) this.MonsterDeath(player);
 			return this.HitPoints <= 0;
 		}
-		public void MonsterDeath(Player player) {
+		private void MonsterDeath(Player player) {
 			player.InCombat = false;
 			this.InCombat = false;
 			this.Effects.Clear();

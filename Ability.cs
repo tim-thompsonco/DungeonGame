@@ -41,7 +41,6 @@ namespace DungeonGame {
 		
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public Ability() {}
-
 		public Ability(string name, int rageCost, int rank, WarriorAbility warAbility, int minLevel) {
 			this.Name = name;
 			this.RageCost = rageCost;
@@ -163,10 +162,10 @@ namespace DungeonGame {
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				powerAuraString);
-			player.Effects.Add(new Effect(player.Abilities[index].Name,
-				Effect.EffectType.ChangeStat, player.Abilities[index].ChangeAmount.Amount,
-				player.Abilities[index].ChangeAmount.ChangeCurRound, player.Abilities[index].ChangeAmount.ChangeMaxRound, 
-				1, 1, false));
+			player.Effects.Add(new Effect(player.Abilities[index].Name,Effect.EffectType.ChangeStat, 
+				player.Abilities[index].ChangeAmount.Amount, player.Abilities[index].ChangeAmount.ChangeCurRound, 
+				player.Abilities[index].ChangeAmount.ChangeMaxRound,1, 1, false, 
+				ChangeStat.StatType.Strength));
 		}
 		public static void SwiftAuraAbilityInfo(Player player, int index) {
 			var swiftAuraString = "Swift Aura Amount: " + player.Abilities[index].ChangeAmount.Amount;
@@ -191,9 +190,9 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				swiftAuraString);
 			player.Effects.Add(new Effect(player.Abilities[index].Name,
-				Effect.EffectType.ChangeStat, player.Abilities[index].ChangeAmount.Amount,
-				player.Abilities[index].ChangeAmount.ChangeCurRound, player.Abilities[index].ChangeAmount.ChangeMaxRound, 
-				1, 1, false));
+				Effect.EffectType.ChangeStat, player.Abilities[index].ChangeAmount.Amount, 
+				player.Abilities[index].ChangeAmount.ChangeCurRound, player.Abilities[index].ChangeAmount.ChangeMaxRound,
+				1, 1, false, ChangeStat.StatType.Dexterity));
 		}
 		public static void WarCryAbilityInfo(Player player, int index) {
 			var warCryString = "War Cry Amount: " + -1 * player.Abilities[index].ChangeAmount.Amount;

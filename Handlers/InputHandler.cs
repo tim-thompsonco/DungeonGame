@@ -92,7 +92,7 @@ namespace DungeonGame {
 					break;
 				case "use":
 					try {
-						if (input.Contains("distance")) {
+						if (input.Contains("distance") || input.Contains("ambush")) {
 							player.UseAbility(input);
 						}
 						else if (input.Contains("ambush")) {

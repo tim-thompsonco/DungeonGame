@@ -31,7 +31,7 @@ namespace DungeonGame {
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public TownRoom() {}
-		public TownRoom(
+		private TownRoom(
 			string name,
 			string desc,
 			int x,
