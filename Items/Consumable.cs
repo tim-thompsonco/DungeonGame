@@ -7,9 +7,13 @@ namespace DungeonGame {
 		}
 		public enum PotionType {
 			Health,
-			Mana
+			Mana,
+			Intelligence,
+			Strength,
+			Dexterity,
+			Constitution
 		}
-		public enum PotionLevel {
+		private enum PotionLevel {
 			Minor,
 			Normal,
 			Greater
@@ -19,9 +23,10 @@ namespace DungeonGame {
 		public bool Equipped { get; set; }
 		public ArrowType ArrowCategory { get; set; }
 		public PotionType PotionCategory { get; set; }
-		public PotionLevel PotionStrength { get; set; }
+		private PotionLevel PotionStrength { get; set; }
 		public RestoreHealth RestoreHealth { get; set; }
 		public RestoreMana RestoreMana { get; set; }
+		public ChangeStat ChangeStat { get; set; }
 		public Arrow Arrow { get; set; }
 		public int Weight { get; set; }
 		
@@ -35,17 +40,17 @@ namespace DungeonGame {
 			if (level <= 3) {
 				this.PotionStrength = PotionLevel.Minor;
 				name = PotionLevel.Minor + " " + potionType + " potion";
-				amount = 50;
+				amount = this.PotionCategory == PotionType.Health || this.PotionCategory == PotionType.Mana ? 50 : 5;
 			}
 			else if (level > 6) {
 				this.PotionStrength = PotionLevel.Greater;
 				name = PotionLevel.Greater + " " + potionType + " potion";
-				amount = 150;
+				amount = this.PotionCategory == PotionType.Health || this.PotionCategory == PotionType.Mana ? 150 : 15;
 			}
 			else {
 				this.PotionStrength = PotionLevel.Normal;
 				name = potionType + " potion";
-				amount = 100;
+				amount = this.PotionCategory == PotionType.Health || this.PotionCategory == PotionType.Mana ? 100 : 10;
 			}
 			this.ItemValue = amount / 2;
 			this.Name = name.ToLower();
@@ -55,6 +60,18 @@ namespace DungeonGame {
 					break;
 				case PotionType.Mana:
 					this.RestoreMana = new RestoreMana(amount);
+					break;
+				case PotionType.Intelligence:
+					this.ChangeStat = new ChangeStat(amount, ChangeStat.StatType.Intelligence);
+					break;
+				case PotionType.Strength:
+					this.ChangeStat = new ChangeStat(amount, ChangeStat.StatType.Strength);
+					break;
+				case PotionType.Dexterity:
+					this.ChangeStat = new ChangeStat(amount, ChangeStat.StatType.Dexterity);
+					break;
+				case PotionType.Constitution:
+					this.ChangeStat = new ChangeStat(amount, ChangeStat.StatType.Constitution);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(potionType), potionType, null);

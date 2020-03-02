@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.Linq;
 using DungeonGame;
 using NUnit.Framework;
 
@@ -26,7 +26,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(baseHealth + healAmount, player.HitPoints);
 			Assert.IsEmpty(player.Consumables);
 			player.DrinkPotion(input);
-			Assert.AreEqual("You don't have any health potions!", OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 		[Test]
 		public void ManaPotionUnitTest() {
@@ -49,7 +49,139 @@ namespace DungeonGameTests {
 			Assert.AreEqual(baseMana + manaAmount, player.ManaPoints);
 			Assert.IsEmpty(player.Consumables);
 			player.DrinkPotion(input);
-			Assert.AreEqual("You don't have any mana potions!", OutputHandler.Display.Output[1][2]);
+			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
+		}
+		[Test]
+		public void ConstitutionPotionUnitTest() {
+			OutputHandler.Display.ClearUserOutput();
+			var player = new Player("test", Player.PlayerClassType.Mage) {
+				Consumables = new List<Consumable> {new Consumable(1, Consumable.PotionType.Constitution)}
+			};
+			var potionIndex = player.Consumables.FindIndex(
+				f => f.PotionCategory == Consumable.PotionType.Constitution);
+			var input = new [] {"drink", "constitution"};
+			var potionName = InputHandler.ParseInput(input);
+			Assert.AreEqual("constitution", potionName);
+			var statAmount = player.Consumables[potionIndex].ChangeStat.ChangeAmount;
+			var statType = player.Consumables[potionIndex].ChangeStat.StatCategory;
+			var baseConst = player.Constitution;
+			var baseMaxHitPoints = player.MaxHitPoints;
+			player.DrinkPotion(input);
+			var drankStatString = "You drank a potion and increased " + statType + " by " + statAmount + ".";
+			Assert.AreEqual(drankStatString, OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual(baseConst + statAmount, player.Constitution);
+			Assert.AreEqual(baseMaxHitPoints + statAmount * 10, player.MaxHitPoints);
+			Assert.IsEmpty(player.Consumables);
+			Assert.AreEqual(player.Effects[0].EffectGroup, Effect.EffectType.ChangeStat);
+			for (var i = 1; i < 601; i++) {
+				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
+				player.Effects[0].ChangeStatRound();
+			}
+			GameHandler.RemovedExpiredEffects(player);
+			Assert.AreEqual(false, player.Effects.Any());
+			Assert.AreEqual(baseConst, player.Constitution);
+			Assert.AreEqual(baseMaxHitPoints, player.MaxHitPoints);
+			player.DrinkPotion(input);
+			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
+		}
+		[Test]
+		public void IntelligencePotionUnitTest() {
+			OutputHandler.Display.ClearUserOutput();
+			var player = new Player("test", Player.PlayerClassType.Mage) {
+				Consumables = new List<Consumable> {new Consumable(1, Consumable.PotionType.Intelligence)}
+			};
+			var potionIndex = player.Consumables.FindIndex(
+				f => f.PotionCategory == Consumable.PotionType.Intelligence);
+			var input = new [] {"drink", "intelligence"};
+			var potionName = InputHandler.ParseInput(input);
+			Assert.AreEqual("intelligence", potionName);
+			var statAmount = player.Consumables[potionIndex].ChangeStat.ChangeAmount;
+			var statType = player.Consumables[potionIndex].ChangeStat.StatCategory;
+			var baseInt = player.Intelligence;
+			var baseMaxManaPoints = player.MaxManaPoints;
+			player.DrinkPotion(input);
+			var drankStatString = "You drank a potion and increased " + statType + " by " + statAmount + ".";
+			Assert.AreEqual(drankStatString, OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual(baseInt + statAmount, player.Intelligence);
+			Assert.AreEqual(baseMaxManaPoints + statAmount * 10, player.MaxManaPoints);
+			Assert.IsEmpty(player.Consumables);
+			Assert.AreEqual(player.Effects[0].EffectGroup, Effect.EffectType.ChangeStat);
+			for (var i = 1; i < 601; i++) {
+				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
+				player.Effects[0].ChangeStatRound();
+			}
+			GameHandler.RemovedExpiredEffects(player);
+			Assert.AreEqual(false, player.Effects.Any());
+			Assert.AreEqual(baseInt, player.Intelligence);
+			Assert.AreEqual(baseMaxManaPoints, player.MaxManaPoints);
+			player.DrinkPotion(input);
+			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
+		}
+		[Test]
+		public void StrengthPotionUnitTest() {
+			OutputHandler.Display.ClearUserOutput();
+			var player = new Player("test", Player.PlayerClassType.Mage) {
+				Consumables = new List<Consumable> {new Consumable(1, Consumable.PotionType.Strength)}
+			};
+			var potionIndex = player.Consumables.FindIndex(
+				f => f.PotionCategory == Consumable.PotionType.Strength);
+			var input = new [] {"drink", "strength"};
+			var potionName = InputHandler.ParseInput(input);
+			Assert.AreEqual("strength", potionName);
+			var statAmount = player.Consumables[potionIndex].ChangeStat.ChangeAmount;
+			var statType = player.Consumables[potionIndex].ChangeStat.StatCategory;
+			var baseStr = player.Strength;
+			var baseMaxCarryWeight = player.MaxCarryWeight;
+			player.DrinkPotion(input);
+			var drankStatString = "You drank a potion and increased " + statType + " by " + statAmount + ".";
+			Assert.AreEqual(drankStatString, OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual(baseStr + statAmount, player.Strength);
+			Assert.AreEqual(baseMaxCarryWeight + statAmount * 2, player.MaxCarryWeight);
+			Assert.IsEmpty(player.Consumables);
+			Assert.AreEqual(player.Effects[0].EffectGroup, Effect.EffectType.ChangeStat);
+			for (var i = 1; i < 601; i++) {
+				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
+				player.Effects[0].ChangeStatRound();
+			}
+			GameHandler.RemovedExpiredEffects(player);
+			Assert.AreEqual(false, player.Effects.Any());
+			Assert.AreEqual(baseStr, player.Strength);
+			Assert.AreEqual(baseMaxCarryWeight, player.MaxCarryWeight);
+			player.DrinkPotion(input);
+			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
+		}
+		[Test]
+		public void DexterityPotionUnitTest() {
+			OutputHandler.Display.ClearUserOutput();
+			var player = new Player("test", Player.PlayerClassType.Mage) {
+				Consumables = new List<Consumable> {new Consumable(1, Consumable.PotionType.Dexterity)}
+			};
+			var potionIndex = player.Consumables.FindIndex(
+				f => f.PotionCategory == Consumable.PotionType.Dexterity);
+			var input = new [] {"drink", "dexterity"};
+			var potionName = InputHandler.ParseInput(input);
+			Assert.AreEqual("dexterity", potionName);
+			var statAmount = player.Consumables[potionIndex].ChangeStat.ChangeAmount;
+			var statType = player.Consumables[potionIndex].ChangeStat.StatCategory;
+			var baseDex = player.Dexterity;
+			var baseDodgeChance = player.DodgeChance;
+			player.DrinkPotion(input);
+			var drankStatString = "You drank a potion and increased " + statType + " by " + statAmount + ".";
+			Assert.AreEqual(drankStatString, OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual(baseDex + statAmount, player.Dexterity);
+			Assert.AreEqual(baseDodgeChance + statAmount * 1.5, player.DodgeChance);
+			Assert.IsEmpty(player.Consumables);
+			Assert.AreEqual(player.Effects[0].EffectGroup, Effect.EffectType.ChangeStat);
+			for (var i = 1; i < 601; i++) {
+				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
+				player.Effects[0].ChangeStatRound();
+			}
+			GameHandler.RemovedExpiredEffects(player);
+			Assert.AreEqual(false, player.Effects.Any());
+			Assert.AreEqual(baseDex, player.Dexterity);
+			Assert.AreEqual(baseDodgeChance, player.DodgeChance);
+			player.DrinkPotion(input);
+			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 	}
 }

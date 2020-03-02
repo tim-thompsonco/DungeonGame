@@ -132,15 +132,18 @@ namespace DungeonGame {
 					case Effect.EffectType.Frozen:
 						break;
 					case Effect.EffectType.ChangeStat:
-						switch (player.PlayerClass) {
-							case Player.PlayerClassType.Mage:
+						switch (player.Effects[i].StatGroup) {
+							case ChangeStat.StatType.Intelligence:
 								player.Intelligence -= player.Effects[i].EffectAmountOverTime;
 								break;
-							case Player.PlayerClassType.Warrior:
+							case ChangeStat.StatType.Strength:
 								player.Strength -= player.Effects[i].EffectAmountOverTime;
 								break;
-							case Player.PlayerClassType.Archer:
+							case ChangeStat.StatType.Dexterity:
 								player.Dexterity -= player.Effects[i].EffectAmountOverTime;
+								break;
+							case ChangeStat.StatType.Constitution:
+								player.Constitution -= player.Effects[i].EffectAmountOverTime;
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();

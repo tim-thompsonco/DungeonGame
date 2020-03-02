@@ -293,54 +293,51 @@ namespace DungeonGame {
 			return attackAmount;
 		}
 		public void DrinkPotion(string[] userInput) {
-			int index;
-			switch (userInput[1]) {
-				case "health":
-					index = this.Consumables.FindIndex(
-						f => f.PotionCategory == Consumable.PotionType.Health && f.Name.Contains(userInput[1]));
-					if (index != -1) {
-						this.Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
-						var drankHealthString = "You drank a potion and replenished " +
-						                  this.Consumables[index].RestoreHealth.RestoreHealthAmt + " health.";
-						OutputHandler.Display.StoreUserOutput(
-							Settings.FormatSuccessOutputText(),
-							Settings.FormatDefaultBackground(),
-							drankHealthString);
-						this.Consumables.RemoveAt(index);
-					}
-					else {
-						OutputHandler.Display.StoreUserOutput(
-							Settings.FormatFailureOutputText(),
-							Settings.FormatDefaultBackground(),
-							"You don't have any health potions!");
-					}
+			var index = this.Consumables.FindIndex(
+				f => f.Name.Contains(userInput[1]));
+			if (index == -1) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"What potion did you want to drink?");
+				return;
+			}
+			switch (this.Consumables[index].PotionCategory) {
+				case Consumable.PotionType.Health:
+					this.Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
+					var drankHealthString = "You drank a potion and replenished " +
+					                        this.Consumables[index].RestoreHealth.RestoreHealthAmt + " health.";
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatSuccessOutputText(),
+						Settings.FormatDefaultBackground(),
+						drankHealthString);
+					this.Consumables.RemoveAt(index);
 					break;
-				case "mana":
-					index = this.Consumables.FindIndex(
-						f => f.PotionCategory == Consumable.PotionType.Mana && f.Name.Contains(userInput[1]));
-					if (index != -1) {
-						this.Consumables[index].RestoreMana.RestoreManaPlayer(this);
-						var drankManaString = "You drank a potion and replenished " +
-						                      this.Consumables[index].RestoreMana.RestoreManaAmt + " mana.";
-						OutputHandler.Display.StoreUserOutput(
-							Settings.FormatSuccessOutputText(),
-							Settings.FormatDefaultBackground(),
-							drankManaString);
-						this.Consumables.RemoveAt(index);
-					}
-					else {
-						OutputHandler.Display.StoreUserOutput(
-							Settings.FormatFailureOutputText(),
-							Settings.FormatDefaultBackground(),
-							"You don't have any mana potions!");
-					}
+				case Consumable.PotionType.Mana:
+					this.Consumables[index].RestoreMana.RestoreManaPlayer(this);
+					var drankManaString = "You drank a potion and replenished " +
+					                      this.Consumables[index].RestoreMana.RestoreManaAmt + " mana.";
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatSuccessOutputText(),
+						Settings.FormatDefaultBackground(),
+						drankManaString);
+					this.Consumables.RemoveAt(index);
+					break;
+				case Consumable.PotionType.Intelligence:
+				case Consumable.PotionType.Strength:
+				case Consumable.PotionType.Dexterity:
+				case Consumable.PotionType.Constitution:
+					this.Consumables[index].ChangeStat.ChangeStatPlayer(this);
+					var drankStatString = "You drank a potion and increased " + this.Consumables[index].ChangeStat.StatCategory +
+					                      " by " + this.Consumables[index].ChangeStat.ChangeAmount + ".";
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatSuccessOutputText(),
+						Settings.FormatDefaultBackground(),
+						drankStatString);
+					this.Consumables.RemoveAt(index);
 					break;
 				default:
-					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatFailureOutputText(),
-						Settings.FormatDefaultBackground(),
-						"What potion did you want to drink?");
-					break;
+					throw new ArgumentOutOfRangeException();
 			}
 		}
 		public void ReloadQuiver() {

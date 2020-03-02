@@ -17,6 +17,7 @@ namespace DungeonGame {
 		}
 		public string Name { get; set; }
 		public EffectType EffectGroup { get; set; }
+		public ChangeStat.StatType StatGroup { get; set; }
 		public int EffectAmount { get; set; }
 		public int EffectAmountOverTime { get; set; }
 		public int EffectCurRound { get; set; }
@@ -48,6 +49,12 @@ namespace DungeonGame {
 			int effectMaxRound, double effectMultiplier, int tickDuration, bool harmful)
 			: this(name, effectGroup, effectCurRound, effectMaxRound, effectMultiplier, tickDuration, harmful) {
 			this.EffectAmountOverTime = effectAmountOverTime;
+		}
+		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
+			int effectMaxRound, double effectMultiplier, int tickDuration, bool harmful, ChangeStat.StatType statType)
+			: this(name, effectGroup, effectAmountOverTime , effectCurRound, effectMaxRound, effectMultiplier, tickDuration, 
+				harmful) {
+			this.StatGroup = statType;
 		}
 
 		public void HealingRound(Player player) {
