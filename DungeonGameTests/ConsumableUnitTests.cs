@@ -183,5 +183,38 @@ namespace DungeonGameTests {
 			player.DrinkPotion(input);
 			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
+		[Test]
+		public void ArmorUpgradeKitUnitTest() {
+			var player = new Player("test", Player.PlayerClassType.Mage) {
+				Consumables = new List<Consumable> {new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Armor, 
+					ChangeArmor.KitType.Cloth)}
+			};
+			GearHandler.EquipInitialGear(player);
+			OutputHandler.Display.ClearUserOutput();
+			var armorIndex = player.Inventory.FindIndex(f => f.Name.Contains("cloth"));
+			var armor = player.Inventory[armorIndex] as Armor;
+			var armorName = player.Inventory[armorIndex].Name;
+			var kitIndex = player.Consumables.FindIndex(
+				f => f.KitCategory== Consumable.KitType.Armor);
+			var kitAmount = player.Consumables[kitIndex].ChangeArmor.ChangeAmount;
+			var kitName = player.Consumables[kitIndex].Name;
+			var input = new [] {"enhance", "doesn't exist", kitName};
+			var armorAmount = armor.ArmorRating;
+			GearHandler.UseArmorKit(player, input);
+			const string upgradeFail = "What armor did you want to upgrade?";
+			Assert.AreEqual(upgradeFail, OutputHandler.Display.Output[0][2]);
+			Assert.IsNotEmpty(player.Consumables);
+			input = new [] {"enhance", armorName, "doesn't exist"};
+			GearHandler.UseArmorKit(player, input);
+			const string kitFail = "What armor kit did you want to use?";
+			Assert.AreEqual(kitFail, OutputHandler.Display.Output[1][2]);
+			Assert.IsNotEmpty(player.Consumables);
+			input = new [] {"enhance", armorName, kitName};
+			GearHandler.UseArmorKit(player, input);
+			var upgradeSuccess = "You upgraded " + armor.Name + " with an armor kit.";
+			Assert.AreEqual(upgradeSuccess, OutputHandler.Display.Output[2][2]);
+			Assert.AreEqual(armorAmount + kitAmount, armor.ArmorRating);
+			Assert.IsEmpty(player.Consumables);
+		}
 	}
 }

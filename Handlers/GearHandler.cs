@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -37,6 +38,47 @@ namespace DungeonGame {
 			totalArmorRating += player.Effects.Where(
 				effect => effect.EffectGroup == Effect.EffectType.ChangeArmor).Sum(effect => effect.EffectAmountOverTime);
 			return totalArmorRating < 0 ? 0 : totalArmorRating;
+		}
+		public static void UseArmorKit(Player player, string[] userInput) {
+			var armorIndex = player.Inventory.FindIndex(f => f.Name.Contains(userInput[1]));
+			if (armorIndex == -1) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"What armor did you want to upgrade?");
+				return;
+			}
+			var kitIndex = player.Consumables.FindIndex(f => f.Name.Contains(userInput[2]));
+			if (kitIndex == -1) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"What armor kit did you want to use?");
+				return;
+			}
+			var armor = player.Inventory[armorIndex] as Armor;
+			if (!armor.Equipped) {
+				var inputValid = false;
+				while (!inputValid) {
+					var armorString = armor.Name + " is not equipped. Are you sure you want to upgrade that?";
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(), 
+						Settings.FormatDefaultBackground(),
+						armorString);
+					OutputHandler.Display.BuildUserOutput();
+					OutputHandler.Display.ClearUserOutput();
+					var input = InputHandler.ParseInput(InputHandler.GetFormattedInput(Console.ReadLine()));
+					if (input == "no" || input == "n") return;
+					if (input == "yes" || input == "y") inputValid = true;
+				}
+			}
+			player.Consumables[kitIndex].ChangeArmor.ChangeArmorPlayer(armor);
+			var upgradeSuccess = "You upgraded " + armor.Name + " with an armor kit.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(), 
+				Settings.FormatDefaultBackground(),
+				upgradeSuccess);
+			player.Consumables.RemoveAt(kitIndex);
 		}
 		public static void DropItem(Player player, string[] input) {
 			if (input[1] == null) {
