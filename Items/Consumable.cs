@@ -96,10 +96,15 @@ namespace DungeonGame {
 			this.ArrowCategory = arrowType;
 			this.Arrow = new Arrow(50);
 		}
-		public Consumable(KitLevel kitLevel, KitType kitType, ChangeArmor.KitType kitCategory) {
-			this.Name = kitLevel + " " + kitType + " kit";
+
+		public Consumable(KitLevel kitLevel, KitType kitType) {
+			this.Name = kitLevel.ToString().ToLower() + " " + kitType.ToString().ToLower() + " kit";
 			this.Weight = 1;
 			this.KitStrength = kitLevel;
+			this.KitCategory = kitType;
+		}
+		public Consumable(KitLevel kitLevel, KitType kitType, ChangeArmor.KitType kitCategory) 
+			: this(kitLevel, kitType){
 			var amount = this.KitStrength switch {
 				KitLevel.Light => 1,
 				KitLevel.Medium => 2,
@@ -107,7 +112,6 @@ namespace DungeonGame {
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			this.ItemValue = amount * 10;
-			var randomNum = GameHandler.GetRandomNumber(1, 3);
 			switch (this.KitCategory) {
 				case KitType.Armor:
 					this.ChangeArmor = kitCategory switch {

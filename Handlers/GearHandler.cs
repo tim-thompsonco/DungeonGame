@@ -57,6 +57,26 @@ namespace DungeonGame {
 				return;
 			}
 			var armor = player.Inventory[armorIndex] as Armor;
+			if (player.Consumables[kitIndex].KitCategory != Consumable.KitType.Armor) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"You can't upgrade " + armor.Name + " with that!");
+				return;
+			}
+			if (player.Consumables[kitIndex].ChangeArmor.KitCategory == ChangeArmor.KitType.Cloth && 
+				armor.ArmorGroup != Armor.ArmorType.Cloth || 
+				player.Consumables[kitIndex].ChangeArmor.KitCategory == ChangeArmor.KitType.Leather && 
+				armor.ArmorGroup != Armor.ArmorType.Leather || 
+				player.Consumables[kitIndex].ChangeArmor.KitCategory == ChangeArmor.KitType.Plate &&
+			     armor.ArmorGroup != Armor.ArmorType.Plate ||
+				player.Consumables[kitIndex].KitCategory == Consumable.KitType.Weapon) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"You can't upgrade " + armor.Name + " with that!");
+				return;
+			}
 			if (!armor.Equipped) {
 				var inputValid = false;
 				while (!inputValid) {

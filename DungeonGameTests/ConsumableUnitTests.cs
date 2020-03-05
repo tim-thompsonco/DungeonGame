@@ -194,10 +194,8 @@ namespace DungeonGameTests {
 			var armorIndex = player.Inventory.FindIndex(f => f.Name.Contains("cloth"));
 			var armor = player.Inventory[armorIndex] as Armor;
 			var armorName = player.Inventory[armorIndex].Name;
-			var kitIndex = player.Consumables.FindIndex(
-				f => f.KitCategory== Consumable.KitType.Armor);
-			var kitAmount = player.Consumables[kitIndex].ChangeArmor.ChangeAmount;
-			var kitName = player.Consumables[kitIndex].Name;
+			var kitAmount = player.Consumables[0].ChangeArmor.ChangeAmount;
+			var kitName = player.Consumables[0].Name;
 			var input = new [] {"enhance", "doesn't exist", kitName};
 			var armorAmount = armor.ArmorRating;
 			GearHandler.UseArmorKit(player, input);
@@ -215,6 +213,23 @@ namespace DungeonGameTests {
 			Assert.AreEqual(upgradeSuccess, OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual(armorAmount + kitAmount, armor.ArmorRating);
 			Assert.IsEmpty(player.Consumables);
+			player.Consumables.Add(new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Armor, 
+				ChangeArmor.KitType.Leather));
+			kitName = player.Consumables[0].Name;
+			input = new [] {"enhance", armorName, kitName};
+			GearHandler.UseArmorKit(player, input);
+			var enhanceFail = "You can't upgrade " + armor.Name + " with that!";
+			Assert.IsNotEmpty(player.Consumables);
+			Assert.AreEqual(enhanceFail
+			, OutputHandler.Display.Output[3][2]);
+			player.Consumables[0] = new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Weapon,
+				ChangeArmor.KitType.Cloth);
+			kitName = player.Consumables[0].Name;
+			input = new [] {"enhance", armorName, kitName};
+			GearHandler.UseArmorKit(player, input);
+			Assert.IsNotEmpty(player.Consumables);
+			Assert.AreEqual(enhanceFail
+				, OutputHandler.Display.Output[4][2]);
 		}
 	}
 }
