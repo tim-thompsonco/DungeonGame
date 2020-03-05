@@ -22,6 +22,7 @@
 <p>upgrade [spell/ability] - This will upgrade an existing spell or ability at the appropriate class trainer</p>
 <p>repair [item] - This will repair an item if the player is in the same room as a vendor who can repair that type of item</p>
 <p>repair all - This will attempt to repair all items equipped by a player if the player is in the same room as a vendor</p>
+<p>enhance [armor/weapon] [kit] - This will upgrade a piece of armor or a weapon with an upgrade kit</p>
 <p>restore - This will restore all player stats if the player is in the same room as a healer</p>
 <p>e/w/s/n/u/d/ne/se/nw/sw - This will move the player in the specified direction</p>
 
