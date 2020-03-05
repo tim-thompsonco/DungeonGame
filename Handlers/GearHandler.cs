@@ -39,6 +39,64 @@ namespace DungeonGame {
 				effect => effect.EffectGroup == Effect.EffectType.ChangeArmor).Sum(effect => effect.EffectAmountOverTime);
 			return totalArmorRating < 0 ? 0 : totalArmorRating;
 		}
+		public static void UseWeaponKit(Player player, string[] userInput) {
+			var weaponIndex = player.Inventory.FindIndex(f => f.Name.Contains(userInput[1]));
+			if (weaponIndex == -1) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"What weapon did you want to upgrade?");
+				return;
+			}
+			var kitIndex = player.Consumables.FindIndex(f => f.Name.Contains(userInput[2]));
+			if (kitIndex == -1) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"What weapon kit did you want to use?");
+				return;
+			}
+			var weapon = player.Inventory[weaponIndex] as Weapon;
+			if (player.Consumables[kitIndex].KitCategory != Consumable.KitType.Weapon) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"You can't upgrade " + weapon.Name + " with that!");
+				return;
+			}
+			if (player.Consumables[kitIndex].ChangeWeapon.KitCategory == ChangeWeapon.KitType.Bowstring && 
+				weapon.WeaponGroup != Weapon.WeaponType.Bow || 
+				player.Consumables[kitIndex].ChangeWeapon.KitCategory == ChangeWeapon.KitType.Grindstone && 
+				weapon.WeaponGroup == Weapon.WeaponType.Bow) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"You can't upgrade " + weapon.Name + " with that!");
+				return;
+			}
+			if (!weapon.Equipped) {
+				var inputValid = false;
+				while (!inputValid) {
+					var weaponString = weapon.Name + " is not equipped. Are you sure you want to upgrade that?";
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(), 
+						Settings.FormatDefaultBackground(),
+						weaponString);
+					OutputHandler.Display.BuildUserOutput();
+					OutputHandler.Display.ClearUserOutput();
+					var input = InputHandler.ParseInput(InputHandler.GetFormattedInput(Console.ReadLine()));
+					if (input == "no" || input == "n") return;
+					if (input == "yes" || input == "y") inputValid = true;
+				}
+			}
+			player.Consumables[kitIndex].ChangeWeapon.ChangeWeaponPlayer(weapon);
+			var upgradeSuccess = "You upgraded " + weapon.Name + " with a weapon kit.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(), 
+				Settings.FormatDefaultBackground(),
+				upgradeSuccess);
+			player.Consumables.RemoveAt(kitIndex);
+		}
 		public static void UseArmorKit(Player player, string[] userInput) {
 			var armorIndex = player.Inventory.FindIndex(f => f.Name.Contains(userInput[1]));
 			if (armorIndex == -1) {

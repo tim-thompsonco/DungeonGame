@@ -39,6 +39,7 @@ namespace DungeonGame {
 		public RestoreMana RestoreMana { get; set; }
 		public ChangeStat ChangeStat { get; set; }
 		public ChangeArmor ChangeArmor { get; set; }
+		public ChangeWeapon ChangeWeapon { get; set; }
 		public Arrow Arrow { get; set; }
 		public int Weight { get; set; }
 		
@@ -96,7 +97,6 @@ namespace DungeonGame {
 			this.ArrowCategory = arrowType;
 			this.Arrow = new Arrow(50);
 		}
-
 		public Consumable(KitLevel kitLevel, KitType kitType) {
 			this.Name = kitLevel.ToString().ToLower() + " " + kitType.ToString().ToLower() + " kit";
 			this.Weight = 1;
@@ -112,20 +112,27 @@ namespace DungeonGame {
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			this.ItemValue = amount * 10;
-			switch (this.KitCategory) {
-				case KitType.Armor:
-					this.ChangeArmor = kitCategory switch {
-						ChangeArmor.KitType.Cloth => new ChangeArmor(amount, ChangeArmor.KitType.Cloth),
-						ChangeArmor.KitType.Leather => new ChangeArmor(amount, ChangeArmor.KitType.Leather),
-						ChangeArmor.KitType.Plate => new ChangeArmor(amount, ChangeArmor.KitType.Plate),
-						_ => throw new ArgumentOutOfRangeException()
-					};
-					break;
-				case KitType.Weapon:
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+			this.ChangeArmor = kitCategory switch {
+				ChangeArmor.KitType.Cloth => new ChangeArmor(amount, ChangeArmor.KitType.Cloth),
+				ChangeArmor.KitType.Leather => new ChangeArmor(amount, ChangeArmor.KitType.Leather),
+				ChangeArmor.KitType.Plate => new ChangeArmor(amount, ChangeArmor.KitType.Plate),
+				_ => throw new ArgumentOutOfRangeException()
+			};
+		}
+		public Consumable(KitLevel kitLevel, KitType kitType, ChangeWeapon.KitType kitCategory) 
+			: this(kitLevel, kitType){
+			var amount = this.KitStrength switch {
+				KitLevel.Light => 1,
+				KitLevel.Medium => 2,
+				KitLevel.Heavy => 3,
+				_ => throw new ArgumentOutOfRangeException()
+			};
+			this.ItemValue = amount * 10;
+			this.ChangeWeapon = kitCategory switch {
+				ChangeWeapon.KitType.Grindstone => new ChangeWeapon(amount, ChangeWeapon.KitType.Grindstone),
+				ChangeWeapon.KitType.Bowstring => new ChangeWeapon(amount, ChangeWeapon.KitType.Bowstring),
+				_ => throw new ArgumentOutOfRangeException()
+			};
 		}
 	}
 }

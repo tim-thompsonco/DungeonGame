@@ -38,6 +38,7 @@
     <Compile Include="Consumable Properties\Arrow.cs" />
     <Compile Include="Consumable Properties\ChangeArmor.cs" />
     <Compile Include="Consumable Properties\ChangeStat.cs" />
+    <Compile Include="Consumable Properties\ChangeWeapon.cs" />
     <Compile Include="Consumable Properties\RestoreMana.cs" />
     <Compile Include="Consumable Properties\RestoreHealth.cs" />
     <Compile Include="Effect.cs" />

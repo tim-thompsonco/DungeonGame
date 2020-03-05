@@ -231,5 +231,56 @@ namespace DungeonGameTests {
 			Assert.AreEqual(enhanceFail
 				, OutputHandler.Display.Output[4][2]);
 		}
+		[Test]
+		public void WeaponUpgradeKitUnitTest() {
+			var player = new Player("test", Player.PlayerClassType.Mage) {
+				Consumables = new List<Consumable> {new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Weapon, 
+					ChangeWeapon.KitType.Grindstone)}
+			};
+			GearHandler.EquipInitialGear(player);
+			OutputHandler.Display.ClearUserOutput();
+			var weaponIndex = player.Inventory.FindIndex(f => f.Name.Contains("dagger"));
+			var weapon = player.Inventory[weaponIndex] as Weapon;
+			var weaponName = player.Inventory[weaponIndex].Name;
+			var kitAmount = player.Consumables[0].ChangeWeapon.ChangeAmount;
+			var kitName = player.Consumables[0].Name;
+			var input = new [] {"enhance", "doesn't exist", kitName};
+			var weaponAmount = weapon.RegDamage;
+			GearHandler.UseWeaponKit(player, input);
+			const string upgradeFail = "What weapon did you want to upgrade?";
+			Assert.AreEqual(upgradeFail, OutputHandler.Display.Output[0][2]);
+			Assert.IsNotEmpty(player.Consumables);
+			input = new [] {"enhance", weaponName, "doesn't exist"};
+			GearHandler.UseWeaponKit(player, input);
+			const string kitFail = "What weapon kit did you want to use?";
+			Assert.AreEqual(kitFail, OutputHandler.Display.Output[1][2]);
+			Assert.IsNotEmpty(player.Consumables);
+			input = new [] {"enhance", weaponName, kitName};
+			GearHandler.UseWeaponKit(player, input);
+			var upgradeSuccess = "You upgraded " + weapon.Name + " with a weapon kit.";
+			Assert.AreEqual(upgradeSuccess, OutputHandler.Display.Output[2][2]);
+			Assert.AreEqual(weaponAmount + kitAmount, weapon.RegDamage);
+			Assert.IsEmpty(player.Consumables);
+			player.Consumables.Add(new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Weapon, 
+				ChangeWeapon.KitType.Bowstring));
+			kitName = player.Consumables[0].Name;
+			input = new [] {"enhance", weaponName, kitName};
+			GearHandler.UseWeaponKit(player, input);
+			var enhanceFail = "You can't upgrade " + weapon.Name + " with that!";
+			Assert.IsNotEmpty(player.Consumables);
+			Assert.AreEqual(enhanceFail
+			, OutputHandler.Display.Output[3][2]);
+			player.Inventory.Add(new Weapon(1, Weapon.WeaponType.Bow));
+			weaponIndex = player.Inventory.FindIndex(f => f.Name.Contains("bow"));
+			weapon = player.Inventory[weaponIndex] as Weapon;
+			weapon.Equipped = true;
+			weaponName = player.Inventory[weaponIndex].Name;
+			input = new [] {"enhance", weaponName, kitName};
+			GearHandler.UseWeaponKit(player, input);
+			upgradeSuccess = "You upgraded " + weapon.Name + " with a weapon kit.";
+			Assert.IsEmpty(player.Consumables);
+			Assert.AreEqual(upgradeSuccess
+				, OutputHandler.Display.Output[4][2]);
+		}
 	}
 }
