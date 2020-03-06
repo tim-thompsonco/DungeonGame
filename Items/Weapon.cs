@@ -10,6 +10,7 @@ namespace DungeonGame {
 			Bow
 		}
 		public string Name { get; set; }
+		public string Desc { get; set; }
 		public int RegDamage { get; set; }
 		public int ItemValue { get; set; }
 		public WeaponType WeaponGroup { get; set; }
@@ -59,6 +60,7 @@ namespace DungeonGame {
 			});
 			sb.Append("venomous fang");
 			this.Name = sb.ToString();
+			this.Desc = "A " + this.Name + " that causes damage when you hit stuff with it.";
 		}
 
 		private void BuildWeaponName() {

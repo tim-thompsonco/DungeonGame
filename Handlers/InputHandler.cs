@@ -242,6 +242,9 @@ namespace DungeonGame {
 							try {
 								RoomHandler.Rooms[RoomHandler.RoomIndex].LookNpc(input, player);
 							}
+							catch (ArgumentOutOfRangeException) {
+								
+							}
 							catch (Exception) {
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),

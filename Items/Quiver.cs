@@ -6,6 +6,7 @@
 		public int MaxQuantity { get; set; }
 		public int Weight { get; set; }
 		public string Name { get; set; }
+		public string Desc { get; set; }
 
 		public Quiver(string name, int quantity, int maxQuantity, int itemValue) {
 			this.Name = name;
@@ -13,6 +14,7 @@
 			this.MaxQuantity = maxQuantity;
 			this.ItemValue = itemValue;
 			this.Weight = 1;
+			this.Desc = "A " + this.Name + " that can hold " + this.MaxQuantity + " arrows.";
 		}
 		
 		public bool HaveArrows() {

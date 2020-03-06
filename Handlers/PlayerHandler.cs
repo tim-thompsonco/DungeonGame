@@ -1,19 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace DungeonGame {
 	public static class PlayerHandler {
+		public static void LookAtObject(Player player, string[] input) {
+			var parsedInput = InputHandler.ParseInput(input);
+			/* Need to add in logic to look at monster, trainer or vendor depending on room type  and
+			 if the input was trying to look at them. Otherwise, continue on with the rest of the method. */
+			if (RoomHandler.Rooms[RoomHandler.RoomIndex] is DungeonRoom) {
+				var monster = RoomHandler.Rooms[RoomHandler.RoomIndex].Monster;
+				if (monster != null) RoomHandler.Rooms[RoomHandler.RoomIndex].LookNpc(input, player);
+			}
+			var roomItemIndex = RoomHandler.Rooms[RoomHandler.RoomIndex].RoomObjects
+				.FindIndex(f => f.Name.Contains(input[1]));
+			if (roomItemIndex != -1) {
+				RoomHandler.Rooms[RoomHandler.RoomIndex].LookNpc(input, player);
+				return;
+			}
+			// Everything above here is a work in progress
+			var playerInvIndex = player.Inventory.FindIndex(f => f.Name.Contains(input[1]) || 
+			                                                                     f.Name == parsedInput);
+			if (playerInvIndex != -1) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatInfoText(), 
+					Settings.FormatDefaultBackground(),
+					player.Inventory[playerInvIndex].Desc);
+				return;
+			}
+			var playerConsIndex = player.Consumables.FindIndex(f => f.Name.Contains(input[1]) || 
+			                                                        f.Name == parsedInput);
+			if (playerConsIndex != -1) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatInfoText(), 
+					Settings.FormatDefaultBackground(),
+					player.Inventory[playerInvIndex].Desc);
+			}
+		}
 		public static int GetInventoryWeight(Player player) {
-			var weight = 0;
-			foreach (var item in player.Inventory) {
-				weight += item.Weight;
-			}
-			foreach (var consumable in player.Consumables) {
-				weight += consumable.Weight;
-			}
-			return weight;
+			return player.Inventory.Sum(item => item.Weight) + 
+			       player.Consumables.Sum(consumable => consumable.Weight);
 		}
 		public static void ShowInventory(Player player) {
 			OutputHandler.Display.StoreUserOutput(

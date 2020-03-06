@@ -14,6 +14,7 @@
 			Normal
 		}
 		public string Name { get; set; }
+		public string Desc { get; set; }
 		public bool Equipped { get; set; }
 		public int ItemValue { get; set; }
 		public int Weight { get; set; }
@@ -45,6 +46,7 @@
 				name = gemType.ToString();
 			}
 			this.Name = name.ToLower();
+			this.Desc = "A " + this.Name + " that is worth some money to the right vendor.";
 		}
 	}
 }

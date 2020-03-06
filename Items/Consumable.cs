@@ -28,6 +28,7 @@ namespace DungeonGame {
 			Weapon
 		}
 		public string Name { get; set; }
+		public string Desc { get; set; }
 		public int ItemValue { get; set; }
 		public bool Equipped { get; set; }
 		public ArrowType ArrowCategory { get; set; }
@@ -67,6 +68,9 @@ namespace DungeonGame {
 			}
 			this.ItemValue = amount / 2;
 			this.Name = name.ToLower();
+			this.Desc = this.PotionCategory == PotionType.Health || this.PotionCategory == PotionType.Mana
+				? "A " + name + " that restores " + amount + " " + this.PotionCategory
+				: "A " + name + " that increases " + amount + " " + this.PotionCategory;
 			switch (this.PotionCategory) {
 				case PotionType.Health:
 					this.RestoreHealth = new RestoreHealth(amount);
@@ -96,6 +100,7 @@ namespace DungeonGame {
 			this.ItemValue = itemValue;
 			this.ArrowCategory = arrowType;
 			this.Arrow = new Arrow(50);
+			this.Desc = "A bundle of " + this.Arrow.Quantity + " arrows.";
 		}
 		public Consumable(KitLevel kitLevel, KitType kitType) {
 			this.Name = kitLevel.ToString().ToLower() + " " + kitType.ToString().ToLower() + " kit";
@@ -118,6 +123,7 @@ namespace DungeonGame {
 				ChangeArmor.KitType.Plate => new ChangeArmor(amount, ChangeArmor.KitType.Plate),
 				_ => throw new ArgumentOutOfRangeException()
 			};
+			this.Desc = "A single-use " + this.Name + " that increases armor rating by " + amount + " for one armor item.";
 		}
 		public Consumable(KitLevel kitLevel, KitType kitType, ChangeWeapon.KitType kitCategory) 
 			: this(kitLevel, kitType){
@@ -133,6 +139,7 @@ namespace DungeonGame {
 				ChangeWeapon.KitType.Bowstring => new ChangeWeapon(amount, ChangeWeapon.KitType.Bowstring),
 				_ => throw new ArgumentOutOfRangeException()
 			};
+			this.Desc = "A single-use " + this.Name + " that increases weapon damage by " + amount + " for one weapon item.";
 		}
 	}
 }
