@@ -159,6 +159,20 @@ namespace DungeonGame {
 				case "unequip":
 					GearHandler.EquipItem(player, input);
 					break;
+				case "enhance":
+					var itemIndex = player.Inventory.FindIndex(f => f.Name.Contains(input[1]));
+					switch (player.Inventory[itemIndex]) {
+						case Weapon _:
+							GearHandler.UseWeaponKit(player, input);
+							break;
+						case Armor _:
+							GearHandler.UseArmorKit(player, input);
+							break;
+						default:
+							Messages.InvalidCommand();
+							break;
+					}
+					break;
 				case "reload":
 					player.ReloadQuiver();
 					break;

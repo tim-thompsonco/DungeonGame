@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace DungeonGame {
 	public class Monster : IRoomInteraction {
@@ -105,6 +106,9 @@ namespace DungeonGame {
 						_ => 
 						this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Axe, this.MonsterCategory) 
 					};
+					if (randomGearNum <= 2) {
+						this.BuildMonsterKit();
+					}
 					if (randomGearNum <= 3) {
 						this.BuildMonsterGem();
 					}
@@ -140,6 +144,26 @@ namespace DungeonGame {
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+		}
+		private void BuildMonsterKit() {
+			var kitRandomNum = GameHandler.GetRandomNumber(1, 2);
+			var kitCategory = kitRandomNum switch {
+				1 => Consumable.KitType.Armor,
+				2 => Consumable.KitType.Weapon,
+				_ => throw new ArgumentOutOfRangeException()};
+			var kitTypeRandomNum = GameHandler.GetRandomNumber(1, 3);
+			var kitType = kitTypeRandomNum switch {
+				1 => ChangeArmor.KitType.Cloth,
+				2 => ChangeArmor.KitType.Leather,
+				3 => ChangeArmor.KitType.Plate,
+				_ => throw new ArgumentOutOfRangeException()};
+			var kitLevelRandomNum = GameHandler.GetRandomNumber(1, 3);
+			var kitLevel = kitLevelRandomNum switch {
+				1 => Consumable.KitLevel.Light,
+				2 => Consumable.KitLevel.Medium,
+				3 => Consumable.KitLevel.Heavy,
+				_ => throw new ArgumentOutOfRangeException()};
+			this.MonsterItems.Add(new Consumable(kitLevel, kitCategory, kitType));
 		}
 		private void BuildMonsterArmor() {
 			var randomCatNum = GameHandler.GetRandomNumber(1, 7);
