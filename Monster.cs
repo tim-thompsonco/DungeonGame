@@ -6,7 +6,17 @@ namespace DungeonGame {
 			Skeleton,
 			Zombie,
 			Spider,
-			Demon
+			Demon,
+			Elemental,
+			Vampire,
+			Troll,
+			Dragon
+		}
+
+		public enum ElementalType {
+			Fire,
+			Air,
+			Water
 		}
 		public string Name { get; set; }
 		public string Desc { get; set; }
@@ -20,6 +30,7 @@ namespace DungeonGame {
 		public bool IsStunned { get; set; }
 		public int StatReplenishInterval { get; set; }
 		public MonsterType MonsterCategory { get; set; }
+		public ElementalType ElementalCategory { get; set; }
 		public Weapon MonsterWeapon { get; set; }
 		public Armor MonsterHeadArmor { get; set; }
 		public Armor MonsterBackArmor { get; set; }

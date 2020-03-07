@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 
 namespace DungeonGame {
@@ -51,16 +52,43 @@ namespace DungeonGame {
 		}
 		public Weapon(int level, WeaponType weaponType, Monster.MonsterType monsterType)
 			: this(level, weaponType) {
-			if (monsterType != Monster.MonsterType.Spider) return;
 			var sb = new StringBuilder();
-			sb.Append(this.Quality switch {
-				1 => "",
-				2 => "sturdy ",
-				3 => "fine ",
-				_ => ""
-			});
-			sb.Append("venomous fang");
-			this.Name = sb.ToString();
+			switch (monsterType) {
+				case Monster.MonsterType.Skeleton:
+					return;
+				case Monster.MonsterType.Zombie:
+					return;
+				case Monster.MonsterType.Spider:
+					sb.Append(this.Quality switch {
+						1 => "",
+						2 => "sturdy ",
+						3 => "fine ",
+						_ => ""
+					});
+					sb.Append("venomous fang");
+					this.Name = sb.ToString();
+					return;
+				case Monster.MonsterType.Demon:
+					return;
+				case Monster.MonsterType.Elemental:
+					return;
+				case Monster.MonsterType.Vampire:
+					return;
+				case Monster.MonsterType.Troll:
+					return;
+				case Monster.MonsterType.Dragon:
+					sb.Append(this.Quality switch {
+						1 => "",
+						2 => "sturdy ",
+						3 => "fine ",
+						_ => ""
+					});
+					sb.Append("dragon fang");
+					this.Name = sb.ToString();
+					return;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(monsterType), monsterType, null);
+			}
 		}
 
 		private void BuildWeaponName() {
