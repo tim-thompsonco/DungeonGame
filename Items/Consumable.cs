@@ -50,27 +50,29 @@ namespace DungeonGame {
 			this.PotionCategory = potionType;
 			this.Weight = 1;
 			int amount;
-			string name;
+			var name = string.Empty;
 			if (level <= 3) {
 				this.PotionStrength = PotionLevel.Minor;
-				name = PotionLevel.Minor + " " + potionType + " potion";
+				name = PotionLevel.Minor.ToString().ToLowerInvariant() + " " + 
+				       potionType.ToString().ToLowerInvariant() + " potion";
 				amount = this.PotionCategory == PotionType.Health || this.PotionCategory == PotionType.Mana ? 50 : 5;
 			}
 			else if (level > 6) {
 				this.PotionStrength = PotionLevel.Greater;
-				name = PotionLevel.Greater + " " + potionType + " potion";
+				name = PotionLevel.Greater.ToString().ToLowerInvariant() + " " + 
+				       potionType.ToString().ToLowerInvariant() + " potion";
 				amount = this.PotionCategory == PotionType.Health || this.PotionCategory == PotionType.Mana ? 150 : 15;
 			}
 			else {
 				this.PotionStrength = PotionLevel.Normal;
-				name = potionType + " potion";
+				name = potionType.ToString().ToLowerInvariant() + " potion";
 				amount = this.PotionCategory == PotionType.Health || this.PotionCategory == PotionType.Mana ? 100 : 10;
 			}
 			this.ItemValue = amount / 2;
-			this.Name = name.ToLower();
+			this.Name = name;
 			this.Desc = this.PotionCategory == PotionType.Health || this.PotionCategory == PotionType.Mana
-				? "A " + name + " that restores " + amount + " " + this.PotionCategory
-				: "A " + name + " that increases " + amount + " " + this.PotionCategory;
+				? "A " + name + " that restores " + amount + " " + this.PotionCategory.ToString().ToLowerInvariant() + "."
+				: "A " + name + " that increases " + amount + " " + this.PotionCategory.ToString().ToLowerInvariant() + ".";
 			switch (this.PotionCategory) {
 				case PotionType.Health:
 					this.RestoreHealth = new RestoreHealth(amount);
@@ -103,7 +105,7 @@ namespace DungeonGame {
 			this.Desc = "A bundle of " + this.Arrow.Quantity + " arrows.";
 		}
 		public Consumable(KitLevel kitLevel, KitType kitType) {
-			this.Name = kitLevel.ToString().ToLower() + " " + kitType.ToString().ToLower() + " kit";
+			this.Name = kitLevel.ToString().ToLowerInvariant() + " " + kitType.ToString().ToLowerInvariant() + " kit";
 			this.Weight = 1;
 			this.KitStrength = kitLevel;
 			this.KitCategory = kitType;

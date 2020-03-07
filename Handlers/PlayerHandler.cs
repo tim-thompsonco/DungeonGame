@@ -8,19 +8,12 @@ namespace DungeonGame {
 	public static class PlayerHandler {
 		public static void LookAtObject(Player player, string[] input) {
 			var parsedInput = InputHandler.ParseInput(input);
-			/* Need to add in logic to look at monster, trainer or vendor depending on room type  and
-			 if the input was trying to look at them. Otherwise, continue on with the rest of the method. */
-			if (RoomHandler.Rooms[RoomHandler.RoomIndex] is DungeonRoom) {
-				var monster = RoomHandler.Rooms[RoomHandler.RoomIndex].Monster;
-				if (monster != null) RoomHandler.Rooms[RoomHandler.RoomIndex].LookNpc(input, player);
-			}
-			var roomItemIndex = RoomHandler.Rooms[RoomHandler.RoomIndex].RoomObjects
-				.FindIndex(f => f.Name.Contains(input[1]));
-			if (roomItemIndex != -1) {
+			var roomMatch = RoomHandler.Rooms[RoomHandler.RoomIndex].RoomObjects.FindIndex(f =>
+				f.Name.Contains(parsedInput));
+			if (roomMatch != -1) {
 				RoomHandler.Rooms[RoomHandler.RoomIndex].LookNpc(input, player);
 				return;
 			}
-			// Everything above here is a work in progress
 			var playerInvIndex = player.Inventory.FindIndex(f => f.Name.Contains(input[1]) || 
 			                                                                     f.Name == parsedInput);
 			if (playerInvIndex != -1) {
@@ -36,7 +29,7 @@ namespace DungeonGame {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(), 
 					Settings.FormatDefaultBackground(),
-					player.Inventory[playerInvIndex].Desc);
+					player.Consumables[playerConsIndex].Desc);
 			}
 		}
 		public static int GetInventoryWeight(Player player) {

@@ -47,6 +47,7 @@ namespace DungeonGame {
 			}
 			this.ItemValue = this.RegDamage;
 			this.BuildWeaponName();
+			this.Desc = "A " + this.Name + " that causes damage when you hit stuff with it.";
 		}
 		public Weapon(int level, WeaponType weaponType, Monster.MonsterType monsterType)
 			: this(level, weaponType) {
@@ -60,7 +61,6 @@ namespace DungeonGame {
 			});
 			sb.Append("venomous fang");
 			this.Name = sb.ToString();
-			this.Desc = "A " + this.Name + " that causes damage when you hit stuff with it.";
 		}
 
 		private void BuildWeaponName() {

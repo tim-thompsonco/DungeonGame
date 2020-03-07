@@ -239,18 +239,7 @@ namespace DungeonGame {
 				case "look":
 					try {
 						if (input[1] != null) {
-							try {
-								RoomHandler.Rooms[RoomHandler.RoomIndex].LookNpc(input, player);
-							}
-							catch (ArgumentOutOfRangeException) {
-								
-							}
-							catch (Exception) {
-								OutputHandler.Display.StoreUserOutput(
-									Settings.FormatFailureOutputText(),
-									Settings.FormatDefaultBackground(),
-									"An error has occurred while looking.");
-							}
+							PlayerHandler.LookAtObject(player, input);
 						}
 					}
 					catch (IndexOutOfRangeException) {

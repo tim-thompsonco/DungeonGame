@@ -67,7 +67,7 @@ namespace DungeonGame {
 			this.Durability = 100;
 			this.BuildArmorName();
 			this.SetArmorWeight();
-			this.Desc = "A " + this.Name;
+			this.Desc = "A " + this.Name + ".";
 		}
 		// Constructor to define specific armor slot for players, vendors
 		public Armor(int level, ArmorType armorGroup, ArmorSlot armorCategory) {
@@ -100,7 +100,7 @@ namespace DungeonGame {
 			this.Durability = 100;
 			this.BuildArmorName();
 			this.SetArmorWeight();
-			this.Desc = "A " + this.Name;
+			this.Desc = "A " + this.Name + ".";
 		}
 
 		private void SetArmorWeight() {
