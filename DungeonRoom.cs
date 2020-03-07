@@ -62,18 +62,22 @@ namespace DungeonGame {
 			// Reserving numbers 80-100 for chance of room not having a monster
 			if (randomNum < 25) {
 				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Zombie);
+				this.Monster.BuildMonster();
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum < 50) {
 				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Skeleton);
+				this.Monster.BuildMonster();
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum < 70) {
 				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Spider);
+				this.Monster.BuildMonster();
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum < 80) {
 				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Demon);
+				this.Monster.BuildMonster();
 				this.RoomObjects.Add(this.Monster);
 			}
 		}

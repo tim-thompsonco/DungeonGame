@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 
 namespace DungeonGame {
 	public class Monster : IRoomInteraction {
@@ -21,17 +19,15 @@ namespace DungeonGame {
 		public bool InCombat { get; set; }
 		public bool IsStunned { get; set; }
 		public int StatReplenishInterval { get; set; }
-		private MonsterType MonsterCategory { get; set; }
-		public Loot Item { get; set; }
-		public Consumable Consumable { get; set; }
+		public MonsterType MonsterCategory { get; set; }
 		public Weapon MonsterWeapon { get; set; }
-		private Armor MonsterHeadArmor { get; set; }
-		private Armor MonsterBackArmor { get; set; }
-		private Armor MonsterChestArmor { get; set; }
-		private Armor MonsterWristArmor { get; set; }
-		private Armor MonsterHandsArmor { get; set; }
-		private Armor MonsterWaistArmor { get; set; }
-		private Armor MonsterLegArmor { get; set; }
+		public Armor MonsterHeadArmor { get; set; }
+		public Armor MonsterBackArmor { get; set; }
+		public Armor MonsterChestArmor { get; set; }
+		public Armor MonsterWristArmor { get; set; }
+		public Armor MonsterHandsArmor { get; set; }
+		public Armor MonsterWaistArmor { get; set; }
+		public Armor MonsterLegArmor { get; set; }
 		public List<IEquipment> MonsterItems { get; set; }
 		public List<Effect> Effects { get; set; }
 
@@ -41,7 +37,8 @@ namespace DungeonGame {
 			this.StatReplenishInterval = 3;
 			this.Level = level;
 			this.MonsterCategory = monsterType;
-			this.BuildMonsterNameDesc();
+			this.Name = "placeholder";
+			this.Desc = "placeholder";
 			var randomNumHitPoint = GameHandler.GetRandomNumber(20, 40);
 			var maxHitPoints = 80 + (this.Level - 1) * randomNumHitPoint;
 			this.MaxHitPoints = GameHandler.RoundNumber(maxHitPoints);
@@ -56,237 +53,11 @@ namespace DungeonGame {
 			var randomNumExp = GameHandler.GetRandomNumber(20, 40);
 			var expProvided = this.MaxHitPoints + randomNumExp;
 			this.ExperienceProvided = GameHandler.RoundNumber(expProvided);
-			this.BuildMonsterGear();
 		}
 
-		private void BuildMonsterGear() {
-			var randomGearNum = GameHandler.GetRandomNumber(1, 10);
-			switch (this.MonsterCategory) {
-				case MonsterType.Skeleton:
-					this.MonsterWeapon = randomGearNum switch {
-						1 => 
-						this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Axe, this.MonsterCategory),
-						2 => 
-						this.MonsterWeapon = new Weapon(
-							this.Level, Weapon.WeaponType.TwoHandedSword, this.MonsterCategory),
-						_ => 
-						this.MonsterWeapon = new Weapon(
-							this.Level, Weapon.WeaponType.OneHandedSword, this.MonsterCategory)
-					};
-					this.BuildMonsterArmor();
-					if (randomGearNum <= 4) {
-						var randomPotionNum = GameHandler.GetRandomNumber(1, 6);
-						this.MonsterItems.Add(randomPotionNum switch {
-							1 => new Consumable(this.Level, Consumable.PotionType.Health),
-							2 => new Consumable(this.Level, Consumable.PotionType.Mana),
-							3 => new Consumable(this.Level, Consumable.PotionType.Constitution),
-							4 => new Consumable(this.Level, Consumable.PotionType.Dexterity),
-							5 => new Consumable(this.Level, Consumable.PotionType.Intelligence),
-							6 => new Consumable(this.Level, Consumable.PotionType.Strength),
-							_ => throw new ArgumentOutOfRangeException()
-						});
-					}
-					break;
-				case MonsterType.Zombie:
-					this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Axe, this.MonsterCategory);
-					this.BuildMonsterArmor();
-					break;
-				case MonsterType.Spider:
-					this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Dagger, this.MonsterCategory);
-					if (randomGearNum <= 5) this.MonsterItems.Add(new Loot("large venom sac", this.Level, 1));
-					break;
-				case MonsterType.Demon:
-					this.MonsterWeapon = randomGearNum switch {
-						1 => 
-						this.MonsterWeapon = new Weapon(
-							this.Level, Weapon.WeaponType.OneHandedSword, this.MonsterCategory),
-						2 => 
-						this.MonsterWeapon = new Weapon(
-							this.Level, Weapon.WeaponType.TwoHandedSword, this.MonsterCategory),
-						_ => 
-						this.MonsterWeapon = new Weapon(this.Level, Weapon.WeaponType.Axe, this.MonsterCategory) 
-					};
-					if (randomGearNum <= 2) {
-						this.BuildMonsterKit();
-					}
-					if (randomGearNum <= 3) {
-						this.BuildMonsterGem();
-					}
-					this.BuildMonsterArmor();
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-			this.MonsterWeapon.Equipped = true;
-			this.MonsterItems.Add(this.MonsterWeapon);
-		}
-		private void BuildMonsterGem() {
-			var randomGemNum = GameHandler.GetRandomNumber(1, 6);
-			switch (randomGemNum) {
-				case 1:
-					this.MonsterItems.Add(new Loot(this.Level, Loot.GemType.Amethyst));
-					break;
-				case 2:
-					this.MonsterItems.Add(new Loot(this.Level, Loot.GemType.Diamond));
-					break;
-				case 3:
-					this.MonsterItems.Add(new Loot(this.Level, Loot.GemType.Emerald));
-					break;
-				case 4:
-					this.MonsterItems.Add(new Loot(this.Level, Loot.GemType.Ruby));
-					break;
-				case 5:
-					this.MonsterItems.Add(new Loot(this.Level, Loot.GemType.Sapphire));
-					break;
-				case 6:
-					this.MonsterItems.Add(new Loot(this.Level, Loot.GemType.Topaz));
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-		private void BuildMonsterKit() {
-			var kitRandomNum = GameHandler.GetRandomNumber(1, 2);
-			var kitCategory = kitRandomNum switch {
-				1 => Consumable.KitType.Armor,
-				2 => Consumable.KitType.Weapon,
-				_ => throw new ArgumentOutOfRangeException()};
-			var kitTypeRandomNum = GameHandler.GetRandomNumber(1, 3);
-			var kitType = kitTypeRandomNum switch {
-				1 => ChangeArmor.KitType.Cloth,
-				2 => ChangeArmor.KitType.Leather,
-				3 => ChangeArmor.KitType.Plate,
-				_ => throw new ArgumentOutOfRangeException()};
-			var kitLevelRandomNum = GameHandler.GetRandomNumber(1, 3);
-			var kitLevel = kitLevelRandomNum switch {
-				1 => Consumable.KitLevel.Light,
-				2 => Consumable.KitLevel.Medium,
-				3 => Consumable.KitLevel.Heavy,
-				_ => throw new ArgumentOutOfRangeException()};
-			this.MonsterItems.Add(new Consumable(kitLevel, kitCategory, kitType));
-		}
-		private void BuildMonsterArmor() {
-			var randomCatNum = GameHandler.GetRandomNumber(1, 7);
-			switch(randomCatNum){
-				case 1:
-					this.MonsterBackArmor = new Armor(this.Level, Armor.ArmorSlot.Back);
-					this.MonsterBackArmor.Equipped = true;
-					this.MonsterItems.Add(this.MonsterBackArmor);
-					break;
-				case 2:
-					this.MonsterChestArmor = new Armor(this.Level, Armor.ArmorSlot.Chest);
-					this.MonsterChestArmor.Equipped = true;
-					this.MonsterItems.Add(this.MonsterChestArmor);
-					break;
-				case 3:
-					this.MonsterHeadArmor = new Armor(this.Level, Armor.ArmorSlot.Head);
-					this.MonsterHeadArmor.Equipped = true;
-					this.MonsterItems.Add(this.MonsterHeadArmor);
-					break;
-				case 4:
-					this.MonsterLegArmor = new Armor(this.Level, Armor.ArmorSlot.Legs);
-					this.MonsterLegArmor.Equipped = true;
-					this.MonsterItems.Add(this.MonsterLegArmor);
-					break;
-				case 5:
-					this.MonsterWaistArmor = new Armor(this.Level, Armor.ArmorSlot.Waist);
-					this.MonsterWaistArmor.Equipped = true;
-					this.MonsterItems.Add(this.MonsterWaistArmor);
-					break;
-				case 6:
-					this.MonsterWristArmor = new Armor(this.Level, Armor.ArmorSlot.Wrist);
-					this.MonsterWristArmor.Equipped = true;
-					this.MonsterItems.Add(this.MonsterWristArmor);
-					break;
-				case 7:
-					this.MonsterHandsArmor = new Armor(this.Level, Armor.ArmorSlot.Hands);
-					this.MonsterHandsArmor.Equipped = true;
-					this.MonsterItems.Add(this.MonsterHandsArmor);
-					break;
-			}
-		}
-		private void BuildMonsterNameDesc() {
-			switch (this.MonsterCategory) {
-				case MonsterType.Skeleton:
-					this.Name = this.Level switch {
-						1 => "skeleton",
-						2 => "skeleton fighter",
-						3 => "skeleton warrior",
-						4 => "skeleton guardian",
-						5 => "skeleton defender",
-						6 => "skeleton conqueror",
-						7 => "skeleton zealot",
-						8 => "skeleton gladiator",
-						9 => "skeleton knight",
-						10 => "skeleton champion",
-						_ => "skeleton placeholder"
-					};
-					this.Desc =
-						"A " + this.Name + " stands in front of you. Its bones look worn and damaged from years of fighting. A " +
-						"ghastly yellow glow surrounds it, which is the only indication of the magic that must exist to " +
-						"reanimate it.";
-					break;
-				case MonsterType.Zombie:
-					this.Name = this.Level switch {
-						1 => "zombie",
-						2 => "rotting zombie",
-						3 => "vicious zombie",
-						4 => "rabid zombie",
-						5 => "crazed zombie",
-						6 => "frenzied zombie",
-						7 => "virulent zombie",
-						8 => "delirious zombie",
-						9 => "furious zombie",
-						10 => "fanatical zombie",
-						_ => "zombie placeholder"
-					};
-					this.Desc =
-						"A " + this.Name +
-						" stares at you, it's face frozen in a look of indifference to the fact a bug is crawling" +
-						" out of it's empty eye sockets. In one hand, it drags a weapon against the ground, as it stares at you " +
-						"menacingly. Bones, muscle and tendons are visible through many gashes and tears in it's rotting skin.";
-					break;
-				case MonsterType.Spider:
-					this.Name = this.Level switch {
-						1 => "spider",
-						2 => "black spider",
-						3 => "huge spider",
-						4 => "ghoulish spider",
-						5 => "menacing spider",
-						6 => "sinister spider",
-						7 => "macabre spider",
-						8 => "gruesome spider",
-						9 => "hideous spider",
-						10 => "abominable spider",
-						_ => "spider placeholder"
-					};
-					this.Desc =
-						"A " + this.Name + " about the size of a large bear skitters down the corridor towards you. " +
-						"Coarse hair sticks out from every direction on it's thorax and legs. It's many eyes stare at " +
-						"you, legs ending in sharp claws carrying it closer as it hisses hungrily.";
-					break;
-				case MonsterType.Demon:
-					this.Name = this.Level switch {
-						1 => "lesser demon",
-						2 => "demon",
-						3 => "horned demon",
-						4 => "greater demon",
-						5 => "hulking demon",
-						6 => "immense demon",
-						7 => "massive demon",
-						8 => "towering demon",
-						9 => "titanic demon",
-						10 => "colossal demon",
-						_ => "demon placeholder"
-					};
-					this.Desc =
-						"A " + this.Name + " stands before you with two horns sticking out of it's head. It's eyes glint " +
-						"yellow and a look of pure hatred adorns its face. Leathery wings spread out on either side of its " +
-						"back as it rises up to its full height and growls at you.";
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+		public void BuildMonster() {
+			MonsterBuilder.BuildMonsterNameDesc(this);
+			MonsterBuilder.BuildMonsterGear(this);
 		}
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;

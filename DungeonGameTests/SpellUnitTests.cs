@@ -12,6 +12,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 50, MaxHitPoints = 100};
+			monster.BuildMonster();
 			player.PlayerWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			var inputInfo = new[] {"spell", "fireball"};
 			var spellIndex = player.Spellbook.FindIndex(
@@ -55,6 +56,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
+			monster.BuildMonster();
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}
@@ -115,6 +117,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
+			monster.BuildMonster();
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}
@@ -277,6 +280,7 @@ namespace DungeonGameTests {
 			var player = new Player("test", Player.PlayerClassType.Mage) {MaxManaPoints = 100, ManaPoints = 100};
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
+			monster.BuildMonster();
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}
@@ -381,6 +385,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
+			monster.BuildMonster();
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}

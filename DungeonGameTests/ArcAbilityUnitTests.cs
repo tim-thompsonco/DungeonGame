@@ -23,6 +23,7 @@ namespace DungeonGameTests {
 			RoomHandler.Rooms[1].Monster = new Monster(3, Monster.MonsterType.Demon)
 				{HitPoints = 100, MaxHitPoints = 100};
 			var monster = RoomHandler.Rooms[1].Monster;
+			monster.BuildMonster();
 			RoomHandler.SetPlayerLocation(player, 0, 0, 0);
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
@@ -80,6 +81,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
+			monster.BuildMonster();
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}
@@ -138,6 +140,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
+			monster.BuildMonster();
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}
@@ -171,6 +174,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
+			monster.BuildMonster();
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}
@@ -224,6 +228,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
+			monster.BuildMonster();
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}
@@ -282,6 +287,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
+			monster.BuildMonster();
 			var abilityIndex = player.Abilities.FindIndex(
 				f => f.ArcAbilityCategory == Ability.ArcherAbility.Double);
 			var inputInfo = new[] {"ability", "double"};
@@ -415,6 +421,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
+			monster.BuildMonster();
 			player.PlayerWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			player.Abilities.Add(new Ability(
 				"immolating arrow", 35, 1, Ability.ArcherAbility.ImmolatingArrow, 8));
@@ -459,6 +466,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
+			monster.BuildMonster();
 			player.Abilities.Add(new Ability(
 				"ambush", 75, 1, Ability.ArcherAbility.Ambush, 4));
 			var inputInfo = new[] {"ability", "ambush"};

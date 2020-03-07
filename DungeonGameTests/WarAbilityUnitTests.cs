@@ -10,6 +10,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
+			monster.BuildMonster();
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}
@@ -39,6 +40,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
+			monster.BuildMonster();
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}
@@ -94,6 +96,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
+			monster.BuildMonster();
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}
@@ -144,6 +147,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
+			monster.BuildMonster();
 			var abilityIndex = player.Abilities.FindIndex(
 				f => f.WarAbilityCategory == Ability.WarriorAbility.Block);
 			var inputInfo = new[] {"ability", "block"};
@@ -194,6 +198,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
+			monster.BuildMonster();
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}
@@ -250,6 +255,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
+			monster.BuildMonster();
 			var abilityIndex = player.Abilities.FindIndex(
 				f => f.WarAbilityCategory == Ability.WarriorAbility.Disarm);
 			var inputInfo = new[] {"ability", "disarm"};
@@ -375,6 +381,7 @@ namespace DungeonGameTests {
 				"war cry", 50, 1, Ability.WarriorAbility.WarCry, 4));
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
+			monster.BuildMonster();
 			var abilityIndex = player.Abilities.FindIndex(
 				f => f.WarAbilityCategory == Ability.WarriorAbility.WarCry);
 			var inputInfo = new[] {"ability", "war", "cry"};
@@ -419,6 +426,7 @@ namespace DungeonGameTests {
 				"onslaught", 25, 1, Ability.WarriorAbility.Onslaught, 8));
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
+			monster.BuildMonster();
 			var abilityIndex = player.Abilities.FindIndex(
 				f => f.WarAbilityCategory == Ability.WarriorAbility.Onslaught);
 			var inputInfo = new[] {"ability", "onslaught"};
