@@ -65,11 +65,7 @@ namespace DungeonGame {
 			var expProvided = this.MaxHitPoints + randomNumExp;
 			this.ExperienceProvided = GameHandler.RoundNumber(expProvided);
 		}
-
-		public void BuildMonster() {
-			MonsterBuilder.BuildMonsterNameDesc(this);
-			MonsterBuilder.BuildMonsterGear(this);
-		}
+		
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;
 		}

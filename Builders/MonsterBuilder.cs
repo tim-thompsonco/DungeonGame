@@ -3,7 +3,11 @@ using System.Diagnostics;
 
 namespace DungeonGame {
 	public static class MonsterBuilder {
-		public static void BuildMonsterGear(Monster monster) {
+		public static void BuildMonster(Monster monster) {
+			BuildMonsterNameDesc(monster);
+			BuildMonsterGear(monster);
+		}
+		private static void BuildMonsterGear(Monster monster) {
 			var randomGearNum = GameHandler.GetRandomNumber(1, 10);
 			switch (monster.MonsterCategory) {
 				case Monster.MonsterType.Skeleton:
@@ -120,7 +124,7 @@ namespace DungeonGame {
 			if (monster.MonsterCategory != Monster.MonsterType.Elemental) monster.MonsterWeapon.Equipped = true;
 			monster.MonsterItems.Add(monster.MonsterWeapon);
 		}
-		public static void BuildMonsterGem(Monster monster) {
+		private static void BuildMonsterGem(Monster monster) {
 			var randomGemNum = GameHandler.GetRandomNumber(1, 6);
 			switch (randomGemNum) {
 				case 1:
@@ -145,7 +149,7 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		public static void BuildMonsterKit(Monster monster) {
+		private static void BuildMonsterKit(Monster monster) {
 			var kitRandomNum = GameHandler.GetRandomNumber(1, 2);
 			var kitCategory = kitRandomNum switch {
 				1 => Consumable.KitType.Armor,
@@ -165,7 +169,7 @@ namespace DungeonGame {
 				_ => throw new ArgumentOutOfRangeException()};
 			monster.MonsterItems.Add(new Consumable(kitLevel, kitCategory, kitType));
 		}
-		public static void BuildMonsterArmor(Monster monster) {
+		private static void BuildMonsterArmor(Monster monster) {
 			var randomCatNum = GameHandler.GetRandomNumber(1, 7);
 			switch(randomCatNum){
 				case 1:
@@ -205,7 +209,7 @@ namespace DungeonGame {
 					break;
 			}
 		}
-		public static void BuildMonsterNameDesc(Monster monster) {
+		private static void BuildMonsterNameDesc(Monster monster) {
 			switch (monster.MonsterCategory) {
 				case Monster.MonsterType.Skeleton:
 					monster.Name = monster.Level switch {

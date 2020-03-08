@@ -27,6 +27,7 @@
 			this.Name = name;
 			this.Weight = weight;
 			this.ItemValue = 15 + (level - 1) * 5;
+			this.Desc = "A " + this.Name + " that is worth some money to the right vendor.";
 		}
 		public Loot(int level, GemType gemType) {
 			this.GemCategory = gemType;

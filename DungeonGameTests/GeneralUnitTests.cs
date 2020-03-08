@@ -17,7 +17,7 @@ namespace DungeonGameTests {
 			/* Test Monster constructor HP and exp smoothing
 			if values smoothed correctly, % should be 0 */
 			var monster = new Monster(1, Monster.MonsterType.Skeleton);
-			monster.BuildMonster();
+			MonsterBuilder.BuildMonster(monster);
 			Assert.AreEqual(0, monster.MaxHitPoints % 10);
 			Assert.AreEqual(0, monster.ExperienceProvided % 10);
 			// Test consumable potion creation
@@ -79,7 +79,7 @@ namespace DungeonGameTests {
 			// Test case 1, weapon on level 1 skeleton based on possible weapon types
 			// Name check
 			var skeletonLevelOne = new Monster(1, Monster.MonsterType.Skeleton);
-			skeletonLevelOne.BuildMonster();
+			MonsterBuilder.BuildMonster(skeletonLevelOne);
 			var skeletonWeapon = skeletonLevelOne.MonsterWeapon;
 			switch (skeletonWeapon.Quality) {
 				case 1:
@@ -143,7 +143,7 @@ namespace DungeonGameTests {
 			// Test case 2, weapon on level 1 spider based on possible weapon types
 			// Name check
 			var spiderLevelOne = new Monster(1, Monster.MonsterType.Spider);
-			spiderLevelOne.BuildMonster();
+			MonsterBuilder.BuildMonster(spiderLevelOne);
 			var spiderWeapon = spiderLevelOne.MonsterWeapon;
 			switch (spiderWeapon.Quality) {
 				case 1:
@@ -201,7 +201,7 @@ namespace DungeonGameTests {
 			// Test case 3, weapon on level 3 zombie based on possible weapon types
 			// Name check
 			var zombieLevelThree = new Monster(3, Monster.MonsterType.Zombie);
-			zombieLevelThree.BuildMonster();
+			MonsterBuilder.BuildMonster(zombieLevelThree);
 			var zombieWeapon = zombieLevelThree.MonsterWeapon;
 			switch (zombieWeapon.Quality) {
 				case 1:
@@ -259,7 +259,7 @@ namespace DungeonGameTests {
 			// Test case 3, weapon on level 3 zombie based on possible weapon types
 			// Name check
 			var demonLevelTwo = new Monster(2, Monster.MonsterType.Demon);
-			demonLevelTwo.BuildMonster();
+			MonsterBuilder.BuildMonster(demonLevelTwo);
 			var demonWeapon = demonLevelTwo.MonsterWeapon;
 			switch (demonWeapon.Quality) {
 				case 1:

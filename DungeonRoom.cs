@@ -36,6 +36,9 @@ namespace DungeonGame {
 		public List<IRoomInteraction> RoomObjects { get; set; }
 		public Monster Monster { get; set; }
 
+		/* Default constructor for JSON deserialization to work since there isn't 1 main constructor that should be
+		 used for JSON deserialization */
+		public DungeonRoom() {}
 		public DungeonRoom(int x, int y, int z, bool goNorth, bool goSouth, bool goEast, bool goWest, bool goNorthWest,
 			bool goSouthWest, bool goNorthEast, bool goSouthEast, bool goUp, bool goDown, int levelRangeLow,
 			int levelRangeHigh) {
@@ -63,49 +66,49 @@ namespace DungeonGame {
 			if (randomNum <= 16) {
 				// 20% chance of spawning based on cumulative 0.2 * 80
 				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Zombie);
-				this.Monster.BuildMonster();
+				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 32) {
 				// 20% chance of spawning based on cumulative 0.4 * 80
 				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Skeleton);
-				this.Monster.BuildMonster();
+				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 40) {
 				// 10% chance of spawning based on cumulative 0.5 * 80
 				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Elemental);
-				this.Monster.BuildMonster();
+				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 48) {
 				// 10% chance of spawning based on cumulative 0.6 * 80
 				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Vampire);
-				this.Monster.BuildMonster();
+				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 60) {
 				// 15% chance of spawning based on cumulative 0.75 * 80
 				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Troll);
-				this.Monster.BuildMonster();
+				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 68) {
 				// 10% chance of spawning based on cumulative 0.85 * 80
 				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Demon);
-				this.Monster.BuildMonster();
+				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 76) {
 				// 10% chance of spawning based on cumulative 0.95 * 80
 				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Spider);
-				this.Monster.BuildMonster();
+				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 80) {
 				// 5% chance of spawning based on cumulative 1 * 80
 				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Dragon);
-				this.Monster.BuildMonster();
+				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 		}
