@@ -40,16 +40,24 @@ namespace DungeonGame {
 				}
 				if (this.FleeSuccess) return;
 				// Check to see if player attack killed monster
-				if (this.Opponent.IsMonsterDead(this.Player)) return;
+				if (this.Opponent.HitPoints <= 0) {
+					this.Opponent.MonsterDeath(this.Player);
+					return;
+				}
 				if (this.Opponent.Effects.Any()) {
 					this.ProcessOpponentEffects();
 				}
 				// Check to see if damage over time effects killed monster
-				if (this.Opponent.IsMonsterDead(this.Player)) return;
+				if (this.Opponent.HitPoints <= 0) {
+					this.Opponent.MonsterDeath(this.Player);
+					return;
+				}
 				if (this.Opponent.IsStunned) continue;
 				this.ProcessMonsterAttack();
-				// In the event player is reflecting damage, check to see if monster killed itself
-				if (this.Opponent.IsMonsterDead(this.Player)) return;
+				// Check at end of round to see if monster was killed by combat round
+				if (this.Opponent.HitPoints > 0) continue;
+				this.Opponent.MonsterDeath(this.Player);
+				return;
 			}
 		}
 		private void FleeCombat() {

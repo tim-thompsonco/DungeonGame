@@ -400,7 +400,7 @@ namespace DungeonGame {
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					shootString);
-				opponent.IsMonsterDead(player);
+				if (opponent.HitPoints <= 0) opponent.MonsterDeath(player);
 			}
 		}
 		public static void DefenseAbilityInfo(Player player, int index) {

@@ -83,11 +83,7 @@ namespace DungeonGame {
 			var adjArmorRating = totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
-		public bool IsMonsterDead(Player player) {
-			if (this.HitPoints <= 0) this.MonsterDeath(player);
-			return this.HitPoints <= 0;
-		}
-		private void MonsterDeath(Player player) {
+		public void MonsterDeath(Player player) {
 			player.InCombat = false;
 			this.InCombat = false;
 			this.Effects.Clear();
