@@ -16,7 +16,7 @@ namespace DungeonGameTests {
 			player.PlayerWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			var inputInfo = new[] {"spell", "fireball"};
 			var spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == Spell.SpellType.Fireball);
+				f => f.SpellCategory == PlayerSpell.SpellType.Fireball);
 			PlayerHandler.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Fireball", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -62,7 +62,7 @@ namespace DungeonGameTests {
 			}
 			var inputInfo = new[] {"spell", "frostbolt"};
 			var spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == Spell.SpellType.Frostbolt);
+				f => f.SpellCategory == PlayerSpell.SpellType.Frostbolt);
 			PlayerHandler.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Frostbolt", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -123,7 +123,7 @@ namespace DungeonGameTests {
 			}
 			var inputInfo = new[] {"spell", "lightning"};
 			var spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == Spell.SpellType.Lightning);
+				f => f.SpellCategory == PlayerSpell.SpellType.Lightning);
 			PlayerHandler.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Lightning", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -148,7 +148,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var inputInfo = new[] {"spell", "heal"};
 			var spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == Spell.SpellType.Heal);
+				f => f.SpellCategory == PlayerSpell.SpellType.Heal);
 			PlayerHandler.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Heal", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -171,7 +171,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var inputInfo = new[] {"spell", "rejuvenate"};
 			var spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == Spell.SpellType.Rejuvenate);
+				f => f.SpellCategory == PlayerSpell.SpellType.Rejuvenate);
 			PlayerHandler.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Rejuvenate", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -208,7 +208,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var inputInfo = new[] {"spell", "diamondskin"};
 			var spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == Spell.SpellType.Diamondskin);
+				f => f.SpellCategory == PlayerSpell.SpellType.Diamondskin);
 			PlayerHandler.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Diamondskin", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -247,11 +247,11 @@ namespace DungeonGameTests {
 			var player = new Player("test", Player.PlayerClassType.Mage) {MaxManaPoints = 100, ManaPoints = 100};
 			RoomHandler.Rooms = new RoomBuilder(
 				100, 5, 0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
-			player.Spellbook.Add(new Spell(
-				"town portal", 100, 1, Spell.SpellType.TownPortal, 2));
+			player.Spellbook.Add(new PlayerSpell(
+				"town portal", 100, 1, PlayerSpell.SpellType.TownPortal, 2));
 			var inputInfo = new[] {"spell", "town", "portal"};
 			var spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == Spell.SpellType.TownPortal);
+				f => f.SpellCategory == PlayerSpell.SpellType.TownPortal);
 			PlayerHandler.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Town Portal", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -284,11 +284,11 @@ namespace DungeonGameTests {
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
 			}
-			player.Spellbook.Add(new Spell(
-				"reflect", 100, 1, Spell.SpellType.Reflect, 4));
+			player.Spellbook.Add(new PlayerSpell(
+				"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 4));
 			var inputInfo = new[] {"spell", "reflect"};
 			var spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == Spell.SpellType.Reflect);
+				f => f.SpellCategory == PlayerSpell.SpellType.Reflect);
 			PlayerHandler.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Reflect", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -329,8 +329,8 @@ namespace DungeonGameTests {
 		public void ArcaneIntellectSpellUnitTest() {
 			OutputHandler.Display.ClearUserOutput();
 			var player = new Player("test", Player.PlayerClassType.Mage) {MaxManaPoints = 150, ManaPoints = 150};
-			player.Spellbook.Add(new Spell(
-				"arcane intellect", 150, 1, Spell.SpellType.ArcaneIntellect, 6));
+			player.Spellbook.Add(new PlayerSpell(
+				"arcane intellect", 150, 1, PlayerSpell.SpellType.ArcaneIntellect, 6));
 			var infoInput = new [] {"spell", "arcane", "intellect"};
 			PlayerHandler.SpellInfo(player, infoInput);
 			Assert.AreEqual("Arcane Intellect", OutputHandler.Display.Output[0][2]);
@@ -344,7 +344,7 @@ namespace DungeonGameTests {
 			var baseMana = player.ManaPoints;
 			var baseMaxMana = player.MaxManaPoints;
 			var spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == Spell.SpellType.ArcaneIntellect);
+				f => f.SpellCategory == PlayerSpell.SpellType.ArcaneIntellect);
 			var input = new [] {"cast", "arcane", "intellect"};
 			var spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("arcane intellect", spellName);
@@ -379,8 +379,8 @@ namespace DungeonGameTests {
 		[Test]
 		public void FrostNovaSpellUnitTest() {
 			var player = new Player("test", Player.PlayerClassType.Mage) {MaxManaPoints = 100, ManaPoints = 100};
-			player.Spellbook.Add(new Spell(
-				"frost nova", 40, 1, Spell.SpellType.FrostNova, 8));
+			player.Spellbook.Add(new PlayerSpell(
+				"frost nova", 40, 1, PlayerSpell.SpellType.FrostNova, 8));
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
@@ -390,7 +390,7 @@ namespace DungeonGameTests {
 				item.Equipped = false;
 			}
 			var spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == Spell.SpellType.FrostNova);
+				f => f.SpellCategory == PlayerSpell.SpellType.FrostNova);
 			var infoInput = new[] {"spell", "frost", "nova"};
 			PlayerHandler.SpellInfo(player, infoInput);
 			Assert.AreEqual("Frost Nova", OutputHandler.Display.Output[0][2]);

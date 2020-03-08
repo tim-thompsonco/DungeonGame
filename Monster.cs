@@ -12,7 +12,6 @@ namespace DungeonGame {
 			Troll,
 			Dragon
 		}
-
 		public enum ElementalType {
 			Fire,
 			Air,
@@ -23,6 +22,8 @@ namespace DungeonGame {
 		public int Level { get; set; }
 		public int MaxHitPoints { get; set; }
 		public int HitPoints { get; set; }
+		public int MaxEnergyPoints { get; set; }
+		public int EnergyPoints { get; set; }
 		public int ExperienceProvided { get; set; }
 		public int Gold { get; set; }
 		public bool WasLooted { get; set; }
@@ -41,6 +42,8 @@ namespace DungeonGame {
 		public Armor MonsterLegArmor { get; set; }
 		public List<IEquipment> MonsterItems { get; set; }
 		public List<Effect> Effects { get; set; }
+		public List<MonsterSpell> Spells { get; set; }
+		public List<MonsterAbility> Abilities { get; set; }
 
 		public Monster(int level, MonsterType monsterType) {
 			this.MonsterItems = new List<IEquipment>();

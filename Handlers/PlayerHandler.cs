@@ -6,6 +6,9 @@ using System.Text;
 
 namespace DungeonGame {
 	public static class PlayerHandler {
+		public static bool OutOfArrows(Player player) {
+			return !player.PlayerQuiver.HaveArrows();
+		}
 		public static void LookAtObject(Player player, string[] input) {
 			var parsedInput = InputHandler.ParseInput(input);
 			var roomMatch = RoomHandler.Rooms[RoomHandler.RoomIndex].RoomObjects.FindIndex(f =>
@@ -461,35 +464,35 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(),
 					rageCostString);
 				switch (player.Abilities[index].WarAbilityCategory) {
-					case Ability.WarriorAbility.Slash:
-						Ability.OffenseDamageAbilityInfo(player, index);
+					case PlayerAbility.WarriorAbility.Slash:
+						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case Ability.WarriorAbility.Rend:
-						Ability.OffenseDamageAbilityInfo(player, index);
+					case PlayerAbility.WarriorAbility.Rend:
+						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case Ability.WarriorAbility.Charge:
-						Ability.StunAbilityInfo(player, index);
+					case PlayerAbility.WarriorAbility.Charge:
+						PlayerAbility.StunAbilityInfo(player, index);
 						break;
-					case Ability.WarriorAbility.Block:
-						Ability.DefenseAbilityInfo(player, index);
+					case PlayerAbility.WarriorAbility.Block:
+						PlayerAbility.DefenseAbilityInfo(player, index);
 						break;
-					case Ability.WarriorAbility.Berserk:
-						Ability.BerserkAbilityInfo(player, index);
+					case PlayerAbility.WarriorAbility.Berserk:
+						PlayerAbility.BerserkAbilityInfo(player, index);
 						break;
-					case Ability.WarriorAbility.Disarm:
-						Ability.DisarmAbilityInfo(player, index);
+					case PlayerAbility.WarriorAbility.Disarm:
+						PlayerAbility.DisarmAbilityInfo(player, index);
 						break;
-					case Ability.WarriorAbility.Bandage:
-						Ability.BandageAbilityInfo(player, index);
+					case PlayerAbility.WarriorAbility.Bandage:
+						PlayerAbility.BandageAbilityInfo(player, index);
 						break;
-					case Ability.WarriorAbility.PowerAura:
-						Ability.PowerAuraAbilityInfo(player, index);
+					case PlayerAbility.WarriorAbility.PowerAura:
+						PlayerAbility.PowerAuraAbilityInfo(player, index);
 						break;
-					case Ability.WarriorAbility.WarCry:
-						Ability.WarCryAbilityInfo(player, index);
+					case PlayerAbility.WarriorAbility.WarCry:
+						PlayerAbility.WarCryAbilityInfo(player, index);
 						break;
-					case Ability.WarriorAbility.Onslaught:
-						Ability.OffenseDamageAbilityInfo(player, index);
+					case PlayerAbility.WarriorAbility.Onslaught:
+						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -511,35 +514,35 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(),
 					comboCostString);
 				switch (player.Abilities[index].ArcAbilityCategory) {
-					case Ability.ArcherAbility.Distance:
-						Ability.DistanceAbilityInfo(player, index);
+					case PlayerAbility.ArcherAbility.Distance:
+						PlayerAbility.DistanceAbilityInfo(player, index);
 						break;
-					case Ability.ArcherAbility.Gut:
-						Ability.OffenseDamageAbilityInfo(player, index);
+					case PlayerAbility.ArcherAbility.Gut:
+						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case Ability.ArcherAbility.Precise:
-						Ability.OffenseDamageAbilityInfo(player, index);
+					case PlayerAbility.ArcherAbility.Precise:
+						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case Ability.ArcherAbility.Stun:
-						Ability.StunAbilityInfo(player, index);
+					case PlayerAbility.ArcherAbility.Stun:
+						PlayerAbility.StunAbilityInfo(player, index);
 						break;
-					case Ability.ArcherAbility.Double:
-						Ability.OffenseDamageAbilityInfo(player, index);
+					case PlayerAbility.ArcherAbility.Double:
+						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case Ability.ArcherAbility.Wound:
-						Ability.OffenseDamageAbilityInfo(player, index);
+					case PlayerAbility.ArcherAbility.Wound:
+						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case Ability.ArcherAbility.Bandage:
-						Ability.BandageAbilityInfo(player, index);
+					case PlayerAbility.ArcherAbility.Bandage:
+						PlayerAbility.BandageAbilityInfo(player, index);
 						break;
-					case Ability.ArcherAbility.SwiftAura:
-						Ability.SwiftAuraAbilityInfo(player, index);
+					case PlayerAbility.ArcherAbility.SwiftAura:
+						PlayerAbility.SwiftAuraAbilityInfo(player, index);
 						break;
-					case Ability.ArcherAbility.ImmolatingArrow:
-						Ability.OffenseDamageAbilityInfo(player, index);
+					case PlayerAbility.ArcherAbility.ImmolatingArrow:
+						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case Ability.ArcherAbility.Ambush:
-						Ability.OffenseDamageAbilityInfo(player, index);
+					case PlayerAbility.ArcherAbility.Ambush:
+						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -583,35 +586,35 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(),
 					manaCostString);
 				switch(player.Spellbook[index].SpellCategory) {
-					case Spell.SpellType.Fireball:
-						Spell.FireOffenseSpellInfo(player, index);
+					case PlayerSpell.SpellType.Fireball:
+						PlayerSpell.FireOffenseSpellInfo(player, index);
 						break;
-					case Spell.SpellType.Frostbolt:
-						Spell.FrostOffenseSpellInfo(player, index);
+					case PlayerSpell.SpellType.Frostbolt:
+						PlayerSpell.FrostOffenseSpellInfo(player, index);
 						break;
-					case Spell.SpellType.Lightning:
-						Spell.ArcaneOffenseSpellInfo(player, index);
+					case PlayerSpell.SpellType.Lightning:
+						PlayerSpell.ArcaneOffenseSpellInfo(player, index);
 						break;
-					case Spell.SpellType.Heal:
-						Spell.HealingSpellInfo(player, index);
+					case PlayerSpell.SpellType.Heal:
+						PlayerSpell.HealingSpellInfo(player, index);
 						break;
-					case Spell.SpellType.Rejuvenate:
-						Spell.HealingSpellInfo(player, index);
+					case PlayerSpell.SpellType.Rejuvenate:
+						PlayerSpell.HealingSpellInfo(player, index);
 						break;
-					case Spell.SpellType.Diamondskin:
-						Spell.AugmentArmorSpellInfo(player, index);
+					case PlayerSpell.SpellType.Diamondskin:
+						PlayerSpell.AugmentArmorSpellInfo(player, index);
 						break;
-					case Spell.SpellType.TownPortal:
-						Spell.PortalSpellInfo();
+					case PlayerSpell.SpellType.TownPortal:
+						PlayerSpell.PortalSpellInfo();
 						break;
-					case Spell.SpellType.Reflect:
-						Spell.ReflectDamageSpellInfo(player, index);
+					case PlayerSpell.SpellType.Reflect:
+						PlayerSpell.ReflectDamageSpellInfo(player, index);
 						break;
-					case Spell.SpellType.ArcaneIntellect:
-						Spell.ArcaneIntellectSpellInfo(player, index);
+					case PlayerSpell.SpellType.ArcaneIntellect:
+						PlayerSpell.ArcaneIntellectSpellInfo(player, index);
 						break;
-					case Spell.SpellType.FrostNova:
-						Spell.FrostOffenseSpellInfo(player, index);
+					case PlayerSpell.SpellType.FrostNova:
+						PlayerSpell.FrostOffenseSpellInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

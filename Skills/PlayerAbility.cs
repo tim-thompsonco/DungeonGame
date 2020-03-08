@@ -1,7 +1,7 @@
 using System;
 
 namespace DungeonGame {
-	public class Ability {
+	public class PlayerAbility {
 		public enum WarriorAbility {
 			Slash,
 			Rend,
@@ -40,8 +40,8 @@ namespace DungeonGame {
 		public int Rank { get; set; }
 		
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
-		public Ability() {}
-		public Ability(string name, int rageCost, int rank, WarriorAbility warAbility, int minLevel) {
+		public PlayerAbility() {}
+		public PlayerAbility(string name, int rageCost, int rank, WarriorAbility warAbility, int minLevel) {
 			this.Name = name;
 			this.RageCost = rageCost;
 			this.Rank = rank;
@@ -84,7 +84,7 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		public Ability(string name, int comboCost, int rank, ArcherAbility archerAbility, int minLevel) {
+		public PlayerAbility(string name, int comboCost, int rank, ArcherAbility archerAbility, int minLevel) {
 			this.Name = name;
 			this.ComboCost = comboCost;
 			this.Rank = rank;
@@ -136,9 +136,6 @@ namespace DungeonGame {
 			else {
 				player.ComboPoints -= player.Abilities[index].ComboCost;
 			}
-		}
-		private static bool OutOfArrows(Player player) {
-			return !player.PlayerQuiver.HaveArrows();
 		}
 		public static void PowerAuraAbilityInfo(Player player, int index) {
 			var powerAuraString = "Power Aura Amount: " + player.Abilities[index].ChangeAmount.Amount;
@@ -233,7 +230,7 @@ namespace DungeonGame {
 				abilityInfoString);
 		}
 		public static void UseStunAbility(Monster opponent, Player player, int index) {
-			if (player.PlayerClass == Player.PlayerClassType.Archer && OutOfArrows(player)) {
+			if (player.PlayerClass == Player.PlayerClassType.Archer && PlayerHandler.OutOfArrows(player)) {
 				/* If quiver is empty, player can only do a normal attack, and attack() also checks for
 				 arrow count and informs player that they are out of arrows */
 				player.Attack(opponent);
@@ -550,7 +547,7 @@ namespace DungeonGame {
 			}
 		}
 		public static void UseOffenseDamageAbility(Monster opponent, Player player, int index) {
-			if (player.PlayerClass == Player.PlayerClassType.Archer && OutOfArrows(player)) {
+			if (player.PlayerClass == Player.PlayerClassType.Archer && PlayerHandler.OutOfArrows(player)) {
 				/* If quiver is empty, player can only do a normal attack, and attack() also checks for
 				 arrow count and informs player that they are out of arrows */
 				player.Attack(opponent);

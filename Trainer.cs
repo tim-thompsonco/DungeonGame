@@ -14,8 +14,8 @@ namespace DungeonGame {
 		public string Desc { get; set; }
 		private TrainerCategory TrainerGroup { get; set; }
 		private int BaseCost { get; set; }
-		private List<Ability> TrainableAbilities { get; set; }
-		private List<Spell> TrainableSpells { get; set; }
+		private List<PlayerAbility> TrainableAbilities { get; set; }
+		private List<PlayerSpell> TrainableSpells { get; set; }
 
 		public Trainer(string name, string desc, TrainerCategory trainerCategory) {
 			this.Name = name;
@@ -24,37 +24,37 @@ namespace DungeonGame {
 			this.TrainerGroup = trainerCategory;
 			switch (this.TrainerGroup) {
 				case TrainerCategory.Archer:
-					this.TrainableAbilities = new List<Ability>();
-					this.TrainableAbilities.Add(new Ability(
-						"bandage", 25, 1, Ability.ArcherAbility.Bandage, 2));
-					this.TrainableAbilities.Add(new Ability(
-						"ambush", 75, 1, Ability.ArcherAbility.Ambush, 4));
-					this.TrainableAbilities.Add(new Ability(
-						"swift aura", 150, 1, Ability.ArcherAbility.SwiftAura, 6));
-					this.TrainableAbilities.Add(new Ability(
-						"immolating arrow", 35, 1, Ability.ArcherAbility.ImmolatingArrow, 8));
+					this.TrainableAbilities = new List<PlayerAbility>();
+					this.TrainableAbilities.Add(new PlayerAbility(
+						"bandage", 25, 1, PlayerAbility.ArcherAbility.Bandage, 2));
+					this.TrainableAbilities.Add(new PlayerAbility(
+						"ambush", 75, 1, PlayerAbility.ArcherAbility.Ambush, 4));
+					this.TrainableAbilities.Add(new PlayerAbility(
+						"swift aura", 150, 1, PlayerAbility.ArcherAbility.SwiftAura, 6));
+					this.TrainableAbilities.Add(new PlayerAbility(
+						"immolating arrow", 35, 1, PlayerAbility.ArcherAbility.ImmolatingArrow, 8));
 					break;
 				case TrainerCategory.Warrior:
-					this.TrainableAbilities = new List<Ability>();
-					this.TrainableAbilities.Add(new Ability(
-						"bandage", 25, 1, Ability.WarriorAbility.Bandage, 2));
-					this.TrainableAbilities.Add(new Ability(
-						"war cry", 50, 1, Ability.WarriorAbility.WarCry, 4));
-					this.TrainableAbilities.Add(new Ability(
-						"power aura", 150, 1, Ability.WarriorAbility.PowerAura, 6));
-					this.TrainableAbilities.Add(new Ability(
-						"onslaught", 25, 1, Ability.WarriorAbility.Onslaught, 8));
+					this.TrainableAbilities = new List<PlayerAbility>();
+					this.TrainableAbilities.Add(new PlayerAbility(
+						"bandage", 25, 1, PlayerAbility.WarriorAbility.Bandage, 2));
+					this.TrainableAbilities.Add(new PlayerAbility(
+						"war cry", 50, 1, PlayerAbility.WarriorAbility.WarCry, 4));
+					this.TrainableAbilities.Add(new PlayerAbility(
+						"power aura", 150, 1, PlayerAbility.WarriorAbility.PowerAura, 6));
+					this.TrainableAbilities.Add(new PlayerAbility(
+						"onslaught", 25, 1, PlayerAbility.WarriorAbility.Onslaught, 8));
 					break;
 				case TrainerCategory.Mage:
-					this.TrainableSpells = new List<Spell>();
-					this.TrainableSpells.Add(new Spell(
-						"town portal", 100, 1, Spell.SpellType.TownPortal, 2));
-					this.TrainableSpells.Add(new Spell(
-						"reflect", 100, 1, Spell.SpellType.Reflect, 4));
-					this.TrainableSpells.Add(new Spell(
-						"arcane intellect", 150, 1, Spell.SpellType.ArcaneIntellect, 6));
-					this.TrainableSpells.Add(new Spell(
-						"frost nova", 50, 1, Spell.SpellType.FrostNova, 8));
+					this.TrainableSpells = new List<PlayerSpell>();
+					this.TrainableSpells.Add(new PlayerSpell(
+						"town portal", 100, 1, PlayerSpell.SpellType.TownPortal, 2));
+					this.TrainableSpells.Add(new PlayerSpell(
+						"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 4));
+					this.TrainableSpells.Add(new PlayerSpell(
+						"arcane intellect", 150, 1, PlayerSpell.SpellType.ArcaneIntellect, 6));
+					this.TrainableSpells.Add(new PlayerSpell(
+						"frost nova", 50, 1, PlayerSpell.SpellType.FrostNova, 8));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -342,37 +342,37 @@ namespace DungeonGame {
 					player.Gold -= trainingCost;
 					player.Spellbook[spellIndex].Rank++;
 					switch (player.Spellbook[spellIndex].SpellCategory) {
-						case Spell.SpellType.Fireball:
+						case PlayerSpell.SpellType.Fireball:
 							player.Spellbook[spellIndex].Offensive.Amount += 10;
 							player.Spellbook[spellIndex].Offensive.AmountOverTime += 5;
 							break;
-						case Spell.SpellType.Frostbolt:
+						case PlayerSpell.SpellType.Frostbolt:
 							player.Spellbook[spellIndex].Offensive.Amount += 10;
 							break;
-						case Spell.SpellType.Lightning:
+						case PlayerSpell.SpellType.Lightning:
 							player.Spellbook[spellIndex].Offensive.Amount += 10;
 							break;
-						case Spell.SpellType.Heal:
+						case PlayerSpell.SpellType.Heal:
 							player.Spellbook[spellIndex].Healing.HealAmount += 10;
 							player.Spellbook[spellIndex].Healing.HealOverTime += 5;
 							break;
-						case Spell.SpellType.Rejuvenate:
+						case PlayerSpell.SpellType.Rejuvenate:
 							player.Spellbook[spellIndex].Healing.HealAmount += 10;
 							player.Spellbook[spellIndex].Healing.HealOverTime += 5;
 							break;
-						case Spell.SpellType.Diamondskin:
+						case PlayerSpell.SpellType.Diamondskin:
 							player.Spellbook[spellIndex].ChangeAmount.Amount += 10;
 							break;
-						case Spell.SpellType.TownPortal:
+						case PlayerSpell.SpellType.TownPortal:
 							player.Spellbook[spellIndex].ManaCost -= 5;
 							break;
-						case Spell.SpellType.Reflect:
+						case PlayerSpell.SpellType.Reflect:
 							player.Spellbook[spellIndex].ChangeAmount.Amount += 10;
 							break;
-						case Spell.SpellType.ArcaneIntellect:
+						case PlayerSpell.SpellType.ArcaneIntellect:
 							player.Spellbook[spellIndex].ChangeAmount.Amount += 5;
 							break;
-						case Spell.SpellType.FrostNova:
+						case PlayerSpell.SpellType.FrostNova:
 							player.Spellbook[spellIndex].Offensive.Amount += 10;
 							break;
 						default:
@@ -424,39 +424,39 @@ namespace DungeonGame {
 					player.Abilities[abilityIndex].Rank++;
 					if (player.PlayerClass == Player.PlayerClassType.Archer) {
 						switch (player.Abilities[abilityIndex].ArcAbilityCategory) {
-							case Ability.ArcherAbility.Distance:
+							case PlayerAbility.ArcherAbility.Distance:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								player.Abilities[abilityIndex].Offensive.ChanceToSucceed += 5;
 								break;
-							case Ability.ArcherAbility.Gut:
+							case PlayerAbility.ArcherAbility.Gut:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								player.Abilities[abilityIndex].Offensive.AmountOverTime += 5;
 								break;
-							case Ability.ArcherAbility.Precise:
+							case PlayerAbility.ArcherAbility.Precise:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								break;
-							case Ability.ArcherAbility.Stun:
+							case PlayerAbility.ArcherAbility.Stun:
 								player.Abilities[abilityIndex].Stun.DamageAmount += 10;
 								break;
-							case Ability.ArcherAbility.Double:
+							case PlayerAbility.ArcherAbility.Double:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								break;
-							case Ability.ArcherAbility.Wound:
+							case PlayerAbility.ArcherAbility.Wound:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								player.Abilities[abilityIndex].Offensive.AmountOverTime += 5;
 								break;
-							case Ability.ArcherAbility.Bandage:
+							case PlayerAbility.ArcherAbility.Bandage:
 								player.Abilities[abilityIndex].Healing.HealAmount += 10;
 								player.Abilities[abilityIndex].Healing.HealOverTime += 5;
 								break;
-							case Ability.ArcherAbility.SwiftAura:
+							case PlayerAbility.ArcherAbility.SwiftAura:
 								player.Abilities[abilityIndex].ChangeAmount.Amount += 5;
 								break;
-							case Ability.ArcherAbility.ImmolatingArrow:
+							case PlayerAbility.ArcherAbility.ImmolatingArrow:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								player.Abilities[abilityIndex].Offensive.AmountOverTime += 5;
 								break;
-							case Ability.ArcherAbility.Ambush:
+							case PlayerAbility.ArcherAbility.Ambush:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								break;
 							default:
@@ -474,37 +474,37 @@ namespace DungeonGame {
 					}
 					if (player.PlayerClass == Player.PlayerClassType.Warrior) {
 						switch (player.Abilities[abilityIndex].WarAbilityCategory) {
-							case Ability.WarriorAbility.Slash:
+							case PlayerAbility.WarriorAbility.Slash:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								break;
-							case Ability.WarriorAbility.Rend:
+							case PlayerAbility.WarriorAbility.Rend:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								player.Abilities[abilityIndex].Offensive.AmountOverTime += 5;
 								break;
-							case Ability.WarriorAbility.Charge:
+							case PlayerAbility.WarriorAbility.Charge:
 								player.Abilities[abilityIndex].Stun.DamageAmount += 10;
 								break;
-							case Ability.WarriorAbility.Block:
+							case PlayerAbility.WarriorAbility.Block:
 								player.Abilities[abilityIndex].Defensive.BlockDamage += 10;
 								break;
-							case Ability.WarriorAbility.Berserk:
+							case PlayerAbility.WarriorAbility.Berserk:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								player.Abilities[abilityIndex].ChangeAmount.Amount += 10;
 								break;
-							case Ability.WarriorAbility.Disarm:
+							case PlayerAbility.WarriorAbility.Disarm:
 								player.Abilities[abilityIndex].Offensive.ChanceToSucceed += 10;
 								break;
-							case Ability.WarriorAbility.Bandage:
+							case PlayerAbility.WarriorAbility.Bandage:
 								player.Abilities[abilityIndex].Healing.HealAmount += 10;
 								player.Abilities[abilityIndex].Healing.HealOverTime += 5;
 								break;
-							case Ability.WarriorAbility.PowerAura:
+							case PlayerAbility.WarriorAbility.PowerAura:
 								player.Abilities[abilityIndex].ChangeAmount.Amount += 5;
 								break;
-							case Ability.WarriorAbility.WarCry:
+							case PlayerAbility.WarriorAbility.WarCry:
 								player.Abilities[abilityIndex].ChangeAmount.Amount += 10;
 								break;
-							case Ability.WarriorAbility.Onslaught:
+							case PlayerAbility.WarriorAbility.Onslaught:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
 								break;
 							default:

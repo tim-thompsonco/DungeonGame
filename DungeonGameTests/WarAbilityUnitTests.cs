@@ -16,7 +16,7 @@ namespace DungeonGameTests {
 			}
 			var inputInfo = new[] {"ability", "slash"};
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.WarAbilityCategory == Ability.WarriorAbility.Slash);
+				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Slash);
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Slash", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -45,7 +45,7 @@ namespace DungeonGameTests {
 				item.Equipped = false;
 			}
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.WarAbilityCategory == Ability.WarriorAbility.Rend);
+				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Rend);
 			var inputInfo = new[] {"ability", "rend"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Rend", OutputHandler.Display.Output[0][2]);
@@ -101,7 +101,7 @@ namespace DungeonGameTests {
 				item.Equipped = false;
 			}
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.WarAbilityCategory == Ability.WarriorAbility.Charge);
+				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Charge);
 			var inputInfo = new[] {"ability", "charge"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Charge", OutputHandler.Display.Output[0][2]);
@@ -149,7 +149,7 @@ namespace DungeonGameTests {
 				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
 			MonsterBuilder.BuildMonster(monster);
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.WarAbilityCategory == Ability.WarriorAbility.Block);
+				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Block);
 			var inputInfo = new[] {"ability", "block"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Block", OutputHandler.Display.Output[0][2]);
@@ -203,7 +203,7 @@ namespace DungeonGameTests {
 				item.Equipped = false;
 			}
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.WarAbilityCategory == Ability.WarriorAbility.Berserk);
+				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Berserk);
 			var inputInfo = new[] {"ability", "berserk"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Berserk", OutputHandler.Display.Output[0][2]);
@@ -257,7 +257,7 @@ namespace DungeonGameTests {
 				{HitPoints = 100, MaxHitPoints = 100};
 			MonsterBuilder.BuildMonster(monster);
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.WarAbilityCategory == Ability.WarriorAbility.Disarm);
+				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Disarm);
 			var inputInfo = new[] {"ability", "disarm"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Disarm", OutputHandler.Display.Output[0][2]);
@@ -287,11 +287,11 @@ namespace DungeonGameTests {
 			var player = new Player("test", Player.PlayerClassType.Warrior) {MaxRagePoints = 100, RagePoints = 100,
 				MaxHitPoints = 100, HitPoints = 10};
 			GearHandler.EquipInitialGear(player);
-			player.Abilities.Add(new Ability(
-				"bandage", 25, 1, Ability.WarriorAbility.Bandage, 2));
+			player.Abilities.Add(new PlayerAbility(
+				"bandage", 25, 1, PlayerAbility.WarriorAbility.Bandage, 2));
 			OutputHandler.Display.ClearUserOutput();
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.WarAbilityCategory == Ability.WarriorAbility.Bandage);
+				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Bandage);
 			var inputInfo = new[] {"ability", "bandage"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Bandage", OutputHandler.Display.Output[0][2]);
@@ -334,11 +334,11 @@ namespace DungeonGameTests {
 		public void PowerAuraAbilityUnitTest() {
 			OutputHandler.Display.ClearUserOutput();
 			var player = new Player("test", Player.PlayerClassType.Warrior) {MaxRagePoints = 150, RagePoints = 150};
-			player.Abilities.Add(new Ability(
-				"power aura", 150, 1, Ability.WarriorAbility.PowerAura, 6));
+			player.Abilities.Add(new PlayerAbility(
+				"power aura", 150, 1, PlayerAbility.WarriorAbility.PowerAura, 6));
 			OutputHandler.Display.ClearUserOutput();
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.WarAbilityCategory == Ability.WarriorAbility.PowerAura);
+				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.PowerAura);
 			var inputInfo = new[] {"ability", "power", "aura"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Power Aura", OutputHandler.Display.Output[0][2]);
@@ -377,13 +377,13 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var player = new Player("test", Player.PlayerClassType.Warrior) {MaxRagePoints = 100, RagePoints = 100,
 				InCombat = true};
-			player.Abilities.Add(new Ability(
-				"war cry", 50, 1, Ability.WarriorAbility.WarCry, 4));
+			player.Abilities.Add(new PlayerAbility(
+				"war cry", 50, 1, PlayerAbility.WarriorAbility.WarCry, 4));
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
 			MonsterBuilder.BuildMonster(monster);
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.WarAbilityCategory == Ability.WarriorAbility.WarCry);
+				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.WarCry);
 			var inputInfo = new[] {"ability", "war", "cry"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("War Cry", OutputHandler.Display.Output[0][2]);
@@ -422,13 +422,13 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var player = new Player("test", Player.PlayerClassType.Warrior) {MaxRagePoints = 100, RagePoints = 100,
 				InCombat = true};
-			player.Abilities.Add(new Ability(
-				"onslaught", 25, 1, Ability.WarriorAbility.Onslaught, 8));
+			player.Abilities.Add(new PlayerAbility(
+				"onslaught", 25, 1, PlayerAbility.WarriorAbility.Onslaught, 8));
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
 			MonsterBuilder.BuildMonster(monster);
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.WarAbilityCategory == Ability.WarriorAbility.Onslaught);
+				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Onslaught);
 			var inputInfo = new[] {"ability", "onslaught"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Onslaught", OutputHandler.Display.Output[0][2]);

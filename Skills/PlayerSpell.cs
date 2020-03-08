@@ -1,7 +1,7 @@
 using System;
 
 namespace DungeonGame {
-	public class Spell {
+	public class PlayerSpell {
 		public enum SpellType {
 			Fireball,
 			Frostbolt,
@@ -24,7 +24,7 @@ namespace DungeonGame {
 		public int ManaCost { get; set; }
 		public int Rank { get; set; }
 
-		public Spell(string name, int manaCost, int rank, SpellType spellType, int minLevel) {
+		public PlayerSpell(string name, int manaCost, int rank, SpellType spellType, int minLevel) {
 			this.Name = name;
 			this.ManaCost = manaCost;
 			this.Rank = rank;

@@ -31,7 +31,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Ability.cs" />
     <Compile Include="Builders\MonsterBuilder.cs" />
     <Compile Include="Builders\PlayerBuilder.cs" />
     <Compile Include="Builders\RoomBuilder.cs" />
@@ -65,13 +64,16 @@
     <Compile Include="Skill Properties\Offensive.cs" />
     <Compile Include="Skill Properties\Portal.cs" />
     <Compile Include="Skill Properties\Stun.cs" />
+    <Compile Include="Skills\MonsterAbility.cs" />
+    <Compile Include="Skills\MonsterSpell.cs" />
+    <Compile Include="Skills\PlayerAbility.cs" />
+    <Compile Include="Skills\PlayerSpell.cs" />
     <Compile Include="Trainer.cs" />
     <Compile Include="UserOutput.cs" />
     <Compile Include="Vendor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="Spell.cs" />
     <Compile Include="DungeonRoom.cs" />
     <Compile Include="Interfaces\IRoom.cs" />
     <Compile Include="Interfaces\IRoomInteraction.cs" />

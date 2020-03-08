@@ -53,7 +53,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(player.MaxComboPoints,player.ComboPoints);
 			Assert.AreEqual(player.MaxComboPoints,player.ComboPoints);
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.ArcAbilityCategory == Ability.ArcherAbility.Distance);
+				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Distance);
 			var comboCost = player.Abilities[abilityIndex].ComboCost;
 			player.Abilities[abilityIndex].Offensive.ChanceToSucceed = 0;
 			input = new [] {"use", "distance", "north"};
@@ -86,7 +86,7 @@ namespace DungeonGameTests {
 				item.Equipped = false;
 			}
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.ArcAbilityCategory == Ability.ArcherAbility.Gut);
+				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Gut);
 			var inputInfo = new[] {"ability", "gut"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Gut Shot", OutputHandler.Display.Output[0][2]);
@@ -146,7 +146,7 @@ namespace DungeonGameTests {
 			}
 			var inputInfo = new[] {"ability", "precise"};
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.ArcAbilityCategory == Ability.ArcherAbility.Precise);
+				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Precise);
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Precise Shot", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -179,7 +179,7 @@ namespace DungeonGameTests {
 				item.Equipped = false;
 			}
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.ArcAbilityCategory == Ability.ArcherAbility.Stun);
+				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Stun);
 			var inputInfo = new[] {"ability", "stun"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Stun Shot", OutputHandler.Display.Output[0][2]);
@@ -233,7 +233,7 @@ namespace DungeonGameTests {
 				item.Equipped = false;
 			}
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.ArcAbilityCategory == Ability.ArcherAbility.Wound);
+				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Wound);
 			var inputInfo = new[] {"ability", "wound"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Wound Shot", OutputHandler.Display.Output[0][2]);
@@ -289,7 +289,7 @@ namespace DungeonGameTests {
 				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
 			MonsterBuilder.BuildMonster(monster);
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.ArcAbilityCategory == Ability.ArcherAbility.Double);
+				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Double);
 			var inputInfo = new[] {"ability", "double"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Double Shot", OutputHandler.Display.Output[0][2]);
@@ -329,11 +329,11 @@ namespace DungeonGameTests {
 			var player = new Player("test", Player.PlayerClassType.Archer) {MaxComboPoints = 100, ComboPoints = 100,
 				MaxHitPoints = 100, HitPoints = 10};
 			GearHandler.EquipInitialGear(player);
-			player.Abilities.Add(new Ability(
-				"bandage", 25, 1, Ability.ArcherAbility.Bandage, 2));
+			player.Abilities.Add(new PlayerAbility(
+				"bandage", 25, 1, PlayerAbility.ArcherAbility.Bandage, 2));
 			OutputHandler.Display.ClearUserOutput();
 			var abilityIndex = player.Abilities.FindIndex(
-				f => f.ArcAbilityCategory == Ability.ArcherAbility.Bandage);
+				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Bandage);
 			var inputInfo = new[] {"ability", "bandage"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Bandage", OutputHandler.Display.Output[0][2]);
@@ -383,8 +383,8 @@ namespace DungeonGameTests {
 					false, false, false, false, false, false,
 					false, 1, 1)
 			};
-			player.Abilities.Add(new Ability(
-				"swift aura", 150, 1, Ability.ArcherAbility.SwiftAura, 6));
+			player.Abilities.Add(new PlayerAbility(
+				"swift aura", 150, 1, PlayerAbility.ArcherAbility.SwiftAura, 6));
 			var input = new [] {"use", "swift", "aura"};
 			PlayerHandler.AbilityInfo(player, input);
 			Assert.AreEqual("Swift Aura", OutputHandler.Display.Output[0][2]);
@@ -423,8 +423,8 @@ namespace DungeonGameTests {
 				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
 			MonsterBuilder.BuildMonster(monster);
 			player.PlayerWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
-			player.Abilities.Add(new Ability(
-				"immolating arrow", 35, 1, Ability.ArcherAbility.ImmolatingArrow, 8));
+			player.Abilities.Add(new PlayerAbility(
+				"immolating arrow", 35, 1, PlayerAbility.ArcherAbility.ImmolatingArrow, 8));
 			var input = new[] {"use", "immolating", "arrow"};
 			PlayerHandler.AbilityInfo(player, input);
 			Assert.AreEqual("Immolating Arrow", OutputHandler.Display.Output[0][2]);
@@ -437,7 +437,7 @@ namespace DungeonGameTests {
 			player.UseAbility(monster, input);
 			Assert.AreEqual(arrowCount - 1, player.PlayerQuiver.Quantity);
 			var index = player.Abilities.FindIndex(
-				f => f.ArcAbilityCategory == Ability.ArcherAbility.ImmolatingArrow);
+				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.ImmolatingArrow);
 			Assert.AreEqual(player.ComboPoints,player.MaxComboPoints - player.Abilities[index].ComboCost);
 			var attackString = "Your immolating arrow hit the " + monster.Name + " for 25 physical damage.";
 			Assert.AreEqual(attackString,OutputHandler.Display.Output[6][2]);
@@ -467,8 +467,8 @@ namespace DungeonGameTests {
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
 				{HitPoints = 100, MaxHitPoints = 100};
 			MonsterBuilder.BuildMonster(monster);
-			player.Abilities.Add(new Ability(
-				"ambush", 75, 1, Ability.ArcherAbility.Ambush, 4));
+			player.Abilities.Add(new PlayerAbility(
+				"ambush", 75, 1, PlayerAbility.ArcherAbility.Ambush, 4));
 			var inputInfo = new[] {"ability", "ambush"};
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Ambush", OutputHandler.Display.Output[0][2]);
@@ -486,7 +486,7 @@ namespace DungeonGameTests {
 			player.InCombat = false;
 			player.UseAbility(monster, input);
 			var index = player.Abilities.FindIndex(
-				f => f.ArcAbilityCategory == Ability.ArcherAbility.Ambush);
+				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Ambush);
 			var abilityDamage = player.Abilities[index].Offensive.Amount;
 			var attackString = "Your ambush hit the " + monster.Name + " for " + abilityDamage + " physical damage.";
 			Assert.AreEqual(arrowCount - 1, player.PlayerQuiver.Quantity);

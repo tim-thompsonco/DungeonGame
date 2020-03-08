@@ -336,8 +336,8 @@ namespace DungeonGameTests {
 			RoomHandler.Rooms = new RoomBuilder(
 				100, 5, 0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
 			GameHandler.CheckStatus(player);
-			player.Spellbook.Add(new Spell(
-				"reflect", 100, 1, Spell.SpellType.Reflect, 1));
+			player.Spellbook.Add(new PlayerSpell(
+				"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 1));
 			player.CastSpell("reflect");
 			for (var i = 0; i <= 30; i++) {
 				GameHandler.CheckStatus(player);
@@ -352,8 +352,8 @@ namespace DungeonGameTests {
 				false, false, false, false, false, false,
 				false, 1, 1)
 		};
-		player.Spellbook.Add(new Spell(
-			"reflect", 100, 1, Spell.SpellType.Reflect, 1));
+		player.Spellbook.Add(new PlayerSpell(
+			"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 1));
 		var defaultEffectOutput = OutputHandler.ShowEffects(player);
 		Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
 		Assert.AreEqual("None.", defaultEffectOutput.Output[1][2]);
