@@ -213,7 +213,7 @@ namespace DungeonGame {
 		}
 		public static void ShowUserOutput(Player player, Monster opponent) {
 			PlayerHandler.DisplayPlayerStats(player);
-			opponent.DisplayStats();
+			MonsterHandler.DisplayStats(opponent);
 			RoomHandler.Rooms[RoomHandler.RoomIndex].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = ShowEffects(player);

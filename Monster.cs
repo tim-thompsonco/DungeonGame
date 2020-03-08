@@ -69,26 +69,6 @@ namespace DungeonGame {
 		public void TakeDamage(int weaponDamage) {
 			this.HitPoints -= weaponDamage;
 		}
-		public void DisplayStats() {
-			var opponentHealthString = "Opponent HP: " + this.HitPoints + " / " + this.MaxHitPoints;
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatGeneralInfoText(),
-				Settings.FormatDefaultBackground(),
-				opponentHealthString);
-			var healLineOutput = new List<string>();
-			var hitPointMaxUnits = this.MaxHitPoints / 10;
-			var hitPointUnits = this.HitPoints / hitPointMaxUnits;
-			for (var i = 0; i < hitPointUnits; i++) {
-				healLineOutput.Add(Settings.FormatGeneralInfoText());
-				healLineOutput.Add(Settings.FormatHealthBackground());
-				healLineOutput.Add("    ");
-			}
-			OutputHandler.Display.StoreUserOutput(healLineOutput);
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatGeneralInfoText(),
-				Settings.FormatDefaultBackground(),
-				"==================================================");
-		}
 		public int Attack(Player player) {
 			var attackDamage = this.MonsterWeapon.Attack();
 			var randomChanceToHit = GameHandler.GetRandomNumber(1, 100);
@@ -96,21 +76,8 @@ namespace DungeonGame {
 			if (chanceToDodge > 50) chanceToDodge = 50;
 			return randomChanceToHit <= chanceToDodge ? 0 : attackDamage;
 		}
-		private int CheckArmorRating() {
-			var totalArmorRating = 0;
-			if (this.MonsterChestArmor != null && this.MonsterChestArmor.Equipped) {
-				totalArmorRating += this.MonsterChestArmor.ArmorRating;
-			}
-			if (this.MonsterHeadArmor != null && this.MonsterHeadArmor.Equipped) {
-				totalArmorRating += this.MonsterHeadArmor.ArmorRating;
-			}
-			if (this.MonsterLegArmor != null && this.MonsterLegArmor.Equipped) {
-				totalArmorRating += this.MonsterLegArmor.ArmorRating;
-			}
-			return totalArmorRating;
-		}
 		public int ArmorRating(Player player) {
-			var totalArmorRating = this.CheckArmorRating();
+			var totalArmorRating = MonsterHandler.CheckArmorRating(this);
 			var levelDiff = player.Level - this.Level;
 			var armorMultiplier = 1.00 + -(double)levelDiff / 5;
 			var adjArmorRating = totalArmorRating * armorMultiplier;
