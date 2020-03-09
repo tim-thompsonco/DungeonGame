@@ -249,10 +249,6 @@
               "ItemValue": 15,
               "Equipped": false,
               "ArrowCategory": 0,
-              "PotionCategory": 0,
-              "PotionStrength": 0,
-              "GemCategory": 0,
-              "GemStrength": 0,
               "Arrow": {
                 "$id": "57",
                 "Quantity": 50
@@ -313,11 +309,8 @@
               "Name": "minor health potion",
               "ItemValue": 25,
               "Equipped": false,
-              "ArrowCategory": 0,
               "PotionCategory": 0,
               "PotionStrength": 0,
-              "GemCategory": 0,
-              "GemStrength": 0,
               "RestoreHealth": {
                 "$id": "64",
                 "RestoreHealthAmt": 50
@@ -330,11 +323,8 @@
               "Name": "minor mana potion",
               "ItemValue": 25,
               "Equipped": false,
-              "ArrowCategory": 0,
               "PotionCategory": 1,
               "PotionStrength": 0,
-              "GemCategory": 0,
-              "GemStrength": 0,
               "RestoreMana": {
                 "$id": "66",
                 "RestoreManaAmt": 50
@@ -504,7 +494,6 @@
             {
               "$id": "98",
               "Name": "bandage",
-              "ArcAbilityCategory": 0,
               "WarAbilityCategory": 6,
               "Bandage": {
                 "$id": "99",
@@ -515,7 +504,6 @@
               },
               "MinLevel": 2,
               "RageCost": 25,
-              "ComboCost": 0,
               "Rank": 1
             }
           ]
@@ -636,7 +624,6 @@
               "$id": "91",
               "Name": "bandage",
               "ArcAbilityCategory": 6,
-              "WarAbilityCategory": 0,
               "Bandage": {
                 "$id": "92",
                 "HealAmount": 25,
@@ -645,7 +632,6 @@
                 "HealMaxRounds": 3
               },
               "MinLevel": 2,
-              "RageCost": 0,
               "ComboCost": 25,
               "Rank": 1
             }
