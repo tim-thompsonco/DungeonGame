@@ -13,13 +13,13 @@ namespace DungeonGame {
 		}
 		public string Name { get; set; }
 		public int MaxHitPoints { get; set; }
-		public int MaxRagePoints { get; set; }
-		public int MaxComboPoints { get; set; }
-		public int MaxManaPoints { get; set; }
 		public int HitPoints { get; set; }
-		public int RagePoints { get; set; }
-		public int ComboPoints { get; set; }
-		public int ManaPoints { get; set; }
+		public int? MaxRagePoints { get; set; }
+		public int? RagePoints { get; set; }
+		public int? MaxComboPoints { get; set; }
+		public int? ComboPoints { get; set; }
+		public int? MaxManaPoints { get; set; }
+		public int? ManaPoints { get; set; }
 		public int Strength { get; set; }
 		public int Intelligence { get; set; }
 		public int Dexterity { get; set; }
@@ -217,7 +217,7 @@ namespace DungeonGame {
 				if (this.PlayerWeapon.Equipped &&
 				    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
 				    !this.PlayerQuiver.HaveArrows()) {
-					this.PlayerQuiver.OutOfArrows();
+					Quiver.OutOfArrows();
 					attackAmount = 5;
 				}
 			}

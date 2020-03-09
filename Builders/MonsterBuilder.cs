@@ -11,15 +11,30 @@ namespace DungeonGame {
 			var randomGearNum = GameHandler.GetRandomNumber(1, 10);
 			switch (monster.MonsterCategory) {
 				case Monster.MonsterType.Skeleton:
-					var randomWeaponNum = GameHandler.GetRandomNumber(1, 5);
-					monster.MonsterWeapon = randomWeaponNum switch {
-						1 => new Weapon(monster.Level, Weapon.WeaponType.Axe, monster.MonsterCategory),
-						2 => new Weapon(monster.Level, Weapon.WeaponType.Bow, monster.MonsterCategory),
-						3 => new Weapon(monster.Level, Weapon.WeaponType.Dagger, monster.MonsterCategory),
-						4 => new Weapon(monster.Level, Weapon.WeaponType.OneHandedSword, monster.MonsterCategory),
-						5 => new Weapon(monster.Level, Weapon.WeaponType.TwoHandedSword, monster.MonsterCategory),
-						_ => throw new ArgumentOutOfRangeException()
-					};
+					switch (monster.SkeletonCategory) {
+						case Monster.SkeletonType.Warrior:
+							var randomWeaponNum = GameHandler.GetRandomNumber(1, 3);
+							monster.MonsterWeapon = randomWeaponNum switch {
+								1 => new Weapon(monster.Level, Weapon.WeaponType.Axe, monster.MonsterCategory),
+								2 => new Weapon(monster.Level, Weapon.WeaponType.OneHandedSword, monster.MonsterCategory),
+								3 => new Weapon(monster.Level, Weapon.WeaponType.TwoHandedSword, monster.MonsterCategory),
+								_ => throw new ArgumentOutOfRangeException()
+							};
+							break;
+						case Monster.SkeletonType.Archer:
+							monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Bow, monster.MonsterCategory);
+							monster.MonsterItems.Add( new Quiver(
+								"basic quiver", 50, 50, 15));
+							break;
+						case Monster.SkeletonType.Mage:
+							monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Dagger, monster.MonsterCategory);
+							break;
+						case null:
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+					
 					BuildMonsterArmor(monster);
 					break;
 				case Monster.MonsterType.Zombie:
@@ -212,19 +227,33 @@ namespace DungeonGame {
 		private static void BuildMonsterNameDesc(Monster monster) {
 			switch (monster.MonsterCategory) {
 				case Monster.MonsterType.Skeleton:
-					monster.Name = monster.Level switch {
-						1 => "skeleton",
-						2 => "skeleton fighter",
-						3 => "skeleton warrior",
-						4 => "skeleton guardian",
-						5 => "skeleton defender",
-						6 => "skeleton conqueror",
-						7 => "skeleton zealot",
-						8 => "skeleton gladiator",
-						9 => "skeleton knight",
-						10 => "skeleton champion",
-						_ => throw new ArgumentOutOfRangeException()
-					};
+					switch (monster.SkeletonCategory) {
+						case Monster.SkeletonType.Warrior:
+							monster.Name = monster.Level switch {
+								1 => "skeleton " + monster.SkeletonCategory.ToString().ToLowerInvariant(),
+								2 => "skeleton fighter",
+								3 => "skeleton warrior",
+								4 => "skeleton guardian",
+								5 => "skeleton defender",
+								6 => "skeleton conqueror",
+								7 => "skeleton zealot",
+								8 => "skeleton gladiator",
+								9 => "skeleton knight",
+								10 => "skeleton champion",
+								_ => throw new ArgumentOutOfRangeException()
+							};
+							break;
+						case Monster.SkeletonType.Archer:
+							monster.Name = "skeleton " + monster.SkeletonCategory.ToString().ToLowerInvariant();
+							break;
+						case Monster.SkeletonType.Mage:
+							monster.Name = "skeleton " + monster.SkeletonCategory.ToString().ToLowerInvariant();
+							break;
+						case null:
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
 					monster.Desc =
 						"A " + monster.Name + " stands in front of you. Its bones look worn and damaged from years of fighting. A " +
 						"ghastly yellow glow surrounds it, which is the only indication of the magic that must exist to " +

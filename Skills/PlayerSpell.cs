@@ -253,6 +253,37 @@ namespace DungeonGame {
 		public static void CastFireOffense(Monster opponent, Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			var fireSpellDamage = player.Spellbook[index].Offensive.Amount;
+			foreach (var effect in opponent.Effects) {
+				switch (effect.EffectGroup) {
+					case Effect.EffectType.Healing:
+						break;
+					case Effect.EffectType.ChangePlayerDamage:
+						break;
+					case Effect.EffectType.ChangeArmor:
+						break;
+					case Effect.EffectType.OnFire:
+						break;
+					case Effect.EffectType.Bleeding:
+						break;
+					case Effect.EffectType.Stunned:
+						break;
+					case Effect.EffectType.Frozen:
+						var frozenAttackAmount = fireSpellDamage * effect.EffectMultiplier;
+						fireSpellDamage = (int)frozenAttackAmount;
+						effect.FrozenRound(opponent);
+						break;
+					case Effect.EffectType.ChangeOpponentDamage:
+						break;
+					case Effect.EffectType.BlockDamage:
+						break;
+					case Effect.EffectType.ReflectDamage:
+						break;
+					case Effect.EffectType.ChangeStat:
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
 			var attackSuccessString = "You hit the " + opponent.Name + " for " + fireSpellDamage + " fire damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
@@ -346,9 +377,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				healString);
 			player.HitPoints += healAmount;
-			if (player.HitPoints > player.MaxHitPoints) {
-				player.HitPoints = player.MaxHitPoints;
-			}
+			if (player.HitPoints > player.MaxHitPoints) player.HitPoints = player.MaxHitPoints;
 			if (player.Spellbook[index].Healing.HealOverTime <= 0) return;
 			player.Effects.Add(new Effect(player.Spellbook[index].Name,
 				Effect.EffectType.Healing, player.Spellbook[index].Healing.HealOverTime,

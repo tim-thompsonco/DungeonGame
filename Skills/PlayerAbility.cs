@@ -27,16 +27,16 @@ namespace DungeonGame {
 			Ambush
 		}
 		public string Name { get; set; }
-		public ArcherAbility ArcAbilityCategory { get; set; }
-		public WarriorAbility WarAbilityCategory { get; set; }
+		public ArcherAbility? ArcAbilityCategory { get; set; }
+		public WarriorAbility? WarAbilityCategory { get; set; }
 		public Healing Healing { get; set; }
 		public Defensive Defensive { get; set; }
 		public Offensive Offensive { get; set; }
 		public ChangeAmount ChangeAmount { get; set; }
 		public Stun Stun { get; set; }
 		public int MinLevel { get; set; }
-		public int RageCost { get; set; }
-		public int ComboCost { get; set; }
+		public int? RageCost { get; set; }
+		public int? ComboCost { get; set; }
 		public int Rank { get; set; }
 		
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor

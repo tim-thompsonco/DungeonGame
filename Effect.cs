@@ -17,7 +17,7 @@ namespace DungeonGame {
 		}
 		public string Name { get; set; }
 		public EffectType EffectGroup { get; set; }
-		public ChangeStat.StatType StatGroup { get; set; }
+		public ChangeStat.StatType? StatGroup { get; set; }
 		public int EffectAmount { get; set; }
 		public int EffectAmountOverTime { get; set; }
 		public int EffectCurRound { get; set; }
@@ -182,11 +182,35 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
+		public void OnFireRound(Player player) {
+			if (this.IsEffectExpired) return;
+			this.EffectCurRound += 1;
+			player.HitPoints -= this.EffectAmountOverTime;
+			var burnString = "You burn for " + this.EffectAmountOverTime + " fire damage.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatOnFireText(),
+				Settings.FormatDefaultBackground(),
+				burnString);
+			if (this.EffectCurRound <= this.EffectMaxRound) return;
+			this.IsEffectExpired = true;
+		}
 		public void BleedingRound(Monster opponent) {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			opponent.HitPoints -= this.EffectAmountOverTime;
 			var bleedString = "The " + opponent.Name + " bleeds for " + this.EffectAmountOverTime + " physical damage.";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				bleedString);
+			if (this.EffectCurRound <= this.EffectMaxRound) return;
+			this.IsEffectExpired = true;
+		}
+		public void BleedingRound(Player player) {
+			if (this.IsEffectExpired) return;
+			this.EffectCurRound += 1;
+			player.HitPoints -= this.EffectAmountOverTime;
+			var bleedString = "You bleed for " + this.EffectAmountOverTime + " physical damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -210,6 +234,17 @@ namespace DungeonGame {
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var frozenString = "The " + opponent.Name + " is frozen. Physical, frost and arcane damage to it will be double!";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				frozenString);
+			if (this.EffectCurRound <= this.EffectMaxRound) return;
+			this.IsEffectExpired = true;
+		}
+		public void FrozenRound(Player player) {
+			if (this.IsEffectExpired) return;
+			this.EffectCurRound += 1;
+			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be double!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),

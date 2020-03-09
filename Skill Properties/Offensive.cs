@@ -7,7 +7,7 @@ namespace DungeonGame {
 		}
 		public OffensiveType OffensiveGroup { get; set; }
 		public int Amount { get; set;  }
-		public int ChanceToSucceed { get; set; }
+		public int? ChanceToSucceed { get; set; }
 		public int AmountOverTime { get; set;  }
 		public int AmountCurRounds { get; set;  }
 		public int AmountMaxRounds { get; set;  }

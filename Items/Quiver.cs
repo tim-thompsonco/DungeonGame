@@ -23,7 +23,7 @@
 		public void UseArrow() {
 			this.Quantity -= 1;
 		}
-		public void OutOfArrows() {
+		public static void OutOfArrows() {
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackFailText(),
 				Settings.FormatDefaultBackground(),

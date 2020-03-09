@@ -31,11 +31,11 @@ namespace DungeonGame {
 		public string Desc { get; set; }
 		public int ItemValue { get; set; }
 		public bool Equipped { get; set; }
-		public ArrowType ArrowCategory { get; set; }
-		public PotionType PotionCategory { get; set; }
-		private PotionLevel PotionStrength { get; set; }
-		public KitLevel KitStrength { get; set; }
-		public KitType KitCategory { get; set; }
+		public ArrowType? ArrowCategory { get; set; }
+		public PotionType? PotionCategory { get; set; }
+		private PotionLevel? PotionStrength { get; set; }
+		public KitLevel? KitStrength { get; set; }
+		public KitType? KitCategory { get; set; }
 		public RestoreHealth RestoreHealth { get; set; }
 		public RestoreMana RestoreMana { get; set; }
 		public ChangeStat ChangeStat { get; set; }
