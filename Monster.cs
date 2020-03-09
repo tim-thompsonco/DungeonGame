@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DungeonGame {
 	public class Monster : IRoomInteraction {
@@ -44,6 +45,7 @@ namespace DungeonGame {
 		public ElementalType? ElementalCategory { get; set; }
 		public SkeletonType? SkeletonCategory { get; set; }
 		public TrollType? TrollCategory { get; set; }
+		public int UnarmedAttackDamage { get; set; }
 		public Weapon MonsterWeapon { get; set; }
 		public Quiver MonsterQuiver { get; set; }
 		public Armor MonsterHeadArmor { get; set; }
@@ -62,6 +64,7 @@ namespace DungeonGame {
 			this.MonsterItems = new List<IEquipment>();
 			this.Effects = new List<Effect>();
 			this.StatReplenishInterval = 3;
+			this.UnarmedAttackDamage = 5;
 			this.Level = level;
 			this.MonsterCategory = monsterType;
 			var randomNumHitPoint = GameHandler.GetRandomNumber(20, 40);
@@ -171,6 +174,49 @@ namespace DungeonGame {
 			}
 		}
 		
+		public AttackOption DetermineAttack() {
+			var attackOptions = new List<AttackOption>();
+			if (this.MonsterWeapon != null && this.MonsterWeapon.Equipped) {
+				attackOptions.Add(new 
+					AttackOption(AttackOption.AttackType.Physical, this.MonsterWeapon.RegDamage, -1));
+			}
+			else {
+				attackOptions.Add(new 
+					AttackOption(AttackOption.AttackType.Physical, this.UnarmedAttackDamage, -1));
+			}
+			if (this.Spellbook != null) {
+				for (var i = 0; i < this.Spellbook.Count; i++) {
+					if (this.EnergyPoints < this.Spellbook[i].EnergyCost) continue;
+					var spellTotalDamage = 0;
+					if (this.Spellbook[i].Offensive.AmountOverTime == 0) {
+						spellTotalDamage = this.Spellbook[i].Offensive.Amount;
+					}
+					else {
+						spellTotalDamage = this.Spellbook[i].Offensive.Amount + this.Spellbook[i].Offensive.AmountOverTime *
+							this.Spellbook[i].Offensive.AmountMaxRounds;
+					}
+					attackOptions.Add(new 
+						AttackOption(AttackOption.AttackType.Spell, spellTotalDamage, i));
+				}
+			}
+			if (this.Abilities != null) {
+				for (var i = 0; i < this.Abilities.Count; i++) {
+					if (this.EnergyPoints < this.Abilities[i].EnergyCost) continue;
+					var abilityTotalDamage = 0;
+					if (this.Abilities[i].Offensive.AmountOverTime == 0) {
+						abilityTotalDamage = this.Abilities[i].Offensive.Amount;
+					}
+					else {
+						abilityTotalDamage = this.Abilities[i].Offensive.Amount + this.Abilities[i].Offensive.AmountOverTime *
+							this.Abilities[i].Offensive.AmountMaxRounds;
+					}
+					attackOptions.Add(new 
+						AttackOption(AttackOption.AttackType.Ability, abilityTotalDamage, i));
+				}
+			}
+			attackOptions = attackOptions.OrderByDescending(attack => attack.DamageAmount).ToList();
+			return attackOptions[0];
+		}
 		public int Attack(Player player) {
 			var attackAmount = 0;
 			try {
@@ -186,7 +232,7 @@ namespace DungeonGame {
 				if (this.MonsterWeapon.Equipped &&
 				    this.MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
 				    !this.MonsterQuiver.HaveArrows()) {
-					attackAmount = 5;
+					attackAmount = this.UnarmedAttackDamage;
 				}
 			}
 			catch (NullReferenceException) {
@@ -195,7 +241,7 @@ namespace DungeonGame {
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					monsterDisarmed);
-				attackAmount = 5;
+				attackAmount = this.UnarmedAttackDamage;
 			}
 			var randomChanceToHit = GameHandler.GetRandomNumber(1, 100);
 			var chanceToDodge = player.DodgeChance;
