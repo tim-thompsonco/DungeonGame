@@ -120,7 +120,7 @@ namespace DungeonGame {
 			player.Effects.Add(new Effect(player.Spellbook[index].Name,
 				Effect.EffectType.ChangeStat, player.Spellbook[index].ChangeAmount.Amount,
 				player.Spellbook[index].ChangeAmount.ChangeCurRound, player.Spellbook[index].ChangeAmount.ChangeMaxRound, 
-				1, 1, false));
+				1, 1, false, ChangeStat.StatType.Intelligence));
 		}
 		public static void ArcaneIntellectSpellInfo(Player player, int index) {
 			var arcaneIntString = "Arcane Intellect Amount: " + player.Spellbook[index].ChangeAmount.Amount;
@@ -221,8 +221,8 @@ namespace DungeonGame {
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
 					frozenString);
-			} 
-			opponent.TakeDamage(frostSpellDamage);
+			}
+			opponent.HitPoints -= frostSpellDamage;
 			opponent.Effects.Add(new Effect(player.Spellbook[index].Name,Effect.EffectType.Frozen, 
 				player.Spellbook[index].Offensive.AmountCurRounds, player.Spellbook[index].Offensive.AmountMaxRounds, 
 				1.5, 1, true));
@@ -289,7 +289,7 @@ namespace DungeonGame {
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			opponent.TakeDamage(fireSpellDamage);
+			opponent.HitPoints -= fireSpellDamage;
 			if (player.Spellbook[index].Offensive.AmountOverTime <= 0) return;
 			var onFireString = "The " + opponent.Name + " bursts into flame!";
 			OutputHandler.Display.StoreUserOutput(
@@ -347,7 +347,7 @@ namespace DungeonGame {
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			opponent.TakeDamage(arcaneSpellDamage);
+			opponent.HitPoints -= arcaneSpellDamage;
 		}
 		public static void HealingSpellInfo(Player player, int index) {
 			var healAmountString = "Heal Amount: " + player.Spellbook[index].Healing.HealAmount;

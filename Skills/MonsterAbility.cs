@@ -53,7 +53,7 @@ namespace DungeonGame {
 		public static void UseOffenseDamageAbility(Monster monster, Player player, int index) {
 			monster.EnergyPoints -= monster.Abilities[index].EnergyCost;
 			var attackDamage = monster.Abilities[index].Offensive.Amount;
-			player.TakeDamage(attackDamage);
+			player.HitPoints -= attackDamage;
 			var attackSuccessString = string.Empty;
 			if (monster.MonsterCategory == Monster.MonsterType.Spider) {
 				attackSuccessString = "The " + monster.Name + " bites you for " + attackDamage + " physical damage.";

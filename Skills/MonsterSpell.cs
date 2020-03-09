@@ -89,7 +89,7 @@ namespace DungeonGame {
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			player.TakeDamage(fireSpellDamage);
+			player.HitPoints -= fireSpellDamage;
 			if (monster.Spellbook[index].Offensive.AmountOverTime <= 0) return;
 			const string onFireString = "You burst into flame!";
 			OutputHandler.Display.StoreUserOutput(
@@ -154,8 +154,8 @@ namespace DungeonGame {
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
 					frozenString);
-			} 
-			player.TakeDamage(frostSpellDamage);
+			}
+			player.HitPoints -= frostSpellDamage;
 			player.Effects.Add(new Effect(monster.Spellbook[index].Name,Effect.EffectType.Frozen, 
 				monster.Spellbook[index].Offensive.AmountCurRounds, monster.Spellbook[index].Offensive.AmountMaxRounds, 
 				1.5, 1, true));
@@ -205,7 +205,7 @@ namespace DungeonGame {
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			player.TakeDamage(arcaneSpellDamage);
+			player.HitPoints -= arcaneSpellDamage;
 		}
 		public static void CastHealing(Monster monster, int index) {
 			monster.EnergyPoints -= monster.Spellbook[index].EnergyCost;

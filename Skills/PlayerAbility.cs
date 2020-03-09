@@ -247,7 +247,7 @@ namespace DungeonGame {
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			opponent.TakeDamage(abilityDamage);
+			opponent.HitPoints -= abilityDamage;
 			var stunString = "The " + opponent.Name + " is stunned!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
@@ -558,7 +558,7 @@ namespace DungeonGame {
 				player.PlayerQuiver.UseArrow();
 			}
 			var abilityDamage = player.Abilities[index].Offensive.Amount;
-			opponent.TakeDamage(abilityDamage);
+			opponent.HitPoints -= abilityDamage;
 			var abilitySuccessString = "Your " + player.Abilities[index].Name + " hit the " + opponent.Name + " for " +
 			                           abilityDamage + " physical damage.";
 			OutputHandler.Display.StoreUserOutput(

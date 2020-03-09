@@ -79,7 +79,7 @@ namespace DungeonGameTests {
 				Assert.AreEqual(frozenString, OutputHandler.Display.Output[i + 1][2]);
 				monster.MonsterWeapon.Durability = 100;
 				var frozenDamage = (double) monster.Attack(player);
-				player.TakeDamage((int) frozenDamage);
+				player.HitPoints -= (int)frozenDamage;
 				totalBaseDamage += baseDamage;
 				totalFrozenDamage += frozenDamage;
 			}
@@ -118,7 +118,7 @@ namespace DungeonGameTests {
 		public void BloodLeechAbilityUnitTest() {
 			var player = new Player("test", Player.PlayerClassType.Mage) {HitPoints = 100, MaxHitPoints = 100};
 			OutputHandler.Display.ClearUserOutput();
-			var monster = new Monster(3, Monster.MonsterType.Vampire);
+			var monster = new Monster(3, Monster.MonsterType.Vampire) {HitPoints = 10, MaxHitPoints = 100};
 			MonsterBuilder.BuildMonster(monster);
 			var abilityIndex = monster.Abilities.FindIndex(
 				f => f.AbilityCategory == MonsterAbility.Ability.BloodLeech);

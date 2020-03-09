@@ -189,12 +189,6 @@ namespace DungeonGame {
 			this.DodgeChance = this.Dexterity * 1.5;
 		}
 		
-		public void GainExperience(int experience) {
-			this.Experience += experience;
-		}
-		public void TakeDamage(int weaponDamage) {
-			this.HitPoints -= weaponDamage;
-		}
 		public int ArmorRating(Monster opponent) {
 			var totalArmorRating = GearHandler.CheckArmorRating(this);
 			var levelDiff = opponent.Level - this.Level;

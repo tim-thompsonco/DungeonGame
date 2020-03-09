@@ -233,7 +233,7 @@ namespace DungeonGame {
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
 					hitString);
-				this.Player.TakeDamage(hitAmount);
+				this.Player.HitPoints -= hitAmount;
 				GearHandler.DecreaseArmorDurability(this.Player);
 			}
 		}
@@ -263,7 +263,7 @@ namespace DungeonGame {
 							Settings.FormatAttackSuccessText(),
 							Settings.FormatDefaultBackground(),
 							attackSucceedString);
-						this.Opponent.TakeDamage(attackAmount);
+						this.Opponent.HitPoints -= attackAmount;
 					}
 					break;
 				case "cast":

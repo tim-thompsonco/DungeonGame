@@ -171,9 +171,6 @@ namespace DungeonGame {
 			}
 		}
 		
-		public void TakeDamage(int weaponDamage) {
-			this.HitPoints -= weaponDamage;
-		}
 		public int Attack(Player player) {
 			var attackAmount = 0;
 			try {
@@ -264,7 +261,7 @@ namespace DungeonGame {
 			}
 			this.Name = "Dead " + this.Name;
 			this.Desc = "A corpse of a monster you killed.";
-			player.GainExperience(this.ExperienceProvided);
+			player.Experience += this.ExperienceProvided;
 			PlayerHandler.LevelUpCheck(player);
 		}
 	}

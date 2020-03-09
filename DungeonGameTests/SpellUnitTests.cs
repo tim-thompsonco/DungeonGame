@@ -99,7 +99,7 @@ namespace DungeonGameTests {
 				Assert.AreEqual(frozenString, OutputHandler.Display.Output[i][2]);
 				player.PlayerWeapon.Durability = 100;
 				var frozenDamage = (double) player.Attack(monster);
-				monster.TakeDamage((int) frozenDamage);
+				monster.HitPoints -= (int)frozenDamage;
 				totalBaseDamage += baseDamage;
 				totalFrozenDamage += frozenDamage;
 			}
@@ -445,7 +445,7 @@ namespace DungeonGameTests {
 				var frozenRoundString = "The " + monster.Name +
 				                        " is frozen. Physical, frost and arcane damage to it will be double!";
 				Assert.AreEqual(frozenRoundString, OutputHandler.Display.Output[1][2]);
-				monster.TakeDamage((int) frozenDamage);
+				monster.HitPoints -= (int)frozenDamage;
 				totalBaseDamage += baseDamage;
 				totalFrozenDamage += frozenDamage;
 			}
