@@ -117,6 +117,14 @@ namespace DungeonGame {
 						new MonsterSpell("fireball", 50, MonsterSpell.SpellType.Fireball, this.Level)};
 					break;
 				case MonsterType.Elemental:
+					var randomNum = GameHandler.GetRandomNumber(1, 3);
+					var randomPhysicalDmg = GameHandler.GetRandomNumber(18, 24);
+					this.UnarmedAttackDamage = randomNum switch {
+						1 => randomPhysicalDmg + (level - 1) * 1,
+						2 => randomPhysicalDmg + (level - 1) * 2,
+						3 => randomPhysicalDmg + (level - 1) * 3,
+						_ => throw new ArgumentOutOfRangeException()
+					};
 					var randomElementalType = GameHandler.GetRandomNumber(1, 3);
 					this.ElementalCategory = randomElementalType switch {
 						1 => ElementalType.Air,
@@ -174,11 +182,12 @@ namespace DungeonGame {
 			}
 		}
 		
-		public AttackOption DetermineAttack() {
+		public AttackOption DetermineAttack(Player player) {
 			var attackOptions = new List<AttackOption>();
 			if (this.MonsterWeapon != null && this.MonsterWeapon.Equipped) {
 				attackOptions.Add(new 
-					AttackOption(AttackOption.AttackType.Physical, this.MonsterWeapon.RegDamage, -1));
+					AttackOption(AttackOption.AttackType.Physical, 
+						this.MonsterWeapon.RegDamage - player.ArmorRating(this), -1));
 			}
 			else {
 				attackOptions.Add(new 
@@ -187,38 +196,56 @@ namespace DungeonGame {
 			if (this.Spellbook != null) {
 				for (var i = 0; i < this.Spellbook.Count; i++) {
 					if (this.EnergyPoints < this.Spellbook[i].EnergyCost) continue;
-					var spellTotalDamage = 0;
-					if (this.Spellbook[i].Offensive.AmountOverTime == 0) {
-						spellTotalDamage = this.Spellbook[i].Offensive.Amount;
+					switch (this.Spellbook[i].SpellCategory) {
+						case MonsterSpell.SpellType.Fireball:
+						case MonsterSpell.SpellType.Frostbolt:
+						case MonsterSpell.SpellType.Lightning:
+							var spellTotalDamage = 0;
+							if (this.Spellbook[i].Offensive.AmountOverTime == 0) {
+								spellTotalDamage = this.Spellbook[i].Offensive.Amount;
+							}
+							else {
+								spellTotalDamage = this.Spellbook[i].Offensive.Amount + this.Spellbook[i].Offensive.AmountOverTime *
+									this.Spellbook[i].Offensive.AmountMaxRounds;
+							}
+							attackOptions.Add(new 
+								AttackOption(AttackOption.AttackType.Spell, spellTotalDamage, i));
+							break;
+						case MonsterSpell.SpellType.Heal:
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
 					}
-					else {
-						spellTotalDamage = this.Spellbook[i].Offensive.Amount + this.Spellbook[i].Offensive.AmountOverTime *
-							this.Spellbook[i].Offensive.AmountMaxRounds;
-					}
-					attackOptions.Add(new 
-						AttackOption(AttackOption.AttackType.Spell, spellTotalDamage, i));
 				}
 			}
 			if (this.Abilities != null) {
 				for (var i = 0; i < this.Abilities.Count; i++) {
 					if (this.EnergyPoints < this.Abilities[i].EnergyCost) continue;
-					var abilityTotalDamage = 0;
-					if (this.Abilities[i].Offensive.AmountOverTime == 0) {
-						abilityTotalDamage = this.Abilities[i].Offensive.Amount;
+					switch (this.Abilities[i].AbilityCategory) {
+						case MonsterAbility.Ability.PoisonBite:
+						case MonsterAbility.Ability.BloodLeech:
+						case MonsterAbility.Ability.TailWhip:
+							var abilityTotalDamage = 0;
+							if (this.Abilities[i].Offensive.AmountOverTime == 0) {
+								abilityTotalDamage = this.Abilities[i].Offensive.Amount * 2;
+							}
+							else {
+								abilityTotalDamage = this.Abilities[i].Offensive.Amount + this.Abilities[i].Offensive.AmountOverTime *
+									this.Abilities[i].Offensive.AmountMaxRounds;
+							}
+							attackOptions.Add(new 
+								AttackOption(AttackOption.AttackType.Ability, abilityTotalDamage, i));
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
 					}
-					else {
-						abilityTotalDamage = this.Abilities[i].Offensive.Amount + this.Abilities[i].Offensive.AmountOverTime *
-							this.Abilities[i].Offensive.AmountMaxRounds;
-					}
-					attackOptions.Add(new 
-						AttackOption(AttackOption.AttackType.Ability, abilityTotalDamage, i));
 				}
 			}
 			attackOptions = attackOptions.OrderByDescending(attack => attack.DamageAmount).ToList();
 			return attackOptions[0];
 		}
 		public void Attack(Player player) {
-			var attackOption = this.DetermineAttack();
+			var attackOption = this.DetermineAttack(player);
 			switch (attackOption.AttackCategory) {
 				case AttackOption.AttackType.Physical:
 					this.PhysicalAttack(player);
@@ -277,12 +304,17 @@ namespace DungeonGame {
 				}
 			}
 			catch (NullReferenceException) {
-				var monsterDisarmed = "The " + this.Name + " is disarmed! They are going hand to hand!";
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					monsterDisarmed);
-				attackAmount = this.UnarmedAttackDamage;
+				if (this.MonsterCategory == MonsterType.Elemental) {
+					attackAmount = this.UnarmedAttackDamage;
+				}
+				else {
+					var monsterDisarmed = "The " + this.Name + " is disarmed! They are going hand to hand!";
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						monsterDisarmed);
+					attackAmount = this.UnarmedAttackDamage;
+				}
 			}
 			var randomChanceToHit = GameHandler.GetRandomNumber(1, 100);
 			var chanceToDodge = player.DodgeChance;

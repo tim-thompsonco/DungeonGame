@@ -137,7 +137,7 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 			if (monster.MonsterCategory != Monster.MonsterType.Elemental) monster.MonsterWeapon.Equipped = true;
-			monster.MonsterItems.Add(monster.MonsterWeapon);
+			if (monster.MonsterWeapon != null) monster.MonsterItems.Add(monster.MonsterWeapon);
 		}
 		private static void BuildMonsterGem(Monster monster) {
 			var randomGemNum = GameHandler.GetRandomNumber(1, 6);

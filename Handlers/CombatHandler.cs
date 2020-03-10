@@ -130,12 +130,15 @@ namespace DungeonGame {
 						effect.ChangeArmorRound();
 						break;
 					case Effect.EffectType.OnFire:
+						effect.OnFireRound(this.Player);
 						break;
 					case Effect.EffectType.Bleeding:
+						effect.BleedingRound(this.Player);
 						break;
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
+						effect.FrozenRound(this.Player);
 						break;
 					case Effect.EffectType.ChangeStat:
 						break;

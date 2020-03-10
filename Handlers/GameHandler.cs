@@ -32,12 +32,15 @@ namespace DungeonGame {
 							if (!player.InCombat) effect.ChangeArmorRound();
 							break;
 						case Effect.EffectType.OnFire:
+							effect.OnFireRound(player);
 							break;
 						case Effect.EffectType.Bleeding:
+							effect.BleedingRound(player);
 							break;
 						case Effect.EffectType.Stunned:
 							continue;
 						case Effect.EffectType.Frozen:
+							effect.FrozenRound(player);
 							break;
 						case Effect.EffectType.ReflectDamage:
 							effect.ReflectDamageRound();

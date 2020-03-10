@@ -459,6 +459,7 @@ namespace DungeonGame {
 					"It is carrying: "};
 				OutputHandler.Display.StoreUserOutput(sameLineOutput);
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
+				if (this.Monster.MonsterItems == null) return;
 				foreach (var item in this.Monster.MonsterItems) {
 					var sameLineOutputItem = new List<string>();
 					var sb = new StringBuilder();

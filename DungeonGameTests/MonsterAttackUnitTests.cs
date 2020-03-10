@@ -4,16 +4,16 @@ using NUnit.Framework;
 
 namespace DungeonGameTests {
 	public class MonsterAttackUnitTests {
-		
 		[Test]
 		public void DetermineAttackUnitTest() {
+			var player = new Player("test", Player.PlayerClassType.Mage) {HitPoints = 100, MaxHitPoints = 100};
 			var monster = new Monster(3, Monster.MonsterType.Dragon);
 			MonsterBuilder.BuildMonster(monster);
 			OutputHandler.Display.ClearUserOutput();
-			var attackChoice = monster.DetermineAttack();
+			var attackChoice = monster.DetermineAttack(player);
 			Assert.AreEqual(AttackOption.AttackType.Spell, attackChoice.AttackCategory);
 			monster.EnergyPoints = 0;
-			attackChoice = monster.DetermineAttack();
+			attackChoice = monster.DetermineAttack(player);
 			Assert.AreEqual(AttackOption.AttackType.Physical, attackChoice.AttackCategory);
 		}
 		[Test]
