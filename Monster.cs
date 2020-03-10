@@ -24,10 +24,6 @@ namespace DungeonGame {
 			Archer,
 			Mage
 		}
-		public enum TrollType {
-			Warrior,
-			Shaman
-		}
 		public string Name { get; set; }
 		public string Desc { get; set; }
 		public int Level { get; set; }
@@ -44,7 +40,6 @@ namespace DungeonGame {
 		public MonsterType MonsterCategory { get; set; }
 		public ElementalType? ElementalCategory { get; set; }
 		public SkeletonType? SkeletonCategory { get; set; }
-		public TrollType? TrollCategory { get; set; }
 		public int UnarmedAttackDamage { get; set; }
 		public Weapon MonsterWeapon { get; set; }
 		public Quiver MonsterQuiver { get; set; }
@@ -154,22 +149,6 @@ namespace DungeonGame {
 						new MonsterAbility("blood leech", 50, MonsterAbility.Ability.BloodLeech, this.Level)};
 					break;
 				case MonsterType.Troll:
-					var randomTrollType = GameHandler.GetRandomNumber(1, 2);
-					this.TrollCategory = randomTrollType switch {
-						1 => TrollType.Shaman,
-						2 => TrollType.Warrior,
-						_ => throw new ArgumentOutOfRangeException()
-					};
-					switch (this.TrollCategory) {
-						case TrollType.Warrior:
-							break;
-						case TrollType.Shaman:
-							this.Spellbook = new List<MonsterSpell> {
-								new MonsterSpell("heal", 50, MonsterSpell.SpellType.Heal, this.Level)};
-							break;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
 					break;
 				case MonsterType.Dragon:
 					this.Abilities = new List<MonsterAbility> {

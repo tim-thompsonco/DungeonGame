@@ -245,24 +245,5 @@ namespace DungeonGameTests {
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(player.MaxHitPoints - spellDamage - burnDamage * 3, player.HitPoints);
 		}
-		[Test]
-		public void HealSpellUnitTest() {
-			var monster = new Monster(3, Monster.MonsterType.Troll) {HitPoints = 10, MaxHitPoints = 100};
-			while (monster.TrollCategory != Monster.TrollType.Shaman) {
-				monster = new Monster(3, Monster.MonsterType.Troll) {HitPoints = 10, MaxHitPoints = 100};
-			}
-			MonsterBuilder.BuildMonster(monster);
-			OutputHandler.Display.ClearUserOutput();
-			var spellIndex = monster.Spellbook.FindIndex(
-				f => f.SpellCategory == MonsterSpell.SpellType.Heal);
-			var monsterHealthBase = monster.HitPoints;
-			MonsterSpell.CastHealing(monster, spellIndex);
-			var spellCost = monster.Spellbook[spellIndex].EnergyCost;
-			Assert.AreEqual(monster.MaxEnergyPoints - spellCost, monster.EnergyPoints);
-			var healAmount = monster.Spellbook[spellIndex].Healing.HealAmount;
-			Assert.AreEqual(monsterHealthBase + healAmount, monster.HitPoints);
-			var healString = "The " + monster.Name + " heals itself for " + healAmount + " health.";
-			Assert.AreEqual(healString, OutputHandler.Display.Output[0][2]);
-		}
 	}
 }
