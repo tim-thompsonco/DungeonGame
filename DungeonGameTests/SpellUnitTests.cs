@@ -77,7 +77,7 @@ namespace DungeonGameTests {
 			var spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("frostbolt", spellName);
 			player.PlayerWeapon.Durability = 100;
-			var baseDamage = (double) player.Attack(monster);
+			var baseDamage = (double) player.PhysicalAttack(monster);
 			player.CastSpell(monster, spellName);
 			Assert.AreEqual(player.MaxManaPoints - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
 			Assert.AreEqual(85, monster.HitPoints);
@@ -98,7 +98,7 @@ namespace DungeonGameTests {
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
 				Assert.AreEqual(frozenString, OutputHandler.Display.Output[i][2]);
 				player.PlayerWeapon.Durability = 100;
-				var frozenDamage = (double) player.Attack(monster);
+				var frozenDamage = (double) player.PhysicalAttack(monster);
 				monster.HitPoints -= (int)frozenDamage;
 				totalBaseDamage += baseDamage;
 				totalFrozenDamage += frozenDamage;
@@ -278,7 +278,7 @@ namespace DungeonGameTests {
 		public void ReflectDamageSpellUnitTest() {
 			OutputHandler.Display.ClearUserOutput();
 			var player = new Player("test", Player.PlayerClassType.Mage) {MaxManaPoints = 100, ManaPoints = 100};
-			var monster = new Monster(3, Monster.MonsterType.Demon) 
+			var monster = new Monster(3, Monster.MonsterType.Zombie) 
 				{HitPoints = 100, MaxHitPoints = 100};
 			MonsterBuilder.BuildMonster(monster);
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
@@ -309,14 +309,14 @@ namespace DungeonGameTests {
 			Assert.AreEqual(Effect.EffectType.ReflectDamage, player.Effects[0].EffectGroup);
 			OutputHandler.Display.ClearUserOutput();
 			for (var i = 2; i < 5; i++) {
-				var attackDamageM = monster.Attack(player);
+				var attackDamageM = monster.MonsterWeapon.Attack();
 				var index = player.Effects.FindIndex(
 					f => f.EffectGroup == Effect.EffectType.ReflectDamage);
 				var reflectAmount = player.Effects[index].EffectAmountOverTime < attackDamageM ? 
 					player.Effects[index].EffectAmountOverTime : attackDamageM;
 				Assert.AreEqual(true, reflectAmount <= player.Effects[index].EffectAmountOverTime);
 				monster.HitPoints -= reflectAmount;
-				Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - reflectAmount);
+				Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - reflectAmount * (i - 1));
 				player.Effects[index].ReflectDamageRound(reflectAmount);
 				Assert.AreEqual(
 					"You reflected " + reflectAmount + " damage back at your opponent!", 
@@ -409,7 +409,7 @@ namespace DungeonGameTests {
 			var spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("frost nova", spellName);
 			player.PlayerWeapon.Durability = 100;
-			var baseDamage = (double) player.Attack(monster);
+			var baseDamage = (double) player.PhysicalAttack(monster);
 			player.CastSpell(monster, spellName);
 			var attackSuccessString = "You hit the " + monster.Name + " for " + 
 			                          player.Spellbook[spellIndex].Offensive.Amount + " frost damage.";
@@ -440,7 +440,7 @@ namespace DungeonGameTests {
 				Assert.AreEqual(true, monster.IsStunned);
 				Assert.AreEqual(i, monster.Effects[stunIndex].EffectCurRound);
 				player.PlayerWeapon.Durability = 100;
-				var frozenDamage = (double) player.Attack(monster);
+				var frozenDamage = (double) player.PhysicalAttack(monster);
 				Assert.AreEqual(i, monster.Effects[frostIndex].EffectCurRound);
 				var frozenRoundString = "The " + monster.Name +
 				                        " is frozen. Physical, frost and arcane damage to it will be double!";

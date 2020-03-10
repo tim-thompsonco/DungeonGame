@@ -143,11 +143,12 @@ namespace DungeonGameTests {
 		[Test]
 		public void BlockAbilityUnitTest() {
 			var player = new Player("test", Player.PlayerClassType.Warrior) {MaxRagePoints = 100, RagePoints = 100,
-				InCombat = true, MaxHitPoints = 100, HitPoints = 100, DodgeChance = 0};
+				InCombat = true, MaxHitPoints = 100, HitPoints = 100, DodgeChance = 0, Level = 3};
 			OutputHandler.Display.ClearUserOutput();
-			var monster = new Monster(3, Monster.MonsterType.Demon) 
+			var monster = new Monster(3, Monster.MonsterType.Zombie) 
 				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
 			MonsterBuilder.BuildMonster(monster);
+			monster.MonsterWeapon.CritMultiplier = 1;
 			var abilityIndex = player.Abilities.FindIndex(
 				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Block);
 			var inputInfo = new[] {"ability", "block"};
@@ -174,21 +175,31 @@ namespace DungeonGameTests {
 			Assert.AreEqual(player.MaxHitPoints, player.HitPoints);
 			var blockAmountRemaining = player.Effects[0].EffectAmount;
 			Assert.AreEqual(blockAmount, blockAmountRemaining);
-			var combatSim = new CombatHandler(monster, player);
 			var i = 0;
 			while (blockAmountRemaining > 0) {
+				monster.MonsterWeapon.Durability = 100;
 				var blockAmountBefore = blockAmountRemaining;
-				combatSim.ProcessMonsterAttack();
+				monster.Attack(player);
 				blockAmountRemaining = player.Effects.Any() ? player.Effects[0].EffectAmount : 0;
-				Assert.AreEqual(player.MaxHitPoints, player.HitPoints);
-				var blockRoundString = "Your defensive move blocked " + (blockAmountBefore - blockAmountRemaining) + " damage!";
-				Assert.AreEqual(blockRoundString, OutputHandler.Display.Output[i][2]);
+				if (blockAmountRemaining > 0) {
+					Assert.AreEqual(player.MaxHitPoints, player.HitPoints);
+					var blockRoundString = "Your defensive move blocked " + (blockAmountBefore - blockAmountRemaining) + " damage!";
+					Assert.AreEqual(blockRoundString, OutputHandler.Display.Output[i][2]);
+				}
+				else {
+					var attackAmount = monster.MonsterWeapon.Attack() - blockAmountBefore;
+					Assert.AreEqual(player.MaxHitPoints - attackAmount, player.HitPoints);
+					var blockRoundString = "Your defensive move blocked " + blockAmountBefore + " damage!";
+					Assert.AreEqual(blockRoundString, OutputHandler.Display.Output[i][2]);
+					const string blockEndString = "You are no longer blocking damage!";
+					Assert.AreEqual(blockEndString, OutputHandler.Display.Output[i + 1][2]);
+					Assert.AreEqual(false, player.Effects.Any());
+					var hitString = "The " + monster.Name + " hits you for " + attackAmount + " physical damage.";
+					Assert.AreEqual(hitString, OutputHandler.Display.Output[i + 2][2]);
+				}
 				i++;
 				GameHandler.RemovedExpiredEffects(player);
 			}
-			const string blockEndString = "You are no longer blocking damage!";
-			Assert.AreEqual(blockEndString, OutputHandler.Display.Output[i][2]);
-			Assert.AreEqual(false, player.Effects.Any());
 		}
 		[Test]
 		public void BerserkAbilityUnitTest() {
@@ -220,7 +231,7 @@ namespace DungeonGameTests {
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("berserk", abilityName);
 			var baseArmorRating = GearHandler.CheckArmorRating(player);
-			var baseDamage = player.Attack(monster);
+			var baseDamage = player.PhysicalAttack(monster);
 			player.UseAbility(monster, input);
 			var rageCost = player.Abilities[abilityIndex].RageCost;
 			Assert.AreEqual(player.MaxRagePoints - rageCost,player.RagePoints);
@@ -234,7 +245,7 @@ namespace DungeonGameTests {
 				var berserkArmorAmount = player.Abilities[abilityIndex].ChangeAmount.Amount;
 				var berserkDamageAmount = player.Abilities[abilityIndex].Offensive.Amount;
 				var berserkArmorRating = GearHandler.CheckArmorRating(player);
-				var berserkDamage = player.Attack(monster);
+				var berserkDamage = player.PhysicalAttack(monster);
 				Assert.AreEqual(berserkArmorRating, baseArmorRating + berserkArmorAmount);
 				Assert.AreEqual(berserkDamage, baseDamage + berserkDamageAmount, 5);
 				player.Effects[0].ChangePlayerDamageRound(player);
@@ -403,7 +414,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			Assert.AreEqual(Effect.EffectType.ChangeOpponentDamage, player.Effects[0].EffectGroup);
 			for (var i = 2; i < 5; i++) {
-				var baseAttackDamageM = monster.Attack(player);
+				var baseAttackDamageM = monster.UnarmedAttackDamage;
 				var attackDamageM = baseAttackDamageM;
 				var changeDamageAmount = player.Effects[0].EffectAmountOverTime < attackDamageM ?
 					player.Effects[0].EffectAmountOverTime : attackDamageM;

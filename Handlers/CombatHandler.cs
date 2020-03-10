@@ -53,7 +53,7 @@ namespace DungeonGame {
 					return;
 				}
 				if (this.Opponent.IsStunned) continue;
-				this.ProcessMonsterAttack();
+				this.Opponent.Attack(this.Player);
 				// Check at end of round to see if monster was killed by combat round
 				if (this.Opponent.HitPoints > 0) continue;
 				this.Opponent.MonsterDeath(this.Player);
@@ -184,64 +184,11 @@ namespace DungeonGame {
 				}
 			}
 		}
-		public void ProcessMonsterAttack() {
-			var attackDamageM = this.Opponent.Attack(this.Player);
-			var indexDamageChange = this.Player.Effects.FindIndex(
-				f => f.EffectGroup == Effect.EffectType.ChangeOpponentDamage);
-			if (indexDamageChange != -1) {
-				var changeDamageAmount = this.Player.Effects[indexDamageChange].EffectAmountOverTime < attackDamageM ? 
-					this.Player.Effects[indexDamageChange].EffectAmountOverTime : attackDamageM;
-				attackDamageM += changeDamageAmount;
-				if (attackDamageM < 0) attackDamageM = 0;
-			}
-			var indexReflect = this.Player.Effects.FindIndex(
-				f => f.EffectGroup == Effect.EffectType.ReflectDamage);
-			if (indexReflect != -1 && attackDamageM > 0) {
-				var reflectAmount = this.Player.Effects[indexReflect].EffectAmountOverTime < attackDamageM ? 
-					this.Player.Effects[indexReflect].EffectAmountOverTime : attackDamageM;
-				this.Opponent.HitPoints -= reflectAmount;
-				this.Player.Effects[indexReflect].ReflectDamageRound(reflectAmount);
-				return;
-			}
-			var indexBlock = this.Player.Effects.FindIndex(
-				f => f.EffectGroup == Effect.EffectType.BlockDamage);
-			if (indexBlock != -1 && attackDamageM > 0) {
-				var blockAmount = this.Player.Effects[indexBlock].EffectAmount < attackDamageM ?
-					this.Player.Effects[indexBlock].EffectAmount : attackDamageM;
-				this.Player.Effects[indexBlock].BlockDamageRound(blockAmount);
-				attackDamageM -= blockAmount;
-			}
-			if (attackDamageM == 0 && indexBlock == -1 && indexReflect == -1) {
-				var missString = "The " + this.Opponent.Name + " missed you!"; 
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackFailText(),
-					Settings.FormatDefaultBackground(),
-					missString);
-			}
-			else if (attackDamageM - this.Player.ArmorRating(this.Opponent) < 0) {
-				var armorAbsorbString = "Your armor absorbed all of " + this.Opponent.Name + "'s attack!"; 
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackFailText(),
-					Settings.FormatDefaultBackground(),
-					armorAbsorbString);
-				GearHandler.DecreaseArmorDurability(this.Player);
-			}
-			else if (indexBlock == -1 && indexReflect == -1) {
-				var hitAmount = attackDamageM - this.Player.ArmorRating(this.Opponent);
-				var hitString = "The " + this.Opponent.Name + " hits you for " + hitAmount + " physical damage.";
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatAttackSuccessText(),
-					Settings.FormatDefaultBackground(),
-					hitString);
-				this.Player.HitPoints -= hitAmount;
-				GearHandler.DecreaseArmorDurability(this.Player);
-			}
-		}
 		private bool ProcessPlayerInput() {
 			switch (this.Input[0]) {
 				case "f":
 				case "fight":
-					var attackDamage = this.Player.Attack(this.Opponent);
+					var attackDamage = this.Player.PhysicalAttack(this.Opponent);
 					if (attackDamage - this.Opponent.ArmorRating(this.Player) < 0) {
 						var armorAbsorbString = "The " + this.Opponent.Name + "'s armor absorbed all of your attack!";
 						OutputHandler.Display.StoreUserOutput(

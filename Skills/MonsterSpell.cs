@@ -40,6 +40,17 @@ namespace DungeonGame {
 		
 		public static void CastFireOffense(Monster monster, Player player, int index) {
 			monster.EnergyPoints -= monster.Spellbook[index].EnergyCost;
+			var attackString = string.Empty;
+			if (monster.MonsterCategory == Monster.MonsterType.Dragon) {
+				attackString = "The " + monster.Name + " breathes a pillar of fire at you!";
+			}
+			else {
+				attackString = "The " + monster.Name + " casts a fireball and launches it at you!";
+			}
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				attackString);
 			var fireSpellDamage = monster.Spellbook[index].Offensive.Amount;
 			foreach (var effect in player.Effects) {
 				switch (effect.EffectGroup) {
@@ -62,10 +73,22 @@ namespace DungeonGame {
 						effect.IsEffectExpired = true;
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
+						var changeDamageAmount = effect.EffectAmountOverTime < fireSpellDamage ? 
+							effect.EffectAmountOverTime : fireSpellDamage;
+						effect.ChangeOpponentDamageRound(player);
+						fireSpellDamage += changeDamageAmount;
 						break;
 					case Effect.EffectType.BlockDamage:
+						var blockAmount = effect.EffectAmount < fireSpellDamage ?
+							effect.EffectAmount : fireSpellDamage;
+						effect.BlockDamageRound(blockAmount);
+						fireSpellDamage -= blockAmount;
 						break;
 					case Effect.EffectType.ReflectDamage:
+						var reflectAmount = effect.EffectAmountOverTime < fireSpellDamage ? 
+							effect.EffectAmountOverTime : fireSpellDamage;
+						monster.HitPoints -= reflectAmount;
+						effect.ReflectDamageRound(reflectAmount);
 						break;
 					case Effect.EffectType.ChangeStat:
 						break;
@@ -73,23 +96,13 @@ namespace DungeonGame {
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			var attackString = string.Empty;
-			if (monster.MonsterCategory == Monster.MonsterType.Dragon) {
-				attackString = "The " + monster.Name + " breathes a pillar of fire at you!";
-			}
-			else {
-				attackString = "The " + monster.Name + " casts a fireball and launches it at you!";
-			}
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatAttackSuccessText(),
-				Settings.FormatDefaultBackground(),
-				attackString);
+			if (fireSpellDamage <= 0) return;
+			player.HitPoints -= fireSpellDamage;
 			var attackSuccessString = "The " + monster.Name + " hits you for " + fireSpellDamage + " fire damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			player.HitPoints -= fireSpellDamage;
 			if (monster.Spellbook[index].Offensive.AmountOverTime <= 0) return;
 			const string onFireString = "You burst into flame!";
 			OutputHandler.Display.StoreUserOutput(
@@ -103,6 +116,11 @@ namespace DungeonGame {
 		}
 		public static void CastFrostOffense(Monster monster, Player player, int index) {
 			monster.EnergyPoints -= monster.Spellbook[index].EnergyCost;
+			var attackString = "The " + monster.Name + " conjures up a frostbolt and launches it at you!";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				attackString);
 			var frostSpellDamage = monster.Spellbook[index].Offensive.Amount;
 			foreach (var effect in player.Effects) {
 				switch (effect.EffectGroup) {
@@ -125,10 +143,22 @@ namespace DungeonGame {
 						effect.IsEffectExpired = true;
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
+						var changeDamageAmount = effect.EffectAmountOverTime < frostSpellDamage ? 
+							effect.EffectAmountOverTime : frostSpellDamage;
+						effect.ChangeOpponentDamageRound(player);
+						frostSpellDamage += changeDamageAmount;
 						break;
 					case Effect.EffectType.BlockDamage:
+						var blockAmount = effect.EffectAmount < frostSpellDamage ?
+							effect.EffectAmount : frostSpellDamage;
+						effect.BlockDamageRound(blockAmount);
+						frostSpellDamage -= blockAmount;
 						break;
 					case Effect.EffectType.ReflectDamage:
+						var reflectAmount = effect.EffectAmountOverTime < frostSpellDamage ? 
+							effect.EffectAmountOverTime : frostSpellDamage;
+						monster.HitPoints -= reflectAmount;
+						effect.ReflectDamageRound(reflectAmount);
 						break;
 					case Effect.EffectType.ChangeStat:
 						break;
@@ -136,11 +166,8 @@ namespace DungeonGame {
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			var attackString = "The " + monster.Name + " casts a frostbolt and launches it at you!";
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatAttackSuccessText(),
-				Settings.FormatDefaultBackground(),
-				attackString);
+			if (frostSpellDamage <= 0) return;
+			player.HitPoints -= frostSpellDamage;
 			var attackSuccessString = "The " + monster.Name + " hits you for " + frostSpellDamage + " frost damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
@@ -155,13 +182,17 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(),
 					frozenString);
 			}
-			player.HitPoints -= frostSpellDamage;
 			player.Effects.Add(new Effect(monster.Spellbook[index].Name,Effect.EffectType.Frozen, 
 				monster.Spellbook[index].Offensive.AmountCurRounds, monster.Spellbook[index].Offensive.AmountMaxRounds, 
 				1.5, 1, true));
 		}
 		public static void CastArcaneOffense(Monster monster, Player player, int index) {
 			monster.EnergyPoints -= monster.Spellbook[index].EnergyCost;
+			var attackString = "The " + monster.Name + " casts a bolt of lightning at you!";
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				attackString);
 			var arcaneSpellDamage = monster.Spellbook[index].Offensive.Amount;
 			foreach (var effect in player.Effects) {
 				switch (effect.EffectGroup) {
@@ -184,10 +215,22 @@ namespace DungeonGame {
 						effect.IsEffectExpired = true;
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
+						var changeDamageAmount = effect.EffectAmountOverTime < arcaneSpellDamage ? 
+							effect.EffectAmountOverTime : arcaneSpellDamage;
+						effect.ChangeOpponentDamageRound(player);
+						arcaneSpellDamage += changeDamageAmount;
 						break;
 					case Effect.EffectType.BlockDamage:
+						var blockAmount = effect.EffectAmount < arcaneSpellDamage ?
+							effect.EffectAmount : arcaneSpellDamage;
+						effect.BlockDamageRound(blockAmount);
+						arcaneSpellDamage -= blockAmount;
 						break;
 					case Effect.EffectType.ReflectDamage:
+						var reflectAmount = effect.EffectAmountOverTime < arcaneSpellDamage ? 
+							effect.EffectAmountOverTime : arcaneSpellDamage;
+						monster.HitPoints -= reflectAmount;
+						effect.ReflectDamageRound(reflectAmount);
 						break;
 					case Effect.EffectType.ChangeStat:
 						break;
@@ -195,17 +238,13 @@ namespace DungeonGame {
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			var attackString = "The " + monster.Name + " casts a bolt of lightning at you!";
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatAttackSuccessText(),
-				Settings.FormatDefaultBackground(),
-				attackString);
+			if (arcaneSpellDamage <= 0) return;
+			player.HitPoints -= arcaneSpellDamage;
 			var attackSuccessString = "The " + monster.Name + " hits you for " + arcaneSpellDamage + " arcane damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			player.HitPoints -= arcaneSpellDamage;
 		}
 		public static void CastHealing(Monster monster, int index) {
 			monster.EnergyPoints -= monster.Spellbook[index].EnergyCost;

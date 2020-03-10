@@ -196,7 +196,7 @@ namespace DungeonGame {
 			var adjArmorRating = totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
-		public int Attack(Monster opponent) {
+		public int PhysicalAttack(Monster opponent) {
 			var attackAmount = 0;
 			try {
 				if (this.PlayerWeapon.Equipped && this.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {

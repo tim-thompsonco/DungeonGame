@@ -233,7 +233,7 @@ namespace DungeonGame {
 			if (player.PlayerClass == Player.PlayerClassType.Archer && PlayerHandler.OutOfArrows(player)) {
 				/* If quiver is empty, player can only do a normal attack, and attack() also checks for
 				 arrow count and informs player that they are out of arrows */
-				player.Attack(opponent);
+				player.PhysicalAttack(opponent);
 				return;
 			}
 			DeductAbilityCost(player, index);
@@ -550,7 +550,7 @@ namespace DungeonGame {
 			if (player.PlayerClass == Player.PlayerClassType.Archer && PlayerHandler.OutOfArrows(player)) {
 				/* If quiver is empty, player can only do a normal attack, and attack() also checks for
 				 arrow count and informs player that they are out of arrows */
-				player.Attack(opponent);
+				player.PhysicalAttack(opponent);
 				return;
 			}
 			DeductAbilityCost(player, index);

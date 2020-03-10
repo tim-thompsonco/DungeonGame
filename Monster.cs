@@ -217,7 +217,48 @@ namespace DungeonGame {
 			attackOptions = attackOptions.OrderByDescending(attack => attack.DamageAmount).ToList();
 			return attackOptions[0];
 		}
-		public int Attack(Player player) {
+		public void Attack(Player player) {
+			var attackOption = this.DetermineAttack();
+			switch (attackOption.AttackCategory) {
+				case AttackOption.AttackType.Physical:
+					this.PhysicalAttack(player);
+					break;
+				case AttackOption.AttackType.Spell:
+					switch (this.Spellbook[attackOption.AttackIndex].SpellCategory) {
+						case MonsterSpell.SpellType.Fireball:
+							MonsterSpell.CastFireOffense(this, player, attackOption.AttackIndex);
+							break;
+						case MonsterSpell.SpellType.Frostbolt:
+							MonsterSpell.CastFrostOffense(this, player, attackOption.AttackIndex);
+							break;
+						case MonsterSpell.SpellType.Lightning:
+							MonsterSpell.CastArcaneOffense(this, player, attackOption.AttackIndex);
+							break;
+						case MonsterSpell.SpellType.Heal:
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+					break;
+				case AttackOption.AttackType.Ability:
+					switch (this.Abilities[attackOption.AttackIndex].AbilityCategory) {
+						case MonsterAbility.Ability.PoisonBite:
+						case MonsterAbility.Ability.TailWhip:
+							MonsterAbility.UseOffenseDamageAbility(this, player, attackOption.AttackIndex);
+							break;
+						case MonsterAbility.Ability.BloodLeech:
+							MonsterAbility.UseBloodLeechAbility(this, player, attackOption.AttackIndex);
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+			GearHandler.DecreaseArmorDurability(player);
+		}
+		public void PhysicalAttack(Player player) {
 			var attackAmount = 0;
 			try {
 				if (this.MonsterWeapon.Equipped && this.MonsterWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
@@ -246,6 +287,14 @@ namespace DungeonGame {
 			var randomChanceToHit = GameHandler.GetRandomNumber(1, 100);
 			var chanceToDodge = player.DodgeChance;
 			if (chanceToDodge > 50) chanceToDodge = 50;
+			if (randomChanceToHit <= chanceToDodge) {
+				var missString = "The " + this.Name + " missed you!"; 
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAttackFailText(),
+					Settings.FormatDefaultBackground(),
+					missString);
+				return;
+			}
 			foreach (var effect in player.Effects) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
@@ -264,21 +313,49 @@ namespace DungeonGame {
 						var frozenAttackAmount = attackAmount * effect.EffectMultiplier;
 						attackAmount = (int)frozenAttackAmount;
 						effect.FrozenRound(player);
-						break;
-					case Effect.EffectType.ReflectDamage:
-						break;
-					case Effect.EffectType.ChangeStat:
+						effect.IsEffectExpired = true;
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
+						var changeDamageAmount = effect.EffectAmountOverTime < attackAmount ? 
+							effect.EffectAmountOverTime : attackAmount;
+						effect.ChangeOpponentDamageRound(player);
+						attackAmount += changeDamageAmount;
 						break;
 					case Effect.EffectType.BlockDamage:
+						var blockAmount = effect.EffectAmount < attackAmount ?
+							effect.EffectAmount : attackAmount;
+						effect.BlockDamageRound(blockAmount);
+						attackAmount -= blockAmount;
+						break;
+					case Effect.EffectType.ReflectDamage:
+						var reflectAmount = effect.EffectAmountOverTime < attackAmount ? 
+							effect.EffectAmountOverTime : attackAmount;
+						this.HitPoints -= reflectAmount;
+						effect.ReflectDamageRound(reflectAmount);
+						break;
+					case Effect.EffectType.ChangeStat:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 				GameHandler.RemovedExpiredEffects(this);
 			}
-			return randomChanceToHit <= chanceToDodge ? 0 : attackAmount;
+			if (attackAmount- player.ArmorRating(this) <= 0 && !player.Effects.Any()) {
+				var armorAbsorbString = "Your armor absorbed all of " + this.Name + "'s attack!"; 
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAttackFailText(),
+					Settings.FormatDefaultBackground(),
+					armorAbsorbString);
+			}
+			else if (attackAmount > 0) {
+				attackAmount -= player.ArmorRating(this);
+				var hitString = "The " + this.Name + " hits you for " + attackAmount + " physical damage.";
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAttackSuccessText(),
+					Settings.FormatDefaultBackground(),
+					hitString);
+				player.HitPoints -= attackAmount;
+			}
 		}
 		public int ArmorRating(Player player) {
 			var totalArmorRating = MonsterHandler.CheckArmorRating(this);
