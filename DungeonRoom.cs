@@ -435,7 +435,7 @@ namespace DungeonGame {
 			}
 			var inputName = inputString.ToString().Trim();
 			var monsterName = this.Monster.Name.Split(' ');
-			if (monsterName.Last() == inputName || this.Monster.Name == inputName) {
+			if (monsterName.Last() == inputName || this.Monster.Name.Contains(inputName)) {
 				for (var i = 0; i < this.Monster.Desc.Length; i += Settings.GetGameWidth()) {
 					if (this.Monster.Desc.Length - i < Settings.GetGameWidth()) {
 						OutputHandler.Display.StoreUserOutput(
