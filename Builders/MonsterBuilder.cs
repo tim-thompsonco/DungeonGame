@@ -23,8 +23,10 @@ namespace DungeonGame {
 							break;
 						case Monster.SkeletonType.Archer:
 							monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Bow, monster.MonsterCategory);
-							monster.MonsterItems.Add( new Quiver(
-								"basic quiver", 50, 50, 15));
+							var quiver = new Quiver("basic quiver", 50, 50, 15);
+							monster.MonsterQuiver = quiver;
+							monster.MonsterQuiver.Equipped = true;
+							monster.MonsterItems.Add(quiver);
 							break;
 						case Monster.SkeletonType.Mage:
 							monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Dagger, monster.MonsterCategory);

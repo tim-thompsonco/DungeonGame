@@ -320,7 +320,7 @@ namespace DungeonGame {
 			}
 			var inputName = inputString.ToString().Trim();
 			var monsterName = this.Monster.Name.Split(' ');
-			if (monsterName.Last() == inputName || this.Monster.Name == inputName) {
+			if (monsterName.Last() == inputName || this.Monster.Name.Contains(inputName)) {
 				if (this.Monster.HitPoints <= 0 && this.Monster.WasLooted == false) {
 					var goldLooted = this.Monster.Gold;
 					player.Gold += this.Monster.Gold;
