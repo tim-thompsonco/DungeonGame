@@ -1,21 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 
 namespace DungeonGame {
 	public class Vendor : IRoomInteraction {
+		public enum VendorType {
+			Armorer,
+			Weaponsmith,
+			Healer,
+			Shopkeeper
+		}
 		public string Name { get; set; }
 		public string Desc { get; set; }
-		private string BuySellType { get; set; }
+		public VendorType VendorCategory { get; set; }
 		public List<IEquipment> VendorItems { get; set; } = new List<IEquipment>();
 
-		public Vendor(string name, string desc, string buySellType) {
+		// Default constructor for JSON serialization
+		public Vendor() { }
+		public Vendor(string name, string desc, VendorType vendorCategory) {
 			this.Name = name;
 			this.Desc = desc;
-			this.BuySellType = buySellType;
-			switch (name) {
-				case "armorer":
+			this.VendorCategory = vendorCategory;
+			switch (this.VendorCategory) {
+				case VendorType.Armorer:
 					this.VendorItems.Add(
 						new Armor(1, Armor.ArmorType.Leather, Armor.ArmorSlot.Head));
 					this.VendorItems.Add(
@@ -23,16 +32,20 @@ namespace DungeonGame {
 					this.VendorItems.Add(
 						new Armor(1, Armor.ArmorType.Leather, Armor.ArmorSlot.Legs));
 					break;
-				case "weaponsmith":
+				case VendorType.Weaponsmith:
 					this.VendorItems.Add(new Weapon(1, Weapon.WeaponType.OneHandedSword));
 					this.VendorItems.Add(new Consumable("arrows", 15, Consumable.ArrowType.Standard));
 					break;
-				case "healer":
+				case VendorType.Healer:
 					this.VendorItems.Add(
-					new Consumable(1, Consumable.PotionType.Health));
+						new Consumable(1, Consumable.PotionType.Health));
 					this.VendorItems.Add(
-					new Consumable(1, Consumable.PotionType.Mana));
+						new Consumable(1, Consumable.PotionType.Mana));
 					break;
+				case VendorType.Shopkeeper:
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
 		}
 
@@ -74,7 +87,7 @@ namespace DungeonGame {
 		public void BuyItemCheck(Player player, string[] userInput) {
 			var inputName = InputHandler.ParseInput(userInput);
 			var index = 0;
-			if (this.BuySellType == "Healer") {
+			if (this.VendorCategory == VendorType.Healer) {
 				index = this.VendorItems.FindIndex(
 					f => f.Name == inputName || f.Name.Contains(inputName));
 			}
@@ -87,13 +100,13 @@ namespace DungeonGame {
 				var buyLoot = this.VendorItems[index] as Loot;
 				var buyWeapon = this.VendorItems[index] as Weapon;
 				var buyConsumable = this.VendorItems[index] as Consumable;
-				switch (this.BuySellType) {
-					case "Armor":
+				switch (this.VendorCategory) {
+					case VendorType.Armorer:
 						if (buyArmor != null) {
 							this.BuyItem(player, buyArmor, index);
 						}
 						break;
-					case "Weapon":
+					case VendorType.Weaponsmith:
 						if (buyWeapon != null) {
 							this.BuyItem(player, buyWeapon, index);
 						}
@@ -101,12 +114,12 @@ namespace DungeonGame {
 							this.BuyItem(player, buyConsumable, index, inputName);
 						}
 						break;
-					case "Healer":
+					case VendorType.Healer:
 						if (buyConsumable != null) {
 							this.BuyItem(player, buyConsumable, index, inputName);
 						}
 						break;
-					case "Shopkeeper":
+					case VendorType.Shopkeeper:
 						if (buyArmor != null) {
 							this.BuyItem(player, buyArmor, index);
 						}
@@ -120,6 +133,8 @@ namespace DungeonGame {
 							this.BuyItem(player, buyLoot, index);
 						}
 						break;
+					default:
+						throw new ArgumentOutOfRangeException();
 				}
 			}
 			else {
@@ -157,7 +172,7 @@ namespace DungeonGame {
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					purchaseString);
-				if (this.BuySellType == "Healer") {
+				if (this.VendorCategory == VendorType.Healer) {
 					this.RepopulateHealerPotion(inputName);
 				}
 				else {
@@ -178,41 +193,49 @@ namespace DungeonGame {
 				f => f.Name == inputName || f.Name.Contains(inputName) && f.Equipped == false);
 			if (conIndex != -1) {
 				var sellConsumable = player.Consumables[conIndex];
-				switch (this.BuySellType) {
-					case "Healer":
+				switch (this.VendorCategory) {
+					case VendorType.Armorer:
+						break;
+					case VendorType.Weaponsmith:
+						break;
+					case VendorType.Healer:
 						if (sellConsumable != null) {
 							this.SellItem(player, sellConsumable, conIndex);
 							break;
 						}
 						Messages.InvalidVendorSell();
 						break;
-					case "Shopkeeper":
+					case VendorType.Shopkeeper:
 						if (sellConsumable != null) {
 							this.SellItem(player, sellConsumable, conIndex);
 						}
 						break;
+					default:
+						throw new ArgumentOutOfRangeException();
 				}
 			}
 			if (invIndex != -1) {
 				var sellArmor = player.Inventory[invIndex] as Armor;
 				var sellWeapon = player.Inventory[invIndex] as Weapon;
 				var sellLoot = player.Inventory[invIndex] as Loot;
-				switch (this.BuySellType) {
-					case "Armor":
+				switch (this.VendorCategory) {
+					case VendorType.Armorer:
 						if (sellArmor != null) {
 							this.SellItem(player, sellArmor, invIndex);
 							break;
 						}
 						Messages.InvalidVendorSell();
 						break;
-					case "Weapon":
+					case VendorType.Weaponsmith:
 						if (sellWeapon != null) {
 							this.SellItem(player, sellWeapon, invIndex);
 							break;
 						}
 						Messages.InvalidVendorSell();
 						break;
-					case "Shopkeeper":
+					case VendorType.Healer:
+						break;
+					case VendorType.Shopkeeper:
 						if (sellArmor != null) {
 							this.SellItem(player, sellArmor, invIndex);
 						}
@@ -223,6 +246,8 @@ namespace DungeonGame {
 							this.SellItem(player, sellLoot, invIndex);
 						}
 						break;
+					default:
+						throw new ArgumentOutOfRangeException();
 				}
 			}
 			if (invIndex != -1 || conIndex != -1) return;
@@ -258,8 +283,8 @@ namespace DungeonGame {
 			var index = player.Inventory.FindIndex(
 				f => f.Name == parsedInput || f.Name.Contains(userInput.Last()));
 			if (index != -1) {
-				switch (this.BuySellType) {
-					case "Armor":
+				switch (this.VendorCategory) {
+					case VendorType.Armorer:
 						if (player.Inventory[index] is Armor repairArmor && repairArmor.Equipped) {
 							var durabilityRepairArmor = 100 - repairArmor.Durability;
 							var repairCostArmor = repairArmor.ItemValue * (durabilityRepairArmor / 100f);
@@ -267,7 +292,7 @@ namespace DungeonGame {
 								player.Gold -= (int)repairCostArmor;
 								repairArmor.Durability = 100;
 								var repairArmorString = "Your " + repairArmor.Name + " has been repaired for " + (int) repairCostArmor +
-								                   " gold."; 
+								                        " gold."; 
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatSuccessOutputText(),
 									Settings.FormatDefaultBackground(),
@@ -285,7 +310,7 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"The vendor doesn't repair that type of equipment.");
 						break;
-					case "Weapon":
+					case VendorType.Weaponsmith:
 						if (player.Inventory[index] is Weapon repairWeapon && repairWeapon.Equipped) {
 							var durabilityRepairWeapon = 100 - repairWeapon.Durability;
 							var repairCostWeapon = repairWeapon.ItemValue * (durabilityRepairWeapon / 100f);
@@ -311,14 +336,17 @@ namespace DungeonGame {
 							Settings.FormatDefaultBackground(),
 							"The vendor doesn't repair that type of equipment.");
 						break;
-					case "Healer":
-					case "Shopkeeper":
-						var noRepairString = this.BuySellType + "s don't repair equipment.";
+					case VendorType.Healer:
+						break;
+					case VendorType.Shopkeeper:
+						var noRepairString = this.VendorCategory+ "s don't repair equipment.";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							noRepairString);
 						break;
+					default:
+						throw new ArgumentOutOfRangeException();
 				}
 				return;
 			}
@@ -328,7 +356,7 @@ namespace DungeonGame {
 				"That item is not in your inventory.");
 		}
 		public void RestorePlayer(Player player) {
-			if (this.BuySellType == "Healer") {
+			if (this.VendorCategory == VendorType.Healer) {
 				player.HitPoints = player.MaxHitPoints;
 				player.RagePoints = player.MaxRagePoints;
 				player.ManaPoints = player.MaxManaPoints;

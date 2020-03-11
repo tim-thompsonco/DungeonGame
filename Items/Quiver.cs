@@ -8,6 +8,8 @@
 		public string Name { get; set; }
 		public string Desc { get; set; }
 
+		// Default constructor for JSON serialization
+		public Quiver() { }
 		public Quiver(string name, int quantity, int maxQuantity, int itemValue) {
 			this.Name = name;
 			this.Quantity = quantity;

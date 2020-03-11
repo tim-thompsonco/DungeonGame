@@ -17,6 +17,8 @@ namespace DungeonGame {
 		private List<PlayerAbility> TrainableAbilities { get; set; }
 		private List<PlayerSpell> TrainableSpells { get; set; }
 
+		// Default constructor for JSON serialization
+		public Trainer() { }
 		public Trainer(string name, string desc, TrainerCategory trainerCategory) {
 			this.Name = name;
 			this.Desc = desc;

@@ -159,7 +159,7 @@ namespace DungeonGame {
 		public void ShowCommands() {
 			var sameLineOutput = new List<string> {
 			Settings.FormatGeneralInfoText(), Settings.FormatDefaultBackground(), "Available Commands: "};
-			if (this.Monster != null && this.Monster.InCombat) {
+			if (this.Monster != null && this.Monster.InCombat && this.CombatCommands != null) {
 				var objCombatCount = this.CombatCommands.Count;
 				foreach (var command in this.CombatCommands) {
 					var sb = new StringBuilder();
@@ -173,7 +173,7 @@ namespace DungeonGame {
 					sameLineOutput.Add(sb.ToString());
 				}
 			}
-			else {
+			else if (this.Commands != null) {
 				var objCount = this.Commands.Count;
 				foreach (var command in this.Commands) {
 					var sb = new StringBuilder();

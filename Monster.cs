@@ -55,6 +55,8 @@ namespace DungeonGame {
 		public List<MonsterSpell> Spellbook { get; set; }
 		public List<MonsterAbility> Abilities { get; set; }
 
+		// Default constructor for JSON serialization
+		public Monster() {}
 		public Monster(int level, MonsterType monsterType) {
 			this.MonsterItems = new List<IEquipment>();
 			this.Effects = new List<Effect>();

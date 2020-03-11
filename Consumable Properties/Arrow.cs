@@ -2,6 +2,8 @@
 	public class Arrow {
 		public int Quantity { get; set; }
 
+		// Default constructor for JSON serialization
+		public Arrow() { }
 		public Arrow(int quantity) {
 			this.Quantity = quantity;
 		}

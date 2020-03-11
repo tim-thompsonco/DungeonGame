@@ -131,7 +131,7 @@ namespace DungeonGame {
 		}
 		public static void LevelUpCheck(Player player) {
 			if (player.Experience < player.ExperienceToLevel || player.Level == 10) return;
-			player.Level += 1;
+			player.Level++;
 			player.Experience -= player.ExperienceToLevel;
 			player.ExperienceToLevel *= 2;
 			var levelUpString = "You have leveled! You are now level " + player.Level + ".";
@@ -175,7 +175,7 @@ namespace DungeonGame {
 					Settings.FormatAnnounceText(),
 					Settings.FormatDefaultBackground(),
 					levelUpStatConst);
-				OutputHandler.Display.BuildUserOutput();
+				OutputHandler.Display.RetrieveUserOutput();
 				OutputHandler.Display.ClearUserOutput();
 				var statNumber = 0;
 				try {

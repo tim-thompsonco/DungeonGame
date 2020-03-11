@@ -235,6 +235,7 @@ namespace DungeonGame {
 					TypeNameHandling = TypeNameHandling.Auto,
 					NullValueHandling = NullValueHandling.Ignore
 				});
+				RoomHandler.SetPlayerLocation(player, player.X, player.Y, player.Z);				
 			}
 			catch (FileNotFoundException) {
 				player = new PlayerBuilder().BuildNewPlayer();

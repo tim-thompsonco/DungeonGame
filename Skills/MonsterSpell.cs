@@ -14,6 +14,8 @@ namespace DungeonGame {
 		public Healing Healing { get; set; }
 		public int EnergyCost { get; set; }
 
+		// Default constructor for JSON serialization
+		public MonsterSpell() { }
 		public MonsterSpell(string name, int energyCost, SpellType spellType, int monsterLevel) {
 			this.Name = name;
 			this.EnergyCost = energyCost;

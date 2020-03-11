@@ -60,6 +60,8 @@ namespace DungeonGame {
 		public List<Consumable> Consumables { get; set; }
 		public List<IEquipment> Inventory { get; set; }
 
+		// Default constructor for JSON serialization
+		public Player() { }
 		public Player(string name, PlayerClassType playerClass) {
 			this.Name = name;
 			this.PlayerClass = playerClass;

@@ -137,7 +137,7 @@
         "$type": "DungeonGame.Vendor, DungeonGame",
         "Name": "armorer",
         "Desc": "A large man covered in sweat beating away at a chestplate with a hammer. He wipes his brow as you approach and wonders whether you're going to make him a little bit richer or not. You can: buy <item>, sell <item>, or <show forsale> to see what he has for sale.",
-        "BuySellType": "Armor",
+        "VendorCategory": 0,
         "VendorItems": {
           "$id": "46",
           "$values": [
@@ -224,7 +224,7 @@
         "$type": "DungeonGame.Vendor, DungeonGame",
         "Name": "weaponsmith",
         "Desc": "A large man covered in sweat sharpening a sword against a grindstone. He wipes his brow as you approach and wonders whether you're going to make him a little bit richer or not. You can: buy <item>, sell <item>, or <show forsale> to see what he has for sale.",
-        "BuySellType": "Weapon",
+        "VendorCategory": 1,
         "VendorItems": {
           "$id": "54",
           "$values": [
@@ -299,7 +299,7 @@
         "$type": "DungeonGame.Vendor, DungeonGame",
         "Name": "healer",
         "Desc": "An old man covered in robes looks you up and raises an eyebrow questioningly. He can rid you of all your pain every so often. In fact, he may even provide you with some help that will be invaluable in your travels. You can buy <item>, sell <item>, or <show forsale> to see what he has for sale. You can also try to ask him to <heal> you.",
-        "BuySellType": "Healer",
+        "VendorCategory": 2,
         "VendorItems": {
           "$id": "62",
           "$values": [
@@ -375,7 +375,7 @@
         "$type": "DungeonGame.Vendor, DungeonGame",
         "Name": "shopkeeper",
         "Desc": "A woman in casual work clothes looks at you and asks if you want to buy anything. She raises an item to show an example of what she has for sale. You can buy <item>, sell <item>, or <show forsale> to see what she has for sale.",
-        "BuySellType": "Shopkeeper",
+        "VendorCategory": 3,
         "VendorItems": {
           "$id": "71",
           "$values": []

@@ -11,7 +11,9 @@ namespace DungeonGame {
 		public Ability AbilityCategory { get; set; }
 		public Offensive Offensive { get; set; }
 		public int EnergyCost { get; set; }
-		
+				
+		// Default constructor for JSON serialization
+		public MonsterAbility() { }
 		public MonsterAbility(string name, int energyCost, Ability abilityCategory, int monsterLevel) {
 			this.Name = name;
 			this.EnergyCost = energyCost;

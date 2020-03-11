@@ -13,6 +13,8 @@ namespace DungeonGame {
 		private int ChangeMaxRound { get; set; }
 		public StatType StatCategory { get; set; }
 
+		// Default constructor for JSON serialization
+		public ChangeStat() { }
 		public ChangeStat(int amount, StatType statType) {
 			this.ChangeAmount = amount;
 			this.StatCategory = statType;

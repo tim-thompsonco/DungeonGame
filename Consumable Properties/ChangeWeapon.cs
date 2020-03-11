@@ -9,6 +9,8 @@ namespace DungeonGame {
 		public int ChangeAmount { get; set; }
 		public KitType KitCategory { get; set; }
 
+		// Default constructor for JSON serialization
+		public ChangeWeapon() { }
 		public ChangeWeapon(int amount, KitType kitType) {
 			this.ChangeAmount = amount;
 			this.KitCategory = kitType;
