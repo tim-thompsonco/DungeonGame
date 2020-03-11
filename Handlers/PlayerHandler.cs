@@ -73,12 +73,20 @@ namespace DungeonGame {
 				var itemInfo = new StringBuilder();
 				itemInfo.Append(item.Name);
 				if (item.Name.Contains("potion")) {
-					switch (item.PotionCategory.ToString()) {
-						case "Health":
+					switch (item.PotionCategory) {
+						case Consumable.PotionType.Health:
 							itemInfo.Append(" (" + item.RestoreHealth.RestoreHealthAmt + ")");
 							break;
-						case "Mana":
+						case Consumable.PotionType.Mana:
 							itemInfo.Append(" (" + item.RestoreMana.RestoreManaAmt + ")");
+							break;
+						case Consumable.PotionType.Intelligence:
+						case Consumable.PotionType.Strength:
+						case Consumable.PotionType.Dexterity:
+						case Consumable.PotionType.Constitution:
+							itemInfo.Append(" (" + item.ChangeStat.ChangeAmount + ")");
+							break;
+						case null:
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
