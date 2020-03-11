@@ -12,10 +12,10 @@ namespace DungeonGame {
 		}
 		public string Name { get; set; }
 		public string Desc { get; set; }
-		private TrainerCategory TrainerGroup { get; set; }
-		private int BaseCost { get; set; }
-		private List<PlayerAbility> TrainableAbilities { get; set; }
-		private List<PlayerSpell> TrainableSpells { get; set; }
+		public TrainerCategory TrainerGroup { get; set; }
+		public int BaseCost { get; set; }
+		public List<PlayerAbility> TrainableAbilities { get; set; }
+		public List<PlayerSpell> TrainableSpells { get; set; }
 
 		// Default constructor for JSON serialization
 		public Trainer() { }
