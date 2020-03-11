@@ -123,10 +123,11 @@ namespace DungeonGame {
 				else {
 					try {
 						var newSpellsToTrain = 0;
-						foreach (var spellName in from spell in this.TrainableSpells
-							where player.Level >= spell.MinLevel
-							select textInfo.ToTitleCase(
-								spell.Name + " (Rank: " + spell.Rank + ")")) {
+						foreach (var spell in this.TrainableSpells) {
+							if (player.Level < spell.MinLevel) continue;
+							var trainingCost = (int)(spell.MinLevel * this.BaseCost * (1.0 - player.Intelligence / 100.0));
+							var spellName = textInfo.ToTitleCase(spell.Name + 
+							                                     " (Rank: " + spell.Rank + ") (Cost: " + trainingCost + ")");
 							newSpellsToTrain++;
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatInfoText(),
@@ -160,9 +161,11 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(),
 					"");
 				var spellsToTrain = 0;
-				foreach (var spellName in from spell in player.Spellbook
-					where player.Level >= spell.MinLevel && player.Level > spell.Rank select textInfo.ToTitleCase(
-						spell.Name + " (Rank: " + (spell.Rank + 1) + ")")) {
+				foreach (var spell in player.Spellbook) {
+					if (player.Level < spell.MinLevel && player.Level < spell.Rank) continue;
+					var trainingCost = (int)((spell.Rank + 1.0) * this.BaseCost * (1.0 - player.Intelligence / 100.0));
+					var spellName = textInfo.ToTitleCase(spell.Name + 
+					                                     " (Rank: " + spell.Rank + ") (Cost: " + trainingCost + ")");
 					spellsToTrain++;
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
@@ -194,10 +197,11 @@ namespace DungeonGame {
 				else {
 					try {
 						var newAbilitiesToTrain = 0;
-						foreach (var abilityName in from ability in this.TrainableAbilities where 
-								player.Level >= ability.MinLevel 
-							select textInfo.ToTitleCase(
-								ability.Name + " (Rank: " + ability.Rank + ")")) {
+						foreach (var ability in this.TrainableAbilities) {
+							if (player.Level < ability.MinLevel) continue;
+							var trainingCost = (int)(ability.MinLevel * this.BaseCost * (1.0 - player.Intelligence / 100.0));
+							var abilityName = textInfo.ToTitleCase(ability.Name + 
+							                                     " (Rank: " + ability.Rank + ") (Cost: " + trainingCost + ")");
 							newAbilitiesToTrain++;
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatInfoText(),
@@ -231,9 +235,11 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(),
 					"");
 				var abilitiesToTrain = 0;
-				foreach (var abilityName in from ability in player.Abilities where 
-					player.Level >= ability.MinLevel && player.Level > ability.Rank select textInfo.ToTitleCase(
-					ability.Name + " (Rank: " + (ability.Rank + 1) + ")")) {
+				foreach (var ability in player.Abilities) {
+					if (player.Level < ability.MinLevel) continue;
+					var trainingCost = (int)(ability.MinLevel * this.BaseCost * (1.0 - player.Intelligence / 100.0));
+					var abilityName = textInfo.ToTitleCase(ability.Name + 
+					                                       " (Rank: " + ability.Rank + ") (Cost: " + trainingCost + ")");
 					abilitiesToTrain++;
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
@@ -247,6 +253,15 @@ namespace DungeonGame {
 						"None.");
 				}
 			}
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatInfoText(),
+				Settings.FormatDefaultBackground(),
+				string.Empty);
+			var playerGold = "Player Gold: " + player.Gold;
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatInfoText(),
+				Settings.FormatDefaultBackground(),
+				playerGold);
 		}
 		public void TrainAbility(Player player, string inputName) {
 			if (player.PlayerClass == Player.PlayerClassType.Mage) {
@@ -382,7 +397,7 @@ namespace DungeonGame {
 					}
 					var textInfo = new CultureInfo("en-US", false).TextInfo;
 					var spellName = textInfo.ToTitleCase(player.Spellbook[spellIndex].Name);
-					var purchaseString = "You upgraded " + spellName + " to rank " + 
+					var purchaseString = "You upgraded " + spellName + " to Rank " + 
 					                     player.Spellbook[spellIndex].Rank + " for " + trainingCost + " gold.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -466,7 +481,7 @@ namespace DungeonGame {
 						}
 						var textInfo = new CultureInfo("en-US", false).TextInfo;
 						var abilityName = textInfo.ToTitleCase(player.Abilities[abilityIndex].Name);
-						var purchaseString = "You upgraded " + abilityName + " to rank " + 
+						var purchaseString = "You upgraded " + abilityName + " to Rank " + 
 						                     player.Abilities[abilityIndex].Rank + " for " + trainingCost + " gold.";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
