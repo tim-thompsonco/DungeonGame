@@ -32,7 +32,7 @@ namespace DungeonGame {
 		public int Y { get; set; }
 		public int Z { get; set; }
 		public List<string> Commands { get; set; }
-		public List<string> CombatCommands { get; set; } = new List<string> {"[F]ight", "[I]nventory", "Flee"};
+		public List<string> CombatCommands { get; set; }
 		public List<IRoomInteraction> RoomObjects { get; set; }
 		public Monster Monster { get; set; }
 
@@ -56,10 +56,8 @@ namespace DungeonGame {
 			this.GoSouthEast = goSouthEast;
 			this.GoUp = goUp;
 			this.GoDown = goDown;
-			this.Commands = new List<string> {
-				"[I]nventory",
-				"Save",
-				"[Q]uit"};
+			this.Commands = new List<string> {"[I]nventory", "Save", "[Q]uit"};
+			this.CombatCommands = new List<string> {"[F]ight", "[I]nventory", "Flee"};
 			var randomNum = GameHandler.GetRandomNumber(1, 100);
 			var randomNumLevel = GameHandler.GetRandomNumber(levelRangeLow, levelRangeHigh);
 			// Reserving numbers 80-100 for chance of room not having a monster

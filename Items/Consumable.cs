@@ -104,14 +104,11 @@ namespace DungeonGame {
 			this.Arrow = new Arrow(50);
 			this.Desc = "A bundle of " + this.Arrow.Quantity + " arrows.";
 		}
-		public Consumable(KitLevel kitLevel, KitType kitType) {
+		public Consumable(KitLevel kitLevel, KitType kitType, ChangeArmor.KitType kitCategory) {
+			this.KitCategory = kitType;
 			this.Name = kitLevel.ToString().ToLowerInvariant() + " " + kitType.ToString().ToLowerInvariant() + " kit";
 			this.Weight = 1;
 			this.KitStrength = kitLevel;
-			this.KitCategory = kitType;
-		}
-		public Consumable(KitLevel kitLevel, KitType kitType, ChangeArmor.KitType kitCategory) 
-			: this(kitLevel, kitType){
 			var amount = this.KitStrength switch {
 				KitLevel.Light => 1,
 				KitLevel.Medium => 2,
@@ -127,8 +124,11 @@ namespace DungeonGame {
 			};
 			this.Desc = "A single-use " + this.Name + " that increases armor rating by " + amount + " for one armor item.";
 		}
-		public Consumable(KitLevel kitLevel, KitType kitType, ChangeWeapon.KitType kitCategory) 
-			: this(kitLevel, kitType){
+		public Consumable(KitLevel kitLevel, KitType kitType, ChangeWeapon.KitType kitCategory) {
+			this.KitCategory = kitType;
+			this.Name = kitLevel.ToString().ToLowerInvariant() + " " + kitType.ToString().ToLowerInvariant() + " kit";
+			this.Weight = 1;
+			this.KitStrength = kitLevel;
 			var amount = this.KitStrength switch {
 				KitLevel.Light => 1,
 				KitLevel.Medium => 2,

@@ -172,19 +172,29 @@ namespace DungeonGame {
 				1 => Consumable.KitType.Armor,
 				2 => Consumable.KitType.Weapon,
 				_ => throw new ArgumentOutOfRangeException()};
-			var kitTypeRandomNum = GameHandler.GetRandomNumber(1, 3);
-			var kitType = kitTypeRandomNum switch {
-				1 => ChangeArmor.KitType.Cloth,
-				2 => ChangeArmor.KitType.Leather,
-				3 => ChangeArmor.KitType.Plate,
-				_ => throw new ArgumentOutOfRangeException()};
 			var kitLevelRandomNum = GameHandler.GetRandomNumber(1, 3);
 			var kitLevel = kitLevelRandomNum switch {
 				1 => Consumable.KitLevel.Light,
 				2 => Consumable.KitLevel.Medium,
 				3 => Consumable.KitLevel.Heavy,
 				_ => throw new ArgumentOutOfRangeException()};
-			monster.MonsterItems.Add(new Consumable(kitLevel, kitCategory, kitType));
+			if (kitCategory == Consumable.KitType.Armor) {
+				var kitTypeRandomNum = GameHandler.GetRandomNumber(1, 3);
+				var kitType = kitTypeRandomNum switch {
+					1 => ChangeArmor.KitType.Cloth,
+					2 => ChangeArmor.KitType.Leather,
+					3 => ChangeArmor.KitType.Plate,
+					_ => throw new ArgumentOutOfRangeException()};
+				monster.MonsterItems.Add(new Consumable(kitLevel, kitCategory, kitType));
+			}
+			else {
+				var kitTypeRandomNum = GameHandler.GetRandomNumber(1, 3);
+				var kitType = kitTypeRandomNum switch {
+					1 => ChangeWeapon.KitType.Bowstring,
+					2 => ChangeWeapon.KitType.Grindstone,
+					_ => throw new ArgumentOutOfRangeException()};
+				monster.MonsterItems.Add(new Consumable(kitLevel, kitCategory, kitType));
+			}
 		}
 		private static void BuildMonsterArmor(Monster monster) {
 			var randomCatNum = GameHandler.GetRandomNumber(1, 7);

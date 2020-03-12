@@ -75,16 +75,16 @@ namespace DungeonGame {
 				if (item.Name.Contains("potion")) {
 					switch (item.PotionCategory) {
 						case Consumable.PotionType.Health:
-							itemInfo.Append(" (" + item.RestoreHealth.RestoreHealthAmt + ")");
+							itemInfo.Append(" (+" + item.RestoreHealth.RestoreHealthAmt + " " + item.PotionCategory + ")");
 							break;
 						case Consumable.PotionType.Mana:
-							itemInfo.Append(" (" + item.RestoreMana.RestoreManaAmt + ")");
+							itemInfo.Append(" (+" + item.RestoreMana.RestoreManaAmt + " " + item.PotionCategory + ")");
 							break;
 						case Consumable.PotionType.Intelligence:
 						case Consumable.PotionType.Strength:
 						case Consumable.PotionType.Dexterity:
 						case Consumable.PotionType.Constitution:
-							itemInfo.Append(" (" + item.ChangeStat.ChangeAmount + ")");
+							itemInfo.Append(" (+" + item.ChangeStat.ChangeAmount + " " + item.PotionCategory + ")");
 							break;
 						case null:
 							break;

@@ -96,46 +96,8 @@ namespace DungeonGame {
 					f => f.Name == inputName || f.Name.Contains(userInput.Last()));
 			}
 			if (index != -1) {
-				var buyArmor = this.VendorItems[index] as Armor;
-				var buyLoot = this.VendorItems[index] as Loot;
-				var buyWeapon = this.VendorItems[index] as Weapon;
-				var buyConsumable = this.VendorItems[index] as Consumable;
-				switch (this.VendorCategory) {
-					case VendorType.Armorer:
-						if (buyArmor != null) {
-							this.BuyItem(player, buyArmor, index);
-						}
-						break;
-					case VendorType.Weaponsmith:
-						if (buyWeapon != null) {
-							this.BuyItem(player, buyWeapon, index);
-						}
-						if (buyConsumable != null) {
-							this.BuyItem(player, buyConsumable, index, inputName);
-						}
-						break;
-					case VendorType.Healer:
-						if (buyConsumable != null) {
-							this.BuyItem(player, buyConsumable, index, inputName);
-						}
-						break;
-					case VendorType.Shopkeeper:
-						if (buyArmor != null) {
-							this.BuyItem(player, buyArmor, index);
-						}
-						if (buyWeapon != null) {
-							this.BuyItem(player, buyWeapon, index);
-						}
-						if (buyConsumable != null) {
-							this.BuyItem(player, buyConsumable, index);
-						}
-						if (buyLoot != null) {
-							this.BuyItem(player, buyLoot, index);
-						}
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
+				var buyItem = this.VendorItems[index];
+				this.BuyItem(player, buyItem, index);
 			}
 			else {
 				OutputHandler.Display.StoreUserOutput(
@@ -161,8 +123,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				"You can't afford that!");
 		}
-		private void BuyItem(
-			Player player, IEquipment buyItem, int index, string inputName) {
+		private void BuyItem(Player player, IEquipment buyItem, int index, string inputName) {
 			if (player.Gold >= buyItem.ItemValue) {
 				player.Gold -= buyItem.ItemValue;
 				player.Consumables.Add(buyItem as Consumable);
@@ -215,36 +176,27 @@ namespace DungeonGame {
 				}
 			}
 			if (invIndex != -1) {
-				var sellArmor = player.Inventory[invIndex] as Armor;
-				var sellWeapon = player.Inventory[invIndex] as Weapon;
-				var sellLoot = player.Inventory[invIndex] as Loot;
+				var sellInventory = player.Inventory[invIndex];
 				switch (this.VendorCategory) {
 					case VendorType.Armorer:
-						if (sellArmor != null) {
-							this.SellItem(player, sellArmor, invIndex);
+						if (sellInventory is Armor) {
+							this.SellItem(player, sellInventory, invIndex);
 							break;
 						}
 						Messages.InvalidVendorSell();
 						break;
 					case VendorType.Weaponsmith:
-						if (sellWeapon != null) {
-							this.SellItem(player, sellWeapon, invIndex);
+						if (sellInventory is Weapon || sellInventory is Quiver) {
+							this.SellItem(player, sellInventory, invIndex);
 							break;
 						}
 						Messages.InvalidVendorSell();
 						break;
 					case VendorType.Healer:
+						Messages.InvalidVendorSell();
 						break;
 					case VendorType.Shopkeeper:
-						if (sellArmor != null) {
-							this.SellItem(player, sellArmor, invIndex);
-						}
-						if (sellWeapon != null) {
-							this.SellItem(player, sellWeapon, invIndex);
-						}
-						if (sellLoot != null) {
-							this.SellItem(player, sellLoot, invIndex);
-						}
+						this.SellItem(player, sellInventory, invIndex);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
