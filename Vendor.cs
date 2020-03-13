@@ -97,7 +97,12 @@ namespace DungeonGame {
 			}
 			if (index != -1) {
 				var buyItem = this.VendorItems[index];
-				this.BuyItem(player, buyItem, index);
+				if (inputName.Contains("potion") || inputName.Contains("arrow")) {
+					this.BuyItem(player, buyItem as Consumable, index, inputName);
+				}
+				else {
+					this.BuyItem(player, buyItem, index);
+				}
 			}
 			else {
 				OutputHandler.Display.StoreUserOutput(
@@ -106,7 +111,7 @@ namespace DungeonGame {
 					"The vendor doesn't have that available for sale!");
 			}
 		}
-		public void BuyItem(Player player, IEquipment buyItem, int index) {
+		private void BuyItem(Player player, IEquipment buyItem, int index) {
 			if (player.Gold >= buyItem.ItemValue) {
 				player.Gold -= buyItem.ItemValue;
 				player.Inventory.Add(buyItem);
@@ -123,10 +128,10 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				"You can't afford that!");
 		}
-		private void BuyItem(Player player, IEquipment buyItem, int index, string inputName) {
+		private void BuyItem(Player player, Consumable buyItem, int index, string inputName) {
 			if (player.Gold >= buyItem.ItemValue) {
 				player.Gold -= buyItem.ItemValue;
-				player.Consumables.Add(buyItem as Consumable);
+				player.Consumables.Add(buyItem);
 				this.VendorItems.RemoveAt(index);
 				var purchaseString = "You purchased " + buyItem.Name + " from the vendor for " + buyItem.ItemValue + " gold.";
 				OutputHandler.Display.StoreUserOutput(

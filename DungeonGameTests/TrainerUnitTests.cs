@@ -36,7 +36,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(35, player.Spellbook[spellIndex].Offensive.Amount);
 			Assert.AreEqual(10, player.Spellbook[spellIndex].Offensive.AmountOverTime);
 			Assert.AreEqual(60, player.Gold);
-			Assert.AreEqual("You upgraded Fireball to rank 2 for 40 gold.", 
+			Assert.AreEqual("You upgraded Fireball to Rank 2 for 40 gold.", 
 				OutputHandler.Display.Output[4][2]);
 		}
 		[Test]
@@ -72,7 +72,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(35, player.Abilities[abilityIndex].Offensive.Amount);
 			Assert.AreEqual(55, player.Abilities[abilityIndex].Offensive.ChanceToSucceed);
 			Assert.AreEqual(60, player.Gold);
-			Assert.AreEqual("You upgraded Distance Shot to rank 2 for 40 gold.", 
+			Assert.AreEqual("You upgraded Distance Shot to Rank 2 for 40 gold.", 
 				OutputHandler.Display.Output[4][2]);
 		}
 		[Test]

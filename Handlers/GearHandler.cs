@@ -90,6 +90,7 @@ namespace DungeonGame {
 				}
 			}
 			player.Consumables[kitIndex].ChangeWeapon.ChangeWeaponPlayer(weapon);
+			weapon.ItemValue += player.Consumables[kitIndex].ItemValue;
 			var upgradeSuccess = "You upgraded " + weapon.Name + " with a weapon kit.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(), 
@@ -151,6 +152,7 @@ namespace DungeonGame {
 				}
 			}
 			player.Consumables[kitIndex].ChangeArmor.ChangeArmorPlayer(armor);
+			armor.ItemValue += player.Consumables[kitIndex].ItemValue;
 			var upgradeSuccess = "You upgraded " + armor.Name + " with an armor kit.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(), 

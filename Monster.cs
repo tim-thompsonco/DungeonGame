@@ -315,6 +315,7 @@ namespace DungeonGame {
 					case Effect.EffectType.ChangePlayerDamage:
 						break;
 					case Effect.EffectType.ChangeArmor:
+						if (attackAmount - player.ArmorRating(this) < 0) return; 
 						break;
 					case Effect.EffectType.OnFire:
 						break;
@@ -333,12 +334,14 @@ namespace DungeonGame {
 							effect.EffectAmountOverTime : attackAmount;
 						effect.ChangeOpponentDamageRound(player);
 						attackAmount += changeDamageAmount;
+						if (attackAmount - player.ArmorRating(this) < 0) return; 
 						break;
 					case Effect.EffectType.BlockDamage:
 						var blockAmount = effect.EffectAmount < attackAmount ?
 							effect.EffectAmount : attackAmount;
 						effect.BlockDamageRound(blockAmount);
 						attackAmount -= blockAmount;
+						if (attackAmount - player.ArmorRating(this) < 0) return; 
 						break;
 					case Effect.EffectType.ReflectDamage:
 						var reflectAmount = effect.EffectAmountOverTime < attackAmount ? 
@@ -353,14 +356,14 @@ namespace DungeonGame {
 				}
 				GameHandler.RemovedExpiredEffects(this);
 			}
-			if (attackAmount- player.ArmorRating(this) <= 0 && !player.Effects.Any()) {
+			if (attackAmount- player.ArmorRating(this) <= 0) {
 				var armorAbsorbString = "Your armor absorbed all of " + this.Name + "'s attack!"; 
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					armorAbsorbString);
 			}
-			else if (attackAmount > 0) {
+			else if (attackAmount - player.ArmorRating(this) > 0) {
 				attackAmount -= player.ArmorRating(this);
 				var hitString = "The " + this.Name + " hits you for " + attackAmount + " physical damage.";
 				OutputHandler.Display.StoreUserOutput(
