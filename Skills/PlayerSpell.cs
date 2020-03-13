@@ -19,7 +19,7 @@ namespace DungeonGame {
 		public ChangeAmount ChangeAmount { get; set; }
 		public Offensive Offensive { get; set; }
 		public Healing Healing { get; set; }
-		private Portal Portal { get; set; }
+		public Portal Portal { get; set; }
 		public int MinLevel { get; set; }
 		public int ManaCost { get; set; }
 		public int Rank { get; set; }

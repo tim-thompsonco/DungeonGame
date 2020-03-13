@@ -289,7 +289,6 @@ namespace DungeonGame {
 							"The vendor doesn't repair that type of equipment.");
 						break;
 					case VendorType.Healer:
-						break;
 					case VendorType.Shopkeeper:
 						var noRepairString = this.VendorCategory+ "s don't repair equipment.";
 						OutputHandler.Display.StoreUserOutput(

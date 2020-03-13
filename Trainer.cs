@@ -162,7 +162,7 @@ namespace DungeonGame {
 					"");
 				var spellsToTrain = 0;
 				foreach (var spell in player.Spellbook) {
-					if (player.Level < spell.MinLevel && player.Level < spell.Rank) continue;
+					if (player.Level == spell.Rank) continue;
 					var trainingCost = (int)((spell.Rank + 1.0) * this.BaseCost * (1.0 - player.Intelligence / 100.0));
 					var spellName = textInfo.ToTitleCase(spell.Name + 
 					                                     " (Rank: " + spell.Rank + ") (Cost: " + trainingCost + ")");
@@ -236,7 +236,7 @@ namespace DungeonGame {
 					"");
 				var abilitiesToTrain = 0;
 				foreach (var ability in player.Abilities) {
-					if (player.Level < ability.MinLevel) continue;
+					if (player.Level == ability.Rank) continue;
 					var trainingCost = (int)(ability.MinLevel * this.BaseCost * (1.0 - player.Intelligence / 100.0));
 					var abilityName = textInfo.ToTitleCase(ability.Name + 
 					                                       " (Rank: " + ability.Rank + ") (Cost: " + trainingCost + ")");

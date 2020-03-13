@@ -188,7 +188,7 @@ namespace DungeonGame {
 				monster.MonsterItems.Add(new Consumable(kitLevel, kitCategory, kitType));
 			}
 			else {
-				var kitTypeRandomNum = GameHandler.GetRandomNumber(1, 3);
+				var kitTypeRandomNum = GameHandler.GetRandomNumber(1, 2);
 				var kitType = kitTypeRandomNum switch {
 					1 => ChangeWeapon.KitType.Bowstring,
 					2 => ChangeWeapon.KitType.Grindstone,

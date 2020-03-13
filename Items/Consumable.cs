@@ -106,7 +106,8 @@ namespace DungeonGame {
 		}
 		public Consumable(KitLevel kitLevel, KitType kitType, ChangeArmor.KitType kitCategory) {
 			this.KitCategory = kitType;
-			this.Name = kitLevel.ToString().ToLowerInvariant() + " " + kitType.ToString().ToLowerInvariant() + " kit";
+			this.Name = kitLevel.ToString().ToLowerInvariant() + " " + kitCategory.ToString().ToLowerInvariant() + " " +
+			            kitType.ToString().ToLowerInvariant() + " kit";
 			this.Weight = 1;
 			this.KitStrength = kitLevel;
 			var amount = this.KitStrength switch {
@@ -122,11 +123,12 @@ namespace DungeonGame {
 				ChangeArmor.KitType.Plate => new ChangeArmor(amount, ChangeArmor.KitType.Plate),
 				_ => throw new ArgumentOutOfRangeException()
 			};
-			this.Desc = "A single-use " + this.Name + " that increases armor rating by " + amount + " for one armor item.";
+			this.Desc = "A single-use " + this.Name +  " that increases armor rating by " + amount + " for one armor item.";
 		}
 		public Consumable(KitLevel kitLevel, KitType kitType, ChangeWeapon.KitType kitCategory) {
 			this.KitCategory = kitType;
-			this.Name = kitLevel.ToString().ToLowerInvariant() + " " + kitType.ToString().ToLowerInvariant() + " kit";
+			this.Name = kitLevel.ToString().ToLowerInvariant() + " " + kitCategory.ToString().ToLowerInvariant() + " " +
+			            kitType.ToString().ToLowerInvariant() + " kit";
 			this.Weight = 1;
 			this.KitStrength = kitLevel;
 			var amount = this.KitStrength switch {
