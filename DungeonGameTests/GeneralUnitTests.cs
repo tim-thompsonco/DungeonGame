@@ -345,59 +345,56 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void EffectUserOutputUnitTest() {
-		OutputHandler.Display.ClearUserOutput();
-		var player = new Player("placeholder", Player.PlayerClassType.Mage);
-		RoomHandler.Rooms = new List<IRoom> {
-			new DungeonRoom(0, 0, 0, false, false, false,
-				false, false, false, false, false, false,
-				false, 1, 1)
-		};
-		player.Spellbook.Add(new PlayerSpell(
-			"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 1));
-		var defaultEffectOutput = OutputHandler.ShowEffects(player);
-		Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
-		Assert.AreEqual("None.", defaultEffectOutput.Output[1][2]);
-		player.CastSpell("reflect");
-		OutputHandler.Display.ClearUserOutput();
-		defaultEffectOutput = OutputHandler.ShowEffects(player);
-		Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
-		Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
-		Assert.AreEqual("(30 seconds) Reflect", defaultEffectOutput.Output[1][2]);
-		for (var i = 0; i < 10; i++) {
-			GameHandler.CheckStatus(player);
-		}
-		player.Effects.Add(new Effect("burning", Effect.EffectType.OnFire, 5, 
-			1, 3, 1, 10, true));
-		Assert.AreEqual("Your spell reflect is slowly fading away.", OutputHandler.Display.Output[0][2]);
-		player.CastSpell("rejuvenate");
-		defaultEffectOutput = OutputHandler.ShowEffects(player);
-		Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
-		Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
-		Assert.AreEqual("(20 seconds) Reflect", defaultEffectOutput.Output[1][2]);
-		Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[2][0]);
-		Assert.AreEqual("(30 seconds) Rejuvenate", defaultEffectOutput.Output[2][2]);
-		Assert.AreEqual(Settings.FormatAttackFailText(), defaultEffectOutput.Output[3][0]);
-		Assert.AreEqual("(30 seconds) Burning", defaultEffectOutput.Output[3][2]);
-		}
-		[Test]
-		public void SaveGameUnitTest() {
-		var player = new Player("placeholder", Player.PlayerClassType.Mage);
-		GearHandler.EquipInitialGear(player);
-		OutputHandler.Display.ClearUserOutput();
-		RoomHandler.Rooms = new List<IRoom> {
-			new DungeonRoom(0, 0, 0, false, false, false,
-				false, false, false, false, false, false,
-				false, 1, 1)};
-		player.CanSave = true;
-		GameHandler.SaveGame(player);
-		Assert.AreEqual( "Your game has been saved.", OutputHandler.Display.Output[0][2]);
+			OutputHandler.Display.ClearUserOutput();
+			var player = new Player("placeholder", Player.PlayerClassType.Mage);
+			RoomHandler.Rooms = new List<IRoom> {
+				new DungeonRoom(0, 0, 0, false, false, false,
+					false, false, false, false, false, false,
+					false, 1, 1)
+			};
+			player.Spellbook.Add(new PlayerSpell(
+				"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 1));
+			var defaultEffectOutput = OutputHandler.ShowEffects(player);
+			Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
+			Assert.AreEqual("None.", defaultEffectOutput.Output[1][2]);
+			player.CastSpell("reflect");
+			OutputHandler.Display.ClearUserOutput();
+			defaultEffectOutput = OutputHandler.ShowEffects(player);
+			Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
+			Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
+			Assert.AreEqual("(30 seconds) Reflect", defaultEffectOutput.Output[1][2]);
+			for (var i = 0; i < 10; i++) {
+				GameHandler.CheckStatus(player);
+			}
+			player.Effects.Add(new Effect("burning", Effect.EffectType.OnFire, 5, 
+				1, 3, 1, 10, true));
+			Assert.AreEqual("Your spell reflect is slowly fading away.", OutputHandler.Display.Output[0][2]);
+			player.CastSpell("rejuvenate");
+			defaultEffectOutput = OutputHandler.ShowEffects(player);
+			Assert.AreEqual("Player Effects:", defaultEffectOutput.Output[0][2]);
+			Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
+			Assert.AreEqual("(20 seconds) Reflect", defaultEffectOutput.Output[1][2]);
+			Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[2][0]);
+			Assert.AreEqual("(30 seconds) Rejuvenate", defaultEffectOutput.Output[2][2]);
+			Assert.AreEqual(Settings.FormatAttackFailText(), defaultEffectOutput.Output[3][0]);
+			Assert.AreEqual("(30 seconds) Burning", defaultEffectOutput.Output[3][2]);
 		}
 		[Test]
-		public void LoadGameUnitTest() {
+		public void SaveLoadGameUnitTest() {
+			var player = new Player("placeholder", Player.PlayerClassType.Mage);
+			GearHandler.EquipInitialGear(player);
+			OutputHandler.Display.ClearUserOutput();
+			RoomHandler.Rooms = new List<IRoom> {
+				new DungeonRoom(0, 0, 0, false, false, false,
+					false, false, false, false, false, false,
+					false, 1, 1)};
+			player.CanSave = true;
+			GameHandler.SaveGame(player);
+			Assert.AreEqual( "Your game has been saved.", OutputHandler.Display.Output[0][2]);
 			OutputHandler.Display.ClearUserOutput();
 			RoomHandler.Rooms = null;
 			GameHandler.LoadGame();
-			var player = GameHandler.LoadPlayer();
+			player = GameHandler.LoadPlayer();
 			Assert.AreEqual("placeholder", player.Name);
 			Assert.NotNull(RoomHandler.Rooms);
 			Assert.AreEqual("Reloading your saved game.", OutputHandler.Display.Output[1][2]);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace DungeonGame {
 	public class MonsterSpell {
@@ -54,7 +55,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackString);
 			var fireSpellDamage = monster.Spellbook[index].Offensive.Amount;
-			foreach (var effect in player.Effects) {
+			foreach (var effect in player.Effects.ToList()) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
 						break;
@@ -130,7 +131,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackString);
 			var frostSpellDamage = monster.Spellbook[index].Offensive.Amount;
-			foreach (var effect in player.Effects) {
+			foreach (var effect in player.Effects.ToList()) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
 						break;
@@ -208,7 +209,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackString);
 			var arcaneSpellDamage = monster.Spellbook[index].Offensive.Amount;
-			foreach (var effect in player.Effects) {
+			foreach (var effect in player.Effects.ToList()) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
 						break;

@@ -328,7 +328,7 @@ namespace DungeonGame {
 					break;
 				case "drink":
 					if (this.Input.Last() == "potion") {
-						this.Player.DrinkPotion(this.Input);
+						this.Player.DrinkPotion(InputHandler.ParseInput(this.Input));
 					}
 					else {
 						OutputHandler.Display.StoreUserOutput(

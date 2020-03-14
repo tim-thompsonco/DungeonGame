@@ -9,8 +9,8 @@ namespace DungeonGame {
 			Constitution
 		}
 		public int ChangeAmount { get; set; }
-		private int ChangeCurRound { get; set; }
-		private int ChangeMaxRound { get; set; }
+		public int ChangeCurRound { get; set; }
+		public int ChangeMaxRound { get; set; }
 		public StatType StatCategory { get; set; }
 
 		// Default constructor for JSON serialization
@@ -41,7 +41,7 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 			PlayerHandler.CalculatePlayerStats(player);
-			var effectName = this.StatCategory + " (" + this.ChangeAmount + ")";
+			var effectName = this.StatCategory + " (+" + this.ChangeAmount + ")";
 			player.Effects.Add(new Effect(effectName, Effect.EffectType.ChangeStat, this.ChangeAmount, 
 				this.ChangeCurRound, this.ChangeMaxRound, 1, 1, false, this.StatCategory));
 		}

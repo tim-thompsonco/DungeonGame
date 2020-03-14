@@ -329,10 +329,9 @@ namespace DungeonGame {
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
 							lootGoldString);
-						for (var i = 0; i < this.Monster.MonsterItems.Count; i++) {
-							var itemType = this.Monster.MonsterItems[i].GetType().FullName;
+						while (this.Monster.MonsterItems.Count > 0) {
 							var playerWeight = PlayerHandler.GetInventoryWeight(player);
-							var itemWeight = this.Monster.MonsterItems[i].Weight;
+							var itemWeight = this.Monster.MonsterItems[0].Weight;
 							if (playerWeight + itemWeight > player.MaxCarryWeight) {
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
@@ -340,21 +339,20 @@ namespace DungeonGame {
 									"You can't carry that much!");
 								return;
 							}
-							if (itemType == "DungeonGame.Consumable") {
-								player.Consumables.Add((Consumable)this.Monster.MonsterItems[i]);
+							if (this.Monster.MonsterItems[0] is Consumable) {
+								player.Consumables.Add((Consumable)this.Monster.MonsterItems[0]);
 							}
 							else {
-								player.Inventory.Add(this.Monster.MonsterItems[i]);
+								player.Inventory.Add(this.Monster.MonsterItems[0]);
 							}
-							var lootItemString = "You looted " + this.Monster.MonsterItems[i].Name + " from the " +
+							var lootItemString = "You looted " + this.Monster.MonsterItems[0].Name + " from the " +
 							                     this.Monster.Name + "!";
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatSuccessOutputText(),
 								Settings.FormatDefaultBackground(),
 								lootItemString);
-							this.Monster.MonsterItems.RemoveAt(i);
+							this.Monster.MonsterItems.RemoveAt(0);
 						}
-						this.Monster.MonsterItems.Clear();
 						this.Monster.WasLooted = true;
 						var monsterIndex = this.RoomObjects.FindIndex(
 							f => f.Name == this.Monster.Name);

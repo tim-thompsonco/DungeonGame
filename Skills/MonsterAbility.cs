@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace DungeonGame {
 	public class MonsterAbility {
@@ -43,7 +44,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackString);
 			var leechAmount = monster.Abilities[index].Offensive.Amount;
-			foreach (var effect in player.Effects) {
+			foreach (var effect in player.Effects.ToList()) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
 						break;
@@ -117,7 +118,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackString);
 			var attackDamage = monster.Abilities[index].Offensive.Amount;
-			foreach (var effect in player.Effects) {
+			foreach (var effect in player.Effects.ToList()) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
 						break;

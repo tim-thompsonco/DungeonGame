@@ -288,9 +288,9 @@ namespace DungeonGame {
 			}
 			return attackAmount;
 		}
-		public void DrinkPotion(string[] userInput) {
+		public void DrinkPotion(string input) {
 			var index = this.Consumables.FindIndex(
-				f => f.Name.Contains(userInput[1]));
+				f => f.Name.Contains(input));
 			if (index == -1) {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),

@@ -308,7 +308,7 @@ namespace DungeonGame {
 					missString);
 				return;
 			}
-			foreach (var effect in player.Effects) {
+			foreach (var effect in player.Effects.ToList()) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
 						break;

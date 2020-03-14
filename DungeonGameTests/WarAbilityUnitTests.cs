@@ -184,18 +184,16 @@ namespace DungeonGameTests {
 				if (blockAmountRemaining > 0) {
 					Assert.AreEqual(player.MaxHitPoints, player.HitPoints);
 					var blockRoundString = "Your defensive move blocked " + (blockAmountBefore - blockAmountRemaining) + " damage!";
-					Assert.AreEqual(blockRoundString, OutputHandler.Display.Output[i][2]);
+					Assert.AreEqual(blockRoundString, OutputHandler.Display.Output[i + (i * 1)][2]);
 				}
 				else {
 					var attackAmount = monster.MonsterWeapon.Attack() - blockAmountBefore;
 					Assert.AreEqual(player.MaxHitPoints - attackAmount, player.HitPoints);
-					var blockRoundString = "Your defensive move blocked " + blockAmountBefore + " damage!";
-					Assert.AreEqual(blockRoundString, OutputHandler.Display.Output[i][2]);
 					const string blockEndString = "You are no longer blocking damage!";
-					Assert.AreEqual(blockEndString, OutputHandler.Display.Output[i + 1][2]);
+					Assert.AreEqual(blockEndString, OutputHandler.Display.Output[i + 3][2]);
 					Assert.AreEqual(false, player.Effects.Any());
 					var hitString = "The " + monster.Name + " hits you for " + attackAmount + " physical damage.";
-					Assert.AreEqual(hitString, OutputHandler.Display.Output[i + 2][2]);
+					Assert.AreEqual(hitString, OutputHandler.Display.Output[i + 4][2]);
 				}
 				i++;
 				GameHandler.RemovedExpiredEffects(player);
@@ -421,7 +419,7 @@ namespace DungeonGameTests {
 				attackDamageM -= changeDamageAmount;
 				Assert.AreEqual(baseAttackDamageM - changeDamageAmount, attackDamageM);
 				player.Effects[0].ChangeOpponentDamageRound(player);
-				var changeDmgString = "Incoming damage is decreased by " + player.Effects[0].EffectAmountOverTime + ".";
+				var changeDmgString = "Incoming damage is decreased by " + -1 * player.Effects[0].EffectAmountOverTime + ".";
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
 				Assert.AreEqual(changeDmgString, OutputHandler.Display.Output[i - 2][2]);
 			}

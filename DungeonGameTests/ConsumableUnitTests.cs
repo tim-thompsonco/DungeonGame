@@ -20,12 +20,12 @@ namespace DungeonGameTests {
 			Assert.AreEqual("health", potionName);
 			var baseHealth = player.HitPoints;
 			var healAmount = player.Consumables[potionIndex].RestoreHealth.RestoreHealthAmt;
-			player.DrinkPotion(input);
+			player.DrinkPotion(InputHandler.ParseInput(input));
 			var drankHealthString = "You drank a potion and replenished " + healAmount + " health.";
 			Assert.AreEqual(drankHealthString, OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual(baseHealth + healAmount, player.HitPoints);
 			Assert.IsEmpty(player.Consumables);
-			player.DrinkPotion(input);
+			player.DrinkPotion(InputHandler.ParseInput(input));
 			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 		[Test]
@@ -43,12 +43,12 @@ namespace DungeonGameTests {
 			Assert.AreEqual("mana", potionName);
 			var baseMana = player.ManaPoints;
 			var manaAmount = player.Consumables[potionIndex].RestoreMana.RestoreManaAmt;
-			player.DrinkPotion(input);
+			player.DrinkPotion(InputHandler.ParseInput(input));
 			var drankManaString = "You drank a potion and replenished " + manaAmount + " mana.";
 			Assert.AreEqual(drankManaString, OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual(baseMana + manaAmount, player.ManaPoints);
 			Assert.IsEmpty(player.Consumables);
-			player.DrinkPotion(input);
+			player.DrinkPotion(InputHandler.ParseInput(input));
 			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 		[Test]
@@ -66,7 +66,7 @@ namespace DungeonGameTests {
 			var statType = player.Consumables[potionIndex].ChangeStat.StatCategory;
 			var baseConst = player.Constitution;
 			var baseMaxHitPoints = player.MaxHitPoints;
-			player.DrinkPotion(input);
+			player.DrinkPotion(InputHandler.ParseInput(input));
 			var drankStatString = "You drank a potion and increased " + statType + " by " + statAmount + ".";
 			Assert.AreEqual(drankStatString, OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual(baseConst + statAmount, player.Constitution);
@@ -81,7 +81,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(baseConst, player.Constitution);
 			Assert.AreEqual(baseMaxHitPoints, player.MaxHitPoints);
-			player.DrinkPotion(input);
+			player.DrinkPotion(InputHandler.ParseInput(input));
 			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 		[Test]
@@ -99,7 +99,7 @@ namespace DungeonGameTests {
 			var statType = player.Consumables[potionIndex].ChangeStat.StatCategory;
 			var baseInt = player.Intelligence;
 			var baseMaxManaPoints = player.MaxManaPoints;
-			player.DrinkPotion(input);
+			player.DrinkPotion(InputHandler.ParseInput(input));
 			var drankStatString = "You drank a potion and increased " + statType + " by " + statAmount + ".";
 			Assert.AreEqual(drankStatString, OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual(baseInt + statAmount, player.Intelligence);
@@ -114,7 +114,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(baseInt, player.Intelligence);
 			Assert.AreEqual(baseMaxManaPoints, player.MaxManaPoints);
-			player.DrinkPotion(input);
+			player.DrinkPotion(InputHandler.ParseInput(input));
 			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 		[Test]
@@ -132,7 +132,7 @@ namespace DungeonGameTests {
 			var statType = player.Consumables[potionIndex].ChangeStat.StatCategory;
 			var baseStr = player.Strength;
 			var baseMaxCarryWeight = player.MaxCarryWeight;
-			player.DrinkPotion(input);
+			player.DrinkPotion(InputHandler.ParseInput(input));
 			var drankStatString = "You drank a potion and increased " + statType + " by " + statAmount + ".";
 			Assert.AreEqual(drankStatString, OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual(baseStr + statAmount, player.Strength);
@@ -147,7 +147,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(baseStr, player.Strength);
 			Assert.AreEqual(baseMaxCarryWeight, player.MaxCarryWeight);
-			player.DrinkPotion(input);
+			player.DrinkPotion(InputHandler.ParseInput(input));
 			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 		[Test]
@@ -165,7 +165,7 @@ namespace DungeonGameTests {
 			var statType = player.Consumables[potionIndex].ChangeStat.StatCategory;
 			var baseDex = player.Dexterity;
 			var baseDodgeChance = player.DodgeChance;
-			player.DrinkPotion(input);
+			player.DrinkPotion(InputHandler.ParseInput(input));
 			var drankStatString = "You drank a potion and increased " + statType + " by " + statAmount + ".";
 			Assert.AreEqual(drankStatString, OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual(baseDex + statAmount, player.Dexterity);
@@ -180,7 +180,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(baseDex, player.Dexterity);
 			Assert.AreEqual(baseDodgeChance, player.DodgeChance);
-			player.DrinkPotion(input);
+			player.DrinkPotion(InputHandler.ParseInput(input));
 			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 		[Test]
