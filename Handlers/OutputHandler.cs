@@ -34,6 +34,45 @@ namespace DungeonGame {
 					var roomName = RoomHandler.Rooms.Find(f => f.X == mapX && f.Y == mapY && f.Z == mapZ);
 					var roomIndex = RoomHandler.Rooms.IndexOf(roomName);
 					if (roomIndex != -1 &&
+					         mapX == player.X &&
+					         mapY == player.Y &&
+					         mapZ == player.Z &&
+					         j == startLeftPos) {
+						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
+							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
+							sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
+							sameLineOutput.Add("| OO"); // What prints to display
+						}
+						else {
+							sameLineOutput.Add(Settings.FormatHiddenOutputText()); // Foreground color
+							sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
+							sameLineOutput.Add("|   "); // What prints to display
+						}
+					}
+					else if (roomIndex != -1 && RoomHandler.Rooms[roomIndex].IsDiscovered && j == startLeftPos) {
+						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
+							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
+							sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
+							sameLineOutput.Add("| "); // What prints to display
+							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
+							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
+							sameLineOutput.Add("OO"); // What prints to display
+						}
+						else {
+							sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
+							sameLineOutput.Add("| "); // What prints to display
+							sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
+							sameLineOutput.Add("  "); // What prints to display
+						}
+					}
+					else if (j == startLeftPos) {
+						sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
+						sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
+						sameLineOutput.Add("|   "); // What prints to display
+					}
+					else if (roomIndex != -1 &&
 					    mapX == player.X &&
 					    mapY == player.Y &&
 					    mapZ == player.Z) {
@@ -41,14 +80,14 @@ namespace DungeonGame {
 							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
 							sameLineOutput.Add("OO"); // What prints to display
-							continue;
 						}
-						sameLineOutput.Add(Settings.FormatHiddenOutputText()); // Foreground color
-						sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
-						sameLineOutput.Add("  "); // What prints to display
-						continue;
+						else {
+							sameLineOutput.Add(Settings.FormatHiddenOutputText()); // Foreground color
+							sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
+							sameLineOutput.Add("  "); // What prints to display
+						}
 					}
-					if (roomIndex != -1 &&
+					else if (roomIndex != -1 &&
 					    mapX == player.X &&
 					    mapY == player.Y &&
 					    mapZ == player.Z &&
@@ -57,78 +96,53 @@ namespace DungeonGame {
 							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
 							sameLineOutput.Add("OO |"); // What prints to display
-							continue;
 						}
-						sameLineOutput.Add(Settings.FormatHiddenOutputText()); // Foreground color
-						sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
-						sameLineOutput.Add("   |"); // What prints to display
-						continue;
-					}
-					if (roomIndex != -1 &&
-					    mapX == player.X &&
-					    mapY == player.Y &&
-					    mapZ == player.Z &&
-					    j == startLeftPos) {
-						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
-							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
+						else {
+							sameLineOutput.Add(Settings.FormatHiddenOutputText()); // Foreground color
 							sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
-							sameLineOutput.Add("| OO"); // What prints to display
-							continue;
+							sameLineOutput.Add("   |"); // What prints to display
 						}
-						sameLineOutput.Add(Settings.FormatHiddenOutputText()); // Foreground color
-						sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
-						sameLineOutput.Add("|   "); // What prints to display
-						continue;
 					}
-					if (roomIndex != -1 && RoomHandler.Rooms[roomIndex].IsDiscovered && j == startLeftPos) {
-						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
-							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
-							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
-							sameLineOutput.Add("| OO"); // What prints to display
-							continue;
-						}
-						sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
-						sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
-						sameLineOutput.Add("|   "); // What prints to display
-						continue;
-					}
-					if (roomIndex != -1 && RoomHandler.Rooms[roomIndex].IsDiscovered) {
+					else if (roomIndex != -1 && RoomHandler.Rooms[roomIndex].IsDiscovered) {
 						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
 							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 							sameLineOutput.Add("OO"); // What prints to display
-							continue;
 						}
-						sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
-						sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
-						sameLineOutput.Add("  "); // What prints to display
-						continue;
+						else {
+							sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
+							sameLineOutput.Add("  "); // What prints to display
+						}
 					}
-					if (roomIndex != -1 && RoomHandler.Rooms[roomIndex].IsDiscovered && j == endRightPos) {
+					else if (roomIndex != -1 && RoomHandler.Rooms[roomIndex].IsDiscovered && j == endRightPos) {
 						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
 							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
-							sameLineOutput.Add("OO |"); // What prints to display
-							continue;
+							sameLineOutput.Add("OO"); // What prints to display
+							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
+							sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
+							sameLineOutput.Add(" |"); // What prints to display
 						}
-						sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
-						sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
-						sameLineOutput.Add("   |"); // What prints to display
-						continue;
+						else {
+							sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
+							sameLineOutput.Add("  "); // What prints to display
+							sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
+							sameLineOutput.Add(" |"); // What prints to display
+						}
 					}
-					if (j == endRightPos) {
+					else if (j == endRightPos) {
 						sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
 						sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 						sameLineOutput.Add("   |"); // What prints to display
 					}
-					if (j == startLeftPos) {
+					else {
 						sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
 						sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
-						sameLineOutput.Add("|   "); // What prints to display
+						sameLineOutput.Add("  "); // What prints to display
 					}
-					sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
-					sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
-					sameLineOutput.Add("  "); // What prints to display
 				}
 				output.StoreUserOutput(sameLineOutput);
 			}
