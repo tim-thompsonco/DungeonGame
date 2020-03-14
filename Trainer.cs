@@ -288,19 +288,20 @@ namespace DungeonGame {
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						purchaseString);
-					return;
 				}
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					"You can't afford that!");
-				return;
+				else {
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"You can't afford that!");
+				}
 			}
-			if (abilityIndex != -1) {
+			else {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
-					"You are not ready to train that ability. You need to level up first!");
+					abilityIndex != -1 ? 
+						"You are not ready to train that ability. You need to level up first!" : "Train what?");
 			}
 		}
 		public void TrainSpell(Player player, string inputName) {
@@ -328,19 +329,21 @@ namespace DungeonGame {
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						purchaseString);
-					return;
 				}
+				else {
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"You can't afford that!");
+				}
+			}
+			else {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
-					"You can't afford that!");
-				return;
+					spellIndex != -1 ? 
+						"You are not ready to train that spell. You need to level up first!" : "Train what?");
 			}
-			if (spellIndex == -1) return;
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(),
-				Settings.FormatDefaultBackground(),
-				"You are not ready to train that spell. You need to level up first!");
 		}
 		public void UpgradeSpell(Player player, string inputName) {
 			if (player.PlayerClass != Player.PlayerClassType.Mage) {
@@ -494,7 +497,7 @@ namespace DungeonGame {
 								break;
 							case PlayerAbility.WarriorAbility.Berserk:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
-								player.Abilities[abilityIndex].ChangeAmount.Amount += 10;
+								player.Abilities[abilityIndex].ChangeAmount.Amount -= 10;
 								break;
 							case PlayerAbility.WarriorAbility.Disarm:
 								player.Abilities[abilityIndex].Offensive.ChanceToSucceed += 10;
@@ -507,7 +510,7 @@ namespace DungeonGame {
 								player.Abilities[abilityIndex].ChangeAmount.Amount += 5;
 								break;
 							case PlayerAbility.WarriorAbility.WarCry:
-								player.Abilities[abilityIndex].ChangeAmount.Amount += 10;
+								player.Abilities[abilityIndex].ChangeAmount.Amount -= 10;
 								break;
 							case PlayerAbility.WarriorAbility.Onslaught:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;

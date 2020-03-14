@@ -67,7 +67,7 @@ namespace DungeonGame {
 			this.PlayerClass = playerClass;
 			this.StatReplenishInterval = 3;
 			this.Level = 1;
-			this.ExperienceToLevel = 500;
+			this.ExperienceToLevel = Settings.GetBaseExperienceToLevel();
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();
 			this.Effects = new List<Effect>();

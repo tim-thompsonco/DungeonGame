@@ -86,8 +86,14 @@ namespace DungeonGame {
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
+				if (leechAmount > 0) continue;
+				var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + monster.Name + "'s attack!"; 
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAttackFailText(),
+					Settings.FormatDefaultBackground(),
+					effectAbsorbString);
+				return;
 			}
-			if (leechAmount <= 0) return;
 			player.HitPoints -= leechAmount;
 			monster.HitPoints += leechAmount;
 			if (monster.HitPoints > monster.MaxHitPoints) monster.HitPoints = monster.MaxHitPoints;
@@ -154,8 +160,14 @@ namespace DungeonGame {
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
+				if (attackDamage > 0) continue;
+				var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + monster.Name + "'s attack!"; 
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAttackFailText(),
+					Settings.FormatDefaultBackground(),
+					effectAbsorbString);
+				return;
 			}
-			if (attackDamage <= 0) return;
 			var attackSuccessString = string.Empty;
 			if (monster.MonsterCategory == Monster.MonsterType.Spider) {
 				attackSuccessString = "The " + monster.Name + " bites you for " + attackDamage + " physical damage.";

@@ -315,7 +315,6 @@ namespace DungeonGame {
 					case Effect.EffectType.ChangePlayerDamage:
 						break;
 					case Effect.EffectType.ChangeArmor:
-						if (attackAmount - player.ArmorRating(this) < 0) return; 
 						break;
 					case Effect.EffectType.OnFire:
 						break;
@@ -334,14 +333,12 @@ namespace DungeonGame {
 							effect.EffectAmountOverTime : attackAmount;
 						effect.ChangeOpponentDamageRound(player);
 						attackAmount += changeDamageAmount;
-						if (attackAmount - player.ArmorRating(this) < 0) return; 
 						break;
 					case Effect.EffectType.BlockDamage:
 						var blockAmount = effect.EffectAmount < attackAmount ?
 							effect.EffectAmount : attackAmount;
 						effect.BlockDamageRound(blockAmount);
 						attackAmount -= blockAmount;
-						if (attackAmount - player.ArmorRating(this) < 0) return; 
 						break;
 					case Effect.EffectType.ReflectDamage:
 						var reflectAmount = effect.EffectAmountOverTime < attackAmount ? 
@@ -354,6 +351,14 @@ namespace DungeonGame {
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
+				if (attackAmount - player.ArmorRating(this) < 0) {
+					var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + this.Name + "'s attack!"; 
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatAttackFailText(),
+						Settings.FormatDefaultBackground(),
+						effectAbsorbString);
+					return;
+				} 
 				GameHandler.RemovedExpiredEffects(this);
 			}
 			if (attackAmount- player.ArmorRating(this) <= 0) {

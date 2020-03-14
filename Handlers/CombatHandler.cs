@@ -192,7 +192,7 @@ namespace DungeonGame {
 				case "f":
 				case "fight":
 					var attackDamage = this.Player.PhysicalAttack(this.Opponent);
-					if (attackDamage - this.Opponent.ArmorRating(this.Player) < 0) {
+					if (attackDamage - this.Opponent.ArmorRating(this.Player) <= 0) {
 						var armorAbsorbString = "The " + this.Opponent.Name + "'s armor absorbed all of your attack!";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),

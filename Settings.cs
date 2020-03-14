@@ -96,5 +96,8 @@
 		public static string FormatTextBorder() {
 			return "========================================================";
 		}
+		public static int GetBaseExperienceToLevel() {
+			return 500;
+		}
 	}
 }

@@ -393,7 +393,7 @@ namespace DungeonGame {
 					break;
 				case "show":
 					try {
-						if (input[1] == "forsale") {
+						if (input[1].Contains("forsale")) {
 							try {
 								isTownRoom?.Vendor.DisplayGearForSale();
 							}
@@ -404,7 +404,7 @@ namespace DungeonGame {
 									"There is no vendor in the room to show inventory available for sale.");
 							}
 						}
-						if (input[1] == "upgrades") {
+						if (input[1].Contains("upgrade")) {
 							try {
 								isTownRoom?.Trainer.DisplayAvailableUpgrades(player);
 							}

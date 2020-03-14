@@ -141,7 +141,7 @@ namespace DungeonGame {
 			if (player.Experience < player.ExperienceToLevel || player.Level == 10) return;
 			player.Level++;
 			player.Experience -= player.ExperienceToLevel;
-			player.ExperienceToLevel *= 2;
+			player.ExperienceToLevel = Settings.GetBaseExperienceToLevel() * player.Level;
 			var levelUpString = "You have leveled! You are now level " + player.Level + ".";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatLevelUpText(), 

@@ -134,7 +134,7 @@ namespace DungeonGame {
 			this.EffectCurRound += 1;
 			var changeDmgString = this.EffectAmountOverTime > 0 ?
 				"Incoming damage is increased by " + this.EffectAmountOverTime + "."
-				: "Incoming damage is decreased by " + this.EffectAmountOverTime + ".";
+				: "Incoming damage is decreased by " + -1 * this.EffectAmountOverTime + ".";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),

@@ -97,8 +97,14 @@ namespace DungeonGame {
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
+				if (fireSpellDamage > 0) continue;
+				var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + monster.Name + "'s attack!"; 
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAttackFailText(),
+					Settings.FormatDefaultBackground(),
+					effectAbsorbString);
+				return;
 			}
-			if (fireSpellDamage <= 0) return;
 			player.HitPoints -= fireSpellDamage;
 			var attackSuccessString = "The " + monster.Name + " hits you for " + fireSpellDamage + " fire damage.";
 			OutputHandler.Display.StoreUserOutput(
@@ -167,8 +173,14 @@ namespace DungeonGame {
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
+				if (frostSpellDamage > 0) continue;
+				var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + monster.Name + "'s attack!"; 
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAttackFailText(),
+					Settings.FormatDefaultBackground(),
+					effectAbsorbString);
+				return;
 			}
-			if (frostSpellDamage <= 0) return;
 			player.HitPoints -= frostSpellDamage;
 			var attackSuccessString = "The " + monster.Name + " hits you for " + frostSpellDamage + " frost damage.";
 			OutputHandler.Display.StoreUserOutput(
@@ -239,30 +251,20 @@ namespace DungeonGame {
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
+				if (arcaneSpellDamage > 0) continue;
+				var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + monster.Name + "'s attack!"; 
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatAttackFailText(),
+					Settings.FormatDefaultBackground(),
+					effectAbsorbString);
+				return;
 			}
-			if (arcaneSpellDamage <= 0) return;
 			player.HitPoints -= arcaneSpellDamage;
 			var attackSuccessString = "The " + monster.Name + " hits you for " + arcaneSpellDamage + " arcane damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-		}
-		public static void CastHealing(Monster monster, int index) {
-			monster.EnergyPoints -= monster.Spellbook[index].EnergyCost;
-			var healAmount = monster.Spellbook[index].Healing.HealAmount;
-			var healString = "The " + monster.Name + " heals itself for " + healAmount + " health.";
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatAttackSuccessText(),
-				Settings.FormatDefaultBackground(),
-				healString);
-			monster.HitPoints += healAmount;
-			if (monster.HitPoints > monster.MaxHitPoints) monster.HitPoints = monster.MaxHitPoints;
-			if (monster.Spellbook[index].Healing.HealOverTime <= 0) return;
-			monster.Effects.Add(new Effect(monster.Spellbook[index].Name,
-				Effect.EffectType.Healing, monster.Spellbook[index].Healing.HealOverTime,
-				monster.Spellbook[index].Healing.HealCurRounds, monster.Spellbook[index].Healing.HealMaxRounds,
-				1, 10, false));
 		}
 	}
 }
