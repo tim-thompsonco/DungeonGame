@@ -13,7 +13,7 @@
 			return 5;
 		}
 		public static int GetMiniMapBorderWidth() {
-			return GetMiniMapWidth() * 4 + 6;
+			return GetMiniMapWidth() * 4 + 4;
 		}
 		public static string FormatDefaultBackground() {
 			return "black";
