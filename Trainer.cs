@@ -237,7 +237,7 @@ namespace DungeonGame {
 				var abilitiesToTrain = 0;
 				foreach (var ability in player.Abilities) {
 					if (player.Level == ability.Rank) continue;
-					var trainingCost = (int)(ability.MinLevel * this.BaseCost * (1.0 - player.Intelligence / 100.0));
+					var trainingCost = (int)((ability.Rank + 1.0) * this.BaseCost * (1.0 - player.Intelligence / 100.0));
 					var abilityName = textInfo.ToTitleCase(ability.Name + 
 					                                       " (Rank: " + ability.Rank + ") (Cost: " + trainingCost + ")");
 					abilitiesToTrain++;
@@ -403,25 +403,22 @@ namespace DungeonGame {
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						purchaseString);
-					return;
 				}
+				else {
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"You can't afford that!");
+				}
+			}
+			else {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
-					"You can't afford that!");
-				return;
+					spellIndex != -1
+						? "You are not ready to upgrade that spell. You need to level up first!"
+						: "You don't have that spell to train!");
 			}
-			if (spellIndex != -1) {
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					"You are not ready to upgrade that spell. You need to level up first!");
-				return;
-			}
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(),
-				Settings.FormatDefaultBackground(),
-				"You don't have that spell to train!");
 		}
 		public void UpgradeAbility(Player player, string inputName) {
 			if (player.PlayerClass == Player.PlayerClassType.Mage) {
@@ -479,17 +476,8 @@ namespace DungeonGame {
 							default:
 								throw new ArgumentOutOfRangeException();
 						}
-						var textInfo = new CultureInfo("en-US", false).TextInfo;
-						var abilityName = textInfo.ToTitleCase(player.Abilities[abilityIndex].Name);
-						var purchaseString = "You upgraded " + abilityName + " to Rank " + 
-						                     player.Abilities[abilityIndex].Rank + " for " + trainingCost + " gold.";
-						OutputHandler.Display.StoreUserOutput(
-							Settings.FormatSuccessOutputText(),
-							Settings.FormatDefaultBackground(),
-							purchaseString);
-						return;
 					}
-					if (player.PlayerClass == Player.PlayerClassType.Warrior) {
+					else {
 						switch (player.Abilities[abilityIndex].WarAbilityCategory) {
 							case PlayerAbility.WarriorAbility.Slash:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
@@ -528,24 +516,30 @@ namespace DungeonGame {
 								throw new ArgumentOutOfRangeException();
 						}
 					}
+					var textInfo = new CultureInfo("en-US", false).TextInfo;
+					var abilityName = textInfo.ToTitleCase(player.Abilities[abilityIndex].Name);
+					var purchaseString = "You upgraded " + abilityName + " to Rank " + 
+					                     player.Abilities[abilityIndex].Rank + " for " + trainingCost + " gold.";
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatSuccessOutputText(),
+						Settings.FormatDefaultBackground(),
+						purchaseString);
 				}
+				else {
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"You can't afford that!");
+				}
+			}
+			else {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
-					"You can't afford that!");
-				return;
+					abilityIndex != -1
+						? "You are not ready to upgrade that ability. You need to level up first!"
+						: "You don't have that ability to train!");
 			}
-			if (abilityIndex != -1) {
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					"You are not ready to upgrade that ability. You need to level up first!");
-				return;
-			}
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(),
-				Settings.FormatDefaultBackground(),
-				"You don't have that ability to train!");
 		}
 	}
 }

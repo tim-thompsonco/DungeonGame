@@ -495,7 +495,7 @@
               "$id": "98",
               "Name": "bandage",
               "WarAbilityCategory": 6,
-              "Bandage": {
+              "Healing": {
                 "$id": "99",
                 "HealAmount": 25,
                 "HealOverTime": 5,
@@ -503,6 +503,50 @@
                 "HealMaxRounds": 3
               },
               "MinLevel": 2,
+              "RageCost": 25,
+              "Rank": 1
+            },
+            {
+              "$id": "100",
+              "Name": "war cry",
+              "WarAbilityCategory": 8,
+              "ChangeAmount": {
+                "$id": "101",
+                "Amount": -25,
+                "ChangeCurRound": 1,
+                "ChangeMaxRound": 3
+              },
+              "MinLevel": 4,
+              "RageCost": 50,
+              "Rank": 1
+            },
+            {
+              "$id": "102",
+              "Name": "power aura",
+              "WarAbilityCategory": 7,
+              "ChangeAmount": {
+                "$id": "103",
+                "Amount": 15,
+                "ChangeCurRound": 1,
+                "ChangeMaxRound": 600
+              },
+              "MinLevel": 6,
+              "RageCost": 150,
+              "Rank": 1
+            },
+            {
+              "$id": "104",
+              "Name": "onslaught",
+              "WarAbilityCategory": 9,
+              "Offensive": {
+                "$id": "105",
+                "OffensiveGroup": 0,
+                "Amount": 25,
+                "AmountOverTime": 0,
+                "AmountCurRounds": 0,
+                "AmountMaxRounds": 0
+              },
+              "MinLevel": 8,
               "RageCost": 25,
               "Rank": 1
             }
@@ -555,20 +599,64 @@
         "TrainerGroup": 2,
         "BaseCost": 25,
         "TrainableSpells": {
-          "$id": "100",
+          "$id": "106",
           "$values": [
             {
-              "$id": "101",
+              "$id": "107",
               "Name": "town portal",
               "SpellCategory": 6,
               "Portal": {
-                "$id": "102",
+                "$id": "108",
                 "CoordX": 0,
                 "CoordY": 7,
                 "CoordZ": 0
               },
               "MinLevel": 2,
               "ManaCost": 100,
+              "Rank": 1
+            },
+            {
+              "$id": "109",
+              "Name": "reflect",
+              "SpellCategory": 7,
+              "ChangeAmount": {
+                "$id": "110",
+                "Amount": 25,
+                "ChangeCurRound": 1,
+                "ChangeMaxRound": 3
+              },
+              "MinLevel": 4,
+              "ManaCost": 100,
+              "Rank": 1
+            },
+            {
+              "$id": "111",
+              "Name": "arcane intellect",
+              "SpellCategory": 8,
+              "ChangeAmount": {
+                "$id": "112",
+                "Amount": 15,
+                "ChangeCurRound": 1,
+                "ChangeMaxRound": 600
+              },
+              "MinLevel": 6,
+              "ManaCost": 150,
+              "Rank": 1
+            },
+            {
+              "$id": "113",
+              "Name": "frost nova",
+              "SpellCategory": 9,
+              "Offensive": {
+                "$id": "114",
+                "OffensiveGroup": 0,
+                "Amount": 15,
+                "AmountOverTime": 0,
+                "AmountCurRounds": 1,
+                "AmountMaxRounds": 2
+              },
+              "MinLevel": 8,
+              "ManaCost": 50,
               "Rank": 1
             }
           ]
@@ -618,14 +706,14 @@
         "TrainerGroup": 0,
         "BaseCost": 25,
         "TrainableAbilities": {
-          "$id": "90",
+          "$id": "115",
           "$values": [
             {
-              "$id": "91",
+              "$id": "116",
               "Name": "bandage",
               "ArcAbilityCategory": 6,
-              "Bandage": {
-                "$id": "92",
+              "Healing": {
+                "$id": "117",
                 "HealAmount": 25,
                 "HealOverTime": 5,
                 "HealCurRounds": 1,
@@ -633,6 +721,52 @@
               },
               "MinLevel": 2,
               "ComboCost": 25,
+              "Rank": 1
+            },
+            {
+              "$id": "5",
+              "Name": "ambush",
+              "ArcAbilityCategory": 9,
+              "Offensive": {
+                "$id": "118",
+                "OffensiveGroup": 0,
+                "Amount": 50,
+                "AmountOverTime": 0,
+                "AmountCurRounds": 0,
+                "AmountMaxRounds": 0
+              },
+              "MinLevel": 4,
+              "ComboCost": 75,
+              "Rank": 1
+            },
+            {
+              "$id": "119",
+              "Name": "swift aura",
+              "ArcAbilityCategory": 7,
+              "ChangeAmount": {
+                "$id": "120",
+                "Amount": 15,
+                "ChangeCurRound": 1,
+                "ChangeMaxRound": 600
+              },
+              "MinLevel": 6,
+              "ComboCost": 150,
+              "Rank": 1
+            },
+            {
+              "$id": "121",
+              "Name": "immolating arrow",
+              "ArcAbilityCategory": 8,
+              "Offensive": {
+                "$id": "122",
+                "OffensiveGroup": 2,
+                "Amount": 25,
+                "AmountOverTime": 5,
+                "AmountCurRounds": 1,
+                "AmountMaxRounds": 3
+              },
+              "MinLevel": 8,
+              "ComboCost": 35,
               "Rank": 1
             }
           ]
