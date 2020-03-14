@@ -526,7 +526,7 @@
               "WarAbilityCategory": 7,
               "ChangeAmount": {
                 "$id": "103",
-                "Amount": 15,
+                "Amount": 5,
                 "ChangeCurRound": 1,
                 "ChangeMaxRound": 600
               },
@@ -635,7 +635,7 @@
               "SpellCategory": 8,
               "ChangeAmount": {
                 "$id": "112",
-                "Amount": 15,
+                "Amount": 5,
                 "ChangeCurRound": 1,
                 "ChangeMaxRound": 600
               },
@@ -745,7 +745,7 @@
               "ArcAbilityCategory": 7,
               "ChangeAmount": {
                 "$id": "120",
-                "Amount": 15,
+                "Amount": 5,
                 "ChangeCurRound": 1,
                 "ChangeMaxRound": 600
               },

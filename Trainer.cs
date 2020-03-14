@@ -361,6 +361,7 @@ namespace DungeonGame {
 				if (player.Gold >= trainingCost) {
 					player.Gold -= trainingCost;
 					player.Spellbook[spellIndex].Rank++;
+					player.Spellbook[spellIndex].ManaCost += 10;
 					switch (player.Spellbook[spellIndex].SpellCategory) {
 						case PlayerSpell.SpellType.Fireball:
 							player.Spellbook[spellIndex].Offensive.Amount += 10;
@@ -384,7 +385,7 @@ namespace DungeonGame {
 							player.Spellbook[spellIndex].ChangeAmount.Amount += 10;
 							break;
 						case PlayerSpell.SpellType.TownPortal:
-							player.Spellbook[spellIndex].ManaCost -= 5;
+							player.Spellbook[spellIndex].ManaCost -= 15;
 							break;
 						case PlayerSpell.SpellType.Reflect:
 							player.Spellbook[spellIndex].ChangeAmount.Amount += 10;
@@ -440,6 +441,7 @@ namespace DungeonGame {
 					player.Gold -= trainingCost;
 					player.Abilities[abilityIndex].Rank++;
 					if (player.PlayerClass == Player.PlayerClassType.Archer) {
+						player.Abilities[abilityIndex].ComboCost += 10;
 						switch (player.Abilities[abilityIndex].ArcAbilityCategory) {
 							case PlayerAbility.ArcherAbility.Distance:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;
@@ -481,6 +483,7 @@ namespace DungeonGame {
 						}
 					}
 					else {
+						player.Abilities[abilityIndex].RageCost += 10;
 						switch (player.Abilities[abilityIndex].WarAbilityCategory) {
 							case PlayerAbility.WarriorAbility.Slash:
 								player.Abilities[abilityIndex].Offensive.Amount += 10;

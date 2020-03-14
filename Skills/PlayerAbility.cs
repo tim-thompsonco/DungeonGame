@@ -153,15 +153,20 @@ namespace DungeonGame {
 		public static void UsePowerAura(Player player, int index) {
 			DeductAbilityCost(player, index);
 			const string powerAuraString = "You generate a Power Aura around yourself.";
-			player.Strength += player.Abilities[index].ChangeAmount.Amount;
-			PlayerHandler.CalculatePlayerStats(player);
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				powerAuraString);
-			player.Effects.Add(new Effect(player.Abilities[index].Name,Effect.EffectType.ChangeStat, 
-				player.Abilities[index].ChangeAmount.Amount, player.Abilities[index].ChangeAmount.ChangeCurRound, 
-				player.Abilities[index].ChangeAmount.ChangeMaxRound,1, 1, false, 
+			var powerAuraIndex = player.Effects.FindIndex(e => e.Name == player.Abilities[index].Name);
+			if (powerAuraIndex != -1) {
+				player.Effects[powerAuraIndex].IsEffectExpired = true;
+				GameHandler.RemovedExpiredEffects(player);
+			}
+			player.Strength += player.Abilities[index].ChangeAmount.Amount;
+			PlayerHandler.CalculatePlayerStats(player);
+			player.Effects.Add(new Effect(player.Abilities[index].Name, Effect.EffectType.ChangeStat,
+				player.Abilities[index].ChangeAmount.Amount, player.Abilities[index].ChangeAmount.ChangeCurRound,
+				player.Abilities[index].ChangeAmount.ChangeMaxRound, 1, 1, false,
 				ChangeStat.StatType.Strength));
 		}
 		public static void SwiftAuraAbilityInfo(Player player, int index) {
@@ -180,14 +185,19 @@ namespace DungeonGame {
 		public static void UseSwiftAura(Player player, int index) {
 			DeductAbilityCost(player, index);
 			const string swiftAuraString = "You generate a Swift Aura around yourself.";
-			player.Dexterity += player.Abilities[index].ChangeAmount.Amount;
-			PlayerHandler.CalculatePlayerStats(player);
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				swiftAuraString);
+			var swiftAuraIndex = player.Effects.FindIndex(e => e.Name == player.Abilities[index].Name);
+			if (swiftAuraIndex != -1) {
+				player.Effects[swiftAuraIndex].IsEffectExpired = true;
+				GameHandler.RemovedExpiredEffects(player);
+			}
+			player.Dexterity += player.Abilities[index].ChangeAmount.Amount;
+			PlayerHandler.CalculatePlayerStats(player);
 			player.Effects.Add(new Effect(player.Abilities[index].Name,
-				Effect.EffectType.ChangeStat, player.Abilities[index].ChangeAmount.Amount, 
+				Effect.EffectType.ChangeStat, player.Abilities[index].ChangeAmount.Amount,
 				player.Abilities[index].ChangeAmount.ChangeCurRound, player.Abilities[index].ChangeAmount.ChangeMaxRound,
 				1, 1, false, ChangeStat.StatType.Dexterity));
 		}

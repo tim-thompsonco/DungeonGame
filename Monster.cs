@@ -308,6 +308,7 @@ namespace DungeonGame {
 					missString);
 				return;
 			}
+			var baseAttackAmount = attackAmount;
 			foreach (var effect in player.Effects.ToList()) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
@@ -345,13 +346,14 @@ namespace DungeonGame {
 							effect.EffectAmountOverTime : attackAmount;
 						this.HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
+						attackAmount -= reflectAmount;
 						break;
 					case Effect.EffectType.ChangeStat:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-				if (attackAmount - player.ArmorRating(this) < 0) {
+				if (baseAttackAmount > attackAmount && attackAmount - player.ArmorRating(this) <= 0) {
 					var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + this.Name + "'s attack!"; 
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatAttackFailText(),

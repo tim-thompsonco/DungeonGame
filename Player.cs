@@ -402,22 +402,21 @@ namespace DungeonGame {
 						PlayerAbility.UseDistanceAbility(this, index, direction);
 						return;
 					case PlayerAbility.ArcherAbility.Gut:
-						return;
 					case PlayerAbility.ArcherAbility.Precise:
-						return;
 					case PlayerAbility.ArcherAbility.Stun:
-						return;
 					case PlayerAbility.ArcherAbility.Double:
-						return;
 					case PlayerAbility.ArcherAbility.Wound:
+					case PlayerAbility.ArcherAbility.ImmolatingArrow:
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatAttackFailText(),
+							Settings.FormatDefaultBackground(),
+							"You cannot use that ability outside combat!");
 						return;
 					case PlayerAbility.ArcherAbility.Bandage:
 						PlayerAbility.UseBandageAbility(this, index);
 						return;
 					case PlayerAbility.ArcherAbility.SwiftAura:
 						PlayerAbility.UseSwiftAura(this, index);
-						return;
-					case PlayerAbility.ArcherAbility.ImmolatingArrow:
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -568,11 +567,13 @@ namespace DungeonGame {
 						PlayerSpell.CastReflectDamage(this, index);
 						return;
 					case PlayerSpell.SpellType.Fireball:
-						break;
 					case PlayerSpell.SpellType.Frostbolt:
-						break;
 					case PlayerSpell.SpellType.Lightning:
-						break;
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatAttackFailText(),
+							Settings.FormatDefaultBackground(),
+							"You cannot use that spell outside combat!");
+						return;
 					case PlayerSpell.SpellType.ArcaneIntellect:
 						PlayerSpell.CastArcaneIntellect(this, index);
 						return;

@@ -113,15 +113,20 @@ namespace DungeonGame {
 		public static void CastArcaneIntellect(Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
 			const string intellectString = "You cast Arcane Intellect on yourself.";
-			player.Intelligence += player.Spellbook[index].ChangeAmount.Amount;
-			PlayerHandler.CalculatePlayerStats(player);
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				intellectString);
+			var arcaneIntIndex = player.Effects.FindIndex(e => e.Name == player.Spellbook[index].Name);
+			if (arcaneIntIndex != -1) {
+				player.Effects[arcaneIntIndex].IsEffectExpired = true;
+				GameHandler.RemovedExpiredEffects(player);
+			}
+			player.Intelligence += player.Spellbook[index].ChangeAmount.Amount;
+			PlayerHandler.CalculatePlayerStats(player);
 			player.Effects.Add(new Effect(player.Spellbook[index].Name,
 				Effect.EffectType.ChangeStat, player.Spellbook[index].ChangeAmount.Amount,
-				player.Spellbook[index].ChangeAmount.ChangeCurRound, player.Spellbook[index].ChangeAmount.ChangeMaxRound, 
+				player.Spellbook[index].ChangeAmount.ChangeCurRound, player.Spellbook[index].ChangeAmount.ChangeMaxRound,
 				1, 1, false, ChangeStat.StatType.Intelligence));
 		}
 		public static void ArcaneIntellectSpellInfo(Player player, int index) {

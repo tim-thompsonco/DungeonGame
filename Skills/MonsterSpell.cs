@@ -92,6 +92,7 @@ namespace DungeonGame {
 							effect.EffectAmountOverTime : fireSpellDamage;
 						monster.HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
+						fireSpellDamage -= reflectAmount;
 						break;
 					case Effect.EffectType.ChangeStat:
 						break;
@@ -168,6 +169,7 @@ namespace DungeonGame {
 							effect.EffectAmountOverTime : frostSpellDamage;
 						monster.HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
+						frostSpellDamage -= reflectAmount;
 						break;
 					case Effect.EffectType.ChangeStat:
 						break;
@@ -246,6 +248,7 @@ namespace DungeonGame {
 							effect.EffectAmountOverTime : arcaneSpellDamage;
 						monster.HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
+						arcaneSpellDamage -= reflectAmount;
 						break;
 					case Effect.EffectType.ChangeStat:
 						break;

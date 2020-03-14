@@ -81,6 +81,7 @@ namespace DungeonGame {
 							effect.EffectAmountOverTime : leechAmount;
 						monster.HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
+						leechAmount -= reflectAmount;
 						break;
 					case Effect.EffectType.ChangeStat:
 						break;
@@ -155,6 +156,7 @@ namespace DungeonGame {
 							effect.EffectAmountOverTime : attackDamage;
 						monster.HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
+						attackDamage -= reflectAmount;
 						break;
 					case Effect.EffectType.ChangeStat:
 						break;
