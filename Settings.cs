@@ -15,6 +15,24 @@
 		public static int GetMiniMapBorderWidth() {
 			return GetMiniMapWidth() * 4 + 4;
 		}
+		public static string GetEmptyMapTileSizeTwo() {
+			return "  ";
+		}
+		public static string GetUpDownMapTile() {
+			return "OO";
+		}
+		public static string GetLeftMapBorderSizeTwo() {
+			return "| ";
+		}
+		public static string GetRightMapBorderSizeTwo() {
+			return " |";
+		}
+		public static string GetLeftMapBorderSizeFour() {
+			return "|   ";
+		}
+		public static string GetRightMapBorderSizeFour() {
+			return "   |";
+		}
 		public static string FormatDefaultBackground() {
 			return "black";
 		}
