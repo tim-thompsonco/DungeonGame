@@ -103,18 +103,6 @@ namespace DungeonGame {
 							sameLineOutput.Add("   |"); // What prints to display
 						}
 					}
-					else if (roomIndex != -1 && RoomHandler.Rooms[roomIndex].IsDiscovered) {
-						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
-							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
-							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
-							sameLineOutput.Add("OO"); // What prints to display
-						}
-						else {
-							sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
-							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
-							sameLineOutput.Add("  "); // What prints to display
-						}
-					}
 					else if (roomIndex != -1 && RoomHandler.Rooms[roomIndex].IsDiscovered && j == endRightPos) {
 						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
 							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
@@ -137,6 +125,18 @@ namespace DungeonGame {
 						sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
 						sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 						sameLineOutput.Add("   |"); // What prints to display
+					}
+					else if (roomIndex != -1 && RoomHandler.Rooms[roomIndex].IsDiscovered) {
+						if (RoomHandler.Rooms[roomIndex].GoUp || RoomHandler.Rooms[roomIndex].GoDown) {
+							sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
+							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
+							sameLineOutput.Add("OO"); // What prints to display
+						}
+						else {
+							sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
+							sameLineOutput.Add("  "); // What prints to display
+						}
 					}
 					else {
 						sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
