@@ -350,8 +350,7 @@ namespace DungeonGameTests {
 			RoomHandler.Rooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
 					false, false, false, false, false, false,
-					false, 1, 1)
-			};
+					false, 1, 1, 1)};
 			player.Spellbook.Add(new PlayerSpell(
 				"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 1));
 			var defaultEffectOutput = OutputHandler.ShowEffects(player);
@@ -387,7 +386,7 @@ namespace DungeonGameTests {
 			RoomHandler.Rooms = new List<IRoom> {
 				new DungeonRoom(0, 0, 0, false, false, false,
 					false, false, false, false, false, false,
-					false, 1, 1)};
+					false, 1, 1, 1)};
 			player.CanSave = true;
 			GameHandler.SaveGame(player);
 			Assert.AreEqual( "Your game has been saved.", OutputHandler.Display.Output[0][2]);

@@ -90,7 +90,7 @@ namespace DungeonGame {
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display
 								}
 								else {
-									sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
+									sameLineOutput.Add(Settings.GetTileColor()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 									sameLineOutput.Add(Settings.GetEmptyMapTileSizeTwo()); // What prints to display
 								}
@@ -114,23 +114,27 @@ namespace DungeonGame {
 								sameLineOutput.Add(Settings.GetRightMapBorderSizeTwo()); // What prints to display
 							}
 							else {
-								sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
+								sameLineOutput.Add(Settings.GetTileColor()); // Foreground color
 								sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
-								sameLineOutput.Add(Settings.GetEmptyMapTileSizeTwo()); // What prints to display
+								sameLineOutput.Add(Settings.GetUndiscoveredMapTileSizeTwo()); // What prints to display
 							}
 						}
 					}
 					else {
-						sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
-						sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 						if (j == startLeftPos) {
+							sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 							sameLineOutput.Add(Settings.GetLeftMapBorderSizeFour()); // What prints to display
 						}
 						else if (j == endRightPos) {
+							sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
+							sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 							sameLineOutput.Add(Settings.GetRightMapBorderSizeFour()); // What prints to display
 						}
 						else {
-							sameLineOutput.Add(Settings.GetEmptyMapTileSizeTwo()); // What prints to display
+							sameLineOutput.Add(Settings.GetTileColor()); // Foreground color
+							sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
+							sameLineOutput.Add(Settings.GetUndiscoveredMapTileSizeTwo()); // What prints to display
 						}
 					}
 				}

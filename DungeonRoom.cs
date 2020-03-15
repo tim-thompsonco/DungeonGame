@@ -31,6 +31,7 @@ namespace DungeonGame {
 		public int X { get; set; }
 		public int Y { get; set; }
 		public int Z { get; set; }
+		public int DungeonLevel { get; set; }
 		public List<string> Commands { get; set; }
 		public List<string> CombatCommands { get; set; }
 		public List<IRoomInteraction> RoomObjects { get; set; }
@@ -41,11 +42,12 @@ namespace DungeonGame {
 		public DungeonRoom() {}
 		public DungeonRoom(int x, int y, int z, bool goNorth, bool goSouth, bool goEast, bool goWest, bool goNorthWest,
 			bool goSouthWest, bool goNorthEast, bool goSouthEast, bool goUp, bool goDown, int levelRangeLow,
-			int levelRangeHigh) {
+			int levelRangeHigh, int dungeonLevel) {
 			this.RoomObjects = new List<IRoomInteraction>();
 			this.X = x;
 			this.Y = y;
 			this.Z = z;
+			this.DungeonLevel = dungeonLevel;
 			this.GoNorth = goNorth;
 			this.GoSouth = goSouth;
 			this.GoEast = goEast;

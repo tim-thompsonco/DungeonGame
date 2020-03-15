@@ -63,7 +63,8 @@ namespace DungeonGame {
 						this.GenerateStartRoomDirections();
 						var firstRoom = new DungeonRoom(startX, startY,startZ - 1, 
 							this.GoNorth, this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, 
-							this.GoNorthEast, this.GoSouthEast, this.GoUp, this.GoDown, levelRangeLowForLevel, levelRangeHighForLevel);
+							this.GoNorthEast, this.GoSouthEast, this.GoUp, this.GoDown, 
+							levelRangeLowForLevel, levelRangeHighForLevel,i + 1);
 						this.SpawnedDungeonRooms.Add(firstRoom);
 						this.ResetRoomDirections();
 						this.CurrentLevel--;
@@ -79,7 +80,7 @@ namespace DungeonGame {
 						this.GenerateStairwayRoomDirections();
 						var firstRoom = new DungeonRoom(this.XCoord, this.YCoord, this.ZCoord, this.GoNorth, 
 							this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, this.GoNorthEast, 
-							this.GoSouthEast, this.GoUp, this.GoDown, levelRangeLowForLevel, levelRangeHighForLevel);
+							this.GoSouthEast, this.GoUp, this.GoDown, levelRangeLowForLevel, levelRangeHighForLevel, i + 1);
 						this.SpawnedDungeonRooms.Add(firstRoom);
 						this.ResetRoomDirections();
 						this.CurrentLevel--;
@@ -89,7 +90,7 @@ namespace DungeonGame {
 					this.GenerateRoomDirections();
 					var newRoom = new DungeonRoom(this.XCoord, this.YCoord, this.ZCoord, this.GoNorth, 
 						this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, this.GoNorthEast, 
-						this.GoSouthEast, this.GoUp, this.GoDown, levelRangeLowForLevel, levelRangeHighForLevel);
+						this.GoSouthEast, this.GoUp, this.GoDown, levelRangeLowForLevel, levelRangeHighForLevel, i + 1);
 					this.SpawnedDungeonRooms.Add(newRoom);
 					this.ResetRoomDirections();
 				}

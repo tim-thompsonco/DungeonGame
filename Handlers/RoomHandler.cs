@@ -4,6 +4,7 @@ namespace DungeonGame {
 	public static class RoomHandler {
 		public static List<IRoom> Rooms { get; set; }
 		public static int RoomIndex { get; set;}
+		public static int RoomLevel { get; set; }
 		
 		public static void ChangeRoom(Player player, int x, int y, int z) {
 			// Player location is changed to the new coordinates

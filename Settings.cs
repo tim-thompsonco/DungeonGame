@@ -1,4 +1,6 @@
-﻿namespace DungeonGame {
+﻿using System;
+
+namespace DungeonGame {
 	public static class Settings {
 		public static int GetGameWidth() {
 			return 100 - GetBufferGap();
@@ -15,8 +17,18 @@
 		public static int GetMiniMapBorderWidth() {
 			return GetMiniMapWidth() * 4 + 4;
 		}
+		public static string GetTileColor() {
+			var room = RoomHandler.Rooms[RoomHandler.RoomIndex];
+			if (room is TownRoom) return "darkgreen";
+			var dungeonRoom = room as DungeonRoom;
+			if (dungeonRoom.DungeonLevel <= 3) return "gray";
+			return dungeonRoom.DungeonLevel <= 7 ? "darkgray" : "darkred";
+		}
 		public static string GetEmptyMapTileSizeTwo() {
 			return "  ";
+		}
+		public static string GetUndiscoveredMapTileSizeTwo() {
+			return "\"\"";
 		}
 		public static string GetUpDownMapTile() {
 			return "OO";
