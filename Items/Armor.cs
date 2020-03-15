@@ -62,7 +62,7 @@ namespace DungeonGame {
 			// Add random attribute to armor rating
 			this.ArmorRating += GameHandler.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
-			this.ArmorRating += (level - 1) * 3;
+			this.ArmorRating += (level - 1) * 2;
 			this.ItemValue = this.ArmorRating;
 			this.Durability = 100;
 			this.BuildArmorName();

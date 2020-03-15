@@ -68,7 +68,8 @@ namespace DungeonGame {
 				name = potionType.ToString().ToLowerInvariant() + " potion";
 				amount = this.PotionCategory == PotionType.Health || this.PotionCategory == PotionType.Mana ? 100 : 10;
 			}
-			this.ItemValue = amount / 2;
+			this.ItemValue = this.PotionCategory == PotionType.Health || 
+			                 this.PotionCategory == PotionType.Mana ? amount / 2 : amount * 10 / 2;
 			this.Name = name;
 			this.Desc = this.PotionCategory == PotionType.Health || this.PotionCategory == PotionType.Mana
 				? "A " + name + " that restores " + amount + " " + this.PotionCategory.ToString().ToLowerInvariant() + "."

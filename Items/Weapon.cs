@@ -30,7 +30,7 @@ namespace DungeonGame {
 			this.Weight = this.WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
 			this.Durability = 100;
 			var randomNum = GameHandler.GetRandomNumber(1, 100);
-			var randomWeaponDmg = GameHandler.GetRandomNumber(18, 24);
+			var randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
 			if (randomNum < 5) {
 				this.RegDamage = randomWeaponDmg + (level - 1) * 3;
 				this.CritMultiplier = 1.3;

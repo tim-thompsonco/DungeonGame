@@ -257,17 +257,21 @@ namespace DungeonGame {
 			switch (player.PlayerClass) {
 				case Player.PlayerClassType.Mage:
 					player.MaxManaPoints = player.Intelligence * 10;
+					if (player.ManaPoints > player.MaxManaPoints) player.ManaPoints = player.MaxManaPoints;
 					break;
 				case Player.PlayerClassType.Warrior:
 					player.MaxRagePoints = player.Strength * 10;
+					if (player.RagePoints > player.MaxRagePoints) player.RagePoints = player.MaxRagePoints;
 					break;
 				case Player.PlayerClassType.Archer:
 					player.MaxComboPoints = player.Dexterity * 10;
+					if (player.ComboPoints > player.MaxComboPoints) player.ComboPoints = player.MaxComboPoints;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 			player.MaxHitPoints = player.Constitution * 10;
+			if (player.HitPoints > player.MaxHitPoints) player.HitPoints = player.MaxHitPoints;
 			player.MaxCarryWeight = player.Strength * 2;
 			player.DodgeChance = player.Dexterity * 1.5;			
 		}

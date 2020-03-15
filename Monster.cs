@@ -75,7 +75,7 @@ namespace DungeonGame {
 				var randomNumGold = GameHandler.GetRandomNumber(5, 10);
 				this.Gold = 10 + (this.Level - 1) * randomNumGold;
 			}
-			var randomNumExp = GameHandler.GetRandomNumber(20, 40);
+			var randomNumExp = GameHandler.GetRandomNumber(15, 25);
 			var expProvided = this.MaxHitPoints + randomNumExp;
 			this.ExperienceProvided = GameHandler.RoundNumber(expProvided);
 			this.MaxEnergyPoints = 100 + this.Level * 10;

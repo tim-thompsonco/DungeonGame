@@ -200,20 +200,16 @@ namespace DungeonGame {
 		}
 		private static void ReplenishStatsOverTime(Player player) {
 			if (player.InCombat) return;
-			if (player.HitPoints == player.MaxHitPoints) return;
-			player.HitPoints += 1;
+			if (player.HitPoints < player.MaxHitPoints) player.HitPoints++;
 			switch (player.PlayerClass) {
 				case Player.PlayerClassType.Mage:
-					if (player.ManaPoints == player.MaxManaPoints) return;
-					player.ManaPoints += 1;
+					if (player.ManaPoints < player.MaxManaPoints) player.ManaPoints++;
 					break;
 				case Player.PlayerClassType.Warrior:
-					if (player.RagePoints == player.MaxRagePoints) return;
-					player.RagePoints += 1;
+					if (player.RagePoints < player.MaxRagePoints) player.RagePoints++;
 					break;
 				case Player.PlayerClassType.Archer:
-					if (player.ComboPoints == player.MaxComboPoints) return;
-					player.ComboPoints += 1;
+					if (player.ComboPoints < player.MaxComboPoints) player.ComboPoints++;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -221,8 +217,8 @@ namespace DungeonGame {
 		}
 		private static void ReplenishStatsOverTime(Monster monster) {
 			if (monster.InCombat) return;
-			if (monster.HitPoints == monster.MaxHitPoints) return;
-			monster.HitPoints += 1;
+			if (monster.HitPoints < monster.MaxHitPoints) monster.HitPoints++;
+			if (monster.EnergyPoints < monster.MaxEnergyPoints) monster.EnergyPoints++;
 		}
 		public static bool IsWholeNumber(string value) {
 			return value.All(char.IsNumber);

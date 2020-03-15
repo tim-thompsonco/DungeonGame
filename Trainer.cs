@@ -125,7 +125,9 @@ namespace DungeonGame {
 						var newSpellsToTrain = 0;
 						foreach (var spell in this.TrainableSpells) {
 							if (player.Level < spell.MinLevel) continue;
-							var trainingCost = (int)(spell.MinLevel * this.BaseCost * (1.0 - player.Intelligence / 100.0));
+							var trainingReduction = 1.0 - player.Intelligence / 100.0;
+							if (trainingReduction < 0.5) trainingReduction = 0.5;
+							var trainingCost = (int)(spell.MinLevel * this.BaseCost * trainingReduction);
 							var spellName = textInfo.ToTitleCase(spell.Name + 
 							                                     " (Rank: " + spell.Rank + ") (Cost: " + trainingCost + ")");
 							newSpellsToTrain++;
@@ -163,7 +165,9 @@ namespace DungeonGame {
 				var spellsToTrain = 0;
 				foreach (var spell in player.Spellbook) {
 					if (player.Level == spell.Rank) continue;
-					var trainingCost = (int)((spell.Rank + 1.0) * this.BaseCost * (1.0 - player.Intelligence / 100.0));
+					var trainingReduction = 1.0 - player.Intelligence / 100.0;
+					if (trainingReduction < 0.5) trainingReduction = 0.5;
+					var trainingCost = (int)((spell.Rank + 1.0) * this.BaseCost * trainingReduction);
 					var spellName = textInfo.ToTitleCase(spell.Name + 
 					                                     " (Rank: " + spell.Rank + ") (Cost: " + trainingCost + ")");
 					spellsToTrain++;
@@ -199,7 +203,9 @@ namespace DungeonGame {
 						var newAbilitiesToTrain = 0;
 						foreach (var ability in this.TrainableAbilities) {
 							if (player.Level < ability.MinLevel) continue;
-							var trainingCost = (int)(ability.MinLevel * this.BaseCost * (1.0 - player.Intelligence / 100.0));
+							var trainingReduction = 1.0 - player.Intelligence / 100.0;
+							if (trainingReduction < 0.5) trainingReduction = 0.5;
+							var trainingCost = (int)(ability.MinLevel * this.BaseCost * trainingReduction);
 							var abilityName = textInfo.ToTitleCase(ability.Name + 
 							                                     " (Rank: " + ability.Rank + ") (Cost: " + trainingCost + ")");
 							newAbilitiesToTrain++;
@@ -237,7 +243,9 @@ namespace DungeonGame {
 				var abilitiesToTrain = 0;
 				foreach (var ability in player.Abilities) {
 					if (player.Level == ability.Rank) continue;
-					var trainingCost = (int)((ability.Rank + 1.0) * this.BaseCost * (1.0 - player.Intelligence / 100.0));
+					var trainingReduction = 1.0 - player.Intelligence / 100.0;
+					if (trainingReduction < 0.5) trainingReduction = 0.5;
+					var trainingCost = (int)((ability.Rank + 1.0) * this.BaseCost * trainingReduction);
 					var abilityName = textInfo.ToTitleCase(ability.Name + 
 					                                       " (Rank: " + ability.Rank + ") (Cost: " + trainingCost + ")");
 					abilitiesToTrain++;
@@ -274,8 +282,9 @@ namespace DungeonGame {
 			var abilityIndex = this.TrainableAbilities.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (abilityIndex != -1 && player.Level >= this.TrainableAbilities[abilityIndex].MinLevel) {
-				var trainingCost = (int)(this.TrainableAbilities[abilityIndex].MinLevel * this.BaseCost * 
-				                         (1.0 - player.Intelligence / 100.0));
+				var trainingReduction = 1.0 - player.Intelligence / 100.0;
+				if (trainingReduction < 0.5) trainingReduction = 0.5;
+				var trainingCost = (int)(this.TrainableAbilities[abilityIndex].MinLevel * this.BaseCost * trainingReduction);
 				if (player.Gold >= trainingCost) {
 					player.Gold -= trainingCost;
 					player.Abilities.Add(this.TrainableAbilities[abilityIndex]);
@@ -315,8 +324,9 @@ namespace DungeonGame {
 			var spellIndex = this.TrainableSpells.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (spellIndex != -1 && player.Level >= this.TrainableSpells[spellIndex].MinLevel) {
-				var trainingCost = (int)(this.TrainableSpells[spellIndex].MinLevel * this.BaseCost * 
-				                      (1.0 - player.Intelligence / 100.0));
+				var trainingReduction = 1.0 - player.Intelligence / 100.0;
+				if (trainingReduction < 0.5) trainingReduction = 0.5;
+				var trainingCost = (int)(this.TrainableSpells[spellIndex].MinLevel * this.BaseCost * trainingReduction);
 				if (player.Gold >= trainingCost) {
 					player.Gold -= trainingCost;
 					player.Spellbook.Add(this.TrainableSpells[spellIndex]);
@@ -356,8 +366,9 @@ namespace DungeonGame {
 			var spellIndex = player.Spellbook.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (spellIndex != -1 && player.Level >= player.Spellbook[spellIndex].Rank + 1) {
-				var trainingCost = (int)((player.Spellbook[spellIndex].Rank + 1.0) * this.BaseCost * 
-				                      (1.0 - player.Intelligence / 100.0));
+				var trainingReduction = 1.0 - player.Intelligence / 100.0;
+				if (trainingReduction < 0.5) trainingReduction = 0.5;
+				var trainingCost = (int)((player.Spellbook[spellIndex].Rank + 1.0) * this.BaseCost * trainingReduction);
 				if (player.Gold >= trainingCost) {
 					player.Gold -= trainingCost;
 					player.Spellbook[spellIndex].Rank++;
@@ -435,8 +446,9 @@ namespace DungeonGame {
 			var abilityIndex = player.Abilities.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (abilityIndex != -1 && player.Level >= player.Abilities[abilityIndex].Rank + 1) {
-				var trainingCost = (int)((player.Abilities[abilityIndex].Rank + 1.0) * this.BaseCost * 
-				                      (1.0 - player.Intelligence / 100.0));
+				var trainingReduction = 1.0 - player.Intelligence / 100.0;
+				if (trainingReduction < 0.5) trainingReduction = 0.5;
+				var trainingCost = (int)((player.Abilities[abilityIndex].Rank + 1.0) * this.BaseCost * trainingReduction);
 				if (player.Gold >= trainingCost) {
 					player.Gold -= trainingCost;
 					player.Abilities[abilityIndex].Rank++;

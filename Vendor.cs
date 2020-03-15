@@ -139,7 +139,7 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(),
 					purchaseString);
 				if (this.VendorCategory == VendorType.Healer) {
-					this.RepopulateHealerPotion(inputName);
+					this.RepopulateHealerPotion(player, inputName);
 				}
 				else {
 					this.RepopulateArrows(inputName);
@@ -331,15 +331,15 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				noRestoreString);
 		}
-		private void RepopulateHealerPotion(string inputName) {
+		private void RepopulateHealerPotion(Player player, string inputName) {
 			var potionIndex = this.VendorItems.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (potionIndex != -1) return;
 			if (inputName.Contains("mana")) {
-				this.VendorItems.Add(new Consumable(1, Consumable.PotionType.Mana));
+				this.VendorItems.Add(new Consumable(player.Level, Consumable.PotionType.Mana));
 			}
 			else if (inputName.Contains("health")) {
-				this.VendorItems.Add(new Consumable(1, Consumable.PotionType.Health));
+				this.VendorItems.Add(new Consumable(player.Level, Consumable.PotionType.Health));
 			}
 		}
 		private void RepopulateArrows(string inputName) {
