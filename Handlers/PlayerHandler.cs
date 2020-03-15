@@ -139,6 +139,10 @@ namespace DungeonGame {
 		}
 		public static void LevelUpCheck(Player player) {
 			if (player.Experience < player.ExperienceToLevel || player.Level == 10) return;
+			foreach (var effect in player.Effects.ToList().Where(effect => effect.IsHarmful = true)) {
+				effect.IsEffectExpired = true;
+				GameHandler.RemovedExpiredEffects(player);
+			}
 			player.Level++;
 			player.Experience -= player.ExperienceToLevel;
 			player.ExperienceToLevel = Settings.GetBaseExperienceToLevel() * player.Level;

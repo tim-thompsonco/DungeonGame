@@ -366,16 +366,16 @@ namespace DungeonGame {
 			    this.PlayerClass == PlayerClassType.Warrior) {
 				switch (this.Abilities[index].WarAbilityCategory) {
 					case PlayerAbility.WarriorAbility.Slash:
-						return;
 					case PlayerAbility.WarriorAbility.Rend:
-						return;
 					case PlayerAbility.WarriorAbility.Charge:
-						return;
 					case PlayerAbility.WarriorAbility.Block:
-						return;
 					case PlayerAbility.WarriorAbility.Berserk:
-						return;
 					case PlayerAbility.WarriorAbility.Disarm:
+					case PlayerAbility.WarriorAbility.Onslaught:
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatAttackFailText(),
+							Settings.FormatDefaultBackground(),
+							"You cannot use that ability outside combat!");
 						return;
 					case PlayerAbility.WarriorAbility.Bandage:
 						PlayerAbility.UseBandageAbility(this, index);
@@ -385,8 +385,6 @@ namespace DungeonGame {
 						return;
 					case PlayerAbility.WarriorAbility.WarCry:
 						PlayerAbility.UseWarCry(this, index);
-						return;
-					case PlayerAbility.WarriorAbility.Onslaught:
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
