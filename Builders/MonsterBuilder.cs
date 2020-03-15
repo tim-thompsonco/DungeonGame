@@ -103,7 +103,6 @@ namespace DungeonGame {
 					if (monster.MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
 						monster.MonsterQuiver = new Quiver("basic quiver", 50, 50, 15);
 					}
-					monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Bow, monster.MonsterCategory);
 					BuildMonsterArmor(monster);
 					if (randomGearNum <= 3) {
 						BuildMonsterKit(monster);
