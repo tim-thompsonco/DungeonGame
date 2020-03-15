@@ -215,8 +215,12 @@ namespace DungeonGame {
 		}
 		private void SellItem(Player player, IEquipment sellItem, int index) {
 			if (!sellItem.Equipped) {
-				player.Gold += sellItem.ItemValue;
-				if (sellItem.GetType().Name == "Consumable") {
+				player.Gold += sellItem switch {
+					Armor armor => (int)(sellItem.ItemValue * (armor.Durability / 100.0)),
+					Weapon weapon => (int)(sellItem.ItemValue * (weapon.Durability / 100.0)),
+					_ => sellItem.ItemValue
+				};
+				if (sellItem is Consumable) {
 					player.Consumables.RemoveAt(index);
 				}
 				else {
@@ -236,7 +240,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				"You have to unequip that first!");
 		}
-		public void RepairItem(Player player, string[] userInput) {
+		public void RepairItem(Player player, string[] userInput, bool repairAll) {
 			var parsedInput = InputHandler.ParseInput(userInput);
 			var index = player.Inventory.FindIndex(
 				f => f.Name == parsedInput || f.Name.Contains(userInput.Last()));
@@ -255,21 +259,25 @@ namespace DungeonGame {
 									Settings.FormatSuccessOutputText(),
 									Settings.FormatDefaultBackground(),
 									repairArmorString);
-								break;
 							}
-							var cantAffordArmorString = "You can't afford to repair " + repairArmor.Name;
+							else {
+								var cantAffordArmorString = "You can't afford to repair " + repairArmor.Name + "!";
+								OutputHandler.Display.StoreUserOutput(
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
+									cantAffordArmorString);
+							}
+						}
+						else {
+							if (repairAll) break;
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
-								cantAffordArmorString);
+								"The vendor doesn't repair that type of equipment.");
 						}
-						OutputHandler.Display.StoreUserOutput(
-							Settings.FormatFailureOutputText(),
-							Settings.FormatDefaultBackground(),
-							"The vendor doesn't repair that type of equipment.");
 						break;
 					case VendorType.Weaponsmith:
-						if (player.Inventory[index] is Weapon repairWeapon && repairWeapon.Equipped) {
+						if (player.Inventory[index] is Weapon repairWeapon) {
 							var durabilityRepairWeapon = 100 - repairWeapon.Durability;
 							var repairCostWeapon = repairWeapon.ItemValue * (durabilityRepairWeapon / 100f);
 							if (player.Gold >= repairCostWeapon) {
@@ -281,18 +289,22 @@ namespace DungeonGame {
 									Settings.FormatSuccessOutputText(),
 									Settings.FormatDefaultBackground(),
 									repairWeaponString);
-								break;
 							}
-							var cantAffordWeaponString = "You can't afford to repair " + repairWeapon.Name;
+							else {
+								var cantAffordWeaponString = "You can't afford to repair " + repairWeapon.Name + "!";
+								OutputHandler.Display.StoreUserOutput(
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
+									cantAffordWeaponString);
+							}
+						}
+						else {
+							if (repairAll) break;
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
-								cantAffordWeaponString);
+								"The vendor doesn't repair that type of equipment.");
 						}
-						OutputHandler.Display.StoreUserOutput(
-							Settings.FormatFailureOutputText(),
-							Settings.FormatDefaultBackground(),
-							"The vendor doesn't repair that type of equipment.");
 						break;
 					case VendorType.Healer:
 					case VendorType.Shopkeeper:

@@ -187,7 +187,7 @@ namespace DungeonGame {
 			}
 			this.MaxHitPoints = this.Constitution * 10;
 			this.HitPoints = this.MaxHitPoints;
-			this.MaxCarryWeight = this.Strength * 2;
+			this.MaxCarryWeight = (int)(this.Strength * 2.5);
 			this.DodgeChance = this.Dexterity * 1.5;
 		}
 		
@@ -361,7 +361,6 @@ namespace DungeonGame {
 			}
 			var index = this.Abilities.FindIndex(
 				f => f.Name == inputName.ToString() || f.Name.Contains(input[1]));
-			var direction = input.Last();
 			if (index != -1 && 
 			    this.RagePoints >= this.Abilities[index].RageCost && 
 			    this.PlayerClass == PlayerClassType.Warrior) {
@@ -395,10 +394,11 @@ namespace DungeonGame {
 			}
 			if (index != -1 &&
 			    this.ComboPoints >= this.Abilities[index].ComboCost && 
-			    this.PlayerClass == PlayerClassType.Archer && 
-			    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
+			    this.PlayerClass == PlayerClassType.Archer) {
 				switch (this.Abilities[index].ArcAbilityCategory) {
 					case PlayerAbility.ArcherAbility.Distance:
+						if (this.PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow) throw new InvalidOperationException();
+						var direction = input.Last();
 						PlayerAbility.UseDistanceAbility(this, index, direction);
 						return;
 					case PlayerAbility.ArcherAbility.Gut:
@@ -486,21 +486,24 @@ namespace DungeonGame {
 			}
 			if (index != -1 &&
 			    this.ComboPoints >= this.Abilities[index].ComboCost && 
-			    this.PlayerClass == PlayerClassType.Archer && 
-			    this.PlayerWeapon?.WeaponGroup == Weapon.WeaponType.Bow) {
+			    this.PlayerClass == PlayerClassType.Archer) {
 				switch (this.Abilities[index].ArcAbilityCategory) {
 					case PlayerAbility.ArcherAbility.Distance:
 						return;
 					case PlayerAbility.ArcherAbility.Gut:
+						if (this.PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow) throw new InvalidOperationException();
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case PlayerAbility.ArcherAbility.Precise:
+						if (this.PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow) throw new InvalidOperationException();
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case PlayerAbility.ArcherAbility.Stun:
+						if (this.PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow) throw new InvalidOperationException();
 						PlayerAbility.UseStunAbility(opponent, this, index);
 						return;
 					case PlayerAbility.ArcherAbility.Double:
+						if (this.PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow) throw new InvalidOperationException();
 						for (var i = 0; i < 2; i++) {
 							if (this.ComboPoints >= this.Abilities[index].ComboCost) {
 								PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
@@ -514,6 +517,7 @@ namespace DungeonGame {
 						}
 						return;
 					case PlayerAbility.ArcherAbility.Wound:
+						if (this.PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow) throw new InvalidOperationException();
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case PlayerAbility.ArcherAbility.Bandage:
@@ -523,9 +527,11 @@ namespace DungeonGame {
 						PlayerAbility.UseSwiftAura(this, index);
 						return;
 					case PlayerAbility.ArcherAbility.ImmolatingArrow:
+						if (this.PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow) throw new InvalidOperationException();
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case PlayerAbility.ArcherAbility.Ambush:
+						if (this.PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow) throw new InvalidOperationException();
 						if (!this.InCombat) {
 							PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						}

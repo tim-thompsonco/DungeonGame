@@ -19,21 +19,14 @@ namespace DungeonGame {
 			this.Name = name;
 			this.EnergyCost = energyCost;
 			this.AbilityCategory = abilityCategory;
-			switch (this.AbilityCategory) {
-				case Ability.PoisonBite:
-					this.Offensive = new Offensive(
-						15 + (monsterLevel - 1) * 10, 5 + (monsterLevel - 1) * 5, 
-						1, 3, Offensive.OffensiveType.Bleed);
-					break;
-				case Ability.BloodLeech:
-					this.Offensive = new Offensive(10 + (monsterLevel - 1) * 10);
-					break;
-				case Ability.TailWhip:
-					this.Offensive = new Offensive(10 + (monsterLevel - 1) * 10);
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+			this.Offensive = this.AbilityCategory switch {
+				Ability.PoisonBite => new Offensive(15 + (monsterLevel - 1) * 5, 
+					5 + (monsterLevel - 1) * 2, 1, 3,
+					Offensive.OffensiveType.Bleed),
+				Ability.BloodLeech => new Offensive(10 + (monsterLevel - 1) * 5),
+				Ability.TailWhip => new Offensive(10 + (monsterLevel - 1) * 5),
+				_ => throw new ArgumentOutOfRangeException()
+			};
 		}
 		
 		public static void UseBloodLeechAbility(Monster monster, Player player, int index) {

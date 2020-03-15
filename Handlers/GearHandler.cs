@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -57,11 +58,13 @@ namespace DungeonGame {
 				return;
 			}
 			var weapon = player.Inventory[weaponIndex] as Weapon;
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			var weaponName = textInfo.ToTitleCase(weapon.Name);
 			if (player.Consumables[kitIndex].KitCategory != Consumable.KitType.Weapon) {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
-					"You can't upgrade " + weapon.Name + " with that!");
+					"You can't upgrade " + weaponName + " with that!");
 				return;
 			}
 			if (player.Consumables[kitIndex].ChangeWeapon.KitCategory == ChangeWeapon.KitType.Bowstring && 
@@ -71,27 +74,27 @@ namespace DungeonGame {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
-					"You can't upgrade " + weapon.Name + " with that!");
+					"You can't upgrade " + weaponName + " with that!");
 				return;
 			}
 			if (!weapon.Equipped) {
 				var inputValid = false;
 				while (!inputValid) {
-					var weaponString = weapon.Name + " is not equipped. Are you sure you want to upgrade that?";
+					var weaponString = weaponName + " is not equipped. Are you sure you want to upgrade that?";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(), 
 						Settings.FormatDefaultBackground(),
 						weaponString);
-					OutputHandler.Display.BuildUserOutput();
+					OutputHandler.Display.RetrieveUserOutput();
 					OutputHandler.Display.ClearUserOutput();
-					var input = InputHandler.ParseInput(InputHandler.GetFormattedInput(Console.ReadLine()));
-					if (input == "no" || input == "n") return;
-					if (input == "yes" || input == "y") inputValid = true;
+					var input = InputHandler.GetFormattedInput(Console.ReadLine());
+					if (input[0] == "no" || input[0] == "n") return;
+					if (input[0] == "yes" || input[0] == "y") inputValid = true;
 				}
 			}
 			player.Consumables[kitIndex].ChangeWeapon.ChangeWeaponPlayer(weapon);
 			weapon.ItemValue += player.Consumables[kitIndex].ItemValue;
-			var upgradeSuccess = "You upgraded " + weapon.Name + " with a weapon kit.";
+			var upgradeSuccess = "You upgraded " + weaponName + " with a weapon kit.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(), 
 				Settings.FormatDefaultBackground(),
@@ -116,11 +119,13 @@ namespace DungeonGame {
 				return;
 			}
 			var armor = player.Inventory[armorIndex] as Armor;
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			var armorName = textInfo.ToTitleCase(armor.Name);
 			if (player.Consumables[kitIndex].KitCategory != Consumable.KitType.Armor) {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
-					"You can't upgrade " + armor.Name + " with that!");
+					"You can't upgrade " + armorName + " with that!");
 				return;
 			}
 			if (player.Consumables[kitIndex].ChangeArmor.KitCategory == ChangeArmor.KitType.Cloth && 
@@ -133,27 +138,27 @@ namespace DungeonGame {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
-					"You can't upgrade " + armor.Name + " with that!");
+					"You can't upgrade " + armorName + " with that!");
 				return;
 			}
 			if (!armor.Equipped) {
 				var inputValid = false;
 				while (!inputValid) {
-					var armorString = armor.Name + " is not equipped. Are you sure you want to upgrade that?";
+					var armorString = armorName + " is not equipped. Are you sure you want to upgrade that?";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(), 
 						Settings.FormatDefaultBackground(),
 						armorString);
 					OutputHandler.Display.BuildUserOutput();
 					OutputHandler.Display.ClearUserOutput();
-					var input = InputHandler.ParseInput(InputHandler.GetFormattedInput(Console.ReadLine()));
-					if (input == "no" || input == "n") return;
-					if (input == "yes" || input == "y") inputValid = true;
+					var input = InputHandler.GetFormattedInput(Console.ReadLine());
+					if (input[0] == "no" || input[0] == "n") return;
+					if (input[0] == "yes" || input[0] == "y") inputValid = true;
 				}
 			}
 			player.Consumables[kitIndex].ChangeArmor.ChangeArmorPlayer(armor);
 			armor.ItemValue += player.Consumables[kitIndex].ItemValue;
-			var upgradeSuccess = "You upgraded " + armor.Name + " with an armor kit.";
+			var upgradeSuccess = "You upgraded " + armorName + " with an armor kit.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(), 
 				Settings.FormatDefaultBackground(),

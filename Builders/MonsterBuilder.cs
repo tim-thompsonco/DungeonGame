@@ -33,7 +33,6 @@ namespace DungeonGame {
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
-					
 					BuildMonsterArmor(monster);
 					break;
 				case Monster.MonsterType.Zombie:

@@ -6,13 +6,11 @@ namespace DungeonGame {
 		public enum SpellType {
 			Fireball,
 			Frostbolt,
-			Lightning,
-			Heal
+			Lightning
 		}
 		public string Name { get; set; }
 		public SpellType SpellCategory { get; set; }
 		public Offensive Offensive { get; set; }
-		public Healing Healing { get; set; }
 		public int EnergyCost { get; set; }
 
 		// Default constructor for JSON serialization
@@ -21,24 +19,15 @@ namespace DungeonGame {
 			this.Name = name;
 			this.EnergyCost = energyCost;
 			this.SpellCategory = spellType;
-			switch(this.SpellCategory) {
-				case SpellType.Fireball:
-					this.Offensive = new Offensive(
-						25 + (monsterLevel - 1) * 10, 5 + (monsterLevel - 1) * 5, 
-						1, 3, Offensive.OffensiveType.Fire);
-					break;
-				case SpellType.Frostbolt:
-					this.Offensive = new Offensive(15 + (monsterLevel - 1) * 10, 1, 2);
-					break;
-				case SpellType.Lightning:
-					this.Offensive = new Offensive(35 + (monsterLevel - 1) * 10);
-					break;
-				case SpellType.Heal:
-					this.Healing = new Healing(50 + (monsterLevel - 1) * 10);
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+			this.Offensive = this.SpellCategory switch {
+				SpellType.Fireball => new Offensive(25 + (monsterLevel - 1) * 5, 
+					5 + (monsterLevel - 1) * 2, 1, 3,
+					Offensive.OffensiveType.Fire),
+				SpellType.Frostbolt => new Offensive(15 + (monsterLevel - 1) * 5, 
+					1, 2),
+				SpellType.Lightning => new Offensive(35 + (monsterLevel - 1) * 5),
+				_ => throw new ArgumentOutOfRangeException()
+			};
 		}
 		
 		public static void CastFireOffense(Monster monster, Player player, int index) {

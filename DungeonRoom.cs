@@ -122,7 +122,7 @@ namespace DungeonGame {
 				var inputName = inputString.ToString().Trim();
 				var monsterName = this.Monster.Name.Split(' ');
 				if (monsterName.Last() == inputName || this.Monster.Name == inputName || 
-				    this.Monster.Name.Contains(input.Last())) {
+				    this.Monster.Name.Contains(input.Last()) || this.Monster != null) {
 					if (this.Monster.HitPoints > 0) {
 						var fightEvent = new CombatHandler(this.Monster, player);
 						fightEvent.StartCombat();

@@ -240,16 +240,12 @@ namespace DungeonGame {
 						}
 					}
 					catch (InvalidOperationException) {
-						if (this.Player.PlayerClass != Player.PlayerClassType.Mage) {
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatFailureOutputText(),
-								Settings.FormatDefaultBackground(),
-								"You can't cast spells. You're not a mage!");
-						}
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
-							"You do not have enough mana to cast that spell!");
+							this.Player.PlayerClass != Player.PlayerClassType.Mage
+								? "You can't cast spells. You're not a mage!"
+								: "You do not have enough mana to cast that spell!");
 						return false;
 					}
 					break;
@@ -286,14 +282,12 @@ namespace DungeonGame {
 						}
 					}
 					catch (InvalidOperationException) {
-						if (this.Player.PlayerClass == Player.PlayerClassType.Mage) {
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatFailureOutputText(),
-								Settings.FormatDefaultBackground(),
-								"You can't use abilities. You're not a warrior or archer!");
-						}
 						switch (this.Player.PlayerClass) {
 							case Player.PlayerClassType.Mage:
+								OutputHandler.Display.StoreUserOutput(
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
+									"You can't use abilities. You're not a warrior or archer!");
 								break;
 							case Player.PlayerClassType.Warrior:
 								OutputHandler.Display.StoreUserOutput(
@@ -302,16 +296,12 @@ namespace DungeonGame {
 									"You do not have enough rage to use that ability!");
 								break;
 							case Player.PlayerClassType.Archer:
-								if (this.Player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
-									OutputHandler.Display.StoreUserOutput(
-										Settings.FormatFailureOutputText(),
-										Settings.FormatDefaultBackground(),
-										"You do not have a bow equipped!");
-								}
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
-									"You do not have enough combo points to use that ability!");
+									this.Player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow
+										? "You do not have a bow equipped!"
+										: "You do not have enough combo points to use that ability!");
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();

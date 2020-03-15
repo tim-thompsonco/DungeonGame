@@ -272,7 +272,7 @@ namespace DungeonGame {
 			}
 			player.MaxHitPoints = player.Constitution * 10;
 			if (player.HitPoints > player.MaxHitPoints) player.HitPoints = player.MaxHitPoints;
-			player.MaxCarryWeight = player.Strength * 2;
+			player.MaxCarryWeight = (int)(player.Strength * 2.5);
 			player.DodgeChance = player.Dexterity * 1.5;			
 		}
 		public static void DisplayPlayerStats(Player player) {
@@ -386,12 +386,15 @@ namespace DungeonGame {
 				expLineOutput.Add("    ");
 			}
 			OutputHandler.Display.StoreUserOutput(expLineOutput);
-			var statsString =  "Str: " + player.Strength + " Int: " + player.Intelligence +
+			var baseStatsString =  "Str: " + player.Strength + " Int: " + player.Intelligence +
 			                  " Dex: " + player.Dexterity + " Level: " + player.Level;
+			var statsSb = new StringBuilder(baseStatsString);
+			if (player.PlayerClass == Player.PlayerClassType.Archer)
+				statsSb.Append(" Arrows: " + player.PlayerQuiver?.Quantity);
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
-				statsString);
+				statsSb.ToString());
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),

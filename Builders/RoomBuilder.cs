@@ -55,7 +55,7 @@ namespace DungeonGame {
 			var levelSize = size / levels;
 			for (var i = 0; i < levels; i++) {
 				var levelRangeLowForLevel = i - 1 >= 1 ? i - 1 : 1;
-				var levelRangeHighForLevel = i + 1 <= 10 ? i + 1: 10;
+				var levelRangeHighForLevel = i + 2 <= 10 ? i + 1: 10;
 				for (var j = 0; j < levelSize; j++) {
 					if (i == 0 && j == 0) {
 						/* To connect static room to dynamic dungeon build, always have first room go down one, and the static

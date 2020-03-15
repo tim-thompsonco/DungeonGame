@@ -72,16 +72,12 @@ namespace DungeonGame {
 						}
 					}
 					catch (InvalidOperationException) {
-						if (player.PlayerClass != Player.PlayerClassType.Mage) {
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatFailureOutputText(),
-								Settings.FormatDefaultBackground(),
-								"You can't cast spells. You're not a mage!");
-						}
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
-							"You do not have enough mana to cast that spell!");
+							player.PlayerClass != Player.PlayerClassType.Mage
+								? "You can't cast spells. You're not a mage!"
+								: "You do not have enough mana to cast that spell!");
 					}
 					break;
 				case "drop":
@@ -92,7 +88,7 @@ namespace DungeonGame {
 					break;
 				case "use":
 					try {
-						if (input.Contains("distance") || input.Contains("ambush")) {
+						if (input.Contains("distance")) {
 							player.UseAbility(input);
 						}
 						else if (input.Contains("ambush")) {
@@ -125,12 +121,6 @@ namespace DungeonGame {
 						}
 					}
 					catch (InvalidOperationException) {
-						if (player.PlayerClass == Player.PlayerClassType.Mage) {
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatFailureOutputText(),
-								Settings.FormatDefaultBackground(),
-								"You can't use abilities. You're not a warrior or archer!");
-						}
 						switch (player.PlayerClass) {
 							case Player.PlayerClassType.Warrior:
 								OutputHandler.Display.StoreUserOutput(
@@ -139,16 +129,18 @@ namespace DungeonGame {
 									"You do not have enough rage to use that ability!");
 								break;
 							case Player.PlayerClassType.Archer:
-								if (player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
-									OutputHandler.Display.StoreUserOutput(
-										Settings.FormatFailureOutputText(),
-										Settings.FormatDefaultBackground(),
-										"You do not have a bow equipped!");
-								}
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
-									"You do not have enough combo points to use that ability!");
+									player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow
+										? "You do not have a bow equipped!"
+										: "You do not have enough combo points to use that ability!");
+								break;
+							case Player.PlayerClassType.Mage:
+								OutputHandler.Display.StoreUserOutput(
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
+									"You can't use abilities. You're not a warrior or archer!");
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();
@@ -316,13 +308,11 @@ namespace DungeonGame {
 									foreach (var item in player.Inventory) {
 										if (!item.Equipped) continue;
 										var itemNameArray = new [] {input[0], item.Name};
-										isTownRoom.Vendor.RepairItem(player, itemNameArray);
+										isTownRoom.Vendor.RepairItem(player, itemNameArray, true);
 									}
-
 									break;
 								}
-
-								isTownRoom.Vendor.RepairItem(player, input);
+								isTownRoom.Vendor.RepairItem(player, input, false);
 							}
 						}
 					}

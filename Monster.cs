@@ -191,8 +191,6 @@ namespace DungeonGame {
 							attackOptions.Add(new 
 								AttackOption(AttackOption.AttackType.Spell, spellTotalDamage, i));
 							break;
-						case MonsterSpell.SpellType.Heal:
-							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
@@ -240,8 +238,6 @@ namespace DungeonGame {
 							break;
 						case MonsterSpell.SpellType.Lightning:
 							MonsterSpell.CastArcaneOffense(this, player, attackOption.AttackIndex);
-							break;
-						case MonsterSpell.SpellType.Heal:
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
