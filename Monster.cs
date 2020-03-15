@@ -75,8 +75,7 @@ namespace DungeonGame {
 				var randomNumGold = GameHandler.GetRandomNumber(5, 10);
 				this.Gold = 10 + (this.Level - 1) * randomNumGold;
 			}
-			var randomNumExp = GameHandler.GetRandomNumber(15, 25);
-			var expProvided = this.MaxHitPoints + randomNumExp;
+			var expProvided = this.MaxHitPoints;
 			this.ExperienceProvided = GameHandler.RoundNumber(expProvided);
 			this.MaxEnergyPoints = 100 + this.Level * 10;
 			this.EnergyPoints = this.MaxEnergyPoints;
@@ -266,27 +265,27 @@ namespace DungeonGame {
 			}
 			GearHandler.DecreaseArmorDurability(player);
 		}
-		public void PhysicalAttack(Player player) {
-			var attackAmount = 0;
+		private void PhysicalAttack(Player player) {
+			var attackAmount = 10;
 			try {
 				if (this.MonsterWeapon.Equipped && this.MonsterWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
-					attackAmount = this.MonsterWeapon.Attack();
+					attackAmount += this.MonsterWeapon.Attack();
 				}
 				if (this.MonsterWeapon.Equipped &&
 				    this.MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
 				    this.MonsterQuiver.HaveArrows()) {
 					this.MonsterQuiver.UseArrow();
-					attackAmount = this.MonsterWeapon.Attack();
+					attackAmount += this.MonsterWeapon.Attack();
 				}
 				if (this.MonsterWeapon.Equipped &&
 				    this.MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
 				    !this.MonsterQuiver.HaveArrows()) {
-					attackAmount = this.UnarmedAttackDamage;
+					attackAmount += this.UnarmedAttackDamage;
 				}
 			}
 			catch (NullReferenceException) {
 				if (this.MonsterCategory == MonsterType.Elemental) {
-					attackAmount = this.UnarmedAttackDamage;
+					attackAmount += this.UnarmedAttackDamage;
 				}
 				else {
 					var monsterDisarmed = "The " + this.Name + " is disarmed! They are going hand to hand!";
@@ -294,7 +293,7 @@ namespace DungeonGame {
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						monsterDisarmed);
-					attackAmount = this.UnarmedAttackDamage;
+					attackAmount += this.UnarmedAttackDamage;
 				}
 			}
 			var randomChanceToHit = GameHandler.GetRandomNumber(1, 100);

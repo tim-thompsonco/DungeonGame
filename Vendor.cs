@@ -222,7 +222,7 @@ namespace DungeonGame {
 				else {
 					player.Inventory.RemoveAt(index);
 				}
-				if (this.VendorItems.Count == 5) this.VendorItems.RemoveAt(0);
+				if (this.VendorItems.Count == 5) this.VendorItems.RemoveAt(this.VendorItems[0].Name.Contains("arrow") ? 1 : 0);
 				this.VendorItems.Add(sellItem);
 				var soldString = "You sold " + sellItem.Name + " to the vendor for " + sellItem.ItemValue + " gold.";
 				OutputHandler.Display.StoreUserOutput(

@@ -20,6 +20,7 @@
 			if (this.Quantity < amountCanLoad) {
 				player.PlayerQuiver.Quantity += this.Quantity;
 				this.Quantity = 0;
+				return;
 			}
 			player.PlayerQuiver.Quantity += amountCanLoad;
 			this.Quantity -= amountCanLoad;
