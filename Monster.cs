@@ -115,7 +115,7 @@ namespace DungeonGame {
 					break;
 				case MonsterType.Elemental:
 					var randomNum = GameHandler.GetRandomNumber(1, 3);
-					var randomPhysicalDmg = GameHandler.GetRandomNumber(18, 24);
+					var randomPhysicalDmg = GameHandler.GetRandomNumber(20, 26);
 					this.UnarmedAttackDamage = randomNum switch {
 						1 => randomPhysicalDmg + (level - 1) * 1,
 						2 => randomPhysicalDmg + (level - 1) * 2,

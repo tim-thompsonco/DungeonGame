@@ -18,8 +18,8 @@
 		public bool Equipped { get; set; }
 		public int ItemValue { get; set; }
 		public int Weight { get; set; }
-		private GemType GemCategory { get; set; }
-		private GemLevel GemStrength { get; set; }
+		public GemType GemCategory { get; set; }
+		public GemLevel GemStrength { get; set; }
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public Loot() {}

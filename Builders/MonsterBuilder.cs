@@ -23,9 +23,7 @@ namespace DungeonGame {
 							break;
 						case Monster.SkeletonType.Archer:
 							monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Bow, monster.MonsterCategory);
-							monster.MonsterQuiver = new Quiver("basic quiver", 50, 50, 15) 
-								{Equipped = true};
-							monster.MonsterItems.Add(monster.MonsterQuiver);
+							monster.MonsterQuiver = new Quiver("basic quiver", 50, 50, 15);
 							break;
 						case Monster.SkeletonType.Mage:
 							monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Dagger, monster.MonsterCategory);
@@ -103,9 +101,7 @@ namespace DungeonGame {
 							monster.Level, Weapon.WeaponType.OneHandedSword, monster.MonsterCategory)
 					};
 					if (monster.MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow) {
-						monster.MonsterQuiver = new Quiver("basic quiver", 50, 50, 15) 
-							{Equipped = true};
-						monster.MonsterItems.Add(monster.MonsterQuiver);
+						monster.MonsterQuiver = new Quiver("basic quiver", 50, 50, 15);
 					}
 					monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Bow, monster.MonsterCategory);
 					BuildMonsterArmor(monster);
@@ -145,6 +141,9 @@ namespace DungeonGame {
 			}
 			if (monster.MonsterCategory != Monster.MonsterType.Elemental) monster.MonsterWeapon.Equipped = true;
 			if (monster.MonsterWeapon != null) monster.MonsterItems.Add(monster.MonsterWeapon);
+			if (monster.MonsterQuiver == null) return;
+			monster.MonsterQuiver.Equipped = true;
+			monster.MonsterItems.Add(monster.MonsterQuiver);
 		}
 		private static void BuildMonsterGem(Monster monster) {
 			var randomGemNum = GameHandler.GetRandomNumber(1, 6);

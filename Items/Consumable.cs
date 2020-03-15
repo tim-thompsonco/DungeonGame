@@ -13,7 +13,7 @@ namespace DungeonGame {
 			Dexterity,
 			Constitution
 		}
-		private enum PotionLevel {
+		public enum PotionLevel {
 			Minor,
 			Normal,
 			Greater
@@ -33,7 +33,7 @@ namespace DungeonGame {
 		public bool Equipped { get; set; }
 		public ArrowType? ArrowCategory { get; set; }
 		public PotionType? PotionCategory { get; set; }
-		private PotionLevel? PotionStrength { get; set; }
+		public PotionLevel? PotionStrength { get; set; }
 		public KitLevel? KitStrength { get; set; }
 		public KitType? KitCategory { get; set; }
 		public RestoreHealth RestoreHealth { get; set; }

@@ -17,7 +17,7 @@ namespace DungeonGame {
 		public WeaponType WeaponGroup { get; set; }
 		public double CritMultiplier { get; set; }
 		public bool Equipped { get; set; }
-		private int Level { get; set; }
+		public int Level { get; set; }
 		public int Durability { get; set; }
 		public int Quality { get; set; }
 		public int Weight { get; set; }
