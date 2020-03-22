@@ -42,6 +42,7 @@
     <Compile Include="Consumable Properties\ChangeWeapon.cs" />
     <Compile Include="Consumable Properties\RestoreMana.cs" />
     <Compile Include="Consumable Properties\RestoreHealth.cs" />
+    <Compile Include="Coordinate.cs" />
     <Compile Include="Effect.cs" />
     <Compile Include="Handlers\CombatHandler.cs" />
     <Compile Include="Handlers\GameHandler.cs" />
@@ -90,11 +91,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="townrooms.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

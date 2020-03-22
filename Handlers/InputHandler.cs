@@ -20,12 +20,16 @@ namespace DungeonGame {
 			return parsedInput;
 		}
 		public static void ProcessUserInput(Player player, string[] input, Timer globalTimer) {
-			var isTownRoom = player.PlayerLocation as TownRoom;
+			var playerRoom = RoomHandler.Rooms[player.PlayerLocation];
+			var isTownRoom = playerRoom as TownRoom;
+			var playerX = player.PlayerLocation.X;
+			var playerY = player.PlayerLocation.Y;
+			var playerZ = player.PlayerLocation.Z;
 			switch (input[0]) {
 				case "a":
 				case "attack":
 				case "kill":
-					player.PlayerLocation.AttackOpponent(player, input, globalTimer);
+					playerRoom.AttackOpponent(player, input, globalTimer);
 					break;
 				case "buy":
 					try {
@@ -92,8 +96,8 @@ namespace DungeonGame {
 							player.UseAbility(input);
 						}
 						else if (input.Contains("ambush")) {
-							player.UseAbility(player.PlayerLocation.Monster, input);
-							player.PlayerLocation.AttackOpponent(player, input, globalTimer);
+							player.UseAbility(playerRoom.Monster, input);
+							playerRoom.AttackOpponent(player, input, globalTimer);
 						}
 						else if (input[1] != null) {
 							player.UseAbility(input);
@@ -235,14 +239,14 @@ namespace DungeonGame {
 						}
 					}
 					catch (IndexOutOfRangeException) {
-						player.PlayerLocation.LookRoom();
+						playerRoom.LookRoom();
 					}
 					break;
 				case "loot":
 					try {
 						if (input[1] != null) {
 							try {
-								player.PlayerLocation.LootCorpse(player, input);
+								playerRoom.LootCorpse(player, input);
 							}
 							catch (Exception) {
 								OutputHandler.Display.StoreUserOutput(
@@ -415,9 +419,10 @@ namespace DungeonGame {
 					break;
 				case "n":
 				case "north":
-					if (player.PlayerLocation.North != null) {
+					if (playerRoom.North != null) {
 						try {
-							RoomHandler.ChangeRoom(player, player.PlayerLocation.North);
+							var newCoord = new Coordinate(playerX, playerY + 1, playerZ);
+							RoomHandler.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -429,10 +434,10 @@ namespace DungeonGame {
 					break;
 				case "s":
 				case "south":
-					if (player.PlayerLocation.South != null) {
+					if (playerRoom.South != null) {
 						try {
-							RoomHandler.ChangeRoom(player, player.PlayerLocation.South);
-
+							var newCoord = new Coordinate(playerX, playerY - 1, playerZ);
+							RoomHandler.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -444,9 +449,10 @@ namespace DungeonGame {
 					break;
 				case "e":
 				case "east":
-					if (player.PlayerLocation.East != null) {
+					if (playerRoom.East != null) {
 						try {
-							RoomHandler.ChangeRoom(player, player.PlayerLocation.East);
+							var newCoord = new Coordinate(playerX + 1, playerY, playerZ);
+							RoomHandler.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -458,9 +464,10 @@ namespace DungeonGame {
 					break;
 				case "w":
 				case "west":
-					if (player.PlayerLocation.West != null) {
+					if (playerRoom.West != null) {
 						try {
-							RoomHandler.ChangeRoom(player, player.PlayerLocation.West);
+							var newCoord = new Coordinate(playerX - 1, playerY, playerZ);
+							RoomHandler.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -472,9 +479,10 @@ namespace DungeonGame {
 					break;
 				case "ne":
 				case "northeast":
-					if (player.PlayerLocation.NorthEast != null) {
+					if (playerRoom.NorthEast != null) {
 						try {
-							RoomHandler.ChangeRoom(player, player.PlayerLocation.NorthEast);
+							var newCoord = new Coordinate(playerX + 1, playerY + 1, playerZ);
+							RoomHandler.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -486,9 +494,10 @@ namespace DungeonGame {
 					break;
 				case "nw":
 				case "northwest":
-					if (player.PlayerLocation.NorthWest != null) {
+					if (playerRoom.NorthWest != null) {
 						try {
-							RoomHandler.ChangeRoom(player, player.PlayerLocation.NorthWest);
+							var newCoord = new Coordinate(playerX - 1, playerY + 1, playerZ);
+							RoomHandler.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -500,9 +509,10 @@ namespace DungeonGame {
 					break;
 				case "se":
 				case "southeast":
-					if (player.PlayerLocation.SouthEast != null) {
+					if (playerRoom.SouthEast != null) {
 						try {
-							RoomHandler.ChangeRoom(player, player.PlayerLocation.SouthEast);
+							var newCoord = new Coordinate(playerX + 1, playerY - 1, playerZ);
+							RoomHandler.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -514,9 +524,10 @@ namespace DungeonGame {
 					break;
 				case "sw":
 				case "southwest":
-					if (player.PlayerLocation.SouthWest != null) {
+					if (playerRoom.SouthWest != null) {
 						try {
-							RoomHandler.ChangeRoom(player, player.PlayerLocation.SouthWest);
+							var newCoord = new Coordinate(playerX - 1, playerY - 1, playerZ);
+							RoomHandler.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -528,9 +539,10 @@ namespace DungeonGame {
 					break;
 				case "u":
 				case "up":
-					if (player.PlayerLocation.Up != null) {
+					if (playerRoom.Up != null) {
 						try {
-							RoomHandler.ChangeRoom(player, player.PlayerLocation.Up);
+							var newCoord = new Coordinate(playerX, playerY, playerZ + 1);
+							RoomHandler.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -542,9 +554,10 @@ namespace DungeonGame {
 					break;
 				case "d":
 				case "down":
-					if (player.PlayerLocation.Down != null) {
+					if (playerRoom.Down != null) {
 						try {
-							RoomHandler.ChangeRoom(player, player.PlayerLocation.Down);
+							var newCoord = new Coordinate(playerX, playerY, playerZ - 1);
+							RoomHandler.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();

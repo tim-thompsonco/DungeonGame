@@ -18,7 +18,7 @@ namespace DungeonGame {
 			return GetMiniMapWidth() * 4 + 4;
 		}
 		public static string GetTileColor(Player player) {
-			var room = player.PlayerLocation;
+			var room = RoomHandler.Rooms[player.PlayerLocation];
 			if (room is TownRoom) return "darkgreen";
 			var dungeonRoom = room as DungeonRoom;
 			if (dungeonRoom.DungeonLevel <= 3) return "gray";

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DungeonGame {
@@ -21,21 +22,27 @@ namespace DungeonGame {
 				Settings.FormatGeneralInfoText(), 
 				Settings.FormatDefaultBackground(), 
 				mapBorder.ToString());
+			// Get player coordinates and room player is located in
+			var playerX = player.PlayerLocation.X;
+			var playerY = player.PlayerLocation.Y;
+			var playerZ = player.PlayerLocation.Z;
+			var playerRoom = RoomHandler.Rooms[player.PlayerLocation];
 			/* Map starts drawing from top left, so it needs to decrement since
 			each new console writeline pushes screen down instead of up */
-			for (var i = player.Y + height; i > player.Y - height; i--) {
+			for (var i = playerY + height; i > playerY - height; i--) {
 				var sameLineOutput = new List<string>();
-				var startLeftPos = player.X - width;
-				var endRightPos = player.X + width - 1;
+				var startLeftPos = playerX - width;
+				var endRightPos = playerX + width - 1;
 				for (var j = startLeftPos; j <= endRightPos; j ++) {
 					var mapX = j;
 					var mapY = i;
-					var mapZ = player.Z;
-					var room = RoomHandler.Rooms.Find(f => f.X == mapX && f.Y == mapY && f.Z == mapZ);
-					if (room != null) {
+					var mapZ = playerZ;
+					var findCoord = new Coordinate(mapX, mapY, mapZ);
+					if (RoomHandler.Rooms.ContainsKey(findCoord)) {
+						var room = RoomHandler.Rooms[findCoord];
 						if (room.IsDiscovered) {
 							if (j == startLeftPos) {
-								if (player.PlayerLocation.Up != null || player.PlayerLocation.Down != null) {
+								if (playerRoom.Up != null || playerRoom.Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 									sameLineOutput.Add(Settings.GetLeftMapBorderSizeTwo()); // What prints to display
@@ -53,7 +60,7 @@ namespace DungeonGame {
 								}
 							}
 							else if (j == endRightPos) {
-								if (player.PlayerLocation.Up != null || player.PlayerLocation.Down != null) {
+								if (playerRoom.Up != null || playerRoom.Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display
@@ -70,8 +77,8 @@ namespace DungeonGame {
 									sameLineOutput.Add(Settings.GetRightMapBorderSizeTwo()); // What prints to display
 								}
 							}
-							else if (mapX == player.X && mapY == player.Y && mapZ == player.Z) {
-								if (player.PlayerLocation.Up != null || player.PlayerLocation.Down != null) {
+							else if (mapX == playerX && mapY == playerY && mapZ == playerZ) {
+								if (playerRoom.Up != null || playerRoom.Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display
@@ -83,7 +90,7 @@ namespace DungeonGame {
 								}
 							}
 							else {
-								if (player.PlayerLocation.Up != null || player.PlayerLocation.Down != null) {
+								if (playerRoom.Up != null || playerRoom.Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display
@@ -221,7 +228,7 @@ namespace DungeonGame {
 		public static void ShowUserOutput(Player player, Monster opponent) {
 			PlayerHandler.DisplayPlayerStats(player);
 			MonsterHandler.DisplayStats(opponent);
-			player.PlayerLocation.ShowCommands();
+			RoomHandler.Rooms[player.PlayerLocation].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = ShowEffects(player);
 			Display.BuildUserOutput();
@@ -229,7 +236,7 @@ namespace DungeonGame {
 		}
 		public static void ShowUserOutput(Player player) {
 			PlayerHandler.DisplayPlayerStats(player);
-			player.PlayerLocation.ShowCommands();
+			RoomHandler.Rooms[player.PlayerLocation].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = ShowEffects(player);
 			Display.BuildUserOutput();

@@ -175,6 +175,7 @@ namespace DungeonGame {
 			}
 			var itemIndex = player.Inventory.FindIndex(
 				f => f.Name == input[1] || f.Name.Contains(input[1]));
+			var playerRoom = RoomHandler.Rooms[player.PlayerLocation];
 			if (itemIndex != -1) {
 				if (player.Inventory[itemIndex].Equipped) {
 					OutputHandler.Display.StoreUserOutput(
@@ -183,7 +184,7 @@ namespace DungeonGame {
 						"You have to unequip that item first!");
 					return;
 				}
-				player.PlayerLocation.RoomObjects.Add(player.Inventory[itemIndex]);
+				playerRoom.RoomObjects.Add(player.Inventory[itemIndex]);
 				var dropInventoryString = "You dropped " +
 				                        player.Inventory[itemIndex].Name + ".";
 				player.Inventory.RemoveAt(itemIndex);
@@ -196,7 +197,7 @@ namespace DungeonGame {
 			itemIndex = player.Consumables.FindIndex(
 				f => f.Name == input[1] || f.Name.Contains(input[1]));
 			if (itemIndex != -1) {
-				player.PlayerLocation.RoomObjects.Add(player.Consumables[itemIndex]);
+				playerRoom.RoomObjects.Add(player.Consumables[itemIndex]);
 				var dropConsumableString = "You dropped " +
 				                          player.Consumables[itemIndex].Name + ".";
 				player.Consumables.RemoveAt(itemIndex);
@@ -219,9 +220,10 @@ namespace DungeonGame {
 					"What item did you want to pickup?");
 				return;
 			}
-			var itemIndex = player.PlayerLocation.RoomObjects.FindIndex(
+			var playerRoom = RoomHandler.Rooms[player.PlayerLocation];
+			var itemIndex = playerRoom.RoomObjects.FindIndex(
 				f => f.Name == input[1] || f.Name.Contains(input[1]));
-			if (!(player.PlayerLocation.RoomObjects[itemIndex] is IEquipment item)) {
+			if (!(playerRoom.RoomObjects[itemIndex] is IEquipment item)) {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -243,15 +245,15 @@ namespace DungeonGame {
 					"That item is not in the room!");
 				return;
 			}
-			if (player.PlayerLocation.RoomObjects[itemIndex].GetType() == typeof(Consumable)) {
-				player.Consumables.Add(player.PlayerLocation.RoomObjects[itemIndex] as Consumable);
+			if (playerRoom.RoomObjects[itemIndex].GetType() == typeof(Consumable)) {
+				player.Consumables.Add(playerRoom.RoomObjects[itemIndex] as Consumable);
 			}
 			else {
-				player.Inventory.Add(player.PlayerLocation.RoomObjects[itemIndex] as IEquipment);
+				player.Inventory.Add(playerRoom.RoomObjects[itemIndex] as IEquipment);
 			}
 			var pickupItemString = "You picked up " +
-			                       player.PlayerLocation.RoomObjects[itemIndex].Name + ".";
-			player.PlayerLocation.RoomObjects.RemoveAt(itemIndex);
+			                       playerRoom.RoomObjects[itemIndex].Name + ".";
+			playerRoom.RoomObjects.RemoveAt(itemIndex);
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),

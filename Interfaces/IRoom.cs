@@ -14,9 +14,6 @@ namespace DungeonGame {
 		IRoom SouthEast { get; set; }
 		IRoom Up { get; set; }
 		IRoom Down { get; set; }
-		int X { get; set; }
-		int Y { get; set; }
-		int Z { get; set; }
 		string Desc { get; set; }
 		List<IRoomInteraction> RoomObjects { get; set; }
 		Monster Monster { get; set; }

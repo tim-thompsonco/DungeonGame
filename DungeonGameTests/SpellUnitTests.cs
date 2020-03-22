@@ -257,20 +257,19 @@ namespace DungeonGameTests {
 			Assert.AreEqual("Mana Cost: 100", OutputHandler.Display.Output[2][2]);
 			const string portalString = "This spell will create a portal and return you to town.";
 			Assert.AreEqual(portalString, OutputHandler.Display.Output[3][2]);
-			player.X = -2;
-			player.Y = 6;
-			player.Z = 0;
-			Assert.AreEqual(-2, player.X);
-			Assert.AreEqual(6, player.Y);
-			Assert.AreEqual(0, player.Z);
+			var newCoord = new Coordinate(-2, 6, 0);
+			player.PlayerLocation = newCoord;
+			Assert.AreEqual(-2, player.PlayerLocation.X);
+			Assert.AreEqual(6, player.PlayerLocation.Y);
+			Assert.AreEqual(0, player.PlayerLocation.Z);
 			var input = new [] {"cast", "town", "portal"};
 			var spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("town portal", spellName);
 			player.CastSpell(spellName);
 			Assert.AreEqual(player.MaxManaPoints - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
-			Assert.AreEqual(0, player.X);
-			Assert.AreEqual(7, player.Y);
-			Assert.AreEqual(0, player.Z);
+			Assert.AreEqual(0, player.PlayerLocation.X);
+			Assert.AreEqual(7, player.PlayerLocation.Y);
+			Assert.AreEqual(0, player.PlayerLocation.Z);
 			Assert.AreEqual("You open a portal and step through it.", OutputHandler.Display.Output[4][2]);
 		}
 		[Test]

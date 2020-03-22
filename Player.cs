@@ -51,10 +51,7 @@ namespace DungeonGame {
 		public Armor PlayerWaistArmor { get; set; }
 		public Armor PlayerLegsArmor { get; set; }
 		public Weapon PlayerWeapon { get; set; }
-		public IRoom PlayerLocation { get; set; }
-		public int X { get; set; }
-		public int Y { get; set; }
-		public int Z { get; set; }
+		public Coordinate PlayerLocation { get; set; }
 		public List<Effect> Effects { get; set; }
 		public List<PlayerSpell> Spellbook { get; set; }
 		public List<PlayerAbility> Abilities { get; set; }

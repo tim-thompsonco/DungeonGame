@@ -1,25 +1,28 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace DungeonGame {
 	public static class RoomHandler {
-		public static List<IRoom> Rooms { get; set; }
+		public static Dictionary<Coordinate, IRoom> Rooms { get; set; }
 		
-		public static void ChangeRoom(Player player, IRoom room) {
-			player.PlayerLocation = room;
-			player.PlayerLocation.LookRoom();
-			if (!player.PlayerLocation.IsDiscovered) player.PlayerLocation.IsDiscovered = true;
-			player.CanSave = player.PlayerLocation is TownRoom;
+		public static void ChangeRoom(Player player, Coordinate newCoord) {
+			player.PlayerLocation = newCoord;
+			var playerRoom = Rooms[player.PlayerLocation];
+			playerRoom.LookRoom();
+			if (!playerRoom.IsDiscovered) playerRoom.IsDiscovered = true;
+			player.CanSave = playerRoom is TownRoom;
 		}
 		public static void SetPlayerLocation(Player player, int x, int y, int z) {
-			var room = Rooms.Find(room => room.X == x && room.Y == y && room.Z == z);
+			var findCoord = new Coordinate(x, y, z);
+			var room = Rooms[findCoord];
 			if (room != null) {
-				player.PlayerLocation = room;
+				player.PlayerLocation = findCoord;
 			}
 			else {
 				return;
 			}
-			if (!player.PlayerLocation.IsDiscovered) player.PlayerLocation.IsDiscovered = true;
-			player.CanSave = player.PlayerLocation is TownRoom;
+			if (!room.IsDiscovered) room.IsDiscovered = true;
+			player.CanSave = room is TownRoom;
 		}
 	}
 }

@@ -319,9 +319,9 @@ namespace DungeonGame {
 				"Usage example if monster is in room to north. 'use distance north'");
 		}
 		public static void UseDistanceAbility(Player player, int index, string direction) {
-			var targetX = player.X;
-			var targetY = player.Y;
-			var targetZ = player.Z;
+			var targetX = player.PlayerLocation.X;
+			var targetY = player.PlayerLocation.Y;
+			var targetZ = player.PlayerLocation.Z;
 			switch (direction) {
 				case "n":
 				case "north":
@@ -368,16 +368,16 @@ namespace DungeonGame {
 					targetZ -= 1;
 					break;
 			}
-			var roomName = RoomHandler.Rooms.Find(f => f.X == targetX && f.Y == targetY && f.Z == targetZ);
-			if (roomName == null) {
+			var findCoord = new Coordinate(targetX, targetY, targetZ);
+			var room = RoomHandler.Rooms[findCoord];
+			if (room == null) {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't attack in that direction!");
 				return;
 			}
-			var roomIndex = RoomHandler.Rooms.IndexOf(roomName);
-			var opponentRoom = RoomHandler.Rooms[roomIndex] as DungeonRoom;
+			var opponentRoom = RoomHandler.Rooms[findCoord] as DungeonRoom;
 			var opponent = opponentRoom?.Monster;
 			if (opponent == null) {
 				OutputHandler.Display.StoreUserOutput(

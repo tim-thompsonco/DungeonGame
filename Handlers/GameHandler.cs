@@ -60,7 +60,7 @@ namespace DungeonGame {
 					}
 				}
 			}
-			foreach (var room in RoomHandler.Rooms) {
+			foreach (var room in RoomHandler.Rooms.Values) {
 				foreach (var roomObject in room.RoomObjects.Where(
 					roomObject => roomObject?.GetType() == typeof(Monster))) {
 					var monster = (Monster) roomObject;
@@ -243,7 +243,7 @@ namespace DungeonGame {
 		}
 		public static void LoadGame() {
 			try {
-				RoomHandler.Rooms = JsonConvert.DeserializeObject<List<IRoom>>(File.ReadAllText(
+				RoomHandler.Rooms = JsonConvert.DeserializeObject<Dictionary<Coordinate, IRoom>>(File.ReadAllText(
 					"gamesave.json"), new JsonSerializerSettings {
 					TypeNameHandling = TypeNameHandling.Auto,
 					NullValueHandling = NullValueHandling.Ignore

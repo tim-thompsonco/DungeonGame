@@ -70,44 +70,58 @@ namespace DungeonGame {
 				this.Player.InCombat = false;
 				this.Opponent.InCombat = false;
 				this.FleeSuccess = true;
-				if (this.Player.PlayerLocation.Up != null) {
-					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.Up);
+				var playerRoom = RoomHandler.Rooms[this.Player.PlayerLocation];
+				var playerX = this.Player.PlayerLocation.X;
+				var playerY = this.Player.PlayerLocation.Y;
+				var playerZ = this.Player.PlayerLocation.Z;
+				if (playerRoom.Up != null) {
+					var newCoord = new Coordinate(playerX, playerY, playerZ + 1);
+					RoomHandler.ChangeRoom(this.Player, newCoord);
 					return;
 				}
-				if (this.Player.PlayerLocation.East != null) {
-					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.East);
+				if (playerRoom.East != null) {
+					var newCoord = new Coordinate(playerX + 1, playerY, playerZ);
+					RoomHandler.ChangeRoom(this.Player, newCoord);
 					return;
 				}
-				if (this.Player.PlayerLocation.West != null) {
-					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.West);
+				if (playerRoom.West != null) {
+					var newCoord = new Coordinate(playerX - 1, playerY, playerZ);
+					RoomHandler.ChangeRoom(this.Player, newCoord);
 					return;
 				}
-				if (this.Player.PlayerLocation.North != null) {
-					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.North);
+				if (playerRoom.North != null) {
+					var newCoord = new Coordinate(playerX, playerY + 1, playerZ);
+					RoomHandler.ChangeRoom(this.Player, newCoord);
 					return;
 				}
-				if (this.Player.PlayerLocation.South != null) {
-					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.South);
+				if (playerRoom.South != null) {
+					var newCoord = new Coordinate(playerX, playerY - 1, playerZ);
+					RoomHandler.ChangeRoom(this.Player, newCoord);
 					return;
 				}
-				if (this.Player.PlayerLocation.NorthEast != null) {
-					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.NorthEast);
+				if (playerRoom.NorthEast != null) {
+					var newCoord = new Coordinate(playerX + 1, playerY + 1, playerZ);
+					RoomHandler.ChangeRoom(this.Player, newCoord);
 					return;
 				}
-				if (this.Player.PlayerLocation.NorthWest != null) {
-					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.NorthWest);
+				if (playerRoom.NorthWest != null) {
+					var newCoord = new Coordinate(playerX - 1, playerY + 1, playerZ);
+					RoomHandler.ChangeRoom(this.Player, newCoord);
 					return;
 				}
-				if (this.Player.PlayerLocation.SouthEast != null) {
-					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.SouthEast);
+				if (playerRoom.SouthEast != null) {
+					var newCoord = new Coordinate(playerX + 1, playerY - 1, playerZ);
+					RoomHandler.ChangeRoom(this.Player, newCoord);
 					return;
 				}
-				if (this.Player.PlayerLocation.SouthWest != null) {
-					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.SouthWest);
+				if (playerRoom.SouthWest != null) {
+					var newCoord = new Coordinate(playerX - 1, playerY - 1, playerZ);
+					RoomHandler.ChangeRoom(this.Player, newCoord);
 					return;
 				}
-				if (this.Player.PlayerLocation.Down != null) {
-					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.Down);
+				if (playerRoom.Down != null) {
+					var newCoord = new Coordinate(playerX, playerY, playerZ - 1);
+					RoomHandler.ChangeRoom(this.Player, newCoord);
 					return;
 				}
 			}

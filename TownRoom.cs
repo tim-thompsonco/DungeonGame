@@ -17,9 +17,6 @@ namespace DungeonGame {
 		public IRoom SouthEast { get; set; }
 		public IRoom Up { get; set; }
 		public IRoom Down { get; set; }
-		public int X { get; set; }
-		public int Y { get; set; }
-		public int Z { get; set; }
 		public string Name { get; set; }
 		public string Desc { get; set; }
 		public List<string> Commands { get; set; }
@@ -31,10 +28,7 @@ namespace DungeonGame {
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public TownRoom() {}
-		public TownRoom(int x, int y, int z, string name, string desc) {
-			this.X = x;
-			this.Y = y;
-			this.Z = z;
+		public TownRoom(string name, string desc) {
 			this.RoomObjects = new List<IRoomInteraction>();
 			this.Name = name;
 			this.Desc = desc;
@@ -43,11 +37,11 @@ namespace DungeonGame {
 				"Save",
 				"[Q]uit"};
 		}
-		public TownRoom(int x, int y, int z, string name, string desc, Vendor vendor) : this(x, y, z, name, desc) {
+		public TownRoom(string name, string desc, Vendor vendor) : this(name, desc) {
 			this.Vendor = vendor;
 			this.RoomObjects.Add(this.Vendor);
 		}
-		public TownRoom(int x, int y, int z, string name, string desc, Trainer trainer) : this(x, y, z, name, desc) {
+		public TownRoom(string name, string desc, Trainer trainer) : this(name, desc) {
 			this.Trainer = trainer;
 			this.RoomObjects.Add(this.Trainer);
 		}

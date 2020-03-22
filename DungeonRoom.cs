@@ -26,9 +26,6 @@ namespace DungeonGame {
 		public IRoom SouthEast { get; set; }
 		public IRoom Up { get; set; }
 		public IRoom Down { get; set; }
-		public int X { get; set; }
-		public int Y { get; set; }
-		public int Z { get; set; }
 		public string Name { get; set; }
 		public string Desc { get; set; }
 		public int DungeonLevel { get; set; }
@@ -37,10 +34,7 @@ namespace DungeonGame {
 		public List<IRoomInteraction> RoomObjects { get; set; }
 		public Monster Monster { get; set; }
 
-		public DungeonRoom(int x, int y, int z, int levelRangeLow, int levelRangeHigh) {
-			this.X = x;
-			this.Y = y;
-			this.Z = z;
+		public DungeonRoom(int levelRangeLow, int levelRangeHigh) {
 			this.RoomObjects = new List<IRoomInteraction>();
 			this.Commands = new List<string> {"[I]nventory", "Save", "[Q]uit"};
 			this.CombatCommands = new List<string> {"[F]ight", "[I]nventory", "Flee"};
