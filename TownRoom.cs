@@ -7,21 +7,21 @@ using System.Threading;
 namespace DungeonGame {
 	public class TownRoom : IRoom {
 		public bool IsDiscovered { get; set; }
-		public bool GoNorth { get; set; }
-		public bool GoSouth { get; set; }
-		public bool GoEast { get; set; }
-		public bool GoWest { get; set; }
-		public bool GoNorthWest { get; set; }
-		public bool GoSouthWest { get; set; }
-		public bool GoNorthEast { get; set; }
-		public bool GoSouthEast { get; set; }
-		public bool GoUp { get; set; }
-		public bool GoDown { get; set; }
-		public string Name { get; set; }
-		public string Desc { get; set; }
+		public IRoom North { get; set; }
+		public IRoom South { get; set; }
+		public IRoom East { get; set; }
+		public IRoom West { get; set; }
+		public IRoom NorthWest { get; set; }
+		public IRoom SouthWest { get; set; }
+		public IRoom NorthEast { get; set; }
+		public IRoom SouthEast { get; set; }
+		public IRoom Up { get; set; }
+		public IRoom Down { get; set; }
 		public int X { get; set; }
 		public int Y { get; set; }
 		public int Z { get; set; }
+		public string Name { get; set; }
+		public string Desc { get; set; }
 		public List<string> Commands { get; set; }
 		// List of objects in room (including Vendors)
 		public List<IRoomInteraction> RoomObjects { get; set; }
@@ -31,113 +31,23 @@ namespace DungeonGame {
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public TownRoom() {}
-		private TownRoom(
-			string name,
-			string desc,
-			int x,
-			int y,
-			int z,
-			bool goNorth,
-			bool goSouth,
-			bool goEast,
-			bool goWest,
-			bool goNorthWest,
-			bool goSouthWest,
-			bool goNorthEast,
-			bool goSouthEast,
-			bool goUp,
-			bool goDown
-			) {
-			this.RoomObjects = new List<IRoomInteraction>();
-			this.Name = name;
-			this.Desc = desc;
+		public TownRoom(int x, int y, int z, string name, string desc) {
 			this.X = x;
 			this.Y = y;
 			this.Z = z;
-			this.GoNorth = goNorth;
-			this.GoSouth = goSouth;
-			this.GoEast = goEast;
-			this.GoWest = goWest;
-			this.GoNorthWest = goNorthWest;
-			this.GoSouthWest = goSouthWest;
-			this.GoNorthEast = goNorthEast;
-			this.GoSouthEast = goSouthEast;
-			this.GoUp = goUp;
-			this.GoDown = goDown;
+			this.RoomObjects = new List<IRoomInteraction>();
+			this.Name = name;
+			this.Desc = desc;
 			this.Commands = new List<string> {
 				"[I]nventory",
 				"Save",
 				"[Q]uit"};
 		}
-		public TownRoom(
-			string name,
-			string desc,
-			int x,
-			int y,
-			int z,
-			bool goNorth,
-			bool goSouth,
-			bool goEast,
-			bool goWest,
-			bool goNorthWest,
-			bool goSouthWest,
-			bool goNorthEast,
-			bool goSouthEast,
-			bool goUp,
-			bool goDown,
-			Vendor vendor
-			)
-			: this(name, 
-				desc, 
-				x, 
-				y, 
-				z,
-				goNorth,
-				goSouth, 
-				goEast,
-				goWest,
-				goNorthWest, 
-				goSouthWest,
-				goNorthEast, 
-				goSouthEast, 
-				goUp, 
-				goDown) {
+		public TownRoom(int x, int y, int z, string name, string desc, Vendor vendor) : this(x, y, z, name, desc) {
 			this.Vendor = vendor;
 			this.RoomObjects.Add(this.Vendor);
 		}
-		public TownRoom(
-			string name,
-			string desc,
-			int x,
-			int y,
-			int z,
-			bool goNorth,
-			bool goSouth,
-			bool goEast,
-			bool goWest,
-			bool goNorthWest,
-			bool goSouthWest,
-			bool goNorthEast,
-			bool goSouthEast,
-			bool goUp,
-			bool goDown,
-			Trainer trainer
-		)
-			: this(name, 
-				desc, 
-				x, 
-				y, 
-				z,
-				goNorth,
-				goSouth, 
-				goEast,
-				goWest,
-				goNorthWest, 
-				goSouthWest,
-				goNorthEast, 
-				goSouthEast, 
-				goUp, 
-				goDown) {
+		public TownRoom(int x, int y, int z, string name, string desc, Trainer trainer) : this(x, y, z, name, desc) {
 			this.Trainer = trainer;
 			this.RoomObjects.Add(this.Trainer);
 		}
@@ -168,34 +78,34 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				directionList};
 			var roomDirs = new StringBuilder();
-			if (this.GoNorth) {
+			if (this.North != null) {
 				roomDirs.Append("[N]orth ");
 			}
-			if (this.GoSouth) {
+			if (this.South != null) {
 				roomDirs.Append("[S]outh ");
 			}
-			if (this.GoEast) {
+			if (this.East != null) {
 				roomDirs.Append("[E]ast ");
 			}
-			if (this.GoWest) {
+			if (this.West != null) {
 				roomDirs.Append("[W]est ");
 			}
-			if (this.GoNorthWest) {
+			if (this.NorthWest != null) {
 				roomDirs.Append("[N]orth[W]est ");
 			}
-			if (this.GoSouthWest) {
+			if (this.SouthWest != null) {
 				roomDirs.Append("[S]outh[W]est ");
 			}
-			if (this.GoNorthEast) {
+			if (this.NorthEast != null) {
 				roomDirs.Append("[N]orth[E]ast ");
 			}
-			if (this.GoSouthEast) {
+			if (this.SouthEast != null) {
 				roomDirs.Append("[S]outh[E]ast ");
 			}
-			if (this.GoUp) {
+			if (this.Up != null) {
 				roomDirs.Append("[U]p ");
 			}
-			if (this.GoDown) {
+			if (this.Down != null) {
 				roomDirs.Append("[D]own");
 			}
 			if (directionList.Length + roomDirs.ToString().Length > Settings.GetGameWidth()) {

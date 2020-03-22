@@ -70,44 +70,44 @@ namespace DungeonGame {
 				this.Player.InCombat = false;
 				this.Opponent.InCombat = false;
 				this.FleeSuccess = true;
-				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoUp) {
-					RoomHandler.ChangeRoom(this.Player, 0, 0, 1);
+				if (this.Player.PlayerLocation.Up != null) {
+					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.Up);
 					return;
 				}
-				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoEast) {
-					RoomHandler.ChangeRoom(this.Player, 1, 0, 0);
+				if (this.Player.PlayerLocation.East != null) {
+					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.East);
 					return;
 				}
-				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoWest) {
-					RoomHandler.ChangeRoom(this.Player, -1, 0, 0);
+				if (this.Player.PlayerLocation.West != null) {
+					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.West);
 					return;
 				}
-				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoNorth) {
-					RoomHandler.ChangeRoom(this.Player, 0, 1, 0);
+				if (this.Player.PlayerLocation.North != null) {
+					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.North);
 					return;
 				}
-				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoSouth) {
-					RoomHandler.ChangeRoom(this.Player, 0, -1, 0);
+				if (this.Player.PlayerLocation.South != null) {
+					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.South);
 					return;
 				}
-				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoNorthEast) {
-					RoomHandler.ChangeRoom(this.Player, 1, 1, 0);
+				if (this.Player.PlayerLocation.NorthEast != null) {
+					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.NorthEast);
 					return;
 				}
-				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoNorthWest) {
-					RoomHandler.ChangeRoom(this.Player, -1, 1, 0);
+				if (this.Player.PlayerLocation.NorthWest != null) {
+					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.NorthWest);
 					return;
 				}
-				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoSouthEast) {
-					RoomHandler.ChangeRoom(this.Player, 1, -1, 0);
+				if (this.Player.PlayerLocation.SouthEast != null) {
+					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.SouthEast);
 					return;
 				}
-				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoSouthWest) {
-					RoomHandler.ChangeRoom(this.Player, -1, -1, 0);
+				if (this.Player.PlayerLocation.SouthWest != null) {
+					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.SouthWest);
 					return;
 				}
-				if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoDown) {
-					RoomHandler.ChangeRoom(this.Player, 0, 0, -1);
+				if (this.Player.PlayerLocation.Down != null) {
+					RoomHandler.ChangeRoom(this.Player, this.Player.PlayerLocation.Down);
 					return;
 				}
 			}

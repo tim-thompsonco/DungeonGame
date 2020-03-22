@@ -173,8 +173,6 @@ namespace DungeonGame {
 					"What item did you want to drop?");
 				return;
 			}
-			var room = RoomHandler.Rooms.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
-			var roomIndex = RoomHandler.Rooms.IndexOf(room);
 			var itemIndex = player.Inventory.FindIndex(
 				f => f.Name == input[1] || f.Name.Contains(input[1]));
 			if (itemIndex != -1) {
@@ -185,7 +183,7 @@ namespace DungeonGame {
 						"You have to unequip that item first!");
 					return;
 				}
-				RoomHandler.Rooms[roomIndex].RoomObjects.Add(player.Inventory[itemIndex]);
+				player.PlayerLocation.RoomObjects.Add(player.Inventory[itemIndex]);
 				var dropInventoryString = "You dropped " +
 				                        player.Inventory[itemIndex].Name + ".";
 				player.Inventory.RemoveAt(itemIndex);
@@ -198,7 +196,7 @@ namespace DungeonGame {
 			itemIndex = player.Consumables.FindIndex(
 				f => f.Name == input[1] || f.Name.Contains(input[1]));
 			if (itemIndex != -1) {
-				RoomHandler.Rooms[roomIndex].RoomObjects.Add(player.Consumables[itemIndex]);
+				player.PlayerLocation.RoomObjects.Add(player.Consumables[itemIndex]);
 				var dropConsumableString = "You dropped " +
 				                          player.Consumables[itemIndex].Name + ".";
 				player.Consumables.RemoveAt(itemIndex);
@@ -221,11 +219,9 @@ namespace DungeonGame {
 					"What item did you want to pickup?");
 				return;
 			}
-			var room = RoomHandler.Rooms.Find(f => f.X == player.X && f.Y == player.Y && f.Z == player.Z);
-			var roomIndex = RoomHandler.Rooms.IndexOf(room);
-			var itemIndex = RoomHandler.Rooms[roomIndex].RoomObjects.FindIndex(
+			var itemIndex = player.PlayerLocation.RoomObjects.FindIndex(
 				f => f.Name == input[1] || f.Name.Contains(input[1]));
-			if (!(RoomHandler.Rooms[roomIndex].RoomObjects[itemIndex] is IEquipment item)) {
+			if (!(player.PlayerLocation.RoomObjects[itemIndex] is IEquipment item)) {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -247,15 +243,15 @@ namespace DungeonGame {
 					"That item is not in the room!");
 				return;
 			}
-			if (RoomHandler.Rooms[roomIndex].RoomObjects[itemIndex].GetType() == typeof(Consumable)) {
-				player.Consumables.Add(RoomHandler.Rooms[roomIndex].RoomObjects[itemIndex] as Consumable);
+			if (player.PlayerLocation.RoomObjects[itemIndex].GetType() == typeof(Consumable)) {
+				player.Consumables.Add(player.PlayerLocation.RoomObjects[itemIndex] as Consumable);
 			}
 			else {
-				player.Inventory.Add(RoomHandler.Rooms[roomIndex].RoomObjects[itemIndex] as IEquipment);
+				player.Inventory.Add(player.PlayerLocation.RoomObjects[itemIndex] as IEquipment);
 			}
 			var pickupItemString = "You picked up " +
-			                       RoomHandler.Rooms[roomIndex].RoomObjects[itemIndex].Name + ".";
-			RoomHandler.Rooms[roomIndex].RoomObjects.RemoveAt(itemIndex);
+			                       player.PlayerLocation.RoomObjects[itemIndex].Name + ".";
+			player.PlayerLocation.RoomObjects.RemoveAt(itemIndex);
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),

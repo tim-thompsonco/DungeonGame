@@ -16,98 +16,82 @@ namespace DungeonGame {
 		}
 		public RoomType RoomCategory { get; set; }
 		public bool IsDiscovered { get; set; }
-		public bool GoNorth { get; set; }
-		public bool GoSouth { get; set; }
-		public bool GoEast { get; set; }
-		public bool GoWest { get; set; }
-		public bool GoNorthWest { get; set; }
-		public bool GoSouthWest { get; set; }
-		public bool GoNorthEast { get; set; }
-		public bool GoSouthEast { get; set; }
-		public bool GoUp { get; set; }
-		public bool GoDown { get; set; }
-		public string Name { get; set; }
-		public string Desc { get; set; }
+		public IRoom North { get; set; }
+		public IRoom South { get; set; }
+		public IRoom East { get; set; }
+		public IRoom West { get; set; }
+		public IRoom NorthWest { get; set; }
+		public IRoom SouthWest { get; set; }
+		public IRoom NorthEast { get; set; }
+		public IRoom SouthEast { get; set; }
+		public IRoom Up { get; set; }
+		public IRoom Down { get; set; }
 		public int X { get; set; }
 		public int Y { get; set; }
 		public int Z { get; set; }
+		public string Name { get; set; }
+		public string Desc { get; set; }
 		public int DungeonLevel { get; set; }
 		public List<string> Commands { get; set; }
 		public List<string> CombatCommands { get; set; }
 		public List<IRoomInteraction> RoomObjects { get; set; }
 		public Monster Monster { get; set; }
 
-		/* Default constructor for JSON deserialization to work since there isn't 1 main constructor that should be
-		 used for JSON deserialization */
-		public DungeonRoom() {}
-		public DungeonRoom(int x, int y, int z, bool goNorth, bool goSouth, bool goEast, bool goWest, bool goNorthWest,
-			bool goSouthWest, bool goNorthEast, bool goSouthEast, bool goUp, bool goDown, int levelRangeLow,
-			int levelRangeHigh, int dungeonLevel) {
-			this.RoomObjects = new List<IRoomInteraction>();
+		public DungeonRoom(int x, int y, int z, int levelRangeLow, int levelRangeHigh) {
 			this.X = x;
 			this.Y = y;
 			this.Z = z;
-			this.DungeonLevel = dungeonLevel;
-			this.GoNorth = goNorth;
-			this.GoSouth = goSouth;
-			this.GoEast = goEast;
-			this.GoWest = goWest;
-			this.GoNorthWest = goNorthWest;
-			this.GoSouthWest = goSouthWest;
-			this.GoNorthEast = goNorthEast;
-			this.GoSouthEast = goSouthEast;
-			this.GoUp = goUp;
-			this.GoDown = goDown;
+			this.RoomObjects = new List<IRoomInteraction>();
 			this.Commands = new List<string> {"[I]nventory", "Save", "[Q]uit"};
 			this.CombatCommands = new List<string> {"[F]ight", "[I]nventory", "Flee"};
+			this.DungeonLevel = GameHandler.GetRandomNumber(levelRangeLow, levelRangeHigh);
 			var randomNum = GameHandler.GetRandomNumber(1, 100);
-			var randomNumLevel = GameHandler.GetRandomNumber(levelRangeLow, levelRangeHigh);
 			// Reserving numbers 80-100 for chance of room not having a monster
 			if (randomNum <= 16) {
 				// 20% chance of spawning based on cumulative 0.2 * 80
-				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Zombie);
+				this.Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Zombie);
 				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 32) {
 				// 20% chance of spawning based on cumulative 0.4 * 80
-				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Skeleton);
+				this.Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Skeleton);
 				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 40) {
 				// 10% chance of spawning based on cumulative 0.5 * 80
-				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Elemental);
+				this.Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Elemental);
 				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 48) {
 				// 10% chance of spawning based on cumulative 0.6 * 80
-				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Vampire);
+				this.Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Vampire);
 				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 60) {
 				// 15% chance of spawning based on cumulative 0.75 * 80
-				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Troll);
+				this.Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Troll);
 				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 68) {
 				// 10% chance of spawning based on cumulative 0.85 * 80
-				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Demon);
+				this.Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Demon);
 				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 76) {
 				// 10% chance of spawning based on cumulative 0.95 * 80
-				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Spider);
+				this.Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Spider);
 				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
 			else if (randomNum <= 80) {
 				// 5% chance of spawning based on cumulative 1 * 80
-				this.Monster = new Monster(randomNumLevel, Monster.MonsterType.Dragon);
+				this.Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Dragon);
 				MonsterBuilder.BuildMonster(this.Monster);
 				this.RoomObjects.Add(this.Monster);
 			}
@@ -196,34 +180,34 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				directionList};
 			var roomDirs = new StringBuilder();
-			if (this.GoNorth) {
+			if (this.North != null) {
 				roomDirs.Append("[N]orth ");
 			}
-			if (this.GoSouth) {
+			if (this.South != null) {
 				roomDirs.Append("[S]outh ");
 			}
-			if (this.GoEast) {
+			if (this.East != null) {
 				roomDirs.Append("[E]ast ");
 			}
-			if (this.GoWest) {
+			if (this.West != null) {
 				roomDirs.Append("[W]est ");
 			}
-			if (this.GoNorthWest) {
+			if (this.NorthWest != null) {
 				roomDirs.Append("[N]orth[W]est ");
 			}
-			if (this.GoSouthWest) {
+			if (this.SouthWest != null) {
 				roomDirs.Append("[S]outh[W]est ");
 			}
-			if (this.GoNorthEast) {
+			if (this.NorthEast != null) {
 				roomDirs.Append("[N]orth[E]ast ");
 			}
-			if (this.GoSouthEast) {
+			if (this.SouthEast != null) {
 				roomDirs.Append("[S]outh[E]ast ");
 			}
-			if (this.GoUp) {
+			if (this.Up != null) {
 				roomDirs.Append("[U]p ");
 			}
-			if (this.GoDown) {
+			if (this.Down != null) {
 				roomDirs.Append("[D]own");
 			}
 			if (directionList.Length + roomDirs.ToString().Length > Settings.GetGameWidth()) {

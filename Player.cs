@@ -29,9 +29,6 @@ namespace DungeonGame {
 		public int Experience { get; set; }
 		public int ExperienceToLevel { get; set; }
 		public int Level { get; set; }
-		public int X { get; set; }
-		public int Y { get; set; }
-		public int Z { get; set; }
 		public bool InCombat { get; set; }
 		public bool CanSave { get; set; }
 		public bool CanWearCloth { get; set; }
@@ -54,6 +51,10 @@ namespace DungeonGame {
 		public Armor PlayerWaistArmor { get; set; }
 		public Armor PlayerLegsArmor { get; set; }
 		public Weapon PlayerWeapon { get; set; }
+		public IRoom PlayerLocation { get; set; }
+		public int X { get; set; }
+		public int Y { get; set; }
+		public int Z { get; set; }
 		public List<Effect> Effects { get; set; }
 		public List<PlayerSpell> Spellbook { get; set; }
 		public List<PlayerAbility> Abilities { get; set; }

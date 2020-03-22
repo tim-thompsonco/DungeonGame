@@ -20,12 +20,12 @@ namespace DungeonGame {
 			return parsedInput;
 		}
 		public static void ProcessUserInput(Player player, string[] input, Timer globalTimer) {
-			var isTownRoom = RoomHandler.Rooms[RoomHandler.RoomIndex] as TownRoom;
+			var isTownRoom = player.PlayerLocation as TownRoom;
 			switch (input[0]) {
 				case "a":
 				case "attack":
 				case "kill":
-					RoomHandler.Rooms[RoomHandler.RoomIndex].AttackOpponent(player, input, globalTimer);
+					player.PlayerLocation.AttackOpponent(player, input, globalTimer);
 					break;
 				case "buy":
 					try {
@@ -92,8 +92,8 @@ namespace DungeonGame {
 							player.UseAbility(input);
 						}
 						else if (input.Contains("ambush")) {
-							player.UseAbility(RoomHandler.Rooms[RoomHandler.RoomIndex].Monster, input);
-							RoomHandler.Rooms[RoomHandler.RoomIndex].AttackOpponent(player, input, globalTimer);
+							player.UseAbility(player.PlayerLocation.Monster, input);
+							player.PlayerLocation.AttackOpponent(player, input, globalTimer);
 						}
 						else if (input[1] != null) {
 							player.UseAbility(input);
@@ -235,14 +235,14 @@ namespace DungeonGame {
 						}
 					}
 					catch (IndexOutOfRangeException) {
-						RoomHandler.Rooms[RoomHandler.RoomIndex].LookRoom();
+						player.PlayerLocation.LookRoom();
 					}
 					break;
 				case "loot":
 					try {
 						if (input[1] != null) {
 							try {
-								RoomHandler.Rooms[RoomHandler.RoomIndex].LootCorpse(player, input);
+								player.PlayerLocation.LootCorpse(player, input);
 							}
 							catch (Exception) {
 								OutputHandler.Display.StoreUserOutput(
@@ -415,9 +415,9 @@ namespace DungeonGame {
 					break;
 				case "n":
 				case "north":
-					if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoNorth) {
+					if (player.PlayerLocation.North != null) {
 						try {
-							RoomHandler.ChangeRoom(player, 0, 1, 0);
+							RoomHandler.ChangeRoom(player, player.PlayerLocation.North);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -429,9 +429,9 @@ namespace DungeonGame {
 					break;
 				case "s":
 				case "south":
-					if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoSouth) {
+					if (player.PlayerLocation.South != null) {
 						try {
-							RoomHandler.ChangeRoom(player, 0, -1, 0);
+							RoomHandler.ChangeRoom(player, player.PlayerLocation.South);
 
 						}
 						catch (ArgumentOutOfRangeException) {
@@ -444,9 +444,9 @@ namespace DungeonGame {
 					break;
 				case "e":
 				case "east":
-					if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoEast) {
+					if (player.PlayerLocation.East != null) {
 						try {
-							RoomHandler.ChangeRoom(player, 1, 0, 0);
+							RoomHandler.ChangeRoom(player, player.PlayerLocation.East);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -458,9 +458,9 @@ namespace DungeonGame {
 					break;
 				case "w":
 				case "west":
-					if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoWest) {
+					if (player.PlayerLocation.West != null) {
 						try {
-							RoomHandler.ChangeRoom(player, -1, 0, 0);
+							RoomHandler.ChangeRoom(player, player.PlayerLocation.West);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -472,9 +472,9 @@ namespace DungeonGame {
 					break;
 				case "ne":
 				case "northeast":
-					if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoNorthEast) {
+					if (player.PlayerLocation.NorthEast != null) {
 						try {
-							RoomHandler.ChangeRoom(player, 1, 1, 0);
+							RoomHandler.ChangeRoom(player, player.PlayerLocation.NorthEast);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -486,9 +486,9 @@ namespace DungeonGame {
 					break;
 				case "nw":
 				case "northwest":
-					if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoNorthWest) {
+					if (player.PlayerLocation.NorthWest != null) {
 						try {
-							RoomHandler.ChangeRoom(player, -1, 1, 0);
+							RoomHandler.ChangeRoom(player, player.PlayerLocation.NorthWest);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -500,9 +500,9 @@ namespace DungeonGame {
 					break;
 				case "se":
 				case "southeast":
-					if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoSouthEast) {
+					if (player.PlayerLocation.SouthEast != null) {
 						try {
-							RoomHandler.ChangeRoom(player, 1, -1, 0);
+							RoomHandler.ChangeRoom(player, player.PlayerLocation.SouthEast);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -514,9 +514,9 @@ namespace DungeonGame {
 					break;
 				case "sw":
 				case "southwest":
-					if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoSouthWest) {
+					if (player.PlayerLocation.SouthWest != null) {
 						try {
-							RoomHandler.ChangeRoom(player, -1, -1, 0);
+							RoomHandler.ChangeRoom(player, player.PlayerLocation.SouthWest);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -528,9 +528,9 @@ namespace DungeonGame {
 					break;
 				case "u":
 				case "up":
-					if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoUp) {
+					if (player.PlayerLocation.Up != null) {
 						try {
-							RoomHandler.ChangeRoom(player, 0, 0, 1);
+							RoomHandler.ChangeRoom(player, player.PlayerLocation.Up);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
@@ -542,9 +542,9 @@ namespace DungeonGame {
 					break;
 				case "d":
 				case "down":
-					if (RoomHandler.Rooms[RoomHandler.RoomIndex].GoDown) {
+					if (player.PlayerLocation.Down != null) {
 						try {
-							RoomHandler.ChangeRoom(player, 0, 0, -1);
+							RoomHandler.ChangeRoom(player, player.PlayerLocation.Down);
 						}
 						catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();

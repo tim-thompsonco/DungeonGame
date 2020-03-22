@@ -407,7 +407,7 @@ namespace DungeonGame {
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				portalString);
-			RoomHandler.Rooms[RoomHandler.RoomIndex].LookRoom();
+			player.PlayerLocation.LookRoom();
 		}
 	}
 }

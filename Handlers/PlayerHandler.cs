@@ -11,10 +11,10 @@ namespace DungeonGame {
 		}
 		public static void LookAtObject(Player player, string[] input) {
 			var parsedInput = InputHandler.ParseInput(input);
-			var roomMatch = RoomHandler.Rooms[RoomHandler.RoomIndex].RoomObjects.FindIndex(f =>
+			var roomMatch = player.PlayerLocation.RoomObjects.FindIndex(f =>
 				f.Name.Contains(parsedInput));
 			if (roomMatch != -1) {
-				RoomHandler.Rooms[RoomHandler.RoomIndex].LookNpc(input, player);
+				player.PlayerLocation.LookNpc(input, player);
 				return;
 			}
 			var playerInvIndex = player.Inventory.FindIndex(f => f.Name.Contains(input[1]) || 

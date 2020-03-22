@@ -1,55 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace DungeonGame {
 	public class RoomBuilder {
-		public enum StartDirection {
-			Up,
-			Down
-		}
-
-		private StartDirection StartDir { get; set; }
 		private int Size { get; set; }
 		private int Levels { get; set; }
-		private int XCoord { get; set; }
-		private int YCoord { get; set; }
-		private int ZCoord { get; set; }
 		private int CurrentLevel { get; set; }
-		private bool GoNorth { get; set; }
-		private bool GoSouth { get; set; }
-		private bool GoEast { get; set; }
-		private bool GoWest { get; set; }
-		private bool GoNorthWest { get; set; }
-		private bool GoSouthWest { get; set; }
-		private bool GoNorthEast { get; set; }
-		private bool GoSouthEast { get; set; }
-		private bool GoUp { get; set; }
-		private bool GoDown { get; set; }
 		private List<IRoom> SpawnedDungeonRooms { get; set; }
 
-		private RoomBuilder() {
-			this.SpawnedDungeonRooms = new List<IRoom>();
-			var townRooms = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IRoom>>(File.ReadAllText(
-				"townrooms.json"), new Newtonsoft.Json.JsonSerializerSettings {
-				TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
-				NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
-			});
-			foreach (var room in townRooms) {
-				this.SpawnedDungeonRooms.Add(room);
-			}
-		}
-		public RoomBuilder(int size, int levels, int startX, int startY, int startZ, StartDirection startDir)
-			: this() {
-			/* Dungeon difficulty settings
-			Commenting out for now because I am setting each level to be equal to difficulty of i, subject to some
-			variation, and later on if I build out this project more I will reuse this code to make the level ranges
-			dynamic again when I build multiple dungeons
-			this.LevelRangeLow = levelRangeLow;
-			this.LevelRangeHigh = levelRangeHigh; */
+		public RoomBuilder(int size, int levels, int startX, int startY, int startZ) {
+			// Create town to connect dungeon to
+			this.SpawnedDungeonRooms = BuildTown();
 			// Dungeon build settings
-			this.StartDir = startDir;
 			this.Size = size;
 			this.Levels = levels;
 			var levelSize = size / levels;
@@ -60,44 +23,32 @@ namespace DungeonGame {
 					if (i == 0 && j == 0) {
 						/* To connect static room to dynamic dungeon build, always have first room go down one, and the static
 						 room must always be up by one for the two to connect */
-						this.GenerateStartRoomDirections();
-						var firstRoom = new DungeonRoom(startX, startY,startZ - 1, 
-							this.GoNorth, this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, 
-							this.GoNorthEast, this.GoSouthEast, this.GoUp, this.GoDown, 
-							levelRangeLowForLevel, levelRangeHighForLevel,i + 1);
+						var firstRoom = new DungeonRoom(
+							startX, startY,startZ - 1, levelRangeLowForLevel, levelRangeHighForLevel);
+						this.SpawnedDungeonRooms[0].Down = firstRoom;
+						firstRoom.Up = this.SpawnedDungeonRooms[0];
 						this.SpawnedDungeonRooms.Add(firstRoom);
-						this.ResetRoomDirections();
 						this.CurrentLevel--;
 						continue;
 					}
 					if (i > 0 && j == 0) {
 						/* To connect upper level to lower level, always have first room go down one, and the upper level
-						 room must always be up by one for the two to connect, so X/Y coords are same but Z coord is -1
-						 from beginning Z coord */
-						this.XCoord = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].X;
-						this.YCoord = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Y;
-						this.ZCoord = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Z - 1;
-						this.GenerateStairwayRoomDirections();
-						var firstRoom = new DungeonRoom(this.XCoord, this.YCoord, this.ZCoord, this.GoNorth, 
-							this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, this.GoNorthEast, 
-							this.GoSouthEast, this.GoUp, this.GoDown, levelRangeLowForLevel, levelRangeHighForLevel, i + 1);
-						this.SpawnedDungeonRooms.Add(firstRoom);
-						this.ResetRoomDirections();
+						 room must always be up by one for the two to connect*/
+						var oldRoom = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1];
+						var newLevelRoom = new DungeonRoom(
+							oldRoom.X, oldRoom.Y, oldRoom.Z - 1, levelRangeLowForLevel, levelRangeHighForLevel);
+						oldRoom.Down = newLevelRoom;
+						newLevelRoom.Up = oldRoom;
+						this.SpawnedDungeonRooms.Add(newLevelRoom);
 						this.CurrentLevel--;
 						continue;
 					}
-					this.GenerateRandomCoords();
-					this.GenerateRoomDirections();
-					var newRoom = new DungeonRoom(this.XCoord, this.YCoord, this.ZCoord, this.GoNorth, 
-						this.GoSouth, this.GoEast, this.GoWest, this.GoNorthWest, this.GoSouthWest, this.GoNorthEast, 
-						this.GoSouthEast, this.GoUp, this.GoDown, levelRangeLowForLevel, levelRangeHighForLevel, i + 1);
-					this.SpawnedDungeonRooms.Add(newRoom);
-					this.ResetRoomDirections();
+					this.SpawnedDungeonRooms.Add(this.GenerateDungeonRoom(levelRangeLowForLevel, levelRangeHighForLevel));
 				}
 			}
 			foreach (var room in this.SpawnedDungeonRooms.Where(
 				room => room.GetType() == typeof(DungeonRoom))) {
-				DetermineDungeonRoomCategory(room);
+				DetermineDungeonRoomCategory(room as DungeonRoom);
 				room.Name = RoomBuilderHelper.PopulateDungeonRoomName(room);
 				room.Desc = RoomBuilderHelper.PopulateDungeonRoomDesc(room);
 			}
@@ -106,173 +57,247 @@ namespace DungeonGame {
 		public List<IRoom> RetrieveSpawnRooms() {
 			return this.SpawnedDungeonRooms;
 		}
-		private int FindRoomCordsIndex(int xCoord, int yCoord, int zCoord) {
-			var roomName = this.SpawnedDungeonRooms.Find(
-				f => f.X == xCoord && f.Y == yCoord && f.Z == zCoord);
-			var roomIndex = this.SpawnedDungeonRooms.IndexOf(roomName);
-			return roomIndex;
-		}
-		private void GenerateRandomCoords() {
+		private DungeonRoom GenerateDungeonRoom(int levelRangeLow, int levelRangeHigh) {
+			var oldRoom = this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1];
 			while (true) {
-				this.XCoord = GameHandler.GetRandomNumber(
-					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].X - 1, 
-					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].X + 1);
-				this.YCoord = GameHandler.GetRandomNumber(
-					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Y - 1, 
-					this.SpawnedDungeonRooms[this.SpawnedDungeonRooms.Count - 1].Y + 1);
-				this.ZCoord = this.CurrentLevel;
-				if (this.FindRoomCordsIndex(this.XCoord, this.YCoord, this.ZCoord) != -1) continue;
-				break;
+				var randomNum = GameHandler.GetRandomNumber(1, 6);
+				switch (randomNum) {
+					case 1:
+						if (oldRoom.North == null) {
+							var newRoom = new DungeonRoom(oldRoom.X, oldRoom.Y + 1, oldRoom.Z, levelRangeLow, levelRangeHigh);
+							oldRoom.North = newRoom;
+							newRoom.South = oldRoom;
+							return newRoom;
+						}
+						break;
+					case 2:
+						if (oldRoom.NorthEast == null) {
+							var newRoom = new DungeonRoom(
+								oldRoom.X + 1, oldRoom.Y + 1, oldRoom.Z, levelRangeLow, levelRangeHigh);
+							oldRoom.NorthEast = newRoom;
+							newRoom.SouthWest = oldRoom;
+							return newRoom;
+						}
+						break;
+					case 3:
+						if (oldRoom.NorthWest == null) {
+							var newRoom = new DungeonRoom(
+								oldRoom.X - 1, oldRoom.Y + 1, oldRoom.Z, levelRangeLow, levelRangeHigh);
+							oldRoom.NorthWest = newRoom;
+							newRoom.SouthEast = oldRoom;
+							return newRoom;
+						}
+						break;
+					case 4:
+						if (oldRoom.South == null) {
+							var newRoom = new DungeonRoom(oldRoom.X, oldRoom.Y - 1, oldRoom.Z, levelRangeLow, levelRangeHigh);
+							oldRoom.South = newRoom;
+							newRoom.North = oldRoom;
+							return newRoom;
+						}
+						break;
+					case 5:
+						if (oldRoom.SouthEast == null) {
+							var newRoom = new DungeonRoom(
+								oldRoom.X + 1, oldRoom.Y - 1, oldRoom.Z, levelRangeLow, levelRangeHigh);
+							oldRoom.SouthEast = newRoom;
+							newRoom.NorthWest = oldRoom;
+							return newRoom;
+						}
+						break;
+					case 6:
+						if (oldRoom.SouthWest == null) {
+							var newRoom = new DungeonRoom(
+								oldRoom.X - 1, oldRoom.Y - 1, oldRoom.Z, levelRangeLow, levelRangeHigh);
+							oldRoom.SouthWest = newRoom;
+							newRoom.NorthEast = oldRoom;
+							return newRoom;
+						}
+						break;
+				}
 			}
 		}
-		private void GenerateStartRoomDirections() {
-			switch (this.StartDir) {
-				case StartDirection.Up:
-					this.GoDown = true;
-					break;
-				case StartDirection.Down:
-					this.GoUp = true;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}			
-		}
-		private void GenerateRoomDirections() {
-			var checkWest = this.FindRoomCordsIndex(this.XCoord - 1, this.YCoord, this.ZCoord);
-			if (checkWest != -1) {
-				this.SpawnedDungeonRooms[checkWest].GoEast = true;
-				this.GoWest = true;
-			}
-			var checkNorthWest = this.FindRoomCordsIndex(this.XCoord - 1, this.YCoord + 1, this.ZCoord);
-			if (checkNorthWest != -1) {
-				this.SpawnedDungeonRooms[checkNorthWest].GoSouthEast = true;
-				this.GoNorthWest = true;
-			}
-			var checkNorth = this.FindRoomCordsIndex(this.XCoord, this.YCoord + 1, this.ZCoord);
-			if (checkNorth != -1) {
-				this.SpawnedDungeonRooms[checkNorth].GoSouth = true;
-				this.GoNorth = true;
-			}
-			var checkNorthEast = this.FindRoomCordsIndex(this.XCoord + 1, this.YCoord + 1, this.ZCoord);
-			if (checkNorthEast != -1) {
-				this.SpawnedDungeonRooms[checkNorthEast].GoSouthWest = true;
-				this.GoNorthEast = true;
-			}
-			var checkEast = this.FindRoomCordsIndex(this.XCoord + 1, this.YCoord, this.ZCoord);
-			if (checkEast != -1) {
-				this.SpawnedDungeonRooms[checkEast].GoWest = true;
-				this.GoEast = true;
-			}
-			var checkSouthEast = this.FindRoomCordsIndex(this.XCoord + 1, this.YCoord - 1, this.ZCoord);
-			if (checkSouthEast != -1) {
-				this.SpawnedDungeonRooms[checkSouthEast].GoNorthWest = true;
-				this.GoSouthEast = true;
-			}
-			var checkSouth = this.FindRoomCordsIndex(this.XCoord, this.YCoord - 1, this.ZCoord);
-			if (checkSouth != -1) {
-				this.SpawnedDungeonRooms[checkSouth].GoNorth = true;
-				this.GoSouth = true;
-			}
-			var checkSouthWest = this.FindRoomCordsIndex(this.XCoord - 1, this.YCoord - 1, this.ZCoord);
-			if (checkSouthWest == -1) return;
-			this.SpawnedDungeonRooms[checkSouthWest].GoNorthEast = true;
-			this.GoSouthWest = true;
-		}
-		private void GenerateStairwayRoomDirections() {
-			var checkWest = this.FindRoomCordsIndex(this.XCoord - 1, this.YCoord, this.ZCoord);
-			if (checkWest != -1) {
-				this.SpawnedDungeonRooms[checkWest].GoEast = true;
-				this.GoWest = true;
-			}
-			var checkNorthWest = this.FindRoomCordsIndex(this.XCoord - 1, this.YCoord + 1, this.ZCoord);
-			if (checkNorthWest != -1) {
-				this.SpawnedDungeonRooms[checkNorthWest].GoSouthEast = true;
-				this.GoNorthWest = true;
-			}
-			var checkNorth = this.FindRoomCordsIndex(this.XCoord, this.YCoord + 1, this.ZCoord);
-			if (checkNorth != -1) {
-				this.SpawnedDungeonRooms[checkNorth].GoSouth = true;
-				this.GoNorth = true;
-			}
-			var checkNorthEast = this.FindRoomCordsIndex(this.XCoord + 1, this.YCoord + 1, this.ZCoord);
-			if (checkNorthEast != -1) {
-				this.SpawnedDungeonRooms[checkNorthEast].GoSouthWest = true;
-				this.GoNorthEast = true;
-			}
-			var checkEast = this.FindRoomCordsIndex(this.XCoord + 1, this.YCoord, this.ZCoord);
-			if (checkEast != -1) {
-				this.SpawnedDungeonRooms[checkEast].GoWest = true;
-				this.GoEast = true;
-			}
-			var checkSouthEast = this.FindRoomCordsIndex(this.XCoord + 1, this.YCoord - 1, this.ZCoord);
-			if (checkSouthEast != -1) {
-				this.SpawnedDungeonRooms[checkSouthEast].GoNorthWest = true;
-				this.GoSouthEast = true;
-			}
-			var checkSouth = this.FindRoomCordsIndex(this.XCoord, this.YCoord - 1, this.ZCoord);
-			if (checkSouth != -1) {
-				this.SpawnedDungeonRooms[checkSouth].GoNorth = true;
-				this.GoSouth = true;
-			}
-			var checkSouthWest = this.FindRoomCordsIndex(this.XCoord - 1, this.YCoord - 1, this.ZCoord);
-			if (checkSouthWest != -1) {
-				this.SpawnedDungeonRooms[checkSouthWest].GoNorthEast = true;
-				this.GoSouthWest = true;
-			}
-			var checkUp = this.FindRoomCordsIndex(this.XCoord, this.YCoord, this.ZCoord + 1);
-			if (checkUp != -1) {
-				this.SpawnedDungeonRooms[checkUp].GoDown = true;
-				this.GoUp = true;
-			}
-			var checkDown = this.FindRoomCordsIndex(this.XCoord, this.YCoord, this.ZCoord - 1);
-			if (checkDown == -1) return;
-			this.SpawnedDungeonRooms[checkDown].GoUp = true;
-			this.GoDown = true;
-		}
-		private void ResetRoomDirections() {
-			this.GoEast = false;
-			this.GoNorthEast = false;
-			this.GoSouthEast = false;
-			this.GoWest = false;
-			this.GoNorthWest = false;
-			this.GoSouthWest = false;
-			this.GoNorth = false;
-			this.GoSouth = false;
-			this.GoUp = false;
-			this.GoDown = false;
-		}
-		private static void DetermineDungeonRoomCategory(IRoom originalRoom) {
-			var castedRoom = originalRoom as DungeonRoom;
+		private static void DetermineDungeonRoomCategory(DungeonRoom room) {
 			var directionCount = 0;
-			if (castedRoom.GoUp) directionCount++;
-			if (castedRoom.GoDown) directionCount++;
-			if (castedRoom.GoEast) directionCount++;
-			if (castedRoom.GoWest) directionCount++;
-			if (castedRoom.GoNorth) directionCount++;
-			if (castedRoom.GoSouth) directionCount++;
-			if (castedRoom.GoNorthEast) directionCount++;
-			if (castedRoom.GoNorthWest) directionCount++;
-			if (castedRoom.GoSouthEast) directionCount++;
-			if (castedRoom.GoSouthWest) directionCount++;
+			if (room.Up != null) directionCount++;
+			if (room.Down != null) directionCount++;
+			if (room.North != null) directionCount++;
+			if (room.NorthEast != null) directionCount++;
+			if (room.NorthWest != null) directionCount++;
+			if (room.South != null) directionCount++;
+			if (room.SouthEast != null) directionCount++;
+			if (room.SouthWest != null) directionCount++;
 			if (directionCount == 0) throw new ArgumentOutOfRangeException();
-			if (castedRoom.GoUp || castedRoom.GoDown) {
-				castedRoom.RoomCategory = DungeonRoom.RoomType.Stairs;
+			if (room.Up != null || room.Down != null) {
+				room.RoomCategory = DungeonRoom.RoomType.Stairs;
 				return;
 			}
 			switch (directionCount) {
 				case 1:
-					castedRoom.RoomCategory = DungeonRoom.RoomType.Corner;
+					room.RoomCategory = DungeonRoom.RoomType.Corner;
 					return;
 				case 2:
-					castedRoom.RoomCategory = DungeonRoom.RoomType.Corridor;
+					room.RoomCategory = DungeonRoom.RoomType.Corridor;
 					return;
 				case 3:
-					castedRoom.RoomCategory = DungeonRoom.RoomType.Intersection;
+					room.RoomCategory = DungeonRoom.RoomType.Intersection;
 					return;
 				default:
-					castedRoom.RoomCategory = DungeonRoom.RoomType.Openspace;
+					room.RoomCategory = DungeonRoom.RoomType.Openspace;
 					break;
 			}
+		}
+		private static List<IRoom> BuildTown() {
+			var town = new List<IRoom>();
+			var name = string.Empty;
+			var desc = string.Empty;
+			name = "Outside Dungeon Entrance";
+			desc =
+				"You are outside a rocky outcropping with a wooden door laid into the rock. It has a simple metal handle with " +
+				"no lock. It almost seems like it locks from the inside though. There is a bloody handprint on the door. " +
+				"Around you is a grassy meadow with a cobblestone path leading away from the rocky outcropping towards what " +
+				"looks like a town. Smoke rises from a few chimneys in the distance.";
+			town.Add(new TownRoom(0, 4, 0, name, desc));
+			name = "Cobblestone Path";
+			desc =
+				"You are walking on a cobblestone path north towards a town in the distance. Smoke rises from a few chimneys. " +
+				"Around you is a grassy meadow and behind you is a rocky outcropping with a wooden door set into the rock.";
+			town.Add(new TownRoom(0, 5, 0, name, desc));
+			town[0].North = town[1];
+			town[1].South = town[0];
+			desc =
+				"You are walking on a cobblestone path north towards a nearby town. Smoke rises from a few chimneys. Around you " +
+				"is a grassy meadow and behind you is a rocky outcropping with a wooden door set into the rock.";
+			town.Add(new TownRoom(0, 6, 0, name, desc));
+			town[1].North = town[2];
+			town[2].South = town[1];
+			name = "Town Entrance";
+			desc =
+				"You are at the entrance to a small town. To the northeast you hear the clanking of metal on metal from what " +
+				"sounds like a blacksmith or armorer. There is a large fountain in the middle of the courtyard and off to the " +
+				"northwest are a few buildings with signs outside that you can't read from this distance.";
+			town.Add(new TownRoom(0, 7, 0, name, desc));
+			town[2].North = town[3];
+			town[3].South = town[2];
+			name = "Town - East";
+			desc =
+				"You are in the east part of the town. In front of you is a small building with a forge and furnace outside and " +
+				" a large man pounding away at a chestplate with a hammer. One building over you can see another large man " +
+				"running a sword against a grindstone to sharpen it.";
+			var npcName = "armorer";
+			var npcDesc = "A large man covered in sweat beating away at a chestplate with a hammer. He wipes his brow " +
+			              "as you approach and wonders whether you're going to make him a little bit richer or not. You can: " +
+			              "buy <item>, sell <item>, or <show forsale> to see what he has for sale.";
+			town.Add(new TownRoom(1, 8, 0, name, desc, 
+				new Vendor(npcName, npcDesc,Vendor.VendorType.Armorer)));
+			town[3].NorthEast = town[4];
+			town[4].SouthWest = town[3];
+			desc =
+				"You are in the east part of the town. A large man is in front of a building sharpening a sword against a " +
+				"grindstone. To the south, you can see a small building with a forge and furnace outside. There is another " +
+				"large man in front of it pounding away at a chestplate with a hammer.";
+			npcName = "weaponsmith";
+			npcDesc = "A large man covered in sweat sharpening a sword against a grindstone. He wipes his brow as you " +
+			          "approach and wonders whether you're going to make him a little bit richer or not. You can: buy " +
+			          "<item>, sell <item>, or <show forsale> to see what he has for sale.";
+			town.Add(new TownRoom(1, 9, 0, name, desc, 
+				new Vendor(npcName, npcDesc, Vendor.VendorType.Weaponsmith)));
+			town[4].North = town[5];
+			town[5].South = town[4];
+			name = "Town - Center";
+			desc =
+				"You are in the central part of the town. There is a wrinkled old man standing in front of a small hut, his " +
+				"hands clasped in the arms of his robes, as he gazes around the town calmly.";
+			npcName = "healer";
+			npcDesc = "An old man covered in robes looks you up and raises an eyebrow questioningly. He can rid you of all " +
+			          "your pain every so often. In fact, he may even provide you with some help that will be invaluable in " +
+			          "your travels. You can buy <item>, sell <item>, or <show forsale> to see what he has for sale. You can " +
+			          "also try to ask him to <restore> you.";
+			town.Add(new TownRoom(0, 10, 0, name, desc, 
+				new Vendor(npcName, npcDesc, Vendor.VendorType.Healer)));
+			town[5].NorthWest = town[6];
+			town[6].SouthEast = town[5];
+			name = "Town - West";
+			desc =
+				"You are in the west part of the town. A woman stands in front of a building with displays of various items in " +
+				"front of it. It looks like she buys and sells a little bit of everything.";
+			npcName = "shopkeeper";
+			npcDesc =
+				"A woman in casual work clothes looks at you and asks if you want to buy anything. She raises an item " +
+				"to show an example of what she has for sale. You can buy <item>, sell <item>, or <show forsale> to " +
+				"see what she has for sale.";
+			town.Add(new TownRoom(-1, 9, 0, name, desc, 
+				new Vendor(npcName, npcDesc, Vendor.VendorType.Shopkeeper)));
+			town[6].SouthWest = town[7];
+			town[7].NorthEast = town[6];
+			desc =
+				"You are in the west part of the town. There is a large, wooden building southwest of you with a sign out " +
+				"front that reads 'Training'. Depending on what class you are, it appears that this place might have some " +
+				"people who can help you learn more.";
+			town.Add(new TownRoom(-1, 8, 0, name, desc));
+			town[7].South = town[8];
+			town[8].North = town[7];
+			town[8].SouthEast = town[3];
+			town[3].NorthWest = town[8];
+			name = "Training Hall - Entrance";
+			desc =
+				"You are in the entrance of the training hall. To your west is a large room with training dummies and several " +
+				"people hitting them with various swords, axes and other melee weapons. To your east is another large room with " +
+				"training dummies. There are numerous arrows sticking out of the dummies and several people shooting the dummies " +
+				"with bows. To your south is one more large room with dummies. The dummies are charred because there is someone " +
+				"in a robe torching them with a fire spell.";
+			town.Add(new TownRoom(-2, 7, 0, name, desc));
+			town[8].SouthWest = town[9];
+			town[9].NorthEast = town[8];
+			name = "Training Hall - Warrior Guild";
+			desc =
+				"You are in a large room with training dummies and several people hitting them with various swords, axes and " +
+				"other melee weapons. A grizzled old man watches the practice, his arms folded across his chest,  sometimes " +
+				"nodding his head while other times cringing in disbelief. He looks like he could teach you a few things if " +
+				"you have the money for lessons.";
+			npcName = "warrior grandmaster";
+			npcDesc =
+				"A grizzled old man in a leather vest and plate gauntlets looks you up and down and wonders if you have what it " +
+				"takes to be a warrior. If you're ready, he can let you train <abilityname> to learn something new or upgrade " +
+				"<abilityname> to increase the rank on an ability that you already have. You can <show upgrades> to see the " +
+				"full list of options.";
+			town.Add(new TownRoom(-3, 7, 0, name, desc, 
+				new Trainer(npcName, npcDesc, Trainer.TrainerCategory.Warrior)));
+			town[9].West = town[10];
+			town[10].East = town[9];
+			name = "Training Hall - Mage Guild";
+			desc =
+				"You are in a large room with training dummies. The dummies are being charred by a person in a robe casting a " +
+				"fire spell. A middle-aged woman in an expensive-looking robe watches quietly, holding a staff upright in one " +
+				"hand, while she points with her other hand at the dummy and provides corrections to the trainee's incantation. " +
+				"She looks like she could teach you a few things if you have the money for lessons.";
+			npcName = "mage grandmaster";
+			npcDesc =
+				"A middle-aged woman in an expensive-looking robe, holding a staff upright, looks you up and down and wonders " +
+				"if you have the intelligence to be a mage. If you're ready, she can let you train <spellname> to learn a new " +
+				"spell or upgrade <spellname> to increase the rank on a spell that you already have. You can <show upgrades> " +
+				"to see the full list of options.";
+			town.Add(new TownRoom(-2, 6, 0, name, desc, 
+				new Trainer(npcName, npcDesc, Trainer.TrainerCategory.Mage)));
+			town[9].South = town[11];
+			town[11].North = town[9];
+			name = "Training Hall - Archer Guild";
+			desc =
+				"You are in a large room with training dummies. There are numerous arrows sticking out of the dummies and " +
+				"several people shooting the dummies with bows. A young woman in leather armor looks on, voicing encouragement " +
+				"to the trainees, and scolding them when she spots a bad habit. She looks like she could teach you a few things " +
+				"if you have the money for lessons.";
+			npcName = "archer grandmaster";
+			npcDesc =
+				"A young woman in leather armor glances at you while keeping a keen eye on her students. She looks like she " +
+				"has extremely fast reflexes but that glance suggested that she thought you did not. She can let you train " +
+				"<abilityname> to learn something new or upgrade <abilityname> to increase the rank on an ability that you " +
+				"already have. You can <show upgrades> to see the full list of options.";
+			town.Add(new TownRoom(-1, 7, 0, name, desc, 
+				new Trainer(npcName, npcDesc, Trainer.TrainerCategory.Archer)));
+			town[9].East = town[12];
+			town[12].West = town[9];
+			return town;
 		}
 	}
 }

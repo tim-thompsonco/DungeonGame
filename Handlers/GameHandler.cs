@@ -231,14 +231,13 @@ namespace DungeonGame {
 					TypeNameHandling = TypeNameHandling.Auto,
 					NullValueHandling = NullValueHandling.Ignore
 				});
-				RoomHandler.SetPlayerLocation(player, player.X, player.Y, player.Z);				
 			}
 			catch (FileNotFoundException) {
 				player = new PlayerBuilder().BuildNewPlayer();
 				GearHandler.EquipInitialGear(player);
 				/* Set initial room condition for player
 				Begin game by putting player at coords 0, 7, 0, town entrance */
-				RoomHandler.SetPlayerLocation(player, 0, 7, 0);
+				RoomHandler.SetPlayerLocation(player, 0, 4, 0);
 			}
 			return player;
 		}
@@ -265,9 +264,8 @@ namespace DungeonGame {
 					"");
 			}
 			catch (FileNotFoundException) {
-				// Create dungeon
-				RoomHandler.Rooms = new RoomBuilder(
-					200, 10,0, 4, 0, RoomBuilder.StartDirection.Down).RetrieveSpawnRooms();
+				// Create new dungeon
+				RoomHandler.Rooms = new RoomBuilder(200, 10,0, 4, 0).RetrieveSpawnRooms();
 			}
 		}
 		public static bool QuitGame(Player player) {
@@ -308,7 +306,7 @@ namespace DungeonGame {
 				serializerRooms.PreserveReferencesHandling = PreserveReferencesHandling.All;
 				using (var sw = new StreamWriter("gamesave.json"))
 				using (var writer = new JsonTextWriter(sw)) {
-					serializerPlayer.Serialize(writer, RoomHandler.Rooms, typeof(List<IRoom>));
+					serializerRooms.Serialize(writer, RoomHandler.Rooms, typeof(List<IRoom>));
 				}
 				outputString = "Your game has been saved.";
 				OutputHandler.Display.StoreUserOutput(

@@ -10,15 +10,9 @@ namespace DungeonGameTests {
 			var player = new Player("test", Player.PlayerClassType.Archer) {MaxComboPoints = 100, ComboPoints = 100,
 				MaxHitPoints = 100, HitPoints = 10};
 			RoomHandler.Rooms = new List<IRoom> {
-				new DungeonRoom(0, 0, 0, false, false, false,
-					false, false, false, false, false, false,
-					false, 1, 1, 1),
-				new DungeonRoom(0, 1, 0, false, false, false,
-					false, false, false, false, false, false,
-					false, 1, 1, 1),
-				new DungeonRoom(1, 0, 0, false, false, false,
-					false, false, false, false, false, false,
-					false, 1, 1, 1)};
+				new DungeonRoom(0, 0, 0,  1, 1),
+				new DungeonRoom(0, 1, 0,  1, 1),
+				new DungeonRoom(1, 0, 0, 1, 1)};
 			RoomHandler.Rooms[2].Monster = null;
 			RoomHandler.Rooms[1].Monster = new Monster(3, Monster.MonsterType.Demon)
 				{HitPoints = 100, MaxHitPoints = 100};
@@ -378,10 +372,7 @@ namespace DungeonGameTests {
 			var player = new Player("placeholder", Player.PlayerClassType.Archer);
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
-			RoomHandler.Rooms = new List<IRoom> {
-				new DungeonRoom(0, 0, 0, false, false, false,
-					false, false, false, false, false, false,
-					false, 1, 1, 1)};
+			RoomHandler.Rooms = new List<IRoom> {new DungeonRoom(0, 0, 0, 1, 1)};
 			player.Abilities.Add(new PlayerAbility(
 				"swift aura", 150, 1, PlayerAbility.ArcherAbility.SwiftAura, 6));
 			var input = new [] {"use", "swift", "aura"};

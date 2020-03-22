@@ -40,8 +40,7 @@ namespace DungeonGame {
 				if (GameHandler.ContinuePlaying()) {
 					GameHandler.LoadGame();
 					player = GameHandler.LoadPlayer();
-					RoomHandler.SetPlayerLocation(player, player.X, player.Y, player.Z);
-					RoomHandler.Rooms[RoomHandler.RoomIndex].LookRoom();
+					player.PlayerLocation.LookRoom();
 					OutputHandler.ShowUserOutput(player);
 					OutputHandler.Display.ClearUserOutput();
 				}
