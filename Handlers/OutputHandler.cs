@@ -26,7 +26,6 @@ namespace DungeonGame {
 			var playerX = player.PlayerLocation.X;
 			var playerY = player.PlayerLocation.Y;
 			var playerZ = player.PlayerLocation.Z;
-			var playerRoom = RoomHandler.Rooms[player.PlayerLocation];
 			/* Map starts drawing from top left, so it needs to decrement since
 			each new console writeline pushes screen down instead of up */
 			for (var i = playerY + height; i > playerY - height; i--) {
@@ -42,7 +41,7 @@ namespace DungeonGame {
 						var room = RoomHandler.Rooms[findCoord];
 						if (room.IsDiscovered) {
 							if (j == startLeftPos) {
-								if (playerRoom.Up != null || playerRoom.Down != null) {
+								if (room.Up != null || room.Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 									sameLineOutput.Add(Settings.GetLeftMapBorderSizeTwo()); // What prints to display
@@ -60,7 +59,7 @@ namespace DungeonGame {
 								}
 							}
 							else if (j == endRightPos) {
-								if (playerRoom.Up != null || playerRoom.Down != null) {
+								if (room.Up != null || room.Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display
@@ -78,7 +77,7 @@ namespace DungeonGame {
 								}
 							}
 							else if (mapX == playerX && mapY == playerY && mapZ == playerZ) {
-								if (playerRoom.Up != null || playerRoom.Down != null) {
+								if (room.Up != null || room.Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display
@@ -90,7 +89,7 @@ namespace DungeonGame {
 								}
 							}
 							else {
-								if (playerRoom.Up != null || playerRoom.Down != null) {
+								if (room.Up != null || room.Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display

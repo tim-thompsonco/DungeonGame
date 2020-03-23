@@ -264,7 +264,6 @@ namespace DungeonGame {
 			oldRoomCoord = newRoomCoord;
 			newRoomCoord = new Coordinate(0, 7, 0);
 			town.Add(newRoomCoord, new TownRoom(name, desc));
-			oldRoomCoord = newRoomCoord;
 			town[oldRoomCoord].North = town[newRoomCoord];
 			town[newRoomCoord].South = town[oldRoomCoord];
 			name = "Town - East";
@@ -276,6 +275,7 @@ namespace DungeonGame {
 			var npcDesc = "A large man covered in sweat beating away at a chestplate with a hammer. He wipes his brow " +
 			              "as you approach and wonders whether you're going to make him a little bit richer or not. You can: " +
 			              "buy <item>, sell <item>, or <show forsale> to see what he has for sale.";
+			oldRoomCoord = newRoomCoord;
 			newRoomCoord = new Coordinate(1, 8, 0);
 			town.Add(newRoomCoord, 
 				new TownRoom(name, desc, new Vendor(npcName, npcDesc,Vendor.VendorType.Armorer)));
@@ -379,7 +379,7 @@ namespace DungeonGame {
 				"if you have the intelligence to be a mage. If you're ready, she can let you train <spellname> to learn a new " +
 				"spell or upgrade <spellname> to increase the rank on a spell that you already have. You can <show upgrades> " +
 				"to see the full list of options.";
-			oldRoomCoord = newRoomCoord;
+			oldRoomCoord = new Coordinate(-2, 7, 0);
 			newRoomCoord = new Coordinate(-2, 6, 0);
 			town.Add(newRoomCoord,
 				new TownRoom(name, desc, new Trainer(npcName, npcDesc, Trainer.TrainerCategory.Mage)));
@@ -397,7 +397,6 @@ namespace DungeonGame {
 				"has extremely fast reflexes but that glance suggested that she thought you did not. She can let you train " +
 				"<abilityname> to learn something new or upgrade <abilityname> to increase the rank on an ability that you " +
 				"already have. You can <show upgrades> to see the full list of options.";
-			oldRoomCoord = newRoomCoord;
 			newRoomCoord = new Coordinate(-1, 7, 0);
 			town.Add(newRoomCoord,
 				new TownRoom(name, desc, new Trainer(npcName, npcDesc, Trainer.TrainerCategory.Archer)));
