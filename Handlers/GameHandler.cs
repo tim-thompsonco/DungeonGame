@@ -243,11 +243,10 @@ namespace DungeonGame {
 		}
 		public static void LoadGame() {
 			try {
+				var serializerSettings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto,
+					NullValueHandling = NullValueHandling.Ignore };
 				RoomHandler.Rooms = JsonConvert.DeserializeObject<Dictionary<Coordinate, IRoom>>(File.ReadAllText(
-					"gamesave.json"), new JsonSerializerSettings {
-					TypeNameHandling = TypeNameHandling.Auto,
-					NullValueHandling = NullValueHandling.Ignore
-				});
+					"gamesave.json"), serializerSettings);
 				// Insert blank space before game reload info for formatting
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
@@ -288,22 +287,18 @@ namespace DungeonGame {
 		public static void SaveGame(Player player) {
 			string outputString;
 			if (player.CanSave) {
-				var serializerPlayer = new JsonSerializer();
+				var serializerPlayer = new JsonSerializer() { NullValueHandling = NullValueHandling.Ignore, 
+					TypeNameHandling = TypeNameHandling.Auto, Formatting = Formatting.Indented, 
+					PreserveReferencesHandling = PreserveReferencesHandling.All };
 				serializerPlayer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
-				serializerPlayer.NullValueHandling = NullValueHandling.Ignore;
-				serializerPlayer.TypeNameHandling = TypeNameHandling.Auto;
-				serializerPlayer.Formatting = Formatting.Indented;
-				serializerPlayer.PreserveReferencesHandling = PreserveReferencesHandling.All;
 				using (var sw = new StreamWriter("playersave.json"))
 				using (var writer = new JsonTextWriter(sw)) {
 					serializerPlayer.Serialize(writer, player, typeof(Player));
 				}
-				var serializerRooms = new JsonSerializer();
+				var serializerRooms = new JsonSerializer() { NullValueHandling = NullValueHandling.Ignore, 
+					TypeNameHandling = TypeNameHandling.Auto, Formatting = Formatting.Indented, 
+					PreserveReferencesHandling = PreserveReferencesHandling.All };
 				serializerRooms.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
-				serializerRooms.NullValueHandling = NullValueHandling.Ignore;
-				serializerRooms.TypeNameHandling = TypeNameHandling.Auto;
-				serializerRooms.Formatting = Formatting.Indented;
-				serializerRooms.PreserveReferencesHandling = PreserveReferencesHandling.All;
 				using (var sw = new StreamWriter("gamesave.json"))
 				using (var writer = new JsonTextWriter(sw)) {
 					serializerRooms.Serialize(writer, RoomHandler.Rooms, typeof(Dictionary<Coordinate, IRoom>));

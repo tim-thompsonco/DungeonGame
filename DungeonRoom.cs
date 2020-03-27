@@ -34,6 +34,8 @@ namespace DungeonGame {
 		public List<IRoomInteraction> RoomObjects { get; set; }
 		public Monster Monster { get; set; }
 
+		// Default constructor for JSON deserialization
+		public DungeonRoom() {}
 		public DungeonRoom(int levelRangeLow, int levelRangeHigh) {
 			this.RoomObjects = new List<IRoomInteraction>();
 			this.Commands = new List<string> {"[I]nventory", "Save", "[Q]uit"};
