@@ -306,7 +306,7 @@ namespace DungeonGame {
 				serializerRooms.PreserveReferencesHandling = PreserveReferencesHandling.All;
 				using (var sw = new StreamWriter("gamesave.json"))
 				using (var writer = new JsonTextWriter(sw)) {
-					serializerRooms.Serialize(writer, RoomHandler.Rooms, typeof(List<IRoom>));
+					serializerRooms.Serialize(writer, RoomHandler.Rooms, typeof(Dictionary<Coordinate, IRoom>));
 				}
 				outputString = "Your game has been saved.";
 				OutputHandler.Display.StoreUserOutput(
