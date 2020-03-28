@@ -84,9 +84,10 @@ namespace DungeonGame {
 					itemName);
 			}
 		}
-		public void BuyItemCheck(Player player, string[] userInput) {
+		public void BuyItem(Player player, string[] userInput, int quantity) {
+			if (quantity == 0) return;
 			var inputName = InputHandler.ParseInput(userInput);
-			var index = 0;
+			var index = -1;
 			if (this.VendorCategory == VendorType.Healer) {
 				index = this.VendorItems.FindIndex(
 					f => f.Name == inputName || f.Name.Contains(inputName));
@@ -95,19 +96,15 @@ namespace DungeonGame {
 				index = this.VendorItems.FindIndex(
 					f => f.Name == inputName || f.Name.Contains(userInput.Last()));
 			}
-			if (index != -1) {
-				var buyItem = this.VendorItems[index];
-				this.BuyItem(player, buyItem, index, inputName);
-			}
-			else {
+			if (index == -1) {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"The vendor doesn't have that available for sale!");
+				return;
 			}
-		}
-		private void BuyItem(Player player, IEquipment buyItem, int index, string inputName) {
-			if (player.Gold >= buyItem.ItemValue) {
+			var buyItem = this.VendorItems[index];
+			if (player.Gold >= buyItem.ItemValue && quantity > 0) {
 				player.Gold -= buyItem.ItemValue;
 				if (buyItem is Consumable item) {
 					player.Consumables.Add(item);
@@ -128,6 +125,8 @@ namespace DungeonGame {
 				else {
 					this.RepopulateArrows(inputName);
 				}
+				quantity--;
+				this.BuyItem(player, userInput, quantity);
 			}
 			else {
 				OutputHandler.Display.StoreUserOutput(

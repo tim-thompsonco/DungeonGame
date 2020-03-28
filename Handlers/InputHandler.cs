@@ -35,7 +35,15 @@ namespace DungeonGame {
 					try {
 						if (input[1] != null) {
 							try {
-								isTownRoom?.Vendor.BuyItemCheck(player, input);
+								int quantity;
+								bool quantityProvided = int.TryParse(input.Last(), out quantity);
+								if (!quantityProvided) {
+									quantity = 1;
+								}
+								else {
+									input[input.Length - 1] = "";
+								}
+								isTownRoom?.Vendor.BuyItem(player, input, quantity);
 							}
 							catch (NullReferenceException) {
 								OutputHandler.Display.StoreUserOutput(
