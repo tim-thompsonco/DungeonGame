@@ -97,12 +97,7 @@ namespace DungeonGame {
 			}
 			if (index != -1) {
 				var buyItem = this.VendorItems[index];
-				if (inputName.Contains("potion") || inputName.Contains("arrow")) {
-					this.BuyItem(player, buyItem as Consumable, index, inputName);
-				}
-				else {
-					this.BuyItem(player, buyItem, index, inputName);
-				}
+				this.BuyItem(player, buyItem, index, inputName);
 			}
 			else {
 				OutputHandler.Display.StoreUserOutput(
