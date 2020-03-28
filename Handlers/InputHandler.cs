@@ -41,7 +41,7 @@ namespace DungeonGame {
 									quantity = 1;
 								}
 								else {
-									input[input.Length - 1] = "";
+									input = input.Take(input.Count() - 1).ToArray();
 								}
 								isTownRoom?.Vendor.BuyItem(player, input, quantity);
 							}

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using DungeonGame;
 using NUnit.Framework;
@@ -19,7 +20,7 @@ namespace DungeonGameTests {
 				quantity = 1;
 			}
 			else {
-				input[input.Length - 1] = "";
+				input = input.Take(input.Count() - 1).ToArray();
 			}
 			var baseGold = player.Gold;
 			var index = room.Vendor.VendorItems.FindIndex(
@@ -48,7 +49,7 @@ namespace DungeonGameTests {
 				quantity = 1;
 			}
 			else {
-				input[input.Length - 1] = "";
+				input = input.Take(input.Count() - 1).ToArray();
 			}
 			var baseGold = player.Gold;
 			var index = room.Vendor.VendorItems.FindIndex(
@@ -67,7 +68,7 @@ namespace DungeonGameTests {
 			OutputHandler.Display.ClearUserOutput();
 			var player = new Player("placeholder", Player.PlayerClassType.Mage);
 			player.Gold = 1000;
-			player.Consumables = null;
+			player.Consumables = new List<Consumable>();
 			var room = new TownRoom("test", "test", 
 				new Vendor("test", "test", Vendor.VendorType.Healer));
 			var input = new string[] {"buy", "health", "potion", "5"};
@@ -77,7 +78,7 @@ namespace DungeonGameTests {
 				quantity = 1;
 			}
 			else {
-				input[input.Length - 1] = "";
+				input = input.Take(input.Count() - 1).ToArray();
 			}
 			var inputName = InputHandler.ParseInput(input);
 			Assert.AreEqual(5, quantity);
@@ -96,7 +97,7 @@ namespace DungeonGameTests {
 				f => f.Name == inputName || f.Name.Contains(input.Last()));
 			Assert.AreNotEqual(-1, buyItemIndex);
 			var potionCount = player.Consumables.OfType<Consumable.PotionType>().Count();
-			Assert.AreEqual(baseGold - buyItem.ItemValue * 5, player.Gold);
+			Assert.AreEqual(baseGold - buyItem.ItemValue * quantity, player.Gold);
 		}
 	}
 }
