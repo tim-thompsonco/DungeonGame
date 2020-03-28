@@ -101,7 +101,7 @@ namespace DungeonGame {
 					this.BuyItem(player, buyItem as Consumable, index, inputName);
 				}
 				else {
-					this.BuyItem(player, buyItem, index);
+					this.BuyItem(player, buyItem, index, inputName);
 				}
 			}
 			else {
@@ -111,45 +111,35 @@ namespace DungeonGame {
 					"The vendor doesn't have that available for sale!");
 			}
 		}
-		private void BuyItem(Player player, IEquipment buyItem, int index) {
+		private void BuyItem(Player player, IEquipment buyItem, int index, string inputName) {
 			if (player.Gold >= buyItem.ItemValue) {
 				player.Gold -= buyItem.ItemValue;
-				player.Inventory.Add(buyItem);
+				if (buyItem is Consumable item) {
+					player.Consumables.Add(item);
+				}
+				else {
+					player.Inventory.Add(buyItem);	
+				}
 				this.VendorItems.RemoveAt(index);
 				var purchaseString = "You purchased " + buyItem.Name + " from the vendor for " + buyItem.ItemValue + " gold.";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					purchaseString);
-				return;
-			}
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(),
-				Settings.FormatDefaultBackground(),
-				"You can't afford that!");
-		}
-		private void BuyItem(Player player, Consumable buyItem, int index, string inputName) {
-			if (player.Gold >= buyItem.ItemValue) {
-				player.Gold -= buyItem.ItemValue;
-				player.Consumables.Add(buyItem);
-				this.VendorItems.RemoveAt(index);
-				var purchaseString = "You purchased " + buyItem.Name + " from the vendor for " + buyItem.ItemValue + " gold.";
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatSuccessOutputText(),
-					Settings.FormatDefaultBackground(),
-					purchaseString);
+				if (!(buyItem is Consumable)) return;
 				if (this.VendorCategory == VendorType.Healer) {
 					this.RepopulateHealerPotion(player, inputName);
 				}
 				else {
 					this.RepopulateArrows(inputName);
 				}
-				return;
 			}
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(),
-				Settings.FormatDefaultBackground(),
-				"You can't afford that!");
+			else {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"You can't afford that!");	
+			}
 		}
 		public void SellItemCheck(Player player, string[] userInput) {
 			var inputName = InputHandler.ParseInput(userInput);
