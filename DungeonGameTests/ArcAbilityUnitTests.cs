@@ -9,7 +9,7 @@ namespace DungeonGameTests {
 		public void DistanceShotAbilityUnitTest() {
 			var player = new Player("test", Player.PlayerClassType.Archer) {MaxComboPoints = 100, ComboPoints = 100,
 				MaxHitPoints = 100, HitPoints = 10};
-			var rooms = new Dictionary<Coordinate, IRoom> {
+			RoomHandler.Rooms = new Dictionary<Coordinate, IRoom> {
 				{new Coordinate(0, 0, 0), new DungeonRoom(1, 1)},
 				{new Coordinate(0, 1, 0), new DungeonRoom(1, 1)},
 				{new Coordinate(1, 0, 0), new DungeonRoom(1, 1)}

@@ -41,20 +41,21 @@ namespace DungeonGame {
 			return totalArmorRating < 0 ? 0 : totalArmorRating;
 		}
 		public static void UseWeaponKit(Player player, string[] userInput) {
-			var weaponIndex = player.Inventory.FindIndex(f => f.Name.Contains(userInput[1]));
-			if (weaponIndex == -1) {
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					"What weapon did you want to upgrade?");
-				return;
-			}
 			var kitIndex = player.Consumables.FindIndex(f => f.Name.Contains(userInput[2]));
 			if (kitIndex == -1) {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"What weapon kit did you want to use?");
+				return;
+			}
+			var weaponIndex = player.Inventory.FindIndex(f =>
+				f.Name.Contains(userInput[1].ToLowerInvariant()));
+			if (weaponIndex == -1) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"What weapon did you want to upgrade?");
 				return;
 			}
 			var weapon = player.Inventory[weaponIndex] as Weapon;
@@ -102,20 +103,21 @@ namespace DungeonGame {
 			player.Consumables.RemoveAt(kitIndex);
 		}
 		public static void UseArmorKit(Player player, string[] userInput) {
-			var armorIndex = player.Inventory.FindIndex(f => f.Name.Contains(userInput[1]));
-			if (armorIndex == -1) {
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					"What armor did you want to upgrade?");
-				return;
-			}
 			var kitIndex = player.Consumables.FindIndex(f => f.Name.Contains(userInput[2]));
 			if (kitIndex == -1) {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"What armor kit did you want to use?");
+				return;
+			}
+			var armorIndex = player.Inventory.FindIndex(f => 
+				f.Name.Contains(userInput[1].ToLowerInvariant()));
+			if (armorIndex == -1) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"What armor did you want to upgrade?");
 				return;
 			}
 			var armor = player.Inventory[armorIndex] as Armor;

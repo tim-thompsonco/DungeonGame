@@ -262,7 +262,7 @@ namespace DungeonGame {
 			GearHandler.DecreaseArmorDurability(player);
 		}
 		private void PhysicalAttack(Player player) {
-			var attackAmount = 10;
+			var attackAmount = 0;
 			try {
 				if (this.MonsterWeapon.Equipped && this.MonsterWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
 					attackAmount += this.MonsterWeapon.Attack();

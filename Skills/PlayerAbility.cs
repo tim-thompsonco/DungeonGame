@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace DungeonGame {
 	public class PlayerAbility {
@@ -369,8 +370,11 @@ namespace DungeonGame {
 					break;
 			}
 			var findCoord = new Coordinate(targetX, targetY, targetZ);
-			var room = RoomHandler.Rooms[findCoord];
-			if (room == null) {
+			IRoom room;
+			try {
+				room = RoomHandler.Rooms[findCoord];
+			}
+			catch(KeyNotFoundException) {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
