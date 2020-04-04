@@ -120,7 +120,6 @@ namespace DungeonGame {
 			var arcaneIntIndex = player.Effects.FindIndex(e => e.Name == player.Spellbook[index].Name);
 			if (arcaneIntIndex != -1) {
 				player.Effects[arcaneIntIndex].IsEffectExpired = true;
-				GameHandler.RemovedExpiredEffects(player);
 			}
 			player.Intelligence += player.Spellbook[index].ChangeAmount.Amount;
 			PlayerHandler.CalculatePlayerStats(player);

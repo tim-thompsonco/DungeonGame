@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using DungeonGame;
 using NUnit.Framework;
 
@@ -45,7 +46,7 @@ namespace DungeonGameTests {
 				var burnString = "You burn for " + burnDamage + " fire damage.";
 				Assert.AreEqual(burnString, OutputHandler.Display.Output[i + 1][2]);
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
-				GameHandler.RemovedExpiredEffects(player);
+				GameHandler.RemovedExpiredEffectsAsync(player);
 			}
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(player.MaxHitPoints - spellDamage - burnDamage * 3, player.HitPoints);
@@ -94,7 +95,8 @@ namespace DungeonGameTests {
 				monster.Attack(player);
 				Assert.AreEqual(playerHitPointsBefore - frozenDamage, player.HitPoints, 7);
 			}
-			GameHandler.RemovedExpiredEffects(player);
+			GameHandler.RemovedExpiredEffectsAsync(player);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, player.Effects.Any());
 		}
 		[Test]
@@ -180,7 +182,8 @@ namespace DungeonGameTests {
 				var bleedRoundString = "You bleed for " + bleedAmount + " physical damage.";
 				Assert.AreEqual(bleedRoundString, OutputHandler.Display.Output[i-2][2]);
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
-				GameHandler.RemovedExpiredEffects(player);
+				GameHandler.RemovedExpiredEffectsAsync(player);
+				Thread.Sleep(1000);
 			}
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(player.MaxHitPoints - abilityDamage - abilityDamageOverTime * abilityMaxRounds, 
@@ -240,7 +243,8 @@ namespace DungeonGameTests {
 				var burnString = "You burn for " + burnDamage + " fire damage.";
 				Assert.AreEqual(burnString, OutputHandler.Display.Output[i + 1][2]);
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
-				GameHandler.RemovedExpiredEffects(player);
+				GameHandler.RemovedExpiredEffectsAsync(player);
+				Thread.Sleep(1000);
 			}
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(player.MaxHitPoints - spellDamage - burnDamage * 3, player.HitPoints);

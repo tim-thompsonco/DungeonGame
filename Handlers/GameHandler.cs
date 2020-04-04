@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace DungeonGame {
@@ -12,7 +13,6 @@ namespace DungeonGame {
 		
 		public static void CheckStatus(Player player) {
 			GameTicks++;
-			RemovedExpiredEffects(player);
 			if (GameTicks % player.StatReplenishInterval == 0) ReplenishStatsOverTime(player);
 			if (player.Effects.Any()) {
 				foreach (var effect in player.Effects.Where(effect => GameTicks % effect.TickDuration == 0)) {
@@ -64,7 +64,7 @@ namespace DungeonGame {
 				foreach (var roomObject in room.RoomObjects.Where(
 					roomObject => roomObject?.GetType() == typeof(Monster))) {
 					var monster = (Monster) roomObject;
-					RemovedExpiredEffects(monster);
+					RemovedExpiredEffectsAsync(monster);
 					if (GameTicks % monster.StatReplenishInterval == 0 && monster.HitPoints > 0) ReplenishStatsOverTime(monster);
 					if (!monster.Effects.Any()) continue;
 						foreach (var effect in monster.Effects.Where(effect => GameTicks % effect.TickDuration == 0)) {
@@ -101,7 +101,6 @@ namespace DungeonGame {
 						}
 				}
 			}
-			RemovedExpiredEffects(player);
 		}
 		public static int GetRandomNumber(int lowNum, int highNum) {
 			return RndGenerate.Next(lowNum, highNum + 1);
@@ -114,89 +113,93 @@ namespace DungeonGame {
 			number *= 10;
 			return number;
 		}
-		public static void RemovedExpiredEffects(Player player) {
-			for (var i = 0; i < player.Effects.Count; i++) {
-				if (!player.Effects[i].IsEffectExpired) continue;
-				switch (player.Effects[i].EffectGroup) {
-					case Effect.EffectType.Healing:
-						break;
-					case Effect.EffectType.ChangePlayerDamage:
-						break;
-					case Effect.EffectType.ChangeArmor:
-						break;
-					case Effect.EffectType.OnFire:
-						break;
-					case Effect.EffectType.Bleeding:
-						break;
-					case Effect.EffectType.Stunned:
-						break;
-					case Effect.EffectType.ReflectDamage:
-						break;
-					case Effect.EffectType.Frozen:
-						break;
-					case Effect.EffectType.ChangeStat:
-						switch (player.Effects[i].StatGroup) {
-							case ChangeStat.StatType.Intelligence:
-								player.Intelligence -= player.Effects[i].EffectAmountOverTime;
-								break;
-							case ChangeStat.StatType.Strength:
-								player.Strength -= player.Effects[i].EffectAmountOverTime;
-								break;
-							case ChangeStat.StatType.Dexterity:
-								player.Dexterity -= player.Effects[i].EffectAmountOverTime;
-								break;
-							case ChangeStat.StatType.Constitution:
-								player.Constitution -= player.Effects[i].EffectAmountOverTime;
-								break;
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-						PlayerHandler.CalculatePlayerStats(player);
-						break;
-					case Effect.EffectType.ChangeOpponentDamage:
-						break;
-					case Effect.EffectType.BlockDamage:
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
+		public static async void RemovedExpiredEffectsAsync(Player player) {
+			await Task.Run(() => {
+				for (var i = 0; i < player.Effects.Count; i++) {
+					if (!player.Effects[i].IsEffectExpired) continue;
+					switch (player.Effects[i].EffectGroup) {
+						case Effect.EffectType.Healing:
+							break;
+						case Effect.EffectType.ChangePlayerDamage:
+							break;
+						case Effect.EffectType.ChangeArmor:
+							break;
+						case Effect.EffectType.OnFire:
+							break;
+						case Effect.EffectType.Bleeding:
+							break;
+						case Effect.EffectType.Stunned:
+							break;
+						case Effect.EffectType.ReflectDamage:
+							break;
+						case Effect.EffectType.Frozen:
+							break;
+						case Effect.EffectType.ChangeStat:
+							switch (player.Effects[i].StatGroup) {
+								case ChangeStat.StatType.Intelligence:
+									player.Intelligence -= player.Effects[i].EffectAmountOverTime;
+									break;
+								case ChangeStat.StatType.Strength:
+									player.Strength -= player.Effects[i].EffectAmountOverTime;
+									break;
+								case ChangeStat.StatType.Dexterity:
+									player.Dexterity -= player.Effects[i].EffectAmountOverTime;
+									break;
+								case ChangeStat.StatType.Constitution:
+									player.Constitution -= player.Effects[i].EffectAmountOverTime;
+									break;
+								default:
+									throw new ArgumentOutOfRangeException();
+							}
+							PlayerHandler.CalculatePlayerStats(player);
+							break;
+						case Effect.EffectType.ChangeOpponentDamage:
+							break;
+						case Effect.EffectType.BlockDamage:
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+					player.Effects.RemoveAt(i);
+					i--; // Keep i at same amount, since effects.count will decrease, to keep checking effect list properly
 				}
-				player.Effects.RemoveAt(i);
-				i--; // Keep i at same amount, since effects.count will decrease, to keep checking effect list properly
-			}
+			});
 		}
-		public static void RemovedExpiredEffects(Monster monster) {
-			for (var i = 0; i < monster.Effects.Count; i++) {
-				if (!monster.Effects[i].IsEffectExpired) continue;
-				switch (monster.Effects[i].EffectGroup) {
-					case Effect.EffectType.Healing:
-						break;
-					case Effect.EffectType.ChangePlayerDamage:
-						break;
-					case Effect.EffectType.ChangeArmor:
-						break;
-					case Effect.EffectType.OnFire:
-						break;
-					case Effect.EffectType.Bleeding:
-						break;
-					case Effect.EffectType.Stunned:
-						monster.IsStunned = false;
-						break;
-					case Effect.EffectType.ReflectDamage:
-						break;
-					case Effect.EffectType.Frozen:
-						break;
-					case Effect.EffectType.ChangeStat:
-						break;
-					case Effect.EffectType.ChangeOpponentDamage:
-						break;
-					case Effect.EffectType.BlockDamage:
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
+		public static async void RemovedExpiredEffectsAsync(Monster monster) {
+			await Task.Run(() => {
+				for (var i = 0; i < monster.Effects.Count; i++) {
+					if (!monster.Effects[i].IsEffectExpired) continue;
+					switch (monster.Effects[i].EffectGroup) {
+						case Effect.EffectType.Healing:
+							break;
+						case Effect.EffectType.ChangePlayerDamage:
+							break;
+						case Effect.EffectType.ChangeArmor:
+							break;
+						case Effect.EffectType.OnFire:
+							break;
+						case Effect.EffectType.Bleeding:
+							break;
+						case Effect.EffectType.Stunned:
+							monster.IsStunned = false;
+							break;
+						case Effect.EffectType.ReflectDamage:
+							break;
+						case Effect.EffectType.Frozen:
+							break;
+						case Effect.EffectType.ChangeStat:
+							break;
+						case Effect.EffectType.ChangeOpponentDamage:
+							break;
+						case Effect.EffectType.BlockDamage:
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+					monster.Effects.RemoveAt(i);
+					i--; // Keep i at same amount, since effects.count will decrease, to keep checking effect list properly
 				}
-				monster.Effects.RemoveAt(i);
-				i--; // Keep i at same amount, since effects.count will decrease, to keep checking effect list properly
-			}
+			});
 		}
 		private static void ReplenishStatsOverTime(Player player) {
 			if (player.InCombat) return;

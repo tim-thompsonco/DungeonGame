@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using DungeonGame;
 using NUnit.Framework;
 
@@ -44,7 +45,8 @@ namespace DungeonGameTests {
 					"The " + monster.Name + " burns for " + monster.Effects[0].EffectAmountOverTime + " fire damage.",
 					OutputHandler.Display.Output[i][2]);
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
-				GameHandler.RemovedExpiredEffects(monster);
+				GameHandler.RemovedExpiredEffectsAsync(monster);
+				Thread.Sleep(1000);
 			}
 			Assert.AreEqual(false, monster.Effects.Any());
 			Assert.AreEqual(10, monster.HitPoints);
@@ -103,7 +105,8 @@ namespace DungeonGameTests {
 				totalBaseDamage += baseDamage;
 				totalFrozenDamage += frozenDamage;
 			}
-			GameHandler.RemovedExpiredEffects(monster);
+			GameHandler.RemovedExpiredEffectsAsync(monster);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, monster.Effects.Any());
 			var finalBaseDamageWithMod = (int) (totalBaseDamage * multiplier);
 			var finalTotalFrozenDamage = (int) totalFrozenDamage;
@@ -198,7 +201,8 @@ namespace DungeonGameTests {
 				Assert.AreEqual(healAmtString, OutputHandler.Display.Output[i - 1][2]);
 				Assert.AreEqual(70 + (i - 1) * player.Effects[0].EffectAmountOverTime, player.HitPoints);
 			}
-			GameHandler.RemovedExpiredEffects(player);
+			GameHandler.RemovedExpiredEffectsAsync(player);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, player.Effects.Any());
 		}
 		[Test]
@@ -237,7 +241,8 @@ namespace DungeonGameTests {
 				var augmentRoundString = "Your armor is increased by " + player.Effects[0].EffectAmountOverTime + ".";
 				Assert.AreEqual(augmentRoundString, OutputHandler.Display.Output[i - 2][2]);
 			}
-			GameHandler.RemovedExpiredEffects(player);
+			GameHandler.RemovedExpiredEffectsAsync(player);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, player.Effects.Any());
 		}
 		[Test]
@@ -320,7 +325,8 @@ namespace DungeonGameTests {
 					"You reflected " + reflectAmount + " damage back at your opponent!", 
 					OutputHandler.Display.Output[i - 2][2]);
 			}
-			GameHandler.RemovedExpiredEffects(player);
+			GameHandler.RemovedExpiredEffectsAsync(player);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, player.Effects.Any());
 		}
 		[Test]
@@ -364,7 +370,8 @@ namespace DungeonGameTests {
 			for (var i = 0; i < 590; i++) {
 				player.Effects[0].ChangeStatRound();
 			}
-			GameHandler.RemovedExpiredEffects(player);
+			GameHandler.RemovedExpiredEffectsAsync(player);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(baseInt, player.Intelligence);
 			Assert.AreEqual(0, player.ManaPoints);
@@ -447,7 +454,8 @@ namespace DungeonGameTests {
 				totalBaseDamage += baseDamage;
 				totalFrozenDamage += frozenDamage;
 			}
-			GameHandler.RemovedExpiredEffects(monster);
+			GameHandler.RemovedExpiredEffectsAsync(monster);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, monster.Effects.Any());
 			Assert.AreEqual(false, monster.IsStunned);
 			var finalBaseDamageWithMod = (int) (totalBaseDamage * multiplier);

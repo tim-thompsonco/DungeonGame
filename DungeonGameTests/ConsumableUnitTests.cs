@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using DungeonGame;
 using NUnit.Framework;
 
@@ -78,7 +79,8 @@ namespace DungeonGameTests {
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
 				player.Effects[0].ChangeStatRound();
 			}
-			GameHandler.RemovedExpiredEffects(player);
+			GameHandler.RemovedExpiredEffectsAsync(player);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(baseConst, player.Constitution);
 			Assert.AreEqual(baseMaxHitPoints, player.MaxHitPoints);
@@ -111,7 +113,8 @@ namespace DungeonGameTests {
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
 				player.Effects[0].ChangeStatRound();
 			}
-			GameHandler.RemovedExpiredEffects(player);
+			GameHandler.RemovedExpiredEffectsAsync(player);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(baseInt, player.Intelligence);
 			Assert.AreEqual(baseMaxManaPoints, player.MaxManaPoints);
@@ -144,7 +147,8 @@ namespace DungeonGameTests {
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
 				player.Effects[0].ChangeStatRound();
 			}
-			GameHandler.RemovedExpiredEffects(player);
+			GameHandler.RemovedExpiredEffectsAsync(player);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(baseStr, player.Strength);
 			Assert.AreEqual(baseMaxCarryWeight, player.MaxCarryWeight);
@@ -177,7 +181,8 @@ namespace DungeonGameTests {
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
 				player.Effects[0].ChangeStatRound();
 			}
-			GameHandler.RemovedExpiredEffects(player);
+			GameHandler.RemovedExpiredEffectsAsync(player);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(baseDex, player.Dexterity);
 			Assert.AreEqual(baseDodgeChance, player.DodgeChance);

@@ -35,7 +35,6 @@ namespace DungeonGame {
 				totalArmorRating += (int)player.PlayerLegsArmor.GetArmorRating();
 			}
 			if (!player.InCombat) return totalArmorRating;
-			GameHandler.RemovedExpiredEffects(player);
 			totalArmorRating += player.Effects.Where(
 				effect => effect.EffectGroup == Effect.EffectType.ChangeArmor).Sum(effect => effect.EffectAmountOverTime);
 			return totalArmorRating < 0 ? 0 : totalArmorRating;

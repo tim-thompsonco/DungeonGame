@@ -29,6 +29,7 @@ namespace DungeonGame {
 				e => GameHandler.CheckStatus(player), 
 				null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 			while (!GameHandler.IsGameOver) {
+				GameHandler.RemovedExpiredEffectsAsync(player);
 				var input = InputHandler.GetFormattedInput(Console.ReadLine());
 				InputHandler.ProcessUserInput(player, input, globalTimer);
 				Console.Clear();

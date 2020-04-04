@@ -161,7 +161,6 @@ namespace DungeonGame {
 			var powerAuraIndex = player.Effects.FindIndex(e => e.Name == player.Abilities[index].Name);
 			if (powerAuraIndex != -1) {
 				player.Effects[powerAuraIndex].IsEffectExpired = true;
-				GameHandler.RemovedExpiredEffects(player);
 			}
 			player.Strength += player.Abilities[index].ChangeAmount.Amount;
 			PlayerHandler.CalculatePlayerStats(player);
@@ -193,7 +192,6 @@ namespace DungeonGame {
 			var swiftAuraIndex = player.Effects.FindIndex(e => e.Name == player.Abilities[index].Name);
 			if (swiftAuraIndex != -1) {
 				player.Effects[swiftAuraIndex].IsEffectExpired = true;
-				GameHandler.RemovedExpiredEffects(player);
 			}
 			player.Dexterity += player.Abilities[index].ChangeAmount.Amount;
 			PlayerHandler.CalculatePlayerStats(player);

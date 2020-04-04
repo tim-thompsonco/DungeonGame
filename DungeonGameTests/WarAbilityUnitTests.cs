@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using DungeonGame;
 using NUnit.Framework;
 
@@ -83,7 +84,8 @@ namespace DungeonGameTests {
 				var bleedRoundString = "The " + monster.Name + " bleeds for " + bleedAmount + " physical damage.";
 				Assert.AreEqual(bleedRoundString, OutputHandler.Display.Output[i-2][2]);
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
-				GameHandler.RemovedExpiredEffects(monster);
+				GameHandler.RemovedExpiredEffectsAsync(monster);
+				Thread.Sleep(1000);
 			}
 			Assert.AreEqual(false, monster.Effects.Any());
 			Assert.AreEqual(monster.MaxHitPoints - abilityDamage - abilityDamageOverTime * abilityMaxRounds, 
@@ -136,7 +138,8 @@ namespace DungeonGameTests {
 				var stunnedString = "The " + monster.Name + " is stunned and cannot attack.";
 				Assert.AreEqual(stunnedString, OutputHandler.Display.Output[i-2][2]);
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
-				GameHandler.RemovedExpiredEffects(monster);
+				GameHandler.RemovedExpiredEffectsAsync(monster);
+				Thread.Sleep(1000);
 			}
 			Assert.AreEqual(false, monster.Effects.Any());
 		}
@@ -187,16 +190,17 @@ namespace DungeonGameTests {
 					Assert.AreEqual(blockRoundString, OutputHandler.Display.Output[i + (i * 1)][2]);
 				}
 				else {
+					GameHandler.RemovedExpiredEffectsAsync(player);
 					var attackAmount = monster.MonsterWeapon.Attack() - blockAmountBefore;
 					Assert.AreEqual(player.MaxHitPoints - attackAmount, player.HitPoints);
 					const string blockEndString = "You are no longer blocking damage!";
 					Assert.AreEqual(blockEndString, OutputHandler.Display.Output[i + 3][2]);
+					Thread.Sleep(1000);
 					Assert.AreEqual(false, player.Effects.Any());
 					var hitString = "The " + monster.Name + " hits you for " + attackAmount + " physical damage.";
 					Assert.AreEqual(hitString, OutputHandler.Display.Output[i + 4][2]);
 				}
 				i++;
-				GameHandler.RemovedExpiredEffects(player);
 			}
 		}
 		[Test]
@@ -252,7 +256,8 @@ namespace DungeonGameTests {
 				player.Effects[1].ChangeArmorRound();
 				var changeArmorString = "Your armor is decreased by " + berserkArmorAmount * -1 + ".";
 				Assert.AreEqual(changeArmorString, OutputHandler.Display.Output[1][2]);
-				GameHandler.RemovedExpiredEffects(player);
+				GameHandler.RemovedExpiredEffectsAsync(player);
+				Thread.Sleep(1000);
 			}
 			Assert.AreEqual(false, player.Effects.Any());
 		}
@@ -336,7 +341,8 @@ namespace DungeonGameTests {
 				Assert.AreEqual(healAmtString, OutputHandler.Display.Output[i - 2][2]);
 				Assert.AreEqual(baseHitPoints + (i - 1) * healOverTimeAmt, player.HitPoints);
 			}
-			GameHandler.RemovedExpiredEffects(player);
+			GameHandler.RemovedExpiredEffectsAsync(player);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, player.Effects.Any());
 		}
 		[Test]
@@ -375,7 +381,8 @@ namespace DungeonGameTests {
 			for (var i = 0; i < 600; i++) {
 				player.Effects[0].ChangeStatRound();
 			}
-			GameHandler.RemovedExpiredEffects(player);
+			GameHandler.RemovedExpiredEffectsAsync(player);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(baseStr, player.Strength);
 			Assert.AreEqual(baseMaxRage, player.MaxRagePoints);
@@ -423,7 +430,8 @@ namespace DungeonGameTests {
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
 				Assert.AreEqual(changeDmgString, OutputHandler.Display.Output[i - 2][2]);
 			}
-			GameHandler.RemovedExpiredEffects(player);
+			GameHandler.RemovedExpiredEffectsAsync(player);
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, player.Effects.Any());
 		}
 		[Test]

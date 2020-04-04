@@ -356,7 +356,7 @@ namespace DungeonGame {
 						effectAbsorbString);
 					return;
 				} 
-				GameHandler.RemovedExpiredEffects(this);
+				GameHandler.RemovedExpiredEffectsAsync(this);
 			}
 			if (attackAmount- player.ArmorRating(this) <= 0) {
 				var armorAbsorbString = "Your armor absorbed all of " + this.Name + "'s attack!"; 

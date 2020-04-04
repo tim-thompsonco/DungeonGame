@@ -24,6 +24,8 @@ namespace DungeonGame {
 				fightStartString);
 			while (this.Opponent.HitPoints > 0 && this.Player.HitPoints > 0 && 
 			       this.Player.InCombat && this.Opponent.InCombat) {
+				GameHandler.RemovedExpiredEffectsAsync(this.Player);
+				GameHandler.RemovedExpiredEffectsAsync(this.Opponent);
 				var isInputValid = false;
 				// Get input and check to see if input is valid, and if not, keep trying to get input from user
 				while (!isInputValid) {
@@ -131,7 +133,6 @@ namespace DungeonGame {
 				"You tried to flee combat but failed!");
 		}
 		private void ProcessPlayerEffects() {
-			GameHandler.RemovedExpiredEffects(this.Player);
 			foreach (var effect in this.Player.Effects) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
@@ -168,7 +169,7 @@ namespace DungeonGame {
 			}
 		}
 		private void ProcessOpponentEffects() {
-			GameHandler.RemovedExpiredEffects(this.Opponent);
+			GameHandler.RemovedExpiredEffectsAsync(this.Opponent);
 			foreach (var effect in this.Opponent.Effects) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:

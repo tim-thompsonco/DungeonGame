@@ -222,7 +222,6 @@ namespace DungeonGame {
 					"Your weapon is not equipped! Going hand to hand!");
 				attackAmount = 5;
 			}
-			GameHandler.RemovedExpiredEffects(this);
 			foreach (var effect in this.Effects) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
@@ -282,7 +281,6 @@ namespace DungeonGame {
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-				GameHandler.RemovedExpiredEffects(this);
 			}
 			return attackAmount;
 		}
