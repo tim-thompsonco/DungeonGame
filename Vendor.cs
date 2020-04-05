@@ -139,18 +139,14 @@ namespace DungeonGame {
 			var inputName = InputHandler.ParseInput(userInput);
 			var index = player.Inventory.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName) && f.Equipped == false);
+			var sellItem = player.Inventory[index];
 			if (index != -1) {
-				if (player.Inventory[index] is Armor && (this.VendorCategory != VendorType.Armorer || 
-				                                         this.VendorCategory != VendorType.Shopkeeper)) {
-					Messages.InvalidVendorSell();
-					return;
+				switch (this.VendorCategory) {
+					case VendorType.Healer:
+					case VendorType.Shopkeeper:
+						Messages.InvalidVendorSell();
+						return;
 				}
-				if (player.Inventory[index] is Weapon && (this.VendorCategory != VendorType.Weaponsmith || 
-				                                          this.VendorCategory != VendorType.Shopkeeper)) {
-					Messages.InvalidVendorSell();
-					return;
-				}
-				var sellItem = player.Inventory[index];
 				if (!sellItem.Equipped) {
 					player.Gold += sellItem switch {
 						Armor armor => (int) (sellItem.ItemValue * (armor.Durability / 100.0)),
@@ -167,27 +163,31 @@ namespace DungeonGame {
 				}
 			}
 			else {
-				if (this.VendorCategory != VendorType.Healer || this.VendorCategory != VendorType.Shopkeeper) {
-					Messages.InvalidVendorSell();
-					return;
+				switch (this.VendorCategory) {
+					case VendorType.Armorer:
+					case VendorType.Weaponsmith:
+						Messages.InvalidVendorSell();
+						return;
 				}
-				var sellItem = player.Consumables[index];
+				sellItem = player.Consumables[index];
 				index = player.Consumables.FindIndex(
 					f => f.Name == inputName || f.Name.Contains(inputName) && f.Equipped == false);
 				player.Consumables.RemoveAt(index);
 				if (this.VendorItems.Count == 5) this.VendorItems.RemoveAt(this.VendorItems[0].Name.Contains("arrow") ? 1 : 0);
 				this.VendorItems.Add(sellItem);
-				var soldString = "You sold " + sellItem.Name + " to the vendor for " + sellItem.ItemValue + " gold.";
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatSuccessOutputText(),
-					Settings.FormatDefaultBackground(),
-					soldString);
 			}
 			if (index == -1) {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You don't have that to sell!");
+			}
+			else {
+				var soldString = "You sold " + sellItem.Name + " to the vendor for " + sellItem.ItemValue + " gold.";
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatSuccessOutputText(),
+					Settings.FormatDefaultBackground(),
+					soldString);
 			}
 		}
 		public void RepairItem(Player player, string[] userInput, bool repairAll) {

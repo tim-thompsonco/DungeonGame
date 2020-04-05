@@ -15,7 +15,7 @@ namespace DungeonGame {
 			GameTicks++;
 			if (GameTicks % player.StatReplenishInterval == 0) ReplenishStatsOverTime(player);
 			if (player.Effects.Any()) {
-				foreach (var effect in player.Effects.Where(effect => GameTicks % effect.TickDuration == 0)) {
+				foreach (var effect in player.Effects.Where(effect => GameTicks % effect.TickDuration == 0).ToList()) {
 					switch (effect.EffectGroup) {
 						case Effect.EffectType.Healing:
 							effect.HealingRound(player);
@@ -67,7 +67,7 @@ namespace DungeonGame {
 					RemovedExpiredEffectsAsync(monster);
 					if (GameTicks % monster.StatReplenishInterval == 0 && monster.HitPoints > 0) ReplenishStatsOverTime(monster);
 					if (!monster.Effects.Any()) continue;
-						foreach (var effect in monster.Effects.Where(effect => GameTicks % effect.TickDuration == 0)) {
+						foreach (var effect in monster.Effects.Where(effect => GameTicks % effect.TickDuration == 0).ToList()) {
 							switch (effect.EffectGroup) {
 								case Effect.EffectType.Healing:
 									break;
