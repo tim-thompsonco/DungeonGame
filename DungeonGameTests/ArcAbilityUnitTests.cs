@@ -275,6 +275,7 @@ namespace DungeonGameTests {
 				Assert.AreEqual(i, monster.Effects[0].EffectCurRound);
 				GameHandler.RemovedExpiredEffectsAsync(monster);
 			}
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, monster.Effects.Any());
 			Assert.AreEqual(monster.MaxHitPoints - abilityDamage - abilityDamageOverTime * abilityMaxRounds, 
 				monster.HitPoints);

@@ -138,40 +138,44 @@ namespace DungeonGame {
 		public void SellItem(Player player, string[] userInput) {
 			var inputName = InputHandler.ParseInput(userInput);
 			var index = player.Inventory.FindIndex(
-				f => f.Name == inputName || f.Name.Contains(inputName) && f.Equipped == false);
-			var sellItem = player.Inventory[index];
-			if (index != -1) {
-				switch (this.VendorCategory) {
-					case VendorType.Healer:
-					case VendorType.Shopkeeper:
+				f => f.Name == inputName || f.Name.Contains(inputName));
+			IEquipment sellItem;
+			try {
+				sellItem = player.Inventory[index];
+				switch (sellItem) {
+					case Armor _ when this.VendorCategory == VendorType.Healer || this.VendorCategory == VendorType.Weaponsmith:
+						Messages.InvalidVendorSell();
+						return;
+					case Weapon _ when this.VendorCategory == VendorType.Healer || this.VendorCategory == VendorType.Armorer:
 						Messages.InvalidVendorSell();
 						return;
 				}
-				if (!sellItem.Equipped) {
-					player.Gold += sellItem switch {
-						Armor armor => (int) (sellItem.ItemValue * (armor.Durability / 100.0)),
-						Weapon weapon => (int) (sellItem.ItemValue * (weapon.Durability / 100.0)),
-						_ => sellItem.ItemValue
-					};
-					player.Inventory.RemoveAt(index);
-				}
-				else {
-					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatFailureOutputText(),
-						Settings.FormatDefaultBackground(),
-						"You have to unequip that first!");
+				if (index != -1) {
+					if (!sellItem.Equipped) {
+						player.Gold += sellItem switch {
+							Armor armor => (int) (sellItem.ItemValue * (armor.Durability / 100.0)),
+							Weapon weapon => (int) (sellItem.ItemValue * (weapon.Durability / 100.0)),
+							_ => sellItem.ItemValue
+						};
+						player.Inventory.RemoveAt(index);
+					}
+					else {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"You have to unequip that first!");
+						return;
+					}
 				}
 			}
-			else {
-				switch (this.VendorCategory) {
-					case VendorType.Armorer:
-					case VendorType.Weaponsmith:
-						Messages.InvalidVendorSell();
-						return;
-				}
-				sellItem = player.Consumables[index];
+			catch (ArgumentOutOfRangeException) {
 				index = player.Consumables.FindIndex(
-					f => f.Name == inputName || f.Name.Contains(inputName) && f.Equipped == false);
+					f => f.Name == inputName || f.Name.Contains(inputName));
+				sellItem = player.Consumables[index];
+				if (this.VendorCategory == VendorType.Armorer || this.VendorCategory == VendorType.Weaponsmith) {
+					Messages.InvalidVendorSell();
+					return;
+				}
 				player.Consumables.RemoveAt(index);
 				if (this.VendorItems.Count == 5) this.VendorItems.RemoveAt(this.VendorItems[0].Name.Contains("arrow") ? 1 : 0);
 				this.VendorItems.Add(sellItem);

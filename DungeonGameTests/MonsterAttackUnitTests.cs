@@ -48,6 +48,7 @@ namespace DungeonGameTests {
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
 				GameHandler.RemovedExpiredEffectsAsync(player);
 			}
+			Thread.Sleep(1000);
 			Assert.AreEqual(false, player.Effects.Any());
 			Assert.AreEqual(player.MaxHitPoints - spellDamage - burnDamage * 3, player.HitPoints);
 		}
