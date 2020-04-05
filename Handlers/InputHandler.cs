@@ -295,7 +295,7 @@ namespace DungeonGame {
 					try {
 						if (input[1] != null) {
 							try {
-								isTownRoom?.Vendor.SellItemCheck(player, input);
+								isTownRoom?.Vendor.SellItem(player, input);
 							}
 							catch (NullReferenceException) {
 								OutputHandler.Display.StoreUserOutput(
