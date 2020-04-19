@@ -220,7 +220,10 @@ namespace DungeonGame {
 				}
 			}
 			attackOptions = attackOptions.OrderByDescending(attack => attack.DamageAmount).ToList();
-			return attackOptions[0];
+			var randomMonsterAttack = GameHandler.GetRandomNumber(1, 10);
+			if (randomMonsterAttack <= 5) return attackOptions[0];
+			var randomAttackChoice = GameHandler.GetRandomNumber(0, attackOptions.Count - 1);
+			return attackOptions[randomAttackChoice];
 		}
 		public void Attack(Player player) {
 			var attackOption = this.DetermineAttack(player);
