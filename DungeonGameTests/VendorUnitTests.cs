@@ -66,14 +66,13 @@ namespace DungeonGameTests {
 		[Test]
 		public void BuyMultiplePotionUnitTest() {
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Mage);
-			player.Gold = 1000;
-			player.Consumables = new List<Consumable>();
+			var player = new Player("placeholder", Player.PlayerClassType.Mage) {
+				Gold = 1000, Consumables = new List<Consumable>()
+			};
 			var room = new TownRoom("test", "test", 
 				new Vendor("test", "test", Vendor.VendorType.Healer));
 			var input = new string[] {"buy", "health", "potion", "5"};
-			int quantity;
-			bool quantityProvided = int.TryParse(input.Last(), out quantity);
+			var quantityProvided = int.TryParse(input.Last(), out var quantity);
 			if (!quantityProvided) {
 				quantity = 1;
 			}
@@ -98,6 +97,46 @@ namespace DungeonGameTests {
 			Assert.AreNotEqual(-1, buyItemIndex);
 			var potionCount = player.Consumables.OfType<Consumable.PotionType>().Count();
 			Assert.AreEqual(baseGold - buyItem.ItemValue * quantity, player.Gold);
+		}
+		[Test]
+		public void SellItemUnitTest() {
+			OutputHandler.Display.ClearUserOutput();
+			var player = new Player("placeholder", Player.PlayerClassType.Mage) {Gold = 100};
+			var room = new TownRoom("test", "test", 
+				new Vendor("test", "test", Vendor.VendorType.Armorer));
+			var input = new[] {"sell", "cap"};
+			var inputName = InputHandler.ParseInput(input);
+			var index = player.Inventory.FindIndex(
+				f => f.Name == inputName || f.Name.Contains(inputName));
+			var sellItem = player.Inventory[index];
+			var baseGold = player.Gold;
+			room.Vendor.SellItem(player, input);
+			var soldString = "You sold " + sellItem.Name + " to the vendor for " + sellItem.ItemValue + " gold.";
+			Assert.AreEqual(soldString, OutputHandler.Display.Output[0][2]);
+			var sellItemIndex = player.Inventory.FindIndex(
+				f => f.Name == inputName || f.Name.Contains(inputName));
+			Assert.AreEqual(-1, sellItemIndex);
+			Assert.AreEqual(baseGold + sellItem.ItemValue, player.Gold);
+		}
+		[Test]
+		public void SellMultipleItemsWithSameName() {
+			OutputHandler.Display.ClearUserOutput();
+			var player = new Player("placeholder", Player.PlayerClassType.Mage) {
+				Inventory = new List<IEquipment> {
+					new Armor(1, Armor.ArmorSlot.Back), 
+					new Armor(1, Armor.ArmorSlot.Back)
+				}
+			};
+			player.Inventory[0].Name = "cape";
+			player.Inventory[0].ItemValue = 10;
+			player.Inventory[1].Name = "cape";
+			player.Inventory[1].ItemValue = 5;
+			var room = new TownRoom("test", "test", 
+				new Vendor("test", "test", Vendor.VendorType.Armorer));
+			var input = new[] {"sell", "cape", "2"};
+			room.Vendor.SellItem(player, input);
+			Assert.AreEqual(1, player.Inventory.Count);
+			Assert.AreEqual(10, player.Inventory[0].ItemValue);
 		}
 	}
 }

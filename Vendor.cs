@@ -135,10 +135,47 @@ namespace DungeonGame {
 					"You can't afford that!");	
 			}
 		}
+		private static int FindInventoryItemIndex(Player player, string[] userInput) {
+			var indexNumberSearch = int.TryParse(userInput.Last(), out var sellItemIndex);
+			if (!indexNumberSearch) {
+				// If the last word in user input is not a number, return -1, to indicate there's no specific position
+				return -1;
+			}
+			// Player with two capes will input sell cape 2 to sell 2nd cape, but indices start from 0, so adjust value
+			sellItemIndex--;
+			// Find desired object to sell
+			var inputName = InputHandler.ParseInput(userInput);
+			var indexList = player.Inventory.FindAll(f => f.Name == inputName || f.Name.Contains(inputName));
+			var itemMatch = indexList[sellItemIndex];
+			// Return index in player inventory of desired object to sell
+			return player.Inventory.IndexOf(itemMatch);
+		}
+		private static int FindConsumableItemIndex(Player player, string[] userInput) {
+			var indexNumberSearch = int.TryParse(userInput.Last(), out var sellItemIndex);
+			if (!indexNumberSearch) {
+				// If the last word in user input is not a number, return -1, to indicate there's no specific position
+				return -1;
+			}
+			// Player with two capes will input sell cape 2 to sell 2nd cape, but indices start from 0, so adjust value
+			sellItemIndex--;
+			// Find desired object to sell
+			var inputName = InputHandler.ParseInput(userInput);
+			var indexList = player.Consumables.FindAll(f => f.Name == inputName || f.Name.Contains(inputName));
+			var itemMatch = indexList[sellItemIndex];
+			// Return index in player inventory of desired object to sell
+			return player.Consumables.IndexOf(itemMatch);
+		}
 		public void SellItem(Player player, string[] userInput) {
 			var inputName = InputHandler.ParseInput(userInput);
-			var index = player.Inventory.FindIndex(
-				f => f.Name == inputName || f.Name.Contains(inputName));
+			var multipleItemIndex = FindInventoryItemIndex(player, userInput);
+			int index;
+			if (multipleItemIndex != -1) {
+				index = multipleItemIndex;
+			}
+			else {
+				index = player.Inventory.FindIndex(
+					f => f.Name == inputName || f.Name.Contains(inputName));
+			}
 			IEquipment sellItem;
 			try {
 				sellItem = player.Inventory[index];
@@ -169,8 +206,14 @@ namespace DungeonGame {
 				}
 			}
 			catch (ArgumentOutOfRangeException) {
-				index = player.Consumables.FindIndex(
-					f => f.Name == inputName || f.Name.Contains(inputName));
+				multipleItemIndex = FindConsumableItemIndex(player, userInput);
+				if (multipleItemIndex != -1) {
+					index = multipleItemIndex;
+				}
+				else {
+					index = player.Consumables.FindIndex(
+						f => f.Name == inputName || f.Name.Contains(inputName));
+				}
 				sellItem = player.Consumables[index];
 				if (this.VendorCategory == VendorType.Armorer || this.VendorCategory == VendorType.Weaponsmith) {
 					Messages.InvalidVendorSell();

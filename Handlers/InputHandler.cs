@@ -13,6 +13,13 @@ namespace DungeonGame {
 		public static string ParseInput(string[] userInput) {
 			var inputString = new StringBuilder();
 			for (var i = 1; i < userInput.Length; i++) {
+				if (i == userInput.Length - 1) {
+					// If last loop iteration, check to see if it's a number, and if so do not add to input string
+					var isNumber = int.TryParse(userInput.Last(), out var number);
+					if (isNumber) {
+						continue;
+					}
+				}
 				inputString.Append(userInput[i]);
 				inputString.Append(' ');
 			}
@@ -35,8 +42,7 @@ namespace DungeonGame {
 					try {
 						if (input[1] != null) {
 							try {
-								int quantity;
-								bool quantityProvided = int.TryParse(input.Last(), out quantity);
+								var quantityProvided = int.TryParse(input.Last(), out var quantity);
 								if (!quantityProvided) {
 									quantity = 1;
 								}
