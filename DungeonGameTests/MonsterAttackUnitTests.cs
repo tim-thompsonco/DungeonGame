@@ -19,7 +19,8 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void FireballSpellUnitTest() {
-			var player = new Player("test", Player.PlayerClassType.Mage) {HitPoints = 100, MaxHitPoints = 100};
+			var player = new Player("test", Player.PlayerClassType.Mage) 
+				{HitPoints = 100, MaxHitPoints = 100, FireResistance = 0};
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon);
 			MonsterBuilder.BuildMonster(monster);
@@ -54,7 +55,8 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void FrostboltSpellUnitTest() {
-			var player = new Player("test", Player.PlayerClassType.Mage) {HitPoints = 200, MaxHitPoints = 200};
+			var player = new Player("test", Player.PlayerClassType.Mage) 
+				{HitPoints = 200, MaxHitPoints = 200, FrostResistance = 0};
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(1, Monster.MonsterType.Skeleton);
 			while (monster.SkeletonCategory != Monster.SkeletonType.Mage) {
@@ -102,7 +104,8 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void LightningSpellUnitTest() {
-			var player = new Player("test", Player.PlayerClassType.Mage) {HitPoints = 200, MaxHitPoints = 200};
+			var player = new Player("test", Player.PlayerClassType.Mage) 
+				{HitPoints = 200, MaxHitPoints = 200, ArcaneResistance = 0};
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Elemental);
 			while (monster.ElementalCategory != Monster.ElementalType.Air) {
@@ -214,7 +217,8 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void FirebreathSpellUnitTest() {
-			var player = new Player("test", Player.PlayerClassType.Mage) {HitPoints = 200, MaxHitPoints = 200};
+			var player = new Player("test", Player.PlayerClassType.Mage) 
+				{HitPoints = 200, MaxHitPoints = 200, FireResistance = 0};
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Dragon);
 			MonsterBuilder.BuildMonster(monster);

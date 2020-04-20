@@ -12,7 +12,7 @@ namespace DungeonGameTests {
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
-				{HitPoints = 50, MaxHitPoints = 100};
+				{HitPoints = 50, MaxHitPoints = 100, FireResistance = 0};
 			MonsterBuilder.BuildMonster(monster);
 			player.PlayerWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			var inputInfo = new[] {"spell", "fireball"};
@@ -57,7 +57,7 @@ namespace DungeonGameTests {
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
-				{HitPoints = 100, MaxHitPoints = 100};
+				{HitPoints = 100, MaxHitPoints = 100, FrostResistance = 0};
 			MonsterBuilder.BuildMonster(monster);
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
@@ -119,7 +119,7 @@ namespace DungeonGameTests {
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
-				{HitPoints = 100, MaxHitPoints = 100};
+				{HitPoints = 100, MaxHitPoints = 100, ArcaneResistance = 0};
 			MonsterBuilder.BuildMonster(monster);
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;
@@ -389,7 +389,7 @@ namespace DungeonGameTests {
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
-				{HitPoints = 100, MaxHitPoints = 100};
+				{HitPoints = 100, MaxHitPoints = 100, FrostResistance = 0};
 			MonsterBuilder.BuildMonster(monster);
 			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
 				item.Equipped = false;

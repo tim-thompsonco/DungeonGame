@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using DungeonGame;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -398,6 +399,69 @@ namespace DungeonGameTests {
 			Assert.AreEqual("placeholder", player.Name);
 			Assert.NotNull(RoomHandler.Rooms);
 			Assert.AreEqual("Reloading your saved game.", OutputHandler.Display.Output[1][2]);
+		}
+		[Test]
+		public void MonsterResistanceUnitTest() {
+			var player = new Player("test", Player.PlayerClassType.Mage) {MaxManaPoints = 100, ManaPoints = 100};
+			GearHandler.EquipInitialGear(player);
+			OutputHandler.Display.ClearUserOutput();
+			var monster = new Monster(3, Monster.MonsterType.Demon) 
+				{HitPoints = 100, MaxHitPoints = 100};
+			MonsterBuilder.BuildMonster(monster);
+			foreach (var item in monster.MonsterItems.Where(item => item.Equipped)) {
+				item.Equipped = false;
+			}
+			Assert.AreEqual(monster.Level * 5, monster.FireResistance);
+			Assert.AreEqual(monster.Level * 5, monster.FrostResistance);
+			Assert.AreEqual(monster.Level * 5, monster.ArcaneResistance);
+			var arcaneResistance = monster.ArcaneResistance;
+			var resistanceMod = (100 - arcaneResistance) / 100.0;
+			var input = new [] {"cast", "lightning"};
+			var spellIndex = player.Spellbook.FindIndex(
+				f => f.SpellCategory == PlayerSpell.SpellType.Lightning);
+			var spellName = InputHandler.ParseInput(input);
+			player.CastSpell(monster, spellName);
+			var reducedDamage = (int)(player.Spellbook[spellIndex].Offensive.Amount * resistanceMod);
+			Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - reducedDamage);
+		}
+		[Test]
+		public void PlayerResistanceUnitTest() {
+			var player = new Player("test", Player.PlayerClassType.Mage) {MaxManaPoints = 100, ManaPoints = 100};
+			GearHandler.EquipInitialGear(player);
+			OutputHandler.Display.ClearUserOutput();
+			var monster = new Monster(3, Monster.MonsterType.Elemental);
+			while (monster.ElementalCategory != Monster.ElementalType.Air) {
+				monster = new Monster(3, Monster.MonsterType.Elemental);
+			}
+			MonsterBuilder.BuildMonster(monster);
+			foreach (var item in player.Inventory.Where(item => item.Equipped)) {
+				item.Equipped = false;
+			}
+			Assert.AreEqual(player.Level * 5, player.FireResistance);
+			Assert.AreEqual(player.Level * 5, player.FrostResistance);
+			Assert.AreEqual(player.Level * 5, player.ArcaneResistance);
+			var arcaneResistance = player.ArcaneResistance;
+			var resistanceMod = (100 - arcaneResistance) / 100.0;
+			var spellIndex = monster.Spellbook.FindIndex(
+				f => f.SpellCategory == MonsterSpell.SpellType.Lightning);
+			MonsterSpell.CastArcaneOffense(monster, player, spellIndex);
+			var reducedDamage = (int)(monster.Spellbook[spellIndex].Offensive.Amount * resistanceMod);
+			Assert.AreEqual(player.HitPoints, player.MaxHitPoints - reducedDamage);
+		}
+		[Test]
+		public void MonsterResistanceLevelUnitTest() { 
+			var monster = new Monster(1, Monster.MonsterType.Vampire);
+			Assert.AreEqual(monster.Level * 5, monster.FireResistance);
+			Assert.AreEqual(monster.Level * 5, monster.FrostResistance);
+			Assert.AreEqual(monster.Level * 5, monster.ArcaneResistance);
+			monster = new Monster(3, Monster.MonsterType.Elemental);
+			Assert.AreEqual(monster.Level * 5, monster.FireResistance);
+			Assert.AreEqual(monster.Level * 5, monster.FrostResistance);
+			Assert.AreEqual(monster.Level * 5, monster.ArcaneResistance);
+			monster = new Monster(10, Monster.MonsterType.Dragon);
+			Assert.AreEqual(monster.Level * 5, monster.FireResistance);
+			Assert.AreEqual(monster.Level * 5, monster.FrostResistance);
+			Assert.AreEqual(monster.Level * 5, monster.ArcaneResistance);
 		}
 	}
 }

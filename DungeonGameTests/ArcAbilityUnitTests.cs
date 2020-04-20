@@ -417,7 +417,7 @@ namespace DungeonGameTests {
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon) 
-				{HitPoints = 100, MaxHitPoints = 100, InCombat = true};
+				{HitPoints = 100, MaxHitPoints = 100, InCombat = true, FireResistance = 0};
 			MonsterBuilder.BuildMonster(monster);
 			player.PlayerWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			player.Abilities.Add(new PlayerAbility(
