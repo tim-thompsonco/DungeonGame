@@ -35,5 +35,17 @@ namespace DungeonGame {
 			}
 			return totalArmorRating;
 		}
+		public static int CalculateSpellDamage(Player player, Monster opponent, int index) {
+			if (opponent.Spellbook[index].DamageGroup == MonsterSpell.DamageType.Physical) {
+				return opponent.Spellbook[index].Offensive.Amount;
+			}
+			var damageReductionPercentage = opponent.Spellbook[index].DamageGroup switch {
+				MonsterSpell.DamageType.Fire => (player.FireResistance / 100.0),
+				MonsterSpell.DamageType.Frost => (player.FrostResistance / 100.0),
+				MonsterSpell.DamageType.Arcane => (player.ArcaneResistance / 100.0),
+				_ => 0.0
+			};
+			return (int)(opponent.Spellbook[index].Offensive.Amount * (1 - damageReductionPercentage));
+		}
 	}
 }

@@ -250,6 +250,9 @@ namespace DungeonGame {
 				Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(),
 				"All stats have been assigned!");
+			player.FireResistance += 5;
+			player.FrostResistance += 5;
+			player.ArcaneResistance += 5;
 			CalculatePlayerStats(player);
 			// Leveling sets player back to max stats
 			player.HitPoints = player.MaxHitPoints;
@@ -399,6 +402,12 @@ namespace DungeonGame {
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				statsSb.ToString());
+			var resistString = "Fire Resist: " + player.FireResistance + " Frost Resist: " + player.FrostResistance +
+			                   " Arcane Resist: " + player.ArcaneResistance;
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(),
+				Settings.FormatDefaultBackground(),
+				resistString);
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -651,6 +660,30 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(), 
 					"You don't have that spell.");
 			}
+		}
+		public static int CalculateAbilityDamage(Player player, Monster opponent, int index) {
+			if (player.Abilities[index].DamageGroup == PlayerAbility.DamageType.Physical) {
+				return player.Abilities[index].Offensive.Amount;
+			}
+			var damageReductionPercentage = player.Abilities[index].DamageGroup switch {
+				PlayerAbility.DamageType.Fire => (opponent.FireResistance / 100.0),
+				PlayerAbility.DamageType.Frost => (opponent.FrostResistance / 100.0),
+				PlayerAbility.DamageType.Arcane => (opponent.ArcaneResistance / 100.0),
+				_ => 0.0
+			};
+			return (int)(player.Abilities[index].Offensive.Amount * (1 - damageReductionPercentage));
+		}
+		public static int CalculateSpellDamage(Player player, Monster opponent, int index) {
+			if (player.Spellbook[index].DamageGroup == PlayerSpell.DamageType.Physical) {
+				return player.Spellbook[index].Offensive.Amount;
+			}
+			var damageReductionPercentage = player.Spellbook[index].DamageGroup switch {
+				PlayerSpell.DamageType.Fire => (opponent.FireResistance / 100.0),
+				PlayerSpell.DamageType.Frost => (opponent.FrostResistance / 100.0),
+				PlayerSpell.DamageType.Arcane => (opponent.ArcaneResistance / 100.0),
+				_ => 0.0
+			};
+			return (int)(player.Spellbook[index].Offensive.Amount * (1 - damageReductionPercentage));
 		}
 	}
 }

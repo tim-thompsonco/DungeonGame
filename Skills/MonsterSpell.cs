@@ -3,12 +3,19 @@ using System.Linq;
 
 namespace DungeonGame {
 	public class MonsterSpell {
+		public enum DamageType {
+			Physical,
+			Fire,
+			Frost,
+			Arcane
+		}
 		public enum SpellType {
 			Fireball,
 			Frostbolt,
 			Lightning
 		}
 		public string Name { get; set; }
+		public DamageType? DamageGroup { get; set; }
 		public SpellType SpellCategory { get; set; }
 		public Offensive Offensive { get; set; }
 		public int EnergyCost { get; set; }
@@ -19,15 +26,25 @@ namespace DungeonGame {
 			this.Name = name;
 			this.EnergyCost = energyCost;
 			this.SpellCategory = spellType;
-			this.Offensive = this.SpellCategory switch {
-				SpellType.Fireball => new Offensive(25 + (monsterLevel - 1) * 5, 
-					5 + (monsterLevel - 1) * 2, 1, 3,
-					Offensive.OffensiveType.Fire),
-				SpellType.Frostbolt => new Offensive(15 + (monsterLevel - 1) * 5, 
-					1, 2),
-				SpellType.Lightning => new Offensive(35 + (monsterLevel - 1) * 5),
-				_ => throw new ArgumentOutOfRangeException()
-			};
+			switch (this.SpellCategory) {
+				case SpellType.Fireball:
+					this.DamageGroup = DamageType.Fire;
+					this.Offensive = new Offensive(25 + (monsterLevel - 1) * 5,
+						5 + (monsterLevel - 1) * 2, 1, 3,
+						Offensive.OffensiveType.Fire);
+					break;
+				case SpellType.Frostbolt:
+					this.DamageGroup = DamageType.Frost;
+					this.Offensive = new Offensive(15 + (monsterLevel - 1) * 5,
+						1, 2);
+					break;
+				case SpellType.Lightning:
+					this.DamageGroup = DamageType.Arcane;
+					this.Offensive = new Offensive(35 + (monsterLevel - 1) * 5);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 		
 		public static void CastFireOffense(Monster monster, Player player, int index) {
@@ -43,7 +60,7 @@ namespace DungeonGame {
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
-			var fireSpellDamage = monster.Spellbook[index].Offensive.Amount;
+			var fireSpellDamage = MonsterHandler.CalculateSpellDamage(player, monster, index);
 			foreach (var effect in player.Effects.ToList()) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
@@ -120,7 +137,7 @@ namespace DungeonGame {
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
-			var frostSpellDamage = monster.Spellbook[index].Offensive.Amount;
+			var frostSpellDamage = MonsterHandler.CalculateSpellDamage(player, monster, index);
 			foreach (var effect in player.Effects.ToList()) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
@@ -199,7 +216,7 @@ namespace DungeonGame {
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
-			var arcaneSpellDamage = monster.Spellbook[index].Offensive.Amount;
+			var arcaneSpellDamage = MonsterHandler.CalculateSpellDamage(player, monster, index);
 			foreach (var effect in player.Effects.ToList()) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:

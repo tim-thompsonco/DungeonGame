@@ -2,6 +2,12 @@ using System;
 
 namespace DungeonGame {
 	public class PlayerSpell {
+		public enum DamageType {
+			Physical,
+			Fire,
+			Frost,
+			Arcane
+		}
 		public enum SpellType {
 			Fireball,
 			Frostbolt,
@@ -15,6 +21,7 @@ namespace DungeonGame {
 			FrostNova
 		}
 		public string Name { get; set; }
+		public DamageType? DamageGroup { get; set; }
 		public SpellType SpellCategory { get; set; }
 		public ChangeAmount ChangeAmount { get; set; }
 		public Offensive Offensive { get; set; }
@@ -34,13 +41,16 @@ namespace DungeonGame {
 			this.MinLevel = minLevel;
 			switch(this.SpellCategory) {
 				case SpellType.Fireball:
+					this.DamageGroup = DamageType.Fire;
 					this.Offensive = new Offensive(
 						25, 5, 1, 3, Offensive.OffensiveType.Fire);
 					break;
 				case SpellType.Frostbolt:
+					this.DamageGroup = DamageType.Frost;
 					this.Offensive = new Offensive(15, 1, 2);
 					break;
 				case SpellType.Lightning:
+					this.DamageGroup = DamageType.Arcane;
 					this.Offensive = new Offensive(35);
 					break;
 				case SpellType.Heal:
@@ -62,6 +72,7 @@ namespace DungeonGame {
 					this.ChangeAmount = new ChangeAmount(15, 1, 600);
 					break;
 				case SpellType.FrostNova:
+					this.DamageGroup = DamageType.Frost;
 					this.Offensive = new Offensive(15, 1, 2);
 					break;
 				default:
@@ -180,7 +191,7 @@ namespace DungeonGame {
 		}
 		public static void CastFrostOffense(Monster opponent, Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
-			var frostSpellDamage = player.Spellbook[index].Offensive.Amount;
+			var frostSpellDamage = PlayerHandler.CalculateSpellDamage(player, opponent, index);
 			foreach (var effect in opponent.Effects) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
@@ -258,7 +269,7 @@ namespace DungeonGame {
 		}
 		public static void CastFireOffense(Monster opponent, Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
-			var fireSpellDamage = player.Spellbook[index].Offensive.Amount;
+			var fireSpellDamage = PlayerHandler.CalculateSpellDamage(player, opponent, index);
 			foreach (var effect in opponent.Effects) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:
@@ -316,7 +327,7 @@ namespace DungeonGame {
 		}
 		public static void CastArcaneOffense(Monster opponent, Player player, int index) {
 			player.ManaPoints -= player.Spellbook[index].ManaCost;
-			var arcaneSpellDamage = player.Spellbook[index].Offensive.Amount;
+			var arcaneSpellDamage = PlayerHandler.CalculateSpellDamage(player, opponent, index);
 			foreach (var effect in opponent.Effects) {
 				switch (effect.EffectGroup) {
 					case Effect.EffectType.Healing:

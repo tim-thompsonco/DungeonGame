@@ -1,8 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace DungeonGame {
 	public class PlayerAbility {
+		public enum DamageType {
+			Physical,
+			Fire,
+			Frost,
+			Arcane
+		}
 		public enum WarriorAbility {
 			Slash,
 			Rend,
@@ -30,6 +37,7 @@ namespace DungeonGame {
 		public string Name { get; set; }
 		public ArcherAbility? ArcAbilityCategory { get; set; }
 		public WarriorAbility? WarAbilityCategory { get; set; }
+		public DamageType? DamageGroup { get; set; }
 		public Healing Healing { get; set; }
 		public Defensive Defensive { get; set; }
 		public Offensive Offensive { get; set; }
@@ -50,23 +58,28 @@ namespace DungeonGame {
 			this.MinLevel = minLevel;
 			switch (this.WarAbilityCategory) {
 				case WarriorAbility.Slash:
+					this.DamageGroup = DamageType.Physical;
 					this.Offensive = new Offensive(50);
 					break;
 				case WarriorAbility.Rend:
+					this.DamageGroup = DamageType.Physical;
 					this.Offensive = new Offensive(
 						15, 5, 1, 3, Offensive.OffensiveType.Bleed);
 					break;
 				case WarriorAbility.Charge:
+					this.DamageGroup = DamageType.Physical;
 					this.Stun = new Stun(15, 1, 2);
 					break;
 				case WarriorAbility.Block:
 					this.Defensive = new Defensive(50);
 					break;
 				case WarriorAbility.Berserk:
+					this.DamageGroup = DamageType.Physical;
 					this.Offensive = new Offensive(20, 1, 4);
 					this.ChangeAmount = new ChangeAmount(-15, 1, 4);
 					break;
 				case WarriorAbility.Disarm:
+					this.DamageGroup = DamageType.Physical;
 					this.Offensive = new Offensive(35);
 					break;
 				case WarriorAbility.Bandage:
@@ -79,6 +92,7 @@ namespace DungeonGame {
 					this.ChangeAmount = new ChangeAmount(-25, 1, 3);
 					break;
 				case WarriorAbility.Onslaught:
+					this.DamageGroup = DamageType.Physical;
 					this.Offensive = new Offensive(25);
 					break;
 				default:
@@ -93,23 +107,29 @@ namespace DungeonGame {
 			this.MinLevel = minLevel;
 			switch (this.ArcAbilityCategory) {
 				case ArcherAbility.Distance:
+					this.DamageGroup = DamageType.Physical;
 					this.Offensive = new Offensive(25, 50);
 					break;
 				case ArcherAbility.Gut:
+					this.DamageGroup = DamageType.Physical;
 					this.Offensive = new Offensive(
 						15, 5, 1, 3, Offensive.OffensiveType.Bleed);
 					break;
 				case ArcherAbility.Precise:
+					this.DamageGroup = DamageType.Physical;
 					this.Offensive = new Offensive(50);
 					break;
 				case ArcherAbility.Stun:
+					this.DamageGroup = DamageType.Physical;
 					this.Stun = new Stun(15, 1, 3);
 					break;
 				case ArcherAbility.Wound:
+					this.DamageGroup = DamageType.Physical;
 					this.Offensive = new Offensive(
 						5, 10, 1, 5, Offensive.OffensiveType.Bleed);
 					break;
 				case ArcherAbility.Double:
+					this.DamageGroup = DamageType.Physical;
 					this.Offensive = new Offensive(25);
 					break;
 				case ArcherAbility.Bandage:
@@ -119,10 +139,12 @@ namespace DungeonGame {
 					this.ChangeAmount = new ChangeAmount(15, 1, 600);
 					break;
 				case ArcherAbility.ImmolatingArrow:
+					this.DamageGroup = DamageType.Fire;
 					this.Offensive = new Offensive(
 						25, 5, 1, 3, Offensive.OffensiveType.Fire);
 					break;
 				case ArcherAbility.Ambush:
+					this.DamageGroup = DamageType.Physical;
 					this.Offensive = new Offensive(50);
 					break;
 				default:
@@ -569,7 +591,7 @@ namespace DungeonGame {
 			if (player.PlayerClass == Player.PlayerClassType.Archer) {
 				player.PlayerQuiver.UseArrow();
 			}
-			var abilityDamage = player.Abilities[index].Offensive.Amount;
+			var abilityDamage = PlayerHandler.CalculateAbilityDamage(player, opponent, index);
 			opponent.HitPoints -= abilityDamage;
 			var abilitySuccessString = "Your " + player.Abilities[index].Name + " hit the " + opponent.Name + " for " +
 			                           abilityDamage + " physical damage.";

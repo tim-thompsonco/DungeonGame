@@ -31,6 +31,9 @@ namespace DungeonGame {
 		public int HitPoints { get; set; }
 		public int MaxEnergyPoints { get; set; }
 		public int EnergyPoints { get; set; }
+		public int FireResistance { get; set; }
+		public int FrostResistance { get; set; }
+		public int ArcaneResistance { get; set; }
 		public int ExperienceProvided { get; set; }
 		public int Gold { get; set; }
 		public bool WasLooted { get; set; }
@@ -63,6 +66,9 @@ namespace DungeonGame {
 			this.StatReplenishInterval = 3;
 			this.UnarmedAttackDamage = 5;
 			this.Level = level;
+			this.FireResistance = this.Level * 5;
+			this.FrostResistance = this.Level * 5;
+			this.ArcaneResistance = this.Level * 5;
 			this.MonsterCategory = monsterType;
 			var randomNumHitPoint = GameHandler.GetRandomNumber(20, 40);
 			var maxHitPoints = 80 + (this.Level - 1) * randomNumHitPoint;

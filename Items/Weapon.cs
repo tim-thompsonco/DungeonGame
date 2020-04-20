@@ -3,6 +3,12 @@ using System.Text;
 
 namespace DungeonGame {
 	public class Weapon : IEquipment {
+		public enum DamageType {
+			Physical,
+			Fire,
+			Frost,
+			Arcane
+		}
 		public enum WeaponType {
 			Dagger,
 			OneHandedSword,
@@ -14,6 +20,7 @@ namespace DungeonGame {
 		public string Desc { get; set; }
 		public int RegDamage { get; set; }
 		public int ItemValue { get; set; }
+		public DamageType DamageGroup { get; set; }
 		public WeaponType WeaponGroup { get; set; }
 		public double CritMultiplier { get; set; }
 		public bool Equipped { get; set; }
@@ -27,6 +34,7 @@ namespace DungeonGame {
 		public Weapon(int level, WeaponType weaponType) {
 			this.Level = level;
 			this.WeaponGroup = weaponType;
+			this.DamageGroup = DamageType.Physical;
 			this.Weight = this.WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
 			this.Durability = 100;
 			var randomNum = GameHandler.GetRandomNumber(1, 100);

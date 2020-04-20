@@ -20,6 +20,9 @@ namespace DungeonGame {
 		public int? ComboPoints { get; set; }
 		public int? MaxManaPoints { get; set; }
 		public int? ManaPoints { get; set; }
+		public int FireResistance { get; set; }
+		public int FrostResistance { get; set; }
+		public int ArcaneResistance { get; set; }
 		public int Strength { get; set; }
 		public int Intelligence { get; set; }
 		public int Dexterity { get; set; }
@@ -69,6 +72,9 @@ namespace DungeonGame {
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();
 			this.Effects = new List<Effect>();
+			this.FireResistance = 5;
+			this.FrostResistance = 5;
+			this.ArcaneResistance = 5;
 			switch (this.PlayerClass) {
 				case PlayerClassType.Mage:
 					for (var i = 0; i < 3; i++) {

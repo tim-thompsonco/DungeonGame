@@ -3,12 +3,19 @@ using System.Linq;
 
 namespace DungeonGame {
 	public class MonsterAbility {
+		public enum DamageType {
+			Physical,
+			Fire,
+			Frost,
+			Arcane
+		}
 		public enum Ability {
 			PoisonBite,
 			BloodLeech,
 			TailWhip
 		}
 		public string Name { get; set; }
+		public DamageType? DamageGroup { get; set; }
 		public Ability AbilityCategory { get; set; }
 		public Offensive Offensive { get; set; }
 		public int EnergyCost { get; set; }
@@ -18,6 +25,7 @@ namespace DungeonGame {
 		public MonsterAbility(string name, int energyCost, Ability abilityCategory, int monsterLevel) {
 			this.Name = name;
 			this.EnergyCost = energyCost;
+			this.DamageGroup = DamageType.Physical;
 			this.AbilityCategory = abilityCategory;
 			this.Offensive = this.AbilityCategory switch {
 				Ability.PoisonBite => new Offensive(15 + (monsterLevel - 1) * 5, 
