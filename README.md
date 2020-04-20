@@ -17,6 +17,8 @@
 <p>drink [potion] - This will consume an item such as a potion if it is in the player's inventory</p>
 <p>show forsale - This will show available items for sale at a vendor</p>
 <p>buy/sell [item] - This will buy or sell an item if the player is in the same room as a vendor</p>
+<p>buy [potion] [quantity] - This will buy the desired quantity of potions at the healer. IE "buy health 5" will buy 5 health potions.
+<p>sell [item] [count] - This will sell an item with a duplicate name at the desired count. IE player has two "sturdy daggers" in inventory. "sell dagger 2" will sell the 2nd sturdy dagger.
 <p>show upgrades - This will show available abilities/spells that can be upgraded at the appropriate class trainer</p>
 <p>train [spell/ability] - This will train a new spell or ability at the appropriate class trainer</p>
 <p>upgrade [spell/ability] - This will upgrade an existing spell or ability at the appropriate class trainer</p>
