@@ -59,6 +59,7 @@
     <Compile Include="Items\Quiver.cs" />
     <Compile Include="Items\Weapon.cs" />
     <Compile Include="Messages.cs" />
+    <Compile Include="Quest.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Skill Properties\ChangeAmount.cs" />
     <Compile Include="Skill Properties\Defensive.cs" />

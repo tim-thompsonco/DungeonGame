@@ -60,6 +60,7 @@ namespace DungeonGame {
 		public List<PlayerAbility> Abilities { get; set; }
 		public List<Consumable> Consumables { get; set; }
 		public List<IEquipment> Inventory { get; set; }
+		public List<Quest> QuestLog { get; set; }
 
 		// Default constructor for JSON serialization
 		public Player() { }
@@ -72,6 +73,7 @@ namespace DungeonGame {
 			this.Consumables = new List<Consumable>();
 			this.Inventory = new List<IEquipment>();
 			this.Effects = new List<Effect>();
+			this.QuestLog = new List<Quest>();
 			this.FireResistance = 5;
 			this.FrostResistance = 5;
 			this.ArcaneResistance = 5;
