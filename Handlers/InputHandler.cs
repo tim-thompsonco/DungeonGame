@@ -245,6 +245,17 @@ namespace DungeonGame {
 							"What spell did you want to know about?");
 					}
 					break;
+				case "quest":
+					try {
+						PlayerHandler.QuestInfo(player, input);
+					}
+					catch (IndexOutOfRangeException) {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"What quest did you want to know about?");
+					}
+					break;
 				case "l":
 				case "look":
 					try {

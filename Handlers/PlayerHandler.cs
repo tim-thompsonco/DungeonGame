@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DungeonGame {
@@ -48,7 +50,7 @@ namespace DungeonGame {
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (var item in player.Inventory) {
 				if (!item.Equipped) continue;
-				var itemName = GetInventoryName(item);
+				var itemName = GearHandler.GetItemDetails(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (itemName.Contains("Quiver"))
 					itemInfo.Append(" (Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity + ")");
@@ -60,7 +62,7 @@ namespace DungeonGame {
 			}
 			foreach (var item in player.Inventory) {
 				if (item.Equipped) continue;
-				var itemName = GetInventoryName(item);
+				var itemName = GearHandler.GetItemDetails(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (player.PlayerQuiver?.Name == itemName)
 					itemInfo.Append("Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity);
@@ -123,21 +125,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				weightString);
 		}
-		private static string GetInventoryName(IEquipment item) {
-			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			var itemInfo = new StringBuilder();
-			itemInfo.Append(item.Name);
-			switch (item) {
-				case Armor isItemArmor:
-					itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + ")");
-					break;
-				case Weapon isItemWeapon:
-					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + ")");
-					break;
-			}
-			var itemName = textInfo.ToTitleCase(itemInfo.ToString());
-			return itemName;
-		}
+		
 		public static void LevelUpCheck(Player player) {
 			if (player.Experience < player.ExperienceToLevel || player.Level == 10) return;
 			foreach (var effect in player.Effects.ToList().Where(effect => effect.IsHarmful = true)) {
@@ -659,6 +647,25 @@ namespace DungeonGame {
 					Settings.FormatFailureOutputText(), 
 					Settings.FormatDefaultBackground(), 
 					"You don't have that spell.");
+			}
+		}
+		public static void QuestInfo(Player player, string[] input) {
+			var inputName = new StringBuilder();
+			for (var i = 1; i < input.Length; i++) {
+				inputName.Append(input[i]);
+				if (i != input.Length - 1) inputName.Append(" ");
+			}
+			var index = player.QuestLog.FindIndex(f =>
+				f.Name == inputName.ToString() || f.Name == input[1] || f.Name.Contains(inputName.ToString()));
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			if (index != -1) {
+				player.QuestLog[index].ShowQuest();
+			}
+			else {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(), 
+					Settings.FormatDefaultBackground(), 
+					"You don't have that quest.");
 			}
 		}
 		public static int CalculateAbilityDamage(Player player, Monster opponent, int index) {

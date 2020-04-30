@@ -18,6 +18,21 @@ namespace DungeonGame {
 				EquipQuiver(player, player.Inventory[4] as Quiver);
 			}
 		}
+		public static string GetItemDetails(IEquipment item) {
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			var itemInfo = new StringBuilder();
+			itemInfo.Append(item.Name);
+			switch (item) {
+				case Armor isItemArmor:
+					itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + ")");
+					break;
+				case Weapon isItemWeapon:
+					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + ")");
+					break;
+			}
+			var itemName = textInfo.ToTitleCase(itemInfo.ToString());
+			return itemName;
+		}
 		public static void DecreaseArmorDurability(Player player) {
 			player.PlayerChestArmor?.DecreaseDurability();
 			player.PlayerHeadArmor?.DecreaseDurability();

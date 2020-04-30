@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 
 namespace DungeonGame {
 	public class Quest {
@@ -30,13 +31,13 @@ namespace DungeonGame {
 					var desiredKills = GameHandler.GetRandomNumber(20, 30);
 					this.CurrentKills = 0;
 					this.RequiredKills = desiredKills;
-					this.QuestRewardGold = (int)this.RequiredKills;
+					this.QuestRewardGold = (int)this.RequiredKills * 10;
 					break;
 				case QuestType.KillMonster:
 					var desiredMonsterKills = GameHandler.GetRandomNumber(10, 20);
 					this.CurrentKills = 0;
 					this.RequiredKills = desiredMonsterKills;
-					this.QuestRewardGold = (int)this.RequiredKills;
+					this.QuestRewardGold = (int)this.RequiredKills * 10;
 					var randomNum = GameHandler.GetRandomNumber(1, 8);
 					this.MonsterKillType = randomNum switch {
 						1 => Monster.MonsterType.Demon,
@@ -55,14 +56,74 @@ namespace DungeonGame {
 					this.MonstersRemaining = RoomHandler.Rooms.Where(
 						room => room.Key.Z == this.TargetLevel * -1).Count(
 						room => room.Value.Monster?.HitPoints > 0);
-					this.QuestRewardGold = (int)this.MonstersRemaining;
+					this.QuestRewardGold = (int)this.MonstersRemaining * 10;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 			this.QuestRewardItem = questRewardItem;
 		}
-	
+
+		public void ShowQuest() {
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				this.Name);
+			var questBorder = new StringBuilder();
+			for (var i = 0; i < Settings.GetGameWidth(); i++) {
+				questBorder.Append("=");
+			}
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				questBorder.ToString());
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				this.Dialogue);
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				questBorder.ToString());
+			switch (this.QuestCategory) {
+				case QuestType.KillCount:
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatSuccessOutputText(),
+						Settings.FormatDefaultBackground(),
+						"Required Kills: " + this.RequiredKills);
+					break;
+				case QuestType.KillMonster:
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatSuccessOutputText(),
+						Settings.FormatDefaultBackground(),
+						"Target Monster: " + this.MonsterKillType);
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatSuccessOutputText(),
+						Settings.FormatDefaultBackground(),
+						"Required Kills: " + this.RequiredKills);
+					break;
+				case QuestType.ClearLevel:
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatSuccessOutputText(),
+						Settings.FormatDefaultBackground(),
+						"Clear Level " + this.TargetLevel);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				questBorder.ToString());
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				"Gold Reward: " + this.QuestRewardGold + " gold coins");
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				"Item Reward: " + GearHandler.GetItemDetails(this.QuestRewardItem));
+		}
 		public void UpdateQuestProgress(Monster monster) {
 			switch (this.QuestCategory) {
 				case QuestType.KillCount:
