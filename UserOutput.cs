@@ -94,7 +94,6 @@ namespace DungeonGame {
 					this.Output[i].Add(OutputHandler.MapDisplay?.Output[i][j + 2]);
 				}
 			}
-			var lc = 0;
 			// Var k is iterating through each row of output
 			for (var k = OutputHandler.MapDisplay.Output.Count; k < OutputHandler.EffectDisplay.Output.Count + OutputHandler.MapDisplay.Output.Count; k++) {
 				var lineCount = 0;
@@ -120,11 +119,12 @@ namespace DungeonGame {
 						bufferStringBuilder.ToString());
 				}
 				// var j is iterating through each column of each row of output
-				for (var l = 0; l < OutputHandler.EffectDisplay.Output[lc].Count; l += 3) {
-					this.Output[k].Add(OutputHandler.EffectDisplay?.Output[lc][l]);
-					this.Output[k].Add(OutputHandler.EffectDisplay?.Output[lc][l + 1]);
-					this.Output[k].Add(OutputHandler.EffectDisplay?.Output[lc][l + 2]);
-					if (lc + 1 < OutputHandler.EffectDisplay.Output.Count) lc++;
+				var mapLineCount = 0;
+				for (var l = 0; l < OutputHandler.EffectDisplay.Output[mapLineCount].Count; l += 3) {
+					this.Output[k].Add(OutputHandler.EffectDisplay?.Output[mapLineCount][l]);
+					this.Output[k].Add(OutputHandler.EffectDisplay?.Output[mapLineCount][l + 1]);
+					this.Output[k].Add(OutputHandler.EffectDisplay?.Output[mapLineCount][l + 2]);
+					if (mapLineCount + 1 < OutputHandler.EffectDisplay.Output.Count) mapLineCount++;
 				}
 			}
 		}

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -9,6 +10,7 @@ namespace DungeonGame {
 		public static UserOutput Display = new UserOutput();
 		public static UserOutput MapDisplay = new UserOutput();
 		public static UserOutput EffectDisplay = new UserOutput();
+		public static UserOutput QuestDisplay = new UserOutput();
 
 		private static UserOutput BuildMap(Player player, int height, int width) {
 			var output = new UserOutput();
@@ -224,12 +226,59 @@ namespace DungeonGame {
 				effectsBorder.ToString());
 			return effectUserOutput;
 		}
+		public static UserOutput ShowQuests(Player player) {
+			var questUserOutput = new UserOutput();
+			// Draw title to show for player quest log
+			questUserOutput.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(), 
+				"Player Quests:");
+			var quests = 0;
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			foreach (var quest in player.QuestLog) {
+				string questOutput;
+				switch (quest.QuestCategory) {
+					case Quest.QuestType.KillCount:
+					case Quest.QuestType.KillMonster:
+						questOutput = textInfo.ToTitleCase(quest.Name) + " (" + quest.CurrentKills + "/" + quest.RequiredKills + ")";
+						break;
+					case Quest.QuestType.ClearLevel:
+						questOutput = textInfo.ToTitleCase(quest.Name) + " (" + quest.MonstersRemaining + " monsters left";
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+				quests++;
+				questUserOutput.StoreUserOutput(
+					Settings.FormatGeneralInfoText(), 
+					Settings.FormatDefaultBackground(), 
+					questOutput);
+			}
+			if (quests == 0) {
+				questUserOutput.StoreUserOutput(
+					Settings.FormatInfoText(),
+					Settings.FormatDefaultBackground(),
+					"None.");
+			}
+			// Create bottom border for player quest log
+			var questsBorder = new StringBuilder();
+			// Quest log border needs to extend same width as minimap itself in either direction
+			for (var b = 0; b < Settings.GetMiniMapBorderWidth(); b++) {
+				questsBorder.Append("=");
+			}
+			questUserOutput.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(), 
+				questsBorder.ToString());
+			return questUserOutput;
+		}
 		public static void ShowUserOutput(Player player, Monster opponent) {
 			PlayerHandler.DisplayPlayerStats(player);
 			MonsterHandler.DisplayStats(opponent);
 			RoomHandler.Rooms[player.PlayerLocation].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = ShowEffects(player);
+			QuestDisplay = ShowQuests(player);
 			Display.BuildUserOutput();
 			Display.RetrieveUserOutput();
 		}
@@ -238,6 +287,7 @@ namespace DungeonGame {
 			RoomHandler.Rooms[player.PlayerLocation].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = ShowEffects(player);
+			QuestDisplay = ShowQuests(player);
 			Display.BuildUserOutput();
 			Display.RetrieveUserOutput();
 		}
