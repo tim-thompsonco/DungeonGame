@@ -14,6 +14,7 @@ namespace DungeonGame {
 		public int? CurrentKills { get; set; }
 		public int? RequiredKills { get; set; }
 		public int? TargetLevel { get; set; }
+		public int? MonstersRemaining { get; set; }
 		public Monster.MonsterType? MonsterKillType { get; set; }
 		public bool QuestCompleted { get; set; }
 		public int QuestRewardGold { get; set; }
@@ -48,6 +49,10 @@ namespace DungeonGame {
 					};
 					break;
 				case QuestType.ClearLevel:
+					this.TargetLevel = GameHandler.GetRandomNumber(1, 10);
+					this.MonstersRemaining = RoomHandler.Rooms.Where(
+						room => room.Key.Z == this.TargetLevel).Count(
+						room => room.Value.Monster?.HitPoints > 0);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -67,11 +72,10 @@ namespace DungeonGame {
 					if (this.CurrentKills >= this.RequiredKills) this.QuestCompleted = true;
 					break;
 				case QuestType.ClearLevel:
-					foreach (var room in RoomHandler.Rooms.Where(
-						room => room.Key.Z == this.TargetLevel)) {
-						if (room.Value.Monster.HitPoints > 0) {
-							break;
-						}
+					this.MonstersRemaining = RoomHandler.Rooms.Where(
+						room => room.Key.Z == this.TargetLevel).Count(
+						room => room.Value.Monster?.HitPoints > 0);
+					if (this.MonstersRemaining == 0) {
 						this.QuestCompleted = true;
 					}
 					break;
