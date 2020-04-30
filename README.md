@@ -7,6 +7,9 @@
 <p>Whenever possible, I tried to include game commands in the game itself. However, here is a list of the most common commands that as a player you will need to remember.</p>
 
 <p>i - This will display the player's inventory</p>
+<p>ability [name] - This will show details on an ability in the player's ability list</p>
+<p>spell [name] - This will show details on a spell in the player's spellbook</p>
+<p>quest [name] - This will show details on a quest in the player's quest log</p>
 <p>drop [item] - This will drop an item from the player's inventory onto the ground</p>
 <p>pickup [item] - This will pick up an item on the ground and deposit it in the player's inventory</p>
 <p>cast [spell] - This will cast a spell if the player is a Mage</p>
