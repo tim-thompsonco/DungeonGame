@@ -246,7 +246,8 @@ namespace DungeonGame {
 						              " " + quest.MonsterKillType + "s)";
 						break;
 					case Quest.QuestType.ClearLevel:
-						questOutput = textInfo.ToTitleCase(quest.Name) + " (" + quest.MonstersRemaining + " monsters left";
+						questOutput = textInfo.ToTitleCase(quest.Name) + " (Lvl: " + quest.TargetLevel + " | " + 
+						              quest.MonstersRemaining + " monsters left)";
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

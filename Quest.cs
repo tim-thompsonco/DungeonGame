@@ -21,7 +21,7 @@ namespace DungeonGame {
 		public IEquipment QuestRewardItem { get; set; }
 
 		public Quest(
-			string name, string dialogue, QuestType questCategory, int questRewardGold, IEquipment questRewardItem) {
+			string name, string dialogue, QuestType questCategory, IEquipment questRewardItem) {
 			this.Name = name;
 			this.Dialogue = dialogue;
 			this.QuestCategory = questCategory;
@@ -30,11 +30,13 @@ namespace DungeonGame {
 					var desiredKills = GameHandler.GetRandomNumber(20, 30);
 					this.CurrentKills = 0;
 					this.RequiredKills = desiredKills;
+					this.QuestRewardGold = (int)this.RequiredKills;
 					break;
 				case QuestType.KillMonster:
 					var desiredMonsterKills = GameHandler.GetRandomNumber(10, 20);
 					this.CurrentKills = 0;
 					this.RequiredKills = desiredMonsterKills;
+					this.QuestRewardGold = (int)this.RequiredKills;
 					var randomNum = GameHandler.GetRandomNumber(1, 8);
 					this.MonsterKillType = randomNum switch {
 						1 => Monster.MonsterType.Demon,
@@ -51,13 +53,13 @@ namespace DungeonGame {
 				case QuestType.ClearLevel:
 					this.TargetLevel = GameHandler.GetRandomNumber(1, 10);
 					this.MonstersRemaining = RoomHandler.Rooms.Where(
-						room => room.Key.Z == this.TargetLevel).Count(
+						room => room.Key.Z == this.TargetLevel * -1).Count(
 						room => room.Value.Monster?.HitPoints > 0);
+					this.QuestRewardGold = (int)this.MonstersRemaining;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			this.QuestRewardGold = questRewardGold;
 			this.QuestRewardItem = questRewardItem;
 		}
 	
@@ -73,7 +75,7 @@ namespace DungeonGame {
 					break;
 				case QuestType.ClearLevel:
 					this.MonstersRemaining = RoomHandler.Rooms.Where(
-						room => room.Key.Z == this.TargetLevel).Count(
+						room => room.Key.Z == this.TargetLevel * -1).Count(
 						room => room.Value.Monster?.HitPoints > 0);
 					if (this.MonstersRemaining == 0) {
 						this.QuestCompleted = true;
