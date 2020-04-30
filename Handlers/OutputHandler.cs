@@ -239,8 +239,11 @@ namespace DungeonGame {
 				string questOutput;
 				switch (quest.QuestCategory) {
 					case Quest.QuestType.KillCount:
-					case Quest.QuestType.KillMonster:
 						questOutput = textInfo.ToTitleCase(quest.Name) + " (" + quest.CurrentKills + "/" + quest.RequiredKills + ")";
+						break;
+					case Quest.QuestType.KillMonster:
+						questOutput = textInfo.ToTitleCase(quest.Name) + " (" + quest.CurrentKills + "/" + quest.RequiredKills + 
+						              " " + quest.MonsterKillType + "s)";
 						break;
 					case Quest.QuestType.ClearLevel:
 						questOutput = textInfo.ToTitleCase(quest.Name) + " (" + quest.MonstersRemaining + " monsters left";
