@@ -413,6 +413,10 @@ namespace DungeonGame {
 			this.Desc = "A corpse of a monster you killed.";
 			player.Experience += this.ExperienceProvided;
 			PlayerHandler.LevelUpCheck(player);
+			if (player.QuestLog == null) return;
+			foreach (var quest in player.QuestLog) {
+				quest.UpdateQuestProgress(this);
+			}
 		}
 	}
 }

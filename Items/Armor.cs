@@ -15,7 +15,8 @@ namespace DungeonGame {
 		public enum ArmorType {
 			Cloth,
 			Leather,
-			Plate
+			Plate,
+			Rainbow
 		}
 		public string Name { get; set; }
 		public string Desc { get; set; }

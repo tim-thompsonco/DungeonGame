@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Runtime;
+using System.Linq;
 
 namespace DungeonGame {
 	public class Quest {
@@ -13,10 +13,14 @@ namespace DungeonGame {
 		public QuestType QuestCategory { get; set; }
 		public int? CurrentKills { get; set; }
 		public int? RequiredKills { get; set; }
+		public int? TargetLevel { get; set; }
 		public Monster.MonsterType? MonsterKillType { get; set; }
 		public bool QuestCompleted { get; set; }
+		public int QuestRewardGold { get; set; }
+		public IEquipment QuestRewardItem { get; set; }
 
-		public Quest(string name, string dialogue, QuestType questCategory) {
+		public Quest(
+			string name, string dialogue, QuestType questCategory, int questRewardGold, IEquipment questRewardItem) {
 			this.Name = name;
 			this.Dialogue = dialogue;
 			this.QuestCategory = questCategory;
@@ -48,29 +52,28 @@ namespace DungeonGame {
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+			this.QuestRewardGold = questRewardGold;
+			this.QuestRewardItem = questRewardItem;
 		}
-
-		public void CheckQuestCompleted() {
-			switch (this.QuestCategory) {
-				case QuestType.KillCount:
-				case QuestType.KillMonster:
-					if (this.CurrentKills >= this.RequiredKills) this.QuestCompleted = true;
-					break;
-				case QuestType.ClearLevel:
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-		public void UpdateQuestProgress(Monster.MonsterType monsterType) {
+	
+		public void UpdateQuestProgress(Monster monster) {
 			switch (this.QuestCategory) {
 				case QuestType.KillCount:
 					this.CurrentKills++;
+					if (this.CurrentKills >= this.RequiredKills) this.QuestCompleted = true;
 					break;
 				case QuestType.KillMonster:
-					if (this.MonsterKillType == monsterType) this.CurrentKills++;
+					if (this.MonsterKillType == monster.MonsterCategory) this.CurrentKills++;
+					if (this.CurrentKills >= this.RequiredKills) this.QuestCompleted = true;
 					break;
 				case QuestType.ClearLevel:
+					foreach (var room in RoomHandler.Rooms.Where(
+						room => room.Key.Z == this.TargetLevel)) {
+						if (room.Value.Monster.HitPoints > 0) {
+							break;
+						}
+						this.QuestCompleted = true;
+					}
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
