@@ -68,7 +68,8 @@ namespace DungeonGame {
 						"a reasonable offer to me.", 
 						Quest.QuestType.KillCount, 
 						new Armor(
-							Armor.ArmorType.Cloth, Armor.ArmorSlot.Chest, true)));
+							Armor.ArmorType.Cloth, Armor.ArmorSlot.Chest, true), 
+						this.Name));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -641,7 +642,51 @@ namespace DungeonGame {
 			}
 		}
 		public void CompleteQuest(Player player, string[] input) {
-			throw new NotImplementedException();
+			var userInput = InputHandler.ParseInput(input);
+			var questIndex = player.QuestLog.FindIndex(
+				f => f.Name.ToLowerInvariant().Contains(userInput));
+			var quest = player.QuestLog[questIndex];
+			if (questIndex != -1) {
+				if (quest.QuestGiver == this.Name) {
+					if (quest.QuestCompleted) {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatGeneralInfoText(),
+							Settings.FormatDefaultBackground(),
+							"Congratulations on finishing " + quest.Name + "! Here's your reward.");
+						player.Inventory.Add(quest.QuestRewardItem);
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatGeneralInfoText(),
+							Settings.FormatDefaultBackground(),
+							"You have received: ");
+						GearHandler.StoreRainbowGearOutput(GearHandler.GetItemDetails(quest.QuestRewardItem));
+						player.Gold += quest.QuestRewardGold;
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatGeneralInfoText(),
+							Settings.FormatDefaultBackground(),
+							quest.QuestRewardGold + " gold coins.");
+						player.QuestLog.RemoveAt(questIndex);
+					}
+					else {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"You haven't finished that quest yet!");
+					}
+				}
+				else {
+					var textInfo = new CultureInfo("en-US", false).TextInfo;
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"I didn't give you that quest. " + textInfo.ToTitleCase(quest.QuestGiver) + " did.");
+				}
+			}
+			else {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"What quest did you want to turn in?");
+			}
 		}
 	}
 }

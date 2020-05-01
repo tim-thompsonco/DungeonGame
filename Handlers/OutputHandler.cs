@@ -245,11 +245,13 @@ namespace DungeonGame {
 					                               quest.MonstersRemaining + " monsters left)"),
 					_ => throw new ArgumentOutOfRangeException()
 				};
+				var questStringBuilder = new StringBuilder(questOutput);
+				if (quest.QuestCompleted) questStringBuilder.Append(" (Complete)");
 				quests++;
 				questUserOutput.StoreUserOutput(
 					Settings.FormatGeneralInfoText(), 
 					Settings.FormatDefaultBackground(), 
-					questOutput);
+					questStringBuilder.ToString());
 			}
 			if (quests == 0) {
 				questUserOutput.StoreUserOutput(

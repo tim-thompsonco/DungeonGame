@@ -21,12 +21,14 @@ namespace DungeonGame {
 		public bool QuestCompleted { get; set; }
 		public int QuestRewardGold { get; set; }
 		public IEquipment QuestRewardItem { get; set; }
+		public string QuestGiver { get; set; }
 
 		public Quest(
-			string name, string dialogue, QuestType questCategory, IEquipment questRewardItem) {
+			string name, string dialogue, QuestType questCategory, IEquipment questRewardItem, string questGiver) {
 			this.Name = name;
 			this.Dialogue = dialogue;
 			this.QuestCategory = questCategory;
+			this.QuestGiver = questGiver;
 			switch (this.QuestCategory) {
 				case QuestType.KillCount:
 					var desiredKills = GameHandler.GetRandomNumber(20, 30);
@@ -67,7 +69,7 @@ namespace DungeonGame {
 
 		public void ShowQuest() {
 			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
+				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				this.Name);
 			var questBorder = new StringBuilder();
@@ -75,46 +77,46 @@ namespace DungeonGame {
 				questBorder.Append("=");
 			}
 			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
+				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				questBorder.ToString());
 			for (var i = 0; i < this.Dialogue.Length; i += Settings.GetGameWidth()) {
 				if (this.Dialogue.Length - i < Settings.GetGameWidth()) {
 					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatRoomOutputText(), 
+						Settings.FormatGeneralInfoText(), 
 						Settings.FormatDefaultBackground(), 
 						this.Dialogue.Substring(i, this.Dialogue.Length - i));
 					continue;
 				}
 				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatRoomOutputText(), 
+					Settings.FormatGeneralInfoText(), 
 					Settings.FormatDefaultBackground(), 
 					this.Dialogue.Substring(i, Settings.GetGameWidth()));
 			}
 			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
+				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				questBorder.ToString());
 			switch (this.QuestCategory) {
 				case QuestType.KillCount:
 					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatSuccessOutputText(),
+						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
 						"Required Kills: " + this.RequiredKills);
 					break;
 				case QuestType.KillMonster:
 					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatSuccessOutputText(),
+						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
 						"Target Monster: " + this.MonsterKillType);
 					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatSuccessOutputText(),
+						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
 						"Required Kills: " + this.RequiredKills);
 					break;
 				case QuestType.ClearLevel:
 					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatSuccessOutputText(),
+						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
 						"Clear Level " + this.TargetLevel);
 					break;
@@ -122,24 +124,18 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
+				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				questBorder.ToString());
 			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
+				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
-				"Gold Reward: ");
+				"Rewards: ");
+			GearHandler.StoreRainbowGearOutput(GearHandler.GetItemDetails(this.QuestRewardItem));
 			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
+				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				this.QuestRewardGold + " gold coins");
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				"Item Reward: ");
-			var itemName = GearHandler.GetItemDetails(this.QuestRewardItem);
-			var itemInfo = new StringBuilder(itemName);
-			GearHandler.StoreRainbowGearOutput(itemInfo.ToString());
 		}
 		public async void UpdateQuestProgress(Monster monster) {
 			await Task.Run(() => {
@@ -162,6 +158,12 @@ namespace DungeonGame {
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
+				}
+				if (this.QuestCompleted) {
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatGeneralInfoText(),
+						Settings.FormatDefaultBackground(),
+						"You have completed the quest " + this.Name + "! Go turn it in and get your reward.");
 				}
 			});
 		}

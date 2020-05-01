@@ -256,6 +256,32 @@ namespace DungeonGame {
 							"What quest did you want to know about?");
 					}
 					break;
+				case "complete":
+					try {
+						if (input[1] != null) {
+							try {
+								if (isTownRoom?.Trainer != null) {
+									isTownRoom?.Trainer.CompleteQuest(player, input);
+								}
+								else {
+									isTownRoom?.Vendor.CompleteQuest(player, input);
+								}
+							}
+							catch (NullReferenceException) {
+								OutputHandler.Display.StoreUserOutput(
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
+									"There is no one to turn in quests to here.");
+							}
+						}
+					}
+					catch (IndexOutOfRangeException) {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"Complete what quest?");
+					}
+					break;
 				case "l":
 				case "look":
 					try {
@@ -412,8 +438,11 @@ namespace DungeonGame {
 					break;
 				case "consider":
 					try {
-						if (input[1] != null) {
-							isTownRoom?.Trainer.OfferQuest(player, input);
+						if (isTownRoom?.Trainer != null) {
+							isTownRoom.Trainer.OfferQuest(player, input);
+						}
+						else {
+							isTownRoom?.Vendor.OfferQuest(player, input);
 						}
 					}
 					catch (IndexOutOfRangeException) {
@@ -455,7 +484,12 @@ namespace DungeonGame {
 						}
 						if (input[1].Contains("quests")) {
 							try {
-								isTownRoom?.Trainer.ShowQuestList();
+								if (isTownRoom?.Trainer != null) {
+									isTownRoom.Trainer.ShowQuestList();
+								}
+								else {
+									isTownRoom?.Vendor.ShowQuestList();
+								}
 							}
 							catch (NullReferenceException) {
 								OutputHandler.Display.StoreUserOutput(

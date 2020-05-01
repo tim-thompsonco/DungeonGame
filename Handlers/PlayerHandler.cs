@@ -68,13 +68,15 @@ namespace DungeonGame {
 					itemInfo.Append("Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity);
 				if (item is Armor || item is Weapon) {
 					var playerItem = item as IRainbowGear;
-					if (playerItem.IsRainbowGear) GearHandler.StoreRainbowGearOutput(itemInfo.ToString());
-				}
-				else {
-					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatInfoText(), 
-						Settings.FormatDefaultBackground(),
-						itemInfo.ToString());
+					if (playerItem.IsRainbowGear) {
+						GearHandler.StoreRainbowGearOutput(itemInfo.ToString());
+					}
+					else {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatInfoText(), 
+							Settings.FormatDefaultBackground(),
+							itemInfo.ToString());
+					}
 				}
 			}
 			var consumableDict = new Dictionary<string, int>();

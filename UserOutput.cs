@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DungeonGame {
@@ -18,7 +19,7 @@ namespace DungeonGame {
 		}
 		public void RetrieveUserOutput() {
 			// Var i is iterating through each row of output
-			foreach (var line in this.Output) {
+			foreach (var line in this.Output.ToList()) {
 				// var j is iterating through each column of each row of output
 				for (var i = 0; i < line.Count; i += 3) {
 					var textColor = line[i];

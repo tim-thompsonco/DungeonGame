@@ -2,6 +2,7 @@
 
 namespace DungeonGame {
 	public interface IQuestGiver {
+		string Name { get; set; }
 		List<Quest> AvailableQuests { get; set; }
 
 		void OfferQuest(Player player, string[] input);
