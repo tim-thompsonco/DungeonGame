@@ -78,10 +78,19 @@ namespace DungeonGame {
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				questBorder.ToString());
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				this.Dialogue);
+			for (var i = 0; i < this.Dialogue.Length; i += Settings.GetGameWidth()) {
+				if (this.Dialogue.Length - i < Settings.GetGameWidth()) {
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatRoomOutputText(), 
+						Settings.FormatDefaultBackground(), 
+						this.Dialogue.Substring(i, this.Dialogue.Length - i));
+					continue;
+				}
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatRoomOutputText(), 
+					Settings.FormatDefaultBackground(), 
+					this.Dialogue.Substring(i, Settings.GetGameWidth()));
+			}
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
@@ -119,11 +128,18 @@ namespace DungeonGame {
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
-				"Gold Reward: " + this.QuestRewardGold + " gold coins");
+				"Gold Reward: ");
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
-				"Item Reward: " + GearHandler.GetItemDetails(this.QuestRewardItem));
+				this.QuestRewardGold + " gold coins");
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				"Item Reward: ");
+			var itemName = GearHandler.GetItemDetails(this.QuestRewardItem);
+			var itemInfo = new StringBuilder(itemName);
+			GearHandler.StoreRainbowGearOutput(itemInfo.ToString());
 		}
 		public async void UpdateQuestProgress(Monster monster) {
 			await Task.Run(() => {

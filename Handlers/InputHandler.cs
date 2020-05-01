@@ -410,6 +410,25 @@ namespace DungeonGame {
 							"There is no trainer here!");
 					}
 					break;
+				case "consider":
+					try {
+						if (input[1] != null) {
+							isTownRoom?.Trainer.OfferQuest(player, input);
+						}
+					}
+					catch (IndexOutOfRangeException) {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"Consider what quest?");
+					}
+					catch (NullReferenceException) {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"There is no quest giver here!");
+					}
+					break;
 				case "show":
 					try {
 						if (input[1].Contains("forsale")) {

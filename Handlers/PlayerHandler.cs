@@ -662,7 +662,8 @@ namespace DungeonGame {
 				if (i != input.Length - 1) inputName.Append(" ");
 			}
 			var index = player.QuestLog.FindIndex(f =>
-				f.Name == inputName.ToString() || f.Name == input[1] || f.Name.Contains(inputName.ToString()));
+				f.Name.ToLowerInvariant() == inputName.ToString() || f.Name.ToLowerInvariant() == input[1] || 
+				f.Name.ToLowerInvariant().Contains(inputName.ToString()));
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (index != -1) {
 				player.QuestLog[index].ShowQuest();

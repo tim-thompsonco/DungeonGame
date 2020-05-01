@@ -572,27 +572,53 @@ namespace DungeonGame {
 			}
 		}
 		public void ShowQuestList() {
-			throw new NotImplementedException();
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(), 
+				"Available Quests:");
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			foreach (var quest in this.AvailableQuests) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatGeneralInfoText(), 
+					Settings.FormatDefaultBackground(), 
+					textInfo.ToTitleCase(quest.Name));
+			}
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(), 
+				"You can <consider> <quest name> if you want to obtain quest details.");
 		}
 		public void OfferQuest(Player player, string[] input) {
 			var userInput = InputHandler.ParseInput(input);
-			var questIndex = this.AvailableQuests.FindIndex(f => f.Name.Contains(userInput));
+			var questIndex = this.AvailableQuests.FindIndex(
+				f => f.Name.ToLowerInvariant().Contains(userInput));
 			if (questIndex != -1) {
 				this.AvailableQuests[questIndex].ShowQuest();
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"Will you accept this quest?");
-				var questInput = InputHandler.ParseInput(InputHandler.GetFormattedInput(Console.ReadLine()));
-				while (questInput.ToLowerInvariant() != "y" || questInput.ToLowerInvariant() != "yes" ||
-				       questInput.ToLowerInvariant() != "n" || questInput.ToLowerInvariant() != "no") {
+				Console.Clear();
+				OutputHandler.ShowUserOutput(player);
+				OutputHandler.Display.ClearUserOutput();
+				var questInput = InputHandler.GetFormattedInput(Console.ReadLine());
+				while (questInput[0].ToLowerInvariant() != "y" && questInput[0].ToLowerInvariant() != "yes" &&
+				       questInput[0].ToLowerInvariant() != "n" && questInput[0].ToLowerInvariant() != "no") {
+					var textInfo = new CultureInfo("en-US", false).TextInfo;
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						textInfo.ToTitleCase(this.AvailableQuests[questIndex].Name) + " Consideration:");
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"I need either a yes or no answer here.");
-					questInput = InputHandler.ParseInput(InputHandler.GetFormattedInput(Console.ReadLine()));
+					Console.Clear();
+					OutputHandler.ShowUserOutput(player);
+					OutputHandler.Display.ClearUserOutput();
+					questInput = InputHandler.GetFormattedInput(Console.ReadLine());
 				}
-				if (questInput == "y" || questInput == "yes") {
+				if (questInput[0] == "y" || questInput[0] == "yes") {
 					player.QuestLog.Add(this.AvailableQuests[questIndex]);
 					this.AvailableQuests.RemoveAt(questIndex);
 					OutputHandler.Display.StoreUserOutput(

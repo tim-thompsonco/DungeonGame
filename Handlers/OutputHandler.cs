@@ -236,22 +236,15 @@ namespace DungeonGame {
 			var quests = 0;
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (var quest in player.QuestLog) {
-				string questOutput;
-				switch (quest.QuestCategory) {
-					case Quest.QuestType.KillCount:
-						questOutput = textInfo.ToTitleCase(quest.Name) + " (" + quest.CurrentKills + "/" + quest.RequiredKills + ")";
-						break;
-					case Quest.QuestType.KillMonster:
-						questOutput = textInfo.ToTitleCase(quest.Name) + " (" + quest.CurrentKills + "/" + quest.RequiredKills + 
-						              " " + quest.MonsterKillType + "s)";
-						break;
-					case Quest.QuestType.ClearLevel:
-						questOutput = textInfo.ToTitleCase(quest.Name) + " (Lvl: " + quest.TargetLevel + " | " + 
-						              quest.MonstersRemaining + " monsters left)";
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
+				var questOutput = quest.QuestCategory switch {
+					Quest.QuestType.KillCount => (textInfo.ToTitleCase(quest.Name) + " (" + quest.CurrentKills + "/" +
+					                              quest.RequiredKills + ")"),
+					Quest.QuestType.KillMonster => (textInfo.ToTitleCase(quest.Name) + " (" + quest.CurrentKills + "/" +
+					                                quest.RequiredKills + " " + quest.MonsterKillType + "s)"),
+					Quest.QuestType.ClearLevel => (textInfo.ToTitleCase(quest.Name) + " (Lvl: " + quest.TargetLevel + " | " +
+					                               quest.MonstersRemaining + " monsters left)"),
+					_ => throw new ArgumentOutOfRangeException()
+				};
 				quests++;
 				questUserOutput.StoreUserOutput(
 					Settings.FormatGeneralInfoText(), 
