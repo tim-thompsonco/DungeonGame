@@ -134,7 +134,7 @@ namespace DungeonGame {
 			this.ArmorRating += 5;
 			this.ItemValue = this.ArmorRating;
 			this.Durability = 100;
-			this.BuildArmorName("Rainbow");
+			this.BuildArmorName("rainbow");
 			this.SetArmorWeight();
 			this.Desc = "A " + this.Name + ".";
 		}

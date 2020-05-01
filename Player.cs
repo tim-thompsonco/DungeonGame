@@ -191,6 +191,7 @@ namespace DungeonGame {
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+			this.Inventory.Add(new Armor(Armor.ArmorType.Cloth, Armor.ArmorSlot.Chest, true));
 			this.MaxHitPoints = this.Constitution * 10;
 			this.HitPoints = this.MaxHitPoints;
 			this.MaxCarryWeight = (int)(this.Strength * 2.5);

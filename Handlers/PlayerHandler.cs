@@ -66,10 +66,15 @@ namespace DungeonGame {
 				var itemInfo = new StringBuilder(itemName);
 				if (player.PlayerQuiver?.Name == itemName)
 					itemInfo.Append("Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity);
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatInfoText(), 
-					Settings.FormatDefaultBackground(),
-					itemInfo.ToString());
+				if (item.IsRainbowGear) {
+					GearHandler.StoreRainbowGearOutput(itemInfo.ToString());
+				}
+				else {
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatInfoText(), 
+						Settings.FormatDefaultBackground(),
+						itemInfo.ToString());
+				}
 			}
 			var consumableDict = new Dictionary<string, int>();
 			foreach (var item in player.Consumables) {

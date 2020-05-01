@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -32,6 +33,26 @@ namespace DungeonGame {
 			}
 			var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 			return itemName;
+		}
+		public static void StoreRainbowGearOutput(string itemName) {
+			var sameLineOutput = new List<string>();
+			for (var i = 0; i < itemName.Length; i++) {
+				var colorIndex = i % 7;
+				var colorString = colorIndex switch {
+					0 => "cyan",
+					1 => "green",
+					2 => "yellow",
+					3 => "white",
+					4 => "red",
+					5 => "blue",
+					6 => "magenta",
+					_ => throw new ArgumentOutOfRangeException()
+				};
+				sameLineOutput.Add(colorString); // Foreground color
+				sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
+				sameLineOutput.Add(itemName[i].ToString()); // What prints to display
+			}
+			OutputHandler.Display.StoreUserOutput(sameLineOutput);
 		}
 		public static void DecreaseArmorDurability(Player player) {
 			player.PlayerChestArmor?.DecreaseDurability();

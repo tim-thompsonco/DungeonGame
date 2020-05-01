@@ -86,7 +86,7 @@ namespace DungeonGame {
 			// Add modifier for rainbow gear to enhance weapon damage
 			this.RegDamage += 5;
 			this.ItemValue = this.RegDamage;
-			this.BuildWeaponName("Rainbow");
+			this.BuildWeaponName("rainbow");
 			this.Desc = "A " + this.Name + " that causes damage when you hit stuff with it.";
 		}
 		public Weapon(int level, WeaponType weaponType, Monster.MonsterType monsterType)
