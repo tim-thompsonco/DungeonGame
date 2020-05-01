@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 
 namespace DungeonGame {
-	public class Vendor : IRoomInteraction {
+	public class Vendor : IRoomInteraction, IQuestGiver {
 		public enum VendorType {
 			Armorer,
 			Weaponsmith,
@@ -15,13 +15,15 @@ namespace DungeonGame {
 		public string Name { get; set; }
 		public string Desc { get; set; }
 		public VendorType VendorCategory { get; set; }
-		public List<IEquipment> VendorItems { get; set; } = new List<IEquipment>();
+		public List<IEquipment> VendorItems { get; set; }
+		public List<Quest> AvailableQuests { get; set; }
 
 		// Default constructor for JSON serialization
 		public Vendor() { }
 		public Vendor(string name, string desc, VendorType vendorCategory) {
 			this.Name = name;
 			this.Desc = desc;
+			this.VendorItems = new List<IEquipment>();
 			this.VendorCategory = vendorCategory;
 			switch (this.VendorCategory) {
 				case VendorType.Armorer:
@@ -356,6 +358,15 @@ namespace DungeonGame {
 				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (arrowIndex != -1) return;
 			this.VendorItems.Add(new Consumable("arrows", 15, Consumable.ArrowType.Standard));
+		}
+		public void ShowQuestList() {
+			throw new NotImplementedException();
+		}
+		public void OfferQuest(Player player, string[] input) {
+			throw new NotImplementedException();
+		}
+		public void CompleteQuest(Player player, string[] input) {
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -434,6 +434,17 @@ namespace DungeonGame {
 									"There is no trainer in the room to show available upgrades.");
 							}
 						}
+						if (input[1].Contains("quests")) {
+							try {
+								isTownRoom?.Trainer.ShowQuestList();
+							}
+							catch (NullReferenceException) {
+								OutputHandler.Display.StoreUserOutput(
+									Settings.FormatFailureOutputText(),
+									Settings.FormatDefaultBackground(),
+									"There is no one in the room to show quests.");
+							}
+						}
 					}
 					catch (IndexOutOfRangeException) {
 						OutputHandler.Display.StoreUserOutput(

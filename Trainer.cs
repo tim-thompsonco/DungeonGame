@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 
 namespace DungeonGame {
-	public class Trainer : IRoomInteraction {
+	public class Trainer : IRoomInteraction, IQuestGiver {
 		public enum TrainerCategory {
 			Archer,
 			Warrior,
@@ -16,6 +16,7 @@ namespace DungeonGame {
 		public int BaseCost { get; set; }
 		public List<PlayerAbility> TrainableAbilities { get; set; }
 		public List<PlayerSpell> TrainableSpells { get; set; }
+		public List<Quest> AvailableQuests { get; set; }
 
 		// Default constructor for JSON serialization
 		public Trainer() { }
@@ -57,6 +58,17 @@ namespace DungeonGame {
 						"arcane intellect", 150, 1, PlayerSpell.SpellType.ArcaneIntellect, 6));
 					this.TrainableSpells.Add(new PlayerSpell(
 						"frost nova", 50, 1, PlayerSpell.SpellType.FrostNova, 8));
+					this.AvailableQuests = new List<Quest>();
+					this.AvailableQuests.Add(new Quest(
+						"Kill Them All",
+						"I need you to do something for me. I'm busy training mages here all day but it isn't lost " + 
+						"on me how many evil creatures are down in that dungeon killing unsuspecting travelers. I want you " +
+						"to go in there and kill as many of them as you can. You look like you might have a slightly higher " +
+						"chance of surviving, but if you don't, I promise I'll find and bury you someday ok? That seems like " +
+						"a reasonable offer to me.", 
+						Quest.QuestType.KillCount, 
+						new Armor(
+							Armor.ArmorType.Cloth, Armor.ArmorSlot.Chest, true)));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -558,6 +570,52 @@ namespace DungeonGame {
 						? "You are not ready to upgrade that ability. You need to level up first!"
 						: "You don't have that ability to train!");
 			}
+		}
+		public void ShowQuestList() {
+			throw new NotImplementedException();
+		}
+		public void OfferQuest(Player player, string[] input) {
+			var userInput = InputHandler.ParseInput(input);
+			var questIndex = this.AvailableQuests.FindIndex(f => f.Name.Contains(userInput));
+			if (questIndex != -1) {
+				this.AvailableQuests[questIndex].ShowQuest();
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"Will you accept this quest?");
+				var questInput = InputHandler.ParseInput(InputHandler.GetFormattedInput(Console.ReadLine()));
+				while (questInput.ToLowerInvariant() != "y" || questInput.ToLowerInvariant() != "yes" ||
+				       questInput.ToLowerInvariant() != "n" || questInput.ToLowerInvariant() != "no") {
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"I need either a yes or no answer here.");
+					questInput = InputHandler.ParseInput(InputHandler.GetFormattedInput(Console.ReadLine()));
+				}
+				if (questInput == "y" || questInput == "yes") {
+					player.QuestLog.Add(this.AvailableQuests[questIndex]);
+					this.AvailableQuests.RemoveAt(questIndex);
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"My hero. I am adding the particulars to your quest log.");
+				}
+				else {
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"Let me know if you change your mind later.");
+				}
+			}
+			else {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"I don't have that quest to offer!");
+			}
+		}
+		public void CompleteQuest(Player player, string[] input) {
+			throw new NotImplementedException();
 		}
 	}
 }
