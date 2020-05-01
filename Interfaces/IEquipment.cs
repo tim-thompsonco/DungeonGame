@@ -4,6 +4,5 @@
 		int ItemValue { get; set; }
 		int Weight { get; set; }
 		string Desc { get; set; }
-		bool IsRainbowGear { get; set; }
 	}
 }

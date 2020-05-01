@@ -66,8 +66,9 @@ namespace DungeonGame {
 				var itemInfo = new StringBuilder(itemName);
 				if (player.PlayerQuiver?.Name == itemName)
 					itemInfo.Append("Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity);
-				if (item.IsRainbowGear) {
-					GearHandler.StoreRainbowGearOutput(itemInfo.ToString());
+				if (item is Armor || item is Weapon) {
+					var playerItem = item as IRainbowGear;
+					if (playerItem.IsRainbowGear) GearHandler.StoreRainbowGearOutput(itemInfo.ToString());
 				}
 				else {
 					OutputHandler.Display.StoreUserOutput(

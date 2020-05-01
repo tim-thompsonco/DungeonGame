@@ -2,7 +2,7 @@ using System;
 using System.Text;
 
 namespace DungeonGame {
-	public class Weapon : IEquipment {
+	public class Weapon : IEquipment, IRainbowGear {
 		public enum DamageType {
 			Physical,
 			Fire,

@@ -54,6 +54,7 @@
     <Compile Include="Handlers\PlayerHandler.cs" />
     <Compile Include="Interfaces\IEquipment.cs" />
     <Compile Include="Interfaces\IQuestGiver.cs" />
+    <Compile Include="Interfaces\IRainbowGear.cs" />
     <Compile Include="Items\Armor.cs" />
     <Compile Include="Items\Consumable.cs" />
     <Compile Include="Items\Loot.cs" />

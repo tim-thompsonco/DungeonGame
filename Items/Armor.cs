@@ -2,7 +2,7 @@
 using System.Text;
 
 namespace DungeonGame {
-	public class Armor : IEquipment {
+	public class Armor : IEquipment, IRainbowGear {
 		public enum ArmorSlot {
 			Head,
 			Back,

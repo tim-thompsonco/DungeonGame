@@ -43,7 +43,6 @@ namespace DungeonGame {
 		public ChangeWeapon ChangeWeapon { get; set; }
 		public Arrow Arrow { get; set; }
 		public int Weight { get; set; }
-		public bool IsRainbowGear { get; set; }
 		
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public Consumable() {}

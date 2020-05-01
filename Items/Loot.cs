@@ -20,7 +20,6 @@
 		public int Weight { get; set; }
 		public GemType GemCategory { get; set; }
 		public GemLevel GemStrength { get; set; }
-		public bool IsRainbowGear { get; set; }
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public Loot() {}

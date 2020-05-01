@@ -7,7 +7,6 @@
 		public int Weight { get; set; }
 		public string Name { get; set; }
 		public string Desc { get; set; }
-		public bool IsRainbowGear { get; set; }
 
 		// Default constructor for JSON serialization
 		public Quiver() { }

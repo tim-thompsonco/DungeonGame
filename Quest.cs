@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DungeonGame {
 	public class Quest {
@@ -124,27 +125,29 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				"Item Reward: " + GearHandler.GetItemDetails(this.QuestRewardItem));
 		}
-		public void UpdateQuestProgress(Monster monster) {
-			switch (this.QuestCategory) {
-				case QuestType.KillCount:
-					this.CurrentKills++;
-					if (this.CurrentKills >= this.RequiredKills) this.QuestCompleted = true;
-					break;
-				case QuestType.KillMonster:
-					if (this.MonsterKillType == monster.MonsterCategory) this.CurrentKills++;
-					if (this.CurrentKills >= this.RequiredKills) this.QuestCompleted = true;
-					break;
-				case QuestType.ClearLevel:
-					this.MonstersRemaining = RoomHandler.Rooms.Where(
-						room => room.Key.Z == this.TargetLevel * -1).Count(
-						room => room.Value.Monster?.HitPoints > 0);
-					if (this.MonstersRemaining == 0) {
-						this.QuestCompleted = true;
-					}
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+		public async void UpdateQuestProgress(Monster monster) {
+			await Task.Run(() => {
+				switch (this.QuestCategory) {
+					case QuestType.KillCount:
+						this.CurrentKills++;
+						if (this.CurrentKills >= this.RequiredKills) this.QuestCompleted = true;
+						break;
+					case QuestType.KillMonster:
+						if (this.MonsterKillType == monster.MonsterCategory) this.CurrentKills++;
+						if (this.CurrentKills >= this.RequiredKills) this.QuestCompleted = true;
+						break;
+					case QuestType.ClearLevel:
+						this.MonstersRemaining = RoomHandler.Rooms.Where(
+							room => room.Key.Z == this.TargetLevel * -1).Count(
+							room => room.Value.Monster?.HitPoints > 0);
+						if (this.MonstersRemaining == 0) {
+							this.QuestCompleted = true;
+						}
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			});
 		}
 	}
 }
