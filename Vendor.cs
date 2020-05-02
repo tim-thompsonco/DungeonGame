@@ -369,12 +369,57 @@ namespace DungeonGame {
 			};
 			switch (this.VendorCategory) {
 				case VendorType.Armorer:
+					this.AvailableQuests.Add(new Quest(
+						"Bring The Mallet To Them",
+						"I'm fixing armor for everyone in this town and you wouldn't believe the dents I've banged " + 
+						"out from travelers who have gone down into that dungeon. You know what would be great? If someone " +
+						"went down there and put some dents in them for a change. I can't do that myself, I'm not a fighter, " +
+						"but you look like you are. Go get 'em tiger.",
+						Quest.QuestType.KillMonster, 
+						new Armor(questArmorGroup, Armor.ArmorSlot.Head, true), 
+						this.Name));
+					this.AvailableQuests.Add(new Quest(
+						"A Deadly Encounter",
+						"I've got too much work on my hands because people like you keep going down into that dungeon " + 
+						"and come out looking like they got thrown around by something big. Maybe if you go clear out one of " +
+						"those levels, it'll reduce how many people are getting their armor trashed around here, so I can get " +
+						"caught up on my work. If it doesn't help, well you'll get some pretty gear out of it at least.",
+						Quest.QuestType.ClearLevel, 
+						new Armor(questArmorGroup, Armor.ArmorSlot.Legs, true), 
+						this.Name));
 					break;
 				case VendorType.Weaponsmith:
+					this.AvailableQuests.Add(new Quest(
+						"Live And Let Die",
+						"You want me to make you a weapon? A really good weapon that will be really shiny with great " + 
+						"stats? Well, nothing is free pal. I'm not going to ask you to go talk to someone standing right next " +
+						"to me, but I will give you a bounty. Go kill a bunch of monsters for me to prove you're worthy of what " +
+						"I can make. Do that and you'll get a hell of a weapon.",
+						Quest.QuestType.KillMonster, 
+						new Weapon(Weapon.WeaponType.OneHandedSword, true), 
+						this.Name));
 					break;
 				case VendorType.Healer:
+					this.AvailableQuests.Add(new Quest(
+						"Stop The Pain",
+						"I can't recall how many travelers like you I've patched up who went down into that dungeon, " + 
+						"tangled with the wrong monster, and came back missing a limb covered in blood. There's only so much " +
+						"suffering I can heal. Would you do me a favor? Go kill some of those monsters, so they stop hurting " +
+						"people like you, and I can rest easy for a while because I'm not constantly busy.",
+						Quest.QuestType.ClearLevel, 
+						new Armor(questArmorGroup, Armor.ArmorSlot.Wrist, true), 
+						this.Name));
 					break;
 				case VendorType.Shopkeeper:
+					this.AvailableQuests.Add(new Quest(
+						"Buyer's Market",
+						"I wish I had more stuff to sell. I'd love to sell you something, but I have nothing to offer. " + 
+						"You know what would fix that? If you went and killed some monsters then sold me their gear. I'm not " +
+						"expecting you to buy that stuff, but someone else will, and don't you worry about how much I'm going " +
+						"to mark up that stuff. Help me help you by buying your loot at a, uh, fair price.",
+						Quest.QuestType.KillMonster, 
+						new Armor(questArmorGroup, Armor.ArmorSlot.Waist, true), 
+						this.Name));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

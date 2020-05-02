@@ -541,8 +541,6 @@ namespace DungeonGame {
 					break;
 				case Armor.ArmorType.Plate when player.CanWearPlate:
 					break;
-				case Armor.ArmorType.Rainbow when player.CanWearRainbow:
-					break;
 				default:
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
