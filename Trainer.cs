@@ -36,6 +36,15 @@ namespace DungeonGame {
 						"swift aura", 150, 1, PlayerAbility.ArcherAbility.SwiftAura, 6));
 					this.TrainableAbilities.Add(new PlayerAbility(
 						"immolating arrow", 35, 1, PlayerAbility.ArcherAbility.ImmolatingArrow, 8));
+					this.AvailableQuests.Add(new Quest(
+						"Slaughterhouse",
+						"Look. I'm busy here teaching these kids how to defend themselves. I need you to get some " + 
+						"practice with that yourself. Why don't you go down into that dungeon and clear a level of it? If it " +
+						"moves, kill it. Be like a house cat. Don't ask questions, just kill it, and keep doing that until " +
+						"there's nothing left. Do that, come back here, and you'll get a reward. ",
+						Quest.QuestType.ClearLevel, 
+						new Armor(Armor.ArmorSlot.Hands, true), 
+						this.Name));
 					break;
 				case TrainerCategory.Warrior:
 					this.TrainableAbilities = new List<PlayerAbility>();
@@ -47,6 +56,15 @@ namespace DungeonGame {
 						"power aura", 150, 1, PlayerAbility.WarriorAbility.PowerAura, 6));
 					this.TrainableAbilities.Add(new PlayerAbility(
 						"onslaught", 25, 1, PlayerAbility.WarriorAbility.Onslaught, 8));
+					this.AvailableQuests.Add(new Quest(
+						"Hunter Killer",
+						"We need some hard souls to do some house cleaning in the dungeon. There's a lot of monsters " + 
+						"down there and some of them have been wandering out of the dungeon at night to terrorize this town. " +
+						"I want you to return the favor. Hunt down and kill a bunch of them. Surely if we thin the ranks down " +
+						"then they won't be so likely to stray from the dungeon. Go take care of this for me will you? ",
+						Quest.QuestType.KillMonster, 
+						new Armor(Armor.ArmorSlot.Back, true), 
+						this.Name));
 					break;
 				case TrainerCategory.Mage:
 					this.TrainableSpells = new List<PlayerSpell>();
@@ -67,8 +85,7 @@ namespace DungeonGame {
 						"chance of surviving, but if you don't, I promise I'll find and bury you someday ok? That seems like " +
 						"a reasonable offer to me.", 
 						Quest.QuestType.KillCount, 
-						new Armor(
-							Armor.ArmorType.Cloth, Armor.ArmorSlot.Chest, true), 
+						new Armor(Armor.ArmorSlot.Chest, true), 
 						this.Name));
 					break;
 				default:

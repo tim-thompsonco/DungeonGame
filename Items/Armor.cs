@@ -15,7 +15,8 @@ namespace DungeonGame {
 		public enum ArmorType {
 			Cloth,
 			Leather,
-			Plate
+			Plate,
+			Rainbow
 		}
 		public string Name { get; set; }
 		public string Desc { get; set; }
@@ -103,10 +104,10 @@ namespace DungeonGame {
 			this.SetArmorWeight();
 			this.Desc = "A " + this.Name + ".";
 		}
-		public Armor(ArmorType armorGroup, ArmorSlot armorCategory, bool isRainbowGear) {
+		public Armor(ArmorSlot armorCategory, bool isRainbowGear) {
 			this.Level = 10;
 			this.IsRainbowGear = isRainbowGear;
-			this.ArmorGroup = armorGroup;
+			this.ArmorGroup = ArmorType.Rainbow;
 			this.ArmorCategory = armorCategory;
 			// Base armor rating before random attribute or armor type
 			this.ArmorRating = this.ArmorCategory switch {
@@ -117,13 +118,6 @@ namespace DungeonGame {
 				ArmorSlot.Waist => 2,
 				ArmorSlot.Wrist => 1,
 				ArmorSlot.Hands => 1,
-				_ => throw new ArgumentOutOfRangeException()
-			};
-			// Add armor type armor rating to base value
-			this.ArmorRating += this.ArmorGroup switch {
-				ArmorType.Cloth => 0,
-				ArmorType.Leather => 2,
-				ArmorType.Plate => 4,
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
@@ -140,6 +134,26 @@ namespace DungeonGame {
 		}
 
 		private void SetArmorWeight() {
+			if (this.ArmorGroup == ArmorType.Rainbow) {
+				switch (this.ArmorCategory) {
+					case ArmorSlot.Chest:
+						this.Weight = 3;
+						break;
+					case ArmorSlot.Legs:
+						this.Weight = 2;
+						break;
+					case ArmorSlot.Wrist:
+					case ArmorSlot.Hands:
+					case ArmorSlot.Waist:
+					case ArmorSlot.Back:
+					case ArmorSlot.Head:
+						this.Weight = 1;
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+				return;
+			}
 			switch (this.ArmorGroup) {
 				case ArmorType.Cloth:
 					if (this.ArmorCategory == ArmorSlot.Chest || this.ArmorCategory == ArmorSlot.Legs) {
@@ -296,91 +310,31 @@ namespace DungeonGame {
 		private void BuildArmorName(string rainbowName) {
 			var sb = new StringBuilder();
 			sb.Append(rainbowName + " ");
-			switch (this.ArmorGroup) {
-				case ArmorType.Cloth:
-					switch (this.ArmorCategory) {
-						case ArmorSlot.Head:
-							sb.Append("cap");
-							break;
-						case ArmorSlot.Back:
-							sb.Append("cape");
-							break;
-						case ArmorSlot.Chest:
-							sb.Append("tunic");
-							break;
-						case ArmorSlot.Wrist:
-							sb.Append("bracers");
-							break;
-						case ArmorSlot.Waist:
-							sb.Append("belt");
-							break;
-						case ArmorSlot.Legs:
-							sb.Append("leggings");
-							break;
-						case ArmorSlot.Hands:
-							sb.Append("gloves");
-							break;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
-					break;
-				case ArmorType.Leather:
-					switch (this.ArmorCategory) {
-						case ArmorSlot.Head:
-							sb.Append("helmet");
-							break;
-						case ArmorSlot.Back:
-							sb.Append("cape");
-							break;
-						case ArmorSlot.Chest:
-							sb.Append("vest");
-							break;
-						case ArmorSlot.Wrist:
-							sb.Append("bracers");
-							break;
-						case ArmorSlot.Waist:
-							sb.Append("belt");
-							break;
-						case ArmorSlot.Legs:
-							sb.Append("leggings");
-							break;
-						case ArmorSlot.Hands:
-							sb.Append("gloves");
-							break;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
-					break;
-				case ArmorType.Plate:
-					switch (this.ArmorCategory) {
-						case ArmorSlot.Head:
-							sb.Append("plate helmet");
-							break;
-						case ArmorSlot.Back:
-							sb.Append("backplate");
-							break;
-						case ArmorSlot.Chest:
-							sb.Append("chestplate");
-							break;
-						case ArmorSlot.Wrist:
-							sb.Append("plate bracers");
-							break;
-						case ArmorSlot.Waist:
-							sb.Append("plate belt");
-							break;
-						case ArmorSlot.Legs:
-							sb.Append("plate leggings");
-							break;
-						case ArmorSlot.Hands:
-							sb.Append("plate gauntlets");
-							break;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+				switch (this.ArmorCategory) {
+					case ArmorSlot.Head:
+						sb.Append("helmet");
+						break;
+					case ArmorSlot.Back:
+						sb.Append("cape");
+						break;
+					case ArmorSlot.Chest:
+						sb.Append("tunic");
+						break;
+					case ArmorSlot.Wrist:
+						sb.Append("bracers");
+						break;
+					case ArmorSlot.Waist:
+						sb.Append("belt");
+						break;
+					case ArmorSlot.Legs:
+						sb.Append("leggings");
+						break;
+					case ArmorSlot.Hands:
+						sb.Append("gloves");
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
 			this.Name = sb.ToString();
 		}
 		public void DecreaseDurability() {
