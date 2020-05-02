@@ -37,7 +37,6 @@ namespace DungeonGame {
 		public bool CanWearCloth { get; set; }
 		public bool CanWearLeather { get; set; }
 		public bool CanWearPlate { get; set; }
-		public bool CanWearRainbow { get; set; }
 		public bool CanUseDagger { get; set; }
 		public bool CanUseOneHandedSword { get; set; }
 		public bool CanUseTwoHandedSword { get; set; }
@@ -78,7 +77,6 @@ namespace DungeonGame {
 			this.FireResistance = 5;
 			this.FrostResistance = 5;
 			this.ArcaneResistance = 5;
-			this.CanWearRainbow = true;
 			switch (this.PlayerClass) {
 				case PlayerClassType.Mage:
 					for (var i = 0; i < 3; i++) {
