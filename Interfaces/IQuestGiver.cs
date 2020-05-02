@@ -7,6 +7,7 @@ namespace DungeonGame {
 
 		void OfferQuest(Player player, string[] input);
 		void CompleteQuest(Player player, string[] input);
-		void ShowQuestList();
+		void PopulateQuests(Player player);
+		void ShowQuestList(Player player);
 	}
 }

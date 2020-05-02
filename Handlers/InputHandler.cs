@@ -485,10 +485,10 @@ namespace DungeonGame {
 						if (input[1].Contains("quests")) {
 							try {
 								if (isTownRoom?.Trainer != null) {
-									isTownRoom.Trainer.ShowQuestList();
+									isTownRoom.Trainer.ShowQuestList(player);
 								}
 								else {
-									isTownRoom?.Vendor.ShowQuestList();
+									isTownRoom?.Vendor.ShowQuestList(player);
 								}
 							}
 							catch (NullReferenceException) {

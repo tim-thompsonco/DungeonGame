@@ -238,7 +238,7 @@ namespace DungeonGame {
 			foreach (var quest in player.QuestLog) {
 				var questOutput = quest.QuestCategory switch {
 					Quest.QuestType.KillCount => (textInfo.ToTitleCase(quest.Name) + " (" + quest.CurrentKills + "/" +
-					                              quest.RequiredKills + ")"),
+					                              quest.RequiredKills + " monsters)"),
 					Quest.QuestType.KillMonster => (textInfo.ToTitleCase(quest.Name) + " (" + quest.CurrentKills + "/" +
 					                                quest.RequiredKills + " " + quest.MonsterKillType + "s)"),
 					Quest.QuestType.ClearLevel => (textInfo.ToTitleCase(quest.Name) + " (Lvl: " + quest.TargetLevel + " | " +

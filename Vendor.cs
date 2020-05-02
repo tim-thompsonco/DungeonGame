@@ -359,14 +359,143 @@ namespace DungeonGame {
 			if (arrowIndex != -1) return;
 			this.VendorItems.Add(new Consumable("arrows", 15, Consumable.ArrowType.Standard));
 		}
-		public void ShowQuestList() {
-			throw new NotImplementedException();
+		public void PopulateQuests(Player player) {
+			this.AvailableQuests = new List<Quest>();
+			var questArmorGroup = player.PlayerClass switch {
+				Player.PlayerClassType.Mage => Armor.ArmorType.Cloth,
+				Player.PlayerClassType.Warrior => Armor.ArmorType.Plate,
+				Player.PlayerClassType.Archer => Armor.ArmorType.Leather,
+				_ => throw new ArgumentOutOfRangeException()
+			};
+			switch (this.VendorCategory) {
+				case VendorType.Armorer:
+					break;
+				case VendorType.Weaponsmith:
+					break;
+				case VendorType.Healer:
+					break;
+				case VendorType.Shopkeeper:
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+		public void ShowQuestList(Player player) {
+			if (this.AvailableQuests == null) this.PopulateQuests(player);
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(), 
+				"Available Quests:");
+			var textInfo = new CultureInfo("en-US", false).TextInfo;
+			foreach (var quest in this.AvailableQuests) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatGeneralInfoText(), 
+					Settings.FormatDefaultBackground(), 
+					textInfo.ToTitleCase(quest.Name));
+			}
+			OutputHandler.Display.StoreUserOutput(
+				Settings.FormatGeneralInfoText(), 
+				Settings.FormatDefaultBackground(), 
+				"You can <consider> <quest name> if you want to obtain quest details.");
 		}
 		public void OfferQuest(Player player, string[] input) {
-			throw new NotImplementedException();
+			var userInput = InputHandler.ParseInput(input);
+			var questIndex = this.AvailableQuests.FindIndex(
+				f => f.Name.ToLowerInvariant().Contains(userInput));
+			if (questIndex != -1) {
+				this.AvailableQuests[questIndex].ShowQuest();
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"Will you accept this quest?");
+				Console.Clear();
+				OutputHandler.ShowUserOutput(player);
+				OutputHandler.Display.ClearUserOutput();
+				var questInput = InputHandler.GetFormattedInput(Console.ReadLine());
+				while (questInput[0].ToLowerInvariant() != "y" && questInput[0].ToLowerInvariant() != "yes" &&
+				       questInput[0].ToLowerInvariant() != "n" && questInput[0].ToLowerInvariant() != "no") {
+					var textInfo = new CultureInfo("en-US", false).TextInfo;
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						textInfo.ToTitleCase(this.AvailableQuests[questIndex].Name) + " Consideration:");
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"I need either a yes or no answer here.");
+					Console.Clear();
+					OutputHandler.ShowUserOutput(player);
+					OutputHandler.Display.ClearUserOutput();
+					questInput = InputHandler.GetFormattedInput(Console.ReadLine());
+				}
+				if (questInput[0] == "y" || questInput[0] == "yes") {
+					player.QuestLog.Add(this.AvailableQuests[questIndex]);
+					this.AvailableQuests.RemoveAt(questIndex);
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"My hero. I am adding the particulars to your quest log.");
+				}
+				else {
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"Let me know if you change your mind later.");
+				}
+			}
+			else {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"I don't have that quest to offer!");
+			}
 		}
 		public void CompleteQuest(Player player, string[] input) {
-			throw new NotImplementedException();
+			var userInput = InputHandler.ParseInput(input);
+			var questIndex = player.QuestLog.FindIndex(
+				f => f.Name.ToLowerInvariant().Contains(userInput));
+			var quest = player.QuestLog[questIndex];
+			if (questIndex != -1) {
+				if (quest.QuestGiver == this.Name) {
+					if (quest.QuestCompleted) {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatGeneralInfoText(),
+							Settings.FormatDefaultBackground(),
+							"Congratulations on finishing " + quest.Name + "! Here's your reward.");
+						player.Inventory.Add(quest.QuestRewardItem);
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatGeneralInfoText(),
+							Settings.FormatDefaultBackground(),
+							"You have received: ");
+						GearHandler.StoreRainbowGearOutput(GearHandler.GetItemDetails(quest.QuestRewardItem));
+						player.Gold += quest.QuestRewardGold;
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatGeneralInfoText(),
+							Settings.FormatDefaultBackground(),
+							quest.QuestRewardGold + " gold coins.");
+						player.QuestLog.RemoveAt(questIndex);
+					}
+					else {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatFailureOutputText(),
+							Settings.FormatDefaultBackground(),
+							"You haven't finished that quest yet!");
+					}
+				}
+				else {
+					var textInfo = new CultureInfo("en-US", false).TextInfo;
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"I didn't give you that quest. " + textInfo.ToTitleCase(quest.QuestGiver) + " did.");
+				}
+			}
+			else {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"What quest did you want to turn in?");
+			}
 		}
 	}
 }
