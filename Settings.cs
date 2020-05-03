@@ -18,11 +18,13 @@ namespace DungeonGame {
 			return GetMiniMapWidth() * 4 + 4;
 		}
 		public static string GetTileColor(Player player) {
-			var room = RoomHandler.Rooms[player.PlayerLocation];
-			if (room is TownRoom) return "darkgreen";
-			var dungeonRoom = room as DungeonRoom;
-			if (dungeonRoom.DungeonLevel <= 3) return "gray";
-			return dungeonRoom.DungeonLevel <= 7 ? "darkgray" : "darkred";
+			if (player.PlayerLocation.Z <= -8) {
+				return "darkred";
+			}
+			if (player.PlayerLocation.Z < -3) {
+				return "darkgray";
+			}
+			return "gray";
 		}
 		public static string GetEmptyMapTileSizeTwo() {
 			return "  ";

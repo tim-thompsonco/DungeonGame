@@ -84,7 +84,7 @@ namespace DungeonGame {
 				this.Quality = 1;
 			}
 			// Add modifier for rainbow gear to enhance weapon damage
-			this.RegDamage += 3;
+			this.RegDamage += 15;
 			this.ItemValue = this.RegDamage;
 			this.BuildWeaponName("rainbow");
 			this.Desc = "A " + this.Name + " that causes damage when you hit stuff with it.";
@@ -203,7 +203,7 @@ namespace DungeonGame {
 			this.CritMultiplier = 1.3;
 			this.Quality = 3;
 			// Add modifier for rainbow gear to enhance weapon damage
-			this.RegDamage += 3;
+			this.RegDamage += 15;
 			this.ItemValue = this.RegDamage;
 		}
 	}

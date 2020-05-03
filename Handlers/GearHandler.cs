@@ -303,62 +303,58 @@ namespace DungeonGame {
 				inputString.Append(' ');
 			}
 			var inputName = inputString.ToString().Trim();
-			foreach (var item in player.Inventory) {
-				var itemName = item.Name.Split(' ');
-				var itemType = item.GetType().Name;
-				var itemFound = itemName.Last() == inputName || item.Name == inputName ||
-				                 itemName.Contains(inputName);
-				switch (itemFound) {
-					case true when input[0] == "equip": {
-						if (IsWearable(item) && item.Equipped == false) {
-							switch (itemType) {
-								case "Weapon":
-									EquipWeapon(player, (Weapon)item);
-									break;
-								case "Armor":
-									EquipArmor(player, (Armor)item);
-									break;
-								case "Quiver":
-									EquipQuiver(player, (Quiver) item);
-									break;
-							}
-							return;
-						}
-						if (IsWearable(item)) {
-							OutputHandler.Display.StoreUserOutput(
-								Settings.FormatFailureOutputText(),
-								Settings.FormatDefaultBackground(),
-								"You have already equipped that.");
-							return;
-						}
-						OutputHandler.Display.StoreUserOutput(
-							Settings.FormatFailureOutputText(),
-							Settings.FormatDefaultBackground(),
-							"You can't equip that!");
-						return;
+			var item = player.Inventory.Find(f => f.Name.Contains(inputName));
+			if (item == null) {
+				var noItemFoundString = "You don't have " + inputName + " in your inventory!"; 
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					noItemFoundString);
+				return;
+			}
+			var itemType = item.GetType().Name;
+			if (input[0] == "equip") {
+				if (IsWearable(item) && item.Equipped == false) {
+					switch (itemType) {
+						case "Weapon":
+							EquipWeapon(player, (Weapon)item);
+							break;
+						case "Armor":
+							EquipArmor(player, (Armor)item);
+							break;
+						case "Quiver":
+							EquipQuiver(player, (Quiver) item);
+							break;
 					}
-					case true when input[0] == "unequip": {
-						if (!IsWearable(item)) return;
-						switch (itemType) {
-							case "Weapon":
-								UnequipWeapon(player, (Weapon)item);
-								break;
-							case "Armor":
-								UnequipArmor(player, (Armor)item);
-								break;
-							case "Quiver":
-								UnequipQuiver(player, (Quiver) item);
-								break;
-						}
-						return;
-					}
+					return;
+				}
+				if (IsWearable(item)) {
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"You have already equipped that.");
+					return;
+				}
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"You can't equip that!");
+				return;
+			}
+			if (input[0] == "unequip") {
+				if (!IsWearable(item)) return;
+				switch (itemType) {
+					case "Weapon":
+						UnequipWeapon(player, (Weapon)item);
+						break;
+					case "Armor":
+						UnequipArmor(player, (Armor)item);
+						break;
+					case "Quiver":
+						UnequipQuiver(player, (Quiver) item);
+						break;
 				}
 			}
-			var noItemFoundString = "You don't have " + inputName + " in your inventory!"; 
-			OutputHandler.Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(),
-				Settings.FormatDefaultBackground(),
-				noItemFoundString);
 		}
 		private static void UnequipWeapon(Player player, Weapon weapon) {
 			if (!weapon.Equipped) {

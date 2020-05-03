@@ -131,7 +131,7 @@ namespace DungeonGame {
 			// Add level adjustment to armor rating
 			this.ArmorRating += (this.Level - 1) * 3;
 			// Add modifier for rainbow gear to enhance armor rating
-			this.ArmorRating += 3;
+			this.ArmorRating += 5;
 			this.ItemValue = this.ArmorRating;
 			this.Durability = 100;
 			this.BuildArmorName("rainbow");
@@ -415,7 +415,7 @@ namespace DungeonGame {
 			// Add level adjustment to armor rating
 			this.ArmorRating += (this.Level - 1) * 3;
 			// Add modifier for rainbow gear to enhance armor rating
-			this.ArmorRating += 3;
+			this.ArmorRating += 5;
 			this.ItemValue = this.ArmorRating;
 		}
 	}
