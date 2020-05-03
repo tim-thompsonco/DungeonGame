@@ -197,6 +197,11 @@ namespace DungeonGame {
 							_ => sellItem.ItemValue
 						};
 						player.Inventory.RemoveAt(index);
+						var soldString = "You sold " + sellItem.Name + " to the vendor for " + sellItem.ItemValue + " gold.";
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatSuccessOutputText(),
+							Settings.FormatDefaultBackground(),
+							soldString);
 					}
 					else {
 						OutputHandler.Display.StoreUserOutput(
@@ -216,6 +221,13 @@ namespace DungeonGame {
 					index = player.Consumables.FindIndex(
 						f => f.Name == inputName || f.Name.Contains(inputName));
 				}
+				if (index == -1) {
+					OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(),
+						Settings.FormatDefaultBackground(),
+						"You don't have that to sell!");
+					return;
+				}
 				sellItem = player.Consumables[index];
 				if (this.VendorCategory == VendorType.Armorer || this.VendorCategory == VendorType.Weaponsmith) {
 					Messages.InvalidVendorSell();
@@ -224,14 +236,6 @@ namespace DungeonGame {
 				player.Consumables.RemoveAt(index);
 				if (this.VendorItems.Count == 5) this.VendorItems.RemoveAt(this.VendorItems[0].Name.Contains("arrow") ? 1 : 0);
 				this.VendorItems.Add(sellItem);
-			}
-			if (index == -1) {
-				OutputHandler.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					"You don't have that to sell!");
-			}
-			else {
 				var soldString = "You sold " + sellItem.Name + " to the vendor for " + sellItem.ItemValue + " gold.";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
@@ -376,7 +380,7 @@ namespace DungeonGame {
 						"went down there and put some dents in them for a change. I can't do that myself, I'm not a fighter, " +
 						"but you look like you are. Go get 'em tiger.",
 						Quest.QuestType.KillMonster, 
-						new Armor(questArmorGroup, Armor.ArmorSlot.Head, true), 
+						new Armor(questArmorGroup, Armor.ArmorSlot.Head, true, player), 
 						this.Name));
 					this.AvailableQuests.Add(new Quest(
 						"A Deadly Encounter",
@@ -385,7 +389,7 @@ namespace DungeonGame {
 						"those levels, it'll reduce how many people are getting their armor trashed around here, so I can get " +
 						"caught up on my work. If it doesn't help, well you'll get some pretty gear out of it at least.",
 						Quest.QuestType.ClearLevel, 
-						new Armor(questArmorGroup, Armor.ArmorSlot.Legs, true), 
+						new Armor(questArmorGroup, Armor.ArmorSlot.Legs, true, player), 
 						this.Name));
 					break;
 				case VendorType.Weaponsmith:
@@ -396,7 +400,7 @@ namespace DungeonGame {
 						"to me, but I will give you a bounty. Go kill a bunch of monsters for me to prove you're worthy of what " +
 						"I can make. Do that and you'll get a hell of a weapon.",
 						Quest.QuestType.KillMonster, 
-						new Weapon(Weapon.WeaponType.OneHandedSword, true), 
+						new Weapon(Weapon.WeaponType.OneHandedSword, true, player), 
 						this.Name));
 					break;
 				case VendorType.Healer:
@@ -407,7 +411,7 @@ namespace DungeonGame {
 						"suffering I can heal. Would you do me a favor? Go kill some of those monsters, so they stop hurting " +
 						"people like you, and I can rest easy for a while because I'm not constantly busy.",
 						Quest.QuestType.ClearLevel, 
-						new Armor(questArmorGroup, Armor.ArmorSlot.Wrist, true), 
+						new Armor(questArmorGroup, Armor.ArmorSlot.Wrist, true, player), 
 						this.Name));
 					break;
 				case VendorType.Shopkeeper:
@@ -418,7 +422,7 @@ namespace DungeonGame {
 						"expecting you to buy that stuff, but someone else will, and don't you worry about how much I'm going " +
 						"to mark up that stuff. Help me help you by buying your loot at a, uh, fair price.",
 						Quest.QuestType.KillMonster, 
-						new Armor(questArmorGroup, Armor.ArmorSlot.Waist, true), 
+						new Armor(questArmorGroup, Armor.ArmorSlot.Waist, true, player), 
 						this.Name));
 					break;
 				default:

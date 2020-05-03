@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DungeonGame {
@@ -55,6 +53,13 @@ namespace DungeonGame {
 				if (itemName.Contains("Quiver"))
 					itemInfo.Append(" (Arrows: " + player.PlayerQuiver.Quantity + "/" + player.PlayerQuiver.MaxQuantity + ")");
 				itemInfo.Append(" <Equipped>");
+				if (item is Armor || item is Weapon) {
+					var playerItem = item as IRainbowGear;
+					if (playerItem.IsRainbowGear) {
+						GearHandler.StoreRainbowGearOutput(itemInfo.ToString());
+						continue;
+					}
+				}
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(), 
 					Settings.FormatDefaultBackground(),
@@ -70,14 +75,13 @@ namespace DungeonGame {
 					var playerItem = item as IRainbowGear;
 					if (playerItem.IsRainbowGear) {
 						GearHandler.StoreRainbowGearOutput(itemInfo.ToString());
-					}
-					else {
-						OutputHandler.Display.StoreUserOutput(
-							Settings.FormatInfoText(), 
-							Settings.FormatDefaultBackground(),
-							itemInfo.ToString());
+						continue;
 					}
 				}
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatInfoText(), 
+					Settings.FormatDefaultBackground(),
+					itemInfo.ToString());
 			}
 			var consumableDict = new Dictionary<string, int>();
 			foreach (var item in player.Consumables) {
@@ -255,6 +259,15 @@ namespace DungeonGame {
 			player.RagePoints = player.MaxRagePoints;
 			player.ComboPoints = player.MaxComboPoints;
 			player.ManaPoints = player.MaxManaPoints;
+			// Update level for rainbow gear if any in player inventory
+			foreach (var item in player.Inventory) {
+				if (item is Armor || item is Weapon) {
+					var rainbowItem = (IRainbowGear)item;
+					if (rainbowItem != null && rainbowItem.IsRainbowGear) {
+						rainbowItem.UpdateRainbowStats(player);
+					}
+				}
+			}
 		}
 		public static void CalculatePlayerStats(Player player) {
 			switch (player.PlayerClass) {

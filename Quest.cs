@@ -163,7 +163,8 @@ namespace DungeonGame {
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
-						"You have completed the quest " + this.Name + "! Go turn it in and get your reward.");
+						"You have completed the quest " + this.Name + "! Go turn it in to " + this.QuestGiver +
+						" and get your reward.");
 				}
 			});
 		}

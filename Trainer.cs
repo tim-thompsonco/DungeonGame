@@ -577,7 +577,7 @@ namespace DungeonGame {
 						"moves, kill it. Be like a house cat. Don't ask questions, just kill it, and keep doing that until " +
 						"there's nothing left. Do that, come back here, and you'll get a reward. ",
 						Quest.QuestType.ClearLevel, 
-						new Armor(questArmorGroup, Armor.ArmorSlot.Hands, true), 
+						new Armor(questArmorGroup, Armor.ArmorSlot.Hands, true, player), 
 						this.Name));
 					break;
 				case TrainerCategory.Warrior:
@@ -588,7 +588,7 @@ namespace DungeonGame {
 						"I want you to return the favor. Hunt down and kill a bunch of them. Surely if we thin the ranks down " +
 						"then they won't be so likely to stray from the dungeon. Go take care of this for me will you? ",
 						Quest.QuestType.KillMonster, 
-						new Armor(questArmorGroup, Armor.ArmorSlot.Back, true), 
+						new Armor(questArmorGroup, Armor.ArmorSlot.Back, true, player), 
 						this.Name));
 					break;
 				case TrainerCategory.Mage:
@@ -600,7 +600,7 @@ namespace DungeonGame {
 						"chance of surviving, but if you don't, I promise I'll find and bury you someday ok? That seems like " +
 						"a reasonable offer to me.", 
 						Quest.QuestType.KillCount, 
-						new Armor(questArmorGroup, Armor.ArmorSlot.Chest, true), 
+						new Armor(questArmorGroup, Armor.ArmorSlot.Chest, true, player), 
 						this.Name));
 					break;
 				default:

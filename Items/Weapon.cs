@@ -59,8 +59,8 @@ namespace DungeonGame {
 			this.BuildWeaponName();
 			this.Desc = "A " + this.Name + " that causes damage when you hit stuff with it.";
 		}
-		public Weapon(WeaponType weaponType, bool isRainbowGear) {
-			this.Level = 10;
+		public Weapon(WeaponType weaponType, bool isRainbowGear, Player player) {
+			this.Level = player.Level;
 			this.IsRainbowGear = isRainbowGear;
 			this.WeaponGroup = weaponType;
 			this.DamageGroup = DamageType.Physical;
@@ -84,7 +84,7 @@ namespace DungeonGame {
 				this.Quality = 1;
 			}
 			// Add modifier for rainbow gear to enhance weapon damage
-			this.RegDamage += 5;
+			this.RegDamage += 3;
 			this.ItemValue = this.RegDamage;
 			this.BuildWeaponName("rainbow");
 			this.Desc = "A " + this.Name + " that causes damage when you hit stuff with it.";
@@ -195,6 +195,16 @@ namespace DungeonGame {
 			this.Durability -= 1;
 			attackDamage *= this.Durability / (double)100;
 			return (int)attackDamage;
+		}
+		public void UpdateRainbowStats(Player player) {
+			this.Level = player.Level;
+			var randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
+			this.RegDamage = randomWeaponDmg + (this.Level - 1) * 3;
+			this.CritMultiplier = 1.3;
+			this.Quality = 3;
+			// Add modifier for rainbow gear to enhance weapon damage
+			this.RegDamage += 3;
+			this.ItemValue = this.RegDamage;
 		}
 	}
 }
