@@ -145,12 +145,18 @@ namespace DungeonGame {
 			}
 			// Player with two capes will input sell cape 2 to sell 2nd cape, but indices start from 0, so adjust value
 			sellItemIndex--;
-			// Find desired object to sell
-			var inputName = InputHandler.ParseInput(userInput);
-			var indexList = player.Inventory.FindAll(f => f.Name == inputName || f.Name.Contains(inputName));
-			var itemMatch = indexList[sellItemIndex];
-			// Return index in player inventory of desired object to sell
-			return player.Inventory.IndexOf(itemMatch);
+			try {
+				// Find desired object to sell
+				var inputName = InputHandler.ParseInput(userInput);
+				var indexList = player.Inventory.FindAll(f => f.Name == inputName || f.Name.Contains(inputName));
+				var itemMatch = indexList[sellItemIndex];
+				// Return index in player inventory of desired object to sell
+				return player.Inventory.IndexOf(itemMatch);
+			}
+			catch (ArgumentOutOfRangeException) {
+				// Using -2 to indicate that this is a multiple item sell attempt but the item does not exist
+				return -2;
+			}
 		}
 		private static int FindConsumableItemIndex(Player player, string[] userInput) {
 			var indexNumberSearch = int.TryParse(userInput.Last(), out var sellItemIndex);
@@ -160,16 +166,29 @@ namespace DungeonGame {
 			}
 			// Player with two capes will input sell cape 2 to sell 2nd cape, but indices start from 0, so adjust value
 			sellItemIndex--;
-			// Find desired object to sell
-			var inputName = InputHandler.ParseInput(userInput);
-			var indexList = player.Consumables.FindAll(f => f.Name == inputName || f.Name.Contains(inputName));
-			var itemMatch = indexList[sellItemIndex];
-			// Return index in player inventory of desired object to sell
-			return player.Consumables.IndexOf(itemMatch);
+			try {
+				// Find desired object to sell
+				var inputName = InputHandler.ParseInput(userInput);
+				var indexList = player.Consumables.FindAll(f => f.Name == inputName || f.Name.Contains(inputName));
+				var itemMatch = indexList[sellItemIndex];
+				// Return index in player inventory of desired object to sell
+				return player.Consumables.IndexOf(itemMatch);
+			}
+			catch (ArgumentOutOfRangeException) {
+				// Using -2 to indicate that this is a multiple item sell attempt but the item does not exist
+				return -2;
+			}
 		}
 		public void SellItem(Player player, string[] userInput) {
 			var inputName = InputHandler.ParseInput(userInput);
 			var multipleItemIndex = FindInventoryItemIndex(player, userInput);
+			if (multipleItemIndex == -2) {
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(),
+					Settings.FormatDefaultBackground(),
+					"You don't have that item to sell!");
+				return;
+			}
 			int index;
 			if (multipleItemIndex != -1) {
 				index = multipleItemIndex;
@@ -208,7 +227,6 @@ namespace DungeonGame {
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You have to unequip that first!");
-						return;
 					}
 				}
 			}

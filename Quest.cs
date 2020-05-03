@@ -159,12 +159,21 @@ namespace DungeonGame {
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-				if (this.QuestCompleted) {
+				if (!this.QuestCompleted) return;
+				var questSuccess = "You have completed the quest " + this.Name +
+				                   "! Go turn it in to " + this.QuestGiver + " and get your reward.";
+				for (var i = 0; i < questSuccess.Length; i += Settings.GetGameWidth()) {
+					if (questSuccess.Length - i < Settings.GetGameWidth()) {
+						OutputHandler.Display.StoreUserOutput(
+							Settings.FormatSuccessOutputText(), 
+							Settings.FormatDefaultBackground(), 
+							questSuccess.Substring(i, questSuccess.Length - i));
+						continue;
+					}
 					OutputHandler.Display.StoreUserOutput(
-						Settings.FormatGeneralInfoText(),
-						Settings.FormatDefaultBackground(),
-						"You have completed the quest " + this.Name + "! Go turn it in to " + this.QuestGiver +
-						" and get your reward.");
+						Settings.FormatSuccessOutputText(), 
+						Settings.FormatDefaultBackground(), 
+						questSuccess.Substring(i, Settings.GetGameWidth()));
 				}
 			});
 		}
