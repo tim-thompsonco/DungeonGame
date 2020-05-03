@@ -28,10 +28,34 @@ namespace DungeonGame {
 				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
 		}
 		public static void GameIntro() {
-			const string gameIntroString = 
-				"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot" +
-				"and explore dungeons. Stuff you've probably done a million times already across various RPG games. At any time " +
-				"you can get help on commands by typing 'help'.";
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(), 
+					Settings.FormatDefaultBackground(), 
+					"_________ .__                  .__                 __________        .__      ___.                          ");
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(), 
+					Settings.FormatDefaultBackground(), 
+					"\\_   ___ \\|  |__ _____    _____|__| ____    ____   \\______   \\_____  |__| ____\\_ |__   ______  _  ________  ");
+				OutputHandler.Display.StoreUserOutput(
+					Settings.FormatFailureOutputText(), 
+					Settings.FormatDefaultBackground(), 
+					"/    \\  \\/|  |  \\__  \\  /  ___/  |/    \\  / ___\\   |       _/\\__  \\ |  |/    \\| __ \\ /  _ \\ \\/ \\/ /  ___/  ");
+				OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(), 
+						Settings.FormatDefaultBackground(), 
+						"\\     \\___|   Y  \\/ __ \\_\\___ \\|  |   |  \\/ /_/  >  |    |   \\ / __ \\|  |   |  \\ \\_\\ (  <_> )     /\\___ \\ ");
+				OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(), 
+						Settings.FormatDefaultBackground(), 
+						"\\______  /___|  (____  /____  >__|___|  /\\___  /   |____|_  /(____  /__|___|  /___  /\\____/ \\/\\_//____  > ");
+				OutputHandler.Display.StoreUserOutput(
+						Settings.FormatFailureOutputText(), 
+						Settings.FormatDefaultBackground(), 
+						"	\\/     \\/     \\/     \\/        \\//_____/           \\/      \\/        \\/    \\/                  \\/       \n");
+				const string gameIntroString = 
+					"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot" +
+					"and explore dungeons. Stuff you've probably done a million times already across various RPG games. At any time " +
+					"you can get help on commands by typing 'help'.";
 			for (var i = 0; i < gameIntroString.Length; i += Settings.GetGameWidth()) {
 				if (gameIntroString.Length - i < Settings.GetGameWidth()) {
 					OutputHandler.Display.StoreUserOutput(

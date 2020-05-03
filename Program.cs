@@ -16,6 +16,8 @@ namespace DungeonGame {
 			}
 			// Game loading commands
 			Messages.GameIntro();
+			OutputHandler.Display.RetrieveUserOutput();
+			OutputHandler.Display.ClearUserOutput();
 			/* Load game if save game exists, and if not, build new game
 			this method must run first so rooms exists to place player in */
 			GameHandler.LoadGame();
