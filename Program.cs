@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 
 namespace DungeonGame {
@@ -12,7 +11,7 @@ namespace DungeonGame {
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
-					"The game window could not be resized on your computer. Error: " + ex);
+					$"The game window could not be resized on your computer. Error: {ex}");
 			}
 			// Game loading commands
 			Messages.GameIntro();
