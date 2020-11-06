@@ -102,23 +102,23 @@ namespace DungeonGame {
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
-						"Required Kills: " + this.RequiredKills);
+						$"Required Kills: {this.RequiredKills}");
 					break;
 				case QuestType.KillMonster:
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
-						"Target Monster: " + this.MonsterKillType);
+						$"Target Monster: {this.MonsterKillType}");
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
-						"Required Kills: " + this.RequiredKills);
+						$"Required Kills: {this.RequiredKills}");
 					break;
 				case QuestType.ClearLevel:
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
-						"Clear Level " + this.TargetLevel);
+						$"Clear Level {this.TargetLevel}");
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -135,7 +135,7 @@ namespace DungeonGame {
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
-				this.QuestRewardGold + " gold coins");
+				$"{this.QuestRewardGold} gold coins");
 		}
 		public async void UpdateQuestProgress(Monster monster) {
 			await Task.Run(() => {
@@ -160,8 +160,7 @@ namespace DungeonGame {
 						throw new ArgumentOutOfRangeException();
 				}
 				if (!this.QuestCompleted) return;
-				var questSuccess = "You have completed the quest " + this.Name +
-				                   "! Go turn it in to " + this.QuestGiver + " and get your reward.";
+				var questSuccess = $"You have completed the quest {this.Name}! Go turn it in to {this.QuestGiver} and get your reward.";
 				for (var i = 0; i < questSuccess.Length; i += Settings.GetGameWidth()) {
 					if (questSuccess.Length - i < Settings.GetGameWidth()) {
 						OutputHandler.Display.StoreUserOutput(
