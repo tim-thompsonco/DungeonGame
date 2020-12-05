@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DungeonGame {
-	public class Monster : IRoomInteraction {
-		public enum MonsterType {
+namespace DungeonGame
+{
+	public class Monster : IRoomInteraction
+	{
+		public enum MonsterType
+		{
 			Skeleton,
 			Zombie,
 			Spider,
@@ -14,17 +17,19 @@ namespace DungeonGame {
 			Troll,
 			Dragon
 		}
-		public enum ElementalType {
+		public enum ElementalType
+		{
 			Fire,
 			Air,
 			Water
 		}
-		public enum SkeletonType {
+		public enum SkeletonType
+		{
 			Warrior,
 			Archer,
 			Mage
 		}
-		public string Name { get; set; }
+		public string _Name { get; set; }
 		public string Desc { get; set; }
 		public int Level { get; set; }
 		public int MaxHitPoints { get; set; }
@@ -59,8 +64,9 @@ namespace DungeonGame {
 		public List<MonsterAbility> Abilities { get; set; }
 
 		// Default constructor for JSON deserialization
-		public Monster() {}
-		public Monster(int level, MonsterType monsterType) {
+		public Monster() { }
+		public Monster(int level, MonsterType monsterType)
+		{
 			this.MonsterItems = new List<IEquipment>();
 			this.Effects = new List<Effect>();
 			this.StatReplenishInterval = 3;
@@ -74,10 +80,12 @@ namespace DungeonGame {
 			var maxHitPoints = 80 + (this.Level - 1) * randomNumHitPoint;
 			this.MaxHitPoints = GameHandler.RoundNumber(maxHitPoints);
 			this.HitPoints = this.MaxHitPoints;
-			if (this.MonsterCategory == MonsterType.Spider) {
+			if (this.MonsterCategory == MonsterType.Spider)
+			{
 				this.Gold = 0;
 			}
-			else {
+			else
+			{
 				var randomNumGold = GameHandler.GetRandomNumber(5, 10);
 				this.Gold = 10 + (this.Level - 1) * randomNumGold;
 			}
@@ -85,23 +93,26 @@ namespace DungeonGame {
 			this.ExperienceProvided = GameHandler.RoundNumber(expProvided);
 			this.MaxEnergyPoints = 100 + this.Level * 10;
 			this.EnergyPoints = this.MaxEnergyPoints;
-			switch (this.MonsterCategory) {
+			switch (this.MonsterCategory)
+			{
 				case MonsterType.Skeleton:
 					var randomSkeletonType = GameHandler.GetRandomNumber(1, 3);
-					this.SkeletonCategory = randomSkeletonType switch {
+					this.SkeletonCategory = randomSkeletonType switch
+					{
 						1 => SkeletonType.Archer,
 						2 => SkeletonType.Warrior,
 						3 => SkeletonType.Mage,
 						_ => throw new ArgumentOutOfRangeException()
 					};
-					switch (this.SkeletonCategory) {
+					switch (this.SkeletonCategory)
+					{
 						case SkeletonType.Warrior:
 							break;
 						case SkeletonType.Archer:
 							break;
 						case SkeletonType.Mage:
 							this.Spellbook = new List<MonsterSpell> {
-								new MonsterSpell("frostbolt", 50, MonsterSpell.SpellType.Frostbolt, this.Level), 
+								new MonsterSpell("frostbolt", 50, MonsterSpell.SpellType.Frostbolt, this.Level),
 								new MonsterSpell("fireball", 50, MonsterSpell.SpellType.Fireball, this.Level)};
 							break;
 						default:
@@ -121,20 +132,23 @@ namespace DungeonGame {
 				case MonsterType.Elemental:
 					var randomNum = GameHandler.GetRandomNumber(1, 3);
 					var randomPhysicalDmg = GameHandler.GetRandomNumber(20, 26);
-					this.UnarmedAttackDamage = randomNum switch {
+					this.UnarmedAttackDamage = randomNum switch
+					{
 						1 => randomPhysicalDmg + (level - 1) * 1,
 						2 => randomPhysicalDmg + (level - 1) * 2,
 						3 => randomPhysicalDmg + (level - 1) * 3,
 						_ => throw new ArgumentOutOfRangeException()
 					};
 					var randomElementalType = GameHandler.GetRandomNumber(1, 3);
-					this.ElementalCategory = randomElementalType switch {
+					this.ElementalCategory = randomElementalType switch
+					{
 						1 => ElementalType.Air,
 						2 => ElementalType.Fire,
 						3 => ElementalType.Water,
 						_ => throw new ArgumentOutOfRangeException()
 					};
-					switch (this.ElementalCategory) {
+					switch (this.ElementalCategory)
+					{
 						case ElementalType.Fire:
 							this.Spellbook = new List<MonsterSpell> {
 								new MonsterSpell("fireball", 50, MonsterSpell.SpellType.Fireball, this.Level)};
@@ -167,34 +181,42 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		
-		public AttackOption DetermineAttack(Player player) {
+
+		public AttackOption DetermineAttack(Player player)
+		{
 			var attackOptions = new List<AttackOption>();
-			if (this.MonsterWeapon != null && this.MonsterWeapon.Equipped) {
-				attackOptions.Add(new 
-					AttackOption(AttackOption.AttackType.Physical, 
+			if (this.MonsterWeapon != null && this.MonsterWeapon.Equipped)
+			{
+				attackOptions.Add(new
+					AttackOption(AttackOption.AttackType.Physical,
 						this.MonsterWeapon.RegDamage - player.ArmorRating(this), -1));
 			}
-			else {
-				attackOptions.Add(new 
+			else
+			{
+				attackOptions.Add(new
 					AttackOption(AttackOption.AttackType.Physical, this.UnarmedAttackDamage, -1));
 			}
-			if (this.Spellbook != null) {
-				for (var i = 0; i < this.Spellbook.Count; i++) {
+			if (this.Spellbook != null)
+			{
+				for (var i = 0; i < this.Spellbook.Count; i++)
+				{
 					if (this.EnergyPoints < this.Spellbook[i].EnergyCost) continue;
-					switch (this.Spellbook[i].SpellCategory) {
+					switch (this.Spellbook[i].SpellCategory)
+					{
 						case MonsterSpell.SpellType.Fireball:
 						case MonsterSpell.SpellType.Frostbolt:
 						case MonsterSpell.SpellType.Lightning:
 							var spellTotalDamage = 0;
-							if (this.Spellbook[i].Offensive.AmountOverTime == 0) {
+							if (this.Spellbook[i].Offensive.AmountOverTime == 0)
+							{
 								spellTotalDamage = this.Spellbook[i].Offensive.Amount;
 							}
-							else {
+							else
+							{
 								spellTotalDamage = this.Spellbook[i].Offensive.Amount + this.Spellbook[i].Offensive.AmountOverTime *
 									this.Spellbook[i].Offensive.AmountMaxRounds;
 							}
-							attackOptions.Add(new 
+							attackOptions.Add(new
 								AttackOption(AttackOption.AttackType.Spell, spellTotalDamage, i));
 							break;
 						default:
@@ -202,22 +224,27 @@ namespace DungeonGame {
 					}
 				}
 			}
-			if (this.Abilities != null) {
-				for (var i = 0; i < this.Abilities.Count; i++) {
+			if (this.Abilities != null)
+			{
+				for (var i = 0; i < this.Abilities.Count; i++)
+				{
 					if (this.EnergyPoints < this.Abilities[i].EnergyCost) continue;
-					switch (this.Abilities[i].AbilityCategory) {
+					switch (this.Abilities[i].AbilityCategory)
+					{
 						case MonsterAbility.Ability.PoisonBite:
 						case MonsterAbility.Ability.BloodLeech:
 						case MonsterAbility.Ability.TailWhip:
 							var abilityTotalDamage = 0;
-							if (this.Abilities[i].Offensive.AmountOverTime == 0) {
+							if (this.Abilities[i].Offensive.AmountOverTime == 0)
+							{
 								abilityTotalDamage = this.Abilities[i].Offensive.Amount * 2;
 							}
-							else {
+							else
+							{
 								abilityTotalDamage = this.Abilities[i].Offensive.Amount + this.Abilities[i].Offensive.AmountOverTime *
 									this.Abilities[i].Offensive.AmountMaxRounds;
 							}
-							attackOptions.Add(new 
+							attackOptions.Add(new
 								AttackOption(AttackOption.AttackType.Ability, abilityTotalDamage, i));
 							break;
 						default:
@@ -231,14 +258,17 @@ namespace DungeonGame {
 			var randomAttackChoice = GameHandler.GetRandomNumber(0, attackOptions.Count - 1);
 			return attackOptions[randomAttackChoice];
 		}
-		public void Attack(Player player) {
+		public void Attack(Player player)
+		{
 			var attackOption = this.DetermineAttack(player);
-			switch (attackOption.AttackCategory) {
+			switch (attackOption.AttackCategory)
+			{
 				case AttackOption.AttackType.Physical:
 					this.PhysicalAttack(player);
 					break;
 				case AttackOption.AttackType.Spell:
-					switch (this.Spellbook[attackOption.AttackIndex].SpellCategory) {
+					switch (this.Spellbook[attackOption.AttackIndex].SpellCategory)
+					{
 						case MonsterSpell.SpellType.Fireball:
 							MonsterSpell.CastFireOffense(this, player, attackOption.AttackIndex);
 							break;
@@ -253,7 +283,8 @@ namespace DungeonGame {
 					}
 					break;
 				case AttackOption.AttackType.Ability:
-					switch (this.Abilities[attackOption.AttackIndex].AbilityCategory) {
+					switch (this.Abilities[attackOption.AttackIndex].AbilityCategory)
+					{
 						case MonsterAbility.Ability.PoisonBite:
 						case MonsterAbility.Ability.TailWhip:
 							MonsterAbility.UseOffenseDamageAbility(this, player, attackOption.AttackIndex);
@@ -270,30 +301,38 @@ namespace DungeonGame {
 			}
 			GearHandler.DecreaseArmorDurability(player);
 		}
-		private void PhysicalAttack(Player player) {
+		private void PhysicalAttack(Player player)
+		{
 			var attackAmount = 0;
-			try {
-				if (this.MonsterWeapon.Equipped && this.MonsterWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
+			try
+			{
+				if (this.MonsterWeapon.Equipped && this.MonsterWeapon.WeaponGroup != Weapon.WeaponType.Bow)
+				{
 					attackAmount += this.MonsterWeapon.Attack();
 				}
 				if (this.MonsterWeapon.Equipped &&
-				    this.MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
-				    this.MonsterQuiver.HaveArrows()) {
+					this.MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
+					this.MonsterQuiver.HaveArrows())
+				{
 					this.MonsterQuiver.UseArrow();
 					attackAmount += this.MonsterWeapon.Attack();
 				}
 				if (this.MonsterWeapon.Equipped &&
-				    this.MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
-				    !this.MonsterQuiver.HaveArrows()) {
+					this.MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
+					!this.MonsterQuiver.HaveArrows())
+				{
 					attackAmount += this.UnarmedAttackDamage;
 				}
 			}
-			catch (NullReferenceException) {
-				if (this.MonsterCategory == MonsterType.Elemental) {
+			catch (NullReferenceException)
+			{
+				if (this.MonsterCategory == MonsterType.Elemental)
+				{
 					attackAmount += this.UnarmedAttackDamage;
 				}
-				else {
-					var monsterDisarmed = "The " + this.Name + " is disarmed! They are going hand to hand!";
+				else
+				{
+					var monsterDisarmed = "The " + this._Name + " is disarmed! They are going hand to hand!";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -304,8 +343,9 @@ namespace DungeonGame {
 			var randomChanceToHit = GameHandler.GetRandomNumber(1, 100);
 			var chanceToDodge = player.DodgeChance;
 			if (chanceToDodge > 50) chanceToDodge = 50;
-			if (randomChanceToHit <= chanceToDodge) {
-				var missString = "The " + this.Name + " missed you!"; 
+			if (randomChanceToHit <= chanceToDodge)
+			{
+				var missString = "The " + this._Name + " missed you!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
@@ -313,8 +353,10 @@ namespace DungeonGame {
 				return;
 			}
 			var baseAttackAmount = attackAmount;
-			foreach (var effect in player.Effects.ToList()) {
-				switch (effect.EffectGroup) {
+			foreach (var effect in player.Effects.ToList())
+			{
+				switch (effect.EffectGroup)
+				{
 					case Effect.EffectType.Healing:
 						break;
 					case Effect.EffectType.ChangePlayerDamage:
@@ -334,7 +376,7 @@ namespace DungeonGame {
 						effect.IsEffectExpired = true;
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
-						var changeDamageAmount = effect.EffectAmountOverTime < attackAmount ? 
+						var changeDamageAmount = effect.EffectAmountOverTime < attackAmount ?
 							effect.EffectAmountOverTime : attackAmount;
 						effect.ChangeOpponentDamageRound(player);
 						attackAmount += changeDamageAmount;
@@ -346,7 +388,7 @@ namespace DungeonGame {
 						attackAmount -= blockAmount;
 						break;
 					case Effect.EffectType.ReflectDamage:
-						var reflectAmount = effect.EffectAmountOverTime < attackAmount ? 
+						var reflectAmount = effect.EffectAmountOverTime < attackAmount ?
 							effect.EffectAmountOverTime : attackAmount;
 						this.HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
@@ -357,26 +399,29 @@ namespace DungeonGame {
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-				if (baseAttackAmount > attackAmount && attackAmount - player.ArmorRating(this) <= 0) {
-					var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + this.Name + "'s attack!"; 
+				if (baseAttackAmount > attackAmount && attackAmount - player.ArmorRating(this) <= 0)
+				{
+					var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + this._Name + "'s attack!";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatAttackFailText(),
 						Settings.FormatDefaultBackground(),
 						effectAbsorbString);
 					return;
-				} 
+				}
 				GameHandler.RemovedExpiredEffectsAsync(this);
 			}
-			if (attackAmount- player.ArmorRating(this) <= 0) {
-				var armorAbsorbString = "Your armor absorbed all of " + this.Name + "'s attack!"; 
+			if (attackAmount - player.ArmorRating(this) <= 0)
+			{
+				var armorAbsorbString = "Your armor absorbed all of " + this._Name + "'s attack!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					armorAbsorbString);
 			}
-			else if (attackAmount - player.ArmorRating(this) > 0) {
+			else if (attackAmount - player.ArmorRating(this) > 0)
+			{
 				attackAmount -= player.ArmorRating(this);
-				var hitString = "The " + this.Name + " hits you for " + attackAmount + " physical damage.";
+				var hitString = "The " + this._Name + " hits you for " + attackAmount + " physical damage.";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
@@ -384,7 +429,8 @@ namespace DungeonGame {
 				player.HitPoints -= attackAmount;
 			}
 		}
-		public int ArmorRating(Player player) {
+		public int ArmorRating(Player player)
+		{
 			var totalArmorRating = MonsterHandler.CheckArmorRating(this);
 			var levelDiff = player.Level - this.Level;
 			var armorMultiplier = 1.00 + -(double)levelDiff / 5;
@@ -392,11 +438,12 @@ namespace DungeonGame {
 			if (this.ElementalCategory != null) adjArmorRating += 20;
 			return (int)adjArmorRating;
 		}
-		public void MonsterDeath(Player player) {
+		public void MonsterDeath(Player player)
+		{
 			player.InCombat = false;
 			this.InCombat = false;
 			this.Effects.Clear();
-			var defeatString = "You have defeated the " + this.Name + "!";
+			var defeatString = "You have defeated the " + this._Name + "!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
@@ -406,15 +453,17 @@ namespace DungeonGame {
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				expGainString);
-			foreach (var loot in this.MonsterItems) {
+			foreach (var loot in this.MonsterItems)
+			{
 				loot.Equipped = false;
 			}
-			this.Name = "Dead " + this.Name;
+			this._Name = "Dead " + this._Name;
 			this.Desc = "A corpse of a monster you killed.";
 			player.Experience += this.ExperienceProvided;
 			PlayerHandler.LevelUpCheck(player);
 			if (player.QuestLog == null) return;
-			foreach (var quest in player.QuestLog) {
+			foreach (var quest in player.QuestLog)
+			{
 				quest.UpdateQuestProgress(this);
 			}
 		}

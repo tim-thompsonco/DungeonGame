@@ -1,116 +1,153 @@
-﻿using System;
-
-namespace DungeonGame {
-	public static class Settings {
-		public static int GetGameWidth() {
+﻿namespace DungeonGame
+{
+	public static class Settings
+	{
+		public static int GetGameWidth()
+		{
 			return 100 - GetBufferGap();
 		}
-		public static int GetMiniMapHeight() {
+		public static int GetMiniMapHeight()
+		{
 			return 5;
 		}
-		public static int GetMiniMapWidth() {
+		public static int GetMiniMapWidth()
+		{
 			return 10;
 		}
-		public static int GetBufferGap() {
+		public static int GetBufferGap()
+		{
 			return 5;
 		}
-		public static int GetMiniMapBorderWidth() {
+		public static int GetMiniMapBorderWidth()
+		{
 			return GetMiniMapWidth() * 4 + 4;
 		}
-		public static string GetTileColor(Player player) {
-			if (player.PlayerLocation.Z <= -8) {
+		public static string GetTileColor(Player player)
+		{
+			if (player.PlayerLocation.Z <= -8)
+			{
 				return "darkred";
 			}
-			if (player.PlayerLocation.Z < -3) {
+			if (player.PlayerLocation.Z < -3)
+			{
 				return "darkgray";
 			}
 			return "gray";
 		}
-		public static string GetEmptyMapTileSizeTwo() {
+		public static string GetEmptyMapTileSizeTwo()
+		{
 			return "  ";
 		}
-		public static string GetUndiscoveredMapTileSizeTwo() {
+		public static string GetUndiscoveredMapTileSizeTwo()
+		{
 			return "\"\"";
 		}
-		public static string GetUpDownMapTile() {
+		public static string GetUpDownMapTile()
+		{
 			return "OO";
 		}
-		public static string GetLeftMapBorderSizeTwo() {
+		public static string GetLeftMapBorderSizeTwo()
+		{
 			return "| ";
 		}
-		public static string GetRightMapBorderSizeTwo() {
+		public static string GetRightMapBorderSizeTwo()
+		{
 			return " |";
 		}
-		public static string GetLeftMapBorderSizeFour() {
+		public static string GetLeftMapBorderSizeFour()
+		{
 			return "|   ";
 		}
-		public static string GetRightMapBorderSizeFour() {
+		public static string GetRightMapBorderSizeFour()
+		{
 			return "   |";
 		}
-		public static string FormatDefaultBackground() {
+		public static string FormatDefaultBackground()
+		{
 			return "black";
 		}
-		public static string FormatHealthBackground() {
+		public static string FormatHealthBackground()
+		{
 			return "darkred";
 		}
-		public static string FormatManaBackground() {
+		public static string FormatManaBackground()
+		{
 			return "darkblue";
 		}
-		public static string FormatRageBackground() {
+		public static string FormatRageBackground()
+		{
 			return "darkyellow";
 		}
-		public static string FormatComboBackground() {
+		public static string FormatComboBackground()
+		{
 			return "darkyellow";
 		}
-		public static string FormatExpBackground() {
+		public static string FormatExpBackground()
+		{
 			return "darkcyan";
 		}
-		public static string FormatSuccessOutputText() {
+		public static string FormatSuccessOutputText()
+		{
 			return "green";
 		}
-		public static string FormatHiddenOutputText() {
+		public static string FormatHiddenOutputText()
+		{
 			return "black";
 		}
-		public static string FormatFailureOutputText() {
+		public static string FormatFailureOutputText()
+		{
 			return "darkcyan";
 		}
-		public static string FormatRoomOutputText() {
+		public static string FormatRoomOutputText()
+		{
 			return "darkcyan";
 		}
-		public static string FormatOnFireText() {
+		public static string FormatOnFireText()
+		{
 			return "yellow";
 		}
-		public static string FormatAttackSuccessText() {
+		public static string FormatAttackSuccessText()
+		{
 			return "red";
 		}
-		public static string FormatAttackFailText() {
+		public static string FormatAttackFailText()
+		{
 			return "darkred";
 		}
-		public static string FormatInfoText() {
+		public static string FormatInfoText()
+		{
 			return "white";
 		}
-		public static string FormatLevelUpText() {
+		public static string FormatLevelUpText()
+		{
 			return "cyan";
 		}
-		public static string FormatGeneralInfoText() {
+		public static string FormatGeneralInfoText()
+		{
 			return "darkgreen";
 		}
-		public static string FormatUpDownIndicator() {
+		public static string FormatUpDownIndicator()
+		{
 			return "black";
 		}
-		public static string FormatAnnounceText() {
+		public static string FormatAnnounceText()
+		{
 			return "gray";
 		}
-		public static string FormatPlayerTile() {
+		public static string FormatPlayerTile()
+		{
 			return "green";
 		}
-		public static string FormatDiscoveredTile() {
+		public static string FormatDiscoveredTile()
+		{
 			return "darkgray";
 		}
-		public static string FormatTextBorder() {
+		public static string FormatTextBorder()
+		{
 			return "========================================================";
 		}
-		public static int GetBaseExperienceToLevel() {
+		public static int GetBaseExperienceToLevel()
+		{
 			return 500;
 		}
 	}

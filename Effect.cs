@@ -1,8 +1,11 @@
 ﻿using System;
 
-namespace DungeonGame {
-	public class Effect {
-		public enum EffectType {
+namespace DungeonGame
+{
+	public class Effect
+	{
+		public enum EffectType
+		{
 			Healing,
 			ChangePlayerDamage,
 			ChangeOpponentDamage,
@@ -28,15 +31,17 @@ namespace DungeonGame {
 		public int TickDuration { get; set; }
 
 		// Default constructor for JSON serialization
-		public Effect() {}
-		public Effect(string name, EffectType effectGroup, int effectAmount, int tickDuration) {
+		public Effect() { }
+		public Effect(string name, EffectType effectGroup, int effectAmount, int tickDuration)
+		{
 			this.Name = name;
 			this.EffectGroup = effectGroup;
 			this.EffectAmount = effectAmount;
 			this.TickDuration = tickDuration;
 		}
-		public Effect(string name, EffectType effectGroup, int effectCurRound, int effectMaxRound, 
-			double effectMultiplier, int tickDuration, bool harmful) {
+		public Effect(string name, EffectType effectGroup, int effectCurRound, int effectMaxRound,
+			double effectMultiplier, int tickDuration, bool harmful)
+		{
 			this.Name = name;
 			this.EffectGroup = effectGroup;
 			this.EffectCurRound = effectCurRound;
@@ -47,22 +52,25 @@ namespace DungeonGame {
 		}
 		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
 			int effectMaxRound, double effectMultiplier, int tickDuration, bool harmful)
-			: this(name, effectGroup, effectCurRound, effectMaxRound, effectMultiplier, tickDuration, harmful) {
+			: this(name, effectGroup, effectCurRound, effectMaxRound, effectMultiplier, tickDuration, harmful)
+		{
 			this.EffectAmountOverTime = effectAmountOverTime;
 		}
 		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
 			int effectMaxRound, double effectMultiplier, int tickDuration, bool harmful, ChangeStat.StatType statType)
-			: this(name, effectGroup, effectAmountOverTime , effectCurRound, effectMaxRound, effectMultiplier, tickDuration, 
-				harmful) {
+			: this(name, effectGroup, effectAmountOverTime, effectCurRound, effectMaxRound, effectMultiplier, tickDuration,
+				harmful)
+		{
 			this.StatGroup = statType;
 		}
 
-		public void HealingRound(Player player) {
+		public void HealingRound(Player player)
+		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			player.HitPoints += this.EffectAmountOverTime;
 			if (player.HitPoints > player.MaxHitPoints) player.HitPoints = player.MaxHitPoints;
-			var healAmtString = "You have been healed for " + this.EffectAmountOverTime + " health."; 
+			var healAmtString = "You have been healed for " + this.EffectAmountOverTime + " health.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
@@ -70,13 +78,15 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void ChangeStatRound() {
+		public void ChangeStatRound()
+		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void BlockDamageRound() {
+		public void BlockDamageRound()
+		{
 			if (this.IsEffectExpired) return;
 			const string blockString = "Your block effect is slowly fading away.";
 			OutputHandler.Display.StoreUserOutput(
@@ -91,7 +101,8 @@ namespace DungeonGame {
 				blockEndString);
 			this.IsEffectExpired = true;
 		}
-		public void BlockDamageRound(int blockAmount) {
+		public void BlockDamageRound(int blockAmount)
+		{
 			if (this.IsEffectExpired) return;
 			var blockString = "Your defensive move blocked " + blockAmount + " damage!";
 			OutputHandler.Display.StoreUserOutput(
@@ -107,7 +118,8 @@ namespace DungeonGame {
 				blockEndString);
 			this.IsEffectExpired = true;
 		}
-		public void ReflectDamageRound() {
+		public void ReflectDamageRound()
+		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			const string reflectString = "Your spell reflect is slowly fading away.";
@@ -118,7 +130,8 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void ReflectDamageRound(int reflectAmount) {
+		public void ReflectDamageRound(int reflectAmount)
+		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var reflectString = "You reflected " + reflectAmount + " damage back at your opponent!";
@@ -129,7 +142,8 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void ChangeOpponentDamageRound(Player player) {
+		public void ChangeOpponentDamageRound(Player player)
+		{
 			if (this.IsEffectExpired || player.InCombat == false) return;
 			this.EffectCurRound += 1;
 			var changeDmgString = this.EffectAmountOverTime > 0 ?
@@ -142,7 +156,8 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void ChangePlayerDamageRound(Player player) {
+		public void ChangePlayerDamageRound(Player player)
+		{
 			if (this.IsEffectExpired || player.InCombat == false) return;
 			this.EffectCurRound += 1;
 			var changeAmount = Math.Abs(this.EffectAmountOverTime);
@@ -156,7 +171,8 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void ChangeArmorRound() {
+		public void ChangeArmorRound()
+		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			var changeAmount = Math.Abs(this.EffectAmountOverTime);
@@ -170,11 +186,12 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void OnFireRound(Monster opponent) {
+		public void OnFireRound(Monster opponent)
+		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			opponent.HitPoints -= this.EffectAmountOverTime;
-			var burnString = "The " + opponent.Name + " burns for " + this.EffectAmountOverTime + " fire damage.";
+			var burnString = "The " + opponent._Name + " burns for " + this.EffectAmountOverTime + " fire damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
@@ -182,7 +199,8 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void OnFireRound(Player player) {
+		public void OnFireRound(Player player)
+		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			player.HitPoints -= this.EffectAmountOverTime;
@@ -194,11 +212,12 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void BleedingRound(Monster opponent) {
+		public void BleedingRound(Monster opponent)
+		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			opponent.HitPoints -= this.EffectAmountOverTime;
-			var bleedString = "The " + opponent.Name + " bleeds for " + this.EffectAmountOverTime + " physical damage.";
+			var bleedString = "The " + opponent._Name + " bleeds for " + this.EffectAmountOverTime + " physical damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -206,7 +225,8 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void BleedingRound(Player player) {
+		public void BleedingRound(Player player)
+		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			player.HitPoints -= this.EffectAmountOverTime;
@@ -218,11 +238,12 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void StunnedRound(Monster opponent) {
+		public void StunnedRound(Monster opponent)
+		{
 			if (this.IsEffectExpired) return;
 			opponent.IsStunned = true;
 			this.EffectCurRound += 1;
-			var stunnedString = "The " + opponent.Name + " is stunned and cannot attack.";
+			var stunnedString = "The " + opponent._Name + " is stunned and cannot attack.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -230,10 +251,11 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void FrozenRound(Monster opponent) {
+		public void FrozenRound(Monster opponent)
+		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
-			var frozenString = "The " + opponent.Name + " is frozen. Physical, frost and arcane damage to it will be double!";
+			var frozenString = "The " + opponent._Name + " is frozen. Physical, frost and arcane damage to it will be double!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -241,7 +263,8 @@ namespace DungeonGame {
 			if (this.EffectCurRound <= this.EffectMaxRound) return;
 			this.IsEffectExpired = true;
 		}
-		public void FrozenRound(Player player) {
+		public void FrozenRound(Player player)
+		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
 			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be double!";

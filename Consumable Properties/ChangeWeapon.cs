@@ -1,8 +1,11 @@
 ﻿using System;
 
-namespace DungeonGame {
-	public class ChangeWeapon {
-		public enum KitType {
+namespace DungeonGame
+{
+	public class ChangeWeapon
+	{
+		public enum KitType
+		{
 			Grindstone,
 			Bowstring
 		}
@@ -11,20 +14,25 @@ namespace DungeonGame {
 
 		// Default constructor for JSON serialization
 		public ChangeWeapon() { }
-		public ChangeWeapon(int amount, KitType kitType) {
+		public ChangeWeapon(int amount, KitType kitType)
+		{
 			this.ChangeAmount = amount;
 			this.KitCategory = kitType;
 		}
 
-		public void ChangeWeaponPlayer(Weapon weapon) {
-			switch (this.KitCategory) {
+		public void ChangeWeaponPlayer(Weapon weapon)
+		{
+			switch (this.KitCategory)
+			{
 				case KitType.Grindstone:
-					if (weapon.WeaponGroup != Weapon.WeaponType.Bow) {
+					if (weapon.WeaponGroup != Weapon.WeaponType.Bow)
+					{
 						weapon.RegDamage += this.ChangeAmount;
 					}
 					break;
 				case KitType.Bowstring:
-					if (weapon.WeaponGroup == Weapon.WeaponType.Bow) {
+					if (weapon.WeaponGroup == Weapon.WeaponType.Bow)
+					{
 						weapon.RegDamage += this.ChangeAmount;
 					}
 					break;

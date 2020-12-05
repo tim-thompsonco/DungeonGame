@@ -1,5 +1,7 @@
-﻿namespace DungeonGame {
-	public interface IRoomInteraction {
-		string Name { get; set; }
+﻿namespace DungeonGame
+{
+	public interface IRoomInteraction
+	{
+		string _Name { get; set; }
 	}
 }

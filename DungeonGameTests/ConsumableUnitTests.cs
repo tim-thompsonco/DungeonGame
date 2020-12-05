@@ -5,19 +5,23 @@ using System.Threading;
 using DungeonGame;
 using NUnit.Framework;
 
-namespace DungeonGameTests {
-	public class ConsumableUnitTests {
+namespace DungeonGameTests
+{
+	public class ConsumableUnitTests
+	{
 		[Test]
-		public void HealthPotionUnitTest() {
+		public void HealthPotionUnitTest()
+		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("test", Player.PlayerClassType.Archer) {
+			var player = new Player("test", Player.PlayerClassType.Archer)
+			{
 				MaxHitPoints = 100,
 				HitPoints = 10,
-				Consumables = new List<Consumable> {new Consumable(1, Consumable.PotionType.Health)}
+				Consumables = new List<Consumable> { new Consumable(1, Consumable.PotionType.Health) }
 			};
 			var potionIndex = player.Consumables.FindIndex(
 				f => f.PotionCategory == Consumable.PotionType.Health);
-			var input = new [] {"drink", "health"};
+			var input = new[] { "drink", "health" };
 			var potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("health", potionName);
 			var baseHealth = player.HitPoints;
@@ -31,16 +35,18 @@ namespace DungeonGameTests {
 			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 		[Test]
-		public void ManaPotionUnitTest() {
+		public void ManaPotionUnitTest()
+		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("test", Player.PlayerClassType.Mage) {
+			var player = new Player("test", Player.PlayerClassType.Mage)
+			{
 				MaxManaPoints = 100,
 				ManaPoints = 10,
-				Consumables = new List<Consumable> {new Consumable(1, Consumable.PotionType.Mana)}
+				Consumables = new List<Consumable> { new Consumable(1, Consumable.PotionType.Mana) }
 			};
 			var potionIndex = player.Consumables.FindIndex(
 				f => f.PotionCategory == Consumable.PotionType.Mana);
-			var input = new [] {"drink", "mana"};
+			var input = new[] { "drink", "mana" };
 			var potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("mana", potionName);
 			var baseMana = player.ManaPoints;
@@ -54,14 +60,16 @@ namespace DungeonGameTests {
 			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 		[Test]
-		public void ConstitutionPotionUnitTest() {
+		public void ConstitutionPotionUnitTest()
+		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("test", Player.PlayerClassType.Mage) {
-				Consumables = new List<Consumable> {new Consumable(1, Consumable.PotionType.Constitution)}
+			var player = new Player("test", Player.PlayerClassType.Mage)
+			{
+				Consumables = new List<Consumable> { new Consumable(1, Consumable.PotionType.Constitution) }
 			};
 			var potionIndex = player.Consumables.FindIndex(
 				f => f.PotionCategory == Consumable.PotionType.Constitution);
-			var input = new [] {"drink", "constitution"};
+			var input = new[] { "drink", "constitution" };
 			var potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("constitution", potionName);
 			var statAmount = player.Consumables[potionIndex].ChangeStat.ChangeAmount;
@@ -75,7 +83,8 @@ namespace DungeonGameTests {
 			Assert.AreEqual(baseMaxHitPoints + statAmount * 10, player.MaxHitPoints);
 			Assert.IsEmpty(player.Consumables);
 			Assert.AreEqual(player.Effects[0].EffectGroup, Effect.EffectType.ChangeStat);
-			for (var i = 1; i < 601; i++) {
+			for (var i = 1; i < 601; i++)
+			{
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
 				player.Effects[0].ChangeStatRound();
 			}
@@ -88,14 +97,16 @@ namespace DungeonGameTests {
 			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 		[Test]
-		public void IntelligencePotionUnitTest() {
+		public void IntelligencePotionUnitTest()
+		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("test", Player.PlayerClassType.Mage) {
-				Consumables = new List<Consumable> {new Consumable(1, Consumable.PotionType.Intelligence)}
+			var player = new Player("test", Player.PlayerClassType.Mage)
+			{
+				Consumables = new List<Consumable> { new Consumable(1, Consumable.PotionType.Intelligence) }
 			};
 			var potionIndex = player.Consumables.FindIndex(
 				f => f.PotionCategory == Consumable.PotionType.Intelligence);
-			var input = new [] {"drink", "intelligence"};
+			var input = new[] { "drink", "intelligence" };
 			var potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("intelligence", potionName);
 			var statAmount = player.Consumables[potionIndex].ChangeStat.ChangeAmount;
@@ -109,7 +120,8 @@ namespace DungeonGameTests {
 			Assert.AreEqual(baseMaxManaPoints + statAmount * 10, player.MaxManaPoints);
 			Assert.IsEmpty(player.Consumables);
 			Assert.AreEqual(player.Effects[0].EffectGroup, Effect.EffectType.ChangeStat);
-			for (var i = 1; i < 601; i++) {
+			for (var i = 1; i < 601; i++)
+			{
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
 				player.Effects[0].ChangeStatRound();
 			}
@@ -122,14 +134,16 @@ namespace DungeonGameTests {
 			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 		[Test]
-		public void StrengthPotionUnitTest() {
+		public void StrengthPotionUnitTest()
+		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("test", Player.PlayerClassType.Mage) {
-				Consumables = new List<Consumable> {new Consumable(1, Consumable.PotionType.Strength)}
+			var player = new Player("test", Player.PlayerClassType.Mage)
+			{
+				Consumables = new List<Consumable> { new Consumable(1, Consumable.PotionType.Strength) }
 			};
 			var potionIndex = player.Consumables.FindIndex(
 				f => f.PotionCategory == Consumable.PotionType.Strength);
-			var input = new [] {"drink", "strength"};
+			var input = new[] { "drink", "strength" };
 			var potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("strength", potionName);
 			var statAmount = player.Consumables[potionIndex].ChangeStat.ChangeAmount;
@@ -143,7 +157,8 @@ namespace DungeonGameTests {
 			Assert.AreEqual(baseMaxCarryWeight + statAmount * 2.5, player.MaxCarryWeight, 1);
 			Assert.IsEmpty(player.Consumables);
 			Assert.AreEqual(player.Effects[0].EffectGroup, Effect.EffectType.ChangeStat);
-			for (var i = 1; i < 601; i++) {
+			for (var i = 1; i < 601; i++)
+			{
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
 				player.Effects[0].ChangeStatRound();
 			}
@@ -156,14 +171,16 @@ namespace DungeonGameTests {
 			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 		[Test]
-		public void DexterityPotionUnitTest() {
+		public void DexterityPotionUnitTest()
+		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("test", Player.PlayerClassType.Mage) {
-				Consumables = new List<Consumable> {new Consumable(1, Consumable.PotionType.Dexterity)}
+			var player = new Player("test", Player.PlayerClassType.Mage)
+			{
+				Consumables = new List<Consumable> { new Consumable(1, Consumable.PotionType.Dexterity) }
 			};
 			var potionIndex = player.Consumables.FindIndex(
 				f => f.PotionCategory == Consumable.PotionType.Dexterity);
-			var input = new [] {"drink", "dexterity"};
+			var input = new[] { "drink", "dexterity" };
 			var potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("dexterity", potionName);
 			var statAmount = player.Consumables[potionIndex].ChangeStat.ChangeAmount;
@@ -177,7 +194,8 @@ namespace DungeonGameTests {
 			Assert.AreEqual(baseDodgeChance + statAmount * 1.5, player.DodgeChance);
 			Assert.IsEmpty(player.Consumables);
 			Assert.AreEqual(player.Effects[0].EffectGroup, Effect.EffectType.ChangeStat);
-			for (var i = 1; i < 601; i++) {
+			for (var i = 1; i < 601; i++)
+			{
 				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
 				player.Effects[0].ChangeStatRound();
 			}
@@ -190,40 +208,42 @@ namespace DungeonGameTests {
 			Assert.AreEqual("What potion did you want to drink?", OutputHandler.Display.Output[1][2]);
 		}
 		[Test]
-		public void ArmorUpgradeKitUnitTest() {
-			var player = new Player("test", Player.PlayerClassType.Mage) {
-				Consumables = new List<Consumable> {new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Armor, 
+		public void ArmorUpgradeKitUnitTest()
+		{
+			var player = new Player("test", Player.PlayerClassType.Mage)
+			{
+				Consumables = new List<Consumable> {new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Armor,
 					ChangeArmor.KitType.Cloth)}
 			};
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
-			var armorIndex = player.Inventory.FindIndex(f => f.Name.Contains("cloth"));
+			var armorIndex = player.Inventory.FindIndex(f => f._Name.Contains("cloth"));
 			var armor = player.Inventory[armorIndex] as Armor;
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			var armorName = textInfo.ToTitleCase(player.Inventory[armorIndex].Name);
+			var armorName = textInfo.ToTitleCase(player.Inventory[armorIndex]._Name);
 			var kitAmount = player.Consumables[0].ChangeArmor.ChangeAmount;
-			var kitName = player.Consumables[0].Name;
-			var input = new [] {"enhance", "doesn't exist", kitName};
+			var kitName = player.Consumables[0]._Name;
+			var input = new[] { "enhance", "doesn't exist", kitName };
 			var armorAmount = armor.ArmorRating;
 			GearHandler.UseArmorKit(player, input);
 			const string upgradeFail = "What armor did you want to upgrade?";
 			Assert.AreEqual(upgradeFail, OutputHandler.Display.Output[0][2]);
 			Assert.IsNotEmpty(player.Consumables);
-			input = new [] {"enhance", armorName, "doesn't exist"};
+			input = new[] { "enhance", armorName, "doesn't exist" };
 			GearHandler.UseArmorKit(player, input);
 			const string kitFail = "What armor kit did you want to use?";
 			Assert.AreEqual(kitFail, OutputHandler.Display.Output[1][2]);
 			Assert.IsNotEmpty(player.Consumables);
-			input = new [] {"enhance", armorName, kitName};
+			input = new[] { "enhance", armorName, kitName };
 			GearHandler.UseArmorKit(player, input);
 			var upgradeSuccess = "You upgraded " + armorName + " with an armor kit.";
 			Assert.AreEqual(upgradeSuccess, OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual(armorAmount + kitAmount, armor.ArmorRating);
 			Assert.IsEmpty(player.Consumables);
-			player.Consumables.Add(new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Armor, 
+			player.Consumables.Add(new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Armor,
 				ChangeArmor.KitType.Leather));
-			kitName = player.Consumables[0].Name;
-			input = new [] {"enhance", armorName, kitName};
+			kitName = player.Consumables[0]._Name;
+			input = new[] { "enhance", armorName, kitName };
 			GearHandler.UseArmorKit(player, input);
 			var enhanceFail = "You can't upgrade " + armorName + " with that!";
 			Assert.IsNotEmpty(player.Consumables);
@@ -231,63 +251,65 @@ namespace DungeonGameTests {
 			, OutputHandler.Display.Output[3][2]);
 			player.Consumables[0] = new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Weapon,
 				ChangeArmor.KitType.Cloth);
-			kitName = player.Consumables[0].Name;
-			input = new [] {"enhance", armorName, kitName};
+			kitName = player.Consumables[0]._Name;
+			input = new[] { "enhance", armorName, kitName };
 			GearHandler.UseArmorKit(player, input);
 			Assert.IsNotEmpty(player.Consumables);
 			Assert.AreEqual(enhanceFail
 				, OutputHandler.Display.Output[4][2]);
 		}
 		[Test]
-		public void WeaponUpgradeKitUnitTest() {
-			var player = new Player("test", Player.PlayerClassType.Mage) {
-				Consumables = new List<Consumable> {new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Weapon, 
+		public void WeaponUpgradeKitUnitTest()
+		{
+			var player = new Player("test", Player.PlayerClassType.Mage)
+			{
+				Consumables = new List<Consumable> {new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Weapon,
 					ChangeWeapon.KitType.Grindstone)}
 			};
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
-			var weaponIndex = player.Inventory.FindIndex(f => f.Name.Contains("dagger"));
+			var weaponIndex = player.Inventory.FindIndex(f => f._Name.Contains("dagger"));
 			var weapon = player.Inventory[weaponIndex] as Weapon;
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			var weaponName = textInfo.ToTitleCase(player.Inventory[weaponIndex].Name);
+			var weaponName = textInfo.ToTitleCase(player.Inventory[weaponIndex]._Name);
 			var kitAmount = player.Consumables[0].ChangeWeapon.ChangeAmount;
-			var kitName = player.Consumables[0].Name;
-			var input = new [] {"enhance", "doesn't exist", kitName};
+			var kitName = player.Consumables[0]._Name;
+			var input = new[] { "enhance", "doesn't exist", kitName };
 			var weaponAmount = weapon.RegDamage;
 			GearHandler.UseWeaponKit(player, input);
 			const string upgradeFail = "What weapon did you want to upgrade?";
 			Assert.AreEqual(upgradeFail, OutputHandler.Display.Output[0][2]);
 			Assert.IsNotEmpty(player.Consumables);
-			input = new [] {"enhance", weaponName, "doesn't exist"};
+			input = new[] { "enhance", weaponName, "doesn't exist" };
 			GearHandler.UseWeaponKit(player, input);
 			const string kitFail = "What weapon kit did you want to use?";
 			Assert.AreEqual(kitFail, OutputHandler.Display.Output[1][2]);
 			Assert.IsNotEmpty(player.Consumables);
-			input = new [] {"enhance", weaponName, kitName};
+			input = new[] { "enhance", weaponName, kitName };
 			GearHandler.UseWeaponKit(player, input);
 			var upgradeSuccess = "You upgraded " + weaponName + " with a weapon kit.";
 			Assert.AreEqual(upgradeSuccess, OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual(weaponAmount + kitAmount, weapon.RegDamage);
 			Assert.IsEmpty(player.Consumables);
-			player.Consumables.Add(new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Weapon, 
+			player.Consumables.Add(new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Weapon,
 				ChangeWeapon.KitType.Bowstring));
-			kitName = player.Consumables[0].Name;
-			input = new [] {"enhance", weaponName, kitName};
+			kitName = player.Consumables[0]._Name;
+			input = new[] { "enhance", weaponName, kitName };
 			GearHandler.UseWeaponKit(player, input);
 			var enhanceFail = "You can't upgrade " + weaponName + " with that!";
 			Assert.IsNotEmpty(player.Consumables);
 			Assert.AreEqual(enhanceFail
 			, OutputHandler.Display.Output[3][2]);
 			player.Inventory.Add(new Weapon(1, Weapon.WeaponType.Bow));
-			weaponIndex = player.Inventory.FindIndex(f => f.Name.Contains("bow"));
+			weaponIndex = player.Inventory.FindIndex(f => f._Name.Contains("bow"));
 			weapon = player.Inventory[weaponIndex] as Weapon;
 			weapon.Equipped = true;
-			weaponName = textInfo.ToTitleCase(player.Inventory[weaponIndex].Name);
-			input = new [] {"enhance", weaponName, kitName};
+			weaponName = textInfo.ToTitleCase(player.Inventory[weaponIndex]._Name);
+			input = new[] { "enhance", weaponName, kitName };
 			GearHandler.UseWeaponKit(player, input);
 			upgradeSuccess = "You upgraded " + weaponName + " with a weapon kit.";
 			Assert.IsEmpty(player.Consumables);
-			Assert.AreEqual(upgradeSuccess,OutputHandler.Display.Output[4][2]);
+			Assert.AreEqual(upgradeSuccess, OutputHandler.Display.Output[4][2]);
 		}
 	}
 }

@@ -1,8 +1,11 @@
 using System;
 
-namespace DungeonGame {
-	public class ChangeStat {
-		public enum StatType {
+namespace DungeonGame
+{
+	public class ChangeStat
+	{
+		public enum StatType
+		{
 			Intelligence,
 			Strength,
 			Dexterity,
@@ -15,16 +18,19 @@ namespace DungeonGame {
 
 		// Default constructor for JSON serialization
 		public ChangeStat() { }
-		public ChangeStat(int amount, StatType statType) {
+		public ChangeStat(int amount, StatType statType)
+		{
 			this.ChangeAmount = amount;
 			this.StatCategory = statType;
 			// Change stat potions will default to 10 minutes
 			this.ChangeCurRound = 1;
 			this.ChangeMaxRound = 600;
 		}
-		
-		public void ChangeStatPlayer(Player player) {
-			switch (this.StatCategory) {
+
+		public void ChangeStatPlayer(Player player)
+		{
+			switch (this.StatCategory)
+			{
 				case StatType.Intelligence:
 					player.Intelligence += this.ChangeAmount;
 					break;
@@ -42,7 +48,7 @@ namespace DungeonGame {
 			}
 			PlayerHandler.CalculatePlayerStats(player);
 			var effectName = this.StatCategory + " (+" + this.ChangeAmount + ")";
-			player.Effects.Add(new Effect(effectName, Effect.EffectType.ChangeStat, this.ChangeAmount, 
+			player.Effects.Add(new Effect(effectName, Effect.EffectType.ChangeStat, this.ChangeAmount,
 				this.ChangeCurRound, this.ChangeMaxRound, 1, 1, false, this.StatCategory));
 		}
 	}

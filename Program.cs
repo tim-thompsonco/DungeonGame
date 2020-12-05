@@ -1,13 +1,18 @@
 using System;
 using System.Threading;
 
-namespace DungeonGame {
-	class MainClass {
-		public static void Main(string[] args) {
-			try {
+namespace DungeonGame
+{
+	class MainClass
+	{
+		public static void Main(string[] args)
+		{
+			try
+			{
 				Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
 			}
-			catch (Exception ex) {
+			catch (Exception ex)
+			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
@@ -21,32 +26,38 @@ namespace DungeonGame {
 			this method must run first so rooms exists to place player in */
 			GameHandler.LoadGame();
 			// Load player if save game exists, and if not, create a new player
-			var player = GameHandler.LoadPlayer();
+			Player player = GameHandler.LoadPlayer();
 			// On loading game, display room that player starts in
 			OutputHandler.ShowUserOutput(player);
 			OutputHandler.Display.ClearUserOutput();
 			// Check every second to see if any effects expired or events need to execute
-			var globalTimer = new Timer(
-				e => GameHandler.CheckStatus(player), 
+			Timer globalTimer = new Timer(
+				e => GameHandler.CheckStatus(player),
 				null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
-			while (!GameHandler.IsGameOver) {
+			while (!GameHandler.IsGameOver)
+			{
 				GameHandler.RemovedExpiredEffectsAsync(player);
-				var input = InputHandler.GetFormattedInput(Console.ReadLine());
+				string[] input = InputHandler.GetFormattedInput(Console.ReadLine());
 				InputHandler.ProcessUserInput(player, input, globalTimer);
 				Console.Clear();
 				OutputHandler.ShowUserOutput(player);
 				OutputHandler.Display.ClearUserOutput();
-				if (player.HitPoints > 0) continue;
+				if (player.HitPoints > 0)
+				{
+					continue;
+				}
 				/* If player dies, provide option to continue playing. If there is a saved game, player can reload
-				 from it. Otherwise, player can start over and create a new game. */
-				if (GameHandler.ContinuePlaying()) {
+ from it. Otherwise, player can start over and create a new game. */
+				if (GameHandler.ContinuePlaying())
+				{
 					GameHandler.LoadGame();
 					player = GameHandler.LoadPlayer();
 					RoomHandler.Rooms[player.PlayerLocation].LookRoom();
 					OutputHandler.ShowUserOutput(player);
 					OutputHandler.Display.ClearUserOutput();
 				}
-				else {
+				else
+				{
 					GameHandler.IsGameOver = true;
 					Messages.GameOver();
 					OutputHandler.Display.RetrieveUserOutput();

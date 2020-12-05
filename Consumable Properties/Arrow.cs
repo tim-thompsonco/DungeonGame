@@ -1,15 +1,20 @@
-﻿namespace DungeonGame {
-	public class Arrow {
+﻿namespace DungeonGame
+{
+	public class Arrow
+	{
 		public int Quantity { get; set; }
 
 		// Default constructor for JSON serialization
 		public Arrow() { }
-		public Arrow(int quantity) {
+		public Arrow(int quantity)
+		{
 			this.Quantity = quantity;
 		}
 
-		public void LoadArrowsPlayer(Player player) {
-			if (player.PlayerQuiver == null) {
+		public void LoadArrowsPlayer(Player player)
+		{
+			if (player.PlayerQuiver == null)
+			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -17,7 +22,8 @@
 				return;
 			}
 			var amountCanLoad = player.PlayerQuiver.MaxQuantity - player.PlayerQuiver.Quantity;
-			if (this.Quantity < amountCanLoad) {
+			if (this.Quantity < amountCanLoad)
+			{
 				player.PlayerQuiver.Quantity += this.Quantity;
 				this.Quantity = 0;
 				return;

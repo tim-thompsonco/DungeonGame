@@ -1,8 +1,12 @@
-﻿namespace DungeonGame {
-	public static class RoomBuilderHelper {
-		public static string PopulateDungeonRoomName(IRoom originalRoom) {
+﻿namespace DungeonGame
+{
+	public static class RoomBuilderHelper
+	{
+		public static string PopulateDungeonRoomName(IRoom originalRoom)
+		{
 			var castedRoom = originalRoom as DungeonRoom;
-			return castedRoom?.RoomCategory switch {
+			return castedRoom?.RoomCategory switch
+			{
 				DungeonRoom.RoomType.Corridor => "Corridor",
 				DungeonRoom.RoomType.Openspace => "Dimly Lit Cavern",
 				DungeonRoom.RoomType.Corner => "Dark Corner",
@@ -11,9 +15,11 @@
 				_ => "room type not found"
 			};
 		}
-		public static string PopulateDungeonRoomDesc(IRoom originalRoom) {
+		public static string PopulateDungeonRoomDesc(IRoom originalRoom)
+		{
 			var castedRoom = originalRoom as DungeonRoom;
-			return castedRoom?.RoomCategory switch {
+			return castedRoom?.RoomCategory switch
+			{
 				DungeonRoom.RoomType.Corridor => (
 					"You are in a corridor carved out of smooth rock approximately 6 feet wide and 10 feet " +
 					"high. Torches in holders along the wall illuminate the hallway. The corridor stretches on for an " +

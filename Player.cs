@@ -1,12 +1,14 @@
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DungeonGame {
-	public class Player {
-		public enum PlayerClassType {
+namespace DungeonGame
+{
+	public class Player
+	{
+		public enum PlayerClassType
+		{
 			Mage,
 			Warrior,
 			Archer
@@ -64,7 +66,8 @@ namespace DungeonGame {
 
 		// Default constructor for JSON serialization
 		public Player() { }
-		public Player(string name, PlayerClassType playerClass) {
+		public Player(string name, PlayerClassType playerClass)
+		{
 			this.Name = name;
 			this.PlayerClass = playerClass;
 			this.StatReplenishInterval = 3;
@@ -77,9 +80,11 @@ namespace DungeonGame {
 			this.FireResistance = 5;
 			this.FrostResistance = 5;
 			this.ArcaneResistance = 5;
-			switch (this.PlayerClass) {
+			switch (this.PlayerClass)
+			{
 				case PlayerClassType.Mage:
-					for (var i = 0; i < 3; i++) {
+					for (var i = 0; i < 3; i++)
+					{
 						this.Consumables.Add(new Consumable(1, Consumable.PotionType.Mana));
 					}
 					this.Spellbook = new List<PlayerSpell>();
@@ -113,7 +118,8 @@ namespace DungeonGame {
 						"rejuvenate", 25, 1, PlayerSpell.SpellType.Rejuvenate, 1));
 					break;
 				case PlayerClassType.Warrior:
-					for (var i = 0; i < 3; i++) {
+					for (var i = 0; i < 3; i++)
+					{
 						this.Consumables.Add(new Consumable(1, Consumable.PotionType.Health));
 					}
 					this.Abilities = new List<PlayerAbility>();
@@ -152,7 +158,8 @@ namespace DungeonGame {
 						"disarm", 25, 1, PlayerAbility.WarriorAbility.Disarm, 1));
 					break;
 				case PlayerClassType.Archer:
-					for (var i = 0; i < 3; i++) {
+					for (var i = 0; i < 3; i++)
+					{
 						this.Consumables.Add(new Consumable(1, Consumable.PotionType.Health));
 					}
 					this.Abilities = new List<PlayerAbility>();
@@ -174,8 +181,8 @@ namespace DungeonGame {
 						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest));
 					this.Inventory.Add(new Armor(
 						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Legs));
-					this.Inventory.Add( new Quiver("basic quiver", 50, 50, 15));
-					this.Abilities.Add(new PlayerAbility("precise shot", 40, 1, 
+					this.Inventory.Add(new Quiver("basic quiver", 50, 50, 15));
+					this.Abilities.Add(new PlayerAbility("precise shot", 40, 1,
 						PlayerAbility.ArcherAbility.Precise, 1));
 					this.Abilities.Add(new PlayerAbility(
 						"gut shot", 25, 1, PlayerAbility.ArcherAbility.Gut, 1));
@@ -196,42 +203,51 @@ namespace DungeonGame {
 			this.MaxCarryWeight = (int)(this.Strength * 2.5);
 			this.DodgeChance = this.Dexterity * 1.5;
 		}
-		
-		public int ArmorRating(Monster opponent) {
+
+		public int ArmorRating(Monster opponent)
+		{
 			var totalArmorRating = GearHandler.CheckArmorRating(this);
 			var levelDiff = opponent.Level - this.Level;
 			var armorMultiplier = 1.00 + -(double)levelDiff / 5;
 			var adjArmorRating = totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
-		public int PhysicalAttack(Monster opponent) {
+		public int PhysicalAttack(Monster opponent)
+		{
 			var attackAmount = 0;
-			try {
-				if (this.PlayerWeapon.Equipped && this.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow) {
+			try
+			{
+				if (this.PlayerWeapon.Equipped && this.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow)
+				{
 					attackAmount = this.PlayerWeapon.Attack();
 				}
 				if (this.PlayerWeapon.Equipped &&
-				    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
-				    this.PlayerQuiver.HaveArrows()) {
+					this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
+					this.PlayerQuiver.HaveArrows())
+				{
 					this.PlayerQuiver.UseArrow();
 					attackAmount = this.PlayerWeapon.Attack();
 				}
 				if (this.PlayerWeapon.Equipped &&
-				    this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
-				    !this.PlayerQuiver.HaveArrows()) {
+					this.PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
+					!this.PlayerQuiver.HaveArrows())
+				{
 					Quiver.OutOfArrows();
 					attackAmount = 5;
 				}
 			}
-			catch (NullReferenceException) {
+			catch (NullReferenceException)
+			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"Your weapon is not equipped! Going hand to hand!");
 				attackAmount = 5;
 			}
-			foreach (var effect in this.Effects) {
-				switch (effect.EffectGroup) {
+			foreach (var effect in this.Effects)
+			{
+				switch (effect.EffectGroup)
+				{
 					case Effect.EffectType.Healing:
 						break;
 					case Effect.EffectType.ChangePlayerDamage:
@@ -259,8 +275,10 @@ namespace DungeonGame {
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			foreach (var effect in opponent.Effects) {
-				switch (effect.EffectGroup) {
+			foreach (var effect in opponent.Effects)
+			{
+				switch (effect.EffectGroup)
+				{
 					case Effect.EffectType.Healing:
 						break;
 					case Effect.EffectType.ChangePlayerDamage:
@@ -292,21 +310,24 @@ namespace DungeonGame {
 			}
 			return attackAmount;
 		}
-		public void DrinkPotion(string input) {
+		public void DrinkPotion(string input)
+		{
 			var index = this.Consumables.FindIndex(
-				f => f.Name.Contains(input));
-			if (index == -1) {
+				f => f._Name.Contains(input));
+			if (index == -1)
+			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"What potion did you want to drink?");
 				return;
 			}
-			switch (this.Consumables[index].PotionCategory) {
+			switch (this.Consumables[index].PotionCategory)
+			{
 				case Consumable.PotionType.Health:
 					this.Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
 					var drankHealthString = "You drank a potion and replenished " +
-					                        this.Consumables[index].RestoreHealth.RestoreHealthAmt + " health.";
+											this.Consumables[index].RestoreHealth.RestoreHealthAmt + " health.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -316,7 +337,7 @@ namespace DungeonGame {
 				case Consumable.PotionType.Mana:
 					this.Consumables[index].RestoreMana.RestoreManaPlayer(this);
 					var drankManaString = "You drank a potion and replenished " +
-					                      this.Consumables[index].RestoreMana.RestoreManaAmt + " mana.";
+										  this.Consumables[index].RestoreMana.RestoreManaAmt + " mana.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -329,7 +350,7 @@ namespace DungeonGame {
 				case Consumable.PotionType.Constitution:
 					this.Consumables[index].ChangeStat.ChangeStatPlayer(this);
 					var drankStatString = "You drank a potion and increased " + this.Consumables[index].ChangeStat.StatCategory +
-					                      " by " + this.Consumables[index].ChangeStat.ChangeAmount + ".";
+										  " by " + this.Consumables[index].ChangeStat.ChangeAmount + ".";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -340,10 +361,12 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		public void ReloadQuiver() {
+		public void ReloadQuiver()
+		{
 			var index = this.Consumables.FindIndex(
-				f => f.ArrowCategory == Consumable.ArrowType.Standard && f.Name.Contains("arrow"));
-			if (index != -1) {
+				f => f.ArrowCategory == Consumable.ArrowType.Standard && f._Name.Contains("arrow"));
+			if (index != -1)
+			{
 				this.Consumables[index].Arrow.LoadArrowsPlayer(this);
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
@@ -351,24 +374,29 @@ namespace DungeonGame {
 					"You reloaded your quiver.");
 				if (this.Consumables[index].Arrow.Quantity == 0) this.Consumables.RemoveAt(index);
 			}
-			else {
+			else
+			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You don't have any arrows!");
 			}
 		}
-		public void UseAbility(string[] input) {
+		public void UseAbility(string[] input)
+		{
 			var inputName = new StringBuilder();
-			for (var i = 1; i < input.Length; i++) {
+			for (var i = 1; i < input.Length; i++)
+			{
 				inputName.Append(input[i]);
 			}
 			var index = this.Abilities.FindIndex(
 				f => f.Name == inputName.ToString() || f.Name.Contains(input[1]));
-			if (index != -1 && 
-			    this.RagePoints >= this.Abilities[index].RageCost && 
-			    this.PlayerClass == PlayerClassType.Warrior) {
-				switch (this.Abilities[index].WarAbilityCategory) {
+			if (index != -1 &&
+				this.RagePoints >= this.Abilities[index].RageCost &&
+				this.PlayerClass == PlayerClassType.Warrior)
+			{
+				switch (this.Abilities[index].WarAbilityCategory)
+				{
 					case PlayerAbility.WarriorAbility.Slash:
 					case PlayerAbility.WarriorAbility.Rend:
 					case PlayerAbility.WarriorAbility.Charge:
@@ -395,9 +423,11 @@ namespace DungeonGame {
 				}
 			}
 			if (index != -1 &&
-			    this.ComboPoints >= this.Abilities[index].ComboCost && 
-			    this.PlayerClass == PlayerClassType.Archer) {
-				switch (this.Abilities[index].ArcAbilityCategory) {
+				this.ComboPoints >= this.Abilities[index].ComboCost &&
+				this.PlayerClass == PlayerClassType.Archer)
+			{
+				switch (this.Abilities[index].ArcAbilityCategory)
+				{
 					case PlayerAbility.ArcherAbility.Distance:
 						if (this.PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow) throw new InvalidOperationException();
 						var direction = input.Last();
@@ -424,24 +454,29 @@ namespace DungeonGame {
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			if (index != -1) {
+			if (index != -1)
+			{
 				throw new InvalidOperationException();
 			}
 			throw new IndexOutOfRangeException();
 		}
-		public void UseAbility(Monster opponent, string[] input) {
+		public void UseAbility(Monster opponent, string[] input)
+		{
 			var inputName = new StringBuilder();
-			for (var i = 1; i < input.Length; i++) {
+			for (var i = 1; i < input.Length; i++)
+			{
 				inputName.Append(input[i]);
 				if (i != input.Length - 1) inputName.Append(" ");
 			}
 			var index = this.Abilities.FindIndex(
-				f => f.Name == inputName.ToString() || f.Name == input[1] || f.Name.Contains(input[1]) || 
-				     f.Name.Contains(inputName.ToString()));
-			if (index != -1 && 
-			    this.RagePoints >= this.Abilities[index].RageCost && 
-			    this.PlayerClass == PlayerClassType.Warrior) {
-				switch (this.Abilities[index].WarAbilityCategory) {
+				f => f.Name == inputName.ToString() || f.Name == input[1] || f.Name.Contains(input[1]) ||
+					 f.Name.Contains(inputName.ToString()));
+			if (index != -1 &&
+				this.RagePoints >= this.Abilities[index].RageCost &&
+				this.PlayerClass == PlayerClassType.Warrior)
+			{
+				switch (this.Abilities[index].WarAbilityCategory)
+				{
 					case PlayerAbility.WarriorAbility.Slash:
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
@@ -470,11 +505,14 @@ namespace DungeonGame {
 						PlayerAbility.UseWarCry(this, index);
 						return;
 					case PlayerAbility.WarriorAbility.Onslaught:
-						for (var i = 0; i < 2; i++) {
-							if (this.RagePoints >= this.Abilities[index].RageCost) {
+						for (var i = 0; i < 2; i++)
+						{
+							if (this.RagePoints >= this.Abilities[index].RageCost)
+							{
 								PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 							}
-							else {
+							else
+							{
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatAttackFailText(),
 									Settings.FormatDefaultBackground(),
@@ -487,9 +525,11 @@ namespace DungeonGame {
 				}
 			}
 			if (index != -1 &&
-			    this.ComboPoints >= this.Abilities[index].ComboCost && 
-			    this.PlayerClass == PlayerClassType.Archer) {
-				switch (this.Abilities[index].ArcAbilityCategory) {
+				this.ComboPoints >= this.Abilities[index].ComboCost &&
+				this.PlayerClass == PlayerClassType.Archer)
+			{
+				switch (this.Abilities[index].ArcAbilityCategory)
+				{
 					case PlayerAbility.ArcherAbility.Distance:
 						return;
 					case PlayerAbility.ArcherAbility.Gut:
@@ -506,11 +546,14 @@ namespace DungeonGame {
 						return;
 					case PlayerAbility.ArcherAbility.Double:
 						if (this.PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow) throw new InvalidOperationException();
-						for (var i = 0; i < 2; i++) {
-							if (this.ComboPoints >= this.Abilities[index].ComboCost) {
+						for (var i = 0; i < 2; i++)
+						{
+							if (this.ComboPoints >= this.Abilities[index].ComboCost)
+							{
 								PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 							}
-							else {
+							else
+							{
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatAttackFailText(),
 									Settings.FormatDefaultBackground(),
@@ -534,31 +577,37 @@ namespace DungeonGame {
 						return;
 					case PlayerAbility.ArcherAbility.Ambush:
 						if (this.PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow) throw new InvalidOperationException();
-						if (!this.InCombat) {
+						if (!this.InCombat)
+						{
 							PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						}
-						else {
+						else
+						{
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatAttackFailText(),
 								Settings.FormatDefaultBackground(),
-								"You can't ambush " + opponent.Name + ", you're already in combat!");
+								"You can't ambush " + opponent._Name + ", you're already in combat!");
 						}
 						return;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			if (index != -1) {
+			if (index != -1)
+			{
 				throw new InvalidOperationException();
 			}
 			throw new IndexOutOfRangeException();
 		}
-		public void CastSpell(string inputName) {
+		public void CastSpell(string inputName)
+		{
 			var index = this.Spellbook.FindIndex(f => f.Name == inputName);
 			if (index != -1 &&
-			    this.ManaPoints >= this.Spellbook[index].ManaCost &&
-			    this.PlayerClass == PlayerClassType.Mage) {
-				switch (this.Spellbook[index].SpellCategory) {
+				this.ManaPoints >= this.Spellbook[index].ManaCost &&
+				this.PlayerClass == PlayerClassType.Mage)
+			{
+				switch (this.Spellbook[index].SpellCategory)
+				{
 					case PlayerSpell.SpellType.Heal:
 						PlayerSpell.CastHealing(this, index);
 						return;
@@ -589,17 +638,21 @@ namespace DungeonGame {
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			if (index != -1) {
+			if (index != -1)
+			{
 				throw new InvalidOperationException();
 			}
 			throw new IndexOutOfRangeException();
 		}
-		public void CastSpell(Monster opponent, string inputName) {
+		public void CastSpell(Monster opponent, string inputName)
+		{
 			var index = this.Spellbook.FindIndex(f => f.Name == inputName);
-			if (index != -1 && 
-			    this.ManaPoints >= this.Spellbook[index].ManaCost && 
-			    this.PlayerClass == PlayerClassType.Mage) {
-				switch (this.Spellbook[index].SpellCategory) {
+			if (index != -1 &&
+				this.ManaPoints >= this.Spellbook[index].ManaCost &&
+				this.PlayerClass == PlayerClassType.Mage)
+			{
+				switch (this.Spellbook[index].SpellCategory)
+				{
 					case PlayerSpell.SpellType.Fireball:
 						PlayerSpell.CastFireOffense(opponent, this, index);
 						return;
@@ -637,7 +690,8 @@ namespace DungeonGame {
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			if (index != -1) {
+			if (index != -1)
+			{
 				throw new InvalidOperationException();
 			}
 			throw new IndexOutOfRangeException();
