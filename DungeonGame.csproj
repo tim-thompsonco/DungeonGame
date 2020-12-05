@@ -7,7 +7,8 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>DungeonGame</RootNamespace>
     <AssemblyName>DungeonGame</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|anycpu' ">
     <DebugSymbols>true</DebugSymbols>
@@ -93,6 +94,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

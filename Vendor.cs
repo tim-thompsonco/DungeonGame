@@ -52,7 +52,7 @@ namespace DungeonGame {
 		}
 
 		public void DisplayGearForSale() {
-			var forSaleString = "The " + this.Name + " has the following items for sale:"; 
+			var forSaleString = $"The {this.Name} has the following items for sale:"; 
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -66,17 +66,16 @@ namespace DungeonGame {
 				}
 				switch (item) {
 					case Armor isItemArmor:
-						itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + " Cost: " + isItemArmor.ItemValue + ")");
+						itemInfo.Append($" (AR: {isItemArmor.ArmorRating} Cost: {isItemArmor.ItemValue})");
 						break;
 					case Weapon isItemWeapon:
-						itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + 
-						                " Cost: " + isItemWeapon.ItemValue + ")");
+						itemInfo.Append($" (DMG: {isItemWeapon.RegDamage} CR: {isItemWeapon.CritMultiplier} Cost: {isItemWeapon.ItemValue})");
 						break;
 					case Consumable isItemConsumable:
 						if (item.Name.Contains("arrow")) {
-							itemInfo.Append(" (" + isItemConsumable.Arrow.Quantity + ")");
+							itemInfo.Append($" ({isItemConsumable.Arrow.Quantity})");
 						}
-						itemInfo.Append(" (Cost: " + isItemConsumable.ItemValue + ")");
+						itemInfo.Append($" (Cost: {isItemConsumable.ItemValue})");
 						break;
 				}
 				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
@@ -115,7 +114,7 @@ namespace DungeonGame {
 					player.Inventory.Add(buyItem);	
 				}
 				this.VendorItems.RemoveAt(index);
-				var purchaseString = "You purchased " + buyItem.Name + " from the vendor for " + buyItem.ItemValue + " gold.";
+				var purchaseString = $"You purchased {buyItem.Name} from the vendor for {buyItem.ItemValue} gold.";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -216,7 +215,7 @@ namespace DungeonGame {
 							_ => sellItem.ItemValue
 						};
 						player.Inventory.RemoveAt(index);
-						var soldString = "You sold " + sellItem.Name + " to the vendor for " + sellItem.ItemValue + " gold.";
+						var soldString = $"You sold {sellItem.Name} to the vendor for {sellItem.ItemValue} gold.";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -254,7 +253,7 @@ namespace DungeonGame {
 				player.Consumables.RemoveAt(index);
 				if (this.VendorItems.Count == 5) this.VendorItems.RemoveAt(this.VendorItems[0].Name.Contains("arrow") ? 1 : 0);
 				this.VendorItems.Add(sellItem);
-				var soldString = "You sold " + sellItem.Name + " to the vendor for " + sellItem.ItemValue + " gold.";
+				var soldString = $"You sold {sellItem.Name} to the vendor for {sellItem.ItemValue} gold.";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -274,15 +273,14 @@ namespace DungeonGame {
 							if (player.Gold >= (int)repairCostArmor) {
 								player.Gold -= (int)repairCostArmor;
 								repairArmor.Durability = 100;
-								var repairArmorString = "Your " + repairArmor.Name + " has been repaired for " + (int) repairCostArmor +
-								                        " gold."; 
+								var repairArmorString = $"Your {repairArmor.Name} has been repaired for {(int) repairCostArmor} gold."; 
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatSuccessOutputText(),
 									Settings.FormatDefaultBackground(),
 									repairArmorString);
 							}
 							else {
-								var cantAffordArmorString = "You can't afford to repair " + repairArmor.Name + "!";
+								var cantAffordArmorString = $"You can't afford to repair {repairArmor.Name}!";
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
@@ -304,15 +302,14 @@ namespace DungeonGame {
 							if (player.Gold >= repairCostWeapon) {
 								player.Gold -= (int)repairCostWeapon;
 								repairWeapon.Durability = 100;
-								var repairWeaponString = "Your " + repairWeapon.Name + " has been repaired for " + 
-								                         (int)repairCostWeapon + " gold.";
+								var repairWeaponString = $"Your {repairWeapon.Name} has been repaired for {(int)repairCostWeapon} gold.";
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatSuccessOutputText(),
 									Settings.FormatDefaultBackground(),
 									repairWeaponString);
 							}
 							else {
-								var cantAffordWeaponString = "You can't afford to repair " + repairWeapon.Name + "!";
+								var cantAffordWeaponString = $"You can't afford to repair {repairWeapon.Name}!";
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
@@ -329,7 +326,7 @@ namespace DungeonGame {
 						break;
 					case VendorType.Healer:
 					case VendorType.Shopkeeper:
-						var noRepairString = this.VendorCategory+ "s don't repair equipment.";
+						var noRepairString = $"{this.VendorCategory}s don't repair equipment.";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -351,14 +348,14 @@ namespace DungeonGame {
 				player.RagePoints = player.MaxRagePoints;
 				player.ManaPoints = player.MaxManaPoints;
 				player.ComboPoints = player.MaxComboPoints;
-				var restoreString = "You have been restored by the " + this.Name + ".";
+				var restoreString = $"You have been restored by the {this.Name}.";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					restoreString);
 				return;
 			}
-			var noRestoreString = "The " + this.Name + " cannot restore you!";
+			var noRestoreString = $"The {this.Name} cannot restore you!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
@@ -528,7 +525,7 @@ namespace DungeonGame {
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
-							"Congratulations on finishing " + quest.Name + "! Here's your reward.");
+							$"Congratulations on finishing {quest.Name}! Here's your reward.");
 						player.Inventory.Add(quest.QuestRewardItem);
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
@@ -539,7 +536,7 @@ namespace DungeonGame {
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
-							quest.QuestRewardGold + " gold coins.");
+							$"{quest.QuestRewardGold} gold coins.");
 						player.QuestLog.RemoveAt(questIndex);
 					}
 					else {
@@ -554,7 +551,7 @@ namespace DungeonGame {
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
-						"I didn't give you that quest. " + textInfo.ToTitleCase(quest.QuestGiver) + " did.");
+						$"I didn't give you that quest. {textInfo.ToTitleCase(quest.QuestGiver)} did.");
 				}
 			}
 			else {
