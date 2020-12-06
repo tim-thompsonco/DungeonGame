@@ -147,16 +147,16 @@ namespace DungeonGameTests
 			var monster = new Monster(3, Monster.MonsterType.Vampire) { _HitPoints = 10, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
 			var abilityIndex = monster._Abilities.FindIndex(
-				f => f.AbilityCategory == MonsterAbility.Ability.BloodLeech);
+				f => f._AbilityCategory == MonsterAbility.Ability.BloodLeech);
 			foreach (var item in player._Inventory.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
 			var monsterHealthBase = monster._HitPoints;
 			MonsterAbility.UseBloodLeechAbility(monster, player, abilityIndex);
-			var abilityCost = monster._Abilities[abilityIndex].EnergyCost;
+			var abilityCost = monster._Abilities[abilityIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - abilityCost, monster._EnergyPoints);
-			var leechAmount = monster._Abilities[abilityIndex].Offensive.Amount;
+			var leechAmount = monster._Abilities[abilityIndex]._Offensive.Amount;
 			Assert.AreEqual(player._MaxHitPoints - leechAmount, player._HitPoints);
 			Assert.AreEqual(monsterHealthBase + leechAmount, monster._HitPoints);
 			var attackString = "The " + monster._Name + " tries to sink its fangs into you and suck your blood!";
@@ -172,18 +172,18 @@ namespace DungeonGameTests
 			var monster = new Monster(3, Monster.MonsterType.Spider) { _HitPoints = 50, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
 			var abilityIndex = monster._Abilities.FindIndex(
-				f => f.AbilityCategory == MonsterAbility.Ability.PoisonBite);
+				f => f._AbilityCategory == MonsterAbility.Ability.PoisonBite);
 			foreach (var item in player._Inventory.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
 			MonsterAbility.UseOffenseDamageAbility(monster, player, abilityIndex);
-			var abilityCost = monster._Abilities[abilityIndex].EnergyCost;
+			var abilityCost = monster._Abilities[abilityIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - abilityCost, monster._EnergyPoints);
-			var abilityDamage = monster._Abilities[abilityIndex].Offensive.Amount;
-			var abilityDamageOverTime = monster._Abilities[abilityIndex].Offensive.AmountOverTime;
-			var abilityCurRounds = monster._Abilities[abilityIndex].Offensive.AmountCurRounds;
-			var abilityMaxRounds = monster._Abilities[abilityIndex].Offensive.AmountMaxRounds;
+			var abilityDamage = monster._Abilities[abilityIndex]._Offensive.Amount;
+			var abilityDamageOverTime = monster._Abilities[abilityIndex]._Offensive.AmountOverTime;
+			var abilityCurRounds = monster._Abilities[abilityIndex]._Offensive.AmountCurRounds;
+			var abilityMaxRounds = monster._Abilities[abilityIndex]._Offensive.AmountMaxRounds;
 			var attackString = "The " + monster._Name + " tries to bite you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
 			var attackSuccessString = "The " + monster._Name + " bites you for " + abilityDamage + " physical damage.";
@@ -218,15 +218,15 @@ namespace DungeonGameTests
 			var monster = new Monster(3, Monster.MonsterType.Dragon);
 			MonsterBuilder.BuildMonster(monster);
 			var abilityIndex = monster._Abilities.FindIndex(
-				f => f.AbilityCategory == MonsterAbility.Ability.TailWhip);
+				f => f._AbilityCategory == MonsterAbility.Ability.TailWhip);
 			foreach (var item in player._Inventory.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
 			MonsterAbility.UseOffenseDamageAbility(monster, player, abilityIndex);
-			var abilityCost = monster._Abilities[abilityIndex].EnergyCost;
+			var abilityCost = monster._Abilities[abilityIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - abilityCost, monster._EnergyPoints);
-			var attackDamage = monster._Abilities[abilityIndex].Offensive.Amount;
+			var attackDamage = monster._Abilities[abilityIndex]._Offensive.Amount;
 			Assert.AreEqual(player._MaxHitPoints - attackDamage, player._HitPoints);
 			var attackString = "The " + monster._Name + " swings its tail at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
