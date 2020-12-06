@@ -37,21 +37,21 @@ namespace DungeonGameTests
 			var spellDamage = monster._Spellbook[spellIndex].Offensive.Amount;
 			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
 			var spellMaxRounds = monster._Spellbook[spellIndex].Offensive.AmountMaxRounds;
-			Assert.AreEqual(spellMaxRounds, player._Effects[0].EffectMaxRound);
+			Assert.AreEqual(spellMaxRounds, player._Effects[0]._EffectMaxRound);
 			var attackString = "The " + monster._Name + " casts a fireball and launches it at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
 			var attackSuccessString = "The " + monster._Name + " hits you for " + spellDamage + " fire damage.";
 			Assert.AreEqual(attackSuccessString, OutputHandler.Display.Output[1][2]);
 			const string onFireString = "You burst into flame!";
 			Assert.AreEqual(onFireString, OutputHandler.Display.Output[2][2]);
-			Assert.AreEqual(player._Effects[0].EffectGroup, Effect.EffectType.OnFire);
+			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.OnFire);
 			var burnDamage = monster._Spellbook[spellIndex].Offensive.AmountOverTime;
 			for (var i = 2; i < 5; i++)
 			{
 				player._Effects[0].OnFireRound(player);
 				var burnString = "You burn for " + burnDamage + " fire damage.";
 				Assert.AreEqual(burnString, OutputHandler.Display.Output[i + 1][2]);
-				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				GameHandler.RemovedExpiredEffectsAsync(player);
 			}
 			Thread.Sleep(1000);
@@ -83,25 +83,25 @@ namespace DungeonGameTests
 			var spellDamage = monster._Spellbook[spellIndex].Offensive.Amount;
 			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
 			var spellMaxRounds = monster._Spellbook[spellIndex].Offensive.AmountMaxRounds;
-			Assert.AreEqual(spellMaxRounds, player._Effects[0].EffectMaxRound);
+			Assert.AreEqual(spellMaxRounds, player._Effects[0]._EffectMaxRound);
 			var attackString = "The " + monster._Name + " conjures up a frostbolt and launches it at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
 			var attackSuccessString = "The " + monster._Name + " hits you for " + spellDamage + " frost damage.";
 			Assert.AreEqual(attackSuccessString, OutputHandler.Display.Output[1][2]);
 			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be double!";
 			Assert.AreEqual(frozenString, OutputHandler.Display.Output[2][2]);
-			Assert.AreEqual(player._Effects[0].EffectGroup, Effect.EffectType.Frozen);
+			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.Frozen);
 			// Remove all spells after casting to make monster decide to use physical attack for unit test
 			monster._Spellbook = null;
 			for (var i = 2; i < 4; i++)
 			{
 				var playerHitPointsBefore = player._HitPoints;
-				var multiplier = player._Effects[0].EffectMultiplier;
+				var multiplier = player._Effects[0]._EffectMultiplier;
 				var baseDamage = monster._MonsterWeapon.RegDamage;
 				var frozenDamage = (int)(monster._MonsterWeapon.RegDamage * multiplier);
 				Assert.AreEqual(frozenDamage, baseDamage * multiplier, 1);
 				player._Effects[0].FrozenRound(player);
-				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				Assert.AreEqual(frozenString, OutputHandler.Display.Output[i + 1][2]);
 				monster._MonsterWeapon.Durability = 100;
 				monster.Attack(player);
@@ -191,18 +191,18 @@ namespace DungeonGameTests
 			var bleedString = "You are bleeding from " + monster._Name + "'s attack!";
 			Assert.AreEqual(bleedString, OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual(
-				true, player._Effects[0].EffectGroup == Effect.EffectType.Bleeding);
+				true, player._Effects[0]._EffectGroup == Effect.EffectType.Bleeding);
 			Assert.AreEqual(player._MaxHitPoints - abilityDamage, player._HitPoints);
-			Assert.AreEqual(abilityCurRounds, player._Effects[0].EffectCurRound);
-			Assert.AreEqual(abilityMaxRounds, player._Effects[0].EffectMaxRound);
+			Assert.AreEqual(abilityCurRounds, player._Effects[0]._EffectCurRound);
+			Assert.AreEqual(abilityMaxRounds, player._Effects[0]._EffectMaxRound);
 			OutputHandler.Display.ClearUserOutput();
 			for (var i = 2; i < 5; i++)
 			{
 				player._Effects[0].BleedingRound(player);
-				var bleedAmount = player._Effects[0].EffectAmountOverTime;
+				var bleedAmount = player._Effects[0]._EffectAmountOverTime;
 				var bleedRoundString = "You bleed for " + bleedAmount + " physical damage.";
 				Assert.AreEqual(bleedRoundString, OutputHandler.Display.Output[i - 2][2]);
-				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				GameHandler.RemovedExpiredEffectsAsync(player);
 				Thread.Sleep(1000);
 			}
@@ -255,21 +255,21 @@ namespace DungeonGameTests
 			var spellDamage = monster._Spellbook[spellIndex].Offensive.Amount;
 			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
 			var spellMaxRounds = monster._Spellbook[spellIndex].Offensive.AmountMaxRounds;
-			Assert.AreEqual(spellMaxRounds, player._Effects[0].EffectMaxRound);
+			Assert.AreEqual(spellMaxRounds, player._Effects[0]._EffectMaxRound);
 			var attackString = "The " + monster._Name + " breathes a pillar of fire at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
 			var attackSuccessString = "The " + monster._Name + " hits you for " + spellDamage + " fire damage.";
 			Assert.AreEqual(attackSuccessString, OutputHandler.Display.Output[1][2]);
 			const string onFireString = "You burst into flame!";
 			Assert.AreEqual(onFireString, OutputHandler.Display.Output[2][2]);
-			Assert.AreEqual(player._Effects[0].EffectGroup, Effect.EffectType.OnFire);
+			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.OnFire);
 			var burnDamage = monster._Spellbook[spellIndex].Offensive.AmountOverTime;
 			for (var i = 2; i < 5; i++)
 			{
 				player._Effects[0].OnFireRound(player);
 				var burnString = "You burn for " + burnDamage + " fire damage.";
 				Assert.AreEqual(burnString, OutputHandler.Display.Output[i + 1][2]);
-				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				GameHandler.RemovedExpiredEffectsAsync(player);
 				Thread.Sleep(1000);
 			}

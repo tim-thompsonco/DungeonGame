@@ -79,18 +79,18 @@ namespace DungeonGameTests
 			var bleedString = "The " + monster._Name + " is bleeding!";
 			Assert.AreEqual(bleedString, OutputHandler.Display.Output[7][2]);
 			Assert.AreEqual(
-				true, monster._Effects[0].EffectGroup == Effect.EffectType.Bleeding);
+				true, monster._Effects[0]._EffectGroup == Effect.EffectType.Bleeding);
 			Assert.AreEqual(monster._MaxHitPoints - abilityDamage, monster._HitPoints);
-			Assert.AreEqual(abilityCurRounds, monster._Effects[0].EffectCurRound);
-			Assert.AreEqual(abilityMaxRounds, monster._Effects[0].EffectMaxRound);
+			Assert.AreEqual(abilityCurRounds, monster._Effects[0]._EffectCurRound);
+			Assert.AreEqual(abilityMaxRounds, monster._Effects[0]._EffectMaxRound);
 			OutputHandler.Display.ClearUserOutput();
 			for (var i = 2; i < 5; i++)
 			{
 				monster._Effects[0].BleedingRound(monster);
-				var bleedAmount = monster._Effects[0].EffectAmountOverTime;
+				var bleedAmount = monster._Effects[0]._EffectAmountOverTime;
 				var bleedRoundString = "The " + monster._Name + " bleeds for " + bleedAmount + " physical damage.";
 				Assert.AreEqual(bleedRoundString, OutputHandler.Display.Output[i - 2][2]);
-				Assert.AreEqual(i, monster._Effects[0].EffectCurRound);
+				Assert.AreEqual(i, monster._Effects[0]._EffectCurRound);
 				GameHandler.RemovedExpiredEffectsAsync(monster);
 				Thread.Sleep(1000);
 			}
@@ -142,16 +142,16 @@ namespace DungeonGameTests
 			Assert.AreEqual(stunString, OutputHandler.Display.Output[6][2]);
 			Assert.AreEqual(monster._MaxHitPoints - abilityDamage, monster._HitPoints);
 			Assert.AreEqual(
-				true, monster._Effects[0].EffectGroup == Effect.EffectType.Stunned);
-			Assert.AreEqual(abilityCurRounds, monster._Effects[0].EffectCurRound);
-			Assert.AreEqual(abilityMaxRounds, monster._Effects[0].EffectMaxRound);
+				true, monster._Effects[0]._EffectGroup == Effect.EffectType.Stunned);
+			Assert.AreEqual(abilityCurRounds, monster._Effects[0]._EffectCurRound);
+			Assert.AreEqual(abilityMaxRounds, monster._Effects[0]._EffectMaxRound);
 			OutputHandler.Display.ClearUserOutput();
 			for (var i = 2; i < 4; i++)
 			{
 				monster._Effects[0].StunnedRound(monster);
 				var stunnedString = "The " + monster._Name + " is stunned and cannot attack.";
 				Assert.AreEqual(stunnedString, OutputHandler.Display.Output[i - 2][2]);
-				Assert.AreEqual(i, monster._Effects[0].EffectCurRound);
+				Assert.AreEqual(i, monster._Effects[0]._EffectCurRound);
 				GameHandler.RemovedExpiredEffectsAsync(monster);
 				Thread.Sleep(1000);
 			}
@@ -197,9 +197,9 @@ namespace DungeonGameTests
 			Assert.AreEqual(blockString, OutputHandler.Display.Output[5][2]);
 			OutputHandler.Display.ClearUserOutput();
 			Assert.AreEqual(
-				true, player._Effects[0].EffectGroup == Effect.EffectType.BlockDamage);
+				true, player._Effects[0]._EffectGroup == Effect.EffectType.BlockDamage);
 			Assert.AreEqual(player._MaxHitPoints, player._HitPoints);
-			var blockAmountRemaining = player._Effects[0].EffectAmount;
+			var blockAmountRemaining = player._Effects[0]._EffectAmount;
 			Assert.AreEqual(blockAmount, blockAmountRemaining);
 			var i = 0;
 			while (blockAmountRemaining > 0)
@@ -207,7 +207,7 @@ namespace DungeonGameTests
 				monster._MonsterWeapon.Durability = 100;
 				var blockAmountBefore = blockAmountRemaining;
 				monster.Attack(player);
-				blockAmountRemaining = player._Effects.Any() ? player._Effects[0].EffectAmount : 0;
+				blockAmountRemaining = player._Effects.Any() ? player._Effects[0]._EffectAmount : 0;
 				if (blockAmountRemaining > 0)
 				{
 					Assert.AreEqual(player._MaxHitPoints, player._HitPoints);
@@ -273,8 +273,8 @@ namespace DungeonGameTests
 			var rageCost = player._Abilities[abilityIndex].RageCost;
 			Assert.AreEqual(player._MaxRagePoints - rageCost, player._RagePoints);
 			Assert.AreEqual(2, player._Effects.Count);
-			Assert.AreEqual(Effect.EffectType.ChangePlayerDamage, player._Effects[0].EffectGroup);
-			Assert.AreEqual(Effect.EffectType.ChangeArmor, player._Effects[1].EffectGroup);
+			Assert.AreEqual(Effect.EffectType.ChangePlayerDamage, player._Effects[0]._EffectGroup);
+			Assert.AreEqual(Effect.EffectType.ChangeArmor, player._Effects[1]._EffectGroup);
 			const string berserkString = "You go into a berserk rage!";
 			Assert.AreEqual(berserkString, OutputHandler.Display.Output[6][2]);
 			for (var i = 2; i < 6; i++)
@@ -377,16 +377,16 @@ namespace DungeonGameTests
 			var healAmount = player._Abilities[abilityIndex].Healing.HealAmount;
 			var healString = "You heal yourself for " + healAmount + " health.";
 			Assert.AreEqual(healString, OutputHandler.Display.Output[7][2]);
-			Assert.AreEqual(Effect.EffectType.Healing, player._Effects[0].EffectGroup);
+			Assert.AreEqual(Effect.EffectType.Healing, player._Effects[0]._EffectGroup);
 			Assert.AreEqual(baseHitPoints + healAmount, player._HitPoints);
 			baseHitPoints = player._HitPoints;
 			OutputHandler.Display.ClearUserOutput();
 			for (var i = 2; i < 5; i++)
 			{
 				player._Effects[0].HealingRound(player);
-				var healOverTimeAmt = player._Effects[0].EffectAmountOverTime;
+				var healOverTimeAmt = player._Effects[0]._EffectAmountOverTime;
 				var healAmtString = "You have been healed for " + healOverTimeAmt + " health.";
-				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				Assert.AreEqual(healAmtString, OutputHandler.Display.Output[i - 2][2]);
 				Assert.AreEqual(baseHitPoints + (i - 1) * healOverTimeAmt, player._HitPoints);
 			}
@@ -427,7 +427,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(player._Strength, baseStr + player._Abilities[abilityIndex].ChangeAmount.Amount);
 			Assert.AreEqual(
 				player._MaxRagePoints, baseMaxRage + player._Abilities[abilityIndex].ChangeAmount.Amount * 10);
-			Assert.AreEqual(Effect.EffectType.ChangeStat, player._Effects[0].EffectGroup);
+			Assert.AreEqual(Effect.EffectType.ChangeStat, player._Effects[0]._EffectGroup);
 			for (var i = 0; i < 600; i++)
 			{
 				player._Effects[0].ChangeStatRound();
@@ -473,18 +473,18 @@ namespace DungeonGameTests
 			Assert.AreEqual("You shout a War Cry, intimidating your opponent, and decreasing incoming damage.",
 				OutputHandler.Display.Output[5][2]);
 			OutputHandler.Display.ClearUserOutput();
-			Assert.AreEqual(Effect.EffectType.ChangeOpponentDamage, player._Effects[0].EffectGroup);
+			Assert.AreEqual(Effect.EffectType.ChangeOpponentDamage, player._Effects[0]._EffectGroup);
 			for (var i = 2; i < 5; i++)
 			{
 				var baseAttackDamageM = monster._UnarmedAttackDamage;
 				var attackDamageM = baseAttackDamageM;
-				var changeDamageAmount = player._Effects[0].EffectAmountOverTime < attackDamageM ?
-					player._Effects[0].EffectAmountOverTime : attackDamageM;
+				var changeDamageAmount = player._Effects[0]._EffectAmountOverTime < attackDamageM ?
+					player._Effects[0]._EffectAmountOverTime : attackDamageM;
 				attackDamageM -= changeDamageAmount;
 				Assert.AreEqual(baseAttackDamageM - changeDamageAmount, attackDamageM);
 				player._Effects[0].ChangeOpponentDamageRound(player);
-				var changeDmgString = "Incoming damage is decreased by " + -1 * player._Effects[0].EffectAmountOverTime + ".";
-				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
+				var changeDmgString = "Incoming damage is decreased by " + -1 * player._Effects[0]._EffectAmountOverTime + ".";
+				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				Assert.AreEqual(changeDmgString, OutputHandler.Display.Output[i - 2][2]);
 			}
 			GameHandler.RemovedExpiredEffectsAsync(player);

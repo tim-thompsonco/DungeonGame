@@ -197,32 +197,32 @@ namespace DungeonGame
 				string effectOutput;
 				if (player._InCombat)
 				{
-					if (effect.EffectMaxRound + 1 - effect.EffectCurRound > 1)
+					if (effect._EffectMaxRound + 1 - effect._EffectCurRound > 1)
 					{
-						effectOutput = "(" + (effect.EffectMaxRound + 1 - effect.EffectCurRound) + " rounds) " +
-									   textInfo.ToTitleCase(effect.Name);
+						effectOutput = "(" + (effect._EffectMaxRound + 1 - effect._EffectCurRound) + " rounds) " +
+									   textInfo.ToTitleCase(effect._Name);
 					}
 					else
 					{
-						effectOutput = "(" + (effect.EffectMaxRound + 1 - effect.EffectCurRound) + " round) " +
-									   textInfo.ToTitleCase(effect.Name);
+						effectOutput = "(" + (effect._EffectMaxRound + 1 - effect._EffectCurRound) + " round) " +
+									   textInfo.ToTitleCase(effect._Name);
 					}
 				}
 				else
 				{
-					if (effect.EffectMaxRound + 1 - effect.EffectCurRound > 1)
+					if (effect._EffectMaxRound + 1 - effect._EffectCurRound > 1)
 					{
-						effectOutput = "(" + (effect.EffectMaxRound + 1 - effect.EffectCurRound) * effect.TickDuration +
-									   " seconds) " + textInfo.ToTitleCase(effect.Name);
+						effectOutput = "(" + (effect._EffectMaxRound + 1 - effect._EffectCurRound) * effect._TickDuration +
+									   " seconds) " + textInfo.ToTitleCase(effect._Name);
 					}
 					else
 					{
-						effectOutput = "(" + (effect.EffectMaxRound + 1 - effect.EffectCurRound) * effect.TickDuration +
-									   " second) " + textInfo.ToTitleCase(effect.Name);
+						effectOutput = "(" + (effect._EffectMaxRound + 1 - effect._EffectCurRound) * effect._TickDuration +
+									   " second) " + textInfo.ToTitleCase(effect._Name);
 					}
 				}
 				activeEffects++;
-				if (effect.IsHarmful)
+				if (effect._IsHarmful)
 				{
 					badEffectUserOutput.StoreUserOutput(
 						Settings.FormatAttackFailText(),

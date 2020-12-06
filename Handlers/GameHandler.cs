@@ -19,23 +19,23 @@ namespace DungeonGame
 			if (GameTicks % player._StatReplenishInterval == 0) ReplenishStatsOverTime(player);
 			if (player._Effects.Any())
 			{
-				foreach (var effect in player._Effects.Where(effect => GameTicks % effect.TickDuration == 0).ToList())
+				foreach (var effect in player._Effects.Where(effect => GameTicks % effect._TickDuration == 0).ToList())
 				{
-					switch (effect.EffectGroup)
+					switch (effect._EffectGroup)
 					{
 						case Effect.EffectType.Healing:
 							effect.HealingRound(player);
 							break;
 						case Effect.EffectType.ChangePlayerDamage:
-							if (!player._InCombat && effect.Name.Contains("berserk"))
+							if (!player._InCombat && effect._Name.Contains("berserk"))
 							{
-								effect.IsEffectExpired = true;
+								effect._IsEffectExpired = true;
 							}
 							break;
 						case Effect.EffectType.ChangeArmor:
-							if (!player._InCombat && effect.Name.Contains("berserk"))
+							if (!player._InCombat && effect._Name.Contains("berserk"))
 							{
-								effect.IsEffectExpired = true;
+								effect._IsEffectExpired = true;
 							}
 							if (!player._InCombat) effect.ChangeArmorRound();
 							break;
@@ -57,7 +57,7 @@ namespace DungeonGame
 							effect.ChangeStatRound();
 							break;
 						case Effect.EffectType.ChangeOpponentDamage:
-							if (!player._InCombat) effect.IsEffectExpired = true;
+							if (!player._InCombat) effect._IsEffectExpired = true;
 							effect.ChangeOpponentDamageRound(player);
 							break;
 						case Effect.EffectType.BlockDamage:
@@ -77,9 +77,9 @@ namespace DungeonGame
 					RemovedExpiredEffectsAsync(monster);
 					if (GameTicks % monster._StatReplenishInterval == 0 && monster._HitPoints > 0) ReplenishStatsOverTime(monster);
 					if (!monster._Effects.Any()) continue;
-					foreach (var effect in monster._Effects.Where(effect => GameTicks % effect.TickDuration == 0).ToList())
+					foreach (var effect in monster._Effects.Where(effect => GameTicks % effect._TickDuration == 0).ToList())
 					{
-						switch (effect.EffectGroup)
+						switch (effect._EffectGroup)
 						{
 							case Effect.EffectType.Healing:
 								break;
@@ -133,8 +133,8 @@ namespace DungeonGame
 			{
 				for (var i = 0; i < player._Effects.Count; i++)
 				{
-					if (!player._Effects[i].IsEffectExpired) continue;
-					switch (player._Effects[i].EffectGroup)
+					if (!player._Effects[i]._IsEffectExpired) continue;
+					switch (player._Effects[i]._EffectGroup)
 					{
 						case Effect.EffectType.Healing:
 							break;
@@ -153,19 +153,19 @@ namespace DungeonGame
 						case Effect.EffectType.Frozen:
 							break;
 						case Effect.EffectType.ChangeStat:
-							switch (player._Effects[i].StatGroup)
+							switch (player._Effects[i]._StatGroup)
 							{
 								case ChangeStat.StatType.Intelligence:
-									player._Intelligence -= player._Effects[i].EffectAmountOverTime;
+									player._Intelligence -= player._Effects[i]._EffectAmountOverTime;
 									break;
 								case ChangeStat.StatType.Strength:
-									player._Strength -= player._Effects[i].EffectAmountOverTime;
+									player._Strength -= player._Effects[i]._EffectAmountOverTime;
 									break;
 								case ChangeStat.StatType.Dexterity:
-									player._Dexterity -= player._Effects[i].EffectAmountOverTime;
+									player._Dexterity -= player._Effects[i]._EffectAmountOverTime;
 									break;
 								case ChangeStat.StatType.Constitution:
-									player._Constitution -= player._Effects[i].EffectAmountOverTime;
+									player._Constitution -= player._Effects[i]._EffectAmountOverTime;
 									break;
 								default:
 									throw new ArgumentOutOfRangeException();
@@ -190,8 +190,8 @@ namespace DungeonGame
 			{
 				for (var i = 0; i < monster._Effects.Count; i++)
 				{
-					if (!monster._Effects[i].IsEffectExpired) continue;
-					switch (monster._Effects[i].EffectGroup)
+					if (!monster._Effects[i]._IsEffectExpired) continue;
+					switch (monster._Effects[i]._EffectGroup)
 					{
 						case Effect.EffectType.Healing:
 							break;

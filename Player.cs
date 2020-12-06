@@ -246,12 +246,12 @@ namespace DungeonGame
 			}
 			foreach (Effect effect in _Effects)
 			{
-				switch (effect.EffectGroup)
+				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
 						break;
 					case Effect.EffectType.ChangePlayerDamage:
-						attackAmount += effect.EffectAmountOverTime;
+						attackAmount += effect._EffectAmountOverTime;
 						break;
 					case Effect.EffectType.ChangeArmor:
 						break;
@@ -277,7 +277,7 @@ namespace DungeonGame
 			}
 			foreach (Effect effect in opponent._Effects)
 			{
-				switch (effect.EffectGroup)
+				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
 						break;
@@ -292,7 +292,7 @@ namespace DungeonGame
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
-						double frozenAttackAmount = attackAmount * effect.EffectMultiplier;
+						double frozenAttackAmount = attackAmount * effect._EffectMultiplier;
 						attackAmount = (int)frozenAttackAmount;
 						effect.FrozenRound(opponent);
 						break;

@@ -54,7 +54,7 @@ namespace DungeonGame
 			var leechAmount = monster._Abilities[index].Offensive.Amount;
 			foreach (var effect in player._Effects.ToList())
 			{
-				switch (effect.EffectGroup)
+				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
 						break;
@@ -69,26 +69,26 @@ namespace DungeonGame
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
-						var frozenAttackAmount = leechAmount * effect.EffectMultiplier;
+						var frozenAttackAmount = leechAmount * effect._EffectMultiplier;
 						leechAmount = (int)frozenAttackAmount;
 						effect.FrozenRound(player);
-						effect.IsEffectExpired = true;
+						effect._IsEffectExpired = true;
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
-						var changeDamageAmount = effect.EffectAmountOverTime < leechAmount ?
-							effect.EffectAmountOverTime : leechAmount;
+						var changeDamageAmount = effect._EffectAmountOverTime < leechAmount ?
+							effect._EffectAmountOverTime : leechAmount;
 						effect.ChangeOpponentDamageRound(player);
 						leechAmount += changeDamageAmount;
 						break;
 					case Effect.EffectType.BlockDamage:
-						var blockAmount = effect.EffectAmount < leechAmount ?
-							effect.EffectAmount : leechAmount;
+						var blockAmount = effect._EffectAmount < leechAmount ?
+							effect._EffectAmount : leechAmount;
 						effect.BlockDamageRound(blockAmount);
 						leechAmount -= blockAmount;
 						break;
 					case Effect.EffectType.ReflectDamage:
-						var reflectAmount = effect.EffectAmountOverTime < leechAmount ?
-							effect.EffectAmountOverTime : leechAmount;
+						var reflectAmount = effect._EffectAmountOverTime < leechAmount ?
+							effect._EffectAmountOverTime : leechAmount;
 						monster._HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
 						leechAmount -= reflectAmount;
@@ -99,7 +99,7 @@ namespace DungeonGame
 						throw new ArgumentOutOfRangeException();
 				}
 				if (leechAmount > 0) continue;
-				var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + monster._Name + "'s attack!";
+				var effectAbsorbString = "Your " + effect._Name + " absorbed all of " + monster._Name + "'s attack!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
@@ -134,7 +134,7 @@ namespace DungeonGame
 			var attackDamage = monster._Abilities[index].Offensive.Amount;
 			foreach (var effect in player._Effects.ToList())
 			{
-				switch (effect.EffectGroup)
+				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
 						break;
@@ -149,26 +149,26 @@ namespace DungeonGame
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
-						var frozenAttackAmount = attackDamage * effect.EffectMultiplier;
+						var frozenAttackAmount = attackDamage * effect._EffectMultiplier;
 						attackDamage = (int)frozenAttackAmount;
 						effect.FrozenRound(player);
-						effect.IsEffectExpired = true;
+						effect._IsEffectExpired = true;
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
-						var changeDamageAmount = effect.EffectAmountOverTime < attackDamage ?
-							effect.EffectAmountOverTime : attackDamage;
+						var changeDamageAmount = effect._EffectAmountOverTime < attackDamage ?
+							effect._EffectAmountOverTime : attackDamage;
 						effect.ChangeOpponentDamageRound(player);
 						attackDamage += changeDamageAmount;
 						break;
 					case Effect.EffectType.BlockDamage:
-						var blockAmount = effect.EffectAmount < attackDamage ?
-							effect.EffectAmount : attackDamage;
+						var blockAmount = effect._EffectAmount < attackDamage ?
+							effect._EffectAmount : attackDamage;
 						effect.BlockDamageRound(blockAmount);
 						attackDamage -= blockAmount;
 						break;
 					case Effect.EffectType.ReflectDamage:
-						var reflectAmount = effect.EffectAmountOverTime < attackDamage ?
-							effect.EffectAmountOverTime : attackDamage;
+						var reflectAmount = effect._EffectAmountOverTime < attackDamage ?
+							effect._EffectAmountOverTime : attackDamage;
 						monster._HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
 						attackDamage -= reflectAmount;
@@ -179,7 +179,7 @@ namespace DungeonGame
 						throw new ArgumentOutOfRangeException();
 				}
 				if (attackDamage > 0) continue;
-				var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + monster._Name + "'s attack!";
+				var effectAbsorbString = "Your " + effect._Name + " absorbed all of " + monster._Name + "'s attack!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),

@@ -138,10 +138,10 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				intellectString);
-			var arcaneIntIndex = player._Effects.FindIndex(e => e.Name == player._Spellbook[index].Name);
+			var arcaneIntIndex = player._Effects.FindIndex(e => e._Name == player._Spellbook[index].Name);
 			if (arcaneIntIndex != -1)
 			{
-				player._Effects[arcaneIntIndex].IsEffectExpired = true;
+				player._Effects[arcaneIntIndex]._IsEffectExpired = true;
 			}
 			player._Intelligence += player._Spellbook[index].ChangeAmount.Amount;
 			PlayerHandler.CalculatePlayerStats(player);
@@ -209,7 +209,7 @@ namespace DungeonGame
 			var frostSpellDamage = PlayerHandler.CalculateSpellDamage(player, opponent, index);
 			foreach (var effect in opponent._Effects)
 			{
-				switch (effect.EffectGroup)
+				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
 						break;
@@ -224,10 +224,10 @@ namespace DungeonGame
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
-						var frozenAttackAmount = frostSpellDamage * effect.EffectMultiplier;
+						var frozenAttackAmount = frostSpellDamage * effect._EffectMultiplier;
 						frostSpellDamage = (int)frozenAttackAmount;
 						effect.FrozenRound(opponent);
-						effect.IsEffectExpired = true;
+						effect._IsEffectExpired = true;
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
 						break;
@@ -247,7 +247,7 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 			var frozenEffectIndex = opponent._Effects.FindIndex(
-				e => e.EffectGroup == Effect.EffectType.Frozen);
+				e => e._EffectGroup == Effect.EffectType.Frozen);
 			if (frozenEffectIndex == -1)
 			{
 				var frozenString = "The " + opponent._Name +
@@ -292,7 +292,7 @@ namespace DungeonGame
 			var fireSpellDamage = PlayerHandler.CalculateSpellDamage(player, opponent, index);
 			foreach (var effect in opponent._Effects)
 			{
-				switch (effect.EffectGroup)
+				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
 						break;
@@ -307,7 +307,7 @@ namespace DungeonGame
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
-						var frozenAttackAmount = fireSpellDamage * effect.EffectMultiplier;
+						var frozenAttackAmount = fireSpellDamage * effect._EffectMultiplier;
 						fireSpellDamage = (int)frozenAttackAmount;
 						effect.FrozenRound(opponent);
 						break;
@@ -354,7 +354,7 @@ namespace DungeonGame
 			var arcaneSpellDamage = PlayerHandler.CalculateSpellDamage(player, opponent, index);
 			foreach (var effect in opponent._Effects)
 			{
-				switch (effect.EffectGroup)
+				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
 						break;
@@ -369,7 +369,7 @@ namespace DungeonGame
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
-						var frozenAttackAmount = arcaneSpellDamage * effect.EffectMultiplier;
+						var frozenAttackAmount = arcaneSpellDamage * effect._EffectMultiplier;
 						arcaneSpellDamage = (int)frozenAttackAmount;
 						effect.FrozenRound(opponent);
 						break;

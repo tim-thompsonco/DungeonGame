@@ -158,7 +158,7 @@ namespace DungeonGame
 		{
 			foreach (var effect in this.Player._Effects)
 			{
-				switch (effect.EffectGroup)
+				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
 						effect.HealingRound(this.Player);
@@ -198,7 +198,7 @@ namespace DungeonGame
 			GameHandler.RemovedExpiredEffectsAsync(this.Opponent);
 			foreach (var effect in this.Opponent._Effects)
 			{
-				switch (effect.EffectGroup)
+				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
 						break;

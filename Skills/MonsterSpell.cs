@@ -72,7 +72,7 @@ namespace DungeonGame
 			var fireSpellDamage = MonsterHandler.CalculateSpellDamage(player, monster, index);
 			foreach (var effect in player._Effects.ToList())
 			{
-				switch (effect.EffectGroup)
+				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
 						break;
@@ -87,26 +87,26 @@ namespace DungeonGame
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
-						var frozenAttackAmount = fireSpellDamage * effect.EffectMultiplier;
+						var frozenAttackAmount = fireSpellDamage * effect._EffectMultiplier;
 						fireSpellDamage = (int)frozenAttackAmount;
 						effect.FrozenRound(player);
-						effect.IsEffectExpired = true;
+						effect._IsEffectExpired = true;
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
-						var changeDamageAmount = effect.EffectAmountOverTime < fireSpellDamage ?
-							effect.EffectAmountOverTime : fireSpellDamage;
+						var changeDamageAmount = effect._EffectAmountOverTime < fireSpellDamage ?
+							effect._EffectAmountOverTime : fireSpellDamage;
 						effect.ChangeOpponentDamageRound(player);
 						fireSpellDamage += changeDamageAmount;
 						break;
 					case Effect.EffectType.BlockDamage:
-						var blockAmount = effect.EffectAmount < fireSpellDamage ?
-							effect.EffectAmount : fireSpellDamage;
+						var blockAmount = effect._EffectAmount < fireSpellDamage ?
+							effect._EffectAmount : fireSpellDamage;
 						effect.BlockDamageRound(blockAmount);
 						fireSpellDamage -= blockAmount;
 						break;
 					case Effect.EffectType.ReflectDamage:
-						var reflectAmount = effect.EffectAmountOverTime < fireSpellDamage ?
-							effect.EffectAmountOverTime : fireSpellDamage;
+						var reflectAmount = effect._EffectAmountOverTime < fireSpellDamage ?
+							effect._EffectAmountOverTime : fireSpellDamage;
 						monster._HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
 						fireSpellDamage -= reflectAmount;
@@ -117,7 +117,7 @@ namespace DungeonGame
 						throw new ArgumentOutOfRangeException();
 				}
 				if (fireSpellDamage > 0) continue;
-				var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + monster._Name + "'s attack!";
+				var effectAbsorbString = "Your " + effect._Name + " absorbed all of " + monster._Name + "'s attack!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
@@ -152,7 +152,7 @@ namespace DungeonGame
 			var frostSpellDamage = MonsterHandler.CalculateSpellDamage(player, monster, index);
 			foreach (var effect in player._Effects.ToList())
 			{
-				switch (effect.EffectGroup)
+				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
 						break;
@@ -167,26 +167,26 @@ namespace DungeonGame
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
-						var frozenAttackAmount = frostSpellDamage * effect.EffectMultiplier;
+						var frozenAttackAmount = frostSpellDamage * effect._EffectMultiplier;
 						frostSpellDamage = (int)frozenAttackAmount;
 						effect.FrozenRound(player);
-						effect.IsEffectExpired = true;
+						effect._IsEffectExpired = true;
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
-						var changeDamageAmount = effect.EffectAmountOverTime < frostSpellDamage ?
-							effect.EffectAmountOverTime : frostSpellDamage;
+						var changeDamageAmount = effect._EffectAmountOverTime < frostSpellDamage ?
+							effect._EffectAmountOverTime : frostSpellDamage;
 						effect.ChangeOpponentDamageRound(player);
 						frostSpellDamage += changeDamageAmount;
 						break;
 					case Effect.EffectType.BlockDamage:
-						var blockAmount = effect.EffectAmount < frostSpellDamage ?
-							effect.EffectAmount : frostSpellDamage;
+						var blockAmount = effect._EffectAmount < frostSpellDamage ?
+							effect._EffectAmount : frostSpellDamage;
 						effect.BlockDamageRound(blockAmount);
 						frostSpellDamage -= blockAmount;
 						break;
 					case Effect.EffectType.ReflectDamage:
-						var reflectAmount = effect.EffectAmountOverTime < frostSpellDamage ?
-							effect.EffectAmountOverTime : frostSpellDamage;
+						var reflectAmount = effect._EffectAmountOverTime < frostSpellDamage ?
+							effect._EffectAmountOverTime : frostSpellDamage;
 						monster._HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
 						frostSpellDamage -= reflectAmount;
@@ -197,7 +197,7 @@ namespace DungeonGame
 						throw new ArgumentOutOfRangeException();
 				}
 				if (frostSpellDamage > 0) continue;
-				var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + monster._Name + "'s attack!";
+				var effectAbsorbString = "Your " + effect._Name + " absorbed all of " + monster._Name + "'s attack!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
@@ -211,7 +211,7 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 			var frozenEffectIndex = player._Effects.FindIndex(
-				e => e.EffectGroup == Effect.EffectType.Frozen);
+				e => e._EffectGroup == Effect.EffectType.Frozen);
 			if (frozenEffectIndex == -1)
 			{
 				const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be double!";
@@ -235,7 +235,7 @@ namespace DungeonGame
 			var arcaneSpellDamage = MonsterHandler.CalculateSpellDamage(player, monster, index);
 			foreach (var effect in player._Effects.ToList())
 			{
-				switch (effect.EffectGroup)
+				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
 						break;
@@ -250,26 +250,26 @@ namespace DungeonGame
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
-						var frozenAttackAmount = arcaneSpellDamage * effect.EffectMultiplier;
+						var frozenAttackAmount = arcaneSpellDamage * effect._EffectMultiplier;
 						arcaneSpellDamage = (int)frozenAttackAmount;
 						effect.FrozenRound(player);
-						effect.IsEffectExpired = true;
+						effect._IsEffectExpired = true;
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
-						var changeDamageAmount = effect.EffectAmountOverTime < arcaneSpellDamage ?
-							effect.EffectAmountOverTime : arcaneSpellDamage;
+						var changeDamageAmount = effect._EffectAmountOverTime < arcaneSpellDamage ?
+							effect._EffectAmountOverTime : arcaneSpellDamage;
 						effect.ChangeOpponentDamageRound(player);
 						arcaneSpellDamage += changeDamageAmount;
 						break;
 					case Effect.EffectType.BlockDamage:
-						var blockAmount = effect.EffectAmount < arcaneSpellDamage ?
-							effect.EffectAmount : arcaneSpellDamage;
+						var blockAmount = effect._EffectAmount < arcaneSpellDamage ?
+							effect._EffectAmount : arcaneSpellDamage;
 						effect.BlockDamageRound(blockAmount);
 						arcaneSpellDamage -= blockAmount;
 						break;
 					case Effect.EffectType.ReflectDamage:
-						var reflectAmount = effect.EffectAmountOverTime < arcaneSpellDamage ?
-							effect.EffectAmountOverTime : arcaneSpellDamage;
+						var reflectAmount = effect._EffectAmountOverTime < arcaneSpellDamage ?
+							effect._EffectAmountOverTime : arcaneSpellDamage;
 						monster._HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
 						arcaneSpellDamage -= reflectAmount;
@@ -280,7 +280,7 @@ namespace DungeonGame
 						throw new ArgumentOutOfRangeException();
 				}
 				if (arcaneSpellDamage > 0) continue;
-				var effectAbsorbString = "Your " + effect.Name + " absorbed all of " + monster._Name + "'s attack!";
+				var effectAbsorbString = "Your " + effect._Name + " absorbed all of " + monster._Name + "'s attack!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),

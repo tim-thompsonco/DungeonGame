@@ -193,10 +193,10 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				powerAuraString);
-			var powerAuraIndex = player._Effects.FindIndex(e => e.Name == player._Abilities[index].Name);
+			var powerAuraIndex = player._Effects.FindIndex(e => e._Name == player._Abilities[index].Name);
 			if (powerAuraIndex != -1)
 			{
-				player._Effects[powerAuraIndex].IsEffectExpired = true;
+				player._Effects[powerAuraIndex]._IsEffectExpired = true;
 			}
 			player._Strength += player._Abilities[index].ChangeAmount.Amount;
 			PlayerHandler.CalculatePlayerStats(player);
@@ -227,10 +227,10 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				swiftAuraString);
-			var swiftAuraIndex = player._Effects.FindIndex(e => e.Name == player._Abilities[index].Name);
+			var swiftAuraIndex = player._Effects.FindIndex(e => e._Name == player._Abilities[index].Name);
 			if (swiftAuraIndex != -1)
 			{
-				player._Effects[swiftAuraIndex].IsEffectExpired = true;
+				player._Effects[swiftAuraIndex]._IsEffectExpired = true;
 			}
 			player._Dexterity += player._Abilities[index].ChangeAmount.Amount;
 			PlayerHandler.CalculatePlayerStats(player);

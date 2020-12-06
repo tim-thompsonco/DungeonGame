@@ -82,10 +82,10 @@ namespace DungeonGameTests
 			Assert.AreEqual(baseConst + statAmount, player._Constitution);
 			Assert.AreEqual(baseMaxHitPoints + statAmount * 10, player._MaxHitPoints);
 			Assert.IsEmpty(player._Consumables);
-			Assert.AreEqual(player._Effects[0].EffectGroup, Effect.EffectType.ChangeStat);
+			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.ChangeStat);
 			for (var i = 1; i < 601; i++)
 			{
-				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				player._Effects[0].ChangeStatRound();
 			}
 			GameHandler.RemovedExpiredEffectsAsync(player);
@@ -119,10 +119,10 @@ namespace DungeonGameTests
 			Assert.AreEqual(baseInt + statAmount, player._Intelligence);
 			Assert.AreEqual(baseMaxManaPoints + statAmount * 10, player._MaxManaPoints);
 			Assert.IsEmpty(player._Consumables);
-			Assert.AreEqual(player._Effects[0].EffectGroup, Effect.EffectType.ChangeStat);
+			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.ChangeStat);
 			for (var i = 1; i < 601; i++)
 			{
-				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				player._Effects[0].ChangeStatRound();
 			}
 			GameHandler.RemovedExpiredEffectsAsync(player);
@@ -156,10 +156,10 @@ namespace DungeonGameTests
 			Assert.AreEqual(baseStr + statAmount, player._Strength);
 			Assert.AreEqual(baseMaxCarryWeight + statAmount * 2.5, player._MaxCarryWeight, 1);
 			Assert.IsEmpty(player._Consumables);
-			Assert.AreEqual(player._Effects[0].EffectGroup, Effect.EffectType.ChangeStat);
+			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.ChangeStat);
 			for (var i = 1; i < 601; i++)
 			{
-				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				player._Effects[0].ChangeStatRound();
 			}
 			GameHandler.RemovedExpiredEffectsAsync(player);
@@ -193,10 +193,10 @@ namespace DungeonGameTests
 			Assert.AreEqual(baseDex + statAmount, player._Dexterity);
 			Assert.AreEqual(baseDodgeChance + statAmount * 1.5, player._DodgeChance);
 			Assert.IsEmpty(player._Consumables);
-			Assert.AreEqual(player._Effects[0].EffectGroup, Effect.EffectType.ChangeStat);
+			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.ChangeStat);
 			for (var i = 1; i < 601; i++)
 			{
-				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				player._Effects[0].ChangeStatRound();
 			}
 			GameHandler.RemovedExpiredEffectsAsync(player);

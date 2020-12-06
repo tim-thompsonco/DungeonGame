@@ -86,7 +86,7 @@ namespace DungeonGame
 			}
 			if (!player._InCombat) return totalArmorRating;
 			totalArmorRating += player._Effects.Where(
-				effect => effect.EffectGroup == Effect.EffectType.ChangeArmor).Sum(effect => effect.EffectAmountOverTime);
+				effect => effect._EffectGroup == Effect.EffectType.ChangeArmor).Sum(effect => effect._EffectAmountOverTime);
 			return totalArmorRating < 0 ? 0 : totalArmorRating;
 		}
 		public static void UseWeaponKit(Player player, string[] userInput)

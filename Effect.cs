@@ -18,262 +18,391 @@ namespace DungeonGame
 			Frozen,
 			ChangeStat,
 		}
-		public string Name { get; set; }
-		public EffectType EffectGroup { get; set; }
-		public ChangeStat.StatType? StatGroup { get; set; }
-		public int EffectAmount { get; set; }
-		public int EffectAmountOverTime { get; set; }
-		public int EffectCurRound { get; set; }
-		public int EffectMaxRound { get; set; }
-		public double EffectMultiplier { get; set; }
-		public bool IsEffectExpired { get; set; }
-		public bool IsHarmful { get; set; }
-		public int TickDuration { get; set; }
+		public string _Name { get; set; }
+		public EffectType _EffectGroup { get; set; }
+		public ChangeStat.StatType? _StatGroup { get; set; }
+		public int _EffectAmount { get; set; }
+		public int _EffectAmountOverTime { get; set; }
+		public int _EffectCurRound { get; set; }
+		public int _EffectMaxRound { get; set; }
+		public double _EffectMultiplier { get; set; }
+		public bool _IsEffectExpired { get; set; }
+		public bool _IsHarmful { get; set; }
+		public int _TickDuration { get; set; }
 
 		// Default constructor for JSON serialization
 		public Effect() { }
 		public Effect(string name, EffectType effectGroup, int effectAmount, int tickDuration)
 		{
-			this.Name = name;
-			this.EffectGroup = effectGroup;
-			this.EffectAmount = effectAmount;
-			this.TickDuration = tickDuration;
+			_Name = name;
+			_EffectGroup = effectGroup;
+			_EffectAmount = effectAmount;
+			_TickDuration = tickDuration;
 		}
 		public Effect(string name, EffectType effectGroup, int effectCurRound, int effectMaxRound,
 			double effectMultiplier, int tickDuration, bool harmful)
 		{
-			this.Name = name;
-			this.EffectGroup = effectGroup;
-			this.EffectCurRound = effectCurRound;
-			this.EffectMaxRound = effectMaxRound;
-			this.TickDuration = tickDuration;
-			this.EffectMultiplier = effectMultiplier;
-			this.IsHarmful = harmful;
+			_Name = name;
+			_EffectGroup = effectGroup;
+			_EffectCurRound = effectCurRound;
+			_EffectMaxRound = effectMaxRound;
+			_TickDuration = tickDuration;
+			_EffectMultiplier = effectMultiplier;
+			_IsHarmful = harmful;
 		}
 		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
 			int effectMaxRound, double effectMultiplier, int tickDuration, bool harmful)
 			: this(name, effectGroup, effectCurRound, effectMaxRound, effectMultiplier, tickDuration, harmful)
 		{
-			this.EffectAmountOverTime = effectAmountOverTime;
+			_EffectAmountOverTime = effectAmountOverTime;
 		}
 		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
 			int effectMaxRound, double effectMultiplier, int tickDuration, bool harmful, ChangeStat.StatType statType)
 			: this(name, effectGroup, effectAmountOverTime, effectCurRound, effectMaxRound, effectMultiplier, tickDuration,
 				harmful)
 		{
-			this.StatGroup = statType;
+			_StatGroup = statType;
 		}
 
 		public void HealingRound(Player player)
 		{
-			if (this.IsEffectExpired) return;
-			this.EffectCurRound += 1;
-			player._HitPoints += this.EffectAmountOverTime;
-			if (player._HitPoints > player._MaxHitPoints) player._HitPoints = player._MaxHitPoints;
-			var healAmtString = "You have been healed for " + this.EffectAmountOverTime + " health.";
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
+			_EffectCurRound += 1;
+			player._HitPoints += _EffectAmountOverTime;
+			if (player._HitPoints > player._MaxHitPoints)
+			{
+				player._HitPoints = player._MaxHitPoints;
+			}
+
+			string healAmtString = $"You have been healed for {_EffectAmountOverTime} health.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				healAmtString);
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 		public void ChangeStatRound()
 		{
-			if (this.IsEffectExpired) return;
-			this.EffectCurRound += 1;
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
+			_EffectCurRound += 1;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 		public void BlockDamageRound()
 		{
-			if (this.IsEffectExpired) return;
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
 			const string blockString = "Your block effect is slowly fading away.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				blockString);
-			if (this.TickDuration > 0) return;
+			if (_TickDuration > 0)
+			{
+				return;
+			}
+
 			const string blockEndString = "You are no longer blocking damage!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				blockEndString);
-			this.IsEffectExpired = true;
+			_IsEffectExpired = true;
 		}
 		public void BlockDamageRound(int blockAmount)
 		{
-			if (this.IsEffectExpired) return;
-			var blockString = "Your defensive move blocked " + blockAmount + " damage!";
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
+			string blockString = $"Your defensive move blocked {blockAmount} damage!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				blockString);
-			this.EffectAmount -= blockAmount;
-			if (this.EffectAmount > 0) return;
+			_EffectAmount -= blockAmount;
+			if (_EffectAmount > 0)
+			{
+				return;
+			}
+
 			const string blockEndString = "You are no longer blocking damage!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				blockEndString);
-			this.IsEffectExpired = true;
+			_IsEffectExpired = true;
 		}
 		public void ReflectDamageRound()
 		{
-			if (this.IsEffectExpired) return;
-			this.EffectCurRound += 1;
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
+			_EffectCurRound += 1;
 			const string reflectString = "Your spell reflect is slowly fading away.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				reflectString);
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 		public void ReflectDamageRound(int reflectAmount)
 		{
-			if (this.IsEffectExpired) return;
-			this.EffectCurRound += 1;
-			var reflectString = "You reflected " + reflectAmount + " damage back at your opponent!";
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
+			_EffectCurRound += 1;
+			string reflectString = $"You reflected {reflectAmount} damage back at your opponent!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				reflectString);
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 		public void ChangeOpponentDamageRound(Player player)
 		{
-			if (this.IsEffectExpired || player._InCombat == false) return;
-			this.EffectCurRound += 1;
-			var changeDmgString = this.EffectAmountOverTime > 0 ?
-				"Incoming damage is increased by " + this.EffectAmountOverTime + "."
-				: "Incoming damage is decreased by " + -1 * this.EffectAmountOverTime + ".";
+			if (_IsEffectExpired || player._InCombat == false)
+			{
+				return;
+			}
+
+			_EffectCurRound += 1;
+			string changeDmgString = _EffectAmountOverTime > 0 ? $"Incoming damage is increased by {_EffectAmountOverTime}." :
+				$"Incoming damage is decreased by {-1 * _EffectAmountOverTime}.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				changeDmgString);
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 		public void ChangePlayerDamageRound(Player player)
 		{
-			if (this.IsEffectExpired || player._InCombat == false) return;
-			this.EffectCurRound += 1;
-			var changeAmount = Math.Abs(this.EffectAmountOverTime);
-			var changeDmgString = this.EffectAmountOverTime > 0 ?
-				"Your damage is increased by " + changeAmount + "."
-				: "Your damage is decreased by " + changeAmount + ".";
+			if (_IsEffectExpired || player._InCombat == false)
+			{
+				return;
+			}
+
+			_EffectCurRound += 1;
+			int changeAmount = Math.Abs(_EffectAmountOverTime);
+			string changeDmgString = _EffectAmountOverTime > 0 ? $"Your damage is increased by {changeAmount}." : 
+				$"Your damage is decreased by {changeAmount}.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				changeDmgString);
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 		public void ChangeArmorRound()
 		{
-			if (this.IsEffectExpired) return;
-			this.EffectCurRound += 1;
-			var changeAmount = Math.Abs(this.EffectAmountOverTime);
-			var changeArmorString = this.EffectAmountOverTime > 0 ?
-				"Your armor is increased by " + changeAmount + "."
-				: "Your armor is decreased by " + changeAmount + ".";
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
+			_EffectCurRound += 1;
+			int changeAmount = Math.Abs(_EffectAmountOverTime);
+			string changeArmorString = _EffectAmountOverTime > 0 ? $"Your armor is increased by {changeAmount}." : 
+				$"Your armor is decreased by {changeAmount}.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				changeArmorString);
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 		public void OnFireRound(Monster opponent)
 		{
-			if (this.IsEffectExpired) return;
-			this.EffectCurRound += 1;
-			opponent._HitPoints -= this.EffectAmountOverTime;
-			var burnString = "The " + opponent._Name + " burns for " + this.EffectAmountOverTime + " fire damage.";
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
+			_EffectCurRound += 1;
+			opponent._HitPoints -= _EffectAmountOverTime;
+			string burnString = $"The {opponent._Name} burns for {_EffectAmountOverTime} fire damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				burnString);
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 		public void OnFireRound(Player player)
 		{
-			if (this.IsEffectExpired) return;
-			this.EffectCurRound += 1;
-			player._HitPoints -= this.EffectAmountOverTime;
-			var burnString = "You burn for " + this.EffectAmountOverTime + " fire damage.";
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
+			_EffectCurRound += 1;
+			player._HitPoints -= _EffectAmountOverTime;
+			string burnString = $"You burn for {_EffectAmountOverTime} fire damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				burnString);
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 		public void BleedingRound(Monster opponent)
 		{
-			if (this.IsEffectExpired) return;
-			this.EffectCurRound += 1;
-			opponent._HitPoints -= this.EffectAmountOverTime;
-			var bleedString = "The " + opponent._Name + " bleeds for " + this.EffectAmountOverTime + " physical damage.";
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
+			_EffectCurRound += 1;
+			opponent._HitPoints -= _EffectAmountOverTime;
+			string bleedString = $"The {opponent._Name} bleeds for {_EffectAmountOverTime} physical damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				bleedString);
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 		public void BleedingRound(Player player)
 		{
-			if (this.IsEffectExpired) return;
-			this.EffectCurRound += 1;
-			player._HitPoints -= this.EffectAmountOverTime;
-			var bleedString = "You bleed for " + this.EffectAmountOverTime + " physical damage.";
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
+			_EffectCurRound += 1;
+			player._HitPoints -= _EffectAmountOverTime;
+			string bleedString = $"You bleed for {_EffectAmountOverTime} physical damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				bleedString);
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 		public void StunnedRound(Monster opponent)
 		{
-			if (this.IsEffectExpired) return;
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
 			opponent._IsStunned = true;
-			this.EffectCurRound += 1;
-			var stunnedString = "The " + opponent._Name + " is stunned and cannot attack.";
+			_EffectCurRound += 1;
+			string stunnedString = $"The {opponent._Name} is stunned and cannot attack.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				stunnedString);
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 		public void FrozenRound(Monster opponent)
 		{
-			if (this.IsEffectExpired) return;
-			this.EffectCurRound += 1;
-			var frozenString = "The " + opponent._Name + " is frozen. Physical, frost and arcane damage to it will be double!";
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
+			_EffectCurRound += 1;
+			string frozenString = $"The {opponent._Name} is frozen. Physical, frost and arcane damage to it will be double!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				frozenString);
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 		public void FrozenRound(Player player)
 		{
-			if (this.IsEffectExpired) return;
-			this.EffectCurRound += 1;
+			if (_IsEffectExpired)
+			{
+				return;
+			}
+
+			_EffectCurRound += 1;
 			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be double!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				frozenString);
-			if (this.EffectCurRound <= this.EffectMaxRound) return;
-			this.IsEffectExpired = true;
+			if (_EffectCurRound <= _EffectMaxRound)
+			{
+				return;
+			}
+
+			_IsEffectExpired = true;
 		}
 	}
 }

@@ -363,7 +363,7 @@ namespace DungeonGame
 			int baseAttackAmount = attackAmount;
 			foreach (Effect effect in player._Effects.ToList())
 			{
-				switch (effect.EffectGroup)
+				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
 						break;
@@ -378,26 +378,26 @@ namespace DungeonGame
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
-						double frozenAttackAmount = attackAmount * effect.EffectMultiplier;
+						double frozenAttackAmount = attackAmount * effect._EffectMultiplier;
 						attackAmount = (int)frozenAttackAmount;
 						effect.FrozenRound(player);
-						effect.IsEffectExpired = true;
+						effect._IsEffectExpired = true;
 						break;
 					case Effect.EffectType.ChangeOpponentDamage:
-						int changeDamageAmount = effect.EffectAmountOverTime < attackAmount ?
-							effect.EffectAmountOverTime : attackAmount;
+						int changeDamageAmount = effect._EffectAmountOverTime < attackAmount ?
+							effect._EffectAmountOverTime : attackAmount;
 						effect.ChangeOpponentDamageRound(player);
 						attackAmount += changeDamageAmount;
 						break;
 					case Effect.EffectType.BlockDamage:
-						int blockAmount = effect.EffectAmount < attackAmount ?
-							effect.EffectAmount : attackAmount;
+						int blockAmount = effect._EffectAmount < attackAmount ?
+							effect._EffectAmount : attackAmount;
 						effect.BlockDamageRound(blockAmount);
 						attackAmount -= blockAmount;
 						break;
 					case Effect.EffectType.ReflectDamage:
-						int reflectAmount = effect.EffectAmountOverTime < attackAmount ?
-							effect.EffectAmountOverTime : attackAmount;
+						int reflectAmount = effect._EffectAmountOverTime < attackAmount ?
+							effect._EffectAmountOverTime : attackAmount;
 						_HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
 						attackAmount -= reflectAmount;
@@ -409,7 +409,7 @@ namespace DungeonGame
 				}
 				if (baseAttackAmount > attackAmount && attackAmount - player.ArmorRating(this) <= 0)
 				{
-					string effectAbsorbString = $"Your {effect.Name} absorbed all of {_Name}'s attack!";
+					string effectAbsorbString = $"Your {effect._Name} absorbed all of {_Name}'s attack!";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatAttackFailText(),
 						Settings.FormatDefaultBackground(),

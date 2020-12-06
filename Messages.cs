@@ -65,7 +65,7 @@ namespace DungeonGame
 				"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot " +
 				"and explore dungeons. Stuff you've probably done a million times already across various RPG games. At any time " +
 				"you can get help on commands by typing 'help'.";
-			for (var i = 0; i < gameIntroString.Length; i += Settings.GetGameWidth())
+			for (int i = 0; i < gameIntroString.Length; i += Settings.GetGameWidth())
 			{
 				if (gameIntroString.Length - i < Settings.GetGameWidth())
 				{
@@ -90,7 +90,7 @@ namespace DungeonGame
 				"commands will be shown to the player. Any object that is consumable, such as a potion, can be drank " +
 				"by typing 'drink' and then the name of the potion or object. To use armor or weapons, you must 'equip' " +
 				"them. You can 'unequip' them as well.";
-			for (var i = 0; i < commandHelpString.Length; i += Settings.GetGameWidth())
+			for (int i = 0; i < commandHelpString.Length; i += Settings.GetGameWidth())
 			{
 				if (commandHelpString.Length - i < Settings.GetGameWidth())
 				{
