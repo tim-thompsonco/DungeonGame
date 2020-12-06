@@ -85,9 +85,9 @@ namespace DungeonGame
 				this.Opponent._InCombat = false;
 				this.FleeSuccess = true;
 				var playerRoom = RoomHandler.Rooms[this.Player._PlayerLocation];
-				var playerX = this.Player._PlayerLocation.X;
-				var playerY = this.Player._PlayerLocation.Y;
-				var playerZ = this.Player._PlayerLocation.Z;
+				var playerX = this.Player._PlayerLocation._X;
+				var playerY = this.Player._PlayerLocation._Y;
+				var playerZ = this.Player._PlayerLocation._Z;
 				if (playerRoom._Up != null)
 				{
 					var newCoord = new Coordinate(playerX, playerY, playerZ + 1);

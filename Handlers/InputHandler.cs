@@ -37,9 +37,9 @@ namespace DungeonGame
 		{
 			var playerRoom = RoomHandler.Rooms[player._PlayerLocation];
 			var isTownRoom = playerRoom as TownRoom;
-			var playerX = player._PlayerLocation.X;
-			var playerY = player._PlayerLocation.Y;
-			var playerZ = player._PlayerLocation.Z;
+			var playerX = player._PlayerLocation._X;
+			var playerY = player._PlayerLocation._Y;
+			var playerZ = player._PlayerLocation._Z;
 			switch (input[0])
 			{
 				case "a":

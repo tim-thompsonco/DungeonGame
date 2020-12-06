@@ -5,7 +5,7 @@
 		public static string PopulateDungeonRoomName(IRoom originalRoom)
 		{
 			var castedRoom = originalRoom as DungeonRoom;
-			return castedRoom?.RoomCategory switch
+			return castedRoom?._RoomCategory switch
 			{
 				DungeonRoom.RoomType.Corridor => "Corridor",
 				DungeonRoom.RoomType.Openspace => "Dimly Lit Cavern",
@@ -18,7 +18,7 @@
 		public static string PopulateDungeonRoomDesc(IRoom originalRoom)
 		{
 			var castedRoom = originalRoom as DungeonRoom;
-			return castedRoom?.RoomCategory switch
+			return castedRoom?._RoomCategory switch
 			{
 				DungeonRoom.RoomType.Corridor => (
 					"You are in a corridor carved out of smooth rock approximately 6 feet wide and 10 feet " +

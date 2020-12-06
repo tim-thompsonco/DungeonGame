@@ -367,9 +367,9 @@ namespace DungeonGame
 		}
 		public static void UseDistanceAbility(Player player, int index, string direction)
 		{
-			var targetX = player._PlayerLocation.X;
-			var targetY = player._PlayerLocation.Y;
-			var targetZ = player._PlayerLocation.Z;
+			var targetX = player._PlayerLocation._X;
+			var targetY = player._PlayerLocation._Y;
+			var targetZ = player._PlayerLocation._Z;
 			switch (direction)
 			{
 				case "n":

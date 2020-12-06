@@ -7,28 +7,28 @@ namespace DungeonGame
 	[TypeConverter(typeof(CoordinateConverter))]
 	public class Coordinate : IEquatable<Coordinate>
 	{
-		public int X { get; }
-		public int Y { get; }
-		public int Z { get; }
+		public int _X { get; }
+		public int _Y { get; }
+		public int _Z { get; }
 
 		public Coordinate(int x, int y, int z)
 		{
-			this.X = x;
-			this.Y = y;
-			this.Z = z;
+			_X = x;
+			_Y = y;
+			_Z = z;
 		}
 
 		public override int GetHashCode()
 		{
-			return (this.X + 100) ^ (this.Y + 100) ^ (this.Z + 100);
+			return (_X + 100) ^ (_Y + 100) ^ (_Z + 100);
 		}
 		public override bool Equals(object obj)
 		{
-			return this.Equals(obj as Coordinate);
+			return Equals(obj as Coordinate);
 		}
 		public bool Equals(Coordinate obj)
 		{
-			return obj != null && obj.X == this.X && obj.Y == this.Y && obj.Z == this.Z;
+			return obj != null && obj._X == _X && obj._Y == _Y && obj._Z == _Z;
 		}
 	}
 
@@ -40,7 +40,11 @@ namespace DungeonGame
 		// provide information about the design-time container.
 		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
 		{
-			if (sourceType == typeof(string)) return true;
+			if (sourceType == typeof(string))
+			{
+				return true;
+			}
+
 			return base.CanConvertFrom(context, sourceType);
 		}
 		// Overrides the ConvertFrom method of TypeConverter.
@@ -49,7 +53,7 @@ namespace DungeonGame
 		{
 			if (value is string)
 			{
-				var v = ((string)value).Split(new char[] { ',' });
+				string[] v = ((string)value).Split(new char[] { ',' });
 				return new Coordinate(int.Parse(v[0]), int.Parse(v[1]), int.Parse(v[2]));
 			}
 			return base.ConvertFrom(context, culture, value);
@@ -60,7 +64,7 @@ namespace DungeonGame
 		{
 			if (destinationType == typeof(string))
 			{
-				return ((Coordinate)value).X + "," + ((Coordinate)value).Y + "," + ((Coordinate)value).Z;
+				return ((Coordinate)value)._X + "," + ((Coordinate)value)._Y + "," + ((Coordinate)value)._Z;
 			}
 			return base.ConvertTo(context, culture, value, destinationType);
 		}

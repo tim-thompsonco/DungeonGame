@@ -15,10 +15,10 @@ namespace DungeonGameTests
 			MonsterBuilder.BuildMonster(monster);
 			OutputHandler.Display.ClearUserOutput();
 			var attackChoice = monster.DetermineAttack(player);
-			Assert.AreEqual(AttackOption.AttackType.Spell, attackChoice.AttackCategory);
+			Assert.AreEqual(AttackOption.AttackType.Spell, attackChoice._AttackCategory);
 			monster._EnergyPoints = 0;
 			attackChoice = monster.DetermineAttack(player);
-			Assert.AreEqual(AttackOption.AttackType.Physical, attackChoice.AttackCategory);
+			Assert.AreEqual(AttackOption.AttackType.Physical, attackChoice._AttackCategory);
 		}
 		[Test]
 		public void FireballSpellUnitTest()

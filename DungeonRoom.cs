@@ -17,7 +17,7 @@ namespace DungeonGame
 			Intersection,
 			Stairs
 		}
-		public RoomType RoomCategory { get; set; }
+		public RoomType _RoomCategory { get; set; }
 		public bool _IsDiscovered { get; set; }
 		public IRoom _North { get; set; }
 		public IRoom _South { get; set; }
@@ -31,9 +31,9 @@ namespace DungeonGame
 		public IRoom _Down { get; set; }
 		public string _Name { get; set; }
 		public string _Desc { get; set; }
-		public int DungeonLevel { get; set; }
-		public List<string> Commands { get; set; }
-		public List<string> CombatCommands { get; set; }
+		public int _DungeonLevel { get; set; }
+		public List<string> _Commands { get; set; }
+		public List<string> _CombatCommands { get; set; }
 		public List<IRoomInteraction> _RoomObjects { get; set; }
 		public Monster _Monster { get; set; }
 
@@ -41,67 +41,67 @@ namespace DungeonGame
 		public DungeonRoom() { }
 		public DungeonRoom(int levelRangeLow, int levelRangeHigh)
 		{
-			this._RoomObjects = new List<IRoomInteraction>();
-			this.Commands = new List<string> { "[I]nventory", "Save", "[Q]uit" };
-			this.CombatCommands = new List<string> { "[F]ight", "[I]nventory", "Flee" };
-			this.DungeonLevel = GameHandler.GetRandomNumber(levelRangeLow, levelRangeHigh);
-			var randomNum = GameHandler.GetRandomNumber(1, 100);
+			_RoomObjects = new List<IRoomInteraction>();
+			_Commands = new List<string> { "[I]nventory", "Save", "[Q]uit" };
+			_CombatCommands = new List<string> { "[F]ight", "[I]nventory", "Flee" };
+			_DungeonLevel = GameHandler.GetRandomNumber(levelRangeLow, levelRangeHigh);
+			int randomNum = GameHandler.GetRandomNumber(1, 100);
 			// Reserving numbers 80-100 for chance of room not having a monster
 			if (randomNum <= 16)
 			{
 				// 20% chance of spawning based on cumulative 0.2 * 80
-				this._Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Zombie);
-				MonsterBuilder.BuildMonster(this._Monster);
-				this._RoomObjects.Add(this._Monster);
+				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Zombie);
+				MonsterBuilder.BuildMonster(_Monster);
+				_RoomObjects.Add(_Monster);
 			}
 			else if (randomNum <= 32)
 			{
 				// 20% chance of spawning based on cumulative 0.4 * 80
-				this._Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Skeleton);
-				MonsterBuilder.BuildMonster(this._Monster);
-				this._RoomObjects.Add(this._Monster);
+				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Skeleton);
+				MonsterBuilder.BuildMonster(_Monster);
+				_RoomObjects.Add(_Monster);
 			}
 			else if (randomNum <= 40)
 			{
 				// 10% chance of spawning based on cumulative 0.5 * 80
-				this._Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Elemental);
-				MonsterBuilder.BuildMonster(this._Monster);
-				this._RoomObjects.Add(this._Monster);
+				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Elemental);
+				MonsterBuilder.BuildMonster(_Monster);
+				_RoomObjects.Add(_Monster);
 			}
 			else if (randomNum <= 48)
 			{
 				// 10% chance of spawning based on cumulative 0.6 * 80
-				this._Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Vampire);
-				MonsterBuilder.BuildMonster(this._Monster);
-				this._RoomObjects.Add(this._Monster);
+				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Vampire);
+				MonsterBuilder.BuildMonster(_Monster);
+				_RoomObjects.Add(_Monster);
 			}
 			else if (randomNum <= 60)
 			{
 				// 15% chance of spawning based on cumulative 0.75 * 80
-				this._Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Troll);
-				MonsterBuilder.BuildMonster(this._Monster);
-				this._RoomObjects.Add(this._Monster);
+				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Troll);
+				MonsterBuilder.BuildMonster(_Monster);
+				_RoomObjects.Add(_Monster);
 			}
 			else if (randomNum <= 68)
 			{
 				// 10% chance of spawning based on cumulative 0.85 * 80
-				this._Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Demon);
-				MonsterBuilder.BuildMonster(this._Monster);
-				this._RoomObjects.Add(this._Monster);
+				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Demon);
+				MonsterBuilder.BuildMonster(_Monster);
+				_RoomObjects.Add(_Monster);
 			}
 			else if (randomNum <= 76)
 			{
 				// 10% chance of spawning based on cumulative 0.95 * 80
-				this._Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Spider);
-				MonsterBuilder.BuildMonster(this._Monster);
-				this._RoomObjects.Add(this._Monster);
+				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Spider);
+				MonsterBuilder.BuildMonster(_Monster);
+				_RoomObjects.Add(_Monster);
 			}
 			else if (randomNum <= 80)
 			{
 				// 5% chance of spawning based on cumulative 1 * 80
-				this._Monster = new Monster(this.DungeonLevel, Monster.MonsterType.Dragon);
-				MonsterBuilder.BuildMonster(this._Monster);
-				this._RoomObjects.Add(this._Monster);
+				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Dragon);
+				MonsterBuilder.BuildMonster(_Monster);
+				_RoomObjects.Add(_Monster);
 			}
 		}
 
@@ -110,20 +110,20 @@ namespace DungeonGame
 			globalTimer.Change(Timeout.Infinite, Timeout.Infinite);
 			try
 			{
-				var inputString = new StringBuilder();
-				for (var i = 1; i < input.Length; i++)
+				StringBuilder inputString = new StringBuilder();
+				for (int i = 1; i < input.Length; i++)
 				{
 					inputString.Append(input[i]);
 					inputString.Append(' ');
 				}
-				var inputName = inputString.ToString().Trim();
-				var monsterName = this._Monster._Name.Split(' ');
-				if (monsterName.Last() == inputName || this._Monster._Name == inputName ||
-					this._Monster._Name.Contains(input.Last()) || this._Monster != null)
+				string inputName = inputString.ToString().Trim();
+				string[] monsterName = _Monster._Name.Split(' ');
+				if (monsterName.Last() == inputName || _Monster._Name == inputName ||
+					_Monster._Name.Contains(input.Last()) || _Monster != null)
 				{
-					if (this._Monster._HitPoints > 0)
+					if (_Monster._HitPoints > 0)
 					{
-						var fightEvent = new CombatHandler(this._Monster, player);
+						CombatHandler fightEvent = new CombatHandler(_Monster, player);
 						fightEvent.StartCombat();
 						if (player._HitPoints <= 0)
 						{
@@ -132,7 +132,7 @@ namespace DungeonGame
 					}
 					else
 					{
-						var monsterDeadString = "The " + this._Monster._Name + " is already dead.";
+						string monsterDeadString = $"The {_Monster._Name} is already dead.";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -141,7 +141,7 @@ namespace DungeonGame
 				}
 				else
 				{
-					var noMonsterString = "There is no " + inputName + " to attack.";
+					string noMonsterString = $"There is no {inputName} to attack.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -159,37 +159,45 @@ namespace DungeonGame
 		}
 		public void ShowCommands()
 		{
-			var sameLineOutput = new List<string> {
+			List<string> sameLineOutput = new List<string> {
 			Settings.FormatGeneralInfoText(), Settings.FormatDefaultBackground(), "Available _Commands: "};
-			if (this._Monster != null && this._Monster._InCombat && this.CombatCommands != null)
+			if (_Monster != null && _Monster._InCombat && _CombatCommands != null)
 			{
-				var objCombatCount = this.CombatCommands.Count;
-				foreach (var command in this.CombatCommands)
+				int objCombatCount = _CombatCommands.Count;
+				foreach (string command in _CombatCommands)
 				{
-					var sb = new StringBuilder();
+					StringBuilder sb = new StringBuilder();
 					sb.Append(command);
-					if (this.CombatCommands[objCombatCount - 1] != command)
+					if (_CombatCommands[objCombatCount - 1] != command)
 					{
 						sb.Append(", ");
 					}
-					if (this.CombatCommands[objCombatCount - 1] == command) sb.Append(".");
+					if (_CombatCommands[objCombatCount - 1] == command)
+					{
+						sb.Append(".");
+					}
+
 					sameLineOutput.Add(Settings.FormatInfoText());
 					sameLineOutput.Add(Settings.FormatDefaultBackground());
 					sameLineOutput.Add(sb.ToString());
 				}
 			}
-			else if (this.Commands != null)
+			else if (_Commands != null)
 			{
-				var objCount = this.Commands.Count;
-				foreach (var command in this.Commands)
+				int objCount = _Commands.Count;
+				foreach (string command in _Commands)
 				{
-					var sb = new StringBuilder();
+					StringBuilder sb = new StringBuilder();
 					sb.Append(command);
-					if (this.Commands[objCount - 1] != command)
+					if (_Commands[objCount - 1] != command)
 					{
 						sb.Append(", ");
 					}
-					if (this.Commands[objCount - 1] == command) sb.Append(".");
+					if (_Commands[objCount - 1] == command)
+					{
+						sb.Append(".");
+					}
+
 					sameLineOutput.Add(Settings.FormatInfoText());
 					sameLineOutput.Add(Settings.FormatDefaultBackground());
 					sameLineOutput.Add(sb.ToString());
@@ -200,48 +208,48 @@ namespace DungeonGame
 		public void ShowDirections()
 		{
 			const string directionList = "Available Directions: ";
-			var sameLineOutput = new List<string> {
+			List<string> sameLineOutput = new List<string> {
 				Settings.FormatRoomOutputText(),
 				Settings.FormatDefaultBackground(),
 				directionList};
-			var roomDirs = new StringBuilder();
-			if (this._North != null)
+			StringBuilder roomDirs = new StringBuilder();
+			if (_North != null)
 			{
 				roomDirs.Append("[N]orth ");
 			}
-			if (this._South != null)
+			if (_South != null)
 			{
 				roomDirs.Append("[S]outh ");
 			}
-			if (this._East != null)
+			if (_East != null)
 			{
 				roomDirs.Append("[E]ast ");
 			}
-			if (this._West != null)
+			if (_West != null)
 			{
 				roomDirs.Append("[W]est ");
 			}
-			if (this._NorthWest != null)
+			if (_NorthWest != null)
 			{
 				roomDirs.Append("[N]orth[W]est ");
 			}
-			if (this._SouthWest != null)
+			if (_SouthWest != null)
 			{
 				roomDirs.Append("[S]outh[W]est ");
 			}
-			if (this._NorthEast != null)
+			if (_NorthEast != null)
 			{
 				roomDirs.Append("[N]orth[E]ast ");
 			}
-			if (this._SouthEast != null)
+			if (_SouthEast != null)
 			{
 				roomDirs.Append("[S]outh[E]ast ");
 			}
-			if (this._Up != null)
+			if (_Up != null)
 			{
 				roomDirs.Append("[U]p ");
 			}
-			if (this._Down != null)
+			if (_Down != null)
 			{
 				roomDirs.Append("[D]own");
 			}
@@ -261,8 +269,8 @@ namespace DungeonGame
 				OutputHandler.Display.StoreUserOutput(sameLineOutput);
 				return;
 			}
-			var remainingRoomDirs = roomDirs.ToString().Substring(Settings.GetGameWidth() - directionList.Length);
-			for (var i = 0; i < remainingRoomDirs.Length; i += Settings.GetGameWidth())
+			string remainingRoomDirs = roomDirs.ToString().Substring(Settings.GetGameWidth() - directionList.Length);
+			for (int i = 0; i < remainingRoomDirs.Length; i += Settings.GetGameWidth())
 			{
 				if (remainingRoomDirs.Length - i < Settings.GetGameWidth())
 				{
@@ -287,43 +295,43 @@ namespace DungeonGame
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatRoomOutputText(),
 				Settings.FormatDefaultBackground(),
-				this._Name);
+				_Name);
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				Settings.FormatTextBorder());
-			for (var i = 0; i < this._Desc.Length; i += Settings.GetGameWidth())
+			for (int i = 0; i < _Desc.Length; i += Settings.GetGameWidth())
 			{
-				if (this._Desc.Length - i < Settings.GetGameWidth())
+				if (_Desc.Length - i < Settings.GetGameWidth())
 				{
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatRoomOutputText(),
 						Settings.FormatDefaultBackground(),
-						this._Desc.Substring(i, this._Desc.Length - i));
+						_Desc.Substring(i, _Desc.Length - i));
 					continue;
 				}
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatRoomOutputText(),
 					Settings.FormatDefaultBackground(),
-					this._Desc.Substring(i, Settings.GetGameWidth()));
+					_Desc.Substring(i, Settings.GetGameWidth()));
 			}
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				Settings.FormatTextBorder());
-			var sameLineOutput = new List<string> {
+			List<string> sameLineOutput = new List<string> {
 				Settings.FormatRoomOutputText(), Settings.FormatDefaultBackground(), "Room Contents: "};
-			if (this._RoomObjects.Count > 0 && this._RoomObjects[0] != null)
+			if (_RoomObjects.Count > 0 && _RoomObjects[0] != null)
 			{
-				var objCount = this._RoomObjects.Count;
-				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				foreach (var item in this._RoomObjects)
+				int objCount = _RoomObjects.Count;
+				TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+				foreach (IRoomInteraction item in _RoomObjects)
 				{
-					var sb = new StringBuilder();
-					var itemTitle = item._Name;
+					StringBuilder sb = new StringBuilder();
+					string itemTitle = item._Name;
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
-					if (this._RoomObjects[objCount - 1] != item)
+					if (_RoomObjects[objCount - 1] != item)
 					{
 						sb.Append(", ");
 					}
@@ -340,36 +348,36 @@ namespace DungeonGame
 				sameLineOutput.Add("There is nothing in the room.");
 			}
 			OutputHandler.Display.StoreUserOutput(sameLineOutput);
-			this.ShowDirections();
+			ShowDirections();
 		}
 		public void LootCorpse(Player player, string[] input)
 		{
-			var inputString = new StringBuilder();
-			for (var i = 1; i < input.Length; i++)
+			StringBuilder inputString = new StringBuilder();
+			for (int i = 1; i < input.Length; i++)
 			{
 				inputString.Append(input[i]);
 				inputString.Append(' ');
 			}
-			var inputName = inputString.ToString().Trim();
-			var monsterName = this._Monster._Name.Split(' ');
-			if (monsterName.Last() == inputName || this._Monster._Name.Contains(inputName))
+			string inputName = inputString.ToString().Trim();
+			string[] monsterName = _Monster._Name.Split(' ');
+			if (monsterName.Last() == inputName || _Monster._Name.Contains(inputName))
 			{
-				if (this._Monster._HitPoints <= 0 && this._Monster._WasLooted == false)
+				if (_Monster._HitPoints <= 0 && _Monster._WasLooted == false)
 				{
-					var goldLooted = this._Monster._Gold;
-					player._Gold += this._Monster._Gold;
+					int goldLooted = _Monster._Gold;
+					player._Gold += _Monster._Gold;
 					try
 					{
-						this._Monster._Gold = 0;
-						var lootGoldString = "You looted " + goldLooted + " gold coins from the " + this._Monster._Name + "!";
+						_Monster._Gold = 0;
+						string lootGoldString = $"You looted {goldLooted} gold coins from the {_Monster._Name}!";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
 							lootGoldString);
-						while (this._Monster._MonsterItems.Count > 0)
+						while (_Monster._MonsterItems.Count > 0)
 						{
-							var playerWeight = PlayerHandler.GetInventoryWeight(player);
-							var itemWeight = this._Monster._MonsterItems[0].Weight;
+							int playerWeight = PlayerHandler.GetInventoryWeight(player);
+							int itemWeight = _Monster._MonsterItems[0].Weight;
 							if (playerWeight + itemWeight > player._MaxCarryWeight)
 							{
 								OutputHandler.Display.StoreUserOutput(
@@ -378,34 +386,36 @@ namespace DungeonGame
 									"You can't carry that much!");
 								return;
 							}
-							if (this._Monster._MonsterItems[0] is Consumable)
+							if (_Monster._MonsterItems[0] is Consumable)
 							{
-								player._Consumables.Add((Consumable)this._Monster._MonsterItems[0]);
+								player._Consumables.Add((Consumable)_Monster._MonsterItems[0]);
 							}
 							else
 							{
-								player._Inventory.Add(this._Monster._MonsterItems[0]);
+								player._Inventory.Add(_Monster._MonsterItems[0]);
 							}
-							var lootItemString = "You looted " + this._Monster._MonsterItems[0]._Name + " from the " +
-												 this._Monster._Name + "!";
+							string lootItemString = $"You looted {_Monster._MonsterItems[0]._Name} from the {_Monster._Name}!";
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatSuccessOutputText(),
 								Settings.FormatDefaultBackground(),
 								lootItemString);
-							this._Monster._MonsterItems.RemoveAt(0);
+							_Monster._MonsterItems.RemoveAt(0);
 						}
-						this._Monster._WasLooted = true;
-						var monsterIndex = this._RoomObjects.FindIndex(
-							f => f._Name == this._Monster._Name);
-						if (monsterIndex != -1) this._RoomObjects.RemoveAt(monsterIndex);
+						_Monster._WasLooted = true;
+						int monsterIndex = _RoomObjects.FindIndex(
+							f => f._Name == _Monster._Name);
+						if (monsterIndex != -1)
+						{
+							_RoomObjects.RemoveAt(monsterIndex);
+						}
 					}
 					catch (InvalidOperationException)
 					{
 					}
 				}
-				else if (this._Monster._WasLooted)
+				else if (_Monster._WasLooted)
 				{
-					var alreadyLootString = "You already looted " + this._Monster._Name + "!";
+					string alreadyLootString = $"You already looted {_Monster._Name}!";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -421,7 +431,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				var noLootString = "There is no " + inputName + " in the room!";
+				string noLootString = $"There is no {inputName} in the room!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -430,42 +440,48 @@ namespace DungeonGame
 		}
 		private string CalculateNpcLevelDiff(Player player)
 		{
-			if (this._Monster == null) return null;
-			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			var monsterName = textInfo.ToTitleCase(this._Monster._Name);
-			var levelDiff = player._Level - this._Monster._Level;
-			var difficultyStringBuilder = new StringBuilder();
+			if (_Monster == null)
+			{
+				return null;
+			}
+
+			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+			string monsterName = textInfo.ToTitleCase(_Monster._Name);
+			int levelDiff = player._Level - _Monster._Level;
+			StringBuilder difficultyStringBuilder = new StringBuilder();
 			difficultyStringBuilder.Append("Difficulty: ");
 			if (levelDiff >= 3)
 			{
-				difficultyStringBuilder.Append("You will crush " + monsterName + " like a bug.");
+				difficultyStringBuilder.Append($"You will crush {monsterName} like a bug.");
 			}
-			else switch (levelDiff)
+			else
+			{
+				switch (levelDiff)
 				{
 					case 2:
-						difficultyStringBuilder.Append("You have an edge over " + monsterName + ".");
+						difficultyStringBuilder.Append($"You have an edge over {monsterName}.");
 						break;
 					case 1:
-						difficultyStringBuilder.Append("You have a slight edge over " + monsterName + ".");
+						difficultyStringBuilder.Append($"You have a slight edge over {monsterName}.");
 						break;
 					case 0:
-						difficultyStringBuilder.Append("You're about even with " + monsterName + ".");
+						difficultyStringBuilder.Append($"You're about even with {monsterName}.");
 						break;
 					default:
 						{
 							switch (levelDiff)
 							{
 								case -1:
-									difficultyStringBuilder.Append(monsterName + " has a slight edge over you.");
+									difficultyStringBuilder.Append($"{monsterName} has a slight edge over you.");
 									break;
 								case -2:
-									difficultyStringBuilder.Append(monsterName + " has an edge over you.");
+									difficultyStringBuilder.Append($"{monsterName} has an edge over you.");
 									break;
 								default:
 									{
 										if (levelDiff <= -3)
 										{
-											difficultyStringBuilder.Append(monsterName + " will crush you like a bug.");
+											difficultyStringBuilder.Append($"{monsterName} will crush you like a bug.");
 										}
 										break;
 									}
@@ -473,51 +489,57 @@ namespace DungeonGame
 							break;
 						}
 				}
+			}
+
 			return difficultyStringBuilder.ToString();
 		}
 		public void LookNpc(string[] input, Player player)
 		{
-			var inputString = new StringBuilder();
-			for (var i = 1; i < input.Length; i++)
+			StringBuilder inputString = new StringBuilder();
+			for (int i = 1; i < input.Length; i++)
 			{
 				inputString.Append(input[i]);
 				inputString.Append(' ');
 			}
-			var inputName = inputString.ToString().Trim();
-			var monsterName = this._Monster._Name.Split(' ');
-			if (monsterName.Last() == inputName || this._Monster._Name.Contains(inputName))
+			string inputName = inputString.ToString().Trim();
+			string[] monsterName = _Monster._Name.Split(' ');
+			if (monsterName.Last() == inputName || _Monster._Name.Contains(inputName))
 			{
-				for (var i = 0; i < this._Monster._Desc.Length; i += Settings.GetGameWidth())
+				for (int i = 0; i < _Monster._Desc.Length; i += Settings.GetGameWidth())
 				{
-					if (this._Monster._Desc.Length - i < Settings.GetGameWidth())
+					if (_Monster._Desc.Length - i < Settings.GetGameWidth())
 					{
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatRoomOutputText(),
 							Settings.FormatDefaultBackground(),
-							this._Monster._Desc.Substring(i, this._Monster._Desc.Length - i));
+							_Monster._Desc.Substring(i, _Monster._Desc.Length - i));
 						continue;
 					}
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatRoomOutputText(),
 						Settings.FormatDefaultBackground(),
-						this._Monster._Desc.Substring(i, Settings.GetGameWidth()));
+						_Monster._Desc.Substring(i, Settings.GetGameWidth()));
 				}
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatRoomOutputText(),
 					Settings.FormatDefaultBackground(),
-					this.CalculateNpcLevelDiff(player));
-				var sameLineOutput = new List<string> {
+					CalculateNpcLevelDiff(player));
+				List<string> sameLineOutput = new List<string> {
 					Settings.FormatRoomOutputText(),
 					Settings.FormatDefaultBackground(),
 					"It is carrying: "};
 				OutputHandler.Display.StoreUserOutput(sameLineOutput);
-				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				if (this._Monster._MonsterItems == null) return;
-				foreach (var item in this._Monster._MonsterItems)
+				TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+				if (_Monster._MonsterItems == null)
 				{
-					var sameLineOutputItem = new List<string>();
-					var sb = new StringBuilder();
-					var itemTitle = item._Name;
+					return;
+				}
+
+				foreach (IEquipment item in _Monster._MonsterItems)
+				{
+					List<string> sameLineOutputItem = new List<string>();
+					StringBuilder sb = new StringBuilder();
+					string itemTitle = item._Name;
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
 					sameLineOutputItem.Add(Settings.FormatRoomOutputText());
@@ -528,7 +550,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				var noNpcString = "There is no " + inputName + " in the room!";
+				string noNpcString = $"There is no {inputName} in the room!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),

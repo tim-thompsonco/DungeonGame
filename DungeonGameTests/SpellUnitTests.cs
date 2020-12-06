@@ -284,17 +284,17 @@ namespace DungeonGameTests
 			Assert.AreEqual(portalString, OutputHandler.Display.Output[3][2]);
 			var newCoord = new Coordinate(-2, 6, 0);
 			player._PlayerLocation = newCoord;
-			Assert.AreEqual(-2, player._PlayerLocation.X);
-			Assert.AreEqual(6, player._PlayerLocation.Y);
-			Assert.AreEqual(0, player._PlayerLocation.Z);
+			Assert.AreEqual(-2, player._PlayerLocation._X);
+			Assert.AreEqual(6, player._PlayerLocation._Y);
+			Assert.AreEqual(0, player._PlayerLocation._Z);
 			var input = new[] { "cast", "town", "portal" };
 			var spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("town portal", spellName);
 			player.CastSpell(spellName);
 			Assert.AreEqual(player._MaxManaPoints - player._Spellbook[spellIndex].ManaCost, player._ManaPoints);
-			Assert.AreEqual(0, player._PlayerLocation.X);
-			Assert.AreEqual(7, player._PlayerLocation.Y);
-			Assert.AreEqual(0, player._PlayerLocation.Z);
+			Assert.AreEqual(0, player._PlayerLocation._X);
+			Assert.AreEqual(7, player._PlayerLocation._Y);
+			Assert.AreEqual(0, player._PlayerLocation._Z);
 			Assert.AreEqual("You open a portal and step through it.", OutputHandler.Display.Output[4][2]);
 		}
 		[Test]

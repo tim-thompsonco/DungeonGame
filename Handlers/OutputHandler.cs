@@ -28,9 +28,9 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				mapBorder.ToString());
 			// Get player coordinates and room player is located in
-			var playerX = player._PlayerLocation.X;
-			var playerY = player._PlayerLocation.Y;
-			var playerZ = player._PlayerLocation.Z;
+			var playerX = player._PlayerLocation._X;
+			var playerY = player._PlayerLocation._Y;
+			var playerZ = player._PlayerLocation._Z;
 			/* Map starts drawing from top left, so it needs to decrement since
 			each new console writeline pushes screen down instead of up */
 			for (var i = playerY + height; i > playerY - height; i--)

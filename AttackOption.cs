@@ -8,15 +8,15 @@
 			Spell,
 			Ability
 		}
-		public AttackType AttackCategory { get; set; }
-		public int DamageAmount { get; set; }
-		public int AttackIndex { get; set; }
+		public AttackType _AttackCategory { get; set; }
+		public int _DamageAmount { get; set; }
+		public int _AttackIndex { get; set; }
 
 		public AttackOption(AttackType attackCategory, int damageAmount, int attackIndex)
 		{
-			this.AttackCategory = attackCategory;
-			this.DamageAmount = damageAmount;
-			this.AttackIndex = attackIndex;
+			_AttackCategory = attackCategory;
+			_DamageAmount = damageAmount;
+			_AttackIndex = attackIndex;
 		}
 	}
 }

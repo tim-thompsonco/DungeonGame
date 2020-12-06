@@ -252,7 +252,7 @@ namespace DungeonGame
 					}
 				}
 			}
-			attackOptions = attackOptions.OrderByDescending(attack => attack.DamageAmount).ToList();
+			attackOptions = attackOptions.OrderByDescending(attack => attack._DamageAmount).ToList();
 			int randomMonsterAttack = GameHandler.GetRandomNumber(1, 10);
 			if (randomMonsterAttack <= 5)
 			{
@@ -265,36 +265,36 @@ namespace DungeonGame
 		public void Attack(Player player)
 		{
 			AttackOption attackOption = DetermineAttack(player);
-			switch (attackOption.AttackCategory)
+			switch (attackOption._AttackCategory)
 			{
 				case AttackOption.AttackType.Physical:
 					PhysicalAttack(player);
 					break;
 				case AttackOption.AttackType.Spell:
-					switch (_Spellbook[attackOption.AttackIndex].SpellCategory)
+					switch (_Spellbook[attackOption._AttackIndex].SpellCategory)
 					{
 						case MonsterSpell.SpellType.Fireball:
-							MonsterSpell.CastFireOffense(this, player, attackOption.AttackIndex);
+							MonsterSpell.CastFireOffense(this, player, attackOption._AttackIndex);
 							break;
 						case MonsterSpell.SpellType.Frostbolt:
-							MonsterSpell.CastFrostOffense(this, player, attackOption.AttackIndex);
+							MonsterSpell.CastFrostOffense(this, player, attackOption._AttackIndex);
 							break;
 						case MonsterSpell.SpellType.Lightning:
-							MonsterSpell.CastArcaneOffense(this, player, attackOption.AttackIndex);
+							MonsterSpell.CastArcaneOffense(this, player, attackOption._AttackIndex);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
 					break;
 				case AttackOption.AttackType.Ability:
-					switch (_Abilities[attackOption.AttackIndex].AbilityCategory)
+					switch (_Abilities[attackOption._AttackIndex].AbilityCategory)
 					{
 						case MonsterAbility.Ability.PoisonBite:
 						case MonsterAbility.Ability.TailWhip:
-							MonsterAbility.UseOffenseDamageAbility(this, player, attackOption.AttackIndex);
+							MonsterAbility.UseOffenseDamageAbility(this, player, attackOption._AttackIndex);
 							break;
 						case MonsterAbility.Ability.BloodLeech:
-							MonsterAbility.UseBloodLeechAbility(this, player, attackOption.AttackIndex);
+							MonsterAbility.UseBloodLeechAbility(this, player, attackOption._AttackIndex);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
