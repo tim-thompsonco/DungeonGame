@@ -10,7 +10,7 @@ namespace DungeonGameTests
 		[Test]
 		public void DetermineAttackUnitTest()
 		{
-			var player = new Player("test", Player.PlayerClassType.Mage) { HitPoints = 100, MaxHitPoints = 100 };
+			var player = new Player("test", Player.PlayerClassType.Mage) { _HitPoints = 100, _MaxHitPoints = 100 };
 			var monster = new Monster(3, Monster.MonsterType.Dragon);
 			MonsterBuilder.BuildMonster(monster);
 			OutputHandler.Display.ClearUserOutput();
@@ -24,7 +24,7 @@ namespace DungeonGameTests
 		public void FireballSpellUnitTest()
 		{
 			var player = new Player("test", Player.PlayerClassType.Mage)
-			{ HitPoints = 100, MaxHitPoints = 100, FireResistance = 0 };
+			{ _HitPoints = 100, _MaxHitPoints = 100, _FireResistance = 0 };
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon);
 			MonsterBuilder.BuildMonster(monster);
@@ -35,34 +35,34 @@ namespace DungeonGameTests
 			var spellCost = monster.Spellbook[spellIndex].EnergyCost;
 			Assert.AreEqual(monster.MaxEnergyPoints - spellCost, monster.EnergyPoints);
 			var spellDamage = monster.Spellbook[spellIndex].Offensive.Amount;
-			Assert.AreEqual(player.MaxHitPoints - spellDamage, player.HitPoints);
+			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
 			var spellMaxRounds = monster.Spellbook[spellIndex].Offensive.AmountMaxRounds;
-			Assert.AreEqual(spellMaxRounds, player.Effects[0].EffectMaxRound);
+			Assert.AreEqual(spellMaxRounds, player._Effects[0].EffectMaxRound);
 			var attackString = "The " + monster._Name + " casts a fireball and launches it at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
 			var attackSuccessString = "The " + monster._Name + " hits you for " + spellDamage + " fire damage.";
 			Assert.AreEqual(attackSuccessString, OutputHandler.Display.Output[1][2]);
 			const string onFireString = "You burst into flame!";
 			Assert.AreEqual(onFireString, OutputHandler.Display.Output[2][2]);
-			Assert.AreEqual(player.Effects[0].EffectGroup, Effect.EffectType.OnFire);
+			Assert.AreEqual(player._Effects[0].EffectGroup, Effect.EffectType.OnFire);
 			var burnDamage = monster.Spellbook[spellIndex].Offensive.AmountOverTime;
 			for (var i = 2; i < 5; i++)
 			{
-				player.Effects[0].OnFireRound(player);
+				player._Effects[0].OnFireRound(player);
 				var burnString = "You burn for " + burnDamage + " fire damage.";
 				Assert.AreEqual(burnString, OutputHandler.Display.Output[i + 1][2]);
-				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
 				GameHandler.RemovedExpiredEffectsAsync(player);
 			}
 			Thread.Sleep(1000);
-			Assert.AreEqual(false, player.Effects.Any());
-			Assert.AreEqual(player.MaxHitPoints - spellDamage - burnDamage * 3, player.HitPoints);
+			Assert.AreEqual(false, player._Effects.Any());
+			Assert.AreEqual(player._MaxHitPoints - spellDamage - burnDamage * 3, player._HitPoints);
 		}
 		[Test]
 		public void FrostboltSpellUnitTest()
 		{
 			var player = new Player("test", Player.PlayerClassType.Mage)
-			{ HitPoints = 200, MaxHitPoints = 200, FrostResistance = 0 };
+			{ _HitPoints = 200, _MaxHitPoints = 200, _FrostResistance = 0 };
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(1, Monster.MonsterType.Skeleton);
 			while (monster.SkeletonCategory != Monster.SkeletonType.Mage)
@@ -73,7 +73,7 @@ namespace DungeonGameTests
 			monster.MonsterWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			var spellIndex = monster.Spellbook.FindIndex(
 				f => f.SpellCategory == MonsterSpell.SpellType.Frostbolt);
-			foreach (var item in player.Inventory.Where(item => item.Equipped))
+			foreach (var item in player._Inventory.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
@@ -81,41 +81,41 @@ namespace DungeonGameTests
 			var spellCost = monster.Spellbook[spellIndex].EnergyCost;
 			Assert.AreEqual(monster.MaxEnergyPoints - spellCost, monster.EnergyPoints);
 			var spellDamage = monster.Spellbook[spellIndex].Offensive.Amount;
-			Assert.AreEqual(player.MaxHitPoints - spellDamage, player.HitPoints);
+			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
 			var spellMaxRounds = monster.Spellbook[spellIndex].Offensive.AmountMaxRounds;
-			Assert.AreEqual(spellMaxRounds, player.Effects[0].EffectMaxRound);
+			Assert.AreEqual(spellMaxRounds, player._Effects[0].EffectMaxRound);
 			var attackString = "The " + monster._Name + " conjures up a frostbolt and launches it at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
 			var attackSuccessString = "The " + monster._Name + " hits you for " + spellDamage + " frost damage.";
 			Assert.AreEqual(attackSuccessString, OutputHandler.Display.Output[1][2]);
 			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be double!";
 			Assert.AreEqual(frozenString, OutputHandler.Display.Output[2][2]);
-			Assert.AreEqual(player.Effects[0].EffectGroup, Effect.EffectType.Frozen);
+			Assert.AreEqual(player._Effects[0].EffectGroup, Effect.EffectType.Frozen);
 			// Remove all spells after casting to make monster decide to use physical attack for unit test
 			monster.Spellbook = null;
 			for (var i = 2; i < 4; i++)
 			{
-				var playerHitPointsBefore = player.HitPoints;
-				var multiplier = player.Effects[0].EffectMultiplier;
+				var playerHitPointsBefore = player._HitPoints;
+				var multiplier = player._Effects[0].EffectMultiplier;
 				var baseDamage = monster.MonsterWeapon.RegDamage;
 				var frozenDamage = (int)(monster.MonsterWeapon.RegDamage * multiplier);
 				Assert.AreEqual(frozenDamage, baseDamage * multiplier, 1);
-				player.Effects[0].FrozenRound(player);
-				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
+				player._Effects[0].FrozenRound(player);
+				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
 				Assert.AreEqual(frozenString, OutputHandler.Display.Output[i + 1][2]);
 				monster.MonsterWeapon.Durability = 100;
 				monster.Attack(player);
-				Assert.AreEqual(playerHitPointsBefore - frozenDamage, player.HitPoints, 7);
+				Assert.AreEqual(playerHitPointsBefore - frozenDamage, player._HitPoints, 7);
 			}
 			GameHandler.RemovedExpiredEffectsAsync(player);
 			Thread.Sleep(1000);
-			Assert.AreEqual(false, player.Effects.Any());
+			Assert.AreEqual(false, player._Effects.Any());
 		}
 		[Test]
 		public void LightningSpellUnitTest()
 		{
 			var player = new Player("test", Player.PlayerClassType.Mage)
-			{ HitPoints = 200, MaxHitPoints = 200, ArcaneResistance = 0 };
+			{ _HitPoints = 200, _MaxHitPoints = 200, _ArcaneResistance = 0 };
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Elemental);
 			while (monster.ElementalCategory != Monster.ElementalType.Air)
@@ -125,7 +125,7 @@ namespace DungeonGameTests
 			MonsterBuilder.BuildMonster(monster);
 			var spellIndex = monster.Spellbook.FindIndex(
 				f => f.SpellCategory == MonsterSpell.SpellType.Lightning);
-			foreach (var item in player.Inventory.Where(item => item.Equipped))
+			foreach (var item in player._Inventory.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
@@ -133,7 +133,7 @@ namespace DungeonGameTests
 			var spellCost = monster.Spellbook[spellIndex].EnergyCost;
 			Assert.AreEqual(monster.MaxEnergyPoints - spellCost, monster.EnergyPoints);
 			var spellDamage = monster.Spellbook[spellIndex].Offensive.Amount;
-			Assert.AreEqual(player.MaxHitPoints - spellDamage, player.HitPoints);
+			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
 			var attackString = "The " + monster._Name + " casts a bolt of lightning at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
 			var attackSuccessString = "The " + monster._Name + " hits you for " + spellDamage + " arcane damage.";
@@ -142,13 +142,13 @@ namespace DungeonGameTests
 		[Test]
 		public void BloodLeechAbilityUnitTest()
 		{
-			var player = new Player("test", Player.PlayerClassType.Mage) { HitPoints = 100, MaxHitPoints = 100 };
+			var player = new Player("test", Player.PlayerClassType.Mage) { _HitPoints = 100, _MaxHitPoints = 100 };
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Vampire) { HitPoints = 10, MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
 			var abilityIndex = monster.Abilities.FindIndex(
 				f => f.AbilityCategory == MonsterAbility.Ability.BloodLeech);
-			foreach (var item in player.Inventory.Where(item => item.Equipped))
+			foreach (var item in player._Inventory.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
@@ -157,7 +157,7 @@ namespace DungeonGameTests
 			var abilityCost = monster.Abilities[abilityIndex].EnergyCost;
 			Assert.AreEqual(monster.MaxEnergyPoints - abilityCost, monster.EnergyPoints);
 			var leechAmount = monster.Abilities[abilityIndex].Offensive.Amount;
-			Assert.AreEqual(player.MaxHitPoints - leechAmount, player.HitPoints);
+			Assert.AreEqual(player._MaxHitPoints - leechAmount, player._HitPoints);
 			Assert.AreEqual(monsterHealthBase + leechAmount, monster.HitPoints);
 			var attackString = "The " + monster._Name + " tries to sink its fangs into you and suck your blood!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
@@ -167,13 +167,13 @@ namespace DungeonGameTests
 		[Test]
 		public void PoisonBiteAbilityUnitTest()
 		{
-			var player = new Player("test", Player.PlayerClassType.Mage) { HitPoints = 100, MaxHitPoints = 100 };
+			var player = new Player("test", Player.PlayerClassType.Mage) { _HitPoints = 100, _MaxHitPoints = 100 };
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Spider) { HitPoints = 50, MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
 			var abilityIndex = monster.Abilities.FindIndex(
 				f => f.AbilityCategory == MonsterAbility.Ability.PoisonBite);
-			foreach (var item in player.Inventory.Where(item => item.Equipped))
+			foreach (var item in player._Inventory.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
@@ -191,35 +191,35 @@ namespace DungeonGameTests
 			var bleedString = "You are bleeding from " + monster._Name + "'s attack!";
 			Assert.AreEqual(bleedString, OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual(
-				true, player.Effects[0].EffectGroup == Effect.EffectType.Bleeding);
-			Assert.AreEqual(player.MaxHitPoints - abilityDamage, player.HitPoints);
-			Assert.AreEqual(abilityCurRounds, player.Effects[0].EffectCurRound);
-			Assert.AreEqual(abilityMaxRounds, player.Effects[0].EffectMaxRound);
+				true, player._Effects[0].EffectGroup == Effect.EffectType.Bleeding);
+			Assert.AreEqual(player._MaxHitPoints - abilityDamage, player._HitPoints);
+			Assert.AreEqual(abilityCurRounds, player._Effects[0].EffectCurRound);
+			Assert.AreEqual(abilityMaxRounds, player._Effects[0].EffectMaxRound);
 			OutputHandler.Display.ClearUserOutput();
 			for (var i = 2; i < 5; i++)
 			{
-				player.Effects[0].BleedingRound(player);
-				var bleedAmount = player.Effects[0].EffectAmountOverTime;
+				player._Effects[0].BleedingRound(player);
+				var bleedAmount = player._Effects[0].EffectAmountOverTime;
 				var bleedRoundString = "You bleed for " + bleedAmount + " physical damage.";
 				Assert.AreEqual(bleedRoundString, OutputHandler.Display.Output[i - 2][2]);
-				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
 				GameHandler.RemovedExpiredEffectsAsync(player);
 				Thread.Sleep(1000);
 			}
-			Assert.AreEqual(false, player.Effects.Any());
-			Assert.AreEqual(player.MaxHitPoints - abilityDamage - abilityDamageOverTime * abilityMaxRounds,
-				player.HitPoints);
+			Assert.AreEqual(false, player._Effects.Any());
+			Assert.AreEqual(player._MaxHitPoints - abilityDamage - abilityDamageOverTime * abilityMaxRounds,
+				player._HitPoints);
 		}
 		[Test]
 		public void TailWhipAbilityUnitTest()
 		{
-			var player = new Player("test", Player.PlayerClassType.Mage) { HitPoints = 200, MaxHitPoints = 200 };
+			var player = new Player("test", Player.PlayerClassType.Mage) { _HitPoints = 200, _MaxHitPoints = 200 };
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Dragon);
 			MonsterBuilder.BuildMonster(monster);
 			var abilityIndex = monster.Abilities.FindIndex(
 				f => f.AbilityCategory == MonsterAbility.Ability.TailWhip);
-			foreach (var item in player.Inventory.Where(item => item.Equipped))
+			foreach (var item in player._Inventory.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
@@ -227,7 +227,7 @@ namespace DungeonGameTests
 			var abilityCost = monster.Abilities[abilityIndex].EnergyCost;
 			Assert.AreEqual(monster.MaxEnergyPoints - abilityCost, monster.EnergyPoints);
 			var attackDamage = monster.Abilities[abilityIndex].Offensive.Amount;
-			Assert.AreEqual(player.MaxHitPoints - attackDamage, player.HitPoints);
+			Assert.AreEqual(player._MaxHitPoints - attackDamage, player._HitPoints);
 			var attackString = "The " + monster._Name + " swings its tail at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
 			var attackSuccessString = "The " + monster._Name + " strikes you with its tail for " +
@@ -238,13 +238,13 @@ namespace DungeonGameTests
 		public void FirebreathSpellUnitTest()
 		{
 			var player = new Player("test", Player.PlayerClassType.Mage)
-			{ HitPoints = 200, MaxHitPoints = 200, FireResistance = 0 };
+			{ _HitPoints = 200, _MaxHitPoints = 200, _FireResistance = 0 };
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Dragon);
 			MonsterBuilder.BuildMonster(monster);
 			var spellIndex = monster.Spellbook.FindIndex(
 				f => f.SpellCategory == MonsterSpell.SpellType.Fireball);
-			foreach (var item in player.Inventory.Where(item => item.Equipped))
+			foreach (var item in player._Inventory.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
@@ -253,28 +253,28 @@ namespace DungeonGameTests
 			var spellCost = monster.Spellbook[spellIndex].EnergyCost;
 			Assert.AreEqual(monster.MaxEnergyPoints - spellCost, monster.EnergyPoints);
 			var spellDamage = monster.Spellbook[spellIndex].Offensive.Amount;
-			Assert.AreEqual(player.MaxHitPoints - spellDamage, player.HitPoints);
+			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
 			var spellMaxRounds = monster.Spellbook[spellIndex].Offensive.AmountMaxRounds;
-			Assert.AreEqual(spellMaxRounds, player.Effects[0].EffectMaxRound);
+			Assert.AreEqual(spellMaxRounds, player._Effects[0].EffectMaxRound);
 			var attackString = "The " + monster._Name + " breathes a pillar of fire at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
 			var attackSuccessString = "The " + monster._Name + " hits you for " + spellDamage + " fire damage.";
 			Assert.AreEqual(attackSuccessString, OutputHandler.Display.Output[1][2]);
 			const string onFireString = "You burst into flame!";
 			Assert.AreEqual(onFireString, OutputHandler.Display.Output[2][2]);
-			Assert.AreEqual(player.Effects[0].EffectGroup, Effect.EffectType.OnFire);
+			Assert.AreEqual(player._Effects[0].EffectGroup, Effect.EffectType.OnFire);
 			var burnDamage = monster.Spellbook[spellIndex].Offensive.AmountOverTime;
 			for (var i = 2; i < 5; i++)
 			{
-				player.Effects[0].OnFireRound(player);
+				player._Effects[0].OnFireRound(player);
 				var burnString = "You burn for " + burnDamage + " fire damage.";
 				Assert.AreEqual(burnString, OutputHandler.Display.Output[i + 1][2]);
-				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
 				GameHandler.RemovedExpiredEffectsAsync(player);
 				Thread.Sleep(1000);
 			}
-			Assert.AreEqual(false, player.Effects.Any());
-			Assert.AreEqual(player.MaxHitPoints - spellDamage - burnDamage * 3, player.HitPoints);
+			Assert.AreEqual(false, player._Effects.Any());
+			Assert.AreEqual(player._MaxHitPoints - spellDamage - burnDamage * 3, player._HitPoints);
 		}
 	}
 }

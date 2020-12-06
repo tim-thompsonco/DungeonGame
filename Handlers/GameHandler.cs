@@ -16,10 +16,10 @@ namespace DungeonGame
 		public static void CheckStatus(Player player)
 		{
 			GameTicks++;
-			if (GameTicks % player.StatReplenishInterval == 0) ReplenishStatsOverTime(player);
-			if (player.Effects.Any())
+			if (GameTicks % player._StatReplenishInterval == 0) ReplenishStatsOverTime(player);
+			if (player._Effects.Any())
 			{
-				foreach (var effect in player.Effects.Where(effect => GameTicks % effect.TickDuration == 0).ToList())
+				foreach (var effect in player._Effects.Where(effect => GameTicks % effect.TickDuration == 0).ToList())
 				{
 					switch (effect.EffectGroup)
 					{
@@ -27,17 +27,17 @@ namespace DungeonGame
 							effect.HealingRound(player);
 							break;
 						case Effect.EffectType.ChangePlayerDamage:
-							if (!player.InCombat && effect.Name.Contains("berserk"))
+							if (!player._InCombat && effect.Name.Contains("berserk"))
 							{
 								effect.IsEffectExpired = true;
 							}
 							break;
 						case Effect.EffectType.ChangeArmor:
-							if (!player.InCombat && effect.Name.Contains("berserk"))
+							if (!player._InCombat && effect.Name.Contains("berserk"))
 							{
 								effect.IsEffectExpired = true;
 							}
-							if (!player.InCombat) effect.ChangeArmorRound();
+							if (!player._InCombat) effect.ChangeArmorRound();
 							break;
 						case Effect.EffectType.OnFire:
 							effect.OnFireRound(player);
@@ -57,7 +57,7 @@ namespace DungeonGame
 							effect.ChangeStatRound();
 							break;
 						case Effect.EffectType.ChangeOpponentDamage:
-							if (!player.InCombat) effect.IsEffectExpired = true;
+							if (!player._InCombat) effect.IsEffectExpired = true;
 							effect.ChangeOpponentDamageRound(player);
 							break;
 						case Effect.EffectType.BlockDamage:
@@ -131,10 +131,10 @@ namespace DungeonGame
 		{
 			await Task.Run(() =>
 			{
-				for (var i = 0; i < player.Effects.Count; i++)
+				for (var i = 0; i < player._Effects.Count; i++)
 				{
-					if (!player.Effects[i].IsEffectExpired) continue;
-					switch (player.Effects[i].EffectGroup)
+					if (!player._Effects[i].IsEffectExpired) continue;
+					switch (player._Effects[i].EffectGroup)
 					{
 						case Effect.EffectType.Healing:
 							break;
@@ -153,19 +153,19 @@ namespace DungeonGame
 						case Effect.EffectType.Frozen:
 							break;
 						case Effect.EffectType.ChangeStat:
-							switch (player.Effects[i].StatGroup)
+							switch (player._Effects[i].StatGroup)
 							{
 								case ChangeStat.StatType.Intelligence:
-									player.Intelligence -= player.Effects[i].EffectAmountOverTime;
+									player._Intelligence -= player._Effects[i].EffectAmountOverTime;
 									break;
 								case ChangeStat.StatType.Strength:
-									player.Strength -= player.Effects[i].EffectAmountOverTime;
+									player._Strength -= player._Effects[i].EffectAmountOverTime;
 									break;
 								case ChangeStat.StatType.Dexterity:
-									player.Dexterity -= player.Effects[i].EffectAmountOverTime;
+									player._Dexterity -= player._Effects[i].EffectAmountOverTime;
 									break;
 								case ChangeStat.StatType.Constitution:
-									player.Constitution -= player.Effects[i].EffectAmountOverTime;
+									player._Constitution -= player._Effects[i].EffectAmountOverTime;
 									break;
 								default:
 									throw new ArgumentOutOfRangeException();
@@ -179,7 +179,7 @@ namespace DungeonGame
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
-					player.Effects.RemoveAt(i);
+					player._Effects.RemoveAt(i);
 					i--; // Keep i at same amount, since effects.count will decrease, to keep checking effect list properly
 				}
 			});
@@ -226,18 +226,18 @@ namespace DungeonGame
 		}
 		private static void ReplenishStatsOverTime(Player player)
 		{
-			if (player.InCombat) return;
-			if (player.HitPoints < player.MaxHitPoints) player.HitPoints++;
-			switch (player.PlayerClass)
+			if (player._InCombat) return;
+			if (player._HitPoints < player._MaxHitPoints) player._HitPoints++;
+			switch (player._PlayerClass)
 			{
 				case Player.PlayerClassType.Mage:
-					if (player.ManaPoints < player.MaxManaPoints) player.ManaPoints++;
+					if (player._ManaPoints < player._MaxManaPoints) player._ManaPoints++;
 					break;
 				case Player.PlayerClassType.Warrior:
-					if (player.RagePoints < player.MaxRagePoints) player.RagePoints++;
+					if (player._RagePoints < player._MaxRagePoints) player._RagePoints++;
 					break;
 				case Player.PlayerClassType.Archer:
-					if (player.ComboPoints < player.MaxComboPoints) player.ComboPoints++;
+					if (player._ComboPoints < player._MaxComboPoints) player._ComboPoints++;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -320,7 +320,7 @@ namespace DungeonGame
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(), "Quitting the game.");
-			player.CanSave = true;
+			player._CanSave = true;
 			IsGameOver = true;
 			SaveGame(player);
 			return true;
@@ -328,7 +328,7 @@ namespace DungeonGame
 		public static void SaveGame(Player player)
 		{
 			string outputString;
-			if (player.CanSave)
+			if (player._CanSave)
 			{
 				var serializerPlayer = new JsonSerializer()
 				{

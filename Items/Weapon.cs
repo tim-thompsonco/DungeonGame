@@ -69,7 +69,7 @@ namespace DungeonGame
 		}
 		public Weapon(WeaponType weaponType, bool isRainbowGear, Player player)
 		{
-			this.Level = player.Level;
+			this.Level = player._Level;
 			this.IsRainbowGear = isRainbowGear;
 			this.WeaponGroup = weaponType;
 			this.DamageGroup = DamageType.Physical;
@@ -227,7 +227,7 @@ namespace DungeonGame
 		}
 		public void UpdateRainbowStats(Player player)
 		{
-			this.Level = player.Level;
+			this.Level = player._Level;
 			var randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
 			this.RegDamage = randomWeaponDmg + (this.Level - 1) * 3;
 			this.CritMultiplier = 1.3;

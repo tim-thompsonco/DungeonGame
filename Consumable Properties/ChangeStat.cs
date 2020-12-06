@@ -32,23 +32,23 @@ namespace DungeonGame
 			switch (this.StatCategory)
 			{
 				case StatType.Intelligence:
-					player.Intelligence += this.ChangeAmount;
+					player._Intelligence += this.ChangeAmount;
 					break;
 				case StatType.Strength:
-					player.Strength += this.ChangeAmount;
+					player._Strength += this.ChangeAmount;
 					break;
 				case StatType.Dexterity:
-					player.Dexterity += this.ChangeAmount;
+					player._Dexterity += this.ChangeAmount;
 					break;
 				case StatType.Constitution:
-					player.Constitution += this.ChangeAmount;
+					player._Constitution += this.ChangeAmount;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 			PlayerHandler.CalculatePlayerStats(player);
 			var effectName = this.StatCategory + " (+" + this.ChangeAmount + ")";
-			player.Effects.Add(new Effect(effectName, Effect.EffectType.ChangeStat, this.ChangeAmount,
+			player._Effects.Add(new Effect(effectName, Effect.EffectType.ChangeStat, this.ChangeAmount,
 				this.ChangeCurRound, this.ChangeMaxRound, 1, 1, false, this.StatCategory));
 		}
 	}

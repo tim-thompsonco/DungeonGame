@@ -13,10 +13,10 @@
 
 		public void RestoreManaPlayer(Player player)
 		{
-			player.ManaPoints += this.RestoreManaAmt;
-			if (player.ManaPoints > player.MaxManaPoints)
+			player._ManaPoints += this.RestoreManaAmt;
+			if (player._ManaPoints > player._MaxManaPoints)
 			{
-				player.ManaPoints = player.MaxManaPoints;
+				player._ManaPoints = player._MaxManaPoints;
 			}
 		}
 	}

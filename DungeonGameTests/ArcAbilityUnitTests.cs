@@ -13,10 +13,10 @@ namespace DungeonGameTests
 		{
 			var player = new Player("test", Player.PlayerClassType.Archer)
 			{
-				MaxComboPoints = 100,
-				ComboPoints = 100,
-				MaxHitPoints = 100,
-				HitPoints = 10
+				_MaxComboPoints = 100,
+				_ComboPoints = 100,
+				_MaxHitPoints = 100,
+				_HitPoints = 10
 			};
 			RoomHandler.Rooms = new Dictionary<Coordinate, IRoom> {
 				{new Coordinate(0, 0, 0), new DungeonRoom(1, 1)},
@@ -46,37 +46,37 @@ namespace DungeonGameTests
 			var input = new[] { "use", "distance", "south" };
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("distance south", abilityName);
-			var arrowCount = player.PlayerQuiver.Quantity;
+			var arrowCount = player._PlayerQuiver.Quantity;
 			player.UseAbility(input);
-			Assert.AreEqual(arrowCount, player.PlayerQuiver.Quantity);
+			Assert.AreEqual(arrowCount, player._PlayerQuiver.Quantity);
 			Assert.AreEqual("You can't attack in that direction!", OutputHandler.Display.Output[6][2]);
-			Assert.AreEqual(player.MaxComboPoints, player.ComboPoints);
+			Assert.AreEqual(player._MaxComboPoints, player._ComboPoints);
 			input = new[] { "use", "distance", "east" };
 			player.UseAbility(input);
-			Assert.AreEqual(arrowCount, player.PlayerQuiver.Quantity);
+			Assert.AreEqual(arrowCount, player._PlayerQuiver.Quantity);
 			Assert.AreEqual("There is no monster in that direction to attack!",
 				OutputHandler.Display.Output[7][2]);
-			Assert.AreEqual(player.MaxComboPoints, player.ComboPoints);
-			Assert.AreEqual(player.MaxComboPoints, player.ComboPoints);
-			var abilityIndex = player.Abilities.FindIndex(
+			Assert.AreEqual(player._MaxComboPoints, player._ComboPoints);
+			Assert.AreEqual(player._MaxComboPoints, player._ComboPoints);
+			var abilityIndex = player._Abilities.FindIndex(
 				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Distance);
-			var comboCost = player.Abilities[abilityIndex].ComboCost;
-			player.Abilities[abilityIndex].Offensive.ChanceToSucceed = 0;
+			var comboCost = player._Abilities[abilityIndex].ComboCost;
+			player._Abilities[abilityIndex].Offensive.ChanceToSucceed = 0;
 			input = new[] { "use", "distance", "north" };
 			player.UseAbility(input);
-			Assert.AreEqual(arrowCount - 1, player.PlayerQuiver.Quantity);
+			Assert.AreEqual(arrowCount - 1, player._PlayerQuiver.Quantity);
 			var missString = "You tried to shoot " + monster._Name + " from afar but failed!";
 			Assert.AreEqual(missString, OutputHandler.Display.Output[8][2]);
-			Assert.AreEqual(player.MaxComboPoints - comboCost, player.ComboPoints);
-			player.Abilities[abilityIndex].Offensive.ChanceToSucceed = 100;
-			player.ComboPoints = player.MaxComboPoints;
-			arrowCount = player.PlayerQuiver.Quantity;
+			Assert.AreEqual(player._MaxComboPoints - comboCost, player._ComboPoints);
+			player._Abilities[abilityIndex].Offensive.ChanceToSucceed = 100;
+			player._ComboPoints = player._MaxComboPoints;
+			arrowCount = player._PlayerQuiver.Quantity;
 			player.UseAbility(input);
-			Assert.AreEqual(arrowCount - 1, player.PlayerQuiver.Quantity);
-			var abilityDmg = player.Abilities[abilityIndex].Offensive.Amount;
+			Assert.AreEqual(arrowCount - 1, player._PlayerQuiver.Quantity);
+			var abilityDmg = player._Abilities[abilityIndex].Offensive.Amount;
 			var shootString = "You successfully shot " + monster._Name + " from afar for " + abilityDmg + " damage!";
 			Assert.AreEqual(shootString, OutputHandler.Display.Output[9][2]);
-			Assert.AreEqual(player.MaxComboPoints - comboCost, player.ComboPoints);
+			Assert.AreEqual(player._MaxComboPoints - comboCost, player._ComboPoints);
 			Assert.AreEqual(monster.MaxHitPoints - abilityDmg, monster.HitPoints);
 		}
 		[Test]
@@ -84,10 +84,10 @@ namespace DungeonGameTests
 		{
 			var player = new Player("test", Player.PlayerClassType.Archer)
 			{
-				MaxComboPoints = 100,
-				ComboPoints = 100,
-				MaxHitPoints = 100,
-				HitPoints = 10
+				_MaxComboPoints = 100,
+				_ComboPoints = 100,
+				_MaxHitPoints = 100,
+				_HitPoints = 10
 			};
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
@@ -98,7 +98,7 @@ namespace DungeonGameTests
 			{
 				item.Equipped = false;
 			}
-			var abilityIndex = player.Abilities.FindIndex(
+			var abilityIndex = player._Abilities.FindIndex(
 				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Gut);
 			var inputInfo = new[] { "ability", "gut" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
@@ -108,21 +108,21 @@ namespace DungeonGameTests
 			Assert.AreEqual("Instant Damage: 15", OutputHandler.Display.Output[3][2]);
 			Assert.AreEqual("Damage Over Time: 5", OutputHandler.Display.Output[4][2]);
 			var bleedOverTimeString = "Bleeding damage over time for " +
-									  player.Abilities[abilityIndex].Offensive.AmountMaxRounds + " rounds.";
+									  player._Abilities[abilityIndex].Offensive.AmountMaxRounds + " rounds.";
 			Assert.AreEqual(bleedOverTimeString, OutputHandler.Display.Output[5][2]);
 			var input = new[] { "use", "gut" };
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("gut", abilityName);
-			var arrowCount = player.PlayerQuiver.Quantity;
+			var arrowCount = player._PlayerQuiver.Quantity;
 			player.UseAbility(monster, input);
-			Assert.AreEqual(arrowCount - 1, player.PlayerQuiver.Quantity);
-			var comboCost = player.Abilities[abilityIndex].ComboCost;
-			Assert.AreEqual(player.MaxComboPoints - comboCost, player.ComboPoints);
-			var abilityDamage = player.Abilities[abilityIndex].Offensive.Amount;
-			var abilityDamageOverTime = player.Abilities[abilityIndex].Offensive.AmountOverTime;
-			var abilityCurRounds = player.Abilities[abilityIndex].Offensive.AmountCurRounds;
-			var abilityMaxRounds = player.Abilities[abilityIndex].Offensive.AmountMaxRounds;
-			var abilitySuccessString = "Your " + player.Abilities[abilityIndex].Name + " hit the " + monster._Name + " for " +
+			Assert.AreEqual(arrowCount - 1, player._PlayerQuiver.Quantity);
+			var comboCost = player._Abilities[abilityIndex].ComboCost;
+			Assert.AreEqual(player._MaxComboPoints - comboCost, player._ComboPoints);
+			var abilityDamage = player._Abilities[abilityIndex].Offensive.Amount;
+			var abilityDamageOverTime = player._Abilities[abilityIndex].Offensive.AmountOverTime;
+			var abilityCurRounds = player._Abilities[abilityIndex].Offensive.AmountCurRounds;
+			var abilityMaxRounds = player._Abilities[abilityIndex].Offensive.AmountMaxRounds;
+			var abilitySuccessString = "Your " + player._Abilities[abilityIndex].Name + " hit the " + monster._Name + " for " +
 									   abilityDamage + " physical damage.";
 			Assert.AreEqual(abilitySuccessString, OutputHandler.Display.Output[6][2]);
 			var bleedString = "The " + monster._Name + " is bleeding!";
@@ -152,10 +152,10 @@ namespace DungeonGameTests
 		{
 			var player = new Player("test", Player.PlayerClassType.Archer)
 			{
-				MaxComboPoints = 100,
-				ComboPoints = 100,
-				MaxHitPoints = 100,
-				HitPoints = 10
+				_MaxComboPoints = 100,
+				_ComboPoints = 100,
+				_MaxHitPoints = 100,
+				_HitPoints = 10
 			};
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
@@ -167,7 +167,7 @@ namespace DungeonGameTests
 				item.Equipped = false;
 			}
 			var inputInfo = new[] { "ability", "precise" };
-			var abilityIndex = player.Abilities.FindIndex(
+			var abilityIndex = player._Abilities.FindIndex(
 				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Precise);
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Precise Shot", OutputHandler.Display.Output[0][2]);
@@ -177,14 +177,14 @@ namespace DungeonGameTests
 			var input = new[] { "use", "precise" };
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("precise", abilityName);
-			var arrowCount = player.PlayerQuiver.Quantity;
+			var arrowCount = player._PlayerQuiver.Quantity;
 			player.UseAbility(monster, input);
-			Assert.AreEqual(arrowCount - 1, player.PlayerQuiver.Quantity);
-			var comboCost = player.Abilities[abilityIndex].ComboCost;
-			Assert.AreEqual(player.MaxComboPoints - comboCost, player.ComboPoints);
-			var abilityDamage = player.Abilities[abilityIndex].Offensive.Amount;
+			Assert.AreEqual(arrowCount - 1, player._PlayerQuiver.Quantity);
+			var comboCost = player._Abilities[abilityIndex].ComboCost;
+			Assert.AreEqual(player._MaxComboPoints - comboCost, player._ComboPoints);
+			var abilityDamage = player._Abilities[abilityIndex].Offensive.Amount;
 			Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - abilityDamage);
-			var abilitySuccessString = "Your " + player.Abilities[abilityIndex].Name + " hit the " + monster._Name + " for " +
+			var abilitySuccessString = "Your " + player._Abilities[abilityIndex].Name + " hit the " + monster._Name + " for " +
 									   abilityDamage + " physical damage.";
 			Assert.AreEqual(abilitySuccessString, OutputHandler.Display.Output[4][2]);
 		}
@@ -193,10 +193,10 @@ namespace DungeonGameTests
 		{
 			var player = new Player("test", Player.PlayerClassType.Archer)
 			{
-				MaxComboPoints = 100,
-				ComboPoints = 100,
-				MaxHitPoints = 100,
-				HitPoints = 10
+				_MaxComboPoints = 100,
+				_ComboPoints = 100,
+				_MaxHitPoints = 100,
+				_HitPoints = 10
 			};
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
@@ -207,7 +207,7 @@ namespace DungeonGameTests
 			{
 				item.Equipped = false;
 			}
-			var abilityIndex = player.Abilities.FindIndex(
+			var abilityIndex = player._Abilities.FindIndex(
 				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Stun);
 			var inputInfo = new[] { "ability", "stun" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
@@ -216,20 +216,20 @@ namespace DungeonGameTests
 			Assert.AreEqual("Combo Cost: 25", OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual("Instant Damage: 15", OutputHandler.Display.Output[3][2]);
 			var abilityInfoString = "Stuns opponent for " +
-									player.Abilities[abilityIndex].Stun.StunMaxRounds + " rounds, preventing their attacks.";
+									player._Abilities[abilityIndex].Stun.StunMaxRounds + " rounds, preventing their attacks.";
 			Assert.AreEqual(abilityInfoString, OutputHandler.Display.Output[4][2]);
 			var input = new[] { "use", "stun" };
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("stun", abilityName);
-			var arrowCount = player.PlayerQuiver.Quantity;
+			var arrowCount = player._PlayerQuiver.Quantity;
 			player.UseAbility(monster, input);
-			Assert.AreEqual(arrowCount - 1, player.PlayerQuiver.Quantity);
-			var comboCost = player.Abilities[abilityIndex].ComboCost;
-			Assert.AreEqual(player.MaxComboPoints - comboCost, player.ComboPoints);
-			var abilityDamage = player.Abilities[abilityIndex].Stun.DamageAmount;
-			var abilityCurRounds = player.Abilities[abilityIndex].Stun.StunCurRounds;
-			var abilityMaxRounds = player.Abilities[abilityIndex].Stun.StunMaxRounds;
-			var attackSuccessString = "You " + player.Abilities[abilityIndex].Name + " the " + monster._Name + " for " +
+			Assert.AreEqual(arrowCount - 1, player._PlayerQuiver.Quantity);
+			var comboCost = player._Abilities[abilityIndex].ComboCost;
+			Assert.AreEqual(player._MaxComboPoints - comboCost, player._ComboPoints);
+			var abilityDamage = player._Abilities[abilityIndex].Stun.DamageAmount;
+			var abilityCurRounds = player._Abilities[abilityIndex].Stun.StunCurRounds;
+			var abilityMaxRounds = player._Abilities[abilityIndex].Stun.StunMaxRounds;
+			var attackSuccessString = "You " + player._Abilities[abilityIndex].Name + " the " + monster._Name + " for " +
 									  abilityDamage + " physical damage.";
 			Assert.AreEqual(attackSuccessString, OutputHandler.Display.Output[5][2]);
 			var stunString = "The " + monster._Name + " is stunned!";
@@ -256,10 +256,10 @@ namespace DungeonGameTests
 		{
 			var player = new Player("test", Player.PlayerClassType.Archer)
 			{
-				MaxComboPoints = 100,
-				ComboPoints = 100,
-				MaxHitPoints = 100,
-				HitPoints = 10
+				_MaxComboPoints = 100,
+				_ComboPoints = 100,
+				_MaxHitPoints = 100,
+				_HitPoints = 10
 			};
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
@@ -270,7 +270,7 @@ namespace DungeonGameTests
 			{
 				item.Equipped = false;
 			}
-			var abilityIndex = player.Abilities.FindIndex(
+			var abilityIndex = player._Abilities.FindIndex(
 				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Wound);
 			var inputInfo = new[] { "ability", "wound" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
@@ -280,21 +280,21 @@ namespace DungeonGameTests
 			Assert.AreEqual("Instant Damage: 5", OutputHandler.Display.Output[3][2]);
 			Assert.AreEqual("Damage Over Time: 10", OutputHandler.Display.Output[4][2]);
 			var bleedOverTimeString = "Bleeding damage over time for " +
-									  player.Abilities[abilityIndex].Offensive.AmountMaxRounds + " rounds.";
+									  player._Abilities[abilityIndex].Offensive.AmountMaxRounds + " rounds.";
 			Assert.AreEqual(bleedOverTimeString, OutputHandler.Display.Output[5][2]);
 			var input = new[] { "use", "wound" };
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("wound", abilityName);
-			var arrowCount = player.PlayerQuiver.Quantity;
+			var arrowCount = player._PlayerQuiver.Quantity;
 			player.UseAbility(monster, input);
-			Assert.AreEqual(arrowCount - 1, player.PlayerQuiver.Quantity);
-			var comboCost = player.Abilities[abilityIndex].ComboCost;
-			Assert.AreEqual(player.MaxComboPoints - comboCost, player.ComboPoints);
-			var abilityDamage = player.Abilities[abilityIndex].Offensive.Amount;
-			var abilityDamageOverTime = player.Abilities[abilityIndex].Offensive.AmountOverTime;
-			var abilityCurRounds = player.Abilities[abilityIndex].Offensive.AmountCurRounds;
-			var abilityMaxRounds = player.Abilities[abilityIndex].Offensive.AmountMaxRounds;
-			var abilitySuccessString = "Your " + player.Abilities[abilityIndex].Name + " hit the " + monster._Name + " for " +
+			Assert.AreEqual(arrowCount - 1, player._PlayerQuiver.Quantity);
+			var comboCost = player._Abilities[abilityIndex].ComboCost;
+			Assert.AreEqual(player._MaxComboPoints - comboCost, player._ComboPoints);
+			var abilityDamage = player._Abilities[abilityIndex].Offensive.Amount;
+			var abilityDamageOverTime = player._Abilities[abilityIndex].Offensive.AmountOverTime;
+			var abilityCurRounds = player._Abilities[abilityIndex].Offensive.AmountCurRounds;
+			var abilityMaxRounds = player._Abilities[abilityIndex].Offensive.AmountMaxRounds;
+			var abilitySuccessString = "Your " + player._Abilities[abilityIndex].Name + " hit the " + monster._Name + " for " +
 									   abilityDamage + " physical damage.";
 			Assert.AreEqual(abilitySuccessString, OutputHandler.Display.Output[6][2]);
 			var bleedString = "The " + monster._Name + " is bleeding!";
@@ -324,17 +324,17 @@ namespace DungeonGameTests
 		{
 			var player = new Player("test", Player.PlayerClassType.Archer)
 			{
-				MaxComboPoints = 100,
-				ComboPoints = 100,
-				MaxHitPoints = 100,
-				HitPoints = 10
+				_MaxComboPoints = 100,
+				_ComboPoints = 100,
+				_MaxHitPoints = 100,
+				_HitPoints = 10
 			};
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon)
 			{ HitPoints = 100, MaxHitPoints = 100, InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
-			var abilityIndex = player.Abilities.FindIndex(
+			var abilityIndex = player._Abilities.FindIndex(
 				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Double);
 			var inputInfo = new[] { "ability", "double" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
@@ -348,24 +348,24 @@ namespace DungeonGameTests
 			var input = new[] { "use", "double" };
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("double", abilityName);
-			var arrowCount = player.PlayerQuiver.Quantity;
+			var arrowCount = player._PlayerQuiver.Quantity;
 			player.UseAbility(monster, input);
-			Assert.AreEqual(arrowCount - 2, player.PlayerQuiver.Quantity);
-			var comboCost = player.Abilities[abilityIndex].ComboCost;
-			var hitAmount = player.Abilities[abilityIndex].Offensive.Amount;
+			Assert.AreEqual(arrowCount - 2, player._PlayerQuiver.Quantity);
+			var comboCost = player._Abilities[abilityIndex].ComboCost;
+			var hitAmount = player._Abilities[abilityIndex].Offensive.Amount;
 			Assert.AreEqual(monster.MaxHitPoints - 2 * hitAmount, monster.HitPoints);
-			Assert.AreEqual(player.MaxComboPoints - 2 * comboCost, player.ComboPoints);
+			Assert.AreEqual(player._MaxComboPoints - 2 * comboCost, player._ComboPoints);
 			var attackString = "Your double shot hit the " + monster._Name + " for 25" + " physical damage.";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[5][2]);
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[6][2]);
-			player.MaxComboPoints = 25;
-			player.ComboPoints = player.MaxComboPoints;
+			player._MaxComboPoints = 25;
+			player._ComboPoints = player._MaxComboPoints;
 			monster.MaxHitPoints = 100;
 			monster.HitPoints = monster.MaxHitPoints;
-			arrowCount = player.PlayerQuiver.Quantity;
+			arrowCount = player._PlayerQuiver.Quantity;
 			player.UseAbility(monster, input);
-			Assert.AreEqual(arrowCount - 1, player.PlayerQuiver.Quantity);
-			Assert.AreEqual(player.MaxComboPoints - comboCost, player.ComboPoints);
+			Assert.AreEqual(arrowCount - 1, player._PlayerQuiver.Quantity);
+			Assert.AreEqual(player._MaxComboPoints - comboCost, player._ComboPoints);
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[7][2]);
 			const string outOfComboString = "You didn't have enough combo points for the second shot!";
 			Assert.AreEqual(outOfComboString, OutputHandler.Display.Output[8][2]);
@@ -375,16 +375,16 @@ namespace DungeonGameTests
 		{
 			var player = new Player("test", Player.PlayerClassType.Archer)
 			{
-				MaxComboPoints = 100,
-				ComboPoints = 100,
-				MaxHitPoints = 100,
-				HitPoints = 10
+				_MaxComboPoints = 100,
+				_ComboPoints = 100,
+				_MaxHitPoints = 100,
+				_HitPoints = 10
 			};
 			GearHandler.EquipInitialGear(player);
-			player.Abilities.Add(new PlayerAbility(
+			player._Abilities.Add(new PlayerAbility(
 				"bandage", 25, 1, PlayerAbility.ArcherAbility.Bandage, 2));
 			OutputHandler.Display.ClearUserOutput();
-			var abilityIndex = player.Abilities.FindIndex(
+			var abilityIndex = player._Abilities.FindIndex(
 				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Bandage);
 			var inputInfo = new[] { "ability", "bandage" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
@@ -394,36 +394,36 @@ namespace DungeonGameTests
 			Assert.AreEqual("Heal Amount: 25", OutputHandler.Display.Output[3][2]);
 			Assert.AreEqual("Heal Over Time: 5", OutputHandler.Display.Output[4][2]);
 			var healInfoStringCombat = "Heal over time will restore health for " +
-									   player.Abilities[abilityIndex].Healing.HealMaxRounds + " rounds in combat.";
+									   player._Abilities[abilityIndex].Healing.HealMaxRounds + " rounds in combat.";
 			Assert.AreEqual(healInfoStringCombat, OutputHandler.Display.Output[5][2]);
 			var healInfoStringNonCombat = "Heal over time will restore health " +
-										  player.Abilities[abilityIndex].Healing.HealMaxRounds + " times every 10 seconds.";
+										  player._Abilities[abilityIndex].Healing.HealMaxRounds + " times every 10 seconds.";
 			Assert.AreEqual(healInfoStringNonCombat, OutputHandler.Display.Output[6][2]);
 			var input = new[] { "use", "bandage" };
 			var abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("bandage", abilityName);
-			var baseHitPoints = player.HitPoints;
+			var baseHitPoints = player._HitPoints;
 			player.UseAbility(input);
-			var comboCost = player.Abilities[abilityIndex].ComboCost;
-			Assert.AreEqual(player.MaxComboPoints - comboCost, player.ComboPoints);
-			var healAmount = player.Abilities[abilityIndex].Healing.HealAmount;
+			var comboCost = player._Abilities[abilityIndex].ComboCost;
+			Assert.AreEqual(player._MaxComboPoints - comboCost, player._ComboPoints);
+			var healAmount = player._Abilities[abilityIndex].Healing.HealAmount;
 			var healString = "You heal yourself for " + healAmount + " health.";
 			Assert.AreEqual(healString, OutputHandler.Display.Output[7][2]);
-			Assert.AreEqual(Effect.EffectType.Healing, player.Effects[0].EffectGroup);
-			Assert.AreEqual(baseHitPoints + healAmount, player.HitPoints);
-			baseHitPoints = player.HitPoints;
+			Assert.AreEqual(Effect.EffectType.Healing, player._Effects[0].EffectGroup);
+			Assert.AreEqual(baseHitPoints + healAmount, player._HitPoints);
+			baseHitPoints = player._HitPoints;
 			OutputHandler.Display.ClearUserOutput();
 			for (var i = 2; i < 5; i++)
 			{
-				player.Effects[0].HealingRound(player);
-				var healOverTimeAmt = player.Effects[0].EffectAmountOverTime;
+				player._Effects[0].HealingRound(player);
+				var healOverTimeAmt = player._Effects[0].EffectAmountOverTime;
 				var healAmtString = "You have been healed for " + healOverTimeAmt + " health.";
-				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
 				Assert.AreEqual(healAmtString, OutputHandler.Display.Output[i - 2][2]);
-				Assert.AreEqual(baseHitPoints + (i - 1) * healOverTimeAmt, player.HitPoints);
+				Assert.AreEqual(baseHitPoints + (i - 1) * healOverTimeAmt, player._HitPoints);
 			}
 			GameHandler.RemovedExpiredEffectsAsync(player);
-			Assert.AreEqual(false, player.Effects.Any());
+			Assert.AreEqual(false, player._Effects.Any());
 		}
 		[Test]
 		public void SwiftAuraAbilityUnitTest()
@@ -432,7 +432,7 @@ namespace DungeonGameTests
 			var player = new Player("placeholder", Player.PlayerClassType.Archer);
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
-			player.Abilities.Add(new PlayerAbility(
+			player._Abilities.Add(new PlayerAbility(
 				"swift aura", 150, 1, PlayerAbility.ArcherAbility.SwiftAura, 6));
 			var input = new[] { "use", "swift", "aura" };
 			PlayerHandler.AbilityInfo(player, input);
@@ -440,48 +440,48 @@ namespace DungeonGameTests
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
 			Assert.AreEqual("Combo Cost: 150", OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual("Swift Aura Amount: 15", OutputHandler.Display.Output[3][2]);
-			Assert.AreEqual("Dexterity is increased by 15 for 10 minutes.", OutputHandler.Display.Output[4][2]);
-			var baseDex = player.Dexterity;
-			var baseCombo = player.ComboPoints;
-			var baseMaxCombo = player.MaxComboPoints;
-			var abilityIndex = player.Abilities.FindIndex(f => f.Name == InputHandler.ParseInput(input));
+			Assert.AreEqual("_Dexterity is increased by 15 for 10 minutes.", OutputHandler.Display.Output[4][2]);
+			var baseDex = player._Dexterity;
+			var baseCombo = player._ComboPoints;
+			var baseMaxCombo = player._MaxComboPoints;
+			var abilityIndex = player._Abilities.FindIndex(f => f.Name == InputHandler.ParseInput(input));
 			player.UseAbility(input);
-			Assert.AreEqual(player.Dexterity, baseDex + player.Abilities[abilityIndex].ChangeAmount.Amount);
+			Assert.AreEqual(player._Dexterity, baseDex + player._Abilities[abilityIndex].ChangeAmount.Amount);
 			Assert.AreEqual(
-				baseCombo - player.Abilities[abilityIndex].ComboCost, player.ComboPoints);
+				baseCombo - player._Abilities[abilityIndex].ComboCost, player._ComboPoints);
 			Assert.AreEqual(
-				player.MaxComboPoints, baseMaxCombo + player.Abilities[abilityIndex].ChangeAmount.Amount * 10);
+				player._MaxComboPoints, baseMaxCombo + player._Abilities[abilityIndex].ChangeAmount.Amount * 10);
 			Assert.AreEqual("You generate a Swift Aura around yourself.", OutputHandler.Display.Output[5][2]);
 			for (var i = 1; i < 601; i++)
 			{
-				Assert.AreEqual(i, player.Effects[0].EffectCurRound);
-				player.Effects[0].ChangeStatRound();
+				Assert.AreEqual(i, player._Effects[0].EffectCurRound);
+				player._Effects[0].ChangeStatRound();
 			}
 			GameHandler.RemovedExpiredEffectsAsync(player);
 			Thread.Sleep(1000);
-			Assert.AreEqual(false, player.Effects.Any());
-			Assert.AreEqual(baseDex, player.Dexterity);
-			Assert.AreEqual(baseMaxCombo, player.MaxComboPoints);
-			Assert.AreEqual(baseCombo - player.Abilities[abilityIndex].ComboCost, player.ComboPoints);
+			Assert.AreEqual(false, player._Effects.Any());
+			Assert.AreEqual(baseDex, player._Dexterity);
+			Assert.AreEqual(baseMaxCombo, player._MaxComboPoints);
+			Assert.AreEqual(baseCombo - player._Abilities[abilityIndex].ComboCost, player._ComboPoints);
 		}
 		[Test]
 		public void ImmolatingArrowAbilityUnitTest()
 		{
 			var player = new Player("test", Player.PlayerClassType.Archer)
 			{
-				MaxComboPoints = 100,
-				ComboPoints = 100,
-				MaxHitPoints = 100,
-				HitPoints = 10,
-				InCombat = true
+				_MaxComboPoints = 100,
+				_ComboPoints = 100,
+				_MaxHitPoints = 100,
+				_HitPoints = 10,
+				_InCombat = true
 			};
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon)
 			{ HitPoints = 100, MaxHitPoints = 100, InCombat = true, FireResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
-			player.PlayerWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
-			player.Abilities.Add(new PlayerAbility(
+			player._PlayerWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
+			player._Abilities.Add(new PlayerAbility(
 				"immolating arrow", 35, 1, PlayerAbility.ArcherAbility.ImmolatingArrow, 8));
 			var input = new[] { "use", "immolating", "arrow" };
 			PlayerHandler.AbilityInfo(player, input);
@@ -491,16 +491,16 @@ namespace DungeonGameTests
 			Assert.AreEqual("Instant Damage: 25", OutputHandler.Display.Output[3][2]);
 			Assert.AreEqual("Damage Over Time: 5", OutputHandler.Display.Output[4][2]);
 			Assert.AreEqual("Fire damage over time for 3 rounds.", OutputHandler.Display.Output[5][2]);
-			var arrowCount = player.PlayerQuiver.Quantity;
+			var arrowCount = player._PlayerQuiver.Quantity;
 			player.UseAbility(monster, input);
-			Assert.AreEqual(arrowCount - 1, player.PlayerQuiver.Quantity);
-			var index = player.Abilities.FindIndex(
+			Assert.AreEqual(arrowCount - 1, player._PlayerQuiver.Quantity);
+			var index = player._Abilities.FindIndex(
 				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.ImmolatingArrow);
-			Assert.AreEqual(player.ComboPoints, player.MaxComboPoints - player.Abilities[index].ComboCost);
+			Assert.AreEqual(player._ComboPoints, player._MaxComboPoints - player._Abilities[index].ComboCost);
 			var attackString = "Your immolating arrow hit the " + monster._Name + " for 25 physical damage.";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[6][2]);
 			Assert.AreEqual(monster.HitPoints,
-				monster.MaxHitPoints - player.Abilities[index].Offensive.Amount);
+				monster.MaxHitPoints - player._Abilities[index].Offensive.Amount);
 			OutputHandler.Display.ClearUserOutput();
 			Assert.AreEqual(Effect.EffectType.OnFire, monster.Effects[0].EffectGroup);
 			Assert.AreEqual(3, monster.Effects[0].EffectMaxRound);
@@ -523,17 +523,17 @@ namespace DungeonGameTests
 		{
 			var player = new Player("test", Player.PlayerClassType.Archer)
 			{
-				MaxComboPoints = 100,
-				ComboPoints = 100,
-				MaxHitPoints = 100,
-				HitPoints = 10
+				_MaxComboPoints = 100,
+				_ComboPoints = 100,
+				_MaxHitPoints = 100,
+				_HitPoints = 10
 			};
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon)
 			{ HitPoints = 100, MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			player.Abilities.Add(new PlayerAbility(
+			player._Abilities.Add(new PlayerAbility(
 				"ambush", 75, 1, PlayerAbility.ArcherAbility.Ambush, 4));
 			var inputInfo = new[] { "ability", "ambush" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
@@ -544,18 +544,18 @@ namespace DungeonGameTests
 			Assert.AreEqual("A surprise attack is launched, which initiates combat.",
 				OutputHandler.Display.Output[4][2]);
 			var input = new[] { "use", "ambush", monster._Name };
-			player.InCombat = true;
-			var arrowCount = player.PlayerQuiver.Quantity;
+			player._InCombat = true;
+			var arrowCount = player._PlayerQuiver.Quantity;
 			player.UseAbility(monster, input);
 			Assert.AreEqual("You can't ambush " + monster._Name + ", you're already in combat!",
 				OutputHandler.Display.Output[5][2]);
-			player.InCombat = false;
+			player._InCombat = false;
 			player.UseAbility(monster, input);
-			var index = player.Abilities.FindIndex(
+			var index = player._Abilities.FindIndex(
 				f => f.ArcAbilityCategory == PlayerAbility.ArcherAbility.Ambush);
-			var abilityDamage = player.Abilities[index].Offensive.Amount;
+			var abilityDamage = player._Abilities[index].Offensive.Amount;
 			var attackString = "Your ambush hit the " + monster._Name + " for " + abilityDamage + " physical damage.";
-			Assert.AreEqual(arrowCount - 1, player.PlayerQuiver.Quantity);
+			Assert.AreEqual(arrowCount - 1, player._PlayerQuiver.Quantity);
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[6][2]);
 			Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - abilityDamage);
 		}

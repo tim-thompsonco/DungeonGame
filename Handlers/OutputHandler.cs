@@ -28,9 +28,9 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				mapBorder.ToString());
 			// Get player coordinates and room player is located in
-			var playerX = player.PlayerLocation.X;
-			var playerY = player.PlayerLocation.Y;
-			var playerZ = player.PlayerLocation.Z;
+			var playerX = player._PlayerLocation.X;
+			var playerY = player._PlayerLocation.Y;
+			var playerZ = player._PlayerLocation.Z;
 			/* Map starts drawing from top left, so it needs to decrement since
 			each new console writeline pushes screen down instead of up */
 			for (var i = playerY + height; i > playerY - height; i--)
@@ -189,13 +189,13 @@ namespace DungeonGame
 			effectUserOutput.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
-				"Player Effects:");
+				"Player _Effects:");
 			var activeEffects = 0;
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (var effect in player.Effects)
+			foreach (var effect in player._Effects)
 			{
 				string effectOutput;
-				if (player.InCombat)
+				if (player._InCombat)
 				{
 					if (effect.EffectMaxRound + 1 - effect.EffectCurRound > 1)
 					{
@@ -256,7 +256,7 @@ namespace DungeonGame
 			}
 			// Create bottom border for effects area
 			var effectsBorder = new StringBuilder();
-			// Effects border needs to extend same width as minimap itself in either direction
+			// _Effects border needs to extend same width as minimap itself in either direction
 			for (var b = 0; b < Settings.GetMiniMapBorderWidth(); b++)
 			{
 				effectsBorder.Append("=");
@@ -277,7 +277,7 @@ namespace DungeonGame
 				"Player Quests:");
 			var quests = 0;
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (var quest in player.QuestLog)
+			foreach (var quest in player._QuestLog)
 			{
 				var questOutput = quest._QuestCategory switch
 				{
@@ -321,7 +321,7 @@ namespace DungeonGame
 		{
 			PlayerHandler.DisplayPlayerStats(player);
 			MonsterHandler.DisplayStats(opponent);
-			RoomHandler.Rooms[player.PlayerLocation].ShowCommands();
+			RoomHandler.Rooms[player._PlayerLocation].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = ShowEffects(player);
 			QuestDisplay = ShowQuests(player);
@@ -331,7 +331,7 @@ namespace DungeonGame
 		public static void ShowUserOutput(Player player)
 		{
 			PlayerHandler.DisplayPlayerStats(player);
-			RoomHandler.Rooms[player.PlayerLocation].ShowCommands();
+			RoomHandler.Rooms[player._PlayerLocation].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = ShowEffects(player);
 			QuestDisplay = ShowQuests(player);

@@ -76,7 +76,7 @@ namespace DungeonGame
 
 		public void DisplayAvailableUpgrades(Player player)
 		{
-			switch (player.PlayerClass)
+			switch (player._PlayerClass)
 			{
 				case Player.PlayerClassType.Mage:
 					if (_TrainerGroup != TrainerCategory.Mage)
@@ -145,12 +145,12 @@ namespace DungeonGame
 						int newSpellsToTrain = 0;
 						foreach (PlayerSpell spell in _TrainableSpells)
 						{
-							if (player.Level < spell.MinLevel)
+							if (player._Level < spell.MinLevel)
 							{
 								continue;
 							}
 
-							double trainingReduction = 1.0 - player.Intelligence / 100.0;
+							double trainingReduction = 1.0 - player._Intelligence / 100.0;
 							if (trainingReduction < 0.5)
 							{
 								trainingReduction = 0.5;
@@ -194,14 +194,14 @@ namespace DungeonGame
 					Settings.FormatDefaultBackground(),
 					"");
 				int spellsToTrain = 0;
-				foreach (PlayerSpell spell in player.Spellbook)
+				foreach (PlayerSpell spell in player._Spellbook)
 				{
-					if (player.Level == spell.Rank)
+					if (player._Level == spell.Rank)
 					{
 						continue;
 					}
 
-					double trainingReduction = 1.0 - player.Intelligence / 100.0;
+					double trainingReduction = 1.0 - player._Intelligence / 100.0;
 					if (trainingReduction < 0.5)
 					{
 						trainingReduction = 0.5;
@@ -229,7 +229,7 @@ namespace DungeonGame
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
-					"New Abilities: ");
+					"New _Abilities: ");
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
@@ -248,12 +248,12 @@ namespace DungeonGame
 						int newAbilitiesToTrain = 0;
 						foreach (PlayerAbility ability in _TrainableAbilities)
 						{
-							if (player.Level < ability.MinLevel)
+							if (player._Level < ability.MinLevel)
 							{
 								continue;
 							}
 
-							double trainingReduction = 1.0 - player.Intelligence / 100.0;
+							double trainingReduction = 1.0 - player._Intelligence / 100.0;
 							if (trainingReduction < 0.5)
 							{
 								trainingReduction = 0.5;
@@ -291,20 +291,20 @@ namespace DungeonGame
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
-					"Existing Abilities: ");
+					"Existing _Abilities: ");
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"");
 				int abilitiesToTrain = 0;
-				foreach (PlayerAbility ability in player.Abilities)
+				foreach (PlayerAbility ability in player._Abilities)
 				{
-					if (player.Level == ability.Rank)
+					if (player._Level == ability.Rank)
 					{
 						continue;
 					}
 
-					double trainingReduction = 1.0 - player.Intelligence / 100.0;
+					double trainingReduction = 1.0 - player._Intelligence / 100.0;
 					if (trainingReduction < 0.5)
 					{
 						trainingReduction = 0.5;
@@ -331,7 +331,7 @@ namespace DungeonGame
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				string.Empty);
-			string playerGold = "Player Gold: " + player.Gold;
+			string playerGold = "Player _Gold: " + player._Gold;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -339,7 +339,7 @@ namespace DungeonGame
 		}
 		public void TrainAbility(Player player, string inputName)
 		{
-			if (player.PlayerClass == Player.PlayerClassType.Mage)
+			if (player._PlayerClass == Player.PlayerClassType.Mage)
 			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -349,24 +349,24 @@ namespace DungeonGame
 			}
 			int abilityIndex = _TrainableAbilities.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
-			if (abilityIndex != -1 && player.Level >= _TrainableAbilities[abilityIndex].MinLevel)
+			if (abilityIndex != -1 && player._Level >= _TrainableAbilities[abilityIndex].MinLevel)
 			{
-				double trainingReduction = 1.0 - player.Intelligence / 100.0;
+				double trainingReduction = 1.0 - player._Intelligence / 100.0;
 				if (trainingReduction < 0.5)
 				{
 					trainingReduction = 0.5;
 				}
 
 				int trainingCost = (int)(_TrainableAbilities[abilityIndex].MinLevel * _BaseCost * trainingReduction);
-				if (player.Gold >= trainingCost)
+				if (player._Gold >= trainingCost)
 				{
-					player.Gold -= trainingCost;
-					player.Abilities.Add(_TrainableAbilities[abilityIndex]);
+					player._Gold -= trainingCost;
+					player._Abilities.Add(_TrainableAbilities[abilityIndex]);
 					_TrainableAbilities.RemoveAt(abilityIndex);
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-					string abilityName = textInfo.ToTitleCase(player.Abilities[player.Abilities.Count - 1].Name);
+					string abilityName = textInfo.ToTitleCase(player._Abilities[player._Abilities.Count - 1].Name);
 					string purchaseString = "You purchased " + abilityName + " (Rank " +
-										 player.Abilities[player.Abilities.Count - 1].Rank + ") for " + trainingCost + " gold.";
+										 player._Abilities[player._Abilities.Count - 1].Rank + ") for " + trainingCost + " gold.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -391,7 +391,7 @@ namespace DungeonGame
 		}
 		public void TrainSpell(Player player, string inputName)
 		{
-			if (player.PlayerClass != Player.PlayerClassType.Mage)
+			if (player._PlayerClass != Player.PlayerClassType.Mage)
 			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -401,24 +401,24 @@ namespace DungeonGame
 			}
 			int spellIndex = _TrainableSpells.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
-			if (spellIndex != -1 && player.Level >= _TrainableSpells[spellIndex].MinLevel)
+			if (spellIndex != -1 && player._Level >= _TrainableSpells[spellIndex].MinLevel)
 			{
-				double trainingReduction = 1.0 - player.Intelligence / 100.0;
+				double trainingReduction = 1.0 - player._Intelligence / 100.0;
 				if (trainingReduction < 0.5)
 				{
 					trainingReduction = 0.5;
 				}
 
 				int trainingCost = (int)(_TrainableSpells[spellIndex].MinLevel * _BaseCost * trainingReduction);
-				if (player.Gold >= trainingCost)
+				if (player._Gold >= trainingCost)
 				{
-					player.Gold -= trainingCost;
-					player.Spellbook.Add(_TrainableSpells[spellIndex]);
+					player._Gold -= trainingCost;
+					player._Spellbook.Add(_TrainableSpells[spellIndex]);
 					_TrainableSpells.RemoveAt(spellIndex);
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-					string spellName = textInfo.ToTitleCase(player.Spellbook[player.Spellbook.Count - 1].Name);
+					string spellName = textInfo.ToTitleCase(player._Spellbook[player._Spellbook.Count - 1].Name);
 					string purchaseString = "You purchased " + spellName + " (Rank " +
-										 player.Spellbook[player.Spellbook.Count - 1].Rank + ") for " + trainingCost + " gold.";
+										 player._Spellbook[player._Spellbook.Count - 1].Rank + ") for " + trainingCost + " gold.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -443,7 +443,7 @@ namespace DungeonGame
 		}
 		public void UpgradeSpell(Player player, string inputName)
 		{
-			if (player.PlayerClass != Player.PlayerClassType.Mage)
+			if (player._PlayerClass != Player.PlayerClassType.Mage)
 			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -451,64 +451,64 @@ namespace DungeonGame
 					"You can't upgrade spells. You're not a mage!");
 				return;
 			}
-			int spellIndex = player.Spellbook.FindIndex(
+			int spellIndex = player._Spellbook.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
-			if (spellIndex != -1 && player.Level >= player.Spellbook[spellIndex].Rank + 1)
+			if (spellIndex != -1 && player._Level >= player._Spellbook[spellIndex].Rank + 1)
 			{
-				double trainingReduction = 1.0 - player.Intelligence / 100.0;
+				double trainingReduction = 1.0 - player._Intelligence / 100.0;
 				if (trainingReduction < 0.5)
 				{
 					trainingReduction = 0.5;
 				}
 
-				int trainingCost = (int)((player.Spellbook[spellIndex].Rank + 1.0) * _BaseCost * trainingReduction);
-				if (player.Gold >= trainingCost)
+				int trainingCost = (int)((player._Spellbook[spellIndex].Rank + 1.0) * _BaseCost * trainingReduction);
+				if (player._Gold >= trainingCost)
 				{
-					player.Gold -= trainingCost;
-					player.Spellbook[spellIndex].Rank++;
-					player.Spellbook[spellIndex].ManaCost += 10;
-					switch (player.Spellbook[spellIndex].SpellCategory)
+					player._Gold -= trainingCost;
+					player._Spellbook[spellIndex].Rank++;
+					player._Spellbook[spellIndex].ManaCost += 10;
+					switch (player._Spellbook[spellIndex].SpellCategory)
 					{
 						case PlayerSpell.SpellType.Fireball:
-							player.Spellbook[spellIndex].Offensive.Amount += 10;
-							player.Spellbook[spellIndex].Offensive.AmountOverTime += 5;
+							player._Spellbook[spellIndex].Offensive.Amount += 10;
+							player._Spellbook[spellIndex].Offensive.AmountOverTime += 5;
 							break;
 						case PlayerSpell.SpellType.Frostbolt:
-							player.Spellbook[spellIndex].Offensive.Amount += 10;
+							player._Spellbook[spellIndex].Offensive.Amount += 10;
 							break;
 						case PlayerSpell.SpellType.Lightning:
-							player.Spellbook[spellIndex].Offensive.Amount += 10;
+							player._Spellbook[spellIndex].Offensive.Amount += 10;
 							break;
 						case PlayerSpell.SpellType.Heal:
-							player.Spellbook[spellIndex].Healing.HealAmount += 10;
-							player.Spellbook[spellIndex].Healing.HealOverTime += 5;
+							player._Spellbook[spellIndex].Healing.HealAmount += 10;
+							player._Spellbook[spellIndex].Healing.HealOverTime += 5;
 							break;
 						case PlayerSpell.SpellType.Rejuvenate:
-							player.Spellbook[spellIndex].Healing.HealAmount += 10;
-							player.Spellbook[spellIndex].Healing.HealOverTime += 5;
+							player._Spellbook[spellIndex].Healing.HealAmount += 10;
+							player._Spellbook[spellIndex].Healing.HealOverTime += 5;
 							break;
 						case PlayerSpell.SpellType.Diamondskin:
-							player.Spellbook[spellIndex].ChangeAmount.Amount += 10;
+							player._Spellbook[spellIndex].ChangeAmount.Amount += 10;
 							break;
 						case PlayerSpell.SpellType.TownPortal:
-							player.Spellbook[spellIndex].ManaCost -= 15;
+							player._Spellbook[spellIndex].ManaCost -= 15;
 							break;
 						case PlayerSpell.SpellType.Reflect:
-							player.Spellbook[spellIndex].ChangeAmount.Amount += 10;
+							player._Spellbook[spellIndex].ChangeAmount.Amount += 10;
 							break;
 						case PlayerSpell.SpellType.ArcaneIntellect:
-							player.Spellbook[spellIndex].ChangeAmount.Amount += 5;
+							player._Spellbook[spellIndex].ChangeAmount.Amount += 5;
 							break;
 						case PlayerSpell.SpellType.FrostNova:
-							player.Spellbook[spellIndex].Offensive.Amount += 10;
+							player._Spellbook[spellIndex].Offensive.Amount += 10;
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-					string spellName = textInfo.ToTitleCase(player.Spellbook[spellIndex].Name);
+					string spellName = textInfo.ToTitleCase(player._Spellbook[spellIndex].Name);
 					string purchaseString = "You upgraded " + spellName + " to Rank " +
-										 player.Spellbook[spellIndex].Rank + " for " + trainingCost + " gold.";
+										 player._Spellbook[spellIndex].Rank + " for " + trainingCost + " gold.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -534,7 +534,7 @@ namespace DungeonGame
 		}
 		public void UpgradeAbility(Player player, string inputName)
 		{
-			if (player.PlayerClass == Player.PlayerClassType.Mage)
+			if (player._PlayerClass == Player.PlayerClassType.Mage)
 			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -542,60 +542,60 @@ namespace DungeonGame
 					"You can't upgrade abilities. You're not a warrior or archer!");
 				return;
 			}
-			int abilityIndex = player.Abilities.FindIndex(
+			int abilityIndex = player._Abilities.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
-			if (abilityIndex != -1 && player.Level >= player.Abilities[abilityIndex].Rank + 1)
+			if (abilityIndex != -1 && player._Level >= player._Abilities[abilityIndex].Rank + 1)
 			{
-				double trainingReduction = 1.0 - player.Intelligence / 100.0;
+				double trainingReduction = 1.0 - player._Intelligence / 100.0;
 				if (trainingReduction < 0.5)
 				{
 					trainingReduction = 0.5;
 				}
 
-				int trainingCost = (int)((player.Abilities[abilityIndex].Rank + 1.0) * _BaseCost * trainingReduction);
-				if (player.Gold >= trainingCost)
+				int trainingCost = (int)((player._Abilities[abilityIndex].Rank + 1.0) * _BaseCost * trainingReduction);
+				if (player._Gold >= trainingCost)
 				{
-					player.Gold -= trainingCost;
-					player.Abilities[abilityIndex].Rank++;
-					if (player.PlayerClass == Player.PlayerClassType.Archer)
+					player._Gold -= trainingCost;
+					player._Abilities[abilityIndex].Rank++;
+					if (player._PlayerClass == Player.PlayerClassType.Archer)
 					{
-						player.Abilities[abilityIndex].ComboCost += 10;
-						switch (player.Abilities[abilityIndex].ArcAbilityCategory)
+						player._Abilities[abilityIndex].ComboCost += 10;
+						switch (player._Abilities[abilityIndex].ArcAbilityCategory)
 						{
 							case PlayerAbility.ArcherAbility.Distance:
-								player.Abilities[abilityIndex].Offensive.Amount += 10;
-								player.Abilities[abilityIndex].Offensive.ChanceToSucceed += 5;
+								player._Abilities[abilityIndex].Offensive.Amount += 10;
+								player._Abilities[abilityIndex].Offensive.ChanceToSucceed += 5;
 								break;
 							case PlayerAbility.ArcherAbility.Gut:
-								player.Abilities[abilityIndex].Offensive.Amount += 10;
-								player.Abilities[abilityIndex].Offensive.AmountOverTime += 5;
+								player._Abilities[abilityIndex].Offensive.Amount += 10;
+								player._Abilities[abilityIndex].Offensive.AmountOverTime += 5;
 								break;
 							case PlayerAbility.ArcherAbility.Precise:
-								player.Abilities[abilityIndex].Offensive.Amount += 10;
+								player._Abilities[abilityIndex].Offensive.Amount += 10;
 								break;
 							case PlayerAbility.ArcherAbility.Stun:
-								player.Abilities[abilityIndex].Stun.DamageAmount += 10;
+								player._Abilities[abilityIndex].Stun.DamageAmount += 10;
 								break;
 							case PlayerAbility.ArcherAbility.Double:
-								player.Abilities[abilityIndex].Offensive.Amount += 10;
+								player._Abilities[abilityIndex].Offensive.Amount += 10;
 								break;
 							case PlayerAbility.ArcherAbility.Wound:
-								player.Abilities[abilityIndex].Offensive.Amount += 10;
-								player.Abilities[abilityIndex].Offensive.AmountOverTime += 5;
+								player._Abilities[abilityIndex].Offensive.Amount += 10;
+								player._Abilities[abilityIndex].Offensive.AmountOverTime += 5;
 								break;
 							case PlayerAbility.ArcherAbility.Bandage:
-								player.Abilities[abilityIndex].Healing.HealAmount += 10;
-								player.Abilities[abilityIndex].Healing.HealOverTime += 5;
+								player._Abilities[abilityIndex].Healing.HealAmount += 10;
+								player._Abilities[abilityIndex].Healing.HealOverTime += 5;
 								break;
 							case PlayerAbility.ArcherAbility.SwiftAura:
-								player.Abilities[abilityIndex].ChangeAmount.Amount += 5;
+								player._Abilities[abilityIndex].ChangeAmount.Amount += 5;
 								break;
 							case PlayerAbility.ArcherAbility.ImmolatingArrow:
-								player.Abilities[abilityIndex].Offensive.Amount += 10;
-								player.Abilities[abilityIndex].Offensive.AmountOverTime += 5;
+								player._Abilities[abilityIndex].Offensive.Amount += 10;
+								player._Abilities[abilityIndex].Offensive.AmountOverTime += 5;
 								break;
 							case PlayerAbility.ArcherAbility.Ambush:
-								player.Abilities[abilityIndex].Offensive.Amount += 10;
+								player._Abilities[abilityIndex].Offensive.Amount += 10;
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();
@@ -603,50 +603,50 @@ namespace DungeonGame
 					}
 					else
 					{
-						player.Abilities[abilityIndex].RageCost += 10;
-						switch (player.Abilities[abilityIndex].WarAbilityCategory)
+						player._Abilities[abilityIndex].RageCost += 10;
+						switch (player._Abilities[abilityIndex].WarAbilityCategory)
 						{
 							case PlayerAbility.WarriorAbility.Slash:
-								player.Abilities[abilityIndex].Offensive.Amount += 10;
+								player._Abilities[abilityIndex].Offensive.Amount += 10;
 								break;
 							case PlayerAbility.WarriorAbility.Rend:
-								player.Abilities[abilityIndex].Offensive.Amount += 10;
-								player.Abilities[abilityIndex].Offensive.AmountOverTime += 5;
+								player._Abilities[abilityIndex].Offensive.Amount += 10;
+								player._Abilities[abilityIndex].Offensive.AmountOverTime += 5;
 								break;
 							case PlayerAbility.WarriorAbility.Charge:
-								player.Abilities[abilityIndex].Stun.DamageAmount += 10;
+								player._Abilities[abilityIndex].Stun.DamageAmount += 10;
 								break;
 							case PlayerAbility.WarriorAbility.Block:
-								player.Abilities[abilityIndex].Defensive.BlockDamage += 10;
+								player._Abilities[abilityIndex].Defensive.BlockDamage += 10;
 								break;
 							case PlayerAbility.WarriorAbility.Berserk:
-								player.Abilities[abilityIndex].Offensive.Amount += 10;
-								player.Abilities[abilityIndex].ChangeAmount.Amount -= 10;
+								player._Abilities[abilityIndex].Offensive.Amount += 10;
+								player._Abilities[abilityIndex].ChangeAmount.Amount -= 10;
 								break;
 							case PlayerAbility.WarriorAbility.Disarm:
-								player.Abilities[abilityIndex].Offensive.ChanceToSucceed += 10;
+								player._Abilities[abilityIndex].Offensive.ChanceToSucceed += 10;
 								break;
 							case PlayerAbility.WarriorAbility.Bandage:
-								player.Abilities[abilityIndex].Healing.HealAmount += 10;
-								player.Abilities[abilityIndex].Healing.HealOverTime += 5;
+								player._Abilities[abilityIndex].Healing.HealAmount += 10;
+								player._Abilities[abilityIndex].Healing.HealOverTime += 5;
 								break;
 							case PlayerAbility.WarriorAbility.PowerAura:
-								player.Abilities[abilityIndex].ChangeAmount.Amount += 5;
+								player._Abilities[abilityIndex].ChangeAmount.Amount += 5;
 								break;
 							case PlayerAbility.WarriorAbility.WarCry:
-								player.Abilities[abilityIndex].ChangeAmount.Amount -= 10;
+								player._Abilities[abilityIndex].ChangeAmount.Amount -= 10;
 								break;
 							case PlayerAbility.WarriorAbility.Onslaught:
-								player.Abilities[abilityIndex].Offensive.Amount += 10;
+								player._Abilities[abilityIndex].Offensive.Amount += 10;
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();
 						}
 					}
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-					string abilityName = textInfo.ToTitleCase(player.Abilities[abilityIndex].Name);
+					string abilityName = textInfo.ToTitleCase(player._Abilities[abilityIndex].Name);
 					string purchaseString = "You upgraded " + abilityName + " to Rank " +
-										 player.Abilities[abilityIndex].Rank + " for " + trainingCost + " gold.";
+										 player._Abilities[abilityIndex].Rank + " for " + trainingCost + " gold.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -673,7 +673,7 @@ namespace DungeonGame
 		public void PopulateQuests(Player player)
 		{
 			_AvailableQuests = new List<Quest>();
-			Armor.ArmorType questArmorGroup = player.PlayerClass switch
+			Armor.ArmorType questArmorGroup = player._PlayerClass switch
 			{
 				Player.PlayerClassType.Mage => Armor.ArmorType.Cloth,
 				Player.PlayerClassType.Warrior => Armor.ArmorType.Plate,
@@ -779,7 +779,7 @@ namespace DungeonGame
 				}
 				if (questInput[0] == "y" || questInput[0] == "yes")
 				{
-					player.QuestLog.Add(_AvailableQuests[questIndex]);
+					player._QuestLog.Add(_AvailableQuests[questIndex]);
 					_AvailableQuests.RemoveAt(questIndex);
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
@@ -805,9 +805,9 @@ namespace DungeonGame
 		public void CompleteQuest(Player player, string[] input)
 		{
 			string userInput = InputHandler.ParseInput(input);
-			int questIndex = player.QuestLog.FindIndex(
+			int questIndex = player._QuestLog.FindIndex(
 				f => f._Name.ToLowerInvariant().Contains(userInput));
-			Quest quest = player.QuestLog[questIndex];
+			Quest quest = player._QuestLog[questIndex];
 			if (questIndex != -1)
 			{
 				if (quest._QuestGiver == _Name)
@@ -818,18 +818,18 @@ namespace DungeonGame
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
 							"Congratulations on finishing " + quest._Name + "! Here's your reward.");
-						player.Inventory.Add(quest._QuestRewardItem);
+						player._Inventory.Add(quest._QuestRewardItem);
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
 							"You have received: ");
 						GearHandler.StoreRainbowGearOutput(GearHandler.GetItemDetails(quest._QuestRewardItem));
-						player.Gold += quest._QuestRewardGold;
+						player._Gold += quest._QuestRewardGold;
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
 							quest._QuestRewardGold + " gold coins.");
-						player.QuestLog.RemoveAt(questIndex);
+						player._QuestLog.RemoveAt(questIndex);
 					}
 					else
 					{

@@ -68,8 +68,8 @@ namespace DungeonGame
 		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
-			player.HitPoints += this.EffectAmountOverTime;
-			if (player.HitPoints > player.MaxHitPoints) player.HitPoints = player.MaxHitPoints;
+			player._HitPoints += this.EffectAmountOverTime;
+			if (player._HitPoints > player._MaxHitPoints) player._HitPoints = player._MaxHitPoints;
 			var healAmtString = "You have been healed for " + this.EffectAmountOverTime + " health.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
@@ -144,7 +144,7 @@ namespace DungeonGame
 		}
 		public void ChangeOpponentDamageRound(Player player)
 		{
-			if (this.IsEffectExpired || player.InCombat == false) return;
+			if (this.IsEffectExpired || player._InCombat == false) return;
 			this.EffectCurRound += 1;
 			var changeDmgString = this.EffectAmountOverTime > 0 ?
 				"Incoming damage is increased by " + this.EffectAmountOverTime + "."
@@ -158,7 +158,7 @@ namespace DungeonGame
 		}
 		public void ChangePlayerDamageRound(Player player)
 		{
-			if (this.IsEffectExpired || player.InCombat == false) return;
+			if (this.IsEffectExpired || player._InCombat == false) return;
 			this.EffectCurRound += 1;
 			var changeAmount = Math.Abs(this.EffectAmountOverTime);
 			var changeDmgString = this.EffectAmountOverTime > 0 ?
@@ -203,7 +203,7 @@ namespace DungeonGame
 		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
-			player.HitPoints -= this.EffectAmountOverTime;
+			player._HitPoints -= this.EffectAmountOverTime;
 			var burnString = "You burn for " + this.EffectAmountOverTime + " fire damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
@@ -229,7 +229,7 @@ namespace DungeonGame
 		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
-			player.HitPoints -= this.EffectAmountOverTime;
+			player._HitPoints -= this.EffectAmountOverTime;
 			var bleedString = "You bleed for " + this.EffectAmountOverTime + " physical damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),

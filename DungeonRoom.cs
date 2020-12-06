@@ -125,7 +125,7 @@ namespace DungeonGame
 					{
 						var fightEvent = new CombatHandler(this._Monster, player);
 						fightEvent.StartCombat();
-						if (player.HitPoints <= 0)
+						if (player._HitPoints <= 0)
 						{
 							Messages.PlayerDeath();
 						}
@@ -357,7 +357,7 @@ namespace DungeonGame
 				if (this._Monster.HitPoints <= 0 && this._Monster.WasLooted == false)
 				{
 					var goldLooted = this._Monster.Gold;
-					player.Gold += this._Monster.Gold;
+					player._Gold += this._Monster.Gold;
 					try
 					{
 						this._Monster.Gold = 0;
@@ -370,7 +370,7 @@ namespace DungeonGame
 						{
 							var playerWeight = PlayerHandler.GetInventoryWeight(player);
 							var itemWeight = this._Monster.MonsterItems[0].Weight;
-							if (playerWeight + itemWeight > player.MaxCarryWeight)
+							if (playerWeight + itemWeight > player._MaxCarryWeight)
 							{
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
@@ -380,11 +380,11 @@ namespace DungeonGame
 							}
 							if (this._Monster.MonsterItems[0] is Consumable)
 							{
-								player.Consumables.Add((Consumable)this._Monster.MonsterItems[0]);
+								player._Consumables.Add((Consumable)this._Monster.MonsterItems[0]);
 							}
 							else
 							{
-								player.Inventory.Add(this._Monster.MonsterItems[0]);
+								player._Inventory.Add(this._Monster.MonsterItems[0]);
 							}
 							var lootItemString = "You looted " + this._Monster.MonsterItems[0]._Name + " from the " +
 												 this._Monster._Name + "!";
@@ -433,7 +433,7 @@ namespace DungeonGame
 			if (this._Monster == null) return null;
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			var monsterName = textInfo.ToTitleCase(this._Monster._Name);
-			var levelDiff = player.Level - this._Monster.Level;
+			var levelDiff = player._Level - this._Monster.Level;
 			var difficultyStringBuilder = new StringBuilder();
 			difficultyStringBuilder.Append("Difficulty: ");
 			if (levelDiff >= 3)

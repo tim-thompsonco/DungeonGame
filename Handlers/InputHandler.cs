@@ -35,11 +35,11 @@ namespace DungeonGame
 		}
 		public static void ProcessUserInput(Player player, string[] input, Timer globalTimer)
 		{
-			var playerRoom = RoomHandler.Rooms[player.PlayerLocation];
+			var playerRoom = RoomHandler.Rooms[player._PlayerLocation];
 			var isTownRoom = playerRoom as TownRoom;
-			var playerX = player.PlayerLocation.X;
-			var playerY = player.PlayerLocation.Y;
-			var playerZ = player.PlayerLocation.Z;
+			var playerX = player._PlayerLocation.X;
+			var playerY = player._PlayerLocation.Y;
+			var playerZ = player._PlayerLocation.Z;
 			switch (input[0])
 			{
 				case "a":
@@ -103,7 +103,7 @@ namespace DungeonGame
 					}
 					catch (NullReferenceException)
 					{
-						if (player.PlayerClass != Player.PlayerClassType.Mage)
+						if (player._PlayerClass != Player.PlayerClassType.Mage)
 						{
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
@@ -116,7 +116,7 @@ namespace DungeonGame
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
-							player.PlayerClass != Player.PlayerClassType.Mage
+							player._PlayerClass != Player.PlayerClassType.Mage
 								? "You can't cast spells. You're not a mage!"
 								: "You do not have enough mana to cast that spell!");
 					}
@@ -161,7 +161,7 @@ namespace DungeonGame
 					}
 					catch (NullReferenceException)
 					{
-						if (player.PlayerClass == Player.PlayerClassType.Mage)
+						if (player._PlayerClass == Player.PlayerClassType.Mage)
 						{
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
@@ -171,7 +171,7 @@ namespace DungeonGame
 					}
 					catch (InvalidOperationException)
 					{
-						switch (player.PlayerClass)
+						switch (player._PlayerClass)
 						{
 							case Player.PlayerClassType.Warrior:
 								OutputHandler.Display.StoreUserOutput(
@@ -183,7 +183,7 @@ namespace DungeonGame
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
-									player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow
+									player._PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow
 										? "You do not have a bow equipped!"
 										: "You do not have enough combo points to use that ability!");
 								break;
@@ -203,8 +203,8 @@ namespace DungeonGame
 					GearHandler.EquipItem(player, input);
 					break;
 				case "enhance":
-					var itemIndex = player.Inventory.FindIndex(f => f._Name.Contains(input[1]));
-					switch (player.Inventory[itemIndex])
+					var itemIndex = player._Inventory.FindIndex(f => f._Name.Contains(input[1]));
+					switch (player._Inventory[itemIndex])
 					{
 						case Weapon _:
 							GearHandler.UseWeaponKit(player, input);
@@ -432,7 +432,7 @@ namespace DungeonGame
 							{
 								if (input[1] == "all")
 								{
-									foreach (var item in player.Inventory)
+									foreach (var item in player._Inventory)
 									{
 										if (!item.Equipped) continue;
 										var itemNameArray = new[] { input[0], item._Name };
@@ -466,7 +466,7 @@ namespace DungeonGame
 						{
 							if (isTownRoom != null)
 							{
-								if (player.PlayerClass == Player.PlayerClassType.Mage)
+								if (player._PlayerClass == Player.PlayerClassType.Mage)
 								{
 									isTownRoom._Trainer.UpgradeSpell(player, ParseInput(input));
 								}
@@ -499,7 +499,7 @@ namespace DungeonGame
 						{
 							if (isTownRoom != null)
 							{
-								if (player.PlayerClass == Player.PlayerClassType.Mage)
+								if (player._PlayerClass == Player.PlayerClassType.Mage)
 								{
 									isTownRoom._Trainer.TrainSpell(player, ParseInput(input));
 								}

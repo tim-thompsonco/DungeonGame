@@ -51,9 +51,9 @@ namespace DungeonGame
 			}
 			var damageReductionPercentage = opponent.Spellbook[index].DamageGroup switch
 			{
-				MonsterSpell.DamageType.Fire => (player.FireResistance / 100.0),
-				MonsterSpell.DamageType.Frost => (player.FrostResistance / 100.0),
-				MonsterSpell.DamageType.Arcane => (player.ArcaneResistance / 100.0),
+				MonsterSpell.DamageType.Fire => (player._FireResistance / 100.0),
+				MonsterSpell.DamageType.Frost => (player._FrostResistance / 100.0),
+				MonsterSpell.DamageType.Arcane => (player._ArcaneResistance / 100.0),
 				_ => 0.0
 			};
 			return (int)(opponent.Spellbook[index].Offensive.Amount * (1 - damageReductionPercentage));

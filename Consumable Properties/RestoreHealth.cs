@@ -13,10 +13,10 @@
 
 		public void RestoreHealthPlayer(Player player)
 		{
-			player.HitPoints += this.RestoreHealthAmt;
-			if (player.HitPoints > player.MaxHitPoints)
+			player._HitPoints += this.RestoreHealthAmt;
+			if (player._HitPoints > player._MaxHitPoints)
 			{
-				player.HitPoints = player.MaxHitPoints;
+				player._HitPoints = player._MaxHitPoints;
 			}
 		}
 	}

@@ -52,7 +52,7 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				attackString);
 			var leechAmount = monster.Abilities[index].Offensive.Amount;
-			foreach (var effect in player.Effects.ToList())
+			foreach (var effect in player._Effects.ToList())
 			{
 				switch (effect.EffectGroup)
 				{
@@ -106,7 +106,7 @@ namespace DungeonGame
 					effectAbsorbString);
 				return;
 			}
-			player.HitPoints -= leechAmount;
+			player._HitPoints -= leechAmount;
 			monster.HitPoints += leechAmount;
 			if (monster.HitPoints > monster.MaxHitPoints) monster.HitPoints = monster.MaxHitPoints;
 			var attackSuccessString = "The " + monster._Name + " leeches " + leechAmount + " life from you.";
@@ -132,7 +132,7 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				attackString);
 			var attackDamage = monster.Abilities[index].Offensive.Amount;
-			foreach (var effect in player.Effects.ToList())
+			foreach (var effect in player._Effects.ToList())
 			{
 				switch (effect.EffectGroup)
 				{
@@ -200,7 +200,7 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			player.HitPoints -= attackDamage;
+			player._HitPoints -= attackDamage;
 			if (monster.Abilities[index].Offensive.AmountOverTime <= 0) return;
 			switch (monster.Abilities[index].Offensive.OffensiveGroup)
 			{
@@ -212,7 +212,7 @@ namespace DungeonGame
 						Settings.FormatAttackSuccessText(),
 						Settings.FormatDefaultBackground(),
 						bleedString);
-					player.Effects.Add(new Effect(monster.Abilities[index].Name,
+					player._Effects.Add(new Effect(monster.Abilities[index].Name,
 						Effect.EffectType.Bleeding, monster.Abilities[index].Offensive.AmountOverTime,
 						monster.Abilities[index].Offensive.AmountCurRounds, monster.Abilities[index].Offensive.AmountMaxRounds,
 						1, 1, true));

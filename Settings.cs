@@ -24,11 +24,11 @@
 		}
 		public static string GetTileColor(Player player)
 		{
-			if (player.PlayerLocation.Z <= -8)
+			if (player._PlayerLocation.Z <= -8)
 			{
 				return "darkred";
 			}
-			if (player.PlayerLocation.Z < -3)
+			if (player._PlayerLocation.Z < -3)
 			{
 				return "darkgray";
 			}

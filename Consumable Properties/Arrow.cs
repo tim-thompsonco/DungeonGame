@@ -13,7 +13,7 @@
 
 		public void LoadArrowsPlayer(Player player)
 		{
-			if (player.PlayerQuiver == null)
+			if (player._PlayerQuiver == null)
 			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -21,14 +21,14 @@
 					"You don't have a quiver to reload!");
 				return;
 			}
-			var amountCanLoad = player.PlayerQuiver.MaxQuantity - player.PlayerQuiver.Quantity;
+			var amountCanLoad = player._PlayerQuiver.MaxQuantity - player._PlayerQuiver.Quantity;
 			if (this.Quantity < amountCanLoad)
 			{
-				player.PlayerQuiver.Quantity += this.Quantity;
+				player._PlayerQuiver.Quantity += this.Quantity;
 				this.Quantity = 0;
 				return;
 			}
-			player.PlayerQuiver.Quantity += amountCanLoad;
+			player._PlayerQuiver.Quantity += amountCanLoad;
 			this.Quantity -= amountCanLoad;
 		}
 	}

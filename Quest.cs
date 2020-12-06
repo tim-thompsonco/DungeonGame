@@ -129,7 +129,7 @@ namespace DungeonGame
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
-						$"Clear Level {_TargetLevel}");
+						$"Clear _Level {_TargetLevel}");
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

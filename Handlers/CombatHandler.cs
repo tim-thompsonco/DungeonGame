@@ -14,20 +14,20 @@ namespace DungeonGame
 		{
 			this.Player = player;
 			this.Opponent = opponent;
-			this.Player.InCombat = true;
+			this.Player._InCombat = true;
 			this.Opponent.InCombat = true;
 		}
 
 		public void StartCombat()
 		{
 			Console.Clear();
-			var fightStartString = this.Player.Name + ", you have encountered a " + this.Opponent._Name + ". Time to fight!";
+			var fightStartString = this.Player._Name + ", you have encountered a " + this.Opponent._Name + ". Time to fight!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				fightStartString);
-			while (this.Opponent.HitPoints > 0 && this.Player.HitPoints > 0 &&
-				   this.Player.InCombat && this.Opponent.InCombat)
+			while (this.Opponent.HitPoints > 0 && this.Player._HitPoints > 0 &&
+				   this.Player._InCombat && this.Opponent.InCombat)
 			{
 				GameHandler.RemovedExpiredEffectsAsync(this.Player);
 				GameHandler.RemovedExpiredEffectsAsync(this.Opponent);
@@ -43,7 +43,7 @@ namespace DungeonGame
 					Console.Clear();
 					isInputValid = this.ProcessPlayerInput();
 				}
-				if (this.Player.Effects.Any())
+				if (this.Player._Effects.Any())
 				{
 					this.ProcessPlayerEffects();
 				}
@@ -81,13 +81,13 @@ namespace DungeonGame
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You have fled combat successfully!");
-				this.Player.InCombat = false;
+				this.Player._InCombat = false;
 				this.Opponent.InCombat = false;
 				this.FleeSuccess = true;
-				var playerRoom = RoomHandler.Rooms[this.Player.PlayerLocation];
-				var playerX = this.Player.PlayerLocation.X;
-				var playerY = this.Player.PlayerLocation.Y;
-				var playerZ = this.Player.PlayerLocation.Z;
+				var playerRoom = RoomHandler.Rooms[this.Player._PlayerLocation];
+				var playerX = this.Player._PlayerLocation.X;
+				var playerY = this.Player._PlayerLocation.Y;
+				var playerZ = this.Player._PlayerLocation.Z;
 				if (playerRoom._Up != null)
 				{
 					var newCoord = new Coordinate(playerX, playerY, playerZ + 1);
@@ -156,7 +156,7 @@ namespace DungeonGame
 		}
 		private void ProcessPlayerEffects()
 		{
-			foreach (var effect in this.Player.Effects)
+			foreach (var effect in this.Player._Effects)
 			{
 				switch (effect.EffectGroup)
 				{
@@ -283,7 +283,7 @@ namespace DungeonGame
 					}
 					catch (NullReferenceException)
 					{
-						if (this.Player.PlayerClass != Player.PlayerClassType.Mage)
+						if (this.Player._PlayerClass != Player.PlayerClassType.Mage)
 						{
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
@@ -297,7 +297,7 @@ namespace DungeonGame
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
-							this.Player.PlayerClass != Player.PlayerClassType.Mage
+							this.Player._PlayerClass != Player.PlayerClassType.Mage
 								? "You can't cast spells. You're not a mage!"
 								: "You do not have enough mana to cast that spell!");
 						return false;
@@ -333,7 +333,7 @@ namespace DungeonGame
 					}
 					catch (NullReferenceException)
 					{
-						if (this.Player.PlayerClass == Player.PlayerClassType.Mage)
+						if (this.Player._PlayerClass == Player.PlayerClassType.Mage)
 						{
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
@@ -344,7 +344,7 @@ namespace DungeonGame
 					}
 					catch (InvalidOperationException)
 					{
-						switch (this.Player.PlayerClass)
+						switch (this.Player._PlayerClass)
 						{
 							case Player.PlayerClassType.Mage:
 								OutputHandler.Display.StoreUserOutput(
@@ -362,7 +362,7 @@ namespace DungeonGame
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
-									this.Player.PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow
+									this.Player._PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow
 										? "You do not have a bow equipped!"
 										: "You do not have enough combo points to use that ability!");
 								break;
@@ -447,7 +447,7 @@ namespace DungeonGame
 					}
 					catch (NullReferenceException)
 					{
-						if (this.Player.PlayerClass == Player.PlayerClassType.Mage)
+						if (this.Player._PlayerClass == Player.PlayerClassType.Mage)
 						{
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
@@ -470,7 +470,7 @@ namespace DungeonGame
 					}
 					catch (NullReferenceException)
 					{
-						if (this.Player.PlayerClass != Player.PlayerClassType.Mage)
+						if (this.Player._PlayerClass != Player.PlayerClassType.Mage)
 						{
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),

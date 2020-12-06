@@ -341,7 +341,7 @@ namespace DungeonGame
 				}
 			}
 			var randomChanceToHit = GameHandler.GetRandomNumber(1, 100);
-			var chanceToDodge = player.DodgeChance;
+			var chanceToDodge = player._DodgeChance;
 			if (chanceToDodge > 50) chanceToDodge = 50;
 			if (randomChanceToHit <= chanceToDodge)
 			{
@@ -353,7 +353,7 @@ namespace DungeonGame
 				return;
 			}
 			var baseAttackAmount = attackAmount;
-			foreach (var effect in player.Effects.ToList())
+			foreach (var effect in player._Effects.ToList())
 			{
 				switch (effect.EffectGroup)
 				{
@@ -426,13 +426,13 @@ namespace DungeonGame
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
 					hitString);
-				player.HitPoints -= attackAmount;
+				player._HitPoints -= attackAmount;
 			}
 		}
 		public int ArmorRating(Player player)
 		{
 			var totalArmorRating = MonsterHandler.CheckArmorRating(this);
-			var levelDiff = player.Level - this.Level;
+			var levelDiff = player._Level - this.Level;
 			var armorMultiplier = 1.00 + -(double)levelDiff / 5;
 			var adjArmorRating = totalArmorRating * armorMultiplier;
 			if (this.ElementalCategory != null) adjArmorRating += 20;
@@ -440,7 +440,7 @@ namespace DungeonGame
 		}
 		public void MonsterDeath(Player player)
 		{
-			player.InCombat = false;
+			player._InCombat = false;
 			this.InCombat = false;
 			this.Effects.Clear();
 			var defeatString = "You have defeated the " + this._Name + "!";
@@ -459,10 +459,10 @@ namespace DungeonGame
 			}
 			this._Name = "Dead " + this._Name;
 			this.Desc = "A corpse of a monster you killed.";
-			player.Experience += this.ExperienceProvided;
+			player._Experience += this.ExperienceProvided;
 			PlayerHandler.LevelUpCheck(player);
-			if (player.QuestLog == null) return;
-			foreach (var quest in player.QuestLog)
+			if (player._QuestLog == null) return;
+			foreach (var quest in player._QuestLog)
 			{
 				quest.UpdateQuestProgress(this);
 			}

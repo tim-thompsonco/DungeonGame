@@ -70,7 +70,7 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				attackString);
 			var fireSpellDamage = MonsterHandler.CalculateSpellDamage(player, monster, index);
-			foreach (var effect in player.Effects.ToList())
+			foreach (var effect in player._Effects.ToList())
 			{
 				switch (effect.EffectGroup)
 				{
@@ -124,7 +124,7 @@ namespace DungeonGame
 					effectAbsorbString);
 				return;
 			}
-			player.HitPoints -= fireSpellDamage;
+			player._HitPoints -= fireSpellDamage;
 			var attackSuccessString = "The " + monster._Name + " hits you for " + fireSpellDamage + " fire damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
@@ -136,7 +136,7 @@ namespace DungeonGame
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				onFireString);
-			player.Effects.Add(new Effect(monster.Spellbook[index].Name,
+			player._Effects.Add(new Effect(monster.Spellbook[index].Name,
 				Effect.EffectType.OnFire, monster.Spellbook[index].Offensive.AmountOverTime,
 				monster.Spellbook[index].Offensive.AmountCurRounds, monster.Spellbook[index].Offensive.AmountMaxRounds,
 				1, 1, true));
@@ -150,7 +150,7 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				attackString);
 			var frostSpellDamage = MonsterHandler.CalculateSpellDamage(player, monster, index);
-			foreach (var effect in player.Effects.ToList())
+			foreach (var effect in player._Effects.ToList())
 			{
 				switch (effect.EffectGroup)
 				{
@@ -204,13 +204,13 @@ namespace DungeonGame
 					effectAbsorbString);
 				return;
 			}
-			player.HitPoints -= frostSpellDamage;
+			player._HitPoints -= frostSpellDamage;
 			var attackSuccessString = "The " + monster._Name + " hits you for " + frostSpellDamage + " frost damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			var frozenEffectIndex = player.Effects.FindIndex(
+			var frozenEffectIndex = player._Effects.FindIndex(
 				e => e.EffectGroup == Effect.EffectType.Frozen);
 			if (frozenEffectIndex == -1)
 			{
@@ -220,7 +220,7 @@ namespace DungeonGame
 					Settings.FormatDefaultBackground(),
 					frozenString);
 			}
-			player.Effects.Add(new Effect(monster.Spellbook[index].Name, Effect.EffectType.Frozen,
+			player._Effects.Add(new Effect(monster.Spellbook[index].Name, Effect.EffectType.Frozen,
 				monster.Spellbook[index].Offensive.AmountCurRounds, monster.Spellbook[index].Offensive.AmountMaxRounds,
 				1.5, 1, true));
 		}
@@ -233,7 +233,7 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				attackString);
 			var arcaneSpellDamage = MonsterHandler.CalculateSpellDamage(player, monster, index);
-			foreach (var effect in player.Effects.ToList())
+			foreach (var effect in player._Effects.ToList())
 			{
 				switch (effect.EffectGroup)
 				{
@@ -287,7 +287,7 @@ namespace DungeonGame
 					effectAbsorbString);
 				return;
 			}
-			player.HitPoints -= arcaneSpellDamage;
+			player._HitPoints -= arcaneSpellDamage;
 			var attackSuccessString = "The " + monster._Name + " hits you for " + arcaneSpellDamage + " arcane damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
