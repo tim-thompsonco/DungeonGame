@@ -190,7 +190,7 @@ namespace DungeonGame
 		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
-			opponent.HitPoints -= this.EffectAmountOverTime;
+			opponent._HitPoints -= this.EffectAmountOverTime;
 			var burnString = "The " + opponent._Name + " burns for " + this.EffectAmountOverTime + " fire damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
@@ -216,7 +216,7 @@ namespace DungeonGame
 		{
 			if (this.IsEffectExpired) return;
 			this.EffectCurRound += 1;
-			opponent.HitPoints -= this.EffectAmountOverTime;
+			opponent._HitPoints -= this.EffectAmountOverTime;
 			var bleedString = "The " + opponent._Name + " bleeds for " + this.EffectAmountOverTime + " physical damage.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
@@ -241,7 +241,7 @@ namespace DungeonGame
 		public void StunnedRound(Monster opponent)
 		{
 			if (this.IsEffectExpired) return;
-			opponent.IsStunned = true;
+			opponent._IsStunned = true;
 			this.EffectCurRound += 1;
 			var stunnedString = "The " + opponent._Name + " is stunned and cannot attack.";
 			OutputHandler.Display.StoreUserOutput(

@@ -23,8 +23,8 @@ namespace DungeonGameTests
 			if values smoothed correctly, % should be 0 */
 			var monster = new Monster(1, Monster.MonsterType.Skeleton);
 			MonsterBuilder.BuildMonster(monster);
-			Assert.AreEqual(0, monster.MaxHitPoints % 10);
-			Assert.AreEqual(0, monster.ExperienceProvided % 10);
+			Assert.AreEqual(0, monster._MaxHitPoints % 10);
+			Assert.AreEqual(0, monster._ExperienceProvided % 10);
 			// Test consumable potion creation
 			var potion = new Consumable(3, Consumable.PotionType.Health);
 			Assert.AreEqual(25, potion.ItemValue);
@@ -87,7 +87,7 @@ namespace DungeonGameTests
 			// _Name check
 			var skeletonLevelOne = new Monster(1, Monster.MonsterType.Skeleton);
 			MonsterBuilder.BuildMonster(skeletonLevelOne);
-			var skeletonWeapon = skeletonLevelOne.MonsterWeapon;
+			var skeletonWeapon = skeletonLevelOne._MonsterWeapon;
 			switch (skeletonWeapon.Quality)
 			{
 				case 1:
@@ -155,7 +155,7 @@ namespace DungeonGameTests
 			// _Name check
 			var spiderLevelOne = new Monster(1, Monster.MonsterType.Spider);
 			MonsterBuilder.BuildMonster(spiderLevelOne);
-			var spiderWeapon = spiderLevelOne.MonsterWeapon;
+			var spiderWeapon = spiderLevelOne._MonsterWeapon;
 			switch (spiderWeapon.Quality)
 			{
 				case 1:
@@ -217,7 +217,7 @@ namespace DungeonGameTests
 			// _Name check
 			var zombieLevelThree = new Monster(3, Monster.MonsterType.Zombie);
 			MonsterBuilder.BuildMonster(zombieLevelThree);
-			var zombieWeapon = zombieLevelThree.MonsterWeapon;
+			var zombieWeapon = zombieLevelThree._MonsterWeapon;
 			switch (zombieWeapon.Quality)
 			{
 				case 1:
@@ -279,7 +279,7 @@ namespace DungeonGameTests
 			// _Name check
 			var demonLevelTwo = new Monster(2, Monster.MonsterType.Demon);
 			MonsterBuilder.BuildMonster(demonLevelTwo);
-			var demonWeapon = demonLevelTwo.MonsterWeapon;
+			var demonWeapon = demonLevelTwo._MonsterWeapon;
 			switch (demonWeapon.Quality)
 			{
 				case 1:
@@ -432,16 +432,16 @@ namespace DungeonGameTests
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Demon)
-			{ HitPoints = 100, MaxHitPoints = 100 };
+			{ _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (var item in monster.MonsterItems.Where(item => item.Equipped))
+			foreach (var item in monster._MonsterItems.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
-			Assert.AreEqual(monster.Level * 5, monster.FireResistance);
-			Assert.AreEqual(monster.Level * 5, monster.FrostResistance);
-			Assert.AreEqual(monster.Level * 5, monster.ArcaneResistance);
-			var arcaneResistance = monster.ArcaneResistance;
+			Assert.AreEqual(monster._Level * 5, monster._FireResistance);
+			Assert.AreEqual(monster._Level * 5, monster._FrostResistance);
+			Assert.AreEqual(monster._Level * 5, monster._ArcaneResistance);
+			var arcaneResistance = monster._ArcaneResistance;
 			var resistanceMod = (100 - arcaneResistance) / 100.0;
 			var input = new[] { "cast", "lightning" };
 			var spellIndex = player._Spellbook.FindIndex(
@@ -449,7 +449,7 @@ namespace DungeonGameTests
 			var spellName = InputHandler.ParseInput(input);
 			player.CastSpell(monster, spellName);
 			var reducedDamage = (int)(player._Spellbook[spellIndex].Offensive.Amount * resistanceMod);
-			Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - reducedDamage);
+			Assert.AreEqual(monster._HitPoints, monster._MaxHitPoints - reducedDamage);
 		}
 		[Test]
 		public void PlayerResistanceUnitTest()
@@ -458,7 +458,7 @@ namespace DungeonGameTests
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
 			var monster = new Monster(3, Monster.MonsterType.Elemental);
-			while (monster.ElementalCategory != Monster.ElementalType.Air)
+			while (monster._ElementalCategory != Monster.ElementalType.Air)
 			{
 				monster = new Monster(3, Monster.MonsterType.Elemental);
 			}
@@ -472,27 +472,27 @@ namespace DungeonGameTests
 			Assert.AreEqual(player._Level * 5, player._ArcaneResistance);
 			var arcaneResistance = player._ArcaneResistance;
 			var resistanceMod = (100 - arcaneResistance) / 100.0;
-			var spellIndex = monster.Spellbook.FindIndex(
+			var spellIndex = monster._Spellbook.FindIndex(
 				f => f.SpellCategory == MonsterSpell.SpellType.Lightning);
 			MonsterSpell.CastArcaneOffense(monster, player, spellIndex);
-			var reducedDamage = (int)(monster.Spellbook[spellIndex].Offensive.Amount * resistanceMod);
+			var reducedDamage = (int)(monster._Spellbook[spellIndex].Offensive.Amount * resistanceMod);
 			Assert.AreEqual(player._HitPoints, player._MaxHitPoints - reducedDamage);
 		}
 		[Test]
 		public void MonsterResistanceLevelUnitTest()
 		{
 			var monster = new Monster(1, Monster.MonsterType.Vampire);
-			Assert.AreEqual(monster.Level * 5, monster.FireResistance);
-			Assert.AreEqual(monster.Level * 5, monster.FrostResistance);
-			Assert.AreEqual(monster.Level * 5, monster.ArcaneResistance);
+			Assert.AreEqual(monster._Level * 5, monster._FireResistance);
+			Assert.AreEqual(monster._Level * 5, monster._FrostResistance);
+			Assert.AreEqual(monster._Level * 5, monster._ArcaneResistance);
 			monster = new Monster(3, Monster.MonsterType.Elemental);
-			Assert.AreEqual(monster.Level * 5, monster.FireResistance);
-			Assert.AreEqual(monster.Level * 5, monster.FrostResistance);
-			Assert.AreEqual(monster.Level * 5, monster.ArcaneResistance);
+			Assert.AreEqual(monster._Level * 5, monster._FireResistance);
+			Assert.AreEqual(monster._Level * 5, monster._FrostResistance);
+			Assert.AreEqual(monster._Level * 5, monster._ArcaneResistance);
 			monster = new Monster(10, Monster.MonsterType.Dragon);
-			Assert.AreEqual(monster.Level * 5, monster.FireResistance);
-			Assert.AreEqual(monster.Level * 5, monster.FrostResistance);
-			Assert.AreEqual(monster.Level * 5, monster.ArcaneResistance);
+			Assert.AreEqual(monster._Level * 5, monster._FireResistance);
+			Assert.AreEqual(monster._Level * 5, monster._FrostResistance);
+			Assert.AreEqual(monster._Level * 5, monster._ArcaneResistance);
 		}
 	}
 }

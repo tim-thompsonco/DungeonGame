@@ -55,9 +55,9 @@ namespace DungeonGame
 
 		public static void CastFireOffense(Monster monster, Player player, int index)
 		{
-			monster.EnergyPoints -= monster.Spellbook[index].EnergyCost;
+			monster._EnergyPoints -= monster._Spellbook[index].EnergyCost;
 			var attackString = string.Empty;
-			if (monster.MonsterCategory == Monster.MonsterType.Dragon)
+			if (monster._MonsterCategory == Monster.MonsterType.Dragon)
 			{
 				attackString = "The " + monster._Name + " breathes a pillar of fire at you!";
 			}
@@ -107,7 +107,7 @@ namespace DungeonGame
 					case Effect.EffectType.ReflectDamage:
 						var reflectAmount = effect.EffectAmountOverTime < fireSpellDamage ?
 							effect.EffectAmountOverTime : fireSpellDamage;
-						monster.HitPoints -= reflectAmount;
+						monster._HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
 						fireSpellDamage -= reflectAmount;
 						break;
@@ -130,20 +130,20 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			if (monster.Spellbook[index].Offensive.AmountOverTime <= 0) return;
+			if (monster._Spellbook[index].Offensive.AmountOverTime <= 0) return;
 			const string onFireString = "You burst into flame!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				onFireString);
-			player._Effects.Add(new Effect(monster.Spellbook[index].Name,
-				Effect.EffectType.OnFire, monster.Spellbook[index].Offensive.AmountOverTime,
-				monster.Spellbook[index].Offensive.AmountCurRounds, monster.Spellbook[index].Offensive.AmountMaxRounds,
+			player._Effects.Add(new Effect(monster._Spellbook[index].Name,
+				Effect.EffectType.OnFire, monster._Spellbook[index].Offensive.AmountOverTime,
+				monster._Spellbook[index].Offensive.AmountCurRounds, monster._Spellbook[index].Offensive.AmountMaxRounds,
 				1, 1, true));
 		}
 		public static void CastFrostOffense(Monster monster, Player player, int index)
 		{
-			monster.EnergyPoints -= monster.Spellbook[index].EnergyCost;
+			monster._EnergyPoints -= monster._Spellbook[index].EnergyCost;
 			var attackString = "The " + monster._Name + " conjures up a frostbolt and launches it at you!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
@@ -187,7 +187,7 @@ namespace DungeonGame
 					case Effect.EffectType.ReflectDamage:
 						var reflectAmount = effect.EffectAmountOverTime < frostSpellDamage ?
 							effect.EffectAmountOverTime : frostSpellDamage;
-						monster.HitPoints -= reflectAmount;
+						monster._HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
 						frostSpellDamage -= reflectAmount;
 						break;
@@ -220,13 +220,13 @@ namespace DungeonGame
 					Settings.FormatDefaultBackground(),
 					frozenString);
 			}
-			player._Effects.Add(new Effect(monster.Spellbook[index].Name, Effect.EffectType.Frozen,
-				monster.Spellbook[index].Offensive.AmountCurRounds, monster.Spellbook[index].Offensive.AmountMaxRounds,
+			player._Effects.Add(new Effect(monster._Spellbook[index].Name, Effect.EffectType.Frozen,
+				monster._Spellbook[index].Offensive.AmountCurRounds, monster._Spellbook[index].Offensive.AmountMaxRounds,
 				1.5, 1, true));
 		}
 		public static void CastArcaneOffense(Monster monster, Player player, int index)
 		{
-			monster.EnergyPoints -= monster.Spellbook[index].EnergyCost;
+			monster._EnergyPoints -= monster._Spellbook[index].EnergyCost;
 			var attackString = "The " + monster._Name + " casts a bolt of lightning at you!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
@@ -270,7 +270,7 @@ namespace DungeonGame
 					case Effect.EffectType.ReflectDamage:
 						var reflectAmount = effect.EffectAmountOverTime < arcaneSpellDamage ?
 							effect.EffectAmountOverTime : arcaneSpellDamage;
-						monster.HitPoints -= reflectAmount;
+						monster._HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
 						arcaneSpellDamage -= reflectAmount;
 						break;

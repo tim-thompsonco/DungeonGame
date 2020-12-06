@@ -6,14 +6,14 @@ namespace DungeonGame
 	{
 		public static void DisplayStats(Monster monster)
 		{
-			var opponentHealthString = "Opponent HP: " + monster.HitPoints + " / " + monster.MaxHitPoints;
+			var opponentHealthString = "Opponent HP: " + monster._HitPoints + " / " + monster._MaxHitPoints;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				opponentHealthString);
 			var healLineOutput = new List<string>();
-			var hitPointMaxUnits = monster.MaxHitPoints / 10;
-			var hitPointUnits = monster.HitPoints / hitPointMaxUnits;
+			var hitPointMaxUnits = monster._MaxHitPoints / 10;
+			var hitPointUnits = monster._HitPoints / hitPointMaxUnits;
 			for (var i = 0; i < hitPointUnits; i++)
 			{
 				healLineOutput.Add(Settings.FormatGeneralInfoText());
@@ -29,34 +29,34 @@ namespace DungeonGame
 		public static int CheckArmorRating(Monster monster)
 		{
 			var totalArmorRating = 0;
-			if (monster.MonsterChestArmor != null && monster.MonsterChestArmor.Equipped)
+			if (monster._MonsterChestArmor != null && monster._MonsterChestArmor.Equipped)
 			{
-				totalArmorRating += monster.MonsterChestArmor.ArmorRating;
+				totalArmorRating += monster._MonsterChestArmor.ArmorRating;
 			}
-			if (monster.MonsterHeadArmor != null && monster.MonsterHeadArmor.Equipped)
+			if (monster._MonsterHeadArmor != null && monster._MonsterHeadArmor.Equipped)
 			{
-				totalArmorRating += monster.MonsterHeadArmor.ArmorRating;
+				totalArmorRating += monster._MonsterHeadArmor.ArmorRating;
 			}
-			if (monster.MonsterLegArmor != null && monster.MonsterLegArmor.Equipped)
+			if (monster._MonsterLegArmor != null && monster._MonsterLegArmor.Equipped)
 			{
-				totalArmorRating += monster.MonsterLegArmor.ArmorRating;
+				totalArmorRating += monster._MonsterLegArmor.ArmorRating;
 			}
 			return totalArmorRating;
 		}
 		public static int CalculateSpellDamage(Player player, Monster opponent, int index)
 		{
-			if (opponent.Spellbook[index].DamageGroup == MonsterSpell.DamageType.Physical)
+			if (opponent._Spellbook[index].DamageGroup == MonsterSpell.DamageType.Physical)
 			{
-				return opponent.Spellbook[index].Offensive.Amount;
+				return opponent._Spellbook[index].Offensive.Amount;
 			}
-			var damageReductionPercentage = opponent.Spellbook[index].DamageGroup switch
+			var damageReductionPercentage = opponent._Spellbook[index].DamageGroup switch
 			{
 				MonsterSpell.DamageType.Fire => (player._FireResistance / 100.0),
 				MonsterSpell.DamageType.Frost => (player._FrostResistance / 100.0),
 				MonsterSpell.DamageType.Arcane => (player._ArcaneResistance / 100.0),
 				_ => 0.0
 			};
-			return (int)(opponent.Spellbook[index].Offensive.Amount * (1 - damageReductionPercentage));
+			return (int)(opponent._Spellbook[index].Offensive.Amount * (1 - damageReductionPercentage));
 		}
 	}
 }

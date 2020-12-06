@@ -207,8 +207,8 @@ namespace DungeonGame
 		public int ArmorRating(Monster opponent)
 		{
 			int totalArmorRating = GearHandler.CheckArmorRating(this);
-			int levelDiff = opponent.Level - _Level;
-			double armorMultiplier = 1.00 + -(double)levelDiff / 5;
+			int levelDiff = opponent._Level - _Level;
+			double armorMultiplier = 1.00 + (-(double)levelDiff / 5);
 			double adjArmorRating = totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
@@ -275,7 +275,7 @@ namespace DungeonGame
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			foreach (Effect effect in opponent.Effects)
+			foreach (Effect effect in opponent._Effects)
 			{
 				switch (effect.EffectGroup)
 				{
@@ -347,7 +347,8 @@ namespace DungeonGame
 				case Consumable.PotionType.Dexterity:
 				case Consumable.PotionType.Constitution:
 					_Consumables[index].ChangeStat.ChangeStatPlayer(this);
-					string drankStatString = $"You drank a potion and increased {_Consumables[index].ChangeStat.StatCategory} by {_Consumables[index].ChangeStat.ChangeAmount}.";
+					string drankStatString = 
+						$"You drank a potion and increased {_Consumables[index].ChangeStat.StatCategory} by {_Consumables[index].ChangeStat.ChangeAmount}.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),

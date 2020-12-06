@@ -12,27 +12,27 @@ namespace DungeonGame
 		private static void BuildMonsterGear(Monster monster)
 		{
 			var randomGearNum = GameHandler.GetRandomNumber(1, 10);
-			switch (monster.MonsterCategory)
+			switch (monster._MonsterCategory)
 			{
 				case Monster.MonsterType.Skeleton:
-					switch (monster.SkeletonCategory)
+					switch (monster._SkeletonCategory)
 					{
 						case Monster.SkeletonType.Warrior:
 							var randomWeaponNum = GameHandler.GetRandomNumber(1, 3);
-							monster.MonsterWeapon = randomWeaponNum switch
+							monster._MonsterWeapon = randomWeaponNum switch
 							{
-								1 => new Weapon(monster.Level, Weapon.WeaponType.Axe, monster.MonsterCategory),
-								2 => new Weapon(monster.Level, Weapon.WeaponType.OneHandedSword, monster.MonsterCategory),
-								3 => new Weapon(monster.Level, Weapon.WeaponType.TwoHandedSword, monster.MonsterCategory),
+								1 => new Weapon(monster._Level, Weapon.WeaponType.Axe, monster._MonsterCategory),
+								2 => new Weapon(monster._Level, Weapon.WeaponType.OneHandedSword, monster._MonsterCategory),
+								3 => new Weapon(monster._Level, Weapon.WeaponType.TwoHandedSword, monster._MonsterCategory),
 								_ => throw new ArgumentOutOfRangeException()
 							};
 							break;
 						case Monster.SkeletonType.Archer:
-							monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Bow, monster.MonsterCategory);
-							monster.MonsterQuiver = new Quiver("basic quiver", 50, 50, 15);
+							monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.Bow, monster._MonsterCategory);
+							monster._MonsterQuiver = new Quiver("basic quiver", 50, 50, 15);
 							break;
 						case Monster.SkeletonType.Mage:
-							monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Dagger, monster.MonsterCategory);
+							monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.Dagger, monster._MonsterCategory);
 							break;
 						case null:
 							break;
@@ -44,33 +44,33 @@ namespace DungeonGame
 				case Monster.MonsterType.Zombie:
 					if (randomGearNum < 4)
 					{
-						monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Axe, monster.MonsterCategory);
+						monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.Axe, monster._MonsterCategory);
 					}
 					else if (randomGearNum < 7)
 					{
-						monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.OneHandedSword, monster.MonsterCategory);
+						monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.OneHandedSword, monster._MonsterCategory);
 					}
 					else
 					{
-						monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.TwoHandedSword, monster.MonsterCategory);
+						monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.TwoHandedSword, monster._MonsterCategory);
 					}
 					BuildMonsterArmor(monster);
 					break;
 				case Monster.MonsterType.Spider:
-					monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Dagger, monster.MonsterCategory);
-					if (randomGearNum <= 5) monster.MonsterItems.Add(new Loot("large venom sac", monster.Level, 1));
+					monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.Dagger, monster._MonsterCategory);
+					if (randomGearNum <= 5) monster._MonsterItems.Add(new Loot("large venom sac", monster._Level, 1));
 					break;
 				case Monster.MonsterType.Demon:
-					monster.MonsterWeapon = randomGearNum switch
+					monster._MonsterWeapon = randomGearNum switch
 					{
 						1 =>
-						monster.MonsterWeapon = new Weapon(
-							monster.Level, Weapon.WeaponType.OneHandedSword, monster.MonsterCategory),
+						monster._MonsterWeapon = new Weapon(
+							monster._Level, Weapon.WeaponType.OneHandedSword, monster._MonsterCategory),
 						2 =>
-						monster.MonsterWeapon = new Weapon(
-							monster.Level, Weapon.WeaponType.TwoHandedSword, monster.MonsterCategory),
+						monster._MonsterWeapon = new Weapon(
+							monster._Level, Weapon.WeaponType.TwoHandedSword, monster._MonsterCategory),
 						_ =>
-						monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Axe, monster.MonsterCategory)
+						monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.Axe, monster._MonsterCategory)
 					};
 					if (randomGearNum <= 2)
 					{
@@ -83,39 +83,39 @@ namespace DungeonGame
 					BuildMonsterArmor(monster);
 					break;
 				case Monster.MonsterType.Elemental:
-					switch (monster.ElementalCategory)
+					switch (monster._ElementalCategory)
 					{
 						case Monster.ElementalType.Fire:
-							monster.MonsterItems.Add(new Loot("essence of fire", monster.Level, 1));
+							monster._MonsterItems.Add(new Loot("essence of fire", monster._Level, 1));
 							break;
 						case Monster.ElementalType.Air:
-							monster.MonsterItems.Add(new Loot("essence of air", monster.Level, 1));
+							monster._MonsterItems.Add(new Loot("essence of air", monster._Level, 1));
 							break;
 						case Monster.ElementalType.Water:
-							monster.MonsterItems.Add(new Loot("essence of water", monster.Level, 1));
+							monster._MonsterItems.Add(new Loot("essence of water", monster._Level, 1));
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
 					break;
 				case Monster.MonsterType.Vampire:
-					monster.MonsterWeapon = randomGearNum switch
+					monster._MonsterWeapon = randomGearNum switch
 					{
 						1 =>
-						monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Dagger, monster.MonsterCategory),
+						monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.Dagger, monster._MonsterCategory),
 						2 =>
-						monster.MonsterWeapon = new Weapon(
-							monster.Level, Weapon.WeaponType.TwoHandedSword, monster.MonsterCategory),
+						monster._MonsterWeapon = new Weapon(
+							monster._Level, Weapon.WeaponType.TwoHandedSword, monster._MonsterCategory),
 						3 =>
-						monster.MonsterWeapon = new Weapon(
-							monster.Level, Weapon.WeaponType.Bow, monster.MonsterCategory),
+						monster._MonsterWeapon = new Weapon(
+							monster._Level, Weapon.WeaponType.Bow, monster._MonsterCategory),
 						_ =>
-						monster.MonsterWeapon = new Weapon(
-							monster.Level, Weapon.WeaponType.OneHandedSword, monster.MonsterCategory)
+						monster._MonsterWeapon = new Weapon(
+							monster._Level, Weapon.WeaponType.OneHandedSword, monster._MonsterCategory)
 					};
-					if (monster.MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow)
+					if (monster._MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow)
 					{
-						monster.MonsterQuiver = new Quiver("basic quiver", 50, 50, 15);
+						monster._MonsterQuiver = new Quiver("basic quiver", 50, 50, 15);
 					}
 					BuildMonsterArmor(monster);
 					if (randomGearNum <= 3)
@@ -128,23 +128,23 @@ namespace DungeonGame
 					}
 					break;
 				case Monster.MonsterType.Troll:
-					monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Axe, monster.MonsterCategory);
+					monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.Axe, monster._MonsterCategory);
 					BuildMonsterArmor(monster);
 					var randomPotionNum = GameHandler.GetRandomNumber(1, 6);
-					monster.MonsterItems.Add(randomPotionNum switch
+					monster._MonsterItems.Add(randomPotionNum switch
 					{
-						1 => new Consumable(monster.Level, Consumable.PotionType.Health),
-						2 => new Consumable(monster.Level, Consumable.PotionType.Mana),
-						3 => new Consumable(monster.Level, Consumable.PotionType.Constitution),
-						4 => new Consumable(monster.Level, Consumable.PotionType.Dexterity),
-						5 => new Consumable(monster.Level, Consumable.PotionType.Intelligence),
-						6 => new Consumable(monster.Level, Consumable.PotionType.Strength),
+						1 => new Consumable(monster._Level, Consumable.PotionType.Health),
+						2 => new Consumable(monster._Level, Consumable.PotionType.Mana),
+						3 => new Consumable(monster._Level, Consumable.PotionType.Constitution),
+						4 => new Consumable(monster._Level, Consumable.PotionType.Dexterity),
+						5 => new Consumable(monster._Level, Consumable.PotionType.Intelligence),
+						6 => new Consumable(monster._Level, Consumable.PotionType.Strength),
 						_ => throw new ArgumentOutOfRangeException()
 					});
 					break;
 				case Monster.MonsterType.Dragon:
-					monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Dagger, monster.MonsterCategory);
-					if (randomGearNum <= 5) monster.MonsterItems.Add(new Loot("dragonscale", monster.Level, 1));
+					monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.Dagger, monster._MonsterCategory);
+					if (randomGearNum <= 5) monster._MonsterItems.Add(new Loot("dragonscale", monster._Level, 1));
 					if (randomGearNum <= 6)
 					{
 						BuildMonsterGem(monster);
@@ -157,11 +157,11 @@ namespace DungeonGame
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			if (monster.MonsterCategory != Monster.MonsterType.Elemental) monster.MonsterWeapon.Equipped = true;
-			if (monster.MonsterWeapon != null) monster.MonsterItems.Add(monster.MonsterWeapon);
-			if (monster.MonsterQuiver == null) return;
-			monster.MonsterQuiver.Equipped = true;
-			monster.MonsterItems.Add(monster.MonsterQuiver);
+			if (monster._MonsterCategory != Monster.MonsterType.Elemental) monster._MonsterWeapon.Equipped = true;
+			if (monster._MonsterWeapon != null) monster._MonsterItems.Add(monster._MonsterWeapon);
+			if (monster._MonsterQuiver == null) return;
+			monster._MonsterQuiver.Equipped = true;
+			monster._MonsterItems.Add(monster._MonsterQuiver);
 		}
 		private static void BuildMonsterGem(Monster monster)
 		{
@@ -169,22 +169,22 @@ namespace DungeonGame
 			switch (randomGemNum)
 			{
 				case 1:
-					monster.MonsterItems.Add(new Loot(monster.Level, Loot.GemType.Amethyst));
+					monster._MonsterItems.Add(new Loot(monster._Level, Loot.GemType.Amethyst));
 					break;
 				case 2:
-					monster.MonsterItems.Add(new Loot(monster.Level, Loot.GemType.Diamond));
+					monster._MonsterItems.Add(new Loot(monster._Level, Loot.GemType.Diamond));
 					break;
 				case 3:
-					monster.MonsterItems.Add(new Loot(monster.Level, Loot.GemType.Emerald));
+					monster._MonsterItems.Add(new Loot(monster._Level, Loot.GemType.Emerald));
 					break;
 				case 4:
-					monster.MonsterItems.Add(new Loot(monster.Level, Loot.GemType.Ruby));
+					monster._MonsterItems.Add(new Loot(monster._Level, Loot.GemType.Ruby));
 					break;
 				case 5:
-					monster.MonsterItems.Add(new Loot(monster.Level, Loot.GemType.Sapphire));
+					monster._MonsterItems.Add(new Loot(monster._Level, Loot.GemType.Sapphire));
 					break;
 				case 6:
-					monster.MonsterItems.Add(new Loot(monster.Level, Loot.GemType.Topaz));
+					monster._MonsterItems.Add(new Loot(monster._Level, Loot.GemType.Topaz));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -217,7 +217,7 @@ namespace DungeonGame
 					3 => ChangeArmor.KitType.Plate,
 					_ => throw new ArgumentOutOfRangeException()
 				};
-				monster.MonsterItems.Add(new Consumable(kitLevel, kitCategory, kitType));
+				monster._MonsterItems.Add(new Consumable(kitLevel, kitCategory, kitType));
 			}
 			else
 			{
@@ -228,7 +228,7 @@ namespace DungeonGame
 					2 => ChangeWeapon.KitType.Grindstone,
 					_ => throw new ArgumentOutOfRangeException()
 				};
-				monster.MonsterItems.Add(new Consumable(kitLevel, kitCategory, kitType));
+				monster._MonsterItems.Add(new Consumable(kitLevel, kitCategory, kitType));
 			}
 		}
 		private static void BuildMonsterArmor(Monster monster)
@@ -237,53 +237,53 @@ namespace DungeonGame
 			switch (randomCatNum)
 			{
 				case 1:
-					monster.MonsterBackArmor = new Armor(monster.Level, Armor.ArmorSlot.Back);
-					monster.MonsterBackArmor.Equipped = true;
-					monster.MonsterItems.Add(monster.MonsterBackArmor);
+					monster._MonsterBackArmor = new Armor(monster._Level, Armor.ArmorSlot.Back);
+					monster._MonsterBackArmor.Equipped = true;
+					monster._MonsterItems.Add(monster._MonsterBackArmor);
 					break;
 				case 2:
-					monster.MonsterChestArmor = new Armor(monster.Level, Armor.ArmorSlot.Chest);
-					monster.MonsterChestArmor.Equipped = true;
-					monster.MonsterItems.Add(monster.MonsterChestArmor);
+					monster._MonsterChestArmor = new Armor(monster._Level, Armor.ArmorSlot.Chest);
+					monster._MonsterChestArmor.Equipped = true;
+					monster._MonsterItems.Add(monster._MonsterChestArmor);
 					break;
 				case 3:
-					monster.MonsterHeadArmor = new Armor(monster.Level, Armor.ArmorSlot.Head);
-					monster.MonsterHeadArmor.Equipped = true;
-					monster.MonsterItems.Add(monster.MonsterHeadArmor);
+					monster._MonsterHeadArmor = new Armor(monster._Level, Armor.ArmorSlot.Head);
+					monster._MonsterHeadArmor.Equipped = true;
+					monster._MonsterItems.Add(monster._MonsterHeadArmor);
 					break;
 				case 4:
-					monster.MonsterLegArmor = new Armor(monster.Level, Armor.ArmorSlot.Legs);
-					monster.MonsterLegArmor.Equipped = true;
-					monster.MonsterItems.Add(monster.MonsterLegArmor);
+					monster._MonsterLegArmor = new Armor(monster._Level, Armor.ArmorSlot.Legs);
+					monster._MonsterLegArmor.Equipped = true;
+					monster._MonsterItems.Add(monster._MonsterLegArmor);
 					break;
 				case 5:
-					monster.MonsterWaistArmor = new Armor(monster.Level, Armor.ArmorSlot.Waist);
-					monster.MonsterWaistArmor.Equipped = true;
-					monster.MonsterItems.Add(monster.MonsterWaistArmor);
+					monster._MonsterWaistArmor = new Armor(monster._Level, Armor.ArmorSlot.Waist);
+					monster._MonsterWaistArmor.Equipped = true;
+					monster._MonsterItems.Add(monster._MonsterWaistArmor);
 					break;
 				case 6:
-					monster.MonsterWristArmor = new Armor(monster.Level, Armor.ArmorSlot.Wrist);
-					monster.MonsterWristArmor.Equipped = true;
-					monster.MonsterItems.Add(monster.MonsterWristArmor);
+					monster._MonsterWristArmor = new Armor(monster._Level, Armor.ArmorSlot.Wrist);
+					monster._MonsterWristArmor.Equipped = true;
+					monster._MonsterItems.Add(monster._MonsterWristArmor);
 					break;
 				case 7:
-					monster.MonsterHandsArmor = new Armor(monster.Level, Armor.ArmorSlot.Hands);
-					monster.MonsterHandsArmor.Equipped = true;
-					monster.MonsterItems.Add(monster.MonsterHandsArmor);
+					monster._MonsterHandsArmor = new Armor(monster._Level, Armor.ArmorSlot.Hands);
+					monster._MonsterHandsArmor.Equipped = true;
+					monster._MonsterItems.Add(monster._MonsterHandsArmor);
 					break;
 			}
 		}
 		private static void BuildMonsterNameDesc(Monster monster)
 		{
-			switch (monster.MonsterCategory)
+			switch (monster._MonsterCategory)
 			{
 				case Monster.MonsterType.Skeleton:
-					switch (monster.SkeletonCategory)
+					switch (monster._SkeletonCategory)
 					{
 						case Monster.SkeletonType.Warrior:
-							monster._Name = monster.Level switch
+							monster._Name = monster._Level switch
 							{
-								1 => "skeleton " + monster.SkeletonCategory.ToString().ToLowerInvariant(),
+								1 => "skeleton " + monster._SkeletonCategory.ToString().ToLowerInvariant(),
 								2 => "skeleton fighter",
 								3 => "skeleton warrior",
 								4 => "skeleton guardian",
@@ -297,23 +297,23 @@ namespace DungeonGame
 							};
 							break;
 						case Monster.SkeletonType.Archer:
-							monster._Name = "skeleton " + monster.SkeletonCategory.ToString().ToLowerInvariant();
+							monster._Name = "skeleton " + monster._SkeletonCategory.ToString().ToLowerInvariant();
 							break;
 						case Monster.SkeletonType.Mage:
-							monster._Name = "skeleton " + monster.SkeletonCategory.ToString().ToLowerInvariant();
+							monster._Name = "skeleton " + monster._SkeletonCategory.ToString().ToLowerInvariant();
 							break;
 						case null:
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
-					monster.Desc =
+					monster._Desc =
 						"A " + monster._Name + " stands in front of you. Its bones look worn and damaged from years of fighting. A " +
 						"ghastly yellow glow surrounds it, which is the only indication of the magic that must exist to " +
 						"reanimate it.";
 					break;
 				case Monster.MonsterType.Zombie:
-					monster._Name = monster.Level switch
+					monster._Name = monster._Level switch
 					{
 						1 => "zombie",
 						2 => "rotting zombie",
@@ -327,14 +327,14 @@ namespace DungeonGame
 						10 => "fanatical zombie",
 						_ => throw new ArgumentOutOfRangeException()
 					};
-					monster.Desc =
+					monster._Desc =
 						"A " + monster._Name +
 						" stares at you, it's face frozen in a look of indifference to the fact a bug is crawling" +
 						" out of it's empty eye sockets. In one hand, it drags a weapon against the ground, as it stares at you " +
 						"menacingly. Bones, muscle and tendons are visible through many gashes and tears in it's rotting skin.";
 					break;
 				case Monster.MonsterType.Spider:
-					monster._Name = monster.Level switch
+					monster._Name = monster._Level switch
 					{
 						1 => "spider",
 						2 => "black spider",
@@ -348,13 +348,13 @@ namespace DungeonGame
 						10 => "abominable spider",
 						_ => throw new ArgumentOutOfRangeException()
 					};
-					monster.Desc =
+					monster._Desc =
 						"A " + monster._Name + " about the size of a large bear skitters down the corridor towards you. " +
 						"Coarse hair sticks out from every direction on it's thorax and legs. It's many eyes stare at " +
 						"you, legs ending in sharp claws carrying it closer as it hisses hungrily.";
 					break;
 				case Monster.MonsterType.Demon:
-					monster._Name = monster.Level switch
+					monster._Name = monster._Level switch
 					{
 						1 => "lesser demon",
 						2 => "demon",
@@ -368,7 +368,7 @@ namespace DungeonGame
 						10 => "colossal demon",
 						_ => throw new ArgumentOutOfRangeException()
 					};
-					monster.Desc =
+					monster._Desc =
 						"A " + monster._Name + " stands before you with two horns sticking out of it's head. It's eyes glint " +
 						"yellow and a look of pure hatred adorns its face. Leathery wings spread out on either side of its " +
 						"back as it rises up to its full height and growls at you.";
@@ -377,32 +377,32 @@ namespace DungeonGame
 					var elementalRandomNumber = GameHandler.GetRandomNumber(1, 3);
 					var elementalType = elementalRandomNumber switch
 					{
-						1 => monster.ElementalCategory == Monster.ElementalType.Fire,
-						2 => monster.ElementalCategory == Monster.ElementalType.Water,
-						3 => monster.ElementalCategory == Monster.ElementalType.Air,
+						1 => monster._ElementalCategory == Monster.ElementalType.Fire,
+						2 => monster._ElementalCategory == Monster.ElementalType.Water,
+						3 => monster._ElementalCategory == Monster.ElementalType.Air,
 						_ => throw new ArgumentOutOfRangeException()
 					};
-					monster._Name = monster.Level switch
+					monster._Name = monster._Level switch
 					{
-						1 => "lesser " + monster.ElementalCategory.ToString().ToLowerInvariant() + " elemental",
-						2 => monster.ElementalCategory.ToString().ToLowerInvariant() + " elemental",
-						3 => "large " + monster.ElementalCategory.ToString().ToLowerInvariant() + " elemental",
-						4 => "greater " + monster.ElementalCategory.ToString().ToLowerInvariant() + " elemental",
-						5 => "hulking " + monster.ElementalCategory.ToString().ToLowerInvariant() + " elemental",
-						6 => "immense " + monster.ElementalCategory.ToString().ToLowerInvariant() + " elemental",
-						7 => "massive " + monster.ElementalCategory.ToString().ToLowerInvariant() + " elemental",
-						8 => "towering " + monster.ElementalCategory.ToString().ToLowerInvariant() + " elemental",
-						9 => "titanic " + monster.ElementalCategory.ToString().ToLowerInvariant() + " elemental",
-						10 => "colossal " + monster.ElementalCategory.ToString().ToLowerInvariant() + " elemental",
+						1 => "lesser " + monster._ElementalCategory.ToString().ToLowerInvariant() + " elemental",
+						2 => monster._ElementalCategory.ToString().ToLowerInvariant() + " elemental",
+						3 => "large " + monster._ElementalCategory.ToString().ToLowerInvariant() + " elemental",
+						4 => "greater " + monster._ElementalCategory.ToString().ToLowerInvariant() + " elemental",
+						5 => "hulking " + monster._ElementalCategory.ToString().ToLowerInvariant() + " elemental",
+						6 => "immense " + monster._ElementalCategory.ToString().ToLowerInvariant() + " elemental",
+						7 => "massive " + monster._ElementalCategory.ToString().ToLowerInvariant() + " elemental",
+						8 => "towering " + monster._ElementalCategory.ToString().ToLowerInvariant() + " elemental",
+						9 => "titanic " + monster._ElementalCategory.ToString().ToLowerInvariant() + " elemental",
+						10 => "colossal " + monster._ElementalCategory.ToString().ToLowerInvariant() + " elemental",
 						_ => throw new ArgumentOutOfRangeException()
 					};
-					monster.Desc =
+					monster._Desc =
 						"A " + monster._Name + " stands before you, shimmering out of the essence that it is created from. It " +
 						"has no expression on its face, but the aggressiveness is clear when it appears to start casting a " +
-						"ball of " + monster.ElementalCategory.ToString().ToLowerInvariant() + " to throw at you.";
+						"ball of " + monster._ElementalCategory.ToString().ToLowerInvariant() + " to throw at you.";
 					break;
 				case Monster.MonsterType.Vampire:
-					monster._Name = monster.Level switch
+					monster._Name = monster._Level switch
 					{
 						1 => "young vampire neophyte",
 						2 => "young vampire acolyte",
@@ -416,13 +416,13 @@ namespace DungeonGame
 						10 => "ancient vampire warrior",
 						_ => throw new ArgumentOutOfRangeException()
 					};
-					monster.Desc =
+					monster._Desc =
 						"A " + monster._Name + " stands in front of you. It has a pale, ghoulish cast to it's skin, and  " +
 						"you can see those trademark canines as it smiles cruelly at you. It does not look friendly but it " +
 						"does look like it's ready to kill you and drink your blood.";
 					break;
 				case Monster.MonsterType.Troll:
-					monster._Name = monster.Level switch
+					monster._Name = monster._Level switch
 					{
 						1 => "troll",
 						2 => "troll fighter",
@@ -436,13 +436,13 @@ namespace DungeonGame
 						10 => "troll champion",
 						_ => throw new ArgumentOutOfRangeException()
 					};
-					monster.Desc =
+					monster._Desc =
 						"A " + monster._Name + " stands in front of you. It has a bracelet of bones around both of its wrists " +
 						"and tusks sprout from each corner of its mouth. As it eyes you apprehensively, it clutches its weapon " +
 						"a little tighter, thinking of how to dissect you with it.";
 					break;
 				case Monster.MonsterType.Dragon:
-					monster._Name = monster.Level switch
+					monster._Name = monster._Level switch
 					{
 						1 => "lesser dragon",
 						2 => "dragon",
@@ -456,7 +456,7 @@ namespace DungeonGame
 						10 => "colossal dragon",
 						_ => throw new ArgumentOutOfRangeException()
 					};
-					monster.Desc = monster.Level < 3 ?
+					monster._Desc = monster._Level < 3 ?
 						"A " + monster._Name + " stands before you, scaled claws clicking and clacking against the ground as it " +
 						"paces back and forth. It is small enough not to have any wings, but as it breathes in deeply and you " +
 						"can see fire forming in the back of its mouth, that doesn't seem to matter." :

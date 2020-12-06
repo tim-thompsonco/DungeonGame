@@ -75,9 +75,9 @@ namespace DungeonGame
 				{
 					var monster = (Monster)roomObject;
 					RemovedExpiredEffectsAsync(monster);
-					if (GameTicks % monster.StatReplenishInterval == 0 && monster.HitPoints > 0) ReplenishStatsOverTime(monster);
-					if (!monster.Effects.Any()) continue;
-					foreach (var effect in monster.Effects.Where(effect => GameTicks % effect.TickDuration == 0).ToList())
+					if (GameTicks % monster._StatReplenishInterval == 0 && monster._HitPoints > 0) ReplenishStatsOverTime(monster);
+					if (!monster._Effects.Any()) continue;
+					foreach (var effect in monster._Effects.Where(effect => GameTicks % effect.TickDuration == 0).ToList())
 					{
 						switch (effect.EffectGroup)
 						{
@@ -188,10 +188,10 @@ namespace DungeonGame
 		{
 			await Task.Run(() =>
 			{
-				for (var i = 0; i < monster.Effects.Count; i++)
+				for (var i = 0; i < monster._Effects.Count; i++)
 				{
-					if (!monster.Effects[i].IsEffectExpired) continue;
-					switch (monster.Effects[i].EffectGroup)
+					if (!monster._Effects[i].IsEffectExpired) continue;
+					switch (monster._Effects[i].EffectGroup)
 					{
 						case Effect.EffectType.Healing:
 							break;
@@ -204,7 +204,7 @@ namespace DungeonGame
 						case Effect.EffectType.Bleeding:
 							break;
 						case Effect.EffectType.Stunned:
-							monster.IsStunned = false;
+							monster._IsStunned = false;
 							break;
 						case Effect.EffectType.ReflectDamage:
 							break;
@@ -219,7 +219,7 @@ namespace DungeonGame
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
-					monster.Effects.RemoveAt(i);
+					monster._Effects.RemoveAt(i);
 					i--; // Keep i at same amount, since effects.count will decrease, to keep checking effect list properly
 				}
 			});
@@ -245,9 +245,9 @@ namespace DungeonGame
 		}
 		private static void ReplenishStatsOverTime(Monster monster)
 		{
-			if (monster.InCombat) return;
-			if (monster.HitPoints < monster.MaxHitPoints) monster.HitPoints++;
-			if (monster.EnergyPoints < monster.MaxEnergyPoints) monster.EnergyPoints++;
+			if (monster._InCombat) return;
+			if (monster._HitPoints < monster._MaxHitPoints) monster._HitPoints++;
+			if (monster._EnergyPoints < monster._MaxEnergyPoints) monster._EnergyPoints++;
 		}
 		public static bool IsWholeNumber(string value)
 		{

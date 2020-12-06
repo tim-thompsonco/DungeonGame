@@ -301,13 +301,13 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			opponent.HitPoints -= abilityDamage;
+			opponent._HitPoints -= abilityDamage;
 			var stunString = "The " + opponent._Name + " is stunned!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				stunString);
-			opponent.Effects.Add(new Effect(player._Abilities[index].Name, Effect.EffectType.Stunned,
+			opponent._Effects.Add(new Effect(player._Abilities[index].Name, Effect.EffectType.Stunned,
 				player._Abilities[index].Stun.StunCurRounds, player._Abilities[index].Stun.StunMaxRounds,
 				1, 1, true));
 		}
@@ -458,14 +458,14 @@ namespace DungeonGame
 			else
 			{
 				Settings.FormatAttackSuccessText();
-				opponent.HitPoints -= player._Abilities[index].Offensive.Amount;
+				opponent._HitPoints -= player._Abilities[index].Offensive.Amount;
 				var shootString = "You successfully shot " + opponent._Name + " from afar for " +
 								  player._Abilities[index].Offensive.Amount + " damage!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					shootString);
-				if (opponent.HitPoints <= 0) opponent.MonsterDeath(player);
+				if (opponent._HitPoints <= 0) opponent.MonsterDeath(player);
 			}
 		}
 		public static void DefenseAbilityInfo(Player player, int index)
@@ -562,7 +562,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				opponent.MonsterWeapon.Equipped = false;
+				opponent._MonsterWeapon.Equipped = false;
 				var disarmSuccessString = "You successfully disarmed " + opponent._Name + "!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
@@ -643,7 +643,7 @@ namespace DungeonGame
 				player._PlayerQuiver.UseArrow();
 			}
 			var abilityDamage = PlayerHandler.CalculateAbilityDamage(player, opponent, index);
-			opponent.HitPoints -= abilityDamage;
+			opponent._HitPoints -= abilityDamage;
 			var abilitySuccessString = "Your " + player._Abilities[index].Name + " hit the " + opponent._Name + " for " +
 									   abilityDamage + " physical damage.";
 			OutputHandler.Display.StoreUserOutput(
@@ -661,7 +661,7 @@ namespace DungeonGame
 						Settings.FormatAttackSuccessText(),
 						Settings.FormatDefaultBackground(),
 						bleedString);
-					opponent.Effects.Add(new Effect(player._Abilities[index].Name,
+					opponent._Effects.Add(new Effect(player._Abilities[index].Name,
 						Effect.EffectType.Bleeding, player._Abilities[index].Offensive.AmountOverTime,
 						player._Abilities[index].Offensive.AmountCurRounds, player._Abilities[index].Offensive.AmountMaxRounds,
 						1, 1, true));
@@ -672,7 +672,7 @@ namespace DungeonGame
 						Settings.FormatOnFireText(),
 						Settings.FormatDefaultBackground(),
 						onFireString);
-					opponent.Effects.Add(new Effect(player._Abilities[index].Name,
+					opponent._Effects.Add(new Effect(player._Abilities[index].Name,
 						Effect.EffectType.OnFire, player._Abilities[index].Offensive.AmountOverTime,
 						player._Abilities[index].Offensive.AmountCurRounds, player._Abilities[index].Offensive.AmountMaxRounds,
 						1, 1, true));

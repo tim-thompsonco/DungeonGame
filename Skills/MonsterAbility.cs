@@ -45,13 +45,13 @@ namespace DungeonGame
 
 		public static void UseBloodLeechAbility(Monster monster, Player player, int index)
 		{
-			monster.EnergyPoints -= monster.Abilities[index].EnergyCost;
+			monster._EnergyPoints -= monster._Abilities[index].EnergyCost;
 			var attackString = "The " + monster._Name + " tries to sink its fangs into you and suck your blood!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
-			var leechAmount = monster.Abilities[index].Offensive.Amount;
+			var leechAmount = monster._Abilities[index].Offensive.Amount;
 			foreach (var effect in player._Effects.ToList())
 			{
 				switch (effect.EffectGroup)
@@ -89,7 +89,7 @@ namespace DungeonGame
 					case Effect.EffectType.ReflectDamage:
 						var reflectAmount = effect.EffectAmountOverTime < leechAmount ?
 							effect.EffectAmountOverTime : leechAmount;
-						monster.HitPoints -= reflectAmount;
+						monster._HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
 						leechAmount -= reflectAmount;
 						break;
@@ -107,8 +107,8 @@ namespace DungeonGame
 				return;
 			}
 			player._HitPoints -= leechAmount;
-			monster.HitPoints += leechAmount;
-			if (monster.HitPoints > monster.MaxHitPoints) monster.HitPoints = monster.MaxHitPoints;
+			monster._HitPoints += leechAmount;
+			if (monster._HitPoints > monster._MaxHitPoints) monster._HitPoints = monster._MaxHitPoints;
 			var attackSuccessString = "The " + monster._Name + " leeches " + leechAmount + " life from you.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
@@ -117,9 +117,9 @@ namespace DungeonGame
 		}
 		public static void UseOffenseDamageAbility(Monster monster, Player player, int index)
 		{
-			monster.EnergyPoints -= monster.Abilities[index].EnergyCost;
+			monster._EnergyPoints -= monster._Abilities[index].EnergyCost;
 			var attackString = string.Empty;
-			if (monster.MonsterCategory == Monster.MonsterType.Spider)
+			if (monster._MonsterCategory == Monster.MonsterType.Spider)
 			{
 				attackString = "The " + monster._Name + " tries to bite you!";
 			}
@@ -131,7 +131,7 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
-			var attackDamage = monster.Abilities[index].Offensive.Amount;
+			var attackDamage = monster._Abilities[index].Offensive.Amount;
 			foreach (var effect in player._Effects.ToList())
 			{
 				switch (effect.EffectGroup)
@@ -169,7 +169,7 @@ namespace DungeonGame
 					case Effect.EffectType.ReflectDamage:
 						var reflectAmount = effect.EffectAmountOverTime < attackDamage ?
 							effect.EffectAmountOverTime : attackDamage;
-						monster.HitPoints -= reflectAmount;
+						monster._HitPoints -= reflectAmount;
 						effect.ReflectDamageRound(reflectAmount);
 						attackDamage -= reflectAmount;
 						break;
@@ -187,7 +187,7 @@ namespace DungeonGame
 				return;
 			}
 			var attackSuccessString = string.Empty;
-			if (monster.MonsterCategory == Monster.MonsterType.Spider)
+			if (monster._MonsterCategory == Monster.MonsterType.Spider)
 			{
 				attackSuccessString = "The " + monster._Name + " bites you for " + attackDamage + " physical damage.";
 			}
@@ -201,8 +201,8 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 			player._HitPoints -= attackDamage;
-			if (monster.Abilities[index].Offensive.AmountOverTime <= 0) return;
-			switch (monster.Abilities[index].Offensive.OffensiveGroup)
+			if (monster._Abilities[index].Offensive.AmountOverTime <= 0) return;
+			switch (monster._Abilities[index].Offensive.OffensiveGroup)
 			{
 				case Offensive.OffensiveType.Normal:
 					break;
@@ -212,9 +212,9 @@ namespace DungeonGame
 						Settings.FormatAttackSuccessText(),
 						Settings.FormatDefaultBackground(),
 						bleedString);
-					player._Effects.Add(new Effect(monster.Abilities[index].Name,
-						Effect.EffectType.Bleeding, monster.Abilities[index].Offensive.AmountOverTime,
-						monster.Abilities[index].Offensive.AmountCurRounds, monster.Abilities[index].Offensive.AmountMaxRounds,
+					player._Effects.Add(new Effect(monster._Abilities[index].Name,
+						Effect.EffectType.Bleeding, monster._Abilities[index].Offensive.AmountOverTime,
+						monster._Abilities[index].Offensive.AmountCurRounds, monster._Abilities[index].Offensive.AmountMaxRounds,
 						1, 1, true));
 					break;
 				case Offensive.OffensiveType.Fire:

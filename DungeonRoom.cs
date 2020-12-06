@@ -121,7 +121,7 @@ namespace DungeonGame
 				if (monsterName.Last() == inputName || this._Monster._Name == inputName ||
 					this._Monster._Name.Contains(input.Last()) || this._Monster != null)
 				{
-					if (this._Monster.HitPoints > 0)
+					if (this._Monster._HitPoints > 0)
 					{
 						var fightEvent = new CombatHandler(this._Monster, player);
 						fightEvent.StartCombat();
@@ -161,7 +161,7 @@ namespace DungeonGame
 		{
 			var sameLineOutput = new List<string> {
 			Settings.FormatGeneralInfoText(), Settings.FormatDefaultBackground(), "Available _Commands: "};
-			if (this._Monster != null && this._Monster.InCombat && this.CombatCommands != null)
+			if (this._Monster != null && this._Monster._InCombat && this.CombatCommands != null)
 			{
 				var objCombatCount = this.CombatCommands.Count;
 				foreach (var command in this.CombatCommands)
@@ -354,22 +354,22 @@ namespace DungeonGame
 			var monsterName = this._Monster._Name.Split(' ');
 			if (monsterName.Last() == inputName || this._Monster._Name.Contains(inputName))
 			{
-				if (this._Monster.HitPoints <= 0 && this._Monster.WasLooted == false)
+				if (this._Monster._HitPoints <= 0 && this._Monster._WasLooted == false)
 				{
-					var goldLooted = this._Monster.Gold;
-					player._Gold += this._Monster.Gold;
+					var goldLooted = this._Monster._Gold;
+					player._Gold += this._Monster._Gold;
 					try
 					{
-						this._Monster.Gold = 0;
+						this._Monster._Gold = 0;
 						var lootGoldString = "You looted " + goldLooted + " gold coins from the " + this._Monster._Name + "!";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
 							lootGoldString);
-						while (this._Monster.MonsterItems.Count > 0)
+						while (this._Monster._MonsterItems.Count > 0)
 						{
 							var playerWeight = PlayerHandler.GetInventoryWeight(player);
-							var itemWeight = this._Monster.MonsterItems[0].Weight;
+							var itemWeight = this._Monster._MonsterItems[0].Weight;
 							if (playerWeight + itemWeight > player._MaxCarryWeight)
 							{
 								OutputHandler.Display.StoreUserOutput(
@@ -378,23 +378,23 @@ namespace DungeonGame
 									"You can't carry that much!");
 								return;
 							}
-							if (this._Monster.MonsterItems[0] is Consumable)
+							if (this._Monster._MonsterItems[0] is Consumable)
 							{
-								player._Consumables.Add((Consumable)this._Monster.MonsterItems[0]);
+								player._Consumables.Add((Consumable)this._Monster._MonsterItems[0]);
 							}
 							else
 							{
-								player._Inventory.Add(this._Monster.MonsterItems[0]);
+								player._Inventory.Add(this._Monster._MonsterItems[0]);
 							}
-							var lootItemString = "You looted " + this._Monster.MonsterItems[0]._Name + " from the " +
+							var lootItemString = "You looted " + this._Monster._MonsterItems[0]._Name + " from the " +
 												 this._Monster._Name + "!";
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatSuccessOutputText(),
 								Settings.FormatDefaultBackground(),
 								lootItemString);
-							this._Monster.MonsterItems.RemoveAt(0);
+							this._Monster._MonsterItems.RemoveAt(0);
 						}
-						this._Monster.WasLooted = true;
+						this._Monster._WasLooted = true;
 						var monsterIndex = this._RoomObjects.FindIndex(
 							f => f._Name == this._Monster._Name);
 						if (monsterIndex != -1) this._RoomObjects.RemoveAt(monsterIndex);
@@ -403,7 +403,7 @@ namespace DungeonGame
 					{
 					}
 				}
-				else if (this._Monster.WasLooted)
+				else if (this._Monster._WasLooted)
 				{
 					var alreadyLootString = "You already looted " + this._Monster._Name + "!";
 					OutputHandler.Display.StoreUserOutput(
@@ -433,7 +433,7 @@ namespace DungeonGame
 			if (this._Monster == null) return null;
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			var monsterName = textInfo.ToTitleCase(this._Monster._Name);
-			var levelDiff = player._Level - this._Monster.Level;
+			var levelDiff = player._Level - this._Monster._Level;
 			var difficultyStringBuilder = new StringBuilder();
 			difficultyStringBuilder.Append("Difficulty: ");
 			if (levelDiff >= 3)
@@ -487,20 +487,20 @@ namespace DungeonGame
 			var monsterName = this._Monster._Name.Split(' ');
 			if (monsterName.Last() == inputName || this._Monster._Name.Contains(inputName))
 			{
-				for (var i = 0; i < this._Monster.Desc.Length; i += Settings.GetGameWidth())
+				for (var i = 0; i < this._Monster._Desc.Length; i += Settings.GetGameWidth())
 				{
-					if (this._Monster.Desc.Length - i < Settings.GetGameWidth())
+					if (this._Monster._Desc.Length - i < Settings.GetGameWidth())
 					{
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatRoomOutputText(),
 							Settings.FormatDefaultBackground(),
-							this._Monster.Desc.Substring(i, this._Monster.Desc.Length - i));
+							this._Monster._Desc.Substring(i, this._Monster._Desc.Length - i));
 						continue;
 					}
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatRoomOutputText(),
 						Settings.FormatDefaultBackground(),
-						this._Monster.Desc.Substring(i, Settings.GetGameWidth()));
+						this._Monster._Desc.Substring(i, Settings.GetGameWidth()));
 				}
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatRoomOutputText(),
@@ -512,8 +512,8 @@ namespace DungeonGame
 					"It is carrying: "};
 				OutputHandler.Display.StoreUserOutput(sameLineOutput);
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				if (this._Monster.MonsterItems == null) return;
-				foreach (var item in this._Monster.MonsterItems)
+				if (this._Monster._MonsterItems == null) return;
+				foreach (var item in this._Monster._MonsterItems)
 				{
 					var sameLineOutputItem = new List<string>();
 					var sb = new StringBuilder();

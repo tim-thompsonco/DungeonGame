@@ -15,7 +15,7 @@ namespace DungeonGame
 			this.Player = player;
 			this.Opponent = opponent;
 			this.Player._InCombat = true;
-			this.Opponent.InCombat = true;
+			this.Opponent._InCombat = true;
 		}
 
 		public void StartCombat()
@@ -26,8 +26,8 @@ namespace DungeonGame
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				fightStartString);
-			while (this.Opponent.HitPoints > 0 && this.Player._HitPoints > 0 &&
-				   this.Player._InCombat && this.Opponent.InCombat)
+			while (this.Opponent._HitPoints > 0 && this.Player._HitPoints > 0 &&
+				   this.Player._InCombat && this.Opponent._InCombat)
 			{
 				GameHandler.RemovedExpiredEffectsAsync(this.Player);
 				GameHandler.RemovedExpiredEffectsAsync(this.Opponent);
@@ -49,25 +49,25 @@ namespace DungeonGame
 				}
 				if (this.FleeSuccess) return;
 				// Check to see if player attack killed monster
-				if (this.Opponent.HitPoints <= 0)
+				if (this.Opponent._HitPoints <= 0)
 				{
 					this.Opponent.MonsterDeath(this.Player);
 					return;
 				}
-				if (this.Opponent.Effects.Any())
+				if (this.Opponent._Effects.Any())
 				{
 					this.ProcessOpponentEffects();
 				}
 				// Check to see if damage over time effects killed monster
-				if (this.Opponent.HitPoints <= 0)
+				if (this.Opponent._HitPoints <= 0)
 				{
 					this.Opponent.MonsterDeath(this.Player);
 					return;
 				}
-				if (this.Opponent.IsStunned) continue;
+				if (this.Opponent._IsStunned) continue;
 				this.Opponent.Attack(this.Player);
 				// Check at end of round to see if monster was killed by combat round
-				if (this.Opponent.HitPoints > 0) continue;
+				if (this.Opponent._HitPoints > 0) continue;
 				this.Opponent.MonsterDeath(this.Player);
 				return;
 			}
@@ -82,7 +82,7 @@ namespace DungeonGame
 					Settings.FormatDefaultBackground(),
 					"You have fled combat successfully!");
 				this.Player._InCombat = false;
-				this.Opponent.InCombat = false;
+				this.Opponent._InCombat = false;
 				this.FleeSuccess = true;
 				var playerRoom = RoomHandler.Rooms[this.Player._PlayerLocation];
 				var playerX = this.Player._PlayerLocation.X;
@@ -196,7 +196,7 @@ namespace DungeonGame
 		private void ProcessOpponentEffects()
 		{
 			GameHandler.RemovedExpiredEffectsAsync(this.Opponent);
-			foreach (var effect in this.Opponent.Effects)
+			foreach (var effect in this.Opponent._Effects)
 			{
 				switch (effect.EffectGroup)
 				{
@@ -261,7 +261,7 @@ namespace DungeonGame
 							Settings.FormatAttackSuccessText(),
 							Settings.FormatDefaultBackground(),
 							attackSucceedString);
-						this.Opponent.HitPoints -= attackAmount;
+						this.Opponent._HitPoints -= attackAmount;
 					}
 					break;
 				case "cast":

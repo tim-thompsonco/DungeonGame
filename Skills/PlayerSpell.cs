@@ -207,7 +207,7 @@ namespace DungeonGame
 		{
 			player._ManaPoints -= player._Spellbook[index].ManaCost;
 			var frostSpellDamage = PlayerHandler.CalculateSpellDamage(player, opponent, index);
-			foreach (var effect in opponent.Effects)
+			foreach (var effect in opponent._Effects)
 			{
 				switch (effect.EffectGroup)
 				{
@@ -246,7 +246,7 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			var frozenEffectIndex = opponent.Effects.FindIndex(
+			var frozenEffectIndex = opponent._Effects.FindIndex(
 				e => e.EffectGroup == Effect.EffectType.Frozen);
 			if (frozenEffectIndex == -1)
 			{
@@ -257,12 +257,12 @@ namespace DungeonGame
 					Settings.FormatDefaultBackground(),
 					frozenString);
 			}
-			opponent.HitPoints -= frostSpellDamage;
-			opponent.Effects.Add(new Effect(player._Spellbook[index].Name, Effect.EffectType.Frozen,
+			opponent._HitPoints -= frostSpellDamage;
+			opponent._Effects.Add(new Effect(player._Spellbook[index].Name, Effect.EffectType.Frozen,
 				player._Spellbook[index].Offensive.AmountCurRounds, player._Spellbook[index].Offensive.AmountMaxRounds,
 				1.5, 1, true));
 			if (player._Spellbook[index].SpellCategory != SpellType.FrostNova) return;
-			opponent.Effects.Add(new Effect(player._Spellbook[index].Name, Effect.EffectType.Stunned,
+			opponent._Effects.Add(new Effect(player._Spellbook[index].Name, Effect.EffectType.Stunned,
 				player._Spellbook[index].Offensive.AmountCurRounds, player._Spellbook[index].Offensive.AmountMaxRounds,
 				1, 1, true));
 		}
@@ -290,7 +290,7 @@ namespace DungeonGame
 		{
 			player._ManaPoints -= player._Spellbook[index].ManaCost;
 			var fireSpellDamage = PlayerHandler.CalculateSpellDamage(player, opponent, index);
-			foreach (var effect in opponent.Effects)
+			foreach (var effect in opponent._Effects)
 			{
 				switch (effect.EffectGroup)
 				{
@@ -328,14 +328,14 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			opponent.HitPoints -= fireSpellDamage;
+			opponent._HitPoints -= fireSpellDamage;
 			if (player._Spellbook[index].Offensive.AmountOverTime <= 0) return;
 			var onFireString = "The " + opponent._Name + " bursts into flame!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				onFireString);
-			opponent.Effects.Add(new Effect(player._Spellbook[index].Name,
+			opponent._Effects.Add(new Effect(player._Spellbook[index].Name,
 				Effect.EffectType.OnFire, player._Spellbook[index].Offensive.AmountOverTime,
 				player._Spellbook[index].Offensive.AmountCurRounds, player._Spellbook[index].Offensive.AmountMaxRounds,
 				1, 1, true));
@@ -352,7 +352,7 @@ namespace DungeonGame
 		{
 			player._ManaPoints -= player._Spellbook[index].ManaCost;
 			var arcaneSpellDamage = PlayerHandler.CalculateSpellDamage(player, opponent, index);
-			foreach (var effect in opponent.Effects)
+			foreach (var effect in opponent._Effects)
 			{
 				switch (effect.EffectGroup)
 				{
@@ -390,7 +390,7 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			opponent.HitPoints -= arcaneSpellDamage;
+			opponent._HitPoints -= arcaneSpellDamage;
 		}
 		public static void HealingSpellInfo(Player player, int index)
 		{
