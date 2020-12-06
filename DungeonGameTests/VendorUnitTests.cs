@@ -11,12 +11,14 @@ namespace DungeonGameTests
 		public void BuyItemUnitTest()
 		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Mage);
-			player._Gold = 100;
-			var room = new TownRoom("test", "test",
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage)
+			{
+				_Gold = 100
+			};
+			TownRoom room = new TownRoom("test", "test",
 				new Vendor("test", "test", Vendor.VendorType.Armorer));
-			var input = new string[] { "buy", "helmet" };
-			var inputName = InputHandler.ParseInput(input);
+			string[] input = new string[] { "buy", "helmet" };
+			string inputName = InputHandler.ParseInput(input);
 			int quantity;
 			bool quantityProvided = int.TryParse(input.Last(), out quantity);
 			if (!quantityProvided)
@@ -27,14 +29,14 @@ namespace DungeonGameTests
 			{
 				input = input.Take(input.Count() - 1).ToArray();
 			}
-			var baseGold = player._Gold;
-			var index = room._Vendor._VendorItems.FindIndex(
+			int baseGold = player._Gold;
+			int index = room._Vendor._VendorItems.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(input.Last()));
-			var buyItem = room._Vendor._VendorItems[index];
+			IEquipment buyItem = room._Vendor._VendorItems[index];
 			room._Vendor.BuyItem(player, input, quantity);
-			var purchaseString = "You purchased " + buyItem._Name + " from the vendor for " + buyItem.ItemValue + " gold.";
+			string purchaseString = $"You purchased {buyItem._Name} from the vendor for {buyItem.ItemValue} gold.";
 			Assert.AreEqual(purchaseString, OutputHandler.Display.Output[0][2]);
-			var buyItemIndex = player._Inventory.FindIndex(
+			int buyItemIndex = player._Inventory.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(input.Last()));
 			Assert.AreNotEqual(-1, buyItemIndex);
 			Assert.AreEqual(baseGold - buyItem.ItemValue, player._Gold);
@@ -43,12 +45,14 @@ namespace DungeonGameTests
 		public void BuySinglePotionUnitTest()
 		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Mage);
-			player._Gold = 100;
-			var room = new TownRoom("test", "test",
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage)
+			{
+				_Gold = 100
+			};
+			TownRoom room = new TownRoom("test", "test",
 				new Vendor("test", "test", Vendor.VendorType.Healer));
-			var input = new string[] { "buy", "health", "potion" };
-			var inputName = InputHandler.ParseInput(input);
+			string[] input = new string[] { "buy", "health", "potion" };
+			string inputName = InputHandler.ParseInput(input);
 			int quantity;
 			bool quantityProvided = int.TryParse(input.Last(), out quantity);
 			if (!quantityProvided)
@@ -59,14 +63,14 @@ namespace DungeonGameTests
 			{
 				input = input.Take(input.Count() - 1).ToArray();
 			}
-			var baseGold = player._Gold;
-			var index = room._Vendor._VendorItems.FindIndex(
+			int baseGold = player._Gold;
+			int index = room._Vendor._VendorItems.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
-			var buyItem = room._Vendor._VendorItems[index];
+			IEquipment buyItem = room._Vendor._VendorItems[index];
 			room._Vendor.BuyItem(player, input, quantity);
-			var purchaseString = "You purchased " + buyItem._Name + " from the vendor for " + buyItem.ItemValue + " gold.";
+			string purchaseString = $"You purchased {buyItem._Name} from the vendor for {buyItem.ItemValue} gold.";
 			Assert.AreEqual(purchaseString, OutputHandler.Display.Output[0][2]);
-			var buyItemIndex = player._Consumables.FindIndex(
+			int buyItemIndex = player._Consumables.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(input.Last()));
 			Assert.AreNotEqual(-1, buyItemIndex);
 			Assert.AreEqual(baseGold - buyItem.ItemValue, player._Gold);
@@ -75,15 +79,15 @@ namespace DungeonGameTests
 		public void BuyMultiplePotionUnitTest()
 		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Mage)
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage)
 			{
 				_Gold = 1000,
 				_Consumables = new List<Consumable>()
 			};
-			var room = new TownRoom("test", "test",
+			TownRoom room = new TownRoom("test", "test",
 				new Vendor("test", "test", Vendor.VendorType.Healer));
-			var input = new string[] { "buy", "health", "potion", "5" };
-			var quantityProvided = int.TryParse(input.Last(), out var quantity);
+			string[] input = new string[] { "buy", "health", "potion", "5" };
+			bool quantityProvided = int.TryParse(input.Last(), out int quantity);
 			if (!quantityProvided)
 			{
 				quantity = 1;
@@ -92,42 +96,42 @@ namespace DungeonGameTests
 			{
 				input = input.Take(input.Count() - 1).ToArray();
 			}
-			var inputName = InputHandler.ParseInput(input);
+			string inputName = InputHandler.ParseInput(input);
 			Assert.AreEqual(5, quantity);
-			var baseGold = player._Gold;
-			var index = room._Vendor._VendorItems.FindIndex(
+			int baseGold = player._Gold;
+			int index = room._Vendor._VendorItems.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
-			var buyItem = room._Vendor._VendorItems[index];
+			IEquipment buyItem = room._Vendor._VendorItems[index];
 			room._Vendor.BuyItem(player, input, quantity);
-			var purchaseString = "You purchased " + buyItem._Name + " from the vendor for " + buyItem.ItemValue + " gold.";
+			string purchaseString = $"You purchased {buyItem._Name} from the vendor for {buyItem.ItemValue} gold.";
 			Assert.AreEqual(purchaseString, OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual(purchaseString, OutputHandler.Display.Output[1][2]);
 			Assert.AreEqual(purchaseString, OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual(purchaseString, OutputHandler.Display.Output[3][2]);
 			Assert.AreEqual(purchaseString, OutputHandler.Display.Output[4][2]);
-			var buyItemIndex = player._Consumables.FindIndex(
+			int buyItemIndex = player._Consumables.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(input.Last()));
 			Assert.AreNotEqual(-1, buyItemIndex);
-			var potionCount = player._Consumables.OfType<Consumable.PotionType>().Count();
+			int potionCount = player._Consumables.OfType<Consumable.PotionType>().Count();
 			Assert.AreEqual(baseGold - buyItem.ItemValue * quantity, player._Gold);
 		}
 		[Test]
 		public void SellItemUnitTest()
 		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Mage) { _Gold = 100 };
-			var room = new TownRoom("test", "test",
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage) { _Gold = 100 };
+			TownRoom room = new TownRoom("test", "test",
 				new Vendor("test", "test", Vendor.VendorType.Armorer));
-			var input = new[] { "sell", "cap" };
-			var inputName = InputHandler.ParseInput(input);
-			var index = player._Inventory.FindIndex(
+			string[] input = new[] { "sell", "cap" };
+			string inputName = InputHandler.ParseInput(input);
+			int index = player._Inventory.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
-			var sellItem = player._Inventory[index];
-			var baseGold = player._Gold;
+			IEquipment sellItem = player._Inventory[index];
+			int baseGold = player._Gold;
 			room._Vendor.SellItem(player, input);
-			var soldString = "You sold " + sellItem._Name + " to the vendor for " + sellItem.ItemValue + " gold.";
+			string soldString = $"You sold {sellItem._Name} to the vendor for {sellItem.ItemValue} gold.";
 			Assert.AreEqual(soldString, OutputHandler.Display.Output[0][2]);
-			var sellItemIndex = player._Inventory.FindIndex(
+			int sellItemIndex = player._Inventory.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
 			Assert.AreEqual(-1, sellItemIndex);
 			Assert.AreEqual(baseGold + sellItem.ItemValue, player._Gold);
@@ -136,7 +140,7 @@ namespace DungeonGameTests
 		public void SellMultipleItemsWithSameName()
 		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Mage)
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage)
 			{
 				_Inventory = new List<IEquipment> {
 					new Armor(1, Armor.ArmorSlot.Back),
@@ -147,9 +151,9 @@ namespace DungeonGameTests
 			player._Inventory[0].ItemValue = 10;
 			player._Inventory[1]._Name = "cape";
 			player._Inventory[1].ItemValue = 5;
-			var room = new TownRoom("test", "test",
+			TownRoom room = new TownRoom("test", "test",
 				new Vendor("test", "test", Vendor.VendorType.Armorer));
-			var input = new[] { "sell", "cape", "2" };
+			string[] input = new[] { "sell", "cape", "2" };
 			room._Vendor.SellItem(player, input);
 			Assert.AreEqual(1, player._Inventory.Count);
 			Assert.AreEqual(10, player._Inventory[0].ItemValue);

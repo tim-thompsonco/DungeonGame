@@ -9,15 +9,15 @@ namespace DungeonGameTests
 		public void UpgradeSpellTest()
 		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Mage);
-			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Mage);
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage);
+			Trainer trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Mage);
 			player._PlayerClass = Player.PlayerClassType.Archer;
 			const string spellName = "fireball";
 			trainer.UpgradeSpell(player, spellName);
 			Assert.AreEqual("You can't upgrade spells. You're not a mage!",
 					OutputHandler.Display.Output[0][2]);
 			player._PlayerClass = Player.PlayerClassType.Mage;
-			var spellIndex = player._Spellbook.FindIndex(
+			int spellIndex = player._Spellbook.FindIndex(
 				f => f.Name == spellName);
 			Assert.AreEqual(25, player._Spellbook[spellIndex].Offensive.Amount);
 			Assert.AreEqual(5, player._Spellbook[spellIndex].Offensive.AmountOverTime);
@@ -46,15 +46,15 @@ namespace DungeonGameTests
 		public void UpgradeAbilityTest()
 		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Archer);
-			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Archer);
+			Player player = new Player("placeholder", Player.PlayerClassType.Archer);
+			Trainer trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Archer);
 			player._PlayerClass = Player.PlayerClassType.Mage;
 			const string abilityName = "distance";
 			trainer.UpgradeAbility(player, abilityName);
 			Assert.AreEqual("You can't upgrade abilities. You're not a warrior or archer!",
 				OutputHandler.Display.Output[0][2]);
 			player._PlayerClass = Player.PlayerClassType.Archer;
-			var abilityIndex = player._Abilities.FindIndex(
+			int abilityIndex = player._Abilities.FindIndex(
 				f => f.Name == abilityName || f.Name.Contains(abilityName));
 			Assert.AreEqual(25, player._Abilities[abilityIndex].Offensive.Amount);
 			Assert.AreEqual(50, player._Abilities[abilityIndex].Offensive.ChanceToSucceed);
@@ -83,15 +83,15 @@ namespace DungeonGameTests
 		public void TrainAbilityTest()
 		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
-			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Warrior);
+			Player player = new Player("placeholder", Player.PlayerClassType.Warrior);
+			Trainer trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Warrior);
 			player._PlayerClass = Player.PlayerClassType.Mage;
 			const string abilityName = "bandage";
 			trainer.TrainAbility(player, abilityName);
 			Assert.AreEqual("You can't train abilities. You're not a warrior or archer!",
 				OutputHandler.Display.Output[0][2]);
 			player._PlayerClass = Player.PlayerClassType.Warrior;
-			var abilityIndex = player._Abilities.FindIndex(
+			int abilityIndex = player._Abilities.FindIndex(
 				f => f.Name == abilityName || f.Name.Contains(abilityName));
 			Assert.AreEqual(-1, abilityIndex);
 			player._Gold = 0;
@@ -118,13 +118,13 @@ namespace DungeonGameTests
 		public void TrainSpellTest()
 		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Warrior);
-			var trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Mage);
+			Player player = new Player("placeholder", Player.PlayerClassType.Warrior);
+			Trainer trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Mage);
 			const string spellName = "frost nova";
 			trainer.TrainSpell(player, spellName);
 			Assert.AreEqual("You can't train spells. You're not a mage!", OutputHandler.Display.Output[0][2]);
 			player = new Player("placeholder", Player.PlayerClassType.Mage);
-			var spellIndex = player._Spellbook.FindIndex(
+			int spellIndex = player._Spellbook.FindIndex(
 				f => f.Name == spellName || f.Name.Contains(spellName));
 			Assert.AreEqual(-1, spellIndex);
 			player._Gold = 0;

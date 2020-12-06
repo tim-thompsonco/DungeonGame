@@ -21,41 +21,41 @@ namespace DungeonGameTests
 			Assert.AreEqual(100, GameHandler.RoundNumber(104));
 			/* Test _Monster constructor HP and exp smoothing
 			if values smoothed correctly, % should be 0 */
-			var monster = new Monster(1, Monster.MonsterType.Skeleton);
+			Monster monster = new Monster(1, Monster.MonsterType.Skeleton);
 			MonsterBuilder.BuildMonster(monster);
 			Assert.AreEqual(0, monster._MaxHitPoints % 10);
 			Assert.AreEqual(0, monster._ExperienceProvided % 10);
 			// Test consumable potion creation
-			var potion = new Consumable(3, Consumable.PotionType.Health);
+			Consumable potion = new Consumable(3, Consumable.PotionType.Health);
 			Assert.AreEqual(25, potion.ItemValue);
 			Assert.AreEqual("minor health potion", potion._Name);
 			Assert.AreEqual(50, potion.RestoreHealth.RestoreHealthAmt);
-			var potionTwo = new Consumable(4, Consumable.PotionType.Health);
+			Consumable potionTwo = new Consumable(4, Consumable.PotionType.Health);
 			Assert.AreEqual(50, potionTwo.ItemValue);
 			Assert.AreEqual("health potion", potionTwo._Name);
 			Assert.AreEqual(100, potionTwo.RestoreHealth.RestoreHealthAmt);
-			var potionThree = new Consumable(6, Consumable.PotionType.Health);
+			Consumable potionThree = new Consumable(6, Consumable.PotionType.Health);
 			Assert.AreEqual(50, potionThree.ItemValue);
 			Assert.AreEqual("health potion", potionThree._Name);
 			Assert.AreEqual(100, potionThree.RestoreHealth.RestoreHealthAmt);
-			var potionFour = new Consumable(7, Consumable.PotionType.Health);
+			Consumable potionFour = new Consumable(7, Consumable.PotionType.Health);
 			Assert.AreEqual(75, potionFour.ItemValue);
 			Assert.AreEqual("greater health potion", potionFour._Name);
 			Assert.AreEqual(150, potionFour.RestoreHealth.RestoreHealthAmt);
 			// Test consumable gem creation
-			var gem = new Loot(1, Loot.GemType.Amethyst);
+			Loot gem = new Loot(1, Loot.GemType.Amethyst);
 			Assert.AreEqual(20, gem.ItemValue);
 			Assert.AreEqual("chipped amethyst", gem._Name);
-			var gemTwo = new Loot(3, Loot.GemType.Amethyst);
+			Loot gemTwo = new Loot(3, Loot.GemType.Amethyst);
 			Assert.AreEqual(60, gemTwo.ItemValue);
 			Assert.AreEqual("chipped amethyst", gemTwo._Name);
-			var gemThree = new Loot(4, Loot.GemType.Amethyst);
+			Loot gemThree = new Loot(4, Loot.GemType.Amethyst);
 			Assert.AreEqual(80, gemThree.ItemValue);
 			Assert.AreEqual("dull amethyst", gemThree._Name);
-			var gemFour = new Loot(6, Loot.GemType.Amethyst);
+			Loot gemFour = new Loot(6, Loot.GemType.Amethyst);
 			Assert.AreEqual(120, gemFour.ItemValue);
 			Assert.AreEqual("dull amethyst", gemFour._Name);
-			var gemFive = new Loot(7, Loot.GemType.Amethyst);
+			Loot gemFive = new Loot(7, Loot.GemType.Amethyst);
 			Assert.AreEqual(140, gemFive.ItemValue);
 			Assert.AreEqual("amethyst", gemFive._Name);
 		}
@@ -64,18 +64,18 @@ namespace DungeonGameTests
 		{
 			// Test armor creation values
 			// Test case 1, level 1 head cloth armor, armor rating should be 4 to 6
-			var testArrClothHead = new[] { 4, 5, 6 };
-			var testArmorClothHead = new Armor(
+			int[] testArrClothHead = new[] { 4, 5, 6 };
+			Armor testArmorClothHead = new Armor(
 				1, Armor.ArmorType.Cloth, Armor.ArmorSlot.Head);
 			CollectionAssert.Contains(testArrClothHead, testArmorClothHead.ArmorRating);
 			// Test case 2, level 3 chest leather armor, armor rating should be 15 to 17
-			var testArrLeatherChest = new[] { 15, 16, 17 };
-			var testArmorLeatherChest = new Armor(
+			int[] testArrLeatherChest = new[] { 15, 16, 17 };
+			Armor testArmorLeatherChest = new Armor(
 				3, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest);
 			CollectionAssert.Contains(testArrLeatherChest, testArmorLeatherChest.ArmorRating);
 			// Test case 3, level 2 legs plate armor, armor rating should be 12 to 14
-			var testArrPlateLegs = new[] { 12, 13, 14 };
-			var testArmorPlateLegs = new Armor(
+			int[] testArrPlateLegs = new[] { 12, 13, 14 };
+			Armor testArmorPlateLegs = new Armor(
 				2, Armor.ArmorType.Plate, Armor.ArmorSlot.Legs);
 			CollectionAssert.Contains(testArrPlateLegs, testArmorPlateLegs.ArmorRating);
 		}
@@ -85,9 +85,9 @@ namespace DungeonGameTests
 			// Test weapon creation values
 			// Test case 1, weapon on level 1 skeleton based on possible weapon types
 			// _Name check
-			var skeletonLevelOne = new Monster(1, Monster.MonsterType.Skeleton);
+			Monster skeletonLevelOne = new Monster(1, Monster.MonsterType.Skeleton);
 			MonsterBuilder.BuildMonster(skeletonLevelOne);
-			var skeletonWeapon = skeletonLevelOne._MonsterWeapon;
+			Weapon skeletonWeapon = skeletonLevelOne._MonsterWeapon;
 			switch (skeletonWeapon.Quality)
 			{
 				case 1:
@@ -103,7 +103,6 @@ namespace DungeonGameTests
 							Assert.AreEqual("chipped sword (2H)", skeletonWeapon._Name);
 							break;
 						case Weapon.WeaponType.Axe:
-							break;
 						case Weapon.WeaponType.Bow:
 							break;
 						default:
@@ -123,7 +122,6 @@ namespace DungeonGameTests
 							Assert.AreEqual("chipped sturdy sword (2H)", skeletonWeapon._Name);
 							break;
 						case Weapon.WeaponType.Axe:
-							break;
 						case Weapon.WeaponType.Bow:
 							break;
 						default:
@@ -143,7 +141,6 @@ namespace DungeonGameTests
 							Assert.AreEqual("chipped fine sword (2H)", skeletonWeapon._Name);
 							break;
 						case Weapon.WeaponType.Axe:
-							break;
 						case Weapon.WeaponType.Bow:
 							break;
 						default:
@@ -153,9 +150,9 @@ namespace DungeonGameTests
 			}
 			// Test case 2, weapon on level 1 spider based on possible weapon types
 			// _Name check
-			var spiderLevelOne = new Monster(1, Monster.MonsterType.Spider);
+			Monster spiderLevelOne = new Monster(1, Monster.MonsterType.Spider);
 			MonsterBuilder.BuildMonster(spiderLevelOne);
-			var spiderWeapon = spiderLevelOne._MonsterWeapon;
+			Weapon spiderWeapon = spiderLevelOne._MonsterWeapon;
 			switch (spiderWeapon.Quality)
 			{
 				case 1:
@@ -165,11 +162,8 @@ namespace DungeonGameTests
 							Assert.AreEqual("venomous fang", spiderWeapon._Name);
 							break;
 						case Weapon.WeaponType.OneHandedSword:
-							break;
 						case Weapon.WeaponType.TwoHandedSword:
-							break;
 						case Weapon.WeaponType.Axe:
-							break;
 						case Weapon.WeaponType.Bow:
 							break;
 						default:
@@ -183,11 +177,8 @@ namespace DungeonGameTests
 							Assert.AreEqual("sturdy venomous fang", spiderWeapon._Name);
 							break;
 						case Weapon.WeaponType.OneHandedSword:
-							break;
 						case Weapon.WeaponType.TwoHandedSword:
-							break;
 						case Weapon.WeaponType.Axe:
-							break;
 						case Weapon.WeaponType.Bow:
 							break;
 						default:
@@ -201,11 +192,8 @@ namespace DungeonGameTests
 							Assert.AreEqual("fine venomous fang", spiderWeapon._Name);
 							break;
 						case Weapon.WeaponType.OneHandedSword:
-							break;
 						case Weapon.WeaponType.TwoHandedSword:
-							break;
 						case Weapon.WeaponType.Axe:
-							break;
 						case Weapon.WeaponType.Bow:
 							break;
 						default:
@@ -215,24 +203,21 @@ namespace DungeonGameTests
 			}
 			// Test case 3, weapon on level 3 zombie based on possible weapon types
 			// _Name check
-			var zombieLevelThree = new Monster(3, Monster.MonsterType.Zombie);
+			Monster zombieLevelThree = new Monster(3, Monster.MonsterType.Zombie);
 			MonsterBuilder.BuildMonster(zombieLevelThree);
-			var zombieWeapon = zombieLevelThree._MonsterWeapon;
+			Weapon zombieWeapon = zombieLevelThree._MonsterWeapon;
 			switch (zombieWeapon.Quality)
 			{
 				case 1:
 					switch (zombieWeapon.WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
-							break;
 						case Weapon.WeaponType.OneHandedSword:
-							break;
 						case Weapon.WeaponType.TwoHandedSword:
+						case Weapon.WeaponType.Bow:
 							break;
 						case Weapon.WeaponType.Axe:
 							Assert.AreEqual("worn axe", zombieWeapon._Name);
-							break;
-						case Weapon.WeaponType.Bow:
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -242,15 +227,12 @@ namespace DungeonGameTests
 					switch (zombieWeapon.WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
-							break;
 						case Weapon.WeaponType.OneHandedSword:
-							break;
 						case Weapon.WeaponType.TwoHandedSword:
+						case Weapon.WeaponType.Bow:
 							break;
 						case Weapon.WeaponType.Axe:
 							Assert.AreEqual("worn sturdy axe", zombieWeapon._Name);
-							break;
-						case Weapon.WeaponType.Bow:
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -260,15 +242,12 @@ namespace DungeonGameTests
 					switch (zombieWeapon.WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
-							break;
 						case Weapon.WeaponType.OneHandedSword:
-							break;
 						case Weapon.WeaponType.TwoHandedSword:
+						case Weapon.WeaponType.Bow:
 							break;
 						case Weapon.WeaponType.Axe:
 							Assert.AreEqual("worn fine axe", zombieWeapon._Name);
-							break;
-						case Weapon.WeaponType.Bow:
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -277,15 +256,16 @@ namespace DungeonGameTests
 			}
 			// Test case 3, weapon on level 3 zombie based on possible weapon types
 			// _Name check
-			var demonLevelTwo = new Monster(2, Monster.MonsterType.Demon);
+			Monster demonLevelTwo = new Monster(2, Monster.MonsterType.Demon);
 			MonsterBuilder.BuildMonster(demonLevelTwo);
-			var demonWeapon = demonLevelTwo._MonsterWeapon;
+			Weapon demonWeapon = demonLevelTwo._MonsterWeapon;
 			switch (demonWeapon.Quality)
 			{
 				case 1:
 					switch (demonWeapon.WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
+						case Weapon.WeaponType.Bow:
 							break;
 						case Weapon.WeaponType.OneHandedSword:
 							Assert.AreEqual("dull sword (1H)", demonWeapon._Name);
@@ -296,8 +276,6 @@ namespace DungeonGameTests
 						case Weapon.WeaponType.Axe:
 							Assert.AreEqual("dull axe", demonWeapon._Name);
 							break;
-						case Weapon.WeaponType.Bow:
-							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
@@ -306,6 +284,7 @@ namespace DungeonGameTests
 					switch (demonWeapon.WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
+						case Weapon.WeaponType.Bow:
 							break;
 						case Weapon.WeaponType.OneHandedSword:
 							Assert.AreEqual("dull sturdy sword (1H)", demonWeapon._Name);
@@ -316,8 +295,6 @@ namespace DungeonGameTests
 						case Weapon.WeaponType.Axe:
 							Assert.AreEqual("dull sturdy axe", demonWeapon._Name);
 							break;
-						case Weapon.WeaponType.Bow:
-							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
@@ -326,6 +303,7 @@ namespace DungeonGameTests
 					switch (demonWeapon.WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
+						case Weapon.WeaponType.Bow:
 							break;
 						case Weapon.WeaponType.OneHandedSword:
 							Assert.AreEqual("dull fine sword (1H)", demonWeapon._Name);
@@ -335,8 +313,6 @@ namespace DungeonGameTests
 							break;
 						case Weapon.WeaponType.Axe:
 							Assert.AreEqual("dull fine axe", demonWeapon._Name);
-							break;
-						case Weapon.WeaponType.Bow:
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -348,7 +324,7 @@ namespace DungeonGameTests
 		public void PlayerMaxLevelUnitTest()
 		{
 			/* Player should not be able to go beyond level 10 */
-			var player = new Player("placeholder", Player.PlayerClassType.Mage) { _Level = 10 };
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage) { _Level = 10 };
 			player._Experience = player._ExperienceToLevel - 1;
 			player._Experience++;
 			PlayerHandler.LevelUpCheck(player);
@@ -357,14 +333,14 @@ namespace DungeonGameTests
 		[Test]
 		public void CheckStatusUnitTest()
 		{
-			var player = new Player("placeholder", Player.PlayerClassType.Mage);
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage);
 			RoomHandler.Rooms = new RoomBuilder(
 				100, 5, 0, 4, 0).RetrieveSpawnRooms();
 			GameHandler.CheckStatus(player);
 			player._Spellbook.Add(new PlayerSpell(
 				"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 1));
 			player.CastSpell("reflect");
-			for (var i = 0; i <= 30; i++)
+			for (int i = 0; i <= 30; i++)
 			{
 				GameHandler.CheckStatus(player);
 			}
@@ -373,13 +349,13 @@ namespace DungeonGameTests
 		public void EffectUserOutputUnitTest()
 		{
 			OutputHandler.Display.ClearUserOutput();
-			var player = new Player("placeholder", Player.PlayerClassType.Mage);
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage);
 			RoomHandler.Rooms = new Dictionary<Coordinate, IRoom> {
 				{new Coordinate(1, 1, 1), new DungeonRoom(1, 1)}
 			};
 			player._Spellbook.Add(new PlayerSpell(
 				"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 1));
-			var defaultEffectOutput = OutputHandler.ShowEffects(player);
+			UserOutput defaultEffectOutput = OutputHandler.ShowEffects(player);
 			Assert.AreEqual("Player _Effects:", defaultEffectOutput.Output[0][2]);
 			Assert.AreEqual("None.", defaultEffectOutput.Output[1][2]);
 			player.CastSpell("reflect");
@@ -388,7 +364,7 @@ namespace DungeonGameTests
 			Assert.AreEqual("Player _Effects:", defaultEffectOutput.Output[0][2]);
 			Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
 			Assert.AreEqual("(30 seconds) Reflect", defaultEffectOutput.Output[1][2]);
-			for (var i = 0; i < 10; i++)
+			for (int i = 0; i < 10; i++)
 			{
 				GameHandler.CheckStatus(player);
 			}
@@ -408,7 +384,7 @@ namespace DungeonGameTests
 		[Test]
 		public void SaveLoadGameUnitTest()
 		{
-			var player = new Player("placeholder", Player.PlayerClassType.Mage);
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage);
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
 			RoomHandler.Rooms = new Dictionary<Coordinate, IRoom> {
@@ -428,60 +404,60 @@ namespace DungeonGameTests
 		[Test]
 		public void MonsterResistanceUnitTest()
 		{
-			var player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
+			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
-			var monster = new Monster(3, Monster.MonsterType.Demon)
+			Monster monster = new Monster(3, Monster.MonsterType.Demon)
 			{ _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (var item in monster._MonsterItems.Where(item => item.Equipped))
+			foreach (IEquipment item in monster._MonsterItems.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
 			Assert.AreEqual(monster._Level * 5, monster._FireResistance);
 			Assert.AreEqual(monster._Level * 5, monster._FrostResistance);
 			Assert.AreEqual(monster._Level * 5, monster._ArcaneResistance);
-			var arcaneResistance = monster._ArcaneResistance;
-			var resistanceMod = (100 - arcaneResistance) / 100.0;
-			var input = new[] { "cast", "lightning" };
-			var spellIndex = player._Spellbook.FindIndex(
+			int arcaneResistance = monster._ArcaneResistance;
+			double resistanceMod = (100 - arcaneResistance) / 100.0;
+			string[] input = new[] { "cast", "lightning" };
+			int spellIndex = player._Spellbook.FindIndex(
 				f => f.SpellCategory == PlayerSpell.SpellType.Lightning);
-			var spellName = InputHandler.ParseInput(input);
+			string spellName = InputHandler.ParseInput(input);
 			player.CastSpell(monster, spellName);
-			var reducedDamage = (int)(player._Spellbook[spellIndex].Offensive.Amount * resistanceMod);
+			int reducedDamage = (int)(player._Spellbook[spellIndex].Offensive.Amount * resistanceMod);
 			Assert.AreEqual(monster._HitPoints, monster._MaxHitPoints - reducedDamage);
 		}
 		[Test]
 		public void PlayerResistanceUnitTest()
 		{
-			var player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
+			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
 			GearHandler.EquipInitialGear(player);
 			OutputHandler.Display.ClearUserOutput();
-			var monster = new Monster(3, Monster.MonsterType.Elemental);
+			Monster monster = new Monster(3, Monster.MonsterType.Elemental);
 			while (monster._ElementalCategory != Monster.ElementalType.Air)
 			{
 				monster = new Monster(3, Monster.MonsterType.Elemental);
 			}
 			MonsterBuilder.BuildMonster(monster);
-			foreach (var item in player._Inventory.Where(item => item.Equipped))
+			foreach (IEquipment item in player._Inventory.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
 			Assert.AreEqual(player._Level * 5, player._FireResistance);
 			Assert.AreEqual(player._Level * 5, player._FrostResistance);
 			Assert.AreEqual(player._Level * 5, player._ArcaneResistance);
-			var arcaneResistance = player._ArcaneResistance;
-			var resistanceMod = (100 - arcaneResistance) / 100.0;
-			var spellIndex = monster._Spellbook.FindIndex(
+			int arcaneResistance = player._ArcaneResistance;
+			double resistanceMod = (100 - arcaneResistance) / 100.0;
+			int spellIndex = monster._Spellbook.FindIndex(
 				f => f.SpellCategory == MonsterSpell.SpellType.Lightning);
 			MonsterSpell.CastArcaneOffense(monster, player, spellIndex);
-			var reducedDamage = (int)(monster._Spellbook[spellIndex].Offensive.Amount * resistanceMod);
+			int reducedDamage = (int)(monster._Spellbook[spellIndex].Offensive.Amount * resistanceMod);
 			Assert.AreEqual(player._HitPoints, player._MaxHitPoints - reducedDamage);
 		}
 		[Test]
 		public void MonsterResistanceLevelUnitTest()
 		{
-			var monster = new Monster(1, Monster.MonsterType.Vampire);
+			Monster monster = new Monster(1, Monster.MonsterType.Vampire);
 			Assert.AreEqual(monster._Level * 5, monster._FireResistance);
 			Assert.AreEqual(monster._Level * 5, monster._FrostResistance);
 			Assert.AreEqual(monster._Level * 5, monster._ArcaneResistance);
