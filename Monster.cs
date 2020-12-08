@@ -174,7 +174,7 @@ namespace DungeonGame
 			}
 		}
 
-		public AttackOption DetermineAttack(Player player)
+		public AttackOption DetermineAttack(Player player, bool addRandomChance)
 		{
 			List<AttackOption> attackOptions = new List<AttackOption>();
 			if (_MonsterWeapon != null && _MonsterWeapon._Equipped)
@@ -252,19 +252,29 @@ namespace DungeonGame
 					}
 				}
 			}
-			attackOptions = attackOptions.OrderByDescending(attack => attack._DamageAmount).ToList();
-			int randomMonsterAttack = GameHandler.GetRandomNumber(1, 10);
-			if (randomMonsterAttack <= 5)
-			{
-				return attackOptions[0];
-			}
 
-			int randomAttackChoice = GameHandler.GetRandomNumber(0, attackOptions.Count - 1);
-			return attackOptions[randomAttackChoice];
+			// Sort and order attack options so that the one which causes the most damage is at the top
+			attackOptions = attackOptions.OrderByDescending(attack => attack._DamageAmount).ToList();
+
+			if (addRandomChance)
+			{
+				int randomMonsterAttack = GameHandler.GetRandomNumber(1, 10);
+
+				// If an element of random chance is required, provide a 50% chance of an attack being selected at random
+				if (randomMonsterAttack > 5)
+				{
+					int randomAttackChoice = GameHandler.GetRandomNumber(0, attackOptions.Count - 1);
+
+					return attackOptions[randomAttackChoice];
+				}
+			}
+			
+			// If an element of random chance is not selected, the attack option which causes the most damage is returned
+			return attackOptions[0];
 		}
 		public void Attack(Player player)
 		{
-			AttackOption attackOption = DetermineAttack(player);
+			AttackOption attackOption = DetermineAttack(player, true);
 			switch (attackOption._AttackCategory)
 			{
 				case AttackOption.AttackType.Physical:

@@ -14,10 +14,10 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Dragon);
 			MonsterBuilder.BuildMonster(monster);
 			OutputHandler.Display.ClearUserOutput();
-			AttackOption attackChoice = monster.DetermineAttack(player);
+			AttackOption attackChoice = monster.DetermineAttack(player, false);
 			Assert.AreEqual(AttackOption.AttackType.Spell, attackChoice._AttackCategory);
 			monster._EnergyPoints = 0;
-			attackChoice = monster.DetermineAttack(player);
+			attackChoice = monster.DetermineAttack(player, false);
 			Assert.AreEqual(AttackOption.AttackType.Physical, attackChoice._AttackCategory);
 		}
 		[Test]
