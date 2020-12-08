@@ -2,7 +2,7 @@
 {
 	public interface IRainbowGear
 	{
-		bool IsRainbowGear { get; set; }
+		bool _IsRainbowGear { get; set; }
 
 		void UpdateRainbowStats(Player player);
 	}

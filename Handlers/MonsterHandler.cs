@@ -29,17 +29,17 @@ namespace DungeonGame
 		public static int CheckArmorRating(Monster monster)
 		{
 			var totalArmorRating = 0;
-			if (monster._MonsterChestArmor != null && monster._MonsterChestArmor.Equipped)
+			if (monster._MonsterChestArmor != null && monster._MonsterChestArmor._Equipped)
 			{
-				totalArmorRating += monster._MonsterChestArmor.ArmorRating;
+				totalArmorRating += monster._MonsterChestArmor._ArmorRating;
 			}
-			if (monster._MonsterHeadArmor != null && monster._MonsterHeadArmor.Equipped)
+			if (monster._MonsterHeadArmor != null && monster._MonsterHeadArmor._Equipped)
 			{
-				totalArmorRating += monster._MonsterHeadArmor.ArmorRating;
+				totalArmorRating += monster._MonsterHeadArmor._ArmorRating;
 			}
-			if (monster._MonsterLegArmor != null && monster._MonsterLegArmor.Equipped)
+			if (monster._MonsterLegArmor != null && monster._MonsterLegArmor._Equipped)
 			{
-				totalArmorRating += monster._MonsterLegArmor.ArmorRating;
+				totalArmorRating += monster._MonsterLegArmor._ArmorRating;
 			}
 			return totalArmorRating;
 		}

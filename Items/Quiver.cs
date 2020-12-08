@@ -2,13 +2,13 @@
 {
 	public class Quiver : IEquipment
 	{
-		public bool Equipped { get; set; }
-		public int ItemValue { get; set; }
+		public bool _Equipped { get; set; }
+		public int _ItemValue { get; set; }
 		public int Quantity { get; set; }
 		public int MaxQuantity { get; set; }
-		public int Weight { get; set; }
+		public int _Weight { get; set; }
 		public string _Name { get; set; }
-		public string Desc { get; set; }
+		public string _Desc { get; set; }
 
 		// Default constructor for JSON serialization
 		public Quiver() { }
@@ -17,9 +17,9 @@
 			this._Name = name;
 			this.Quantity = quantity;
 			this.MaxQuantity = maxQuantity;
-			this.ItemValue = itemValue;
-			this.Weight = 1;
-			this.Desc = "A " + this._Name + " that can hold " + this.MaxQuantity + " arrows.";
+			this._ItemValue = itemValue;
+			this._Weight = 1;
+			this._Desc = "A " + this._Name + " that can hold " + this.MaxQuantity + " arrows.";
 		}
 
 		public bool HaveArrows()

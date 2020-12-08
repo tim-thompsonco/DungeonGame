@@ -217,18 +217,18 @@ namespace DungeonGame
 			int attackAmount = 0;
 			try
 			{
-				if (_PlayerWeapon.Equipped && _PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow)
+				if (_PlayerWeapon._Equipped && _PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow)
 				{
 					attackAmount = _PlayerWeapon.Attack();
 				}
-				if (_PlayerWeapon.Equipped &&
+				if (_PlayerWeapon._Equipped &&
 					_PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
 					_PlayerQuiver.HaveArrows())
 				{
 					_PlayerQuiver.UseArrow();
 					attackAmount = _PlayerWeapon.Attack();
 				}
-				if (_PlayerWeapon.Equipped &&
+				if (_PlayerWeapon._Equipped &&
 					_PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
 					!_PlayerQuiver.HaveArrows())
 				{

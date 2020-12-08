@@ -26,21 +26,21 @@ namespace DungeonGame
 			switch (this.KitCategory)
 			{
 				case KitType.Cloth:
-					if (armor.ArmorGroup == Armor.ArmorType.Cloth)
+					if (armor._ArmorGroup == Armor.ArmorType.Cloth)
 					{
-						armor.ArmorRating += this.ChangeAmount;
+						armor._ArmorRating += this.ChangeAmount;
 					}
 					break;
 				case KitType.Leather:
-					if (armor.ArmorGroup == Armor.ArmorType.Leather)
+					if (armor._ArmorGroup == Armor.ArmorType.Leather)
 					{
-						armor.ArmorRating += this.ChangeAmount;
+						armor._ArmorRating += this.ChangeAmount;
 					}
 					break;
 				case KitType.Plate:
-					if (armor.ArmorGroup == Armor.ArmorType.Plate)
+					if (armor._ArmorGroup == Armor.ArmorType.Plate)
 					{
-						armor.ArmorRating += this.ChangeAmount;
+						armor._ArmorRating += this.ChangeAmount;
 					}
 					break;
 				default:

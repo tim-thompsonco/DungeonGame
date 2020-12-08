@@ -177,7 +177,7 @@ namespace DungeonGame
 		public AttackOption DetermineAttack(Player player)
 		{
 			List<AttackOption> attackOptions = new List<AttackOption>();
-			if (_MonsterWeapon != null && _MonsterWeapon.Equipped)
+			if (_MonsterWeapon != null && _MonsterWeapon._Equipped)
 			{
 				attackOptions.Add(new
 					AttackOption(AttackOption.AttackType.Physical,
@@ -310,18 +310,18 @@ namespace DungeonGame
 			int attackAmount = 0;
 			try
 			{
-				if (_MonsterWeapon.Equipped && _MonsterWeapon.WeaponGroup != Weapon.WeaponType.Bow)
+				if (_MonsterWeapon._Equipped && _MonsterWeapon.WeaponGroup != Weapon.WeaponType.Bow)
 				{
 					attackAmount += _MonsterWeapon.Attack();
 				}
-				if (_MonsterWeapon.Equipped &&
+				if (_MonsterWeapon._Equipped &&
 					_MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
 					_MonsterQuiver.HaveArrows())
 				{
 					_MonsterQuiver.UseArrow();
 					attackAmount += _MonsterWeapon.Attack();
 				}
-				if (_MonsterWeapon.Equipped &&
+				if (_MonsterWeapon._Equipped &&
 					_MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
 					!_MonsterQuiver.HaveArrows())
 				{
@@ -467,7 +467,7 @@ namespace DungeonGame
 				expGainString);
 			foreach (IEquipment loot in _MonsterItems)
 			{
-				loot.Equipped = false;
+				loot._Equipped = false;
 			}
 			_Name = $"Dead {_Name}";
 			_Desc = "A corpse of a monster you killed.";

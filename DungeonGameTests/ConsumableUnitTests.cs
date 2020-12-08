@@ -224,7 +224,7 @@ namespace DungeonGameTests
 			int kitAmount = player._Consumables[0].ChangeArmor.ChangeAmount;
 			string kitName = player._Consumables[0]._Name;
 			string[] input = new[] { "enhance", "doesn't exist", kitName };
-			int armorAmount = armor.ArmorRating;
+			int armorAmount = armor._ArmorRating;
 			GearHandler.UseArmorKit(player, input);
 			const string upgradeFail = "What armor did you want to upgrade?";
 			Assert.AreEqual(upgradeFail, OutputHandler.Display.Output[0][2]);
@@ -238,7 +238,7 @@ namespace DungeonGameTests
 			GearHandler.UseArmorKit(player, input);
 			string upgradeSuccess = $"You upgraded {armorName} with an armor kit.";
 			Assert.AreEqual(upgradeSuccess, OutputHandler.Display.Output[2][2]);
-			Assert.AreEqual(armorAmount + kitAmount, armor.ArmorRating);
+			Assert.AreEqual(armorAmount + kitAmount, armor._ArmorRating);
 			Assert.IsEmpty(player._Consumables);
 			player._Consumables.Add(new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Armor,
 				ChangeArmor.KitType.Leather));
@@ -303,7 +303,7 @@ namespace DungeonGameTests
 			player._Inventory.Add(new Weapon(1, Weapon.WeaponType.Bow));
 			weaponIndex = player._Inventory.FindIndex(f => f._Name.Contains("bow"));
 			weapon = player._Inventory[weaponIndex] as Weapon;
-			weapon.Equipped = true;
+			weapon._Equipped = true;
 			weaponName = textInfo.ToTitleCase(player._Inventory[weaponIndex]._Name);
 			input = new[] { "enhance", weaponName, kitName };
 			GearHandler.UseWeaponKit(player, input);

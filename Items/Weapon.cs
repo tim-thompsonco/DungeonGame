@@ -21,18 +21,18 @@ namespace DungeonGame
 			Bow
 		}
 		public string _Name { get; set; }
-		public string Desc { get; set; }
+		public string _Desc { get; set; }
 		public int RegDamage { get; set; }
-		public int ItemValue { get; set; }
+		public int _ItemValue { get; set; }
 		public DamageType DamageGroup { get; set; }
 		public WeaponType WeaponGroup { get; set; }
 		public double CritMultiplier { get; set; }
-		public bool Equipped { get; set; }
+		public bool _Equipped { get; set; }
 		public int Level { get; set; }
 		public int Durability { get; set; }
 		public int Quality { get; set; }
-		public int Weight { get; set; }
-		public bool IsRainbowGear { get; set; }
+		public int _Weight { get; set; }
+		public bool _IsRainbowGear { get; set; }
 
 		// Default constructor for JSON serialization
 		public Weapon() { }
@@ -41,7 +41,7 @@ namespace DungeonGame
 			this.Level = level;
 			this.WeaponGroup = weaponType;
 			this.DamageGroup = DamageType.Physical;
-			this.Weight = this.WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
+			this._Weight = this.WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
 			this.Durability = 100;
 			var randomNum = GameHandler.GetRandomNumber(1, 100);
 			var randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
@@ -63,17 +63,17 @@ namespace DungeonGame
 				this.CritMultiplier = 1.1;
 				this.Quality = 1;
 			}
-			this.ItemValue = this.RegDamage;
+			this._ItemValue = this.RegDamage;
 			this.BuildWeaponName();
-			this.Desc = "A " + this._Name + " that causes damage when you hit stuff with it.";
+			this._Desc = "A " + this._Name + " that causes damage when you hit stuff with it.";
 		}
 		public Weapon(WeaponType weaponType, bool isRainbowGear, Player player)
 		{
 			this.Level = player._Level;
-			this.IsRainbowGear = isRainbowGear;
+			this._IsRainbowGear = isRainbowGear;
 			this.WeaponGroup = weaponType;
 			this.DamageGroup = DamageType.Physical;
-			this.Weight = this.WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
+			this._Weight = this.WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
 			this.Durability = 100;
 			var randomNum = GameHandler.GetRandomNumber(1, 100);
 			var randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
@@ -97,9 +97,9 @@ namespace DungeonGame
 			}
 			// Add modifier for rainbow gear to enhance weapon damage
 			this.RegDamage += 15;
-			this.ItemValue = this.RegDamage;
+			this._ItemValue = this.RegDamage;
 			this.BuildWeaponName("rainbow");
-			this.Desc = "A " + this._Name + " that causes damage when you hit stuff with it.";
+			this._Desc = "A " + this._Name + " that causes damage when you hit stuff with it.";
 		}
 		public Weapon(int level, WeaponType weaponType, Monster.MonsterType monsterType)
 			: this(level, weaponType)
@@ -217,7 +217,7 @@ namespace DungeonGame
 		}
 		public int Attack()
 		{
-			if (!this.Equipped) return 0;
+			if (!this._Equipped) return 0;
 			double attackDamage = this.RegDamage;
 			var chanceToCrit = GameHandler.GetRandomNumber(1, 100);
 			if (chanceToCrit <= 25) attackDamage *= this.CritMultiplier;
@@ -234,7 +234,7 @@ namespace DungeonGame
 			this.Quality = 3;
 			// Add modifier for rainbow gear to enhance weapon damage
 			this.RegDamage += 15;
-			this.ItemValue = this.RegDamage;
+			this._ItemValue = this.RegDamage;
 		}
 	}
 }

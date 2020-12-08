@@ -377,7 +377,7 @@ namespace DungeonGame
 						while (_Monster._MonsterItems.Count > 0)
 						{
 							int playerWeight = PlayerHandler.GetInventoryWeight(player);
-							int itemWeight = _Monster._MonsterItems[0].Weight;
+							int itemWeight = _Monster._MonsterItems[0]._Weight;
 							if (playerWeight + itemWeight > player._MaxCarryWeight)
 							{
 								OutputHandler.Display.StoreUserOutput(

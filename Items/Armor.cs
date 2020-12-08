@@ -22,34 +22,34 @@ namespace DungeonGame
 			Plate
 		}
 		public string _Name { get; set; }
-		public string Desc { get; set; }
-		public ArmorSlot ArmorCategory { get; set; }
-		public ArmorType ArmorGroup { get; set; }
-		public int ItemValue { get; set; }
-		public int ArmorRating { get; set; }
-		public bool Equipped { get; set; }
-		public int Durability { get; set; }
-		public int Level { get; set; }
-		public int Weight { get; set; }
-		public bool IsRainbowGear { get; set; }
+		public string _Desc { get; set; }
+		public ArmorSlot _ArmorCategory { get; set; }
+		public ArmorType _ArmorGroup { get; set; }
+		public int _ItemValue { get; set; }
+		public int _ArmorRating { get; set; }
+		public bool _Equipped { get; set; }
+		public int _Durability { get; set; }
+		public int _Level { get; set; }
+		public int _Weight { get; set; }
+		public bool _IsRainbowGear { get; set; }
 
 		// Default constructor for JSON serialization
 		public Armor() { }
 		// Constructor to randomly create armor for monsters
 		public Armor(int level, ArmorSlot armorCategory)
 		{
-			this.Level = level;
-			var randomArmorNum = GameHandler.GetRandomNumber(1, 3);
-			this.ArmorGroup = randomArmorNum switch
+			_Level = level;
+			int randomArmorNum = GameHandler.GetRandomNumber(1, 3);
+			_ArmorGroup = randomArmorNum switch
 			{
 				1 => ArmorType.Cloth,
 				2 => ArmorType.Leather,
 				3 => ArmorType.Plate,
 				_ => throw new ArgumentOutOfRangeException()
 			};
-			this.ArmorCategory = armorCategory;
+			_ArmorCategory = armorCategory;
 			// Base armor rating before random attribute or armor type
-			this.ArmorRating = this.ArmorCategory switch
+			_ArmorRating = _ArmorCategory switch
 			{
 				ArmorSlot.Back => 1,
 				ArmorSlot.Chest => 5,
@@ -61,7 +61,7 @@ namespace DungeonGame
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add armor type armor rating to base value
-			this.ArmorRating += this.ArmorGroup switch
+			_ArmorRating += _ArmorGroup switch
 			{
 				ArmorType.Cloth => 0,
 				ArmorType.Leather => 2,
@@ -69,23 +69,23 @@ namespace DungeonGame
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			this.ArmorRating += GameHandler.GetRandomNumber(2, 4);
+			_ArmorRating += GameHandler.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
-			this.ArmorRating += level - 1;
-			this.ItemValue = this.ArmorRating;
-			this.Durability = 100;
-			this.BuildArmorName();
-			this.SetArmorWeight();
-			this.Desc = "A " + this._Name + ".";
+			_ArmorRating += level - 1;
+			_ItemValue = _ArmorRating;
+			_Durability = 100;
+			BuildArmorName();
+			SetArmorWeight();
+			_Desc = $"A {_Name}.";
 		}
 		// Constructor to define specific armor slot for players, vendors
 		public Armor(int level, ArmorType armorGroup, ArmorSlot armorCategory)
 		{
-			this.Level = level;
-			this.ArmorGroup = armorGroup;
-			this.ArmorCategory = armorCategory;
+			_Level = level;
+			_ArmorGroup = armorGroup;
+			_ArmorCategory = armorCategory;
 			// Base armor rating before random attribute or armor type
-			this.ArmorRating = this.ArmorCategory switch
+			_ArmorRating = _ArmorCategory switch
 			{
 				ArmorSlot.Back => 1,
 				ArmorSlot.Chest => 5,
@@ -97,7 +97,7 @@ namespace DungeonGame
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add armor type armor rating to base value
-			this.ArmorRating += this.ArmorGroup switch
+			_ArmorRating += _ArmorGroup switch
 			{
 				ArmorType.Cloth => 0,
 				ArmorType.Leather => 2,
@@ -105,23 +105,23 @@ namespace DungeonGame
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			this.ArmorRating += GameHandler.GetRandomNumber(2, 4);
+			_ArmorRating += GameHandler.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
-			this.ArmorRating += (level - 1) * 3;
-			this.ItemValue = this.ArmorRating;
-			this.Durability = 100;
-			this.BuildArmorName();
-			this.SetArmorWeight();
-			this.Desc = "A " + this._Name + ".";
+			_ArmorRating += (level - 1) * 3;
+			_ItemValue = _ArmorRating;
+			_Durability = 100;
+			BuildArmorName();
+			SetArmorWeight();
+			_Desc = $"A {_Name}.";
 		}
 		public Armor(ArmorType armorGroup, ArmorSlot armorCategory, bool isRainbowGear, Player player)
 		{
-			this.Level = player._Level;
-			this.IsRainbowGear = isRainbowGear;
-			this.ArmorGroup = armorGroup;
-			this.ArmorCategory = armorCategory;
+			_Level = player._Level;
+			_IsRainbowGear = isRainbowGear;
+			_ArmorGroup = armorGroup;
+			_ArmorCategory = armorCategory;
 			// Base armor rating before random attribute or armor type
-			this.ArmorRating = this.ArmorCategory switch
+			_ArmorRating = _ArmorCategory switch
 			{
 				ArmorSlot.Back => 1,
 				ArmorSlot.Chest => 5,
@@ -133,7 +133,7 @@ namespace DungeonGame
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add armor type armor rating to base value
-			this.ArmorRating += this.ArmorGroup switch
+			_ArmorRating += _ArmorGroup switch
 			{
 				ArmorType.Cloth => 0,
 				ArmorType.Leather => 2,
@@ -141,31 +141,31 @@ namespace DungeonGame
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			this.ArmorRating += GameHandler.GetRandomNumber(2, 4);
+			_ArmorRating += GameHandler.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
-			this.ArmorRating += (this.Level - 1) * 3;
+			_ArmorRating += (_Level - 1) * 3;
 			// Add modifier for rainbow gear to enhance armor rating
-			this.ArmorRating += 5;
-			this.ItemValue = this.ArmorRating;
-			this.Durability = 100;
-			this.BuildArmorName("rainbow");
-			this.SetArmorWeight();
-			this.Desc = "A " + this._Name + ".";
+			_ArmorRating += 5;
+			_ItemValue = _ArmorRating;
+			_Durability = 100;
+			BuildArmorName("rainbow");
+			SetArmorWeight();
+			_Desc = $"A {_Name}.";
 		}
 
 		private void SetArmorWeight()
 		{
-			switch (this.ArmorGroup)
+			switch (_ArmorGroup)
 			{
 				case ArmorType.Cloth:
-					if (this.ArmorCategory == ArmorSlot.Chest || this.ArmorCategory == ArmorSlot.Legs)
+					if (_ArmorCategory == ArmorSlot.Chest || _ArmorCategory == ArmorSlot.Legs)
 					{
-						this.Weight = 2;
+						_Weight = 2;
 					}
-					this.Weight = 1;
+					_Weight = 1;
 					break;
 				case ArmorType.Leather:
-					this.Weight = this.ArmorCategory switch
+					_Weight = _ArmorCategory switch
 					{
 						ArmorSlot.Chest => 3,
 						ArmorSlot.Legs => 2,
@@ -173,7 +173,7 @@ namespace DungeonGame
 					};
 					break;
 				case ArmorType.Plate:
-					this.Weight = this.ArmorCategory switch
+					_Weight = _ArmorCategory switch
 					{
 						ArmorSlot.Chest => 4,
 						ArmorSlot.Legs => 3,
@@ -186,11 +186,11 @@ namespace DungeonGame
 		}
 		private void BuildArmorName()
 		{
-			var sb = new StringBuilder();
-			switch (this.ArmorGroup)
+			StringBuilder sb = new StringBuilder();
+			switch (_ArmorGroup)
 			{
 				case ArmorType.Cloth:
-					sb.Append(this.Level switch
+					sb.Append(_Level switch
 					{
 						1 => "ripped cloth ",
 						2 => "torn cloth ",
@@ -204,7 +204,7 @@ namespace DungeonGame
 						10 => "exquisite cloth ",
 						_ => "cloth "
 					});
-					switch (this.ArmorCategory)
+					switch (_ArmorCategory)
 					{
 						case ArmorSlot.Head:
 							sb.Append("cap");
@@ -232,7 +232,7 @@ namespace DungeonGame
 					}
 					break;
 				case ArmorType.Leather:
-					sb.Append(this.Level switch
+					sb.Append(_Level switch
 					{
 						1 => "ripped leather ",
 						2 => "torn leather ",
@@ -246,7 +246,7 @@ namespace DungeonGame
 						10 => "exquisite leather ",
 						_ => "leather "
 					});
-					switch (this.ArmorCategory)
+					switch (_ArmorCategory)
 					{
 						case ArmorSlot.Head:
 							sb.Append("helmet");
@@ -274,7 +274,7 @@ namespace DungeonGame
 					}
 					break;
 				case ArmorType.Plate:
-					sb.Append(this.Level switch
+					sb.Append(_Level switch
 					{
 						1 => "cracked ",
 						2 => "dented ",
@@ -288,7 +288,7 @@ namespace DungeonGame
 						10 => "exquisite ",
 						_ => "plate "
 					});
-					switch (this.ArmorCategory)
+					switch (_ArmorCategory)
 					{
 						case ArmorSlot.Head:
 							sb.Append("plate helmet");
@@ -318,16 +318,16 @@ namespace DungeonGame
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			this._Name = sb.ToString();
+			_Name = sb.ToString();
 		}
 		private void BuildArmorName(string rainbowName)
 		{
-			var sb = new StringBuilder();
+			StringBuilder sb = new StringBuilder();
 			sb.Append(rainbowName + " ");
-			switch (this.ArmorGroup)
+			switch (_ArmorGroup)
 			{
 				case ArmorType.Cloth:
-					switch (this.ArmorCategory)
+					switch (_ArmorCategory)
 					{
 						case ArmorSlot.Head:
 							sb.Append("cap");
@@ -355,7 +355,7 @@ namespace DungeonGame
 					}
 					break;
 				case ArmorType.Leather:
-					switch (this.ArmorCategory)
+					switch (_ArmorCategory)
 					{
 						case ArmorSlot.Head:
 							sb.Append("helmet");
@@ -383,7 +383,7 @@ namespace DungeonGame
 					}
 					break;
 				case ArmorType.Plate:
-					switch (this.ArmorCategory)
+					switch (_ArmorCategory)
 					{
 						case ArmorSlot.Head:
 							sb.Append("plate helmet");
@@ -413,22 +413,22 @@ namespace DungeonGame
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			this._Name = sb.ToString();
+			_Name = sb.ToString();
 		}
 		public void DecreaseDurability()
 		{
-			this.Durability -= 1;
+			_Durability -= 1;
 		}
 		public float GetArmorRating()
 		{
-			var adjArmorRating = this.ArmorRating * (this.Durability / 100f);
+			float adjArmorRating = _ArmorRating * (_Durability / 100f);
 			return adjArmorRating;
 		}
 		public void UpdateRainbowStats(Player player)
 		{
-			this.Level = player._Level;
+			_Level = player._Level;
 			// Base armor rating before random attribute or armor type
-			this.ArmorRating = this.ArmorCategory switch
+			_ArmorRating = _ArmorCategory switch
 			{
 				ArmorSlot.Back => 1,
 				ArmorSlot.Chest => 5,
@@ -440,7 +440,7 @@ namespace DungeonGame
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add armor type armor rating to base value
-			this.ArmorRating += this.ArmorGroup switch
+			_ArmorRating += _ArmorGroup switch
 			{
 				ArmorType.Cloth => 0,
 				ArmorType.Leather => 2,
@@ -448,12 +448,12 @@ namespace DungeonGame
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			this.ArmorRating += GameHandler.GetRandomNumber(2, 4);
+			_ArmorRating += GameHandler.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
-			this.ArmorRating += (this.Level - 1) * 3;
+			_ArmorRating += (_Level - 1) * 3;
 			// Add modifier for rainbow gear to enhance armor rating
-			this.ArmorRating += 5;
-			this.ItemValue = this.ArmorRating;
+			_ArmorRating += 5;
+			_ItemValue = _ArmorRating;
 		}
 	}
 }

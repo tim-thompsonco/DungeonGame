@@ -18,10 +18,10 @@
 			Normal
 		}
 		public string _Name { get; set; }
-		public string Desc { get; set; }
-		public bool Equipped { get; set; }
-		public int ItemValue { get; set; }
-		public int Weight { get; set; }
+		public string _Desc { get; set; }
+		public bool _Equipped { get; set; }
+		public int _ItemValue { get; set; }
+		public int _Weight { get; set; }
 		public GemType GemCategory { get; set; }
 		public GemLevel GemStrength { get; set; }
 
@@ -30,15 +30,15 @@
 		public Loot(string name, int level, int weight)
 		{
 			this._Name = name;
-			this.Weight = weight;
-			this.ItemValue = 15 + (level - 1) * 5;
-			this.Desc = "A " + this._Name + " that is worth some money to the right vendor.";
+			this._Weight = weight;
+			this._ItemValue = 15 + (level - 1) * 5;
+			this._Desc = "A " + this._Name + " that is worth some money to the right vendor.";
 		}
 		public Loot(int level, GemType gemType)
 		{
 			this.GemCategory = gemType;
-			this.Weight = 1;
-			this.ItemValue = level * 20;
+			this._Weight = 1;
+			this._ItemValue = level * 20;
 			string name;
 			if (level <= 3)
 			{
@@ -56,7 +56,7 @@
 				name = gemType.ToString();
 			}
 			this._Name = name.ToLower();
-			this.Desc = "A " + this._Name + " that is worth some money to the right vendor.";
+			this._Desc = "A " + this._Name + " that is worth some money to the right vendor.";
 		}
 	}
 }

@@ -2,9 +2,9 @@
 {
 	public interface IEquipment : IRoomInteraction
 	{
-		bool Equipped { get; set; }
-		int ItemValue { get; set; }
-		int Weight { get; set; }
-		string Desc { get; set; }
+		bool _Equipped { get; set; }
+		int _ItemValue { get; set; }
+		int _Weight { get; set; }
+		string _Desc { get; set; }
 	}
 }

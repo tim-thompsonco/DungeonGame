@@ -31,7 +31,7 @@ namespace DungeonGame
 			switch (item)
 			{
 				case Armor isItemArmor:
-					itemInfo.Append(" (AR: " + isItemArmor.ArmorRating + ")");
+					itemInfo.Append(" (AR: " + isItemArmor._ArmorRating + ")");
 					break;
 				case Weapon isItemWeapon:
 					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + ")");
@@ -72,15 +72,15 @@ namespace DungeonGame
 		public static int CheckArmorRating(Player player)
 		{
 			var totalArmorRating = 0;
-			if (player._PlayerChestArmor != null && player._PlayerChestArmor.Equipped)
+			if (player._PlayerChestArmor != null && player._PlayerChestArmor._Equipped)
 			{
 				totalArmorRating += (int)player._PlayerChestArmor.GetArmorRating();
 			}
-			if (player._PlayerHeadArmor != null && player._PlayerHeadArmor.Equipped)
+			if (player._PlayerHeadArmor != null && player._PlayerHeadArmor._Equipped)
 			{
 				totalArmorRating += (int)player._PlayerHeadArmor.GetArmorRating();
 			}
-			if (player._PlayerLegsArmor != null && player._PlayerLegsArmor.Equipped)
+			if (player._PlayerLegsArmor != null && player._PlayerLegsArmor._Equipped)
 			{
 				totalArmorRating += (int)player._PlayerLegsArmor.GetArmorRating();
 			}
@@ -132,7 +132,7 @@ namespace DungeonGame
 					"You can't upgrade " + weaponName + " with that!");
 				return;
 			}
-			if (!weapon.Equipped)
+			if (!weapon._Equipped)
 			{
 				var inputValid = false;
 				while (!inputValid)
@@ -150,7 +150,7 @@ namespace DungeonGame
 				}
 			}
 			player._Consumables[kitIndex].ChangeWeapon.ChangeWeaponPlayer(weapon);
-			weapon.ItemValue += player._Consumables[kitIndex].ItemValue;
+			weapon._ItemValue += player._Consumables[kitIndex]._ItemValue;
 			var upgradeSuccess = "You upgraded " + weaponName + " with a weapon kit.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
@@ -191,11 +191,11 @@ namespace DungeonGame
 				return;
 			}
 			if (player._Consumables[kitIndex].ChangeArmor.KitCategory == ChangeArmor.KitType.Cloth &&
-				armor.ArmorGroup != Armor.ArmorType.Cloth ||
+				armor._ArmorGroup != Armor.ArmorType.Cloth ||
 				player._Consumables[kitIndex].ChangeArmor.KitCategory == ChangeArmor.KitType.Leather &&
-				armor.ArmorGroup != Armor.ArmorType.Leather ||
+				armor._ArmorGroup != Armor.ArmorType.Leather ||
 				player._Consumables[kitIndex].ChangeArmor.KitCategory == ChangeArmor.KitType.Plate &&
-				 armor.ArmorGroup != Armor.ArmorType.Plate ||
+				 armor._ArmorGroup != Armor.ArmorType.Plate ||
 				player._Consumables[kitIndex].KitCategory == Consumable.KitType.Weapon)
 			{
 				OutputHandler.Display.StoreUserOutput(
@@ -204,7 +204,7 @@ namespace DungeonGame
 					"You can't upgrade " + armorName + " with that!");
 				return;
 			}
-			if (!armor.Equipped)
+			if (!armor._Equipped)
 			{
 				var inputValid = false;
 				while (!inputValid)
@@ -222,7 +222,7 @@ namespace DungeonGame
 				}
 			}
 			player._Consumables[kitIndex].ChangeArmor.ChangeArmorPlayer(armor);
-			armor.ItemValue += player._Consumables[kitIndex].ItemValue;
+			armor._ItemValue += player._Consumables[kitIndex]._ItemValue;
 			var upgradeSuccess = "You upgraded " + armorName + " with an armor kit.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
@@ -245,7 +245,7 @@ namespace DungeonGame
 			var playerRoom = RoomHandler.Rooms[player._PlayerLocation];
 			if (itemIndex != -1)
 			{
-				if (player._Inventory[itemIndex].Equipped)
+				if (player._Inventory[itemIndex]._Equipped)
 				{
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
@@ -304,7 +304,7 @@ namespace DungeonGame
 				return;
 			}
 			var playerWeight = PlayerHandler.GetInventoryWeight(player);
-			var itemWeight = item.Weight;
+			var itemWeight = item._Weight;
 			if (playerWeight + itemWeight > player._MaxCarryWeight)
 			{
 				OutputHandler.Display.StoreUserOutput(
@@ -358,7 +358,7 @@ namespace DungeonGame
 			var itemType = item.GetType().Name;
 			if (input[0] == "equip")
 			{
-				if (IsWearable(item) && item.Equipped == false)
+				if (IsWearable(item) && item._Equipped == false)
 				{
 					switch (itemType)
 					{
@@ -407,7 +407,7 @@ namespace DungeonGame
 		}
 		private static void UnequipWeapon(Player player, Weapon weapon)
 		{
-			if (!weapon.Equipped)
+			if (!weapon._Equipped)
 			{
 				var alreadyUnequipString = "You have already unequipped " + weapon._Name + ".";
 				OutputHandler.Display.StoreUserOutput(
@@ -416,7 +416,7 @@ namespace DungeonGame
 					alreadyUnequipString);
 				return;
 			}
-			weapon.Equipped = false;
+			weapon._Equipped = false;
 			var unequipString = "You have unequipped " + player._PlayerWeapon._Name + ".";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
@@ -426,7 +426,7 @@ namespace DungeonGame
 		}
 		private static void UnequipQuiver(Player player, Quiver quiver)
 		{
-			if (!quiver.Equipped)
+			if (!quiver._Equipped)
 			{
 				var alreadyUnequipString = "You have already unequipped " + quiver._Name + "{0}.";
 				OutputHandler.Display.StoreUserOutput(
@@ -435,7 +435,7 @@ namespace DungeonGame
 					alreadyUnequipString);
 				return;
 			}
-			quiver.Equipped = false;
+			quiver._Equipped = false;
 			var unequipString = "You have unequipped " + player._PlayerQuiver._Name + ".";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
@@ -445,7 +445,7 @@ namespace DungeonGame
 		}
 		private static void UnequipArmor(Player player, Armor armor)
 		{
-			if (!armor.Equipped)
+			if (!armor._Equipped)
 			{
 				var alreadyUnequipString = "You have already unequipped " + armor._Name + ".";
 				OutputHandler.Display.StoreUserOutput(
@@ -454,8 +454,8 @@ namespace DungeonGame
 					alreadyUnequipString);
 				return;
 			}
-			armor.Equipped = false;
-			switch (armor.ArmorCategory)
+			armor._Equipped = false;
+			switch (armor._ArmorCategory)
 			{
 				case Armor.ArmorSlot.Head:
 					var unequipHeadString = "You have unequipped " + player._PlayerHeadArmor._Name + ".";
@@ -519,7 +519,7 @@ namespace DungeonGame
 		}
 		private static void EquipWeapon(Player player, Weapon weapon)
 		{
-			if (weapon.Equipped)
+			if (weapon._Equipped)
 			{
 				var alreadyEquipString = "You have already equipped " + weapon._Name + ".";
 				OutputHandler.Display.StoreUserOutput(
@@ -548,12 +548,12 @@ namespace DungeonGame
 						"You cannot use that type of weapon!");
 					return;
 			}
-			if (player._PlayerWeapon != null && player._PlayerWeapon.Equipped)
+			if (player._PlayerWeapon != null && player._PlayerWeapon._Equipped)
 			{
 				UnequipWeapon(player, player._PlayerWeapon);
 			}
 			player._PlayerWeapon = weapon;
-			weapon.Equipped = true;
+			weapon._Equipped = true;
 			var equipSuccessString = "You have equipped " + player._PlayerWeapon._Name + ".";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
@@ -562,7 +562,7 @@ namespace DungeonGame
 		}
 		private static void EquipQuiver(Player player, Quiver quiver)
 		{
-			if (quiver.Equipped)
+			if (quiver._Equipped)
 			{
 				var alreadyEquipString = "You have already equipped " + quiver._Name + ".";
 				OutputHandler.Display.StoreUserOutput(
@@ -571,12 +571,12 @@ namespace DungeonGame
 					alreadyEquipString);
 				return;
 			}
-			if (player._PlayerQuiver != null && player._PlayerQuiver.Equipped)
+			if (player._PlayerQuiver != null && player._PlayerQuiver._Equipped)
 			{
 				UnequipQuiver(player, player._PlayerQuiver);
 			}
 			player._PlayerQuiver = quiver;
-			quiver.Equipped = true;
+			quiver._Equipped = true;
 			var equipString = "You have equipped " + player._PlayerQuiver._Name + ".";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
@@ -585,7 +585,7 @@ namespace DungeonGame
 		}
 		private static void EquipArmor(Player player, Armor armor)
 		{
-			if (armor.Equipped)
+			if (armor._Equipped)
 			{
 				var alreadyEquipString = "You have already equipped " + armor._Name + ".";
 				OutputHandler.Display.StoreUserOutput(
@@ -595,7 +595,7 @@ namespace DungeonGame
 				return;
 			}
 			// Check to see if player can use armor type, if so, continue, otherwise return output error msg
-			switch (armor.ArmorGroup)
+			switch (armor._ArmorGroup)
 			{
 				case Armor.ArmorType.Cloth when player._CanWearCloth:
 					break;
@@ -610,15 +610,15 @@ namespace DungeonGame
 						"You cannot wear that type of armor!");
 					return;
 			}
-			switch (armor.ArmorCategory)
+			switch (armor._ArmorCategory)
 			{
 				case Armor.ArmorSlot.Head:
-					if (player._PlayerHeadArmor != null && player._PlayerHeadArmor.Equipped)
+					if (player._PlayerHeadArmor != null && player._PlayerHeadArmor._Equipped)
 					{
 						UnequipArmor(player, player._PlayerHeadArmor);
 					}
 					player._PlayerHeadArmor = armor;
-					armor.Equipped = true;
+					armor._Equipped = true;
 					var equipHeadString = "You have equipped " + player._PlayerHeadArmor._Name + ".";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -626,12 +626,12 @@ namespace DungeonGame
 						equipHeadString);
 					break;
 				case Armor.ArmorSlot.Back:
-					if (player._PlayerBackArmor != null && player._PlayerBackArmor.Equipped)
+					if (player._PlayerBackArmor != null && player._PlayerBackArmor._Equipped)
 					{
 						UnequipArmor(player, player._PlayerBackArmor);
 					}
 					player._PlayerBackArmor = armor;
-					armor.Equipped = true;
+					armor._Equipped = true;
 					var equipBackString = "You have equipped " + player._PlayerBackArmor._Name + ".";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -639,12 +639,12 @@ namespace DungeonGame
 						equipBackString);
 					break;
 				case Armor.ArmorSlot.Chest:
-					if (player._PlayerChestArmor != null && player._PlayerChestArmor.Equipped)
+					if (player._PlayerChestArmor != null && player._PlayerChestArmor._Equipped)
 					{
 						UnequipArmor(player, player._PlayerChestArmor);
 					}
 					player._PlayerChestArmor = armor;
-					armor.Equipped = true;
+					armor._Equipped = true;
 					var equipChestString = "You have equipped " + player._PlayerChestArmor._Name + ".";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -652,12 +652,12 @@ namespace DungeonGame
 						equipChestString);
 					break;
 				case Armor.ArmorSlot.Wrist:
-					if (player._PlayerWristArmor != null && player._PlayerWristArmor.Equipped)
+					if (player._PlayerWristArmor != null && player._PlayerWristArmor._Equipped)
 					{
 						UnequipArmor(player, player._PlayerWristArmor);
 					}
 					player._PlayerWristArmor = armor;
-					armor.Equipped = true;
+					armor._Equipped = true;
 					var equipWristString = "You have equipped " + player._PlayerWristArmor._Name + ".";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -665,12 +665,12 @@ namespace DungeonGame
 						equipWristString);
 					break;
 				case Armor.ArmorSlot.Waist:
-					if (player._PlayerWaistArmor != null && player._PlayerWaistArmor.Equipped)
+					if (player._PlayerWaistArmor != null && player._PlayerWaistArmor._Equipped)
 					{
 						UnequipArmor(player, player._PlayerWaistArmor);
 					}
 					player._PlayerWaistArmor = armor;
-					armor.Equipped = true;
+					armor._Equipped = true;
 					var equipWaistString = "You have equipped " + player._PlayerWaistArmor._Name + ".";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -678,12 +678,12 @@ namespace DungeonGame
 						equipWaistString);
 					break;
 				case Armor.ArmorSlot.Legs:
-					if (player._PlayerLegsArmor != null && player._PlayerLegsArmor.Equipped)
+					if (player._PlayerLegsArmor != null && player._PlayerLegsArmor._Equipped)
 					{
 						UnequipArmor(player, player._PlayerLegsArmor);
 					}
 					player._PlayerLegsArmor = armor;
-					armor.Equipped = true;
+					armor._Equipped = true;
 					var equipLegsString = "You have equipped " + player._PlayerLegsArmor._Name + ".";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -691,12 +691,12 @@ namespace DungeonGame
 						equipLegsString);
 					break;
 				case Armor.ArmorSlot.Hands:
-					if (player._PlayerHandsArmor != null && player._PlayerHandsArmor.Equipped)
+					if (player._PlayerHandsArmor != null && player._PlayerHandsArmor._Equipped)
 					{
 						UnequipArmor(player, player._PlayerHandsArmor);
 					}
 					player._PlayerHandsArmor = armor;
-					armor.Equipped = true;
+					armor._Equipped = true;
 					var equipHandsString = "You have equipped " + player._PlayerHandsArmor._Name + ".";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),

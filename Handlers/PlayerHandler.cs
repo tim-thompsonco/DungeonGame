@@ -30,7 +30,7 @@ namespace DungeonGame
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
-					player._Inventory[playerInvIndex].Desc);
+					player._Inventory[playerInvIndex]._Desc);
 				return;
 			}
 			var playerConsIndex = player._Consumables.FindIndex(f => f._Name.Contains(input[1]) ||
@@ -40,13 +40,13 @@ namespace DungeonGame
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
-					player._Consumables[playerConsIndex].Desc);
+					player._Consumables[playerConsIndex]._Desc);
 			}
 		}
 		public static int GetInventoryWeight(Player player)
 		{
-			return player._Inventory.Sum(item => item.Weight) +
-				   player._Consumables.Sum(consumable => consumable.Weight);
+			return player._Inventory.Sum(item => item._Weight) +
+				   player._Consumables.Sum(consumable => consumable._Weight);
 		}
 		public static void ShowInventory(Player player)
 		{
@@ -57,16 +57,16 @@ namespace DungeonGame
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (var item in player._Inventory)
 			{
-				if (!item.Equipped) continue;
+				if (!item._Equipped) continue;
 				var itemName = GearHandler.GetItemDetails(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (itemName.Contains("Quiver"))
 					itemInfo.Append(" (Arrows: " + player._PlayerQuiver.Quantity + "/" + player._PlayerQuiver.MaxQuantity + ")");
-				itemInfo.Append(" <Equipped>");
+				itemInfo.Append(" <_Equipped>");
 				if (item is Armor || item is Weapon)
 				{
 					var playerItem = item as IRainbowGear;
-					if (playerItem.IsRainbowGear)
+					if (playerItem._IsRainbowGear)
 					{
 						GearHandler.StoreRainbowGearOutput(itemInfo.ToString());
 						continue;
@@ -79,7 +79,7 @@ namespace DungeonGame
 			}
 			foreach (var item in player._Inventory)
 			{
-				if (item.Equipped) continue;
+				if (item._Equipped) continue;
 				var itemName = GearHandler.GetItemDetails(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (player._PlayerQuiver?._Name == itemName)
@@ -87,7 +87,7 @@ namespace DungeonGame
 				if (item is Armor || item is Weapon)
 				{
 					var playerItem = item as IRainbowGear;
-					if (playerItem.IsRainbowGear)
+					if (playerItem._IsRainbowGear)
 					{
 						GearHandler.StoreRainbowGearOutput(itemInfo.ToString());
 						continue;
@@ -152,7 +152,7 @@ namespace DungeonGame
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				goldString);
-			var weightString = "Weight: " + GetInventoryWeight(player) + "/" + player._MaxCarryWeight;
+			var weightString = "_Weight: " + GetInventoryWeight(player) + "/" + player._MaxCarryWeight;
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -301,7 +301,7 @@ namespace DungeonGame
 				if (item is Armor || item is Weapon)
 				{
 					var rainbowItem = (IRainbowGear)item;
-					if (rainbowItem != null && rainbowItem.IsRainbowGear)
+					if (rainbowItem != null && rainbowItem._IsRainbowGear)
 					{
 						rainbowItem.UpdateRainbowStats(player);
 					}

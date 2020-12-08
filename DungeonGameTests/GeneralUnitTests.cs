@@ -27,36 +27,36 @@ namespace DungeonGameTests
 			Assert.AreEqual(0, monster._ExperienceProvided % 10);
 			// Test consumable potion creation
 			Consumable potion = new Consumable(3, Consumable.PotionType.Health);
-			Assert.AreEqual(25, potion.ItemValue);
+			Assert.AreEqual(25, potion._ItemValue);
 			Assert.AreEqual("minor health potion", potion._Name);
 			Assert.AreEqual(50, potion.RestoreHealth.RestoreHealthAmt);
 			Consumable potionTwo = new Consumable(4, Consumable.PotionType.Health);
-			Assert.AreEqual(50, potionTwo.ItemValue);
+			Assert.AreEqual(50, potionTwo._ItemValue);
 			Assert.AreEqual("health potion", potionTwo._Name);
 			Assert.AreEqual(100, potionTwo.RestoreHealth.RestoreHealthAmt);
 			Consumable potionThree = new Consumable(6, Consumable.PotionType.Health);
-			Assert.AreEqual(50, potionThree.ItemValue);
+			Assert.AreEqual(50, potionThree._ItemValue);
 			Assert.AreEqual("health potion", potionThree._Name);
 			Assert.AreEqual(100, potionThree.RestoreHealth.RestoreHealthAmt);
 			Consumable potionFour = new Consumable(7, Consumable.PotionType.Health);
-			Assert.AreEqual(75, potionFour.ItemValue);
+			Assert.AreEqual(75, potionFour._ItemValue);
 			Assert.AreEqual("greater health potion", potionFour._Name);
 			Assert.AreEqual(150, potionFour.RestoreHealth.RestoreHealthAmt);
 			// Test consumable gem creation
 			Loot gem = new Loot(1, Loot.GemType.Amethyst);
-			Assert.AreEqual(20, gem.ItemValue);
+			Assert.AreEqual(20, gem._ItemValue);
 			Assert.AreEqual("chipped amethyst", gem._Name);
 			Loot gemTwo = new Loot(3, Loot.GemType.Amethyst);
-			Assert.AreEqual(60, gemTwo.ItemValue);
+			Assert.AreEqual(60, gemTwo._ItemValue);
 			Assert.AreEqual("chipped amethyst", gemTwo._Name);
 			Loot gemThree = new Loot(4, Loot.GemType.Amethyst);
-			Assert.AreEqual(80, gemThree.ItemValue);
+			Assert.AreEqual(80, gemThree._ItemValue);
 			Assert.AreEqual("dull amethyst", gemThree._Name);
 			Loot gemFour = new Loot(6, Loot.GemType.Amethyst);
-			Assert.AreEqual(120, gemFour.ItemValue);
+			Assert.AreEqual(120, gemFour._ItemValue);
 			Assert.AreEqual("dull amethyst", gemFour._Name);
 			Loot gemFive = new Loot(7, Loot.GemType.Amethyst);
-			Assert.AreEqual(140, gemFive.ItemValue);
+			Assert.AreEqual(140, gemFive._ItemValue);
 			Assert.AreEqual("amethyst", gemFive._Name);
 		}
 		[Test]
@@ -67,17 +67,17 @@ namespace DungeonGameTests
 			int[] testArrClothHead = new[] { 4, 5, 6 };
 			Armor testArmorClothHead = new Armor(
 				1, Armor.ArmorType.Cloth, Armor.ArmorSlot.Head);
-			CollectionAssert.Contains(testArrClothHead, testArmorClothHead.ArmorRating);
+			CollectionAssert.Contains(testArrClothHead, testArmorClothHead._ArmorRating);
 			// Test case 2, level 3 chest leather armor, armor rating should be 15 to 17
 			int[] testArrLeatherChest = new[] { 15, 16, 17 };
 			Armor testArmorLeatherChest = new Armor(
 				3, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest);
-			CollectionAssert.Contains(testArrLeatherChest, testArmorLeatherChest.ArmorRating);
+			CollectionAssert.Contains(testArrLeatherChest, testArmorLeatherChest._ArmorRating);
 			// Test case 3, level 2 legs plate armor, armor rating should be 12 to 14
 			int[] testArrPlateLegs = new[] { 12, 13, 14 };
 			Armor testArmorPlateLegs = new Armor(
 				2, Armor.ArmorType.Plate, Armor.ArmorSlot.Legs);
-			CollectionAssert.Contains(testArrPlateLegs, testArmorPlateLegs.ArmorRating);
+			CollectionAssert.Contains(testArrPlateLegs, testArmorPlateLegs._ArmorRating);
 		}
 		[Test]
 		public void WeaponUnitTests()
@@ -410,9 +410,9 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Demon)
 			{ _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IEquipment item in monster._MonsterItems.Where(item => item.Equipped))
+			foreach (IEquipment item in monster._MonsterItems.Where(item => item._Equipped))
 			{
-				item.Equipped = false;
+				item._Equipped = false;
 			}
 			Assert.AreEqual(monster._Level * 5, monster._FireResistance);
 			Assert.AreEqual(monster._Level * 5, monster._FrostResistance);
@@ -439,9 +439,9 @@ namespace DungeonGameTests
 				monster = new Monster(3, Monster.MonsterType.Elemental);
 			}
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IEquipment item in player._Inventory.Where(item => item.Equipped))
+			foreach (IEquipment item in player._Inventory.Where(item => item._Equipped))
 			{
-				item.Equipped = false;
+				item._Equipped = false;
 			}
 			Assert.AreEqual(player._Level * 5, player._FireResistance);
 			Assert.AreEqual(player._Level * 5, player._FrostResistance);

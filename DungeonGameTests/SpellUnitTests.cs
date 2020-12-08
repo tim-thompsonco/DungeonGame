@@ -63,9 +63,9 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Demon)
 			{ _HitPoints = 100, _MaxHitPoints = 100, _FrostResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IEquipment item in monster._MonsterItems.Where(item => item.Equipped))
+			foreach (IEquipment item in monster._MonsterItems.Where(item => item._Equipped))
 			{
-				item.Equipped = false;
+				item._Equipped = false;
 			}
 			string[] inputInfo = new[] { "spell", "frostbolt" };
 			int spellIndex = player._Spellbook.FindIndex(
@@ -126,9 +126,9 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Demon)
 			{ _HitPoints = 100, _MaxHitPoints = 100, _ArcaneResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IEquipment item in monster._MonsterItems.Where(item => item.Equipped))
+			foreach (IEquipment item in monster._MonsterItems.Where(item => item._Equipped))
 			{
-				item.Equipped = false;
+				item._Equipped = false;
 			}
 			string[] inputInfo = new[] { "spell", "lightning" };
 			int spellIndex = player._Spellbook.FindIndex(
@@ -299,9 +299,9 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Zombie)
 			{ _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IEquipment item in monster._MonsterItems.Where(item => item.Equipped))
+			foreach (IEquipment item in monster._MonsterItems.Where(item => item._Equipped))
 			{
-				item.Equipped = false;
+				item._Equipped = false;
 			}
 			player._Spellbook.Add(new PlayerSpell(
 				"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 4));
@@ -411,9 +411,9 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Demon)
 			{ _HitPoints = 100, _MaxHitPoints = 100, _FrostResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IEquipment item in monster._MonsterItems.Where(item => item.Equipped))
+			foreach (IEquipment item in monster._MonsterItems.Where(item => item._Equipped))
 			{
-				item.Equipped = false;
+				item._Equipped = false;
 			}
 			int spellIndex = player._Spellbook.FindIndex(
 				f => f._SpellCategory == PlayerSpell.SpellType.FrostNova);

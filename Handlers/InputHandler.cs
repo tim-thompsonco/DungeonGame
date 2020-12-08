@@ -434,7 +434,7 @@ namespace DungeonGame
 								{
 									foreach (var item in player._Inventory)
 									{
-										if (!item.Equipped) continue;
+										if (!item._Equipped) continue;
 										var itemNameArray = new[] { input[0], item._Name };
 										isTownRoom._Vendor.RepairItem(player, itemNameArray, true);
 									}

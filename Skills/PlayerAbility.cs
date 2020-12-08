@@ -566,7 +566,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				opponent._MonsterWeapon.Equipped = false;
+				opponent._MonsterWeapon._Equipped = false;
 				string disarmSuccessString = $"You successfully disarmed {opponent._Name}!";
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
