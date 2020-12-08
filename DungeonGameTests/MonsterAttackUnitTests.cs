@@ -30,13 +30,13 @@ namespace DungeonGameTests
 			MonsterBuilder.BuildMonster(monster);
 			monster._MonsterWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			int spellIndex = monster._Spellbook.FindIndex(
-				f => f.SpellCategory == MonsterSpell.SpellType.Fireball);
+				f => f._SpellCategory == MonsterSpell.SpellType.Fireball);
 			MonsterSpell.CastFireOffense(monster, player, spellIndex);
-			int spellCost = monster._Spellbook[spellIndex].EnergyCost;
+			int spellCost = monster._Spellbook[spellIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - spellCost, monster._EnergyPoints);
-			int spellDamage = monster._Spellbook[spellIndex].Offensive.Amount;
+			int spellDamage = monster._Spellbook[spellIndex]._Offensive.Amount;
 			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
-			int spellMaxRounds = monster._Spellbook[spellIndex].Offensive.AmountMaxRounds;
+			int spellMaxRounds = monster._Spellbook[spellIndex]._Offensive.AmountMaxRounds;
 			Assert.AreEqual(spellMaxRounds, player._Effects[0]._EffectMaxRound);
 			string attackString = $"The {monster._Name} casts a fireball and launches it at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
@@ -45,7 +45,7 @@ namespace DungeonGameTests
 			const string onFireString = "You burst into flame!";
 			Assert.AreEqual(onFireString, OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.OnFire);
-			int burnDamage = monster._Spellbook[spellIndex].Offensive.AmountOverTime;
+			int burnDamage = monster._Spellbook[spellIndex]._Offensive.AmountOverTime;
 			for (int i = 2; i < 5; i++)
 			{
 				player._Effects[0].OnFireRound(player);
@@ -72,17 +72,17 @@ namespace DungeonGameTests
 			MonsterBuilder.BuildMonster(monster);
 			monster._MonsterWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			int spellIndex = monster._Spellbook.FindIndex(
-				f => f.SpellCategory == MonsterSpell.SpellType.Frostbolt);
+				f => f._SpellCategory == MonsterSpell.SpellType.Frostbolt);
 			foreach (IEquipment item in player._Inventory.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
 			MonsterSpell.CastFrostOffense(monster, player, spellIndex);
-			int spellCost = monster._Spellbook[spellIndex].EnergyCost;
+			int spellCost = monster._Spellbook[spellIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - spellCost, monster._EnergyPoints);
-			int spellDamage = monster._Spellbook[spellIndex].Offensive.Amount;
+			int spellDamage = monster._Spellbook[spellIndex]._Offensive.Amount;
 			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
-			int spellMaxRounds = monster._Spellbook[spellIndex].Offensive.AmountMaxRounds;
+			int spellMaxRounds = monster._Spellbook[spellIndex]._Offensive.AmountMaxRounds;
 			Assert.AreEqual(spellMaxRounds, player._Effects[0]._EffectMaxRound);
 			string attackString = $"The {monster._Name} conjures up a frostbolt and launches it at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
@@ -124,15 +124,15 @@ namespace DungeonGameTests
 			}
 			MonsterBuilder.BuildMonster(monster);
 			int spellIndex = monster._Spellbook.FindIndex(
-				f => f.SpellCategory == MonsterSpell.SpellType.Lightning);
+				f => f._SpellCategory == MonsterSpell.SpellType.Lightning);
 			foreach (IEquipment item in player._Inventory.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
 			MonsterSpell.CastArcaneOffense(monster, player, spellIndex);
-			int spellCost = monster._Spellbook[spellIndex].EnergyCost;
+			int spellCost = monster._Spellbook[spellIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - spellCost, monster._EnergyPoints);
-			int spellDamage = monster._Spellbook[spellIndex].Offensive.Amount;
+			int spellDamage = monster._Spellbook[spellIndex]._Offensive.Amount;
 			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
 			string attackString = $"The {monster._Name} casts a bolt of lightning at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
@@ -242,18 +242,18 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Dragon);
 			MonsterBuilder.BuildMonster(monster);
 			int spellIndex = monster._Spellbook.FindIndex(
-				f => f.SpellCategory == MonsterSpell.SpellType.Fireball);
+				f => f._SpellCategory == MonsterSpell.SpellType.Fireball);
 			foreach (IEquipment item in player._Inventory.Where(item => item.Equipped))
 			{
 				item.Equipped = false;
 			}
 			monster._MonsterWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			MonsterSpell.CastFireOffense(monster, player, spellIndex);
-			int spellCost = monster._Spellbook[spellIndex].EnergyCost;
+			int spellCost = monster._Spellbook[spellIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - spellCost, monster._EnergyPoints);
-			int spellDamage = monster._Spellbook[spellIndex].Offensive.Amount;
+			int spellDamage = monster._Spellbook[spellIndex]._Offensive.Amount;
 			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
-			int spellMaxRounds = monster._Spellbook[spellIndex].Offensive.AmountMaxRounds;
+			int spellMaxRounds = monster._Spellbook[spellIndex]._Offensive.AmountMaxRounds;
 			Assert.AreEqual(spellMaxRounds, player._Effects[0]._EffectMaxRound);
 			string attackString = $"The {monster._Name} breathes a pillar of fire at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
@@ -262,7 +262,7 @@ namespace DungeonGameTests
 			const string onFireString = "You burst into flame!";
 			Assert.AreEqual(onFireString, OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.OnFire);
-			int burnDamage = monster._Spellbook[spellIndex].Offensive.AmountOverTime;
+			int burnDamage = monster._Spellbook[spellIndex]._Offensive.AmountOverTime;
 			for (int i = 2; i < 5; i++)
 			{
 				player._Effects[0].OnFireRound(player);

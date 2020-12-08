@@ -45,18 +45,18 @@ namespace DungeonGame
 		}
 		public static int CalculateSpellDamage(Player player, Monster opponent, int index)
 		{
-			if (opponent._Spellbook[index].DamageGroup == MonsterSpell.DamageType.Physical)
+			if (opponent._Spellbook[index]._DamageGroup == MonsterSpell.DamageType.Physical)
 			{
-				return opponent._Spellbook[index].Offensive.Amount;
+				return opponent._Spellbook[index]._Offensive.Amount;
 			}
-			var damageReductionPercentage = opponent._Spellbook[index].DamageGroup switch
+			var damageReductionPercentage = opponent._Spellbook[index]._DamageGroup switch
 			{
 				MonsterSpell.DamageType.Fire => (player._FireResistance / 100.0),
 				MonsterSpell.DamageType.Frost => (player._FrostResistance / 100.0),
 				MonsterSpell.DamageType.Arcane => (player._ArcaneResistance / 100.0),
 				_ => 0.0
 			};
-			return (int)(opponent._Spellbook[index].Offensive.Amount * (1 - damageReductionPercentage));
+			return (int)(opponent._Spellbook[index]._Offensive.Amount * (1 - damageReductionPercentage));
 		}
 	}
 }

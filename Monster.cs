@@ -192,25 +192,25 @@ namespace DungeonGame
 			{
 				for (int i = 0; i < _Spellbook.Count; i++)
 				{
-					if (_EnergyPoints < _Spellbook[i].EnergyCost)
+					if (_EnergyPoints < _Spellbook[i]._EnergyCost)
 					{
 						continue;
 					}
 
-					switch (_Spellbook[i].SpellCategory)
+					switch (_Spellbook[i]._SpellCategory)
 					{
 						case MonsterSpell.SpellType.Fireball:
 						case MonsterSpell.SpellType.Frostbolt:
 						case MonsterSpell.SpellType.Lightning:
 							int spellTotalDamage = 0;
-							if (_Spellbook[i].Offensive.AmountOverTime == 0)
+							if (_Spellbook[i]._Offensive.AmountOverTime == 0)
 							{
-								spellTotalDamage = _Spellbook[i].Offensive.Amount;
+								spellTotalDamage = _Spellbook[i]._Offensive.Amount;
 							}
 							else
 							{
-								spellTotalDamage = _Spellbook[i].Offensive.Amount + (_Spellbook[i].Offensive.AmountOverTime *
-									_Spellbook[i].Offensive.AmountMaxRounds);
+								spellTotalDamage = _Spellbook[i]._Offensive.Amount + (_Spellbook[i]._Offensive.AmountOverTime *
+									_Spellbook[i]._Offensive.AmountMaxRounds);
 							}
 							attackOptions.Add(new
 								AttackOption(AttackOption.AttackType.Spell, spellTotalDamage, i));
@@ -271,7 +271,7 @@ namespace DungeonGame
 					PhysicalAttack(player);
 					break;
 				case AttackOption.AttackType.Spell:
-					switch (_Spellbook[attackOption._AttackIndex].SpellCategory)
+					switch (_Spellbook[attackOption._AttackIndex]._SpellCategory)
 					{
 						case MonsterSpell.SpellType.Fireball:
 							MonsterSpell.CastFireOffense(this, player, attackOption._AttackIndex);

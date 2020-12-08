@@ -449,9 +449,9 @@ namespace DungeonGameTests
 			int arcaneResistance = player._ArcaneResistance;
 			double resistanceMod = (100 - arcaneResistance) / 100.0;
 			int spellIndex = monster._Spellbook.FindIndex(
-				f => f.SpellCategory == MonsterSpell.SpellType.Lightning);
+				f => f._SpellCategory == MonsterSpell.SpellType.Lightning);
 			MonsterSpell.CastArcaneOffense(monster, player, spellIndex);
-			int reducedDamage = (int)(monster._Spellbook[spellIndex].Offensive.Amount * resistanceMod);
+			int reducedDamage = (int)(monster._Spellbook[spellIndex]._Offensive.Amount * resistanceMod);
 			Assert.AreEqual(player._HitPoints, player._MaxHitPoints - reducedDamage);
 		}
 		[Test]
