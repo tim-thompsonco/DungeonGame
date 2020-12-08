@@ -55,13 +55,13 @@ namespace DungeonGameTests
 				OutputHandler.Display.Output[0][2]);
 			player._PlayerClass = Player.PlayerClassType.Archer;
 			int abilityIndex = player._Abilities.FindIndex(
-				f => f.Name == abilityName || f.Name.Contains(abilityName));
-			Assert.AreEqual(25, player._Abilities[abilityIndex].Offensive.Amount);
-			Assert.AreEqual(50, player._Abilities[abilityIndex].Offensive.ChanceToSucceed);
+				f => f._Name == abilityName || f._Name.Contains(abilityName));
+			Assert.AreEqual(25, player._Abilities[abilityIndex]._Offensive.Amount);
+			Assert.AreEqual(50, player._Abilities[abilityIndex]._Offensive.ChanceToSucceed);
 			player._Gold = 0;
 			trainer.UpgradeAbility(player, abilityName);
-			Assert.AreEqual(25, player._Abilities[abilityIndex].Offensive.Amount);
-			Assert.AreEqual(50, player._Abilities[abilityIndex].Offensive.ChanceToSucceed);
+			Assert.AreEqual(25, player._Abilities[abilityIndex]._Offensive.Amount);
+			Assert.AreEqual(50, player._Abilities[abilityIndex]._Offensive.ChanceToSucceed);
 			Assert.AreEqual("You are not ready to upgrade that ability. You need to level up first!",
 				OutputHandler.Display.Output[1][2]);
 			trainer.UpgradeAbility(player, "not an ability");
@@ -72,9 +72,9 @@ namespace DungeonGameTests
 			Assert.AreEqual("You can't afford that!", OutputHandler.Display.Output[3][2]);
 			player._Gold = 100;
 			trainer.UpgradeAbility(player, abilityName);
-			Assert.AreEqual(2, player._Abilities[abilityIndex].Rank);
-			Assert.AreEqual(35, player._Abilities[abilityIndex].Offensive.Amount);
-			Assert.AreEqual(55, player._Abilities[abilityIndex].Offensive.ChanceToSucceed);
+			Assert.AreEqual(2, player._Abilities[abilityIndex]._Rank);
+			Assert.AreEqual(35, player._Abilities[abilityIndex]._Offensive.Amount);
+			Assert.AreEqual(55, player._Abilities[abilityIndex]._Offensive.ChanceToSucceed);
 			Assert.AreEqual(60, player._Gold);
 			Assert.AreEqual("You upgraded Distance Shot to Rank 2 for 40 gold.",
 				OutputHandler.Display.Output[4][2]);
@@ -92,12 +92,12 @@ namespace DungeonGameTests
 				OutputHandler.Display.Output[0][2]);
 			player._PlayerClass = Player.PlayerClassType.Warrior;
 			int abilityIndex = player._Abilities.FindIndex(
-				f => f.Name == abilityName || f.Name.Contains(abilityName));
+				f => f._Name == abilityName || f._Name.Contains(abilityName));
 			Assert.AreEqual(-1, abilityIndex);
 			player._Gold = 0;
 			trainer.TrainAbility(player, abilityName);
 			abilityIndex = player._Abilities.FindIndex(
-				f => f.Name == abilityName || f.Name.Contains(abilityName));
+				f => f._Name == abilityName || f._Name.Contains(abilityName));
 			Assert.AreEqual(-1, abilityIndex);
 			Assert.AreEqual("You are not ready to train that ability. You need to level up first!",
 				OutputHandler.Display.Output[1][2]);
@@ -108,7 +108,7 @@ namespace DungeonGameTests
 			player._Gold = 100;
 			trainer.TrainAbility(player, abilityName);
 			abilityIndex = player._Abilities.FindIndex(
-				f => f.Name == abilityName || f.Name.Contains(abilityName));
+				f => f._Name == abilityName || f._Name.Contains(abilityName));
 			Assert.AreNotEqual(-1, abilityIndex);
 			Assert.AreEqual(60, player._Gold);
 			Assert.AreEqual("You purchased Bandage (Rank 1) for 40 gold.",

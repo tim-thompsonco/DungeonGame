@@ -21,7 +21,7 @@ namespace DungeonGameTests
 			}
 			string[] inputInfo = new[] { "ability", "slash" };
 			int abilityIndex = player._Abilities.FindIndex(
-				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Slash);
+				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Slash);
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Slash", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
@@ -31,11 +31,11 @@ namespace DungeonGameTests
 			string abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("slash", abilityName);
 			player.UseAbility(monster, input);
-			Assert.AreEqual(player._MaxRagePoints - player._Abilities[abilityIndex].RageCost,
+			Assert.AreEqual(player._MaxRagePoints - player._Abilities[abilityIndex]._RageCost,
 				player._RagePoints);
-			int abilityDamage = player._Abilities[abilityIndex].Offensive.Amount;
+			int abilityDamage = player._Abilities[abilityIndex]._Offensive.Amount;
 			Assert.AreEqual(monster._HitPoints, monster._MaxHitPoints - abilityDamage);
-			string abilitySuccessString = $"Your {player._Abilities[abilityIndex].Name} hit the {monster._Name} for {abilityDamage} physical damage.";
+			string abilitySuccessString = $"Your {player._Abilities[abilityIndex]._Name} hit the {monster._Name} for {abilityDamage} physical damage.";
 			Assert.AreEqual(abilitySuccessString, OutputHandler.Display.Output[4][2]);
 		}
 		[Test]
@@ -51,7 +51,7 @@ namespace DungeonGameTests
 				item.Equipped = false;
 			}
 			int abilityIndex = player._Abilities.FindIndex(
-				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Rend);
+				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Rend);
 			string[] inputInfo = new[] { "ability", "rend" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Rend", OutputHandler.Display.Output[0][2]);
@@ -59,19 +59,19 @@ namespace DungeonGameTests
 			Assert.AreEqual("Rage Cost: 25", OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual("Instant Damage: 15", OutputHandler.Display.Output[3][2]);
 			Assert.AreEqual("Damage Over Time: 5", OutputHandler.Display.Output[4][2]);
-			string bleedOverTimeString = $"Bleeding damage over time for {player._Abilities[abilityIndex].Offensive.AmountMaxRounds} rounds.";
+			string bleedOverTimeString = $"Bleeding damage over time for {player._Abilities[abilityIndex]._Offensive.AmountMaxRounds} rounds.";
 			Assert.AreEqual(bleedOverTimeString, OutputHandler.Display.Output[5][2]);
 			string[] input = new[] { "use", "rend" };
 			string abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("rend", abilityName);
 			player.UseAbility(monster, input);
-			int? rageCost = player._Abilities[abilityIndex].RageCost;
+			int? rageCost = player._Abilities[abilityIndex]._RageCost;
 			Assert.AreEqual(player._MaxRagePoints - rageCost, player._RagePoints);
-			int abilityDamage = player._Abilities[abilityIndex].Offensive.Amount;
-			int abilityDamageOverTime = player._Abilities[abilityIndex].Offensive.AmountOverTime;
-			int abilityCurRounds = player._Abilities[abilityIndex].Offensive.AmountCurRounds;
-			int abilityMaxRounds = player._Abilities[abilityIndex].Offensive.AmountMaxRounds;
-			string abilitySuccessString = $"Your {player._Abilities[abilityIndex].Name} hit the {monster._Name} for {abilityDamage} physical damage.";
+			int abilityDamage = player._Abilities[abilityIndex]._Offensive.Amount;
+			int abilityDamageOverTime = player._Abilities[abilityIndex]._Offensive.AmountOverTime;
+			int abilityCurRounds = player._Abilities[abilityIndex]._Offensive.AmountCurRounds;
+			int abilityMaxRounds = player._Abilities[abilityIndex]._Offensive.AmountMaxRounds;
+			string abilitySuccessString = $"Your {player._Abilities[abilityIndex]._Name} hit the {monster._Name} for {abilityDamage} physical damage.";
 			Assert.AreEqual(abilitySuccessString, OutputHandler.Display.Output[6][2]);
 			string bleedString = $"The {monster._Name} is bleeding!";
 			Assert.AreEqual(bleedString, OutputHandler.Display.Output[7][2]);
@@ -113,25 +113,25 @@ namespace DungeonGameTests
 				item.Equipped = false;
 			}
 			int abilityIndex = player._Abilities.FindIndex(
-				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Charge);
+				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Charge);
 			string[] inputInfo = new[] { "ability", "charge" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Charge", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
 			Assert.AreEqual("Rage Cost: 25", OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual("Instant Damage: 15", OutputHandler.Display.Output[3][2]);
-			string abilityInfoString = $"Stuns opponent for {player._Abilities[abilityIndex].Stun.StunMaxRounds} rounds, preventing their attacks.";
+			string abilityInfoString = $"Stuns opponent for {player._Abilities[abilityIndex]._Stun.StunMaxRounds} rounds, preventing their attacks.";
 			Assert.AreEqual(abilityInfoString, OutputHandler.Display.Output[4][2]);
 			string[] input = new[] { "use", "charge" };
 			string abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("charge", abilityName);
 			player.UseAbility(monster, input);
-			int? rageCost = player._Abilities[abilityIndex].RageCost;
+			int? rageCost = player._Abilities[abilityIndex]._RageCost;
 			Assert.AreEqual(player._MaxRagePoints - rageCost, player._RagePoints);
-			int abilityDamage = player._Abilities[abilityIndex].Stun.DamageAmount;
-			int abilityCurRounds = player._Abilities[abilityIndex].Stun.StunCurRounds;
-			int abilityMaxRounds = player._Abilities[abilityIndex].Stun.StunMaxRounds;
-			string attackSuccessString = $"You {player._Abilities[abilityIndex].Name} the {monster._Name} for {abilityDamage} physical damage.";
+			int abilityDamage = player._Abilities[abilityIndex]._Stun.DamageAmount;
+			int abilityCurRounds = player._Abilities[abilityIndex]._Stun.StunCurRounds;
+			int abilityMaxRounds = player._Abilities[abilityIndex]._Stun.StunMaxRounds;
+			string attackSuccessString = $"You {player._Abilities[abilityIndex]._Name} the {monster._Name} for {abilityDamage} physical damage.";
 			Assert.AreEqual(attackSuccessString, OutputHandler.Display.Output[5][2]);
 			string stunString = $"The {monster._Name} is stunned!";
 			Assert.AreEqual(stunString, OutputHandler.Display.Output[6][2]);
@@ -171,7 +171,7 @@ namespace DungeonGameTests
 			MonsterBuilder.BuildMonster(monster);
 			monster._MonsterWeapon.CritMultiplier = 1;
 			int abilityIndex = player._Abilities.FindIndex(
-				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Block);
+				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Block);
 			string[] inputInfo = new[] { "ability", "block" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Block", OutputHandler.Display.Output[0][2]);
@@ -185,9 +185,9 @@ namespace DungeonGameTests
 			string abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("block", abilityName);
 			player.UseAbility(monster, input);
-			int? rageCost = player._Abilities[abilityIndex].RageCost;
+			int? rageCost = player._Abilities[abilityIndex]._RageCost;
 			Assert.AreEqual(player._MaxRagePoints - rageCost, player._RagePoints);
-			int blockAmount = player._Abilities[abilityIndex].Defensive.BlockDamage;
+			int blockAmount = player._Abilities[abilityIndex]._Defensive.BlockDamage;
 			string blockString = $"You start blocking your opponent's attacks! You will block {blockAmount} damage.";
 			Assert.AreEqual(blockString, OutputHandler.Display.Output[5][2]);
 			OutputHandler.Display.ClearUserOutput();
@@ -246,17 +246,17 @@ namespace DungeonGameTests
 				item.Equipped = false;
 			}
 			int abilityIndex = player._Abilities.FindIndex(
-				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Berserk);
+				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Berserk);
 			string[] inputInfo = new[] { "ability", "berserk" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Berserk", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
 			Assert.AreEqual("Rage Cost: 40", OutputHandler.Display.Output[2][2]);
-			string dmgIncreaseString = $"Damage Increase: {player._Abilities[abilityIndex].Offensive.Amount}";
+			string dmgIncreaseString = $"Damage Increase: {player._Abilities[abilityIndex]._Offensive.Amount}";
 			Assert.AreEqual(dmgIncreaseString, OutputHandler.Display.Output[3][2]);
-			string armDecreaseString = $"Armor Decrease: {player._Abilities[abilityIndex].ChangeAmount.Amount}";
+			string armDecreaseString = $"Armor Decrease: {player._Abilities[abilityIndex]._ChangeAmount.Amount}";
 			Assert.AreEqual(armDecreaseString, OutputHandler.Display.Output[4][2]);
-			string dmgInfoString = $"Damage increased at cost of armor decrease for {player._Abilities[abilityIndex].ChangeAmount.ChangeMaxRound} rounds";
+			string dmgInfoString = $"Damage increased at cost of armor decrease for {player._Abilities[abilityIndex]._ChangeAmount.ChangeMaxRound} rounds";
 			Assert.AreEqual(dmgInfoString, OutputHandler.Display.Output[5][2]);
 			string[] input = new[] { "use", "berserk" };
 			string abilityName = InputHandler.ParseInput(input);
@@ -264,7 +264,7 @@ namespace DungeonGameTests
 			int baseArmorRating = GearHandler.CheckArmorRating(player);
 			int baseDamage = player.PhysicalAttack(monster);
 			player.UseAbility(monster, input);
-			int? rageCost = player._Abilities[abilityIndex].RageCost;
+			int? rageCost = player._Abilities[abilityIndex]._RageCost;
 			Assert.AreEqual(player._MaxRagePoints - rageCost, player._RagePoints);
 			Assert.AreEqual(2, player._Effects.Count);
 			Assert.AreEqual(Effect.EffectType.ChangePlayerDamage, player._Effects[0]._EffectGroup);
@@ -274,8 +274,8 @@ namespace DungeonGameTests
 			for (int i = 2; i < 6; i++)
 			{
 				OutputHandler.Display.ClearUserOutput();
-				int berserkArmorAmount = player._Abilities[abilityIndex].ChangeAmount.Amount;
-				int berserkDamageAmount = player._Abilities[abilityIndex].Offensive.Amount;
+				int berserkArmorAmount = player._Abilities[abilityIndex]._ChangeAmount.Amount;
+				int berserkDamageAmount = player._Abilities[abilityIndex]._Offensive.Amount;
 				int berserkArmorRating = GearHandler.CheckArmorRating(player);
 				int berserkDamage = player.PhysicalAttack(monster);
 				Assert.AreEqual(berserkArmorRating, baseArmorRating + berserkArmorAmount);
@@ -307,25 +307,25 @@ namespace DungeonGameTests
 			{ _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
 			int abilityIndex = player._Abilities.FindIndex(
-				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Disarm);
+				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Disarm);
 			string[] inputInfo = new[] { "ability", "disarm" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Disarm", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
 			Assert.AreEqual("Rage Cost: 25", OutputHandler.Display.Output[2][2]);
-			string abilityString = $"{player._Abilities[abilityIndex].Offensive.Amount}% chance to disarm opponent's weapon.";
+			string abilityString = $"{player._Abilities[abilityIndex]._Offensive.Amount}% chance to disarm opponent's weapon.";
 			Assert.AreEqual(abilityString, OutputHandler.Display.Output[3][2]);
-			player._Abilities[abilityIndex].Offensive.Amount = 0; // Set disarm success chance to 0% for test
+			player._Abilities[abilityIndex]._Offensive.Amount = 0; // Set disarm success chance to 0% for test
 			string[] input = new[] { "use", "disarm" };
 			string abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("disarm", abilityName);
 			player.UseAbility(monster, input);
-			int? rageCost = player._Abilities[abilityIndex].RageCost;
+			int? rageCost = player._Abilities[abilityIndex]._RageCost;
 			Assert.AreEqual(player._MaxRagePoints - rageCost, player._RagePoints);
 			Assert.AreEqual(true, monster._MonsterWeapon.Equipped);
 			string disarmFailString = $"You tried to disarm {monster._Name} but failed!";
 			Assert.AreEqual(disarmFailString, OutputHandler.Display.Output[4][2]);
-			player._Abilities[abilityIndex].Offensive.Amount = 100; // Set disarm success chance to 100% for test
+			player._Abilities[abilityIndex]._Offensive.Amount = 100; // Set disarm success chance to 100% for test
 			player.UseAbility(monster, input);
 			Assert.AreEqual(player._MaxRagePoints - (rageCost * 2), player._RagePoints);
 			Assert.AreEqual(false, monster._MonsterWeapon.Equipped);
@@ -347,7 +347,7 @@ namespace DungeonGameTests
 				"bandage", 25, 1, PlayerAbility.WarriorAbility.Bandage, 2));
 			OutputHandler.Display.ClearUserOutput();
 			int abilityIndex = player._Abilities.FindIndex(
-				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Bandage);
+				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Bandage);
 			string[] inputInfo = new[] { "ability", "bandage" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Bandage", OutputHandler.Display.Output[0][2]);
@@ -355,18 +355,18 @@ namespace DungeonGameTests
 			Assert.AreEqual("Rage Cost: 25", OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual("Heal Amount: 25", OutputHandler.Display.Output[3][2]);
 			Assert.AreEqual("Heal Over Time: 5", OutputHandler.Display.Output[4][2]);
-			string healInfoStringCombat = $"Heal over time will restore health for {player._Abilities[abilityIndex].Healing.HealMaxRounds} rounds in combat.";
+			string healInfoStringCombat = $"Heal over time will restore health for {player._Abilities[abilityIndex]._Healing.HealMaxRounds} rounds in combat.";
 			Assert.AreEqual(healInfoStringCombat, OutputHandler.Display.Output[5][2]);
-			string healInfoStringNonCombat = $"Heal over time will restore health {player._Abilities[abilityIndex].Healing.HealMaxRounds} times every 10 seconds.";
+			string healInfoStringNonCombat = $"Heal over time will restore health {player._Abilities[abilityIndex]._Healing.HealMaxRounds} times every 10 seconds.";
 			Assert.AreEqual(healInfoStringNonCombat, OutputHandler.Display.Output[6][2]);
 			string[] input = new[] { "use", "bandage" };
 			string abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("bandage", abilityName);
 			int baseHitPoints = player._HitPoints;
 			player.UseAbility(input);
-			int? rageCost = player._Abilities[abilityIndex].RageCost;
+			int? rageCost = player._Abilities[abilityIndex]._RageCost;
 			Assert.AreEqual(player._MaxRagePoints - rageCost, player._RagePoints);
-			int healAmount = player._Abilities[abilityIndex].Healing.HealAmount;
+			int healAmount = player._Abilities[abilityIndex]._Healing.HealAmount;
 			string healString = $"You heal yourself for {healAmount} health.";
 			Assert.AreEqual(healString, OutputHandler.Display.Output[7][2]);
 			Assert.AreEqual(Effect.EffectType.Healing, player._Effects[0]._EffectGroup);
@@ -395,14 +395,14 @@ namespace DungeonGameTests
 				"power aura", 150, 1, PlayerAbility.WarriorAbility.PowerAura, 6));
 			OutputHandler.Display.ClearUserOutput();
 			int abilityIndex = player._Abilities.FindIndex(
-				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.PowerAura);
+				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.PowerAura);
 			string[] inputInfo = new[] { "ability", "power", "aura" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Power Aura", OutputHandler.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHandler.Display.Output[1][2]);
 			Assert.AreEqual("Rage Cost: 150", OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual("Power Aura Amount: 15", OutputHandler.Display.Output[3][2]);
-			Assert.AreEqual("_Strength is increased by 15 for 10 minutes.", OutputHandler.Display.Output[4][2]);
+			Assert.AreEqual("Strength is increased by 15 for 10 minutes.", OutputHandler.Display.Output[4][2]);
 			string[] input = new[] { "use", "power", "aura" };
 			string abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("power aura", abilityName);
@@ -410,15 +410,15 @@ namespace DungeonGameTests
 			int? baseRage = player._RagePoints;
 			int? baseMaxRage = player._MaxRagePoints;
 			player.UseAbility(input);
-			int? rageCost = player._Abilities[abilityIndex].RageCost;
+			int? rageCost = player._Abilities[abilityIndex]._RageCost;
 			Assert.AreEqual(baseMaxRage - rageCost, player._RagePoints);
 			Assert.AreEqual("You generate a Power Aura around yourself.", OutputHandler.Display.Output[5][2]);
 			OutputHandler.Display.ClearUserOutput();
 			Assert.AreEqual(
-				baseRage - player._Abilities[abilityIndex].RageCost, player._RagePoints);
-			Assert.AreEqual(player._Strength, baseStr + player._Abilities[abilityIndex].ChangeAmount.Amount);
+				baseRage - player._Abilities[abilityIndex]._RageCost, player._RagePoints);
+			Assert.AreEqual(player._Strength, baseStr + player._Abilities[abilityIndex]._ChangeAmount.Amount);
 			Assert.AreEqual(
-				player._MaxRagePoints, baseMaxRage + player._Abilities[abilityIndex].ChangeAmount.Amount * 10);
+				player._MaxRagePoints, baseMaxRage + player._Abilities[abilityIndex]._ChangeAmount.Amount * 10);
 			Assert.AreEqual(Effect.EffectType.ChangeStat, player._Effects[0]._EffectGroup);
 			for (int i = 0; i < 600; i++)
 			{
@@ -447,7 +447,7 @@ namespace DungeonGameTests
 			{ _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
 			int abilityIndex = player._Abilities.FindIndex(
-				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.WarCry);
+				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.WarCry);
 			string[] inputInfo = new[] { "ability", "war", "cry" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("War Cry", OutputHandler.Display.Output[0][2]);
@@ -460,7 +460,7 @@ namespace DungeonGameTests
 			string abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("war cry", abilityName);
 			player.UseAbility(input);
-			int? rageCost = player._Abilities[abilityIndex].RageCost;
+			int? rageCost = player._Abilities[abilityIndex]._RageCost;
 			Assert.AreEqual(player._MaxRagePoints - rageCost, player._RagePoints);
 			Assert.AreEqual("You shout a War Cry, intimidating your opponent, and decreasing incoming damage.",
 				OutputHandler.Display.Output[5][2]);
@@ -499,7 +499,7 @@ namespace DungeonGameTests
 			{ _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
 			int abilityIndex = player._Abilities.FindIndex(
-				f => f.WarAbilityCategory == PlayerAbility.WarriorAbility.Onslaught);
+				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Onslaught);
 			string[] inputInfo = new[] { "ability", "onslaught" };
 			PlayerHandler.AbilityInfo(player, inputInfo);
 			Assert.AreEqual("Onslaught", OutputHandler.Display.Output[0][2]);
@@ -513,8 +513,8 @@ namespace DungeonGameTests
 			string abilityName = InputHandler.ParseInput(input);
 			Assert.AreEqual("onslaught", abilityName);
 			player.UseAbility(monster, input);
-			int? rageCost = player._Abilities[abilityIndex].RageCost;
-			int hitAmount = player._Abilities[abilityIndex].Offensive.Amount;
+			int? rageCost = player._Abilities[abilityIndex]._RageCost;
+			int hitAmount = player._Abilities[abilityIndex]._Offensive.Amount;
 			Assert.AreEqual(monster._MaxHitPoints - (2 * hitAmount), monster._HitPoints);
 			Assert.AreEqual(player._MaxRagePoints - (2 * rageCost), player._RagePoints);
 			string attackString = $"Your onslaught hit the {monster._Name} for 25 physical damage.";

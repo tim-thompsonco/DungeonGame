@@ -391,12 +391,12 @@ namespace DungeonGame
 				inputName.Append(input[i]);
 			}
 			int index = _Abilities.FindIndex(
-				f => f.Name == inputName.ToString() || f.Name.Contains(input[1]));
+				f => f._Name == inputName.ToString() || f._Name.Contains(input[1]));
 			if (index != -1 &&
-				_RagePoints >= _Abilities[index].RageCost &&
+				_RagePoints >= _Abilities[index]._RageCost &&
 				_PlayerClass == PlayerClassType.Warrior)
 			{
-				switch (_Abilities[index].WarAbilityCategory)
+				switch (_Abilities[index]._WarAbilityCategory)
 				{
 					case PlayerAbility.WarriorAbility.Slash:
 					case PlayerAbility.WarriorAbility.Rend:
@@ -424,10 +424,10 @@ namespace DungeonGame
 				}
 			}
 			if (index != -1 &&
-				_ComboPoints >= _Abilities[index].ComboCost &&
+				_ComboPoints >= _Abilities[index]._ComboCost &&
 				_PlayerClass == PlayerClassType.Archer)
 			{
-				switch (_Abilities[index].ArcAbilityCategory)
+				switch (_Abilities[index]._ArcAbilityCategory)
 				{
 					case PlayerAbility.ArcherAbility.Distance:
 						if (_PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow)
@@ -477,13 +477,13 @@ namespace DungeonGame
 				}
 			}
 			int index = _Abilities.FindIndex(
-				f => f.Name == inputName.ToString() || f.Name == input[1] || f.Name.Contains(input[1]) ||
-					 f.Name.Contains(inputName.ToString()));
+				f => f._Name == inputName.ToString() || f._Name == input[1] || f._Name.Contains(input[1]) ||
+					 f._Name.Contains(inputName.ToString()));
 			if (index != -1 &&
-				_RagePoints >= _Abilities[index].RageCost &&
+				_RagePoints >= _Abilities[index]._RageCost &&
 				_PlayerClass == PlayerClassType.Warrior)
 			{
-				switch (_Abilities[index].WarAbilityCategory)
+				switch (_Abilities[index]._WarAbilityCategory)
 				{
 					case PlayerAbility.WarriorAbility.Slash:
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
@@ -515,7 +515,7 @@ namespace DungeonGame
 					case PlayerAbility.WarriorAbility.Onslaught:
 						for (int i = 0; i < 2; i++)
 						{
-							if (_RagePoints >= _Abilities[index].RageCost)
+							if (_RagePoints >= _Abilities[index]._RageCost)
 							{
 								PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 							}
@@ -533,10 +533,10 @@ namespace DungeonGame
 				}
 			}
 			if (index != -1 &&
-				_ComboPoints >= _Abilities[index].ComboCost &&
+				_ComboPoints >= _Abilities[index]._ComboCost &&
 				_PlayerClass == PlayerClassType.Archer)
 			{
-				switch (_Abilities[index].ArcAbilityCategory)
+				switch (_Abilities[index]._ArcAbilityCategory)
 				{
 					case PlayerAbility.ArcherAbility.Distance:
 						return;
@@ -572,7 +572,7 @@ namespace DungeonGame
 
 						for (int i = 0; i < 2; i++)
 						{
-							if (_ComboPoints >= _Abilities[index].ComboCost)
+							if (_ComboPoints >= _Abilities[index]._ComboCost)
 							{
 								PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 							}

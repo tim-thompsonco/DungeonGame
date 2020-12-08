@@ -485,8 +485,8 @@ namespace DungeonGame
 					"You have the following abilities:");
 				foreach (var ability in player._Abilities)
 				{
-					var abilityName = textInfo.ToTitleCase(ability.Name);
-					var abilityString = abilityName + ", Rank " + ability.Rank;
+					var abilityName = textInfo.ToTitleCase(ability._Name);
+					var abilityString = abilityName + ", Rank " + ability._Rank;
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
@@ -546,25 +546,25 @@ namespace DungeonGame
 		{
 			var inputName = InputHandler.ParseInput(input);
 			var index = player._Abilities.FindIndex(
-				f => f.Name == inputName || f.Name.Contains(inputName));
+				f => f._Name == inputName || f._Name.Contains(inputName));
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (index != -1 && player._PlayerClass == Player.PlayerClassType.Warrior)
 			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
-					textInfo.ToTitleCase(player._Abilities[index].Name));
-				var rankString = "Rank: " + player._Abilities[index].Rank;
+					textInfo.ToTitleCase(player._Abilities[index]._Name));
+				var rankString = "Rank: " + player._Abilities[index]._Rank;
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					rankString);
-				var rageCostString = "Rage Cost: " + player._Abilities[index].RageCost;
+				var rageCostString = "Rage Cost: " + player._Abilities[index]._RageCost;
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					rageCostString);
-				switch (player._Abilities[index].WarAbilityCategory)
+				switch (player._Abilities[index]._WarAbilityCategory)
 				{
 					case PlayerAbility.WarriorAbility.Slash:
 						PlayerAbility.OffenseDamageAbilityInfo(player, index);
@@ -605,18 +605,18 @@ namespace DungeonGame
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
-					textInfo.ToTitleCase(player._Abilities[index].Name));
-				var rankString = "Rank: " + player._Abilities[index].Rank;
+					textInfo.ToTitleCase(player._Abilities[index]._Name));
+				var rankString = "Rank: " + player._Abilities[index]._Rank;
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					rankString);
-				var comboCostString = "Combo Cost: " + player._Abilities[index].ComboCost;
+				var comboCostString = "Combo Cost: " + player._Abilities[index]._ComboCost;
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					comboCostString);
-				switch (player._Abilities[index].ArcAbilityCategory)
+				switch (player._Abilities[index]._ArcAbilityCategory)
 				{
 					case PlayerAbility.ArcherAbility.Distance:
 						PlayerAbility.DistanceAbilityInfo(player, index);
@@ -770,18 +770,18 @@ namespace DungeonGame
 		}
 		public static int CalculateAbilityDamage(Player player, Monster opponent, int index)
 		{
-			if (player._Abilities[index].DamageGroup == PlayerAbility.DamageType.Physical)
+			if (player._Abilities[index]._DamageGroup == PlayerAbility.DamageType.Physical)
 			{
-				return player._Abilities[index].Offensive.Amount;
+				return player._Abilities[index]._Offensive.Amount;
 			}
-			var damageReductionPercentage = player._Abilities[index].DamageGroup switch
+			var damageReductionPercentage = player._Abilities[index]._DamageGroup switch
 			{
 				PlayerAbility.DamageType.Fire => (opponent._FireResistance / 100.0),
 				PlayerAbility.DamageType.Frost => (opponent._FrostResistance / 100.0),
 				PlayerAbility.DamageType.Arcane => (opponent._ArcaneResistance / 100.0),
 				_ => 0.0
 			};
-			return (int)(player._Abilities[index].Offensive.Amount * (1 - damageReductionPercentage));
+			return (int)(player._Abilities[index]._Offensive.Amount * (1 - damageReductionPercentage));
 		}
 		public static int CalculateSpellDamage(Player player, Monster opponent, int index)
 		{
