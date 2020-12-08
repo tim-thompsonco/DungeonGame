@@ -18,13 +18,13 @@ namespace DungeonGameTests
 					OutputHandler.Display.Output[0][2]);
 			player._PlayerClass = Player.PlayerClassType.Mage;
 			int spellIndex = player._Spellbook.FindIndex(
-				f => f.Name == spellName);
-			Assert.AreEqual(25, player._Spellbook[spellIndex].Offensive.Amount);
-			Assert.AreEqual(5, player._Spellbook[spellIndex].Offensive.AmountOverTime);
+				f => f._Name == spellName);
+			Assert.AreEqual(25, player._Spellbook[spellIndex]._Offensive.Amount);
+			Assert.AreEqual(5, player._Spellbook[spellIndex]._Offensive.AmountOverTime);
 			player._Gold = 0;
 			trainer.UpgradeSpell(player, spellName);
-			Assert.AreEqual(25, player._Spellbook[spellIndex].Offensive.Amount);
-			Assert.AreEqual(5, player._Spellbook[spellIndex].Offensive.AmountOverTime);
+			Assert.AreEqual(25, player._Spellbook[spellIndex]._Offensive.Amount);
+			Assert.AreEqual(5, player._Spellbook[spellIndex]._Offensive.AmountOverTime);
 			Assert.AreEqual("You are not ready to upgrade that spell. You need to level up first!",
 				OutputHandler.Display.Output[1][2]);
 			trainer.UpgradeSpell(player, "not a spell");
@@ -35,9 +35,9 @@ namespace DungeonGameTests
 			Assert.AreEqual("You can't afford that!", OutputHandler.Display.Output[3][2]);
 			player._Gold = 100;
 			trainer.UpgradeSpell(player, spellName);
-			Assert.AreEqual(2, player._Spellbook[spellIndex].Rank);
-			Assert.AreEqual(35, player._Spellbook[spellIndex].Offensive.Amount);
-			Assert.AreEqual(10, player._Spellbook[spellIndex].Offensive.AmountOverTime);
+			Assert.AreEqual(2, player._Spellbook[spellIndex]._Rank);
+			Assert.AreEqual(35, player._Spellbook[spellIndex]._Offensive.Amount);
+			Assert.AreEqual(10, player._Spellbook[spellIndex]._Offensive.AmountOverTime);
 			Assert.AreEqual(60, player._Gold);
 			Assert.AreEqual("You upgraded Fireball to Rank 2 for 40 gold.",
 				OutputHandler.Display.Output[4][2]);
@@ -125,12 +125,12 @@ namespace DungeonGameTests
 			Assert.AreEqual("You can't train spells. You're not a mage!", OutputHandler.Display.Output[0][2]);
 			player = new Player("placeholder", Player.PlayerClassType.Mage);
 			int spellIndex = player._Spellbook.FindIndex(
-				f => f.Name == spellName || f.Name.Contains(spellName));
+				f => f._Name == spellName || f._Name.Contains(spellName));
 			Assert.AreEqual(-1, spellIndex);
 			player._Gold = 0;
 			trainer.TrainSpell(player, spellName);
 			spellIndex = player._Spellbook.FindIndex(
-				f => f.Name == spellName || f.Name.Contains(spellName));
+				f => f._Name == spellName || f._Name.Contains(spellName));
 			Assert.AreEqual(-1, spellIndex);
 			Assert.AreEqual("You are not ready to train that spell. You need to level up first!",
 				OutputHandler.Display.Output[1][2]);
@@ -141,7 +141,7 @@ namespace DungeonGameTests
 			player._Gold = 200;
 			trainer.TrainSpell(player, spellName);
 			spellIndex = player._Spellbook.FindIndex(
-				f => f.Name == spellName || f.Name.Contains(spellName));
+				f => f._Name == spellName || f._Name.Contains(spellName));
 			Assert.AreNotEqual(-1, spellIndex);
 			Assert.AreEqual(40, player._Gold);
 			Assert.AreEqual("You purchased Frost Nova (Rank 1) for 160 gold.",

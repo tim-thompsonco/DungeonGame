@@ -145,7 +145,7 @@ namespace DungeonGame
 						int newSpellsToTrain = 0;
 						foreach (PlayerSpell spell in _TrainableSpells)
 						{
-							if (player._Level < spell.MinLevel)
+							if (player._Level < spell._MinLevel)
 							{
 								continue;
 							}
@@ -156,9 +156,9 @@ namespace DungeonGame
 								trainingReduction = 0.5;
 							}
 
-							int trainingCost = (int)(spell.MinLevel * _BaseCost * trainingReduction);
-							string spellName = textInfo.ToTitleCase(spell.Name +
-																 " (Rank: " + spell.Rank + ") (Cost: " + trainingCost + ")");
+							int trainingCost = (int)(spell._MinLevel * _BaseCost * trainingReduction);
+							string spellName = textInfo.ToTitleCase(spell._Name +
+																 " (Rank: " + spell._Rank + ") (Cost: " + trainingCost + ")");
 							newSpellsToTrain++;
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatInfoText(),
@@ -196,7 +196,7 @@ namespace DungeonGame
 				int spellsToTrain = 0;
 				foreach (PlayerSpell spell in player._Spellbook)
 				{
-					if (player._Level == spell.Rank)
+					if (player._Level == spell._Rank)
 					{
 						continue;
 					}
@@ -207,9 +207,9 @@ namespace DungeonGame
 						trainingReduction = 0.5;
 					}
 
-					int trainingCost = (int)((spell.Rank + 1.0) * _BaseCost * trainingReduction);
-					string spellName = textInfo.ToTitleCase(spell.Name +
-														 " (Rank: " + spell.Rank + ") (Cost: " + trainingCost + ")");
+					int trainingCost = (int)((spell._Rank + 1.0) * _BaseCost * trainingReduction);
+					string spellName = textInfo.ToTitleCase(spell._Name +
+														 " (Rank: " + spell._Rank + ") (Cost: " + trainingCost + ")");
 					spellsToTrain++;
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
@@ -400,8 +400,8 @@ namespace DungeonGame
 				return;
 			}
 			int spellIndex = _TrainableSpells.FindIndex(
-				f => f.Name == inputName || f.Name.Contains(inputName));
-			if (spellIndex != -1 && player._Level >= _TrainableSpells[spellIndex].MinLevel)
+				f => f._Name == inputName || f._Name.Contains(inputName));
+			if (spellIndex != -1 && player._Level >= _TrainableSpells[spellIndex]._MinLevel)
 			{
 				double trainingReduction = 1.0 - player._Intelligence / 100.0;
 				if (trainingReduction < 0.5)
@@ -409,16 +409,16 @@ namespace DungeonGame
 					trainingReduction = 0.5;
 				}
 
-				int trainingCost = (int)(_TrainableSpells[spellIndex].MinLevel * _BaseCost * trainingReduction);
+				int trainingCost = (int)(_TrainableSpells[spellIndex]._MinLevel * _BaseCost * trainingReduction);
 				if (player._Gold >= trainingCost)
 				{
 					player._Gold -= trainingCost;
 					player._Spellbook.Add(_TrainableSpells[spellIndex]);
 					_TrainableSpells.RemoveAt(spellIndex);
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-					string spellName = textInfo.ToTitleCase(player._Spellbook[player._Spellbook.Count - 1].Name);
+					string spellName = textInfo.ToTitleCase(player._Spellbook[player._Spellbook.Count - 1]._Name);
 					string purchaseString = "You purchased " + spellName + " (Rank " +
-										 player._Spellbook[player._Spellbook.Count - 1].Rank + ") for " + trainingCost + " gold.";
+										 player._Spellbook[player._Spellbook.Count - 1]._Rank + ") for " + trainingCost + " gold.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -452,8 +452,8 @@ namespace DungeonGame
 				return;
 			}
 			int spellIndex = player._Spellbook.FindIndex(
-				f => f.Name == inputName || f.Name.Contains(inputName));
-			if (spellIndex != -1 && player._Level >= player._Spellbook[spellIndex].Rank + 1)
+				f => f._Name == inputName || f._Name.Contains(inputName));
+			if (spellIndex != -1 && player._Level >= player._Spellbook[spellIndex]._Rank + 1)
 			{
 				double trainingReduction = 1.0 - player._Intelligence / 100.0;
 				if (trainingReduction < 0.5)
@@ -461,54 +461,54 @@ namespace DungeonGame
 					trainingReduction = 0.5;
 				}
 
-				int trainingCost = (int)((player._Spellbook[spellIndex].Rank + 1.0) * _BaseCost * trainingReduction);
+				int trainingCost = (int)((player._Spellbook[spellIndex]._Rank + 1.0) * _BaseCost * trainingReduction);
 				if (player._Gold >= trainingCost)
 				{
 					player._Gold -= trainingCost;
-					player._Spellbook[spellIndex].Rank++;
-					player._Spellbook[spellIndex].ManaCost += 10;
-					switch (player._Spellbook[spellIndex].SpellCategory)
+					player._Spellbook[spellIndex]._Rank++;
+					player._Spellbook[spellIndex]._ManaCost += 10;
+					switch (player._Spellbook[spellIndex]._SpellCategory)
 					{
 						case PlayerSpell.SpellType.Fireball:
-							player._Spellbook[spellIndex].Offensive.Amount += 10;
-							player._Spellbook[spellIndex].Offensive.AmountOverTime += 5;
+							player._Spellbook[spellIndex]._Offensive.Amount += 10;
+							player._Spellbook[spellIndex]._Offensive.AmountOverTime += 5;
 							break;
 						case PlayerSpell.SpellType.Frostbolt:
-							player._Spellbook[spellIndex].Offensive.Amount += 10;
+							player._Spellbook[spellIndex]._Offensive.Amount += 10;
 							break;
 						case PlayerSpell.SpellType.Lightning:
-							player._Spellbook[spellIndex].Offensive.Amount += 10;
+							player._Spellbook[spellIndex]._Offensive.Amount += 10;
 							break;
 						case PlayerSpell.SpellType.Heal:
-							player._Spellbook[spellIndex].Healing.HealAmount += 10;
-							player._Spellbook[spellIndex].Healing.HealOverTime += 5;
+							player._Spellbook[spellIndex]._Healing.HealAmount += 10;
+							player._Spellbook[spellIndex]._Healing.HealOverTime += 5;
 							break;
 						case PlayerSpell.SpellType.Rejuvenate:
-							player._Spellbook[spellIndex].Healing.HealAmount += 10;
-							player._Spellbook[spellIndex].Healing.HealOverTime += 5;
+							player._Spellbook[spellIndex]._Healing.HealAmount += 10;
+							player._Spellbook[spellIndex]._Healing.HealOverTime += 5;
 							break;
 						case PlayerSpell.SpellType.Diamondskin:
-							player._Spellbook[spellIndex].ChangeAmount.Amount += 10;
+							player._Spellbook[spellIndex]._ChangeAmount.Amount += 10;
 							break;
 						case PlayerSpell.SpellType.TownPortal:
-							player._Spellbook[spellIndex].ManaCost -= 15;
+							player._Spellbook[spellIndex]._ManaCost -= 15;
 							break;
 						case PlayerSpell.SpellType.Reflect:
-							player._Spellbook[spellIndex].ChangeAmount.Amount += 10;
+							player._Spellbook[spellIndex]._ChangeAmount.Amount += 10;
 							break;
 						case PlayerSpell.SpellType.ArcaneIntellect:
-							player._Spellbook[spellIndex].ChangeAmount.Amount += 5;
+							player._Spellbook[spellIndex]._ChangeAmount.Amount += 5;
 							break;
 						case PlayerSpell.SpellType.FrostNova:
-							player._Spellbook[spellIndex].Offensive.Amount += 10;
+							player._Spellbook[spellIndex]._Offensive.Amount += 10;
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-					string spellName = textInfo.ToTitleCase(player._Spellbook[spellIndex].Name);
+					string spellName = textInfo.ToTitleCase(player._Spellbook[spellIndex]._Name);
 					string purchaseString = "You upgraded " + spellName + " to Rank " +
-										 player._Spellbook[spellIndex].Rank + " for " + trainingCost + " gold.";
+										 player._Spellbook[spellIndex]._Rank + " for " + trainingCost + " gold.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),

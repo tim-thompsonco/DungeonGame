@@ -519,8 +519,8 @@ namespace DungeonGame
 					"Your spellbook contains:");
 				foreach (var spell in player._Spellbook)
 				{
-					var spellName = textInfo.ToTitleCase(spell.Name);
-					var spellString = spellName + ", Rank " + spell.Rank;
+					var spellName = textInfo.ToTitleCase(spell._Name);
+					var spellString = spellName + ", Rank " + spell._Rank;
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
@@ -676,25 +676,25 @@ namespace DungeonGame
 				if (i != input.Length - 1) inputName.Append(" ");
 			}
 			var index = player._Spellbook.FindIndex(f =>
-				f.Name == inputName.ToString() || f.Name == input[1] || f.Name.Contains(inputName.ToString()));
+				f._Name == inputName.ToString() || f._Name == input[1] || f._Name.Contains(inputName.ToString()));
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (index != -1 && player._PlayerClass == Player.PlayerClassType.Mage)
 			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
-					textInfo.ToTitleCase(player._Spellbook[index].Name));
-				var rankString = "Rank: " + player._Spellbook[index].Rank;
+					textInfo.ToTitleCase(player._Spellbook[index]._Name));
+				var rankString = "Rank: " + player._Spellbook[index]._Rank;
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					rankString);
-				var manaCostString = "Mana Cost: " + player._Spellbook[index].ManaCost;
+				var manaCostString = "Mana Cost: " + player._Spellbook[index]._ManaCost;
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					manaCostString);
-				switch (player._Spellbook[index].SpellCategory)
+				switch (player._Spellbook[index]._SpellCategory)
 				{
 					case PlayerSpell.SpellType.Fireball:
 						PlayerSpell.FireOffenseSpellInfo(player, index);
@@ -785,18 +785,18 @@ namespace DungeonGame
 		}
 		public static int CalculateSpellDamage(Player player, Monster opponent, int index)
 		{
-			if (player._Spellbook[index].DamageGroup == PlayerSpell.DamageType.Physical)
+			if (player._Spellbook[index]._DamageGroup == PlayerSpell.DamageType.Physical)
 			{
-				return player._Spellbook[index].Offensive.Amount;
+				return player._Spellbook[index]._Offensive.Amount;
 			}
-			var damageReductionPercentage = player._Spellbook[index].DamageGroup switch
+			var damageReductionPercentage = player._Spellbook[index]._DamageGroup switch
 			{
 				PlayerSpell.DamageType.Fire => (opponent._FireResistance / 100.0),
 				PlayerSpell.DamageType.Frost => (opponent._FrostResistance / 100.0),
 				PlayerSpell.DamageType.Arcane => (opponent._ArcaneResistance / 100.0),
 				_ => 0.0
 			};
-			return (int)(player._Spellbook[index].Offensive.Amount * (1 - damageReductionPercentage));
+			return (int)(player._Spellbook[index]._Offensive.Amount * (1 - damageReductionPercentage));
 		}
 	}
 }

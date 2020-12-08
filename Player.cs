@@ -637,12 +637,12 @@ namespace DungeonGame
 		}
 		public void CastSpell(string inputName)
 		{
-			int index = _Spellbook.FindIndex(f => f.Name == inputName);
+			int index = _Spellbook.FindIndex(f => f._Name == inputName);
 			if (index != -1 &&
-				_ManaPoints >= _Spellbook[index].ManaCost &&
+				_ManaPoints >= _Spellbook[index]._ManaCost &&
 				_PlayerClass == PlayerClassType.Mage)
 			{
-				switch (_Spellbook[index].SpellCategory)
+				switch (_Spellbook[index]._SpellCategory)
 				{
 					case PlayerSpell.SpellType.Heal:
 						PlayerSpell.CastHealing(this, index);
@@ -682,12 +682,12 @@ namespace DungeonGame
 		}
 		public void CastSpell(Monster opponent, string inputName)
 		{
-			int index = _Spellbook.FindIndex(f => f.Name == inputName);
+			int index = _Spellbook.FindIndex(f => f._Name == inputName);
 			if (index != -1 &&
-				_ManaPoints >= _Spellbook[index].ManaCost &&
+				_ManaPoints >= _Spellbook[index]._ManaCost &&
 				_PlayerClass == PlayerClassType.Mage)
 			{
-				switch (_Spellbook[index].SpellCategory)
+				switch (_Spellbook[index]._SpellCategory)
 				{
 					case PlayerSpell.SpellType.Fireball:
 						PlayerSpell.CastFireOffense(opponent, this, index);
