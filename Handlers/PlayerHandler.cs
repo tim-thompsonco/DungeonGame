@@ -772,7 +772,7 @@ namespace DungeonGame
 		{
 			if (player._Abilities[index]._DamageGroup == PlayerAbility.DamageType.Physical)
 			{
-				return player._Abilities[index]._Offensive.Amount;
+				return player._Abilities[index]._Offensive._Amount;
 			}
 			var damageReductionPercentage = player._Abilities[index]._DamageGroup switch
 			{
@@ -781,13 +781,13 @@ namespace DungeonGame
 				PlayerAbility.DamageType.Arcane => (opponent._ArcaneResistance / 100.0),
 				_ => 0.0
 			};
-			return (int)(player._Abilities[index]._Offensive.Amount * (1 - damageReductionPercentage));
+			return (int)(player._Abilities[index]._Offensive._Amount * (1 - damageReductionPercentage));
 		}
 		public static int CalculateSpellDamage(Player player, Monster opponent, int index)
 		{
 			if (player._Spellbook[index]._DamageGroup == PlayerSpell.DamageType.Physical)
 			{
-				return player._Spellbook[index]._Offensive.Amount;
+				return player._Spellbook[index]._Offensive._Amount;
 			}
 			var damageReductionPercentage = player._Spellbook[index]._DamageGroup switch
 			{
@@ -796,7 +796,7 @@ namespace DungeonGame
 				PlayerSpell.DamageType.Arcane => (opponent._ArcaneResistance / 100.0),
 				_ => 0.0
 			};
-			return (int)(player._Spellbook[index]._Offensive.Amount * (1 - damageReductionPercentage));
+			return (int)(player._Spellbook[index]._Offensive._Amount * (1 - damageReductionPercentage));
 		}
 	}
 }

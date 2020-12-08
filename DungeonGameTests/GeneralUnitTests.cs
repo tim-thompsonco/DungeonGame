@@ -424,7 +424,7 @@ namespace DungeonGameTests
 				f => f._SpellCategory == PlayerSpell.SpellType.Lightning);
 			string spellName = InputHandler.ParseInput(input);
 			player.CastSpell(monster, spellName);
-			int reducedDamage = (int)(player._Spellbook[spellIndex]._Offensive.Amount * resistanceMod);
+			int reducedDamage = (int)(player._Spellbook[spellIndex]._Offensive._Amount * resistanceMod);
 			Assert.AreEqual(monster._HitPoints, monster._MaxHitPoints - reducedDamage);
 		}
 		[Test]
@@ -451,7 +451,7 @@ namespace DungeonGameTests
 			int spellIndex = monster._Spellbook.FindIndex(
 				f => f._SpellCategory == MonsterSpell.SpellType.Lightning);
 			MonsterSpell.CastArcaneOffense(monster, player, spellIndex);
-			int reducedDamage = (int)(monster._Spellbook[spellIndex]._Offensive.Amount * resistanceMod);
+			int reducedDamage = (int)(monster._Spellbook[spellIndex]._Offensive._Amount * resistanceMod);
 			Assert.AreEqual(player._HitPoints, player._MaxHitPoints - reducedDamage);
 		}
 		[Test]

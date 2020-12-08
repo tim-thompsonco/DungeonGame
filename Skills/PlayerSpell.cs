@@ -88,12 +88,12 @@ namespace DungeonGame
 
 		public static void AugmentArmorSpellInfo(Player player, int index)
 		{
-			string augmentAmountString = $"Augment Armor Amount: {player._Spellbook[index]._ChangeAmount.Amount}";
+			string augmentAmountString = $"Augment Armor Amount: {player._Spellbook[index]._ChangeAmount._Amount}";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				augmentAmountString);
-			string augmentInfoString = $"Armor will be augmented for {player._Spellbook[index]._ChangeAmount.ChangeMaxRound} rounds.";
+			string augmentInfoString = $"Armor will be augmented for {player._Spellbook[index]._ChangeAmount._ChangeMaxRound} rounds.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -102,26 +102,26 @@ namespace DungeonGame
 		public static void CastAugmentArmor(Player player, int index)
 		{
 			player._ManaPoints -= player._Spellbook[index]._ManaCost;
-			int changeArmorAmount = player._Spellbook[index]._ChangeAmount.Amount;
+			int changeArmorAmount = player._Spellbook[index]._ChangeAmount._Amount;
 			string augmentString = $"You augmented your armor by {changeArmorAmount} with {player._Spellbook[index]._Name}.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				augmentString);
 			player._Effects.Add(new Effect(player._Spellbook[index]._Name,
-				Effect.EffectType.ChangeArmor, player._Spellbook[index]._ChangeAmount.Amount,
-				player._Spellbook[index]._ChangeAmount.ChangeCurRound, player._Spellbook[index]._ChangeAmount.ChangeMaxRound,
+				Effect.EffectType.ChangeArmor, player._Spellbook[index]._ChangeAmount._Amount,
+				player._Spellbook[index]._ChangeAmount._ChangeCurRound, player._Spellbook[index]._ChangeAmount._ChangeMaxRound,
 				1, 10, false));
 		}
 		public static void ReflectDamageSpellInfo(Player player, int index)
 		{
-			string reflectDamageString = $"Reflect Damage Amount: {player._Spellbook[index]._ChangeAmount.Amount}";
+			string reflectDamageString = $"Reflect Damage Amount: {player._Spellbook[index]._ChangeAmount._Amount}";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				reflectDamageString);
-			string reflectInfoString = $"Damage up to {player._Spellbook[index]._ChangeAmount.Amount} will be reflected for " +
-				$"{player._Spellbook[index]._ChangeAmount.ChangeMaxRound} rounds.";
+			string reflectInfoString = $"Damage up to {player._Spellbook[index]._ChangeAmount._Amount} will be reflected for " +
+				$"{player._Spellbook[index]._ChangeAmount._ChangeMaxRound} rounds.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -140,22 +140,22 @@ namespace DungeonGame
 			{
 				player._Effects[arcaneIntIndex]._IsEffectExpired = true;
 			}
-			player._Intelligence += player._Spellbook[index]._ChangeAmount.Amount;
+			player._Intelligence += player._Spellbook[index]._ChangeAmount._Amount;
 			PlayerHandler.CalculatePlayerStats(player);
 			player._Effects.Add(new Effect(player._Spellbook[index]._Name,
-				Effect.EffectType.ChangeStat, player._Spellbook[index]._ChangeAmount.Amount,
-				player._Spellbook[index]._ChangeAmount.ChangeCurRound, player._Spellbook[index]._ChangeAmount.ChangeMaxRound,
+				Effect.EffectType.ChangeStat, player._Spellbook[index]._ChangeAmount._Amount,
+				player._Spellbook[index]._ChangeAmount._ChangeCurRound, player._Spellbook[index]._ChangeAmount._ChangeMaxRound,
 				1, 1, false, ChangeStat.StatType.Intelligence));
 		}
 		public static void ArcaneIntellectSpellInfo(Player player, int index)
 		{
-			string arcaneIntString = $"Arcane Intellect Amount: {player._Spellbook[index]._ChangeAmount.Amount}";
+			string arcaneIntString = $"Arcane Intellect Amount: {player._Spellbook[index]._ChangeAmount._Amount}";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				arcaneIntString);
-			string arcaneIntInfoString = $"_Intelligence is increased by {player._Spellbook[index]._ChangeAmount.Amount} for " +
-				$"{player._Spellbook[index]._ChangeAmount.ChangeMaxRound / 60} minutes.";
+			string arcaneIntInfoString = $"_Intelligence is increased by {player._Spellbook[index]._ChangeAmount._Amount} for " +
+				$"{player._Spellbook[index]._ChangeAmount._ChangeMaxRound / 60} minutes.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -170,18 +170,18 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				reflectString);
 			player._Effects.Add(new Effect(player._Spellbook[index]._Name,
-				Effect.EffectType.ReflectDamage, player._Spellbook[index]._ChangeAmount.Amount,
-				player._Spellbook[index]._ChangeAmount.ChangeCurRound, player._Spellbook[index]._ChangeAmount.ChangeMaxRound,
+				Effect.EffectType.ReflectDamage, player._Spellbook[index]._ChangeAmount._Amount,
+				player._Spellbook[index]._ChangeAmount._ChangeCurRound, player._Spellbook[index]._ChangeAmount._ChangeMaxRound,
 				1, 10, false));
 		}
 		public static void FrostOffenseSpellInfo(Player player, int index)
 		{
-			string frostAmountString = $"Instant Damage: {player._Spellbook[index]._Offensive.Amount}";
+			string frostAmountString = $"Instant Damage: {player._Spellbook[index]._Offensive._Amount}";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				frostAmountString);
-			string frostInfoString = $"Frost damage will freeze opponent for {player._Spellbook[index]._Offensive.AmountMaxRounds} rounds.";
+			string frostInfoString = $"Frost damage will freeze opponent for {player._Spellbook[index]._Offensive._AmountMaxRounds} rounds.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -196,7 +196,7 @@ namespace DungeonGame
 				return;
 			}
 
-			string frostNovaInfoString = $"Opponent will be stunned for {player._Spellbook[index]._Offensive.AmountMaxRounds} rounds.";
+			string frostNovaInfoString = $"Opponent will be stunned for {player._Spellbook[index]._Offensive._AmountMaxRounds} rounds.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -248,7 +248,7 @@ namespace DungeonGame
 			}
 			opponent._HitPoints -= frostSpellDamage;
 			opponent._Effects.Add(new Effect(player._Spellbook[index]._Name, Effect.EffectType.Frozen,
-				player._Spellbook[index]._Offensive.AmountCurRounds, player._Spellbook[index]._Offensive.AmountMaxRounds,
+				player._Spellbook[index]._Offensive._AmountCurRounds, player._Spellbook[index]._Offensive._AmountMaxRounds,
 				1.5, 1, true));
 			if (player._Spellbook[index]._SpellCategory != SpellType.FrostNova)
 			{
@@ -256,27 +256,27 @@ namespace DungeonGame
 			}
 
 			opponent._Effects.Add(new Effect(player._Spellbook[index]._Name, Effect.EffectType.Stunned,
-				player._Spellbook[index]._Offensive.AmountCurRounds, player._Spellbook[index]._Offensive.AmountMaxRounds,
+				player._Spellbook[index]._Offensive._AmountCurRounds, player._Spellbook[index]._Offensive._AmountMaxRounds,
 				1, 1, true));
 		}
 		public static void FireOffenseSpellInfo(Player player, int index)
 		{
-			string fireAmountString = $"Instant Damage: {player._Spellbook[index]._Offensive.Amount}";
+			string fireAmountString = $"Instant Damage: {player._Spellbook[index]._Offensive._Amount}";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				fireAmountString);
-			if (player._Spellbook[index]._Offensive.AmountOverTime <= 0)
+			if (player._Spellbook[index]._Offensive._AmountOverTime <= 0)
 			{
 				return;
 			}
 
-			string fireOverTimeString = $"Damage Over Time: {player._Spellbook[index]._Offensive.AmountOverTime}";
+			string fireOverTimeString = $"Damage Over Time: {player._Spellbook[index]._Offensive._AmountOverTime}";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				fireOverTimeString);
-			string fireInfoString = $"Fire damage over time will burn for {player._Spellbook[index]._Offensive.AmountMaxRounds} rounds.";
+			string fireInfoString = $"Fire damage over time will burn for {player._Spellbook[index]._Offensive._AmountMaxRounds} rounds.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -316,7 +316,7 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 			opponent._HitPoints -= fireSpellDamage;
-			if (player._Spellbook[index]._Offensive.AmountOverTime <= 0)
+			if (player._Spellbook[index]._Offensive._AmountOverTime <= 0)
 			{
 				return;
 			}
@@ -327,13 +327,13 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				onFireString);
 			opponent._Effects.Add(new Effect(player._Spellbook[index]._Name,
-				Effect.EffectType.OnFire, player._Spellbook[index]._Offensive.AmountOverTime,
-				player._Spellbook[index]._Offensive.AmountCurRounds, player._Spellbook[index]._Offensive.AmountMaxRounds,
+				Effect.EffectType.OnFire, player._Spellbook[index]._Offensive._AmountOverTime,
+				player._Spellbook[index]._Offensive._AmountCurRounds, player._Spellbook[index]._Offensive._AmountMaxRounds,
 				1, 1, true));
 		}
 		public static void ArcaneOffenseSpellInfo(Player player, int index)
 		{
-			string arcaneAmountString = $"Instant Damage: {player._Spellbook[index]._Offensive.Amount}";
+			string arcaneAmountString = $"Instant Damage: {player._Spellbook[index]._Offensive._Amount}";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -376,22 +376,22 @@ namespace DungeonGame
 		}
 		public static void HealingSpellInfo(Player player, int index)
 		{
-			string healAmountString = $"Heal Amount: {player._Spellbook[index]._Healing.HealAmount}";
+			string healAmountString = $"Heal Amount: {player._Spellbook[index]._Healing._HealAmount}";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healAmountString);
-			if (player._Spellbook[index]._Healing.HealOverTime <= 0)
+			if (player._Spellbook[index]._Healing._HealOverTime <= 0)
 			{
 				return;
 			}
 
-			string healOverTimeString = $"Heal Over Time: {player._Spellbook[index]._Healing.HealOverTime}";
+			string healOverTimeString = $"Heal Over Time: {player._Spellbook[index]._Healing._HealOverTime}";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healOverTimeString);
-			string healInfoString = $"Heal over time will restore health for {player._Spellbook[index]._Healing.HealMaxRounds} rounds.";
+			string healInfoString = $"Heal over time will restore health for {player._Spellbook[index]._Healing._HealMaxRounds} rounds.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -400,7 +400,7 @@ namespace DungeonGame
 		public static void CastHealing(Player player, int index)
 		{
 			player._ManaPoints -= player._Spellbook[index]._ManaCost;
-			int healAmount = player._Spellbook[index]._Healing.HealAmount;
+			int healAmount = player._Spellbook[index]._Healing._HealAmount;
 			string healString = $"You heal yourself for {healAmount} health.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
@@ -412,14 +412,14 @@ namespace DungeonGame
 				player._HitPoints = player._MaxHitPoints;
 			}
 
-			if (player._Spellbook[index]._Healing.HealOverTime <= 0)
+			if (player._Spellbook[index]._Healing._HealOverTime <= 0)
 			{
 				return;
 			}
 
 			player._Effects.Add(new Effect(player._Spellbook[index]._Name,
-				Effect.EffectType.Healing, player._Spellbook[index]._Healing.HealOverTime,
-				player._Spellbook[index]._Healing.HealCurRounds, player._Spellbook[index]._Healing.HealMaxRounds,
+				Effect.EffectType.Healing, player._Spellbook[index]._Healing._HealOverTime,
+				player._Spellbook[index]._Healing._HealCurRounds, player._Spellbook[index]._Healing._HealMaxRounds,
 				1, 10, false));
 		}
 		public static void PortalSpellInfo()
@@ -433,8 +433,8 @@ namespace DungeonGame
 		public static void CastTownPortal(Player player, int index)
 		{
 			player._ManaPoints -= player._Spellbook[index]._ManaCost;
-			RoomHandler.SetPlayerLocation(player, player._Spellbook[index]._Portal.CoordX,
-				player._Spellbook[index]._Portal.CoordY, player._Spellbook[index]._Portal.CoordZ);
+			RoomHandler.SetPlayerLocation(player, player._Spellbook[index]._Portal._CoordX,
+				player._Spellbook[index]._Portal._CoordY, player._Spellbook[index]._Portal._CoordZ);
 			const string portalString = "You open a portal and step through it.";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),

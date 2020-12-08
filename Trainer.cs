@@ -470,37 +470,37 @@ namespace DungeonGame
 					switch (player._Spellbook[spellIndex]._SpellCategory)
 					{
 						case PlayerSpell.SpellType.Fireball:
-							player._Spellbook[spellIndex]._Offensive.Amount += 10;
-							player._Spellbook[spellIndex]._Offensive.AmountOverTime += 5;
+							player._Spellbook[spellIndex]._Offensive._Amount += 10;
+							player._Spellbook[spellIndex]._Offensive._AmountOverTime += 5;
 							break;
 						case PlayerSpell.SpellType.Frostbolt:
-							player._Spellbook[spellIndex]._Offensive.Amount += 10;
+							player._Spellbook[spellIndex]._Offensive._Amount += 10;
 							break;
 						case PlayerSpell.SpellType.Lightning:
-							player._Spellbook[spellIndex]._Offensive.Amount += 10;
+							player._Spellbook[spellIndex]._Offensive._Amount += 10;
 							break;
 						case PlayerSpell.SpellType.Heal:
-							player._Spellbook[spellIndex]._Healing.HealAmount += 10;
-							player._Spellbook[spellIndex]._Healing.HealOverTime += 5;
+							player._Spellbook[spellIndex]._Healing._HealAmount += 10;
+							player._Spellbook[spellIndex]._Healing._HealOverTime += 5;
 							break;
 						case PlayerSpell.SpellType.Rejuvenate:
-							player._Spellbook[spellIndex]._Healing.HealAmount += 10;
-							player._Spellbook[spellIndex]._Healing.HealOverTime += 5;
+							player._Spellbook[spellIndex]._Healing._HealAmount += 10;
+							player._Spellbook[spellIndex]._Healing._HealOverTime += 5;
 							break;
 						case PlayerSpell.SpellType.Diamondskin:
-							player._Spellbook[spellIndex]._ChangeAmount.Amount += 10;
+							player._Spellbook[spellIndex]._ChangeAmount._Amount += 10;
 							break;
 						case PlayerSpell.SpellType.TownPortal:
 							player._Spellbook[spellIndex]._ManaCost -= 15;
 							break;
 						case PlayerSpell.SpellType.Reflect:
-							player._Spellbook[spellIndex]._ChangeAmount.Amount += 10;
+							player._Spellbook[spellIndex]._ChangeAmount._Amount += 10;
 							break;
 						case PlayerSpell.SpellType.ArcaneIntellect:
-							player._Spellbook[spellIndex]._ChangeAmount.Amount += 5;
+							player._Spellbook[spellIndex]._ChangeAmount._Amount += 5;
 							break;
 						case PlayerSpell.SpellType.FrostNova:
-							player._Spellbook[spellIndex]._Offensive.Amount += 10;
+							player._Spellbook[spellIndex]._Offensive._Amount += 10;
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -563,39 +563,39 @@ namespace DungeonGame
 						switch (player._Abilities[abilityIndex]._ArcAbilityCategory)
 						{
 							case PlayerAbility.ArcherAbility.Distance:
-								player._Abilities[abilityIndex]._Offensive.Amount += 10;
-								player._Abilities[abilityIndex]._Offensive.ChanceToSucceed += 5;
+								player._Abilities[abilityIndex]._Offensive._Amount += 10;
+								player._Abilities[abilityIndex]._Offensive._ChanceToSucceed += 5;
 								break;
 							case PlayerAbility.ArcherAbility.Gut:
-								player._Abilities[abilityIndex]._Offensive.Amount += 10;
-								player._Abilities[abilityIndex]._Offensive.AmountOverTime += 5;
+								player._Abilities[abilityIndex]._Offensive._Amount += 10;
+								player._Abilities[abilityIndex]._Offensive._AmountOverTime += 5;
 								break;
 							case PlayerAbility.ArcherAbility.Precise:
-								player._Abilities[abilityIndex]._Offensive.Amount += 10;
+								player._Abilities[abilityIndex]._Offensive._Amount += 10;
 								break;
 							case PlayerAbility.ArcherAbility.Stun:
-								player._Abilities[abilityIndex]._Stun.DamageAmount += 10;
+								player._Abilities[abilityIndex]._Stun._DamageAmount += 10;
 								break;
 							case PlayerAbility.ArcherAbility.Double:
-								player._Abilities[abilityIndex]._Offensive.Amount += 10;
+								player._Abilities[abilityIndex]._Offensive._Amount += 10;
 								break;
 							case PlayerAbility.ArcherAbility.Wound:
-								player._Abilities[abilityIndex]._Offensive.Amount += 10;
-								player._Abilities[abilityIndex]._Offensive.AmountOverTime += 5;
+								player._Abilities[abilityIndex]._Offensive._Amount += 10;
+								player._Abilities[abilityIndex]._Offensive._AmountOverTime += 5;
 								break;
 							case PlayerAbility.ArcherAbility.Bandage:
-								player._Abilities[abilityIndex]._Healing.HealAmount += 10;
-								player._Abilities[abilityIndex]._Healing.HealOverTime += 5;
+								player._Abilities[abilityIndex]._Healing._HealAmount += 10;
+								player._Abilities[abilityIndex]._Healing._HealOverTime += 5;
 								break;
 							case PlayerAbility.ArcherAbility.SwiftAura:
-								player._Abilities[abilityIndex]._ChangeAmount.Amount += 5;
+								player._Abilities[abilityIndex]._ChangeAmount._Amount += 5;
 								break;
 							case PlayerAbility.ArcherAbility.ImmolatingArrow:
-								player._Abilities[abilityIndex]._Offensive.Amount += 10;
-								player._Abilities[abilityIndex]._Offensive.AmountOverTime += 5;
+								player._Abilities[abilityIndex]._Offensive._Amount += 10;
+								player._Abilities[abilityIndex]._Offensive._AmountOverTime += 5;
 								break;
 							case PlayerAbility.ArcherAbility.Ambush:
-								player._Abilities[abilityIndex]._Offensive.Amount += 10;
+								player._Abilities[abilityIndex]._Offensive._Amount += 10;
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();
@@ -607,37 +607,37 @@ namespace DungeonGame
 						switch (player._Abilities[abilityIndex]._WarAbilityCategory)
 						{
 							case PlayerAbility.WarriorAbility.Slash:
-								player._Abilities[abilityIndex]._Offensive.Amount += 10;
+								player._Abilities[abilityIndex]._Offensive._Amount += 10;
 								break;
 							case PlayerAbility.WarriorAbility.Rend:
-								player._Abilities[abilityIndex]._Offensive.Amount += 10;
-								player._Abilities[abilityIndex]._Offensive.AmountOverTime += 5;
+								player._Abilities[abilityIndex]._Offensive._Amount += 10;
+								player._Abilities[abilityIndex]._Offensive._AmountOverTime += 5;
 								break;
 							case PlayerAbility.WarriorAbility.Charge:
-								player._Abilities[abilityIndex]._Stun.DamageAmount += 10;
+								player._Abilities[abilityIndex]._Stun._DamageAmount += 10;
 								break;
 							case PlayerAbility.WarriorAbility.Block:
-								player._Abilities[abilityIndex]._Defensive.BlockDamage += 10;
+								player._Abilities[abilityIndex]._Defensive._BlockDamage += 10;
 								break;
 							case PlayerAbility.WarriorAbility.Berserk:
-								player._Abilities[abilityIndex]._Offensive.Amount += 10;
-								player._Abilities[abilityIndex]._ChangeAmount.Amount -= 10;
+								player._Abilities[abilityIndex]._Offensive._Amount += 10;
+								player._Abilities[abilityIndex]._ChangeAmount._Amount -= 10;
 								break;
 							case PlayerAbility.WarriorAbility.Disarm:
-								player._Abilities[abilityIndex]._Offensive.ChanceToSucceed += 10;
+								player._Abilities[abilityIndex]._Offensive._ChanceToSucceed += 10;
 								break;
 							case PlayerAbility.WarriorAbility.Bandage:
-								player._Abilities[abilityIndex]._Healing.HealAmount += 10;
-								player._Abilities[abilityIndex]._Healing.HealOverTime += 5;
+								player._Abilities[abilityIndex]._Healing._HealAmount += 10;
+								player._Abilities[abilityIndex]._Healing._HealOverTime += 5;
 								break;
 							case PlayerAbility.WarriorAbility.PowerAura:
-								player._Abilities[abilityIndex]._ChangeAmount.Amount += 5;
+								player._Abilities[abilityIndex]._ChangeAmount._Amount += 5;
 								break;
 							case PlayerAbility.WarriorAbility.WarCry:
-								player._Abilities[abilityIndex]._ChangeAmount.Amount -= 10;
+								player._Abilities[abilityIndex]._ChangeAmount._Amount -= 10;
 								break;
 							case PlayerAbility.WarriorAbility.Onslaught:
-								player._Abilities[abilityIndex]._Offensive.Amount += 10;
+								player._Abilities[abilityIndex]._Offensive._Amount += 10;
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();

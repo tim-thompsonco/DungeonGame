@@ -19,12 +19,12 @@ namespace DungeonGameTests
 			player._PlayerClass = Player.PlayerClassType.Mage;
 			int spellIndex = player._Spellbook.FindIndex(
 				f => f._Name == spellName);
-			Assert.AreEqual(25, player._Spellbook[spellIndex]._Offensive.Amount);
-			Assert.AreEqual(5, player._Spellbook[spellIndex]._Offensive.AmountOverTime);
+			Assert.AreEqual(25, player._Spellbook[spellIndex]._Offensive._Amount);
+			Assert.AreEqual(5, player._Spellbook[spellIndex]._Offensive._AmountOverTime);
 			player._Gold = 0;
 			trainer.UpgradeSpell(player, spellName);
-			Assert.AreEqual(25, player._Spellbook[spellIndex]._Offensive.Amount);
-			Assert.AreEqual(5, player._Spellbook[spellIndex]._Offensive.AmountOverTime);
+			Assert.AreEqual(25, player._Spellbook[spellIndex]._Offensive._Amount);
+			Assert.AreEqual(5, player._Spellbook[spellIndex]._Offensive._AmountOverTime);
 			Assert.AreEqual("You are not ready to upgrade that spell. You need to level up first!",
 				OutputHandler.Display.Output[1][2]);
 			trainer.UpgradeSpell(player, "not a spell");
@@ -36,8 +36,8 @@ namespace DungeonGameTests
 			player._Gold = 100;
 			trainer.UpgradeSpell(player, spellName);
 			Assert.AreEqual(2, player._Spellbook[spellIndex]._Rank);
-			Assert.AreEqual(35, player._Spellbook[spellIndex]._Offensive.Amount);
-			Assert.AreEqual(10, player._Spellbook[spellIndex]._Offensive.AmountOverTime);
+			Assert.AreEqual(35, player._Spellbook[spellIndex]._Offensive._Amount);
+			Assert.AreEqual(10, player._Spellbook[spellIndex]._Offensive._AmountOverTime);
 			Assert.AreEqual(60, player._Gold);
 			Assert.AreEqual("You upgraded Fireball to Rank 2 for 40 gold.",
 				OutputHandler.Display.Output[4][2]);
@@ -56,12 +56,12 @@ namespace DungeonGameTests
 			player._PlayerClass = Player.PlayerClassType.Archer;
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._Name == abilityName || f._Name.Contains(abilityName));
-			Assert.AreEqual(25, player._Abilities[abilityIndex]._Offensive.Amount);
-			Assert.AreEqual(50, player._Abilities[abilityIndex]._Offensive.ChanceToSucceed);
+			Assert.AreEqual(25, player._Abilities[abilityIndex]._Offensive._Amount);
+			Assert.AreEqual(50, player._Abilities[abilityIndex]._Offensive._ChanceToSucceed);
 			player._Gold = 0;
 			trainer.UpgradeAbility(player, abilityName);
-			Assert.AreEqual(25, player._Abilities[abilityIndex]._Offensive.Amount);
-			Assert.AreEqual(50, player._Abilities[abilityIndex]._Offensive.ChanceToSucceed);
+			Assert.AreEqual(25, player._Abilities[abilityIndex]._Offensive._Amount);
+			Assert.AreEqual(50, player._Abilities[abilityIndex]._Offensive._ChanceToSucceed);
 			Assert.AreEqual("You are not ready to upgrade that ability. You need to level up first!",
 				OutputHandler.Display.Output[1][2]);
 			trainer.UpgradeAbility(player, "not an ability");
@@ -73,8 +73,8 @@ namespace DungeonGameTests
 			player._Gold = 100;
 			trainer.UpgradeAbility(player, abilityName);
 			Assert.AreEqual(2, player._Abilities[abilityIndex]._Rank);
-			Assert.AreEqual(35, player._Abilities[abilityIndex]._Offensive.Amount);
-			Assert.AreEqual(55, player._Abilities[abilityIndex]._Offensive.ChanceToSucceed);
+			Assert.AreEqual(35, player._Abilities[abilityIndex]._Offensive._Amount);
+			Assert.AreEqual(55, player._Abilities[abilityIndex]._Offensive._ChanceToSucceed);
 			Assert.AreEqual(60, player._Gold);
 			Assert.AreEqual("You upgraded Distance Shot to Rank 2 for 40 gold.",
 				OutputHandler.Display.Output[4][2]);

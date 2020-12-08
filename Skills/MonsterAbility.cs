@@ -51,7 +51,7 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
-			int leechAmount = monster._Abilities[index]._Offensive.Amount;
+			int leechAmount = monster._Abilities[index]._Offensive._Amount;
 			foreach (Effect effect in player._Effects.ToList())
 			{
 				switch (effect._EffectGroup)
@@ -133,7 +133,7 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
-			int attackDamage = monster._Abilities[index]._Offensive.Amount;
+			int attackDamage = monster._Abilities[index]._Offensive._Amount;
 			foreach (Effect effect in player._Effects.ToList())
 			{
 				switch (effect._EffectGroup)
@@ -201,12 +201,12 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 			player._HitPoints -= attackDamage;
-			if (monster._Abilities[index]._Offensive.AmountOverTime <= 0)
+			if (monster._Abilities[index]._Offensive._AmountOverTime <= 0)
 			{
 				return;
 			}
 
-			switch (monster._Abilities[index]._Offensive.OffensiveGroup)
+			switch (monster._Abilities[index]._Offensive._OffensiveGroup)
 			{
 				case Offensive.OffensiveType.Normal:
 				case Offensive.OffensiveType.Fire:
@@ -218,8 +218,8 @@ namespace DungeonGame
 						Settings.FormatDefaultBackground(),
 						bleedString);
 					player._Effects.Add(new Effect(monster._Abilities[index]._Name,
-						Effect.EffectType.Bleeding, monster._Abilities[index]._Offensive.AmountOverTime,
-						monster._Abilities[index]._Offensive.AmountCurRounds, monster._Abilities[index]._Offensive.AmountMaxRounds,
+						Effect.EffectType.Bleeding, monster._Abilities[index]._Offensive._AmountOverTime,
+						monster._Abilities[index]._Offensive._AmountCurRounds, monster._Abilities[index]._Offensive._AmountMaxRounds,
 						1, 1, true));
 					break;
 				default:

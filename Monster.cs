@@ -203,14 +203,14 @@ namespace DungeonGame
 						case MonsterSpell.SpellType.Frostbolt:
 						case MonsterSpell.SpellType.Lightning:
 							int spellTotalDamage = 0;
-							if (_Spellbook[i]._Offensive.AmountOverTime == 0)
+							if (_Spellbook[i]._Offensive._AmountOverTime == 0)
 							{
-								spellTotalDamage = _Spellbook[i]._Offensive.Amount;
+								spellTotalDamage = _Spellbook[i]._Offensive._Amount;
 							}
 							else
 							{
-								spellTotalDamage = _Spellbook[i]._Offensive.Amount + (_Spellbook[i]._Offensive.AmountOverTime *
-									_Spellbook[i]._Offensive.AmountMaxRounds);
+								spellTotalDamage = _Spellbook[i]._Offensive._Amount + (_Spellbook[i]._Offensive._AmountOverTime *
+									_Spellbook[i]._Offensive._AmountMaxRounds);
 							}
 							attackOptions.Add(new
 								AttackOption(AttackOption.AttackType.Spell, spellTotalDamage, i));
@@ -235,14 +235,14 @@ namespace DungeonGame
 						case MonsterAbility.Ability.BloodLeech:
 						case MonsterAbility.Ability.TailWhip:
 							int abilityTotalDamage = 0;
-							if (_Abilities[i]._Offensive.AmountOverTime == 0)
+							if (_Abilities[i]._Offensive._AmountOverTime == 0)
 							{
-								abilityTotalDamage = _Abilities[i]._Offensive.Amount * 2;
+								abilityTotalDamage = _Abilities[i]._Offensive._Amount * 2;
 							}
 							else
 							{
-								abilityTotalDamage = _Abilities[i]._Offensive.Amount + (_Abilities[i]._Offensive.AmountOverTime *
-									_Abilities[i]._Offensive.AmountMaxRounds);
+								abilityTotalDamage = _Abilities[i]._Offensive._Amount + (_Abilities[i]._Offensive._AmountOverTime *
+									_Abilities[i]._Offensive._AmountMaxRounds);
 							}
 							attackOptions.Add(new
 								AttackOption(AttackOption.AttackType.Ability, abilityTotalDamage, i));

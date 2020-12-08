@@ -34,9 +34,9 @@ namespace DungeonGameTests
 			MonsterSpell.CastFireOffense(monster, player, spellIndex);
 			int spellCost = monster._Spellbook[spellIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - spellCost, monster._EnergyPoints);
-			int spellDamage = monster._Spellbook[spellIndex]._Offensive.Amount;
+			int spellDamage = monster._Spellbook[spellIndex]._Offensive._Amount;
 			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
-			int spellMaxRounds = monster._Spellbook[spellIndex]._Offensive.AmountMaxRounds;
+			int spellMaxRounds = monster._Spellbook[spellIndex]._Offensive._AmountMaxRounds;
 			Assert.AreEqual(spellMaxRounds, player._Effects[0]._EffectMaxRound);
 			string attackString = $"The {monster._Name} casts a fireball and launches it at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
@@ -45,7 +45,7 @@ namespace DungeonGameTests
 			const string onFireString = "You burst into flame!";
 			Assert.AreEqual(onFireString, OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.OnFire);
-			int burnDamage = monster._Spellbook[spellIndex]._Offensive.AmountOverTime;
+			int burnDamage = monster._Spellbook[spellIndex]._Offensive._AmountOverTime;
 			for (int i = 2; i < 5; i++)
 			{
 				player._Effects[0].OnFireRound(player);
@@ -80,9 +80,9 @@ namespace DungeonGameTests
 			MonsterSpell.CastFrostOffense(monster, player, spellIndex);
 			int spellCost = monster._Spellbook[spellIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - spellCost, monster._EnergyPoints);
-			int spellDamage = monster._Spellbook[spellIndex]._Offensive.Amount;
+			int spellDamage = monster._Spellbook[spellIndex]._Offensive._Amount;
 			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
-			int spellMaxRounds = monster._Spellbook[spellIndex]._Offensive.AmountMaxRounds;
+			int spellMaxRounds = monster._Spellbook[spellIndex]._Offensive._AmountMaxRounds;
 			Assert.AreEqual(spellMaxRounds, player._Effects[0]._EffectMaxRound);
 			string attackString = $"The {monster._Name} conjures up a frostbolt and launches it at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
@@ -132,7 +132,7 @@ namespace DungeonGameTests
 			MonsterSpell.CastArcaneOffense(monster, player, spellIndex);
 			int spellCost = monster._Spellbook[spellIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - spellCost, monster._EnergyPoints);
-			int spellDamage = monster._Spellbook[spellIndex]._Offensive.Amount;
+			int spellDamage = monster._Spellbook[spellIndex]._Offensive._Amount;
 			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
 			string attackString = $"The {monster._Name} casts a bolt of lightning at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
@@ -156,7 +156,7 @@ namespace DungeonGameTests
 			MonsterAbility.UseBloodLeechAbility(monster, player, abilityIndex);
 			int abilityCost = monster._Abilities[abilityIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - abilityCost, monster._EnergyPoints);
-			int leechAmount = monster._Abilities[abilityIndex]._Offensive.Amount;
+			int leechAmount = monster._Abilities[abilityIndex]._Offensive._Amount;
 			Assert.AreEqual(player._MaxHitPoints - leechAmount, player._HitPoints);
 			Assert.AreEqual(monsterHealthBase + leechAmount, monster._HitPoints);
 			string attackString = $"The {monster._Name} tries to sink its fangs into you and suck your blood!";
@@ -180,10 +180,10 @@ namespace DungeonGameTests
 			MonsterAbility.UseOffenseDamageAbility(monster, player, abilityIndex);
 			int abilityCost = monster._Abilities[abilityIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - abilityCost, monster._EnergyPoints);
-			int abilityDamage = monster._Abilities[abilityIndex]._Offensive.Amount;
-			int abilityDamageOverTime = monster._Abilities[abilityIndex]._Offensive.AmountOverTime;
-			int abilityCurRounds = monster._Abilities[abilityIndex]._Offensive.AmountCurRounds;
-			int abilityMaxRounds = monster._Abilities[abilityIndex]._Offensive.AmountMaxRounds;
+			int abilityDamage = monster._Abilities[abilityIndex]._Offensive._Amount;
+			int abilityDamageOverTime = monster._Abilities[abilityIndex]._Offensive._AmountOverTime;
+			int abilityCurRounds = monster._Abilities[abilityIndex]._Offensive._AmountCurRounds;
+			int abilityMaxRounds = monster._Abilities[abilityIndex]._Offensive._AmountMaxRounds;
 			string attackString = $"The {monster._Name} tries to bite you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
 			string attackSuccessString = $"The {monster._Name} bites you for {abilityDamage} physical damage.";
@@ -226,7 +226,7 @@ namespace DungeonGameTests
 			MonsterAbility.UseOffenseDamageAbility(monster, player, abilityIndex);
 			int abilityCost = monster._Abilities[abilityIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - abilityCost, monster._EnergyPoints);
-			int attackDamage = monster._Abilities[abilityIndex]._Offensive.Amount;
+			int attackDamage = monster._Abilities[abilityIndex]._Offensive._Amount;
 			Assert.AreEqual(player._MaxHitPoints - attackDamage, player._HitPoints);
 			string attackString = $"The {monster._Name} swings its tail at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
@@ -251,9 +251,9 @@ namespace DungeonGameTests
 			MonsterSpell.CastFireOffense(monster, player, spellIndex);
 			int spellCost = monster._Spellbook[spellIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - spellCost, monster._EnergyPoints);
-			int spellDamage = monster._Spellbook[spellIndex]._Offensive.Amount;
+			int spellDamage = monster._Spellbook[spellIndex]._Offensive._Amount;
 			Assert.AreEqual(player._MaxHitPoints - spellDamage, player._HitPoints);
-			int spellMaxRounds = monster._Spellbook[spellIndex]._Offensive.AmountMaxRounds;
+			int spellMaxRounds = monster._Spellbook[spellIndex]._Offensive._AmountMaxRounds;
 			Assert.AreEqual(spellMaxRounds, player._Effects[0]._EffectMaxRound);
 			string attackString = $"The {monster._Name} breathes a pillar of fire at you!";
 			Assert.AreEqual(attackString, OutputHandler.Display.Output[0][2]);
@@ -262,7 +262,7 @@ namespace DungeonGameTests
 			const string onFireString = "You burst into flame!";
 			Assert.AreEqual(onFireString, OutputHandler.Display.Output[2][2]);
 			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.OnFire);
-			int burnDamage = monster._Spellbook[spellIndex]._Offensive.AmountOverTime;
+			int burnDamage = monster._Spellbook[spellIndex]._Offensive._AmountOverTime;
 			for (int i = 2; i < 5; i++)
 			{
 				player._Effects[0].OnFireRound(player);

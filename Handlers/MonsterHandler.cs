@@ -47,7 +47,7 @@ namespace DungeonGame
 		{
 			if (opponent._Spellbook[index]._DamageGroup == MonsterSpell.DamageType.Physical)
 			{
-				return opponent._Spellbook[index]._Offensive.Amount;
+				return opponent._Spellbook[index]._Offensive._Amount;
 			}
 			var damageReductionPercentage = opponent._Spellbook[index]._DamageGroup switch
 			{
@@ -56,7 +56,7 @@ namespace DungeonGame
 				MonsterSpell.DamageType.Arcane => (player._ArcaneResistance / 100.0),
 				_ => 0.0
 			};
-			return (int)(opponent._Spellbook[index]._Offensive.Amount * (1 - damageReductionPercentage));
+			return (int)(opponent._Spellbook[index]._Offensive._Amount * (1 - damageReductionPercentage));
 		}
 	}
 }

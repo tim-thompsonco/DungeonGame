@@ -128,7 +128,7 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			if (monster._Spellbook[index]._Offensive.AmountOverTime <= 0)
+			if (monster._Spellbook[index]._Offensive._AmountOverTime <= 0)
 			{
 				return;
 			}
@@ -139,8 +139,8 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				onFireString);
 			player._Effects.Add(new Effect(monster._Spellbook[index]._Name,
-				Effect.EffectType.OnFire, monster._Spellbook[index]._Offensive.AmountOverTime,
-				monster._Spellbook[index]._Offensive.AmountCurRounds, monster._Spellbook[index]._Offensive.AmountMaxRounds,
+				Effect.EffectType.OnFire, monster._Spellbook[index]._Offensive._AmountOverTime,
+				monster._Spellbook[index]._Offensive._AmountCurRounds, monster._Spellbook[index]._Offensive._AmountMaxRounds,
 				1, 1, true));
 		}
 		public static void CastFrostOffense(Monster monster, Player player, int index)
@@ -221,7 +221,7 @@ namespace DungeonGame
 					frozenString);
 			}
 			player._Effects.Add(new Effect(monster._Spellbook[index]._Name, Effect.EffectType.Frozen,
-				monster._Spellbook[index]._Offensive.AmountCurRounds, monster._Spellbook[index]._Offensive.AmountMaxRounds,
+				monster._Spellbook[index]._Offensive._AmountCurRounds, monster._Spellbook[index]._Offensive._AmountMaxRounds,
 				1.5, 1, true));
 		}
 		public static void CastArcaneOffense(Monster monster, Player player, int index)
