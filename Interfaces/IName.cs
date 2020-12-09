@@ -1,6 +1,6 @@
 ﻿namespace DungeonGame
 {
-	public interface IRoomInteraction
+	public interface IName
 	{
 		string _Name { get; set; }
 	}

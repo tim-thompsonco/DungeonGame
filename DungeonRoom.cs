@@ -34,14 +34,14 @@ namespace DungeonGame
 		public int _DungeonLevel { get; set; }
 		public List<string> _Commands { get; set; }
 		public List<string> _CombatCommands { get; set; }
-		public List<IRoomInteraction> _RoomObjects { get; set; }
+		public List<IName> _RoomObjects { get; set; }
 		public Monster _Monster { get; set; }
 
 		// Default constructor for JSON deserialization
 		public DungeonRoom() { }
 		public DungeonRoom(int levelRangeLow, int levelRangeHigh)
 		{
-			_RoomObjects = new List<IRoomInteraction>();
+			_RoomObjects = new List<IName>();
 			_Commands = new List<string> { "[I]nventory", "Save", "[Q]uit" };
 			_CombatCommands = new List<string> { "[F]ight", "[I]nventory", "Flee" };
 			_DungeonLevel = GameHandler.GetRandomNumber(levelRangeLow, levelRangeHigh);
@@ -325,7 +325,7 @@ namespace DungeonGame
 			{
 				int objCount = _RoomObjects.Count;
 				TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-				foreach (IRoomInteraction item in _RoomObjects)
+				foreach (IName item in _RoomObjects)
 				{
 					StringBuilder sb = new StringBuilder();
 					string itemTitle = item._Name;

@@ -1,6 +1,6 @@
 ﻿namespace DungeonGame
 {
-	public interface IEquipment : IRoomInteraction
+	public interface IEquipment : IName
 	{
 		bool _Equipped { get; set; }
 		int _ItemValue { get; set; }

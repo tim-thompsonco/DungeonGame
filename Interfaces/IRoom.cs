@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace DungeonGame
 {
-	public interface IRoom : IRoomInteraction
+	public interface IRoom : IName
 	{
 		bool _IsDiscovered { get; set; }
 		IRoom _North { get; set; }
@@ -17,7 +17,7 @@ namespace DungeonGame
 		IRoom _Up { get; set; }
 		IRoom _Down { get; set; }
 		string _Desc { get; set; }
-		List<IRoomInteraction> _RoomObjects { get; set; }
+		List<IName> _RoomObjects { get; set; }
 		Monster _Monster { get; set; }
 
 		void AttackOpponent(Player player, string[] input, Timer globalTimer);

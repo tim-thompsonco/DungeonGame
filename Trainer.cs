@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace DungeonGame
 {
-	public class Trainer : IRoomInteraction, IQuestGiver
+	public class Trainer : IName, IQuestGiver
 	{
 		public enum TrainerCategory
 		{

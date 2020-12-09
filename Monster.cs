@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DungeonGame
 {
-	public class Monster : IRoomInteraction
+	public class Monster : IName
 	{
 		public enum MonsterType
 		{

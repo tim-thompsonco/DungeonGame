@@ -82,7 +82,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="DungeonRoom.cs" />
     <Compile Include="Interfaces\IRoom.cs" />
-    <Compile Include="Interfaces\IRoomInteraction.cs" />
+    <Compile Include="Interfaces\IName.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="TownRoom.cs" />
   </ItemGroup>

@@ -23,7 +23,7 @@ namespace DungeonGame
 		public string _Desc { get; set; }
 		public List<string> _Commands { get; set; }
 		// List of objects in room (including Vendors)
-		public List<IRoomInteraction> _RoomObjects { get; set; }
+		public List<IName> _RoomObjects { get; set; }
 		public Vendor _Vendor;
 		public Trainer _Trainer;
 		public Monster _Monster { get; set; }
@@ -32,7 +32,7 @@ namespace DungeonGame
 		public TownRoom() { }
 		public TownRoom(string name, string desc)
 		{
-			_RoomObjects = new List<IRoomInteraction>();
+			_RoomObjects = new List<IName>();
 			_Name = name;
 			_Desc = desc;
 			_Commands = new List<string> {
@@ -198,7 +198,7 @@ namespace DungeonGame
 			{
 				int objCount = _RoomObjects.Count;
 				TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-				foreach (IRoomInteraction item in _RoomObjects)
+				foreach (IName item in _RoomObjects)
 				{
 					StringBuilder sb = new StringBuilder();
 					string itemTitle = item._Name;
