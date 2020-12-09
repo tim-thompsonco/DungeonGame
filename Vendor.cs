@@ -83,7 +83,7 @@ namespace DungeonGame
 					case Consumable isItemConsumable:
 						if (item._Name.Contains("arrow"))
 						{
-							itemInfo.Append($" ({isItemConsumable.Arrow.Quantity})");
+							itemInfo.Append($" ({isItemConsumable._Arrow.Quantity})");
 						}
 						itemInfo.Append($" (Cost: {isItemConsumable._ItemValue})");
 						break;

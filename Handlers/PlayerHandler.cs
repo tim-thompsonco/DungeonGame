@@ -105,19 +105,19 @@ namespace DungeonGame
 				itemInfo.Append(item._Name);
 				if (item._Name.Contains("potion"))
 				{
-					switch (item.PotionCategory)
+					switch (item._PotionCategory)
 					{
 						case Consumable.PotionType.Health:
-							itemInfo.Append(" (+" + item.RestoreHealth.RestoreHealthAmt + " " + item.PotionCategory + ")");
+							itemInfo.Append(" (+" + item._RestoreHealth.RestoreHealthAmt + " " + item._PotionCategory + ")");
 							break;
 						case Consumable.PotionType.Mana:
-							itemInfo.Append(" (+" + item.RestoreMana.RestoreManaAmt + " " + item.PotionCategory + ")");
+							itemInfo.Append(" (+" + item._RestoreMana.RestoreManaAmt + " " + item._PotionCategory + ")");
 							break;
 						case Consumable.PotionType.Intelligence:
 						case Consumable.PotionType.Strength:
 						case Consumable.PotionType.Dexterity:
 						case Consumable.PotionType.Constitution:
-							itemInfo.Append(" (+" + item.ChangeStat.ChangeAmount + " " + item.PotionCategory + ")");
+							itemInfo.Append(" (+" + item._ChangeStat.ChangeAmount + " " + item._PotionCategory + ")");
 							break;
 						case null:
 							break;
@@ -127,7 +127,7 @@ namespace DungeonGame
 				}
 				if (item._Name.Contains("arrow"))
 				{
-					itemInfo.Append(" (" + item.Arrow.Quantity + ")");
+					itemInfo.Append(" (" + item._Arrow.Quantity + ")");
 				}
 				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 				if (!consumableDict.ContainsKey(itemName))

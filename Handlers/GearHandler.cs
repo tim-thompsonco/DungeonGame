@@ -113,7 +113,7 @@ namespace DungeonGame
 			var weapon = player._Inventory[weaponIndex] as Weapon;
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			var weaponName = textInfo.ToTitleCase(weapon._Name);
-			if (player._Consumables[kitIndex].KitCategory != Consumable.KitType.Weapon)
+			if (player._Consumables[kitIndex]._KitCategory != Consumable.KitType.Weapon)
 			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -121,9 +121,9 @@ namespace DungeonGame
 					"You can't upgrade " + weaponName + " with that!");
 				return;
 			}
-			if (player._Consumables[kitIndex].ChangeWeapon.KitCategory == ChangeWeapon.KitType.Bowstring &&
+			if (player._Consumables[kitIndex]._ChangeWeapon.KitCategory == ChangeWeapon.KitType.Bowstring &&
 				weapon.WeaponGroup != Weapon.WeaponType.Bow ||
-				player._Consumables[kitIndex].ChangeWeapon.KitCategory == ChangeWeapon.KitType.Grindstone &&
+				player._Consumables[kitIndex]._ChangeWeapon.KitCategory == ChangeWeapon.KitType.Grindstone &&
 				weapon.WeaponGroup == Weapon.WeaponType.Bow)
 			{
 				OutputHandler.Display.StoreUserOutput(
@@ -149,7 +149,7 @@ namespace DungeonGame
 					if (input[0] == "yes" || input[0] == "y") inputValid = true;
 				}
 			}
-			player._Consumables[kitIndex].ChangeWeapon.ChangeWeaponPlayer(weapon);
+			player._Consumables[kitIndex]._ChangeWeapon.ChangeWeaponPlayer(weapon);
 			weapon._ItemValue += player._Consumables[kitIndex]._ItemValue;
 			var upgradeSuccess = "You upgraded " + weaponName + " with a weapon kit.";
 			OutputHandler.Display.StoreUserOutput(
@@ -182,7 +182,7 @@ namespace DungeonGame
 			var armor = player._Inventory[armorIndex] as Armor;
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			var armorName = textInfo.ToTitleCase(armor._Name);
-			if (player._Consumables[kitIndex].KitCategory != Consumable.KitType.Armor)
+			if (player._Consumables[kitIndex]._KitCategory != Consumable.KitType.Armor)
 			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -190,13 +190,13 @@ namespace DungeonGame
 					"You can't upgrade " + armorName + " with that!");
 				return;
 			}
-			if (player._Consumables[kitIndex].ChangeArmor.KitCategory == ChangeArmor.KitType.Cloth &&
+			if (player._Consumables[kitIndex]._ChangeArmor.KitCategory == ChangeArmor.KitType.Cloth &&
 				armor._ArmorGroup != Armor.ArmorType.Cloth ||
-				player._Consumables[kitIndex].ChangeArmor.KitCategory == ChangeArmor.KitType.Leather &&
+				player._Consumables[kitIndex]._ChangeArmor.KitCategory == ChangeArmor.KitType.Leather &&
 				armor._ArmorGroup != Armor.ArmorType.Leather ||
-				player._Consumables[kitIndex].ChangeArmor.KitCategory == ChangeArmor.KitType.Plate &&
+				player._Consumables[kitIndex]._ChangeArmor.KitCategory == ChangeArmor.KitType.Plate &&
 				 armor._ArmorGroup != Armor.ArmorType.Plate ||
-				player._Consumables[kitIndex].KitCategory == Consumable.KitType.Weapon)
+				player._Consumables[kitIndex]._KitCategory == Consumable.KitType.Weapon)
 			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -221,7 +221,7 @@ namespace DungeonGame
 					if (input[0] == "yes" || input[0] == "y") inputValid = true;
 				}
 			}
-			player._Consumables[kitIndex].ChangeArmor.ChangeArmorPlayer(armor);
+			player._Consumables[kitIndex]._ChangeArmor.ChangeArmorPlayer(armor);
 			armor._ItemValue += player._Consumables[kitIndex]._ItemValue;
 			var upgradeSuccess = "You upgraded " + armorName + " with an armor kit.";
 			OutputHandler.Display.StoreUserOutput(

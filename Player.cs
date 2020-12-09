@@ -322,11 +322,11 @@ namespace DungeonGame
 					"What potion did you want to drink?");
 				return;
 			}
-			switch (_Consumables[index].PotionCategory)
+			switch (_Consumables[index]._PotionCategory)
 			{
 				case Consumable.PotionType.Health:
-					_Consumables[index].RestoreHealth.RestoreHealthPlayer(this);
-					string drankHealthString = $"You drank a potion and replenished {_Consumables[index].RestoreHealth.RestoreHealthAmt} health.";
+					_Consumables[index]._RestoreHealth.RestoreHealthPlayer(this);
+					string drankHealthString = $"You drank a potion and replenished {_Consumables[index]._RestoreHealth.RestoreHealthAmt} health.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -334,8 +334,8 @@ namespace DungeonGame
 					_Consumables.RemoveAt(index);
 					break;
 				case Consumable.PotionType.Mana:
-					_Consumables[index].RestoreMana.RestoreManaPlayer(this);
-					string drankManaString = $"You drank a potion and replenished {_Consumables[index].RestoreMana.RestoreManaAmt} mana.";
+					_Consumables[index]._RestoreMana.RestoreManaPlayer(this);
+					string drankManaString = $"You drank a potion and replenished {_Consumables[index]._RestoreMana.RestoreManaAmt} mana.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -346,9 +346,9 @@ namespace DungeonGame
 				case Consumable.PotionType.Strength:
 				case Consumable.PotionType.Dexterity:
 				case Consumable.PotionType.Constitution:
-					_Consumables[index].ChangeStat.ChangeStatPlayer(this);
+					_Consumables[index]._ChangeStat.ChangeStatPlayer(this);
 					string drankStatString = 
-						$"You drank a potion and increased {_Consumables[index].ChangeStat.StatCategory} by {_Consumables[index].ChangeStat.ChangeAmount}.";
+						$"You drank a potion and increased {_Consumables[index]._ChangeStat.StatCategory} by {_Consumables[index]._ChangeStat.ChangeAmount}.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -362,15 +362,15 @@ namespace DungeonGame
 		public void ReloadQuiver()
 		{
 			int index = _Consumables.FindIndex(
-				f => f.ArrowCategory == Consumable.ArrowType.Standard && f._Name.Contains("arrow"));
+				f => f._ArrowCategory == Consumable.ArrowType.Standard && f._Name.Contains("arrow"));
 			if (index != -1)
 			{
-				_Consumables[index].Arrow.LoadArrowsPlayer(this);
+				_Consumables[index]._Arrow.LoadArrowsPlayer(this);
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You reloaded your quiver.");
-				if (_Consumables[index].Arrow.Quantity == 0)
+				if (_Consumables[index]._Arrow.Quantity == 0)
 				{
 					_Consumables.RemoveAt(index);
 				}

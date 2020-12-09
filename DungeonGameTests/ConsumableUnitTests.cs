@@ -20,12 +20,12 @@ namespace DungeonGameTests
 				_Consumables = new List<Consumable> { new Consumable(1, Consumable.PotionType.Health) }
 			};
 			int potionIndex = player._Consumables.FindIndex(
-				f => f.PotionCategory == Consumable.PotionType.Health);
+				f => f._PotionCategory == Consumable.PotionType.Health);
 			string[] input = new[] { "drink", "health" };
 			string potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("health", potionName);
 			int baseHealth = player._HitPoints;
-			int healAmount = player._Consumables[potionIndex].RestoreHealth.RestoreHealthAmt;
+			int healAmount = player._Consumables[potionIndex]._RestoreHealth.RestoreHealthAmt;
 			player.DrinkPotion(InputHandler.ParseInput(input));
 			string drankHealthString = $"You drank a potion and replenished {healAmount} health.";
 			Assert.AreEqual(drankHealthString, OutputHandler.Display.Output[0][2]);
@@ -45,12 +45,12 @@ namespace DungeonGameTests
 				_Consumables = new List<Consumable> { new Consumable(1, Consumable.PotionType.Mana) }
 			};
 			int potionIndex = player._Consumables.FindIndex(
-				f => f.PotionCategory == Consumable.PotionType.Mana);
+				f => f._PotionCategory == Consumable.PotionType.Mana);
 			string[] input = new[] { "drink", "mana" };
 			string potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("mana", potionName);
 			int? baseMana = player._ManaPoints;
-			int manaAmount = player._Consumables[potionIndex].RestoreMana.RestoreManaAmt;
+			int manaAmount = player._Consumables[potionIndex]._RestoreMana.RestoreManaAmt;
 			player.DrinkPotion(InputHandler.ParseInput(input));
 			string drankManaString = $"You drank a potion and replenished {manaAmount} mana.";
 			Assert.AreEqual(drankManaString, OutputHandler.Display.Output[0][2]);
@@ -68,12 +68,12 @@ namespace DungeonGameTests
 				_Consumables = new List<Consumable> { new Consumable(1, Consumable.PotionType.Constitution) }
 			};
 			int potionIndex = player._Consumables.FindIndex(
-				f => f.PotionCategory == Consumable.PotionType.Constitution);
+				f => f._PotionCategory == Consumable.PotionType.Constitution);
 			string[] input = new[] { "drink", "constitution" };
 			string potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("constitution", potionName);
-			int statAmount = player._Consumables[potionIndex].ChangeStat.ChangeAmount;
-			ChangeStat.StatType statType = player._Consumables[potionIndex].ChangeStat.StatCategory;
+			int statAmount = player._Consumables[potionIndex]._ChangeStat.ChangeAmount;
+			ChangeStat.StatType statType = player._Consumables[potionIndex]._ChangeStat.StatCategory;
 			int baseConst = player._Constitution;
 			int baseMaxHitPoints = player._MaxHitPoints;
 			player.DrinkPotion(InputHandler.ParseInput(input));
@@ -105,12 +105,12 @@ namespace DungeonGameTests
 				_Consumables = new List<Consumable> { new Consumable(1, Consumable.PotionType.Intelligence) }
 			};
 			int potionIndex = player._Consumables.FindIndex(
-				f => f.PotionCategory == Consumable.PotionType.Intelligence);
+				f => f._PotionCategory == Consumable.PotionType.Intelligence);
 			string[] input = new[] { "drink", "intelligence" };
 			string potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("intelligence", potionName);
-			int statAmount = player._Consumables[potionIndex].ChangeStat.ChangeAmount;
-			ChangeStat.StatType statType = player._Consumables[potionIndex].ChangeStat.StatCategory;
+			int statAmount = player._Consumables[potionIndex]._ChangeStat.ChangeAmount;
+			ChangeStat.StatType statType = player._Consumables[potionIndex]._ChangeStat.StatCategory;
 			int baseInt = player._Intelligence;
 			int? baseMaxManaPoints = player._MaxManaPoints;
 			player.DrinkPotion(InputHandler.ParseInput(input));
@@ -142,12 +142,12 @@ namespace DungeonGameTests
 				_Consumables = new List<Consumable> { new Consumable(1, Consumable.PotionType.Strength) }
 			};
 			int potionIndex = player._Consumables.FindIndex(
-				f => f.PotionCategory == Consumable.PotionType.Strength);
+				f => f._PotionCategory == Consumable.PotionType.Strength);
 			string[] input = new[] { "drink", "strength" };
 			string potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("strength", potionName);
-			int statAmount = player._Consumables[potionIndex].ChangeStat.ChangeAmount;
-			ChangeStat.StatType statType = player._Consumables[potionIndex].ChangeStat.StatCategory;
+			int statAmount = player._Consumables[potionIndex]._ChangeStat.ChangeAmount;
+			ChangeStat.StatType statType = player._Consumables[potionIndex]._ChangeStat.StatCategory;
 			int baseStr = player._Strength;
 			int baseMaxCarryWeight = player._MaxCarryWeight;
 			player.DrinkPotion(InputHandler.ParseInput(input));
@@ -179,12 +179,12 @@ namespace DungeonGameTests
 				_Consumables = new List<Consumable> { new Consumable(1, Consumable.PotionType.Dexterity) }
 			};
 			int potionIndex = player._Consumables.FindIndex(
-				f => f.PotionCategory == Consumable.PotionType.Dexterity);
+				f => f._PotionCategory == Consumable.PotionType.Dexterity);
 			string[] input = new[] { "drink", "dexterity" };
 			string potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("dexterity", potionName);
-			int statAmount = player._Consumables[potionIndex].ChangeStat.ChangeAmount;
-			ChangeStat.StatType statType = player._Consumables[potionIndex].ChangeStat.StatCategory;
+			int statAmount = player._Consumables[potionIndex]._ChangeStat.ChangeAmount;
+			ChangeStat.StatType statType = player._Consumables[potionIndex]._ChangeStat.StatCategory;
 			int baseDex = player._Dexterity;
 			double baseDodgeChance = player._DodgeChance;
 			player.DrinkPotion(InputHandler.ParseInput(input));
@@ -221,7 +221,7 @@ namespace DungeonGameTests
 			Armor armor = player._Inventory[armorIndex] as Armor;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string armorName = textInfo.ToTitleCase(player._Inventory[armorIndex]._Name);
-			int kitAmount = player._Consumables[0].ChangeArmor.ChangeAmount;
+			int kitAmount = player._Consumables[0]._ChangeArmor.ChangeAmount;
 			string kitName = player._Consumables[0]._Name;
 			string[] input = new[] { "enhance", "doesn't exist", kitName };
 			int armorAmount = armor._ArmorRating;
@@ -272,7 +272,7 @@ namespace DungeonGameTests
 			Weapon weapon = player._Inventory[weaponIndex] as Weapon;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string weaponName = textInfo.ToTitleCase(player._Inventory[weaponIndex]._Name);
-			int kitAmount = player._Consumables[0].ChangeWeapon.ChangeAmount;
+			int kitAmount = player._Consumables[0]._ChangeWeapon.ChangeAmount;
 			string kitName = player._Consumables[0]._Name;
 			string[] input = new[] { "enhance", "doesn't exist", kitName };
 			int weaponAmount = weapon.RegDamage;
