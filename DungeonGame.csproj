@@ -58,6 +58,7 @@
     <Compile Include="Interfaces\IRainbowGear.cs" />
     <Compile Include="Items\Armor.cs" />
     <Compile Include="Items\Consumable.cs" />
+    <Compile Include="Items\Gem.cs" />
     <Compile Include="Items\Loot.cs" />
     <Compile Include="Items\Quiver.cs" />
     <Compile Include="Items\Weapon.cs" />

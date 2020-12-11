@@ -42,22 +42,6 @@ namespace DungeonGameTests
 			Assert.AreEqual(75, potionFour._ItemValue);
 			Assert.AreEqual("greater health potion", potionFour._Name);
 			Assert.AreEqual(150, potionFour._RestoreHealth._RestoreHealthAmt);
-			// Test consumable gem creation
-			Loot gem = new Loot(1, Loot.GemType.Amethyst);
-			Assert.AreEqual(20, gem._ItemValue);
-			Assert.AreEqual("chipped amethyst", gem._Name);
-			Loot gemTwo = new Loot(3, Loot.GemType.Amethyst);
-			Assert.AreEqual(60, gemTwo._ItemValue);
-			Assert.AreEqual("chipped amethyst", gemTwo._Name);
-			Loot gemThree = new Loot(4, Loot.GemType.Amethyst);
-			Assert.AreEqual(80, gemThree._ItemValue);
-			Assert.AreEqual("dull amethyst", gemThree._Name);
-			Loot gemFour = new Loot(6, Loot.GemType.Amethyst);
-			Assert.AreEqual(120, gemFour._ItemValue);
-			Assert.AreEqual("dull amethyst", gemFour._Name);
-			Loot gemFive = new Loot(7, Loot.GemType.Amethyst);
-			Assert.AreEqual(140, gemFive._ItemValue);
-			Assert.AreEqual("amethyst", gemFive._Name);
 		}
 		[Test]
 		public void ArmorUnitTests()

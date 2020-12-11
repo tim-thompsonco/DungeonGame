@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonGame.Items;
+using System;
 
 namespace DungeonGame
 {
@@ -165,26 +166,26 @@ namespace DungeonGame
 		}
 		private static void BuildMonsterGem(Monster monster)
 		{
-			var randomGemNum = GameHandler.GetRandomNumber(1, 6);
+			int randomGemNum = GameHandler.GetRandomNumber(1, 6);
 			switch (randomGemNum)
 			{
 				case 1:
-					monster._MonsterItems.Add(new Loot(monster._Level, Loot.GemType.Amethyst));
+					monster._MonsterItems.Add(new Gem(monster._Level, Gem.GemType.Amethyst));
 					break;
 				case 2:
-					monster._MonsterItems.Add(new Loot(monster._Level, Loot.GemType.Diamond));
+					monster._MonsterItems.Add(new Gem(monster._Level, Gem.GemType.Diamond));
 					break;
 				case 3:
-					monster._MonsterItems.Add(new Loot(monster._Level, Loot.GemType.Emerald));
+					monster._MonsterItems.Add(new Gem(monster._Level, Gem.GemType.Emerald));
 					break;
 				case 4:
-					monster._MonsterItems.Add(new Loot(monster._Level, Loot.GemType.Ruby));
+					monster._MonsterItems.Add(new Gem(monster._Level, Gem.GemType.Ruby));
 					break;
 				case 5:
-					monster._MonsterItems.Add(new Loot(monster._Level, Loot.GemType.Sapphire));
+					monster._MonsterItems.Add(new Gem(monster._Level, Gem.GemType.Sapphire));
 					break;
 				case 6:
-					monster._MonsterItems.Add(new Loot(monster._Level, Loot.GemType.Topaz));
+					monster._MonsterItems.Add(new Gem(monster._Level, Gem.GemType.Topaz));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
