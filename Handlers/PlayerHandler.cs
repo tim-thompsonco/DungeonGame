@@ -111,7 +111,7 @@ namespace DungeonGame
 							itemInfo.Append(" (+" + item._RestoreHealth.RestoreHealthAmt + " " + item._PotionCategory + ")");
 							break;
 						case Consumable.PotionType.Mana:
-							itemInfo.Append(" (+" + item._RestoreMana.RestoreManaAmt + " " + item._PotionCategory + ")");
+							itemInfo.Append(" (+" + item._RestoreMana._RestoreManaAmt + " " + item._PotionCategory + ")");
 							break;
 						case Consumable.PotionType.Intelligence:
 						case Consumable.PotionType.Strength:

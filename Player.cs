@@ -335,7 +335,7 @@ namespace DungeonGame
 					break;
 				case Consumable.PotionType.Mana:
 					_Consumables[index]._RestoreMana.RestoreManaPlayer(this);
-					string drankManaString = $"You drank a potion and replenished {_Consumables[index]._RestoreMana.RestoreManaAmt} mana.";
+					string drankManaString = $"You drank a potion and replenished {_Consumables[index]._RestoreMana._RestoreManaAmt} mana.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),

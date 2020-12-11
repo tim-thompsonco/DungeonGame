@@ -2,21 +2,24 @@
 {
 	public class RestoreMana
 	{
-		public int RestoreManaAmt { get; set; }
+		public int _RestoreManaAmt { get; set; }
 
 		// Default constructor for JSON serialization
 		public RestoreMana() { }
 		public RestoreMana(int amount)
 		{
-			this.RestoreManaAmt = amount;
+			_RestoreManaAmt = amount;
 		}
 
 		public void RestoreManaPlayer(Player player)
 		{
-			player._ManaPoints += this.RestoreManaAmt;
-			if (player._ManaPoints > player._MaxManaPoints)
+			if (player._ManaPoints + _RestoreManaAmt > player._MaxManaPoints)
 			{
 				player._ManaPoints = player._MaxManaPoints;
+			}
+			else
+			{
+				player._ManaPoints += _RestoreManaAmt;
 			}
 		}
 	}

@@ -50,7 +50,7 @@ namespace DungeonGameTests
 			string potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("mana", potionName);
 			int? baseMana = player._ManaPoints;
-			int manaAmount = player._Consumables[potionIndex]._RestoreMana.RestoreManaAmt;
+			int manaAmount = player._Consumables[potionIndex]._RestoreMana._RestoreManaAmt;
 			player.DrinkPotion(InputHandler.ParseInput(input));
 			string drankManaString = $"You drank a potion and replenished {manaAmount} mana.";
 			Assert.AreEqual(drankManaString, OutputHandler.Display.Output[0][2]);
