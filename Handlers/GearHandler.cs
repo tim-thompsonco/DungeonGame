@@ -34,7 +34,7 @@ namespace DungeonGame
 					itemInfo.Append(" (AR: " + isItemArmor._ArmorRating + ")");
 					break;
 				case Weapon isItemWeapon:
-					itemInfo.Append(" (DMG: " + isItemWeapon.RegDamage + " CR: " + isItemWeapon.CritMultiplier + ")");
+					itemInfo.Append(" (DMG: " + isItemWeapon._RegDamage + " CR: " + isItemWeapon._CritMultiplier + ")");
 					break;
 			}
 			var itemName = textInfo.ToTitleCase(itemInfo.ToString());
@@ -122,9 +122,9 @@ namespace DungeonGame
 				return;
 			}
 			if (player._Consumables[kitIndex]._ChangeWeapon.KitCategory == ChangeWeapon.KitType.Bowstring &&
-				weapon.WeaponGroup != Weapon.WeaponType.Bow ||
+				weapon._WeaponGroup != Weapon.WeaponType.Bow ||
 				player._Consumables[kitIndex]._ChangeWeapon.KitCategory == ChangeWeapon.KitType.Grindstone &&
-				weapon.WeaponGroup == Weapon.WeaponType.Bow)
+				weapon._WeaponGroup == Weapon.WeaponType.Bow)
 			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -529,7 +529,7 @@ namespace DungeonGame
 				return;
 			}
 			// Check to see if player can use weapon, if so, continue, otherwise return output error msg
-			switch (weapon.WeaponGroup)
+			switch (weapon._WeaponGroup)
 			{
 				case Weapon.WeaponType.Dagger when player._CanUseDagger:
 					break;

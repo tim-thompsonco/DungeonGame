@@ -471,7 +471,7 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Demon)
 			{ _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true, _FireResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
-			player._PlayerWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
+			player._PlayerWeapon._CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			player._Abilities.Add(new PlayerAbility(
 				"immolating arrow", 35, 1, PlayerAbility.ArcherAbility.ImmolatingArrow, 8));
 			string[] input = new[] { "use", "immolating", "arrow" };

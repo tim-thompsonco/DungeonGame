@@ -181,7 +181,7 @@ namespace DungeonGame
 			{
 				attackOptions.Add(new
 					AttackOption(AttackOption.AttackType.Physical,
-						_MonsterWeapon.RegDamage - player.ArmorRating(this), -1));
+						_MonsterWeapon._RegDamage - player.ArmorRating(this), -1));
 			}
 			else
 			{
@@ -320,19 +320,19 @@ namespace DungeonGame
 			int attackAmount = 0;
 			try
 			{
-				if (_MonsterWeapon._Equipped && _MonsterWeapon.WeaponGroup != Weapon.WeaponType.Bow)
+				if (_MonsterWeapon._Equipped && _MonsterWeapon._WeaponGroup != Weapon.WeaponType.Bow)
 				{
 					attackAmount += _MonsterWeapon.Attack();
 				}
 				if (_MonsterWeapon._Equipped &&
-					_MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
+					_MonsterWeapon._WeaponGroup == Weapon.WeaponType.Bow &&
 					_MonsterQuiver.HaveArrows())
 				{
 					_MonsterQuiver.UseArrow();
 					attackAmount += _MonsterWeapon.Attack();
 				}
 				if (_MonsterWeapon._Equipped &&
-					_MonsterWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
+					_MonsterWeapon._WeaponGroup == Weapon.WeaponType.Bow &&
 					!_MonsterQuiver.HaveArrows())
 				{
 					attackAmount += _UnarmedAttackDamage;

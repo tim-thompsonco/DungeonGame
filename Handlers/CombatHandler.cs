@@ -362,7 +362,7 @@ namespace DungeonGame
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
-									this.Player._PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow
+									this.Player._PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow
 										? "You do not have a bow equipped!"
 										: "You do not have enough combo points to use that ability!");
 								break;

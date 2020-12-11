@@ -169,7 +169,7 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Zombie)
 			{ _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
-			monster._MonsterWeapon.CritMultiplier = 1;
+			monster._MonsterWeapon._CritMultiplier = 1;
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Block);
 			string[] inputInfo = new[] { "ability", "block" };
@@ -199,7 +199,7 @@ namespace DungeonGameTests
 			int i = 0;
 			while (blockAmountRemaining > 0)
 			{
-				monster._MonsterWeapon.Durability = 100;
+				monster._MonsterWeapon._Durability = 100;
 				int blockAmountBefore = blockAmountRemaining;
 				monster.Attack(player);
 				blockAmountRemaining = player._Effects.Any() ? player._Effects[0]._EffectAmount : 0;

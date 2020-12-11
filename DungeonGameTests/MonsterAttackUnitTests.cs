@@ -28,7 +28,7 @@ namespace DungeonGameTests
 			OutputHandler.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon);
 			MonsterBuilder.BuildMonster(monster);
-			monster._MonsterWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
+			monster._MonsterWeapon._CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			int spellIndex = monster._Spellbook.FindIndex(
 				f => f._SpellCategory == MonsterSpell.SpellType.Fireball);
 			MonsterSpell.CastFireOffense(monster, player, spellIndex);
@@ -70,7 +70,7 @@ namespace DungeonGameTests
 				monster = new Monster(1, Monster.MonsterType.Skeleton);
 			}
 			MonsterBuilder.BuildMonster(monster);
-			monster._MonsterWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
+			monster._MonsterWeapon._CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			int spellIndex = monster._Spellbook.FindIndex(
 				f => f._SpellCategory == MonsterSpell.SpellType.Frostbolt);
 			foreach (IEquipment item in player._Inventory.Where(item => item._Equipped))
@@ -97,13 +97,13 @@ namespace DungeonGameTests
 			{
 				int playerHitPointsBefore = player._HitPoints;
 				double multiplier = player._Effects[0]._EffectMultiplier;
-				int baseDamage = monster._MonsterWeapon.RegDamage;
-				int frozenDamage = (int)(monster._MonsterWeapon.RegDamage * multiplier);
+				int baseDamage = monster._MonsterWeapon._RegDamage;
+				int frozenDamage = (int)(monster._MonsterWeapon._RegDamage * multiplier);
 				Assert.AreEqual(frozenDamage, baseDamage * multiplier, 1);
 				player._Effects[0].FrozenRound(player);
 				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				Assert.AreEqual(frozenString, OutputHandler.Display.Output[i + 1][2]);
-				monster._MonsterWeapon.Durability = 100;
+				monster._MonsterWeapon._Durability = 100;
 				monster.Attack(player);
 				Assert.AreEqual(playerHitPointsBefore - frozenDamage, player._HitPoints, 7);
 			}
@@ -247,7 +247,7 @@ namespace DungeonGameTests
 			{
 				item._Equipped = false;
 			}
-			monster._MonsterWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
+			monster._MonsterWeapon._CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			MonsterSpell.CastFireOffense(monster, player, spellIndex);
 			int spellCost = monster._Spellbook[spellIndex]._EnergyCost;
 			Assert.AreEqual(monster._MaxEnergyPoints - spellCost, monster._EnergyPoints);

@@ -17,7 +17,7 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Demon)
 			{ _HitPoints = 50, _MaxHitPoints = 100, _FireResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
-			player._PlayerWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
+			player._PlayerWeapon._CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			string[] inputInfo = new[] { "spell", "fireball" };
 			int spellIndex = player._Spellbook.FindIndex(
 				f => f._SpellCategory == PlayerSpell.SpellType.Fireball);
@@ -83,7 +83,7 @@ namespace DungeonGameTests
 			string[] input = new[] { "cast", "frostbolt" };
 			string spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("frostbolt", spellName);
-			player._PlayerWeapon.Durability = 100;
+			player._PlayerWeapon._Durability = 100;
 			double baseDamage = player.PhysicalAttack(monster);
 			player.CastSpell(monster, spellName);
 			Assert.AreEqual(player._MaxManaPoints - player._Spellbook[spellIndex]._ManaCost, player._ManaPoints);
@@ -103,7 +103,7 @@ namespace DungeonGameTests
 				monster._Effects[0].FrozenRound(monster);
 				Assert.AreEqual(i, monster._Effects[0]._EffectCurRound);
 				Assert.AreEqual(frozenString, OutputHandler.Display.Output[i][2]);
-				player._PlayerWeapon.Durability = 100;
+				player._PlayerWeapon._Durability = 100;
 				double frozenDamage = player.PhysicalAttack(monster);
 				monster._HitPoints -= (int)frozenDamage;
 				totalBaseDamage += baseDamage;
@@ -141,7 +141,7 @@ namespace DungeonGameTests
 			string[] input = new[] { "cast", "lightning" };
 			string spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("lightning", spellName);
-			player._PlayerWeapon.Durability = 100;
+			player._PlayerWeapon._Durability = 100;
 			player.CastSpell(monster, spellName);
 			Assert.AreEqual(player._MaxManaPoints - player._Spellbook[spellIndex]._ManaCost, player._ManaPoints);
 			int arcaneSpellDamage = player._Spellbook[spellIndex]._Offensive._Amount;
@@ -432,7 +432,7 @@ namespace DungeonGameTests
 			string[] input = new[] { "cast", "frost", "nova" };
 			string spellName = InputHandler.ParseInput(input);
 			Assert.AreEqual("frost nova", spellName);
-			player._PlayerWeapon.Durability = 100;
+			player._PlayerWeapon._Durability = 100;
 			double baseDamage = player.PhysicalAttack(monster);
 			player.CastSpell(monster, spellName);
 			string attackSuccessString = $"You hit the {monster._Name} for {player._Spellbook[spellIndex]._Offensive._Amount} frost damage.";
@@ -462,7 +462,7 @@ namespace DungeonGameTests
 				Assert.AreEqual(stunnedRoundString, OutputHandler.Display.Output[0][2]);
 				Assert.AreEqual(true, monster._IsStunned);
 				Assert.AreEqual(i, monster._Effects[stunIndex]._EffectCurRound);
-				player._PlayerWeapon.Durability = 100;
+				player._PlayerWeapon._Durability = 100;
 				double frozenDamage = player.PhysicalAttack(monster);
 				Assert.AreEqual(i, monster._Effects[frostIndex]._EffectCurRound);
 				string frozenRoundString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be double!";

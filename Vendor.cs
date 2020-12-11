@@ -78,7 +78,7 @@ namespace DungeonGame
 						itemInfo.Append($" (AR: {isItemArmor._ArmorRating} Cost: {isItemArmor._ItemValue})");
 						break;
 					case Weapon isItemWeapon:
-						itemInfo.Append($" (DMG: {isItemWeapon.RegDamage} CR: {isItemWeapon.CritMultiplier} Cost: {isItemWeapon._ItemValue})");
+						itemInfo.Append($" (DMG: {isItemWeapon._RegDamage} CR: {isItemWeapon._CritMultiplier} Cost: {isItemWeapon._ItemValue})");
 						break;
 					case Consumable isItemConsumable:
 						if (item._Name.Contains("arrow"))
@@ -256,7 +256,7 @@ namespace DungeonGame
 						player._Gold += sellItem switch
 						{
 							Armor armor => (int)(sellItem._ItemValue * (armor._Durability / 100.0)),
-							Weapon weapon => (int)(sellItem._ItemValue * (weapon.Durability / 100.0)),
+							Weapon weapon => (int)(sellItem._ItemValue * (weapon._Durability / 100.0)),
 							_ => sellItem._ItemValue
 						};
 						player._Inventory.RemoveAt(index);
@@ -364,12 +364,12 @@ namespace DungeonGame
 					case VendorType.Weaponsmith:
 						if (player._Inventory[index] is Weapon repairWeapon)
 						{
-							int durabilityRepairWeapon = 100 - repairWeapon.Durability;
+							int durabilityRepairWeapon = 100 - repairWeapon._Durability;
 							float repairCostWeapon = repairWeapon._ItemValue * (durabilityRepairWeapon / 100f);
 							if (player._Gold >= repairCostWeapon)
 							{
 								player._Gold -= (int)repairCostWeapon;
-								repairWeapon.Durability = 100;
+								repairWeapon._Durability = 100;
 								string repairWeaponString = $"Your {repairWeapon._Name} has been repaired for {(int)repairCostWeapon} gold.";
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatSuccessOutputText(),

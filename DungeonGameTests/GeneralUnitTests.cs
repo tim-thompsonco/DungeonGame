@@ -88,10 +88,10 @@ namespace DungeonGameTests
 			Monster skeletonLevelOne = new Monster(1, Monster.MonsterType.Skeleton);
 			MonsterBuilder.BuildMonster(skeletonLevelOne);
 			Weapon skeletonWeapon = skeletonLevelOne._MonsterWeapon;
-			switch (skeletonWeapon.Quality)
+			switch (skeletonWeapon._Quality)
 			{
 				case 1:
-					switch (skeletonWeapon.WeaponGroup)
+					switch (skeletonWeapon._WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
 							Assert.AreEqual("chipped dagger", skeletonWeapon._Name);
@@ -110,7 +110,7 @@ namespace DungeonGameTests
 					}
 					break;
 				case 2:
-					switch (skeletonWeapon.WeaponGroup)
+					switch (skeletonWeapon._WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
 							Assert.AreEqual("chipped sturdy dagger", skeletonWeapon._Name);
@@ -129,7 +129,7 @@ namespace DungeonGameTests
 					}
 					break;
 				case 3:
-					switch (skeletonWeapon.WeaponGroup)
+					switch (skeletonWeapon._WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
 							Assert.AreEqual("chipped fine dagger", skeletonWeapon._Name);
@@ -153,10 +153,10 @@ namespace DungeonGameTests
 			Monster spiderLevelOne = new Monster(1, Monster.MonsterType.Spider);
 			MonsterBuilder.BuildMonster(spiderLevelOne);
 			Weapon spiderWeapon = spiderLevelOne._MonsterWeapon;
-			switch (spiderWeapon.Quality)
+			switch (spiderWeapon._Quality)
 			{
 				case 1:
-					switch (spiderWeapon.WeaponGroup)
+					switch (spiderWeapon._WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
 							Assert.AreEqual("venomous fang", spiderWeapon._Name);
@@ -171,7 +171,7 @@ namespace DungeonGameTests
 					}
 					break;
 				case 2:
-					switch (spiderWeapon.WeaponGroup)
+					switch (spiderWeapon._WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
 							Assert.AreEqual("sturdy venomous fang", spiderWeapon._Name);
@@ -186,7 +186,7 @@ namespace DungeonGameTests
 					}
 					break;
 				case 3:
-					switch (spiderWeapon.WeaponGroup)
+					switch (spiderWeapon._WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
 							Assert.AreEqual("fine venomous fang", spiderWeapon._Name);
@@ -206,10 +206,10 @@ namespace DungeonGameTests
 			Monster zombieLevelThree = new Monster(3, Monster.MonsterType.Zombie);
 			MonsterBuilder.BuildMonster(zombieLevelThree);
 			Weapon zombieWeapon = zombieLevelThree._MonsterWeapon;
-			switch (zombieWeapon.Quality)
+			switch (zombieWeapon._Quality)
 			{
 				case 1:
-					switch (zombieWeapon.WeaponGroup)
+					switch (zombieWeapon._WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
 						case Weapon.WeaponType.OneHandedSword:
@@ -224,7 +224,7 @@ namespace DungeonGameTests
 					}
 					break;
 				case 2:
-					switch (zombieWeapon.WeaponGroup)
+					switch (zombieWeapon._WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
 						case Weapon.WeaponType.OneHandedSword:
@@ -239,7 +239,7 @@ namespace DungeonGameTests
 					}
 					break;
 				case 3:
-					switch (zombieWeapon.WeaponGroup)
+					switch (zombieWeapon._WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
 						case Weapon.WeaponType.OneHandedSword:
@@ -259,10 +259,10 @@ namespace DungeonGameTests
 			Monster demonLevelTwo = new Monster(2, Monster.MonsterType.Demon);
 			MonsterBuilder.BuildMonster(demonLevelTwo);
 			Weapon demonWeapon = demonLevelTwo._MonsterWeapon;
-			switch (demonWeapon.Quality)
+			switch (demonWeapon._Quality)
 			{
 				case 1:
-					switch (demonWeapon.WeaponGroup)
+					switch (demonWeapon._WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
 						case Weapon.WeaponType.Bow:
@@ -281,7 +281,7 @@ namespace DungeonGameTests
 					}
 					break;
 				case 2:
-					switch (demonWeapon.WeaponGroup)
+					switch (demonWeapon._WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
 						case Weapon.WeaponType.Bow:
@@ -300,7 +300,7 @@ namespace DungeonGameTests
 					}
 					break;
 				case 3:
-					switch (demonWeapon.WeaponGroup)
+					switch (demonWeapon._WeaponGroup)
 					{
 						case Weapon.WeaponType.Dagger:
 						case Weapon.WeaponType.Bow:

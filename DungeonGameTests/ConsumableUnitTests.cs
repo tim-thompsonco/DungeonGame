@@ -275,7 +275,7 @@ namespace DungeonGameTests
 			int kitAmount = player._Consumables[0]._ChangeWeapon.ChangeAmount;
 			string kitName = player._Consumables[0]._Name;
 			string[] input = new[] { "enhance", "doesn't exist", kitName };
-			int weaponAmount = weapon.RegDamage;
+			int weaponAmount = weapon._RegDamage;
 			GearHandler.UseWeaponKit(player, input);
 			const string upgradeFail = "What weapon did you want to upgrade?";
 			Assert.AreEqual(upgradeFail, OutputHandler.Display.Output[0][2]);
@@ -289,7 +289,7 @@ namespace DungeonGameTests
 			GearHandler.UseWeaponKit(player, input);
 			string upgradeSuccess = $"You upgraded {weaponName} with a weapon kit.";
 			Assert.AreEqual(upgradeSuccess, OutputHandler.Display.Output[2][2]);
-			Assert.AreEqual(weaponAmount + kitAmount, weapon.RegDamage);
+			Assert.AreEqual(weaponAmount + kitAmount, weapon._RegDamage);
 			Assert.IsEmpty(player._Consumables);
 			player._Consumables.Add(new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Weapon,
 				ChangeWeapon.KitType.Bowstring));

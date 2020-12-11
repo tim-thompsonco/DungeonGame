@@ -25,15 +25,15 @@ namespace DungeonGame
 			switch (this.KitCategory)
 			{
 				case KitType.Grindstone:
-					if (weapon.WeaponGroup != Weapon.WeaponType.Bow)
+					if (weapon._WeaponGroup != Weapon.WeaponType.Bow)
 					{
-						weapon.RegDamage += this.ChangeAmount;
+						weapon._RegDamage += this.ChangeAmount;
 					}
 					break;
 				case KitType.Bowstring:
-					if (weapon.WeaponGroup == Weapon.WeaponType.Bow)
+					if (weapon._WeaponGroup == Weapon.WeaponType.Bow)
 					{
-						weapon.RegDamage += this.ChangeAmount;
+						weapon._RegDamage += this.ChangeAmount;
 					}
 					break;
 				default:

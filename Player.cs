@@ -217,19 +217,19 @@ namespace DungeonGame
 			int attackAmount = 0;
 			try
 			{
-				if (_PlayerWeapon._Equipped && _PlayerWeapon.WeaponGroup != Weapon.WeaponType.Bow)
+				if (_PlayerWeapon._Equipped && _PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow)
 				{
 					attackAmount = _PlayerWeapon.Attack();
 				}
 				if (_PlayerWeapon._Equipped &&
-					_PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
+					_PlayerWeapon._WeaponGroup == Weapon.WeaponType.Bow &&
 					_PlayerQuiver.HaveArrows())
 				{
 					_PlayerQuiver.UseArrow();
 					attackAmount = _PlayerWeapon.Attack();
 				}
 				if (_PlayerWeapon._Equipped &&
-					_PlayerWeapon.WeaponGroup == Weapon.WeaponType.Bow &&
+					_PlayerWeapon._WeaponGroup == Weapon.WeaponType.Bow &&
 					!_PlayerQuiver.HaveArrows())
 				{
 					Quiver.OutOfArrows();
@@ -430,7 +430,7 @@ namespace DungeonGame
 				switch (_Abilities[index]._ArcAbilityCategory)
 				{
 					case PlayerAbility.ArcherAbility.Distance:
-						if (_PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow)
+						if (_PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow)
 						{
 							throw new InvalidOperationException();
 						}
@@ -541,7 +541,7 @@ namespace DungeonGame
 					case PlayerAbility.ArcherAbility.Distance:
 						return;
 					case PlayerAbility.ArcherAbility.Gut:
-						if (_PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow)
+						if (_PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow)
 						{
 							throw new InvalidOperationException();
 						}
@@ -549,7 +549,7 @@ namespace DungeonGame
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case PlayerAbility.ArcherAbility.Precise:
-						if (_PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow)
+						if (_PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow)
 						{
 							throw new InvalidOperationException();
 						}
@@ -557,7 +557,7 @@ namespace DungeonGame
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case PlayerAbility.ArcherAbility.Stun:
-						if (_PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow)
+						if (_PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow)
 						{
 							throw new InvalidOperationException();
 						}
@@ -565,7 +565,7 @@ namespace DungeonGame
 						PlayerAbility.UseStunAbility(opponent, this, index);
 						return;
 					case PlayerAbility.ArcherAbility.Double:
-						if (_PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow)
+						if (_PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow)
 						{
 							throw new InvalidOperationException();
 						}
@@ -586,7 +586,7 @@ namespace DungeonGame
 						}
 						return;
 					case PlayerAbility.ArcherAbility.Wound:
-						if (_PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow)
+						if (_PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow)
 						{
 							throw new InvalidOperationException();
 						}
@@ -600,7 +600,7 @@ namespace DungeonGame
 						PlayerAbility.UseSwiftAura(this, index);
 						return;
 					case PlayerAbility.ArcherAbility.ImmolatingArrow:
-						if (_PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow)
+						if (_PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow)
 						{
 							throw new InvalidOperationException();
 						}
@@ -608,7 +608,7 @@ namespace DungeonGame
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
 					case PlayerAbility.ArcherAbility.Ambush:
-						if (_PlayerWeapon?.WeaponGroup != Weapon.WeaponType.Bow)
+						if (_PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow)
 						{
 							throw new InvalidOperationException();
 						}

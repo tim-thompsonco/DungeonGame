@@ -22,15 +22,15 @@ namespace DungeonGame
 		}
 		public string _Name { get; set; }
 		public string _Desc { get; set; }
-		public int RegDamage { get; set; }
+		public int _RegDamage { get; set; }
 		public int _ItemValue { get; set; }
-		public DamageType DamageGroup { get; set; }
-		public WeaponType WeaponGroup { get; set; }
-		public double CritMultiplier { get; set; }
+		public DamageType _DamageGroup { get; set; }
+		public WeaponType _WeaponGroup { get; set; }
+		public double _CritMultiplier { get; set; }
 		public bool _Equipped { get; set; }
-		public int Level { get; set; }
-		public int Durability { get; set; }
-		public int Quality { get; set; }
+		public int _Level { get; set; }
+		public int _Durability { get; set; }
+		public int _Quality { get; set; }
 		public int _Weight { get; set; }
 		public bool _IsRainbowGear { get; set; }
 
@@ -38,73 +38,73 @@ namespace DungeonGame
 		public Weapon() { }
 		public Weapon(int level, WeaponType weaponType)
 		{
-			this.Level = level;
-			this.WeaponGroup = weaponType;
-			this.DamageGroup = DamageType.Physical;
-			this._Weight = this.WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
-			this.Durability = 100;
-			var randomNum = GameHandler.GetRandomNumber(1, 100);
-			var randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
+			_Level = level;
+			_WeaponGroup = weaponType;
+			_DamageGroup = DamageType.Physical;
+			_Weight = _WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
+			_Durability = 100;
+			int randomNum = GameHandler.GetRandomNumber(1, 100);
+			int randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
 			if (randomNum < 5)
 			{
-				this.RegDamage = randomWeaponDmg + (level - 1) * 3;
-				this.CritMultiplier = 1.3;
-				this.Quality = 3;
+				_RegDamage = randomWeaponDmg + ((level - 1) * 3);
+				_CritMultiplier = 1.3;
+				_Quality = 3;
 			}
 			else if (randomNum < 40)
 			{
-				this.RegDamage = randomWeaponDmg + (level - 1) * 2;
-				this.CritMultiplier = 1.2;
-				this.Quality = 2;
+				_RegDamage = randomWeaponDmg + ((level - 1) * 2);
+				_CritMultiplier = 1.2;
+				_Quality = 2;
 			}
 			else if (randomNum <= 100)
 			{
-				this.RegDamage = randomWeaponDmg + (level - 1) * 1;
-				this.CritMultiplier = 1.1;
-				this.Quality = 1;
+				_RegDamage = randomWeaponDmg + ((level - 1) * 1);
+				_CritMultiplier = 1.1;
+				_Quality = 1;
 			}
-			this._ItemValue = this.RegDamage;
-			this.BuildWeaponName();
-			this._Desc = "A " + this._Name + " that causes damage when you hit stuff with it.";
+			_ItemValue = _RegDamage;
+			BuildWeaponName();
+			_Desc = $"A {_Name} that causes damage when you hit stuff with it.";
 		}
 		public Weapon(WeaponType weaponType, bool isRainbowGear, Player player)
 		{
-			this.Level = player._Level;
-			this._IsRainbowGear = isRainbowGear;
-			this.WeaponGroup = weaponType;
-			this.DamageGroup = DamageType.Physical;
-			this._Weight = this.WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
-			this.Durability = 100;
-			var randomNum = GameHandler.GetRandomNumber(1, 100);
-			var randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
+			_Level = player._Level;
+			_IsRainbowGear = isRainbowGear;
+			_WeaponGroup = weaponType;
+			_DamageGroup = DamageType.Physical;
+			_Weight = _WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
+			_Durability = 100;
+			int randomNum = GameHandler.GetRandomNumber(1, 100);
+			int randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
 			if (randomNum < 5)
 			{
-				this.RegDamage = randomWeaponDmg + (this.Level - 1) * 3;
-				this.CritMultiplier = 1.3;
-				this.Quality = 3;
+				_RegDamage = randomWeaponDmg + ((_Level - 1) * 3);
+				_CritMultiplier = 1.3;
+				_Quality = 3;
 			}
 			else if (randomNum < 40)
 			{
-				this.RegDamage = randomWeaponDmg + (this.Level - 1) * 2;
-				this.CritMultiplier = 1.2;
-				this.Quality = 2;
+				_RegDamage = randomWeaponDmg + ((_Level - 1) * 2);
+				_CritMultiplier = 1.2;
+				_Quality = 2;
 			}
 			else if (randomNum <= 100)
 			{
-				this.RegDamage = randomWeaponDmg + (this.Level - 1) * 1;
-				this.CritMultiplier = 1.1;
-				this.Quality = 1;
+				_RegDamage = randomWeaponDmg + ((_Level - 1) * 1);
+				_CritMultiplier = 1.1;
+				_Quality = 1;
 			}
 			// Add modifier for rainbow gear to enhance weapon damage
-			this.RegDamage += 15;
-			this._ItemValue = this.RegDamage;
-			this.BuildWeaponName("rainbow");
-			this._Desc = "A " + this._Name + " that causes damage when you hit stuff with it.";
+			_RegDamage += 15;
+			_ItemValue = _RegDamage;
+			BuildWeaponName("rainbow");
+			_Desc = $"A {_Name} that causes damage when you hit stuff with it.";
 		}
 		public Weapon(int level, WeaponType weaponType, Monster.MonsterType monsterType)
 			: this(level, weaponType)
 		{
-			var sb = new StringBuilder();
+			StringBuilder sb = new StringBuilder();
 			switch (monsterType)
 			{
 				case Monster.MonsterType.Skeleton:
@@ -112,7 +112,7 @@ namespace DungeonGame
 				case Monster.MonsterType.Zombie:
 					return;
 				case Monster.MonsterType.Spider:
-					sb.Append(this.Quality switch
+					sb.Append(_Quality switch
 					{
 						1 => "",
 						2 => "sturdy ",
@@ -120,7 +120,7 @@ namespace DungeonGame
 						_ => ""
 					});
 					sb.Append("venomous fang");
-					this._Name = sb.ToString();
+					_Name = sb.ToString();
 					return;
 				case Monster.MonsterType.Demon:
 					return;
@@ -131,7 +131,7 @@ namespace DungeonGame
 				case Monster.MonsterType.Troll:
 					return;
 				case Monster.MonsterType.Dragon:
-					sb.Append(this.Quality switch
+					sb.Append(_Quality switch
 					{
 						1 => "",
 						2 => "sturdy ",
@@ -139,7 +139,7 @@ namespace DungeonGame
 						_ => ""
 					});
 					sb.Append("dragon fang");
-					this._Name = sb.ToString();
+					_Name = sb.ToString();
 					return;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(monsterType), monsterType, null);
@@ -148,10 +148,10 @@ namespace DungeonGame
 
 		private void BuildWeaponName()
 		{
-			var sb = new StringBuilder();
-			if (this.WeaponGroup != WeaponType.Bow)
+			StringBuilder sb = new StringBuilder();
+			if (_WeaponGroup != WeaponType.Bow)
 			{
-				sb.Append(this.Level switch
+				sb.Append(_Level switch
 				{
 					1 => "chipped ",
 					2 => "dull ",
@@ -161,7 +161,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				sb.Append(this.Level switch
+				sb.Append(_Level switch
 				{
 					1 => "cracked ",
 					2 => "worn ",
@@ -169,9 +169,9 @@ namespace DungeonGame
 					_ => ""
 				});
 			}
-			if (this.WeaponGroup != WeaponType.Bow)
+			if (_WeaponGroup != WeaponType.Bow)
 			{
-				sb.Append(this.Quality switch
+				sb.Append(_Quality switch
 				{
 					1 => "",
 					2 => "sturdy ",
@@ -181,7 +181,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				sb.Append(this.Quality switch
+				sb.Append(_Quality switch
 				{
 					1 => "pine ",
 					2 => "oak ",
@@ -189,7 +189,7 @@ namespace DungeonGame
 					_ => ""
 				});
 			}
-			sb.Append(this.WeaponGroup switch
+			sb.Append(_WeaponGroup switch
 			{
 				WeaponType.Axe => "axe",
 				WeaponType.Bow => "bow",
@@ -198,13 +198,13 @@ namespace DungeonGame
 				WeaponType.TwoHandedSword => "sword (2H)",
 				_ => ""
 			});
-			this._Name = sb.ToString();
+			_Name = sb.ToString();
 		}
 		private void BuildWeaponName(string rainbowName)
 		{
-			var sb = new StringBuilder();
-			sb.Append(rainbowName + " ");
-			sb.Append(this.WeaponGroup switch
+			StringBuilder sb = new StringBuilder();
+			sb.Append($"{rainbowName} ");
+			sb.Append(_WeaponGroup switch
 			{
 				WeaponType.Axe => "axe",
 				WeaponType.Bow => "bow",
@@ -213,28 +213,36 @@ namespace DungeonGame
 				WeaponType.TwoHandedSword => "sword (2H)",
 				_ => ""
 			});
-			this._Name = sb.ToString();
+			_Name = sb.ToString();
 		}
 		public int Attack()
 		{
-			if (!this._Equipped) return 0;
-			double attackDamage = this.RegDamage;
-			var chanceToCrit = GameHandler.GetRandomNumber(1, 100);
-			if (chanceToCrit <= 25) attackDamage *= this.CritMultiplier;
-			this.Durability -= 1;
-			attackDamage *= this.Durability / (double)100;
+			if (!_Equipped)
+			{
+				return 0;
+			}
+
+			double attackDamage = _RegDamage;
+			int chanceToCrit = GameHandler.GetRandomNumber(1, 100);
+			if (chanceToCrit <= 25)
+			{
+				attackDamage *= _CritMultiplier;
+			}
+
+			_Durability -= 1;
+			attackDamage *= _Durability / (double)100;
 			return (int)attackDamage;
 		}
 		public void UpdateRainbowStats(Player player)
 		{
-			this.Level = player._Level;
-			var randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
-			this.RegDamage = randomWeaponDmg + (this.Level - 1) * 3;
-			this.CritMultiplier = 1.3;
-			this.Quality = 3;
+			_Level = player._Level;
+			int randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
+			_RegDamage = randomWeaponDmg + ((_Level - 1) * 3);
+			_CritMultiplier = 1.3;
+			_Quality = 3;
 			// Add modifier for rainbow gear to enhance weapon damage
-			this.RegDamage += 15;
-			this._ItemValue = this.RegDamage;
+			_RegDamage += 15;
+			_ItemValue = _RegDamage;
 		}
 	}
 }
