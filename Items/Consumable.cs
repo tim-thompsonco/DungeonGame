@@ -114,7 +114,7 @@ namespace DungeonGame
 			_ItemValue = itemValue;
 			_ArrowCategory = arrowType;
 			_Arrow = new Arrow(50);
-			_Desc = $"A bundle of {_Arrow.Quantity} arrows.";
+			_Desc = $"A bundle of {_Arrow._Quantity} arrows.";
 		}
 		public Consumable(KitLevel kitLevel, KitType kitType, ChangeArmor.KitType kitCategory)
 		{

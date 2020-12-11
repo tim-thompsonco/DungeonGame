@@ -61,7 +61,7 @@ namespace DungeonGame
 				var itemName = GearHandler.GetItemDetails(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (itemName.Contains("Quiver"))
-					itemInfo.Append(" (Arrows: " + player._PlayerQuiver.Quantity + "/" + player._PlayerQuiver._MaxQuantity + ")");
+					itemInfo.Append(" (Arrows: " + player._PlayerQuiver._Quantity + "/" + player._PlayerQuiver._MaxQuantity + ")");
 				itemInfo.Append(" <_Equipped>");
 				if (item is Armor || item is Weapon)
 				{
@@ -83,7 +83,7 @@ namespace DungeonGame
 				var itemName = GearHandler.GetItemDetails(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (player._PlayerQuiver?._Name == itemName)
-					itemInfo.Append("Arrows: " + player._PlayerQuiver.Quantity + "/" + player._PlayerQuiver._MaxQuantity);
+					itemInfo.Append("Arrows: " + player._PlayerQuiver._Quantity + "/" + player._PlayerQuiver._MaxQuantity);
 				if (item is Armor || item is Weapon)
 				{
 					var playerItem = item as IRainbowGear;
@@ -127,7 +127,7 @@ namespace DungeonGame
 				}
 				if (item._Name.Contains("arrow"))
 				{
-					itemInfo.Append(" (" + item._Arrow.Quantity + ")");
+					itemInfo.Append(" (" + item._Arrow._Quantity + ")");
 				}
 				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 				if (!consumableDict.ContainsKey(itemName))
@@ -458,7 +458,7 @@ namespace DungeonGame
 							  " Dex: " + player._Dexterity + " _Level: " + player._Level;
 			var statsSb = new StringBuilder(baseStatsString);
 			if (player._PlayerClass == Player.PlayerClassType.Archer)
-				statsSb.Append(" Arrows: " + player._PlayerQuiver?.Quantity);
+				statsSb.Append(" Arrows: " + player._PlayerQuiver?._Quantity);
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),

@@ -370,7 +370,7 @@ namespace DungeonGame
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You reloaded your quiver.");
-				if (_Consumables[index]._Arrow.Quantity == 0)
+				if (_Consumables[index]._Arrow._Quantity == 0)
 				{
 					_Consumables.RemoveAt(index);
 				}

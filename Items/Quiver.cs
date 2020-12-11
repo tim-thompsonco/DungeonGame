@@ -4,7 +4,7 @@
 	{
 		public bool _Equipped { get; set; }
 		public int _ItemValue { get; set; }
-		public int Quantity { get; set; }
+		public int _Quantity { get; set; }
 		public int _MaxQuantity { get; set; }
 		public int _Weight { get; set; }
 		public string _Name { get; set; }
@@ -15,7 +15,7 @@
 		public Quiver(string name, int quantity, int maxQuantity, int itemValue)
 		{
 			_Name = name;
-			Quantity = quantity;
+			_Quantity = quantity;
 			_MaxQuantity = maxQuantity;
 			_ItemValue = itemValue;
 			_Weight = 1;
@@ -24,11 +24,11 @@
 
 		public bool HaveArrows()
 		{
-			return Quantity > 0;
+			return _Quantity > 0;
 		}
 		public void UseArrow()
 		{
-			Quantity -= 1;
+			_Quantity -= 1;
 		}
 		public static void OutOfArrows()
 		{
