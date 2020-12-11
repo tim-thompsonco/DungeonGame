@@ -21,7 +21,7 @@
 					"You don't have a quiver to reload!");
 				return;
 			}
-			var amountCanLoad = player._PlayerQuiver.MaxQuantity - player._PlayerQuiver.Quantity;
+			var amountCanLoad = player._PlayerQuiver._MaxQuantity - player._PlayerQuiver.Quantity;
 			if (this.Quantity < amountCanLoad)
 			{
 				player._PlayerQuiver.Quantity += this.Quantity;

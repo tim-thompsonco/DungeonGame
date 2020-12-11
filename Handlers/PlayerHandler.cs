@@ -61,7 +61,7 @@ namespace DungeonGame
 				var itemName = GearHandler.GetItemDetails(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (itemName.Contains("Quiver"))
-					itemInfo.Append(" (Arrows: " + player._PlayerQuiver.Quantity + "/" + player._PlayerQuiver.MaxQuantity + ")");
+					itemInfo.Append(" (Arrows: " + player._PlayerQuiver.Quantity + "/" + player._PlayerQuiver._MaxQuantity + ")");
 				itemInfo.Append(" <_Equipped>");
 				if (item is Armor || item is Weapon)
 				{
@@ -83,7 +83,7 @@ namespace DungeonGame
 				var itemName = GearHandler.GetItemDetails(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (player._PlayerQuiver?._Name == itemName)
-					itemInfo.Append("Arrows: " + player._PlayerQuiver.Quantity + "/" + player._PlayerQuiver.MaxQuantity);
+					itemInfo.Append("Arrows: " + player._PlayerQuiver.Quantity + "/" + player._PlayerQuiver._MaxQuantity);
 				if (item is Armor || item is Weapon)
 				{
 					var playerItem = item as IRainbowGear;
