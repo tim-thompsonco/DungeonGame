@@ -5,147 +5,158 @@ namespace DungeonGame
 {
 	public class CombatHandler
 	{
-		private string[] Input { get; set; }
-		private Monster Opponent { get; set; }
-		private Player Player { get; set; }
-		private bool FleeSuccess { get; set; }
+		private string[] _Input { get; set; }
+		private Monster _Opponent { get; set; }
+		private Player _Player { get; set; }
+		private bool _FleeSuccess { get; set; }
 
 		public CombatHandler(Monster opponent, Player player)
 		{
-			this.Player = player;
-			this.Opponent = opponent;
-			this.Player._InCombat = true;
-			this.Opponent._InCombat = true;
+			_Player = player;
+			_Opponent = opponent;
+			_Player._InCombat = true;
+			_Opponent._InCombat = true;
 		}
 
 		public void StartCombat()
 		{
 			Console.Clear();
-			var fightStartString = this.Player._Name + ", you have encountered a " + this.Opponent._Name + ". Time to fight!";
+			string fightStartString = $"{_Player._Name}, you have encountered a {_Opponent._Name}. Time to fight!";
 			OutputHandler.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				fightStartString);
-			while (this.Opponent._HitPoints > 0 && this.Player._HitPoints > 0 &&
-				   this.Player._InCombat && this.Opponent._InCombat)
+			while (_Opponent._HitPoints > 0 && _Player._HitPoints > 0 &&
+				   _Player._InCombat && _Opponent._InCombat)
 			{
-				GameHandler.RemovedExpiredEffectsAsync(this.Player);
-				GameHandler.RemovedExpiredEffectsAsync(this.Opponent);
-				var isInputValid = false;
+				GameHandler.RemovedExpiredEffectsAsync(_Player);
+				GameHandler.RemovedExpiredEffectsAsync(_Opponent);
+				bool isInputValid = false;
 				// Get input and check to see if input is valid, and if not, keep trying to get input from user
 				while (!isInputValid)
 				{
 					// Show initial output that announces start of fight
-					OutputHandler.ShowUserOutput(this.Player, this.Opponent);
+					OutputHandler.ShowUserOutput(_Player, _Opponent);
 					OutputHandler.Display.ClearUserOutput();
 					// Player will attack, use ability, cast spells, etc. to cause damage
-					this.Input = InputHandler.GetFormattedInput(Console.ReadLine());
+					_Input = InputHandler.GetFormattedInput(Console.ReadLine());
 					Console.Clear();
-					isInputValid = this.ProcessPlayerInput();
+					isInputValid = ProcessPlayerInput();
 				}
-				if (this.Player._Effects.Any())
+				if (_Player._Effects.Any())
 				{
-					this.ProcessPlayerEffects();
+					ProcessPlayerEffects();
 				}
-				if (this.FleeSuccess) return;
-				// Check to see if player attack killed monster
-				if (this.Opponent._HitPoints <= 0)
+				if (_FleeSuccess)
 				{
-					this.Opponent.MonsterDeath(this.Player);
 					return;
 				}
-				if (this.Opponent._Effects.Any())
+				// Check to see if player attack killed monster
+				if (_Opponent._HitPoints <= 0)
 				{
-					this.ProcessOpponentEffects();
+					_Opponent.MonsterDeath(_Player);
+					return;
+				}
+				if (_Opponent._Effects.Any())
+				{
+					ProcessOpponentEffects();
 				}
 				// Check to see if damage over time effects killed monster
-				if (this.Opponent._HitPoints <= 0)
+				if (_Opponent._HitPoints <= 0)
 				{
-					this.Opponent.MonsterDeath(this.Player);
+					_Opponent.MonsterDeath(_Player);
 					return;
 				}
-				if (this.Opponent._IsStunned) continue;
-				this.Opponent.Attack(this.Player);
+				if (_Opponent._IsStunned)
+				{
+					continue;
+				}
+
+				_Opponent.Attack(_Player);
 				// Check at end of round to see if monster was killed by combat round
-				if (this.Opponent._HitPoints > 0) continue;
-				this.Opponent.MonsterDeath(this.Player);
+				if (_Opponent._HitPoints > 0)
+				{
+					continue;
+				}
+
+				_Opponent.MonsterDeath(_Player);
 				return;
 			}
 		}
 		private void FleeCombat()
 		{
-			var randomNum = GameHandler.GetRandomNumber(1, 10);
+			int randomNum = GameHandler.GetRandomNumber(1, 10);
 			if (randomNum > 5)
 			{
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You have fled combat successfully!");
-				this.Player._InCombat = false;
-				this.Opponent._InCombat = false;
-				this.FleeSuccess = true;
-				var playerRoom = RoomHandler.Rooms[this.Player._PlayerLocation];
-				var playerX = this.Player._PlayerLocation._X;
-				var playerY = this.Player._PlayerLocation._Y;
-				var playerZ = this.Player._PlayerLocation._Z;
+				_Player._InCombat = false;
+				_Opponent._InCombat = false;
+				_FleeSuccess = true;
+				IRoom playerRoom = RoomHandler.Rooms[_Player._PlayerLocation];
+				int playerX = _Player._PlayerLocation._X;
+				int playerY = _Player._PlayerLocation._Y;
+				int playerZ = _Player._PlayerLocation._Z;
 				if (playerRoom._Up != null)
 				{
-					var newCoord = new Coordinate(playerX, playerY, playerZ + 1);
-					RoomHandler.ChangeRoom(this.Player, newCoord);
+					Coordinate newCoord = new Coordinate(playerX, playerY, playerZ + 1);
+					RoomHandler.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._East != null)
 				{
-					var newCoord = new Coordinate(playerX + 1, playerY, playerZ);
-					RoomHandler.ChangeRoom(this.Player, newCoord);
+					Coordinate newCoord = new Coordinate(playerX + 1, playerY, playerZ);
+					RoomHandler.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._West != null)
 				{
-					var newCoord = new Coordinate(playerX - 1, playerY, playerZ);
-					RoomHandler.ChangeRoom(this.Player, newCoord);
+					Coordinate newCoord = new Coordinate(playerX - 1, playerY, playerZ);
+					RoomHandler.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._North != null)
 				{
-					var newCoord = new Coordinate(playerX, playerY + 1, playerZ);
-					RoomHandler.ChangeRoom(this.Player, newCoord);
+					Coordinate newCoord = new Coordinate(playerX, playerY + 1, playerZ);
+					RoomHandler.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._South != null)
 				{
-					var newCoord = new Coordinate(playerX, playerY - 1, playerZ);
-					RoomHandler.ChangeRoom(this.Player, newCoord);
+					Coordinate newCoord = new Coordinate(playerX, playerY - 1, playerZ);
+					RoomHandler.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._NorthEast != null)
 				{
-					var newCoord = new Coordinate(playerX + 1, playerY + 1, playerZ);
-					RoomHandler.ChangeRoom(this.Player, newCoord);
+					Coordinate newCoord = new Coordinate(playerX + 1, playerY + 1, playerZ);
+					RoomHandler.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._NorthWest != null)
 				{
-					var newCoord = new Coordinate(playerX - 1, playerY + 1, playerZ);
-					RoomHandler.ChangeRoom(this.Player, newCoord);
+					Coordinate newCoord = new Coordinate(playerX - 1, playerY + 1, playerZ);
+					RoomHandler.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._SouthEast != null)
 				{
-					var newCoord = new Coordinate(playerX + 1, playerY - 1, playerZ);
-					RoomHandler.ChangeRoom(this.Player, newCoord);
+					Coordinate newCoord = new Coordinate(playerX + 1, playerY - 1, playerZ);
+					RoomHandler.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._SouthWest != null)
 				{
-					var newCoord = new Coordinate(playerX - 1, playerY - 1, playerZ);
-					RoomHandler.ChangeRoom(this.Player, newCoord);
+					Coordinate newCoord = new Coordinate(playerX - 1, playerY - 1, playerZ);
+					RoomHandler.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._Down != null)
 				{
-					var newCoord = new Coordinate(playerX, playerY, playerZ - 1);
-					RoomHandler.ChangeRoom(this.Player, newCoord);
+					Coordinate newCoord = new Coordinate(playerX, playerY, playerZ - 1);
+					RoomHandler.ChangeRoom(_Player, newCoord);
 					return;
 				}
 			}
@@ -156,36 +167,33 @@ namespace DungeonGame
 		}
 		private void ProcessPlayerEffects()
 		{
-			foreach (var effect in this.Player._Effects)
+			foreach (Effect effect in _Player._Effects)
 			{
 				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
-						effect.HealingRound(this.Player);
+						effect.HealingRound(_Player);
 						break;
 					case Effect.EffectType.ChangePlayerDamage:
-						effect.ChangePlayerDamageRound(this.Player);
+						effect.ChangePlayerDamageRound(_Player);
 						break;
 					case Effect.EffectType.ChangeArmor:
 						effect.ChangeArmorRound();
 						break;
 					case Effect.EffectType.OnFire:
-						effect.OnFireRound(this.Player);
+						effect.OnFireRound(_Player);
 						break;
 					case Effect.EffectType.Bleeding:
-						effect.BleedingRound(this.Player);
+						effect.BleedingRound(_Player);
 						break;
 					case Effect.EffectType.Stunned:
 						break;
 					case Effect.EffectType.Frozen:
-						effect.FrozenRound(this.Player);
+						effect.FrozenRound(_Player);
 						break;
 					case Effect.EffectType.ChangeStat:
-						break;
 					case Effect.EffectType.ChangeOpponentDamage:
-						break;
 					case Effect.EffectType.BlockDamage:
-						break;
 					case Effect.EffectType.ReflectDamage:
 						break;
 					default:
@@ -195,35 +203,28 @@ namespace DungeonGame
 		}
 		private void ProcessOpponentEffects()
 		{
-			GameHandler.RemovedExpiredEffectsAsync(this.Opponent);
-			foreach (var effect in this.Opponent._Effects)
+			GameHandler.RemovedExpiredEffectsAsync(_Opponent);
+			foreach (Effect effect in _Opponent._Effects)
 			{
 				switch (effect._EffectGroup)
 				{
 					case Effect.EffectType.Healing:
-						break;
 					case Effect.EffectType.ChangePlayerDamage:
-						break;
 					case Effect.EffectType.ChangeArmor:
+					case Effect.EffectType.Frozen:
+					case Effect.EffectType.ChangeOpponentDamage:
+					case Effect.EffectType.ReflectDamage:
+					case Effect.EffectType.ChangeStat:
+					case Effect.EffectType.BlockDamage:
 						break;
 					case Effect.EffectType.OnFire:
-						effect.OnFireRound(this.Opponent);
+						effect.OnFireRound(_Opponent);
 						break;
 					case Effect.EffectType.Bleeding:
-						effect.BleedingRound(this.Opponent);
+						effect.BleedingRound(_Opponent);
 						break;
 					case Effect.EffectType.Stunned:
-						effect.StunnedRound(this.Opponent);
-						break;
-					case Effect.EffectType.Frozen:
-						break;
-					case Effect.EffectType.ChangeOpponentDamage:
-						break;
-					case Effect.EffectType.ReflectDamage:
-						break;
-					case Effect.EffectType.ChangeStat:
-						break;
-					case Effect.EffectType.BlockDamage:
+						effect.StunnedRound(_Opponent);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -232,14 +233,14 @@ namespace DungeonGame
 		}
 		private bool ProcessPlayerInput()
 		{
-			switch (this.Input[0])
+			switch (_Input[0])
 			{
 				case "f":
 				case "fight":
-					var attackDamage = this.Player.PhysicalAttack(this.Opponent);
-					if (attackDamage - this.Opponent.ArmorRating(this.Player) <= 0)
+					int attackDamage = _Player.PhysicalAttack(_Opponent);
+					if (attackDamage - _Opponent.ArmorRating(_Player) <= 0)
 					{
-						var armorAbsorbString = "The " + this.Opponent._Name + "'s armor absorbed all of your attack!";
+						string armorAbsorbString = $"The {_Opponent._Name}'s armor absorbed all of your attack!";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
@@ -247,7 +248,7 @@ namespace DungeonGame
 					}
 					else if (attackDamage == 0)
 					{
-						var attackFailString = "You missed " + this.Opponent._Name + "!";
+						string attackFailString = $"You missed {_Opponent._Name}!";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
@@ -255,22 +256,22 @@ namespace DungeonGame
 					}
 					else
 					{
-						var attackAmount = attackDamage - this.Opponent.ArmorRating(this.Player);
-						var attackSucceedString = "You hit the " + this.Opponent._Name + " for " + attackAmount + " physical damage.";
+						int attackAmount = attackDamage - _Opponent.ArmorRating(_Player);
+						string attackSucceedString = $"You hit the {_Opponent._Name} for {attackAmount} physical damage.";
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatAttackSuccessText(),
 							Settings.FormatDefaultBackground(),
 							attackSucceedString);
-						this.Opponent._HitPoints -= attackAmount;
+						_Opponent._HitPoints -= attackAmount;
 					}
 					break;
 				case "cast":
 					try
 					{
-						if (this.Input[1] != null)
+						if (_Input[1] != null)
 						{
-							var spellName = InputHandler.ParseInput(this.Input);
-							this.Player.CastSpell(this.Opponent, spellName);
+							string spellName = InputHandler.ParseInput(_Input);
+							_Player.CastSpell(_Opponent, spellName);
 						}
 					}
 					catch (IndexOutOfRangeException)
@@ -283,7 +284,7 @@ namespace DungeonGame
 					}
 					catch (NullReferenceException)
 					{
-						if (this.Player._PlayerClass != Player.PlayerClassType.Mage)
+						if (_Player._PlayerClass != Player.PlayerClassType.Mage)
 						{
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
@@ -297,7 +298,7 @@ namespace DungeonGame
 						OutputHandler.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
-							this.Player._PlayerClass != Player.PlayerClassType.Mage
+							_Player._PlayerClass != Player.PlayerClassType.Mage
 								? "You can't cast spells. You're not a mage!"
 								: "You do not have enough mana to cast that spell!");
 						return false;
@@ -306,13 +307,13 @@ namespace DungeonGame
 				case "use":
 					try
 					{
-						if (this.Input[1] != null && this.Input[1] != "bandage")
+						if (_Input[1] != null && _Input[1] != "bandage")
 						{
-							this.Player.UseAbility(this.Opponent, this.Input);
+							_Player.UseAbility(_Opponent, _Input);
 						}
-						if (this.Input[1] != null && this.Input[1] == "bandage")
+						if (_Input[1] != null && _Input[1] == "bandage")
 						{
-							this.Player.UseAbility(this.Input);
+							_Player.UseAbility(_Input);
 						}
 					}
 					catch (IndexOutOfRangeException)
@@ -333,7 +334,7 @@ namespace DungeonGame
 					}
 					catch (NullReferenceException)
 					{
-						if (this.Player._PlayerClass == Player.PlayerClassType.Mage)
+						if (_Player._PlayerClass == Player.PlayerClassType.Mage)
 						{
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
@@ -344,7 +345,7 @@ namespace DungeonGame
 					}
 					catch (InvalidOperationException)
 					{
-						switch (this.Player._PlayerClass)
+						switch (_Player._PlayerClass)
 						{
 							case Player.PlayerClassType.Mage:
 								OutputHandler.Display.StoreUserOutput(
@@ -362,7 +363,7 @@ namespace DungeonGame
 								OutputHandler.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
-									this.Player._PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow
+									_Player._PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow
 										? "You do not have a bow equipped!"
 										: "You do not have enough combo points to use that ability!");
 								break;
@@ -374,15 +375,15 @@ namespace DungeonGame
 					break;
 				case "equip":
 				case "unequip":
-					GearHandler.EquipItem(this.Player, this.Input);
+					GearHandler.EquipItem(_Player, _Input);
 					break;
 				case "flee":
-					this.FleeCombat();
+					FleeCombat();
 					break;
 				case "drink":
-					if (this.Input.Last() == "potion")
+					if (_Input.Last() == "potion")
 					{
-						this.Player.DrinkPotion(InputHandler.ParseInput(this.Input));
+						_Player.DrinkPotion(InputHandler.ParseInput(_Input));
 					}
 					else
 					{
@@ -394,19 +395,19 @@ namespace DungeonGame
 					}
 					break;
 				case "reload":
-					this.Player.ReloadQuiver();
+					_Player.ReloadQuiver();
 					break;
 				case "i":
 				case "inventory":
-					PlayerHandler.ShowInventory(this.Player);
+					PlayerHandler.ShowInventory(_Player);
 					return false;
 				case "list":
-					switch (this.Input[1])
+					switch (_Input[1])
 					{
 						case "abilities":
 							try
 							{
-								PlayerHandler.ListAbilities(this.Player);
+								PlayerHandler.ListAbilities(_Player);
 							}
 							catch (IndexOutOfRangeException)
 							{
@@ -420,7 +421,7 @@ namespace DungeonGame
 						case "spells":
 							try
 							{
-								PlayerHandler.ListSpells(this.Player);
+								PlayerHandler.ListSpells(_Player);
 							}
 							catch (IndexOutOfRangeException)
 							{
@@ -436,7 +437,7 @@ namespace DungeonGame
 				case "ability":
 					try
 					{
-						PlayerHandler.AbilityInfo(this.Player, this.Input);
+						PlayerHandler.AbilityInfo(_Player, _Input);
 					}
 					catch (IndexOutOfRangeException)
 					{
@@ -447,7 +448,7 @@ namespace DungeonGame
 					}
 					catch (NullReferenceException)
 					{
-						if (this.Player._PlayerClass == Player.PlayerClassType.Mage)
+						if (_Player._PlayerClass == Player.PlayerClassType.Mage)
 						{
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
@@ -459,7 +460,7 @@ namespace DungeonGame
 				case "spell":
 					try
 					{
-						PlayerHandler.SpellInfo(this.Player, this.Input);
+						PlayerHandler.SpellInfo(_Player, _Input);
 					}
 					catch (IndexOutOfRangeException)
 					{
@@ -470,7 +471,7 @@ namespace DungeonGame
 					}
 					catch (NullReferenceException)
 					{
-						if (this.Player._PlayerClass != Player.PlayerClassType.Mage)
+						if (_Player._PlayerClass != Player.PlayerClassType.Mage)
 						{
 							OutputHandler.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
