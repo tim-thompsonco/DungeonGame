@@ -326,7 +326,7 @@ namespace DungeonGame
 			{
 				case Consumable.PotionType.Health:
 					_Consumables[index]._RestoreHealth.RestoreHealthPlayer(this);
-					string drankHealthString = $"You drank a potion and replenished {_Consumables[index]._RestoreHealth.RestoreHealthAmt} health.";
+					string drankHealthString = $"You drank a potion and replenished {_Consumables[index]._RestoreHealth._RestoreHealthAmt} health.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),

@@ -29,19 +29,19 @@ namespace DungeonGameTests
 			Consumable potion = new Consumable(3, Consumable.PotionType.Health);
 			Assert.AreEqual(25, potion._ItemValue);
 			Assert.AreEqual("minor health potion", potion._Name);
-			Assert.AreEqual(50, potion._RestoreHealth.RestoreHealthAmt);
+			Assert.AreEqual(50, potion._RestoreHealth._RestoreHealthAmt);
 			Consumable potionTwo = new Consumable(4, Consumable.PotionType.Health);
 			Assert.AreEqual(50, potionTwo._ItemValue);
 			Assert.AreEqual("health potion", potionTwo._Name);
-			Assert.AreEqual(100, potionTwo._RestoreHealth.RestoreHealthAmt);
+			Assert.AreEqual(100, potionTwo._RestoreHealth._RestoreHealthAmt);
 			Consumable potionThree = new Consumable(6, Consumable.PotionType.Health);
 			Assert.AreEqual(50, potionThree._ItemValue);
 			Assert.AreEqual("health potion", potionThree._Name);
-			Assert.AreEqual(100, potionThree._RestoreHealth.RestoreHealthAmt);
+			Assert.AreEqual(100, potionThree._RestoreHealth._RestoreHealthAmt);
 			Consumable potionFour = new Consumable(7, Consumable.PotionType.Health);
 			Assert.AreEqual(75, potionFour._ItemValue);
 			Assert.AreEqual("greater health potion", potionFour._Name);
-			Assert.AreEqual(150, potionFour._RestoreHealth.RestoreHealthAmt);
+			Assert.AreEqual(150, potionFour._RestoreHealth._RestoreHealthAmt);
 			// Test consumable gem creation
 			Loot gem = new Loot(1, Loot.GemType.Amethyst);
 			Assert.AreEqual(20, gem._ItemValue);

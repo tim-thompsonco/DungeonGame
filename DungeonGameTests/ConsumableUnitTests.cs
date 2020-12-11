@@ -25,7 +25,7 @@ namespace DungeonGameTests
 			string potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("health", potionName);
 			int baseHealth = player._HitPoints;
-			int healAmount = player._Consumables[potionIndex]._RestoreHealth.RestoreHealthAmt;
+			int healAmount = player._Consumables[potionIndex]._RestoreHealth._RestoreHealthAmt;
 			player.DrinkPotion(InputHandler.ParseInput(input));
 			string drankHealthString = $"You drank a potion and replenished {healAmount} health.";
 			Assert.AreEqual(drankHealthString, OutputHandler.Display.Output[0][2]);

@@ -108,7 +108,7 @@ namespace DungeonGame
 					switch (item._PotionCategory)
 					{
 						case Consumable.PotionType.Health:
-							itemInfo.Append(" (+" + item._RestoreHealth.RestoreHealthAmt + " " + item._PotionCategory + ")");
+							itemInfo.Append(" (+" + item._RestoreHealth._RestoreHealthAmt + " " + item._PotionCategory + ")");
 							break;
 						case Consumable.PotionType.Mana:
 							itemInfo.Append(" (+" + item._RestoreMana._RestoreManaAmt + " " + item._PotionCategory + ")");
