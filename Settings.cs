@@ -20,18 +20,24 @@
 		}
 		public static int GetMiniMapBorderWidth()
 		{
-			return GetMiniMapWidth() * 4 + 4;
+			return (GetMiniMapWidth() * 4) + 4;
 		}
 		public static string GetTileColor(Player player)
 		{
+			// Tile color depends on how deep in the dungeon the player is
+			// The Z coordinate for player location is up/down, so it shows the dungeon level
+			// Levels are depicted as negative numbers, so -8 is 8 levels deep into the dungeon, -9 is 9 levels deep, etc.
+
 			if (player._PlayerLocation._Z <= -8)
 			{
 				return "darkred";
 			}
+
 			if (player._PlayerLocation._Z < -3)
 			{
 				return "darkgray";
 			}
+
 			return "gray";
 		}
 		public static string GetEmptyMapTileSizeTwo()
