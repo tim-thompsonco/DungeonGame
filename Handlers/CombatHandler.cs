@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonGame.Items;
+using System;
 using System.Linq;
 
 namespace DungeonGame

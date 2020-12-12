@@ -1,4 +1,4 @@
-﻿namespace DungeonGame
+﻿namespace DungeonGame.Items
 {
 	public class Loot : IEquipment
 	{

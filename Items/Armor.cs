@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace DungeonGame
+namespace DungeonGame.Items
 {
 	public class Armor : IEquipment, IRainbowGear
 	{
