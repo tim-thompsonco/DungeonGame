@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DungeonGame.Items;
+using DungeonGame.Items.Consumables;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -125,9 +127,10 @@ namespace DungeonGame
 							throw new ArgumentOutOfRangeException();
 					}
 				}
-				if (item._Name.Contains("arrow"))
+				if (item.GetType() == typeof(Arrows))
 				{
-					itemInfo.Append(" (" + item._Arrow._Quantity + ")");
+					Arrows arrows = item as Arrows;
+					itemInfo.Append(" (" + arrows._Quantity + ")");
 				}
 				var itemName = textInfo.ToTitleCase(itemInfo.ToString());
 				if (!consumableDict.ContainsKey(itemName))

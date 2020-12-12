@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DungeonGame.Items;
+using DungeonGame.Items.Consumables;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -41,7 +43,7 @@ namespace DungeonGame
 					break;
 				case VendorType.Weaponsmith:
 					_VendorItems.Add(new Weapon(1, Weapon.WeaponType.OneHandedSword));
-					_VendorItems.Add(new Consumable("arrows", 15, Consumable.ArrowType.Standard));
+					_VendorItems.Add(new Arrows("arrows", 15, Arrows.ArrowType.Standard));
 					break;
 				case VendorType.Healer:
 					_VendorItems.Add(
@@ -81,9 +83,10 @@ namespace DungeonGame
 						itemInfo.Append($" (DMG: {isItemWeapon._RegDamage} CR: {isItemWeapon._CritMultiplier} Cost: {isItemWeapon._ItemValue})");
 						break;
 					case Consumable isItemConsumable:
-						if (item._Name.Contains("arrow"))
+						if (item.GetType() == typeof(Arrows))
 						{
-							itemInfo.Append($" ({isItemConsumable._Arrow._Quantity})");
+							Arrows arrows = item as Arrows;
+							itemInfo.Append($" ({arrows._Quantity})");
 						}
 						itemInfo.Append($" (Cost: {isItemConsumable._ItemValue})");
 						break;
@@ -464,7 +467,7 @@ namespace DungeonGame
 				return;
 			}
 
-			_VendorItems.Add(new Consumable("arrows", 15, Consumable.ArrowType.Standard));
+			_VendorItems.Add(new Arrows("arrows", 15, Arrows.ArrowType.Standard));
 		}
 		public void PopulateQuests(Player player)
 		{

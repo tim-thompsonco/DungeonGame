@@ -1,4 +1,5 @@
 using DungeonGame.Items;
+using DungeonGame.Items.Consumables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -362,16 +363,16 @@ namespace DungeonGame
 		}
 		public void ReloadQuiver()
 		{
-			int index = _Consumables.FindIndex(
-				f => f._ArrowCategory == Consumable.ArrowType.Standard && f._Name.Contains("arrow"));
+			int index = _Consumables.FindIndex(f => f.GetType() == typeof(Arrows));
 			if (index != -1)
 			{
-				_Consumables[index]._Arrow.LoadArrowsPlayer(this);
+				Arrows arrows = _Consumables[index] as Arrows;
+				arrows.LoadPlayerQuiverWithArrows(this);
 				OutputHandler.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You reloaded your quiver.");
-				if (_Consumables[index]._Arrow._Quantity == 0)
+				if (arrows._Quantity == 0)
 				{
 					_Consumables.RemoveAt(index);
 				}

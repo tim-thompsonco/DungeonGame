@@ -37,7 +37,6 @@
     <Compile Include="Builders\PlayerBuilder.cs" />
     <Compile Include="Builders\RoomBuilder.cs" />
     <Compile Include="Builders\RoomBuilderHelper.cs" />
-    <Compile Include="Consumable Properties\Arrow.cs" />
     <Compile Include="Consumable Properties\ChangeArmor.cs" />
     <Compile Include="Consumable Properties\ChangeStat.cs" />
     <Compile Include="Consumable Properties\ChangeWeapon.cs" />
@@ -58,6 +57,7 @@
     <Compile Include="Interfaces\IRainbowGear.cs" />
     <Compile Include="Items\Armor.cs" />
     <Compile Include="Items\Consumable.cs" />
+    <Compile Include="Items\Consumables\Arrows.cs" />
     <Compile Include="Items\Gem.cs" />
     <Compile Include="Items\Loot.cs" />
     <Compile Include="Items\Quiver.cs" />

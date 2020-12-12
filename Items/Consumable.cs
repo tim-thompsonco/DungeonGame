@@ -1,13 +1,9 @@
 ﻿using System;
 
-namespace DungeonGame
+namespace DungeonGame.Items
 {
 	public class Consumable : IEquipment
 	{
-		public enum ArrowType
-		{
-			Standard
-		}
 		public enum PotionType
 		{
 			Health,
@@ -38,7 +34,6 @@ namespace DungeonGame
 		public string _Desc { get; set; }
 		public int _ItemValue { get; set; }
 		public bool _Equipped { get; set; }
-		public ArrowType? _ArrowCategory { get; set; }
 		public PotionType? _PotionCategory { get; set; }
 		public PotionLevel? _PotionStrength { get; set; }
 		public KitLevel? _KitStrength { get; set; }
@@ -48,7 +43,6 @@ namespace DungeonGame
 		public ChangeStat _ChangeStat { get; set; }
 		public ChangeArmor _ChangeArmor { get; set; }
 		public ChangeWeapon _ChangeWeapon { get; set; }
-		public Arrow _Arrow { get; set; }
 		public int _Weight { get; set; }
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
@@ -106,15 +100,6 @@ namespace DungeonGame
 				default:
 					throw new ArgumentOutOfRangeException(nameof(potionType), potionType, null);
 			}
-		}
-		public Consumable(string name, int itemValue, ArrowType arrowType)
-		{
-			_Name = name;
-			_Weight = 1;
-			_ItemValue = itemValue;
-			_ArrowCategory = arrowType;
-			_Arrow = new Arrow(50);
-			_Desc = $"A bundle of {_Arrow._Quantity} arrows.";
 		}
 		public Consumable(KitLevel kitLevel, KitType kitType, ChangeArmor.KitType kitCategory)
 		{

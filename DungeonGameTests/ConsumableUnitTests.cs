@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using DungeonGame;
+using DungeonGame.Items;
+using NUnit.Framework;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using DungeonGame;
-using NUnit.Framework;
 
 namespace DungeonGameTests
 {
