@@ -102,7 +102,7 @@ namespace DungeonGame.Controllers
 				return;
 			}
 			var weaponIndex = player._Inventory.FindIndex(f =>
-				f._Name.Contains(userInput[1].ToLowerInvariant()));
+				f._Name.Contains(userInput[1].ToLower()));
 			if (weaponIndex == -1)
 			{
 				OutputController.Display.StoreUserOutput(
@@ -171,7 +171,7 @@ namespace DungeonGame.Controllers
 				return;
 			}
 			var armorIndex = player._Inventory.FindIndex(f =>
-				f._Name.Contains(userInput[1].ToLowerInvariant()));
+				f._Name.Contains(userInput[1].ToLower()));
 			if (armorIndex == -1)
 			{
 				OutputController.Display.StoreUserOutput(

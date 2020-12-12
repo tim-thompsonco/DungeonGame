@@ -750,7 +750,7 @@ namespace DungeonGame
 		{
 			string userInput = InputController.ParseInput(input);
 			int questIndex = _AvailableQuests.FindIndex(
-				f => f._Name.ToLowerInvariant().Contains(userInput));
+				f => f._Name.ToLower().Contains(userInput));
 			if (questIndex != -1)
 			{
 				_AvailableQuests[questIndex].ShowQuest();
@@ -762,8 +762,8 @@ namespace DungeonGame
 				OutputController.ShowUserOutput(player);
 				OutputController.Display.ClearUserOutput();
 				string[] questInput = InputController.GetFormattedInput(Console.ReadLine());
-				while (questInput[0].ToLowerInvariant() != "y" && questInput[0].ToLowerInvariant() != "yes" &&
-					   questInput[0].ToLowerInvariant() != "n" && questInput[0].ToLowerInvariant() != "no")
+				while (questInput[0].ToLower() != "y" && questInput[0].ToLower() != "yes" &&
+					   questInput[0].ToLower() != "n" && questInput[0].ToLower() != "no")
 				{
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 					OutputController.Display.StoreUserOutput(
@@ -808,7 +808,7 @@ namespace DungeonGame
 		{
 			string userInput = InputController.ParseInput(input);
 			int questIndex = player._QuestLog.FindIndex(
-				f => f._Name.ToLowerInvariant().Contains(userInput));
+				f => f._Name.ToLower().Contains(userInput));
 			Quest quest = player._QuestLog[questIndex];
 			if (questIndex != -1)
 			{

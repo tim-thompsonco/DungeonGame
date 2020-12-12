@@ -757,8 +757,8 @@ namespace DungeonGame.Controllers
 				if (i != input.Length - 1) inputName.Append(" ");
 			}
 			var index = player._QuestLog.FindIndex(f =>
-				f._Name.ToLowerInvariant() == inputName.ToString() || f._Name.ToLowerInvariant() == input[1] ||
-				f._Name.ToLowerInvariant().Contains(inputName.ToString()));
+				f._Name.ToLower() == inputName.ToString() || f._Name.ToLower() == input[1] ||
+				f._Name.ToLower().Contains(inputName.ToString()));
 			if (index != -1)
 			{
 				player._QuestLog[index].ShowQuest();

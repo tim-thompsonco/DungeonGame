@@ -56,27 +56,27 @@ namespace DungeonGame.Items
 			if (level <= 3)
 			{
 				_PotionStrength = PotionLevel.Minor;
-				name = $"{PotionLevel.Minor.ToString().ToLowerInvariant()} {potionType.ToString().ToLowerInvariant()} potion";
+				name = $"{PotionLevel.Minor.ToString().ToLower()} {potionType.ToString().ToLower()} potion";
 				amount = _PotionCategory == PotionType.Health || _PotionCategory == PotionType.Mana ? 50 : 5;
 			}
 			else if (level > 6)
 			{
 				_PotionStrength = PotionLevel.Greater;
-				name = $"{PotionLevel.Greater.ToString().ToLowerInvariant()} {potionType.ToString().ToLowerInvariant()} potion";
+				name = $"{PotionLevel.Greater.ToString().ToLower()} {potionType.ToString().ToLower()} potion";
 				amount = _PotionCategory == PotionType.Health || _PotionCategory == PotionType.Mana ? 150 : 15;
 			}
 			else
 			{
 				_PotionStrength = PotionLevel.Normal;
-				name = $"{potionType.ToString().ToLowerInvariant()} potion";
+				name = $"{potionType.ToString().ToLower()} potion";
 				amount = _PotionCategory == PotionType.Health || _PotionCategory == PotionType.Mana ? 100 : 10;
 			}
 			_ItemValue = _PotionCategory == PotionType.Health ||
 							 _PotionCategory == PotionType.Mana ? amount / 2 : amount * 10 / 2;
 			_Name = name;
 			_Desc = _PotionCategory == PotionType.Health || _PotionCategory == PotionType.Mana
-				? $"A {name} that restores {amount} {_PotionCategory.ToString().ToLowerInvariant()}."
-				: $"A {name} that increases {amount} {_PotionCategory.ToString().ToLowerInvariant()}.";
+				? $"A {name} that restores {amount} {_PotionCategory.ToString().ToLower()}."
+				: $"A {name} that increases {amount} {_PotionCategory.ToString().ToLower()}.";
 			switch (_PotionCategory)
 			{
 				case PotionType.Health:
@@ -104,7 +104,7 @@ namespace DungeonGame.Items
 		public Consumable(KitLevel kitLevel, KitType kitType, ChangeArmor.KitType kitCategory)
 		{
 			_KitCategory = kitType;
-			_Name = $"{kitLevel.ToString().ToLowerInvariant()} {kitCategory.ToString().ToLowerInvariant()} {kitType.ToString().ToLowerInvariant()} kit";
+			_Name = $"{kitLevel.ToString().ToLower()} {kitCategory.ToString().ToLower()} {kitType.ToString().ToLower()} kit";
 			_Weight = 1;
 			_KitStrength = kitLevel;
 			int amount = _KitStrength switch
@@ -127,7 +127,7 @@ namespace DungeonGame.Items
 		public Consumable(KitLevel kitLevel, KitType kitType, ChangeWeapon.KitType kitCategory)
 		{
 			_KitCategory = kitType;
-			_Name = $"{kitLevel.ToString().ToLowerInvariant()} {kitCategory.ToString().ToLowerInvariant()} {kitType.ToString().ToLowerInvariant()} kit";
+			_Name = $"{kitLevel.ToString().ToLower()} {kitCategory.ToString().ToLower()} {kitType.ToString().ToLower()} kit";
 			_Weight = 1;
 			_KitStrength = kitLevel;
 			int amount = _KitStrength switch
