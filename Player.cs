@@ -1,3 +1,4 @@
+using DungeonGame.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -181,7 +182,7 @@ namespace DungeonGame
 						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest));
 					_Inventory.Add(new Armor(
 						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Legs));
-					_Inventory.Add(new Quiver("basic quiver", 50, 50, 15));
+					_Inventory.Add(new Quiver("basic quiver", 50, 15));
 					_Abilities.Add(new PlayerAbility("precise shot", 40, 1,
 						PlayerAbility.ArcherAbility.Precise, 1));
 					_Abilities.Add(new PlayerAbility(
@@ -232,7 +233,7 @@ namespace DungeonGame
 					_PlayerWeapon._WeaponGroup == Weapon.WeaponType.Bow &&
 					!_PlayerQuiver.HaveArrows())
 				{
-					Quiver.OutOfArrows();
+					Quiver.DisplayOutOfArrowsMessage();
 					attackAmount = 5;
 				}
 			}

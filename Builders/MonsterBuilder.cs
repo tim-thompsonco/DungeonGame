@@ -30,7 +30,7 @@ namespace DungeonGame
 							break;
 						case Monster.SkeletonType.Archer:
 							monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.Bow, monster._MonsterCategory);
-							monster._MonsterQuiver = new Quiver("basic quiver", 50, 50, 15);
+							monster._MonsterQuiver = new Quiver("basic quiver", 50, 15);
 							break;
 						case Monster.SkeletonType.Mage:
 							monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.Dagger, monster._MonsterCategory);
@@ -116,7 +116,7 @@ namespace DungeonGame
 					};
 					if (monster._MonsterWeapon._WeaponGroup == Weapon.WeaponType.Bow)
 					{
-						monster._MonsterQuiver = new Quiver("basic quiver", 50, 50, 15);
+						monster._MonsterQuiver = new Quiver("basic quiver", 50, 15);
 					}
 					BuildMonsterArmor(monster);
 					if (randomGearNum <= 3)
