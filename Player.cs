@@ -88,7 +88,7 @@ namespace DungeonGame
 				case PlayerClassType.Mage:
 					for (int i = 0; i < 3; i++)
 					{
-						_Consumables.Add(new Consumable(1, Consumable.PotionType.Mana));
+						_Consumables.Add(new Potion(1, Potion.PotionType.Mana));
 					}
 					_Spellbook = new List<PlayerSpell>();
 					_Strength = 10;
@@ -123,7 +123,7 @@ namespace DungeonGame
 				case PlayerClassType.Warrior:
 					for (int i = 0; i < 3; i++)
 					{
-						_Consumables.Add(new Consumable(1, Consumable.PotionType.Health));
+						_Consumables.Add(new Potion(1, Potion.PotionType.Health));
 					}
 					_Abilities = new List<PlayerAbility>();
 					_Strength = 15;
@@ -163,7 +163,7 @@ namespace DungeonGame
 				case PlayerClassType.Archer:
 					for (int i = 0; i < 3; i++)
 					{
-						_Consumables.Add(new Consumable(1, Consumable.PotionType.Health));
+						_Consumables.Add(new Potion(1, Potion.PotionType.Health));
 					}
 					_Abilities = new List<PlayerAbility>();
 					_Strength = 10;
@@ -317,6 +317,7 @@ namespace DungeonGame
 		{
 			int index = _Consumables.FindIndex(
 				f => f._Name.Contains(input));
+
 			if (index == -1)
 			{
 				OutputController.Display.StoreUserOutput(
@@ -325,33 +326,35 @@ namespace DungeonGame
 					"What potion did you want to drink?");
 				return;
 			}
-			switch (_Consumables[index]._PotionCategory)
+
+			Potion potion = _Consumables[index] as Potion;
+			switch (potion._PotionCategory)
 			{
-				case Consumable.PotionType.Health:
-					_Consumables[index]._RestoreHealth.RestoreHealthPlayer(this);
-					string drankHealthString = $"You drank a potion and replenished {_Consumables[index]._RestoreHealth._RestoreHealthAmt} health.";
+				case Potion.PotionType.Health:
+					potion._RestoreHealth.RestoreHealthPlayer(this);
+					string drankHealthString = $"You drank a potion and replenished {potion._RestoreHealth._RestoreHealthAmt} health.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						drankHealthString);
 					_Consumables.RemoveAt(index);
 					break;
-				case Consumable.PotionType.Mana:
-					_Consumables[index]._RestoreMana.RestoreManaPlayer(this);
-					string drankManaString = $"You drank a potion and replenished {_Consumables[index]._RestoreMana._RestoreManaAmt} mana.";
+				case Potion.PotionType.Mana:
+					potion._RestoreMana.RestoreManaPlayer(this);
+					string drankManaString = $"You drank a potion and replenished {potion._RestoreMana._RestoreManaAmt} mana.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						drankManaString);
 					_Consumables.RemoveAt(index);
 					break;
-				case Consumable.PotionType.Intelligence:
-				case Consumable.PotionType.Strength:
-				case Consumable.PotionType.Dexterity:
-				case Consumable.PotionType.Constitution:
-					_Consumables[index]._ChangeStat.ChangeStatPlayer(this);
+				case Potion.PotionType.Intelligence:
+				case Potion.PotionType.Strength:
+				case Potion.PotionType.Dexterity:
+				case Potion.PotionType.Constitution:
+					potion._ChangeStat.ChangeStatPlayer(this);
 					string drankStatString = 
-						$"You drank a potion and increased {_Consumables[index]._ChangeStat._StatCategory} by {_Consumables[index]._ChangeStat._ChangeAmount}.";
+						$"You drank a potion and increased {potion._ChangeStat._StatCategory} by {potion._ChangeStat._ChangeAmount}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),

@@ -48,9 +48,9 @@ namespace DungeonGame
 					break;
 				case VendorType.Healer:
 					_VendorItems.Add(
-						new Consumable(1, Consumable.PotionType.Health));
+						new Potion(1, Potion.PotionType.Health));
 					_VendorItems.Add(
-						new Consumable(1, Consumable.PotionType.Mana));
+						new Potion(1, Potion.PotionType.Mana));
 					break;
 				case VendorType.Shopkeeper:
 					break;
@@ -452,11 +452,11 @@ namespace DungeonGame
 
 			if (inputName.Contains("mana"))
 			{
-				_VendorItems.Add(new Consumable(player._Level, Consumable.PotionType.Mana));
+				_VendorItems.Add(new Potion(player._Level, Potion.PotionType.Mana));
 			}
 			else if (inputName.Contains("health"))
 			{
-				_VendorItems.Add(new Consumable(player._Level, Consumable.PotionType.Health));
+				_VendorItems.Add(new Potion(player._Level, Potion.PotionType.Health));
 			}
 		}
 		private void RepopulateArrows(string inputName)

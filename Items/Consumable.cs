@@ -4,21 +4,6 @@ namespace DungeonGame.Items
 {
 	public class Consumable : IEquipment
 	{
-		public enum PotionType
-		{
-			Health,
-			Mana,
-			Intelligence,
-			Strength,
-			Dexterity,
-			Constitution
-		}
-		public enum PotionLevel
-		{
-			Minor,
-			Normal,
-			Greater
-		}
 		public enum KitLevel
 		{
 			Light,
@@ -34,73 +19,14 @@ namespace DungeonGame.Items
 		public string _Desc { get; set; }
 		public int _ItemValue { get; set; }
 		public bool _Equipped { get; set; }
-		public PotionType? _PotionCategory { get; set; }
-		public PotionLevel? _PotionStrength { get; set; }
 		public KitLevel? _KitStrength { get; set; }
 		public KitType? _KitCategory { get; set; }
-		public RestoreHealth _RestoreHealth { get; set; }
-		public RestoreMana _RestoreMana { get; set; }
-		public ChangeStat _ChangeStat { get; set; }
 		public ChangeArmor _ChangeArmor { get; set; }
 		public ChangeWeapon _ChangeWeapon { get; set; }
 		public int _Weight { get; set; }
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public Consumable() { }
-		public Consumable(int level, PotionType potionType)
-		{
-			_PotionCategory = potionType;
-			_Weight = 1;
-			int amount;
-			string name;
-			if (level <= 3)
-			{
-				_PotionStrength = PotionLevel.Minor;
-				name = $"{PotionLevel.Minor.ToString().ToLower()} {potionType.ToString().ToLower()} potion";
-				amount = _PotionCategory == PotionType.Health || _PotionCategory == PotionType.Mana ? 50 : 5;
-			}
-			else if (level > 6)
-			{
-				_PotionStrength = PotionLevel.Greater;
-				name = $"{PotionLevel.Greater.ToString().ToLower()} {potionType.ToString().ToLower()} potion";
-				amount = _PotionCategory == PotionType.Health || _PotionCategory == PotionType.Mana ? 150 : 15;
-			}
-			else
-			{
-				_PotionStrength = PotionLevel.Normal;
-				name = $"{potionType.ToString().ToLower()} potion";
-				amount = _PotionCategory == PotionType.Health || _PotionCategory == PotionType.Mana ? 100 : 10;
-			}
-			_ItemValue = _PotionCategory == PotionType.Health ||
-							 _PotionCategory == PotionType.Mana ? amount / 2 : amount * 10 / 2;
-			_Name = name;
-			_Desc = _PotionCategory == PotionType.Health || _PotionCategory == PotionType.Mana
-				? $"A {name} that restores {amount} {_PotionCategory.ToString().ToLower()}."
-				: $"A {name} that increases {amount} {_PotionCategory.ToString().ToLower()}.";
-			switch (_PotionCategory)
-			{
-				case PotionType.Health:
-					_RestoreHealth = new RestoreHealth(amount);
-					break;
-				case PotionType.Mana:
-					_RestoreMana = new RestoreMana(amount);
-					break;
-				case PotionType.Intelligence:
-					_ChangeStat = new ChangeStat(amount, ChangeStat.StatType.Intelligence);
-					break;
-				case PotionType.Strength:
-					_ChangeStat = new ChangeStat(amount, ChangeStat.StatType.Strength);
-					break;
-				case PotionType.Dexterity:
-					_ChangeStat = new ChangeStat(amount, ChangeStat.StatType.Dexterity);
-					break;
-				case PotionType.Constitution:
-					_ChangeStat = new ChangeStat(amount, ChangeStat.StatType.Constitution);
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(potionType), potionType, null);
-			}
-		}
 		public Consumable(KitLevel kitLevel, KitType kitType, ChangeArmor.KitType kitCategory)
 		{
 			_KitCategory = kitType;

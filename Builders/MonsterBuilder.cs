@@ -1,5 +1,6 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Items;
+using DungeonGame.Items.Consumables;
 using System;
 
 namespace DungeonGame
@@ -139,12 +140,12 @@ namespace DungeonGame
 					int randomPotionNum = GameController.GetRandomNumber(1, 6);
 					monster._MonsterItems.Add(randomPotionNum switch
 					{
-						1 => new Consumable(monster._Level, Consumable.PotionType.Health),
-						2 => new Consumable(monster._Level, Consumable.PotionType.Mana),
-						3 => new Consumable(monster._Level, Consumable.PotionType.Constitution),
-						4 => new Consumable(monster._Level, Consumable.PotionType.Dexterity),
-						5 => new Consumable(monster._Level, Consumable.PotionType.Intelligence),
-						6 => new Consumable(monster._Level, Consumable.PotionType.Strength),
+						1 => new Potion(monster._Level, Potion.PotionType.Health),
+						2 => new Potion(monster._Level, Potion.PotionType.Mana),
+						3 => new Potion(monster._Level, Potion.PotionType.Constitution),
+						4 => new Potion(monster._Level, Potion.PotionType.Dexterity),
+						5 => new Potion(monster._Level, Potion.PotionType.Intelligence),
+						6 => new Potion(monster._Level, Potion.PotionType.Strength),
 						_ => throw new ArgumentOutOfRangeException()
 					});
 					break;

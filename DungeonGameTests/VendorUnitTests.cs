@@ -1,6 +1,7 @@
 using DungeonGame;
 using DungeonGame.Controllers;
 using DungeonGame.Items;
+using DungeonGame.Items.Consumables;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,7 +115,7 @@ namespace DungeonGameTests
 			int buyItemIndex = player._Consumables.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(input.Last()));
 			Assert.AreNotEqual(-1, buyItemIndex);
-			int potionCount = player._Consumables.OfType<Consumable.PotionType>().Count();
+			int potionCount = player._Consumables.OfType<Potion>().Count();
 			Assert.AreEqual(baseGold - buyItem._ItemValue * quantity, player._Gold);
 		}
 		[Test]

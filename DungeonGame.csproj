@@ -58,6 +58,7 @@
     <Compile Include="Items\Armor.cs" />
     <Compile Include="Items\Consumable.cs" />
     <Compile Include="Items\Consumables\Arrows.cs" />
+    <Compile Include="Items\Consumables\Potion.cs" />
     <Compile Include="Items\Gem.cs" />
     <Compile Include="Items\Loot.cs" />
     <Compile Include="Items\Quiver.cs" />

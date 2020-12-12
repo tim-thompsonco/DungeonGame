@@ -107,21 +107,20 @@ namespace DungeonGame.Controllers
 				itemInfo.Append(item._Name);
 				if (item._Name.Contains("potion"))
 				{
-					switch (item._PotionCategory)
+					Potion potion = item as Potion;
+					switch (potion._PotionCategory)
 					{
-						case Consumable.PotionType.Health:
-							itemInfo.Append(" (+" + item._RestoreHealth._RestoreHealthAmt + " " + item._PotionCategory + ")");
+						case Potion.PotionType.Health:
+							itemInfo.Append(" (+" + potion._RestoreHealth._RestoreHealthAmt + " " + potion._PotionCategory + ")");
 							break;
-						case Consumable.PotionType.Mana:
-							itemInfo.Append(" (+" + item._RestoreMana._RestoreManaAmt + " " + item._PotionCategory + ")");
+						case Potion.PotionType.Mana:
+							itemInfo.Append(" (+" + potion._RestoreMana._RestoreManaAmt + " " + potion._PotionCategory + ")");
 							break;
-						case Consumable.PotionType.Intelligence:
-						case Consumable.PotionType.Strength:
-						case Consumable.PotionType.Dexterity:
-						case Consumable.PotionType.Constitution:
-							itemInfo.Append(" (+" + item._ChangeStat._ChangeAmount + " " + item._PotionCategory + ")");
-							break;
-						case null:
+						case Potion.PotionType.Intelligence:
+						case Potion.PotionType.Strength:
+						case Potion.PotionType.Dexterity:
+						case Potion.PotionType.Constitution:
+							itemInfo.Append(" (+" + potion._ChangeStat._ChangeAmount + " " + potion._PotionCategory + ")");
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
