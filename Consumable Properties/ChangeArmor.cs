@@ -10,37 +10,35 @@ namespace DungeonGame
 			Leather,
 			Plate
 		}
-		public int ChangeAmount { get; set; }
-		public KitType KitCategory { get; set; }
+		public int _ChangeAmount { get; set; }
+		public KitType _KitCategory { get; set; }
 
-		// Default constructor for JSON serialization
-		public ChangeArmor() { }
 		public ChangeArmor(int amount, KitType kitType)
 		{
-			this.ChangeAmount = amount;
-			this.KitCategory = kitType;
+			_ChangeAmount = amount;
+			_KitCategory = kitType;
 		}
 
 		public void ChangeArmorPlayer(Armor armor)
 		{
-			switch (this.KitCategory)
+			switch (_KitCategory)
 			{
 				case KitType.Cloth:
 					if (armor._ArmorGroup == Armor.ArmorType.Cloth)
 					{
-						armor._ArmorRating += this.ChangeAmount;
+						armor._ArmorRating += _ChangeAmount;
 					}
 					break;
 				case KitType.Leather:
 					if (armor._ArmorGroup == Armor.ArmorType.Leather)
 					{
-						armor._ArmorRating += this.ChangeAmount;
+						armor._ArmorRating += _ChangeAmount;
 					}
 					break;
 				case KitType.Plate:
 					if (armor._ArmorGroup == Armor.ArmorType.Plate)
 					{
-						armor._ArmorRating += this.ChangeAmount;
+						armor._ArmorRating += _ChangeAmount;
 					}
 					break;
 				default:

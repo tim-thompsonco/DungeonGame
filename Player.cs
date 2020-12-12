@@ -349,7 +349,7 @@ namespace DungeonGame
 				case Consumable.PotionType.Constitution:
 					_Consumables[index]._ChangeStat.ChangeStatPlayer(this);
 					string drankStatString = 
-						$"You drank a potion and increased {_Consumables[index]._ChangeStat.StatCategory} by {_Consumables[index]._ChangeStat.ChangeAmount}.";
+						$"You drank a potion and increased {_Consumables[index]._ChangeStat._StatCategory} by {_Consumables[index]._ChangeStat._ChangeAmount}.";
 					OutputHandler.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),

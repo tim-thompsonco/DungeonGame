@@ -72,8 +72,8 @@ namespace DungeonGameTests
 			string[] input = new[] { "drink", "constitution" };
 			string potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("constitution", potionName);
-			int statAmount = player._Consumables[potionIndex]._ChangeStat.ChangeAmount;
-			ChangeStat.StatType statType = player._Consumables[potionIndex]._ChangeStat.StatCategory;
+			int statAmount = player._Consumables[potionIndex]._ChangeStat._ChangeAmount;
+			ChangeStat.StatType statType = player._Consumables[potionIndex]._ChangeStat._StatCategory;
 			int baseConst = player._Constitution;
 			int baseMaxHitPoints = player._MaxHitPoints;
 			player.DrinkPotion(InputHandler.ParseInput(input));
@@ -109,8 +109,8 @@ namespace DungeonGameTests
 			string[] input = new[] { "drink", "intelligence" };
 			string potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("intelligence", potionName);
-			int statAmount = player._Consumables[potionIndex]._ChangeStat.ChangeAmount;
-			ChangeStat.StatType statType = player._Consumables[potionIndex]._ChangeStat.StatCategory;
+			int statAmount = player._Consumables[potionIndex]._ChangeStat._ChangeAmount;
+			ChangeStat.StatType statType = player._Consumables[potionIndex]._ChangeStat._StatCategory;
 			int baseInt = player._Intelligence;
 			int? baseMaxManaPoints = player._MaxManaPoints;
 			player.DrinkPotion(InputHandler.ParseInput(input));
@@ -146,8 +146,8 @@ namespace DungeonGameTests
 			string[] input = new[] { "drink", "strength" };
 			string potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("strength", potionName);
-			int statAmount = player._Consumables[potionIndex]._ChangeStat.ChangeAmount;
-			ChangeStat.StatType statType = player._Consumables[potionIndex]._ChangeStat.StatCategory;
+			int statAmount = player._Consumables[potionIndex]._ChangeStat._ChangeAmount;
+			ChangeStat.StatType statType = player._Consumables[potionIndex]._ChangeStat._StatCategory;
 			int baseStr = player._Strength;
 			int baseMaxCarryWeight = player._MaxCarryWeight;
 			player.DrinkPotion(InputHandler.ParseInput(input));
@@ -183,8 +183,8 @@ namespace DungeonGameTests
 			string[] input = new[] { "drink", "dexterity" };
 			string potionName = InputHandler.ParseInput(input);
 			Assert.AreEqual("dexterity", potionName);
-			int statAmount = player._Consumables[potionIndex]._ChangeStat.ChangeAmount;
-			ChangeStat.StatType statType = player._Consumables[potionIndex]._ChangeStat.StatCategory;
+			int statAmount = player._Consumables[potionIndex]._ChangeStat._ChangeAmount;
+			ChangeStat.StatType statType = player._Consumables[potionIndex]._ChangeStat._StatCategory;
 			int baseDex = player._Dexterity;
 			double baseDodgeChance = player._DodgeChance;
 			player.DrinkPotion(InputHandler.ParseInput(input));
@@ -221,7 +221,7 @@ namespace DungeonGameTests
 			Armor armor = player._Inventory[armorIndex] as Armor;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string armorName = textInfo.ToTitleCase(player._Inventory[armorIndex]._Name);
-			int kitAmount = player._Consumables[0]._ChangeArmor.ChangeAmount;
+			int kitAmount = player._Consumables[0]._ChangeArmor._ChangeAmount;
 			string kitName = player._Consumables[0]._Name;
 			string[] input = new[] { "enhance", "doesn't exist", kitName };
 			int armorAmount = armor._ArmorRating;
@@ -272,7 +272,7 @@ namespace DungeonGameTests
 			Weapon weapon = player._Inventory[weaponIndex] as Weapon;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string weaponName = textInfo.ToTitleCase(player._Inventory[weaponIndex]._Name);
-			int kitAmount = player._Consumables[0]._ChangeWeapon.ChangeAmount;
+			int kitAmount = player._Consumables[0]._ChangeWeapon._ChangeAmount;
 			string kitName = player._Consumables[0]._Name;
 			string[] input = new[] { "enhance", "doesn't exist", kitName };
 			int weaponAmount = weapon._RegDamage;

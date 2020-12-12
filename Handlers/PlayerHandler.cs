@@ -117,7 +117,7 @@ namespace DungeonGame
 						case Consumable.PotionType.Strength:
 						case Consumable.PotionType.Dexterity:
 						case Consumable.PotionType.Constitution:
-							itemInfo.Append(" (+" + item._ChangeStat.ChangeAmount + " " + item._PotionCategory + ")");
+							itemInfo.Append(" (+" + item._ChangeStat._ChangeAmount + " " + item._PotionCategory + ")");
 							break;
 						case null:
 							break;

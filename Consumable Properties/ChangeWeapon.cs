@@ -9,31 +9,29 @@ namespace DungeonGame
 			Grindstone,
 			Bowstring
 		}
-		public int ChangeAmount { get; set; }
-		public KitType KitCategory { get; set; }
+		public int _ChangeAmount { get; set; }
+		public KitType _KitCategory { get; set; }
 
-		// Default constructor for JSON serialization
-		public ChangeWeapon() { }
 		public ChangeWeapon(int amount, KitType kitType)
 		{
-			this.ChangeAmount = amount;
-			this.KitCategory = kitType;
+			_ChangeAmount = amount;
+			_KitCategory = kitType;
 		}
 
 		public void ChangeWeaponPlayer(Weapon weapon)
 		{
-			switch (this.KitCategory)
+			switch (_KitCategory)
 			{
 				case KitType.Grindstone:
 					if (weapon._WeaponGroup != Weapon.WeaponType.Bow)
 					{
-						weapon._RegDamage += this.ChangeAmount;
+						weapon._RegDamage += _ChangeAmount;
 					}
 					break;
 				case KitType.Bowstring:
 					if (weapon._WeaponGroup == Weapon.WeaponType.Bow)
 					{
-						weapon._RegDamage += this.ChangeAmount;
+						weapon._RegDamage += _ChangeAmount;
 					}
 					break;
 				default:

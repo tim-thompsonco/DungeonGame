@@ -11,45 +11,43 @@ namespace DungeonGame
 			Dexterity,
 			Constitution
 		}
-		public int ChangeAmount { get; set; }
-		public int ChangeCurRound { get; set; }
-		public int ChangeMaxRound { get; set; }
-		public StatType StatCategory { get; set; }
+		public int _ChangeAmount { get; set; }
+		public int _ChangeCurRound { get; set; }
+		public int _ChangeMaxRound { get; set; }
+		public StatType _StatCategory { get; set; }
 
-		// Default constructor for JSON serialization
-		public ChangeStat() { }
 		public ChangeStat(int amount, StatType statType)
 		{
-			this.ChangeAmount = amount;
-			this.StatCategory = statType;
-			// Change stat potions will default to 10 minutes
-			this.ChangeCurRound = 1;
-			this.ChangeMaxRound = 600;
+			_ChangeAmount = amount;
+			_StatCategory = statType;
+			// Change stat potions will default to 10 minutes for duration of effect
+			_ChangeCurRound = 1;
+			_ChangeMaxRound = 600;
 		}
 
 		public void ChangeStatPlayer(Player player)
 		{
-			switch (this.StatCategory)
+			switch (_StatCategory)
 			{
 				case StatType.Intelligence:
-					player._Intelligence += this.ChangeAmount;
+					player._Intelligence += _ChangeAmount;
 					break;
 				case StatType.Strength:
-					player._Strength += this.ChangeAmount;
+					player._Strength += _ChangeAmount;
 					break;
 				case StatType.Dexterity:
-					player._Dexterity += this.ChangeAmount;
+					player._Dexterity += _ChangeAmount;
 					break;
 				case StatType.Constitution:
-					player._Constitution += this.ChangeAmount;
+					player._Constitution += _ChangeAmount;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 			PlayerHandler.CalculatePlayerStats(player);
-			var effectName = this.StatCategory + " (+" + this.ChangeAmount + ")";
-			player._Effects.Add(new Effect(effectName, Effect.EffectType.ChangeStat, this.ChangeAmount,
-				this.ChangeCurRound, this.ChangeMaxRound, 1, 1, false, this.StatCategory));
+			string effectName = $"{_StatCategory} (+{_ChangeAmount})";
+			player._Effects.Add(new Effect(effectName, Effect.EffectType.ChangeStat, _ChangeAmount,
+				_ChangeCurRound, _ChangeMaxRound, 1, 1, false, _StatCategory));
 		}
 	}
 }

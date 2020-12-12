@@ -122,9 +122,9 @@ namespace DungeonGame
 					"You can't upgrade " + weaponName + " with that!");
 				return;
 			}
-			if (player._Consumables[kitIndex]._ChangeWeapon.KitCategory == ChangeWeapon.KitType.Bowstring &&
+			if (player._Consumables[kitIndex]._ChangeWeapon._KitCategory == ChangeWeapon.KitType.Bowstring &&
 				weapon._WeaponGroup != Weapon.WeaponType.Bow ||
-				player._Consumables[kitIndex]._ChangeWeapon.KitCategory == ChangeWeapon.KitType.Grindstone &&
+				player._Consumables[kitIndex]._ChangeWeapon._KitCategory == ChangeWeapon.KitType.Grindstone &&
 				weapon._WeaponGroup == Weapon.WeaponType.Bow)
 			{
 				OutputHandler.Display.StoreUserOutput(
@@ -191,11 +191,11 @@ namespace DungeonGame
 					"You can't upgrade " + armorName + " with that!");
 				return;
 			}
-			if (player._Consumables[kitIndex]._ChangeArmor.KitCategory == ChangeArmor.KitType.Cloth &&
+			if (player._Consumables[kitIndex]._ChangeArmor._KitCategory == ChangeArmor.KitType.Cloth &&
 				armor._ArmorGroup != Armor.ArmorType.Cloth ||
-				player._Consumables[kitIndex]._ChangeArmor.KitCategory == ChangeArmor.KitType.Leather &&
+				player._Consumables[kitIndex]._ChangeArmor._KitCategory == ChangeArmor.KitType.Leather &&
 				armor._ArmorGroup != Armor.ArmorType.Leather ||
-				player._Consumables[kitIndex]._ChangeArmor.KitCategory == ChangeArmor.KitType.Plate &&
+				player._Consumables[kitIndex]._ChangeArmor._KitCategory == ChangeArmor.KitType.Plate &&
 				 armor._ArmorGroup != Armor.ArmorType.Plate ||
 				player._Consumables[kitIndex]._KitCategory == Consumable.KitType.Weapon)
 			{
