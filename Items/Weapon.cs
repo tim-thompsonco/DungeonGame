@@ -1,3 +1,4 @@
+using DungeonGame.Controllers;
 using System;
 using System.Text;
 
@@ -43,8 +44,8 @@ namespace DungeonGame.Items
 			_DamageGroup = DamageType.Physical;
 			_Weight = _WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
 			_Durability = 100;
-			int randomNum = GameHandler.GetRandomNumber(1, 100);
-			int randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
+			int randomNum = GameController.GetRandomNumber(1, 100);
+			int randomWeaponDmg = GameController.GetRandomNumber(20, 26);
 			if (randomNum < 5)
 			{
 				_RegDamage = randomWeaponDmg + ((level - 1) * 3);
@@ -75,8 +76,8 @@ namespace DungeonGame.Items
 			_DamageGroup = DamageType.Physical;
 			_Weight = _WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
 			_Durability = 100;
-			int randomNum = GameHandler.GetRandomNumber(1, 100);
-			int randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
+			int randomNum = GameController.GetRandomNumber(1, 100);
+			int randomWeaponDmg = GameController.GetRandomNumber(20, 26);
 			if (randomNum < 5)
 			{
 				_RegDamage = randomWeaponDmg + ((_Level - 1) * 3);
@@ -223,7 +224,7 @@ namespace DungeonGame.Items
 			}
 
 			double attackDamage = _RegDamage;
-			int chanceToCrit = GameHandler.GetRandomNumber(1, 100);
+			int chanceToCrit = GameController.GetRandomNumber(1, 100);
 			if (chanceToCrit <= 25)
 			{
 				attackDamage *= _CritMultiplier;
@@ -236,7 +237,7 @@ namespace DungeonGame.Items
 		public void UpdateRainbowStats(Player player)
 		{
 			_Level = player._Level;
-			int randomWeaponDmg = GameHandler.GetRandomNumber(20, 26);
+			int randomWeaponDmg = GameController.GetRandomNumber(20, 26);
 			_RegDamage = randomWeaponDmg + ((_Level - 1) * 3);
 			_CritMultiplier = 1.3;
 			_Quality = 3;

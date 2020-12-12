@@ -1,4 +1,5 @@
-﻿using DungeonGame.Items;
+﻿using DungeonGame.Controllers;
+using DungeonGame.Items;
 using DungeonGame.Items.Consumables;
 using System;
 using System.Collections.Generic;
@@ -61,7 +62,7 @@ namespace DungeonGame
 		public void DisplayGearForSale()
 		{
 			string forSaleString = $"The {_Name} has the following items for sale:";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				forSaleString);
@@ -92,7 +93,7 @@ namespace DungeonGame
 						break;
 				}
 				string itemName = textInfo.ToTitleCase(itemInfo.ToString());
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					itemName);
@@ -105,7 +106,7 @@ namespace DungeonGame
 				return;
 			}
 
-			string inputName = InputHandler.ParseInput(userInput);
+			string inputName = InputController.ParseInput(userInput);
 			int index = -1;
 			if (_VendorCategory == VendorType.Healer)
 			{
@@ -119,7 +120,7 @@ namespace DungeonGame
 			}
 			if (index == -1)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"The vendor doesn't have that available for sale!");
@@ -139,7 +140,7 @@ namespace DungeonGame
 				}
 				_VendorItems.RemoveAt(index);
 				string purchaseString = $"You purchased {buyItem._Name} from the vendor for {buyItem._ItemValue} gold.";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					purchaseString);
@@ -161,7 +162,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't afford that!");
@@ -180,7 +181,7 @@ namespace DungeonGame
 			try
 			{
 				// Find desired object to sell
-				string inputName = InputHandler.ParseInput(userInput);
+				string inputName = InputController.ParseInput(userInput);
 				List<IEquipment> indexList = player._Inventory.FindAll(f => f._Name == inputName || f._Name.Contains(inputName));
 				IEquipment itemMatch = indexList[sellItemIndex];
 				// Return index in player inventory of desired object to sell
@@ -205,7 +206,7 @@ namespace DungeonGame
 			try
 			{
 				// Find desired object to sell
-				string inputName = InputHandler.ParseInput(userInput);
+				string inputName = InputController.ParseInput(userInput);
 				List<Consumable> indexList = player._Consumables.FindAll(f => f._Name == inputName || f._Name.Contains(inputName));
 				Consumable itemMatch = indexList[sellItemIndex];
 				// Return index in player inventory of desired object to sell
@@ -219,11 +220,11 @@ namespace DungeonGame
 		}
 		public void SellItem(Player player, string[] userInput)
 		{
-			string inputName = InputHandler.ParseInput(userInput);
+			string inputName = InputController.ParseInput(userInput);
 			int multipleItemIndex = FindInventoryItemIndex(player, userInput);
 			if (multipleItemIndex == -2)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You don't have that item to sell!");
@@ -264,14 +265,14 @@ namespace DungeonGame
 						};
 						player._Inventory.RemoveAt(index);
 						string soldString = $"You sold {sellItem._Name} to the vendor for {sellItem._ItemValue} gold.";
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
 							soldString);
 					}
 					else
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You have to unequip that first!");
@@ -292,7 +293,7 @@ namespace DungeonGame
 				}
 				if (index == -1)
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You don't have that to sell!");
@@ -312,7 +313,7 @@ namespace DungeonGame
 
 				_VendorItems.Add(sellItem);
 				string soldString = $"You sold {sellItem._Name} to the vendor for {sellItem._ItemValue} gold.";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					soldString);
@@ -320,7 +321,7 @@ namespace DungeonGame
 		}
 		public void RepairItem(Player player, string[] userInput, bool repairAll)
 		{
-			string parsedInput = InputHandler.ParseInput(userInput);
+			string parsedInput = InputController.ParseInput(userInput);
 			int index = player._Inventory.FindIndex(
 				f => f._Name == parsedInput || f._Name.Contains(userInput.Last()));
 			if (index != -1)
@@ -337,7 +338,7 @@ namespace DungeonGame
 								player._Gold -= (int)repairCostArmor;
 								repairArmor._Durability = 100;
 								string repairArmorString = $"Your {repairArmor._Name} has been repaired for {(int)repairCostArmor} gold.";
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatSuccessOutputText(),
 									Settings.FormatDefaultBackground(),
 									repairArmorString);
@@ -345,7 +346,7 @@ namespace DungeonGame
 							else
 							{
 								string cantAffordArmorString = $"You can't afford to repair {repairArmor._Name}!";
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									cantAffordArmorString);
@@ -358,7 +359,7 @@ namespace DungeonGame
 								break;
 							}
 
-							OutputHandler.Display.StoreUserOutput(
+							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"The vendor doesn't repair that type of equipment.");
@@ -374,7 +375,7 @@ namespace DungeonGame
 								player._Gold -= (int)repairCostWeapon;
 								repairWeapon._Durability = 100;
 								string repairWeaponString = $"Your {repairWeapon._Name} has been repaired for {(int)repairCostWeapon} gold.";
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatSuccessOutputText(),
 									Settings.FormatDefaultBackground(),
 									repairWeaponString);
@@ -382,7 +383,7 @@ namespace DungeonGame
 							else
 							{
 								string cantAffordWeaponString = $"You can't afford to repair {repairWeapon._Name}!";
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									cantAffordWeaponString);
@@ -395,7 +396,7 @@ namespace DungeonGame
 								break;
 							}
 
-							OutputHandler.Display.StoreUserOutput(
+							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"The vendor doesn't repair that type of equipment.");
@@ -404,7 +405,7 @@ namespace DungeonGame
 					case VendorType.Healer:
 					case VendorType.Shopkeeper:
 						string noRepairString = $"{_VendorCategory}s don't repair equipment.";
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							noRepairString);
@@ -414,7 +415,7 @@ namespace DungeonGame
 				}
 				return;
 			}
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"That item is not in your inventory.");
@@ -428,14 +429,14 @@ namespace DungeonGame
 				player._ManaPoints = player._MaxManaPoints;
 				player._ComboPoints = player._MaxComboPoints;
 				string restoreString = $"You have been restored by the {_Name}.";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					restoreString);
 				return;
 			}
 			string noRestoreString = $"The {_Name} cannot restore you!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				noRestoreString);
@@ -545,68 +546,68 @@ namespace DungeonGame
 				PopulateQuests(player);
 			}
 
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				"Available Quests:");
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (Quest quest in _AvailableQuests)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
 					textInfo.ToTitleCase(quest._Name));
 			}
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				"You can <consider> <quest name> if you want to obtain quest details.");
 		}
 		public void OfferQuest(Player player, string[] input)
 		{
-			string userInput = InputHandler.ParseInput(input);
+			string userInput = InputController.ParseInput(input);
 			int questIndex = _AvailableQuests.FindIndex(
 				f => f._Name.ToLowerInvariant().Contains(userInput));
 			if (questIndex != -1)
 			{
 				_AvailableQuests[questIndex].ShowQuest();
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"Will you accept this quest?");
 				Console.Clear();
-				OutputHandler.ShowUserOutput(player);
-				OutputHandler.Display.ClearUserOutput();
-				string[] questInput = InputHandler.GetFormattedInput(Console.ReadLine());
+				OutputController.ShowUserOutput(player);
+				OutputController.Display.ClearUserOutput();
+				string[] questInput = InputController.GetFormattedInput(Console.ReadLine());
 				while (questInput[0].ToLowerInvariant() != "y" && questInput[0].ToLowerInvariant() != "yes" &&
 					   questInput[0].ToLowerInvariant() != "n" && questInput[0].ToLowerInvariant() != "no")
 				{
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						textInfo.ToTitleCase(_AvailableQuests[questIndex]._Name) + " Consideration:");
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"I need either a yes or no answer here.");
 					Console.Clear();
-					OutputHandler.ShowUserOutput(player);
-					OutputHandler.Display.ClearUserOutput();
-					questInput = InputHandler.GetFormattedInput(Console.ReadLine());
+					OutputController.ShowUserOutput(player);
+					OutputController.Display.ClearUserOutput();
+					questInput = InputController.GetFormattedInput(Console.ReadLine());
 				}
 				if (questInput[0] == "y" || questInput[0] == "yes")
 				{
 					player._QuestLog.Add(_AvailableQuests[questIndex]);
 					_AvailableQuests.RemoveAt(questIndex);
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"My hero. I am adding the particulars to your quest log.");
 				}
 				else
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"Let me know if you change your mind later.");
@@ -614,7 +615,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"I don't have that quest to offer!");
@@ -622,7 +623,7 @@ namespace DungeonGame
 		}
 		public void CompleteQuest(Player player, string[] input)
 		{
-			string userInput = InputHandler.ParseInput(input);
+			string userInput = InputController.ParseInput(input);
 			int questIndex = player._QuestLog.FindIndex(
 				f => f._Name.ToLowerInvariant().Contains(userInput));
 			Quest quest = player._QuestLog[questIndex];
@@ -632,18 +633,18 @@ namespace DungeonGame
 				{
 					if (quest._QuestCompleted)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
 							$"Congratulations on finishing {quest._Name}! Here's your reward.");
 						player._Inventory.Add(quest._QuestRewardItem);
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
 							"You have received: ");
-						GearHandler.StoreRainbowGearOutput(GearHandler.GetItemDetails(quest._QuestRewardItem));
+						GearController.StoreRainbowGearOutput(GearController.GetItemDetails(quest._QuestRewardItem));
 						player._Gold += quest._QuestRewardGold;
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
 							$"{quest._QuestRewardGold} gold coins.");
@@ -651,7 +652,7 @@ namespace DungeonGame
 					}
 					else
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You haven't finished that quest yet!");
@@ -660,7 +661,7 @@ namespace DungeonGame
 				else
 				{
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						$"I didn't give you that quest. {textInfo.ToTitleCase(quest._QuestGiver)} did.");
@@ -668,7 +669,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"What quest did you want to turn in?");

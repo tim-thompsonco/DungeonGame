@@ -1,4 +1,6 @@
-﻿namespace DungeonGame.Items.Consumables
+﻿using DungeonGame.Controllers;
+
+namespace DungeonGame.Items.Consumables
 {
 	public class Arrows : Consumable
 	{
@@ -33,7 +35,7 @@
 
 		private void DisplayPlayerHasNoQuiverMessage()
 		{
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"You don't have a quiver to reload!");

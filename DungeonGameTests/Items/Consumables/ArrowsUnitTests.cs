@@ -1,4 +1,5 @@
 ﻿using DungeonGame;
+using DungeonGame.Controllers;
 using DungeonGame.Items.Consumables;
 using NUnit.Framework;
 
@@ -33,17 +34,17 @@ namespace DungeonGameTests.Items
 		[Test]
 		public void PlayerHasNoQuiverUnitTest()
 		{
-			OutputHandler.Display.ClearUserOutput();
+			OutputController.Display.ClearUserOutput();
 
 			arrows.LoadPlayerQuiverWithArrows(player);
 
-			Assert.AreEqual("You don't have a quiver to reload!", OutputHandler.Display.Output[0][2]);
+			Assert.AreEqual("You don't have a quiver to reload!", OutputController.Display.Output[0][2]);
 		}
 
 		[Test]
 		public void PlayerQuiverIsFullUnitTest()
 		{
-			GearHandler.EquipInitialGear(player);
+			GearController.EquipInitialGear(player);
 
 			arrows.LoadPlayerQuiverWithArrows(player);
 
@@ -54,7 +55,7 @@ namespace DungeonGameTests.Items
 		[Test]
 		public void PlayerQuiverIsEmptyUnitTest()
 		{
-			GearHandler.EquipInitialGear(player);
+			GearController.EquipInitialGear(player);
 			player._PlayerQuiver._MaxQuantity = arrowsMaxQuantity;
 			player._PlayerQuiver._Quantity = 0;
 
@@ -67,7 +68,7 @@ namespace DungeonGameTests.Items
 		[Test]
 		public void PlayerQuiverIsPartiallyEmptyUnitTest()
 		{
-			GearHandler.EquipInitialGear(player);
+			GearController.EquipInitialGear(player);
 			player._PlayerQuiver._MaxQuantity = arrowsMaxQuantity;
 			player._PlayerQuiver._Quantity = 35;
 			int arrowsToLoad = player._PlayerQuiver._MaxQuantity - player._PlayerQuiver._Quantity;

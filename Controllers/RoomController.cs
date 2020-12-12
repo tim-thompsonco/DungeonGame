@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace DungeonGame
+namespace DungeonGame.Controllers
 {
-	public static class RoomHandler
+	public static class RoomController
 	{
 		public static Dictionary<Coordinate, IRoom> Rooms { get; set; }
 

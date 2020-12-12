@@ -1,4 +1,5 @@
-﻿using DungeonGame.Items;
+﻿using DungeonGame.Controllers;
+using DungeonGame.Items;
 using System;
 
 namespace DungeonGame
@@ -12,14 +13,14 @@ namespace DungeonGame
 		}
 		private static void BuildMonsterGear(Monster monster)
 		{
-			var randomGearNum = GameHandler.GetRandomNumber(1, 10);
+			var randomGearNum = GameController.GetRandomNumber(1, 10);
 			switch (monster._MonsterCategory)
 			{
 				case Monster.MonsterType.Skeleton:
 					switch (monster._SkeletonCategory)
 					{
 						case Monster.SkeletonType.Warrior:
-							var randomWeaponNum = GameHandler.GetRandomNumber(1, 3);
+							var randomWeaponNum = GameController.GetRandomNumber(1, 3);
 							monster._MonsterWeapon = randomWeaponNum switch
 							{
 								1 => new Weapon(monster._Level, Weapon.WeaponType.Axe, monster._MonsterCategory),
@@ -131,7 +132,7 @@ namespace DungeonGame
 				case Monster.MonsterType.Troll:
 					monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.Axe, monster._MonsterCategory);
 					BuildMonsterArmor(monster);
-					var randomPotionNum = GameHandler.GetRandomNumber(1, 6);
+					var randomPotionNum = GameController.GetRandomNumber(1, 6);
 					monster._MonsterItems.Add(randomPotionNum switch
 					{
 						1 => new Consumable(monster._Level, Consumable.PotionType.Health),
@@ -166,7 +167,7 @@ namespace DungeonGame
 		}
 		private static void BuildMonsterGem(Monster monster)
 		{
-			int randomGemNum = GameHandler.GetRandomNumber(1, 6);
+			int randomGemNum = GameController.GetRandomNumber(1, 6);
 			switch (randomGemNum)
 			{
 				case 1:
@@ -193,14 +194,14 @@ namespace DungeonGame
 		}
 		private static void BuildMonsterKit(Monster monster)
 		{
-			var kitRandomNum = GameHandler.GetRandomNumber(1, 2);
+			var kitRandomNum = GameController.GetRandomNumber(1, 2);
 			var kitCategory = kitRandomNum switch
 			{
 				1 => Consumable.KitType.Armor,
 				2 => Consumable.KitType.Weapon,
 				_ => throw new ArgumentOutOfRangeException()
 			};
-			var kitLevelRandomNum = GameHandler.GetRandomNumber(1, 3);
+			var kitLevelRandomNum = GameController.GetRandomNumber(1, 3);
 			var kitLevel = kitLevelRandomNum switch
 			{
 				1 => Consumable.KitLevel.Light,
@@ -210,7 +211,7 @@ namespace DungeonGame
 			};
 			if (kitCategory == Consumable.KitType.Armor)
 			{
-				var kitTypeRandomNum = GameHandler.GetRandomNumber(1, 3);
+				var kitTypeRandomNum = GameController.GetRandomNumber(1, 3);
 				var kitType = kitTypeRandomNum switch
 				{
 					1 => ChangeArmor.KitType.Cloth,
@@ -222,7 +223,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				var kitTypeRandomNum = GameHandler.GetRandomNumber(1, 2);
+				var kitTypeRandomNum = GameController.GetRandomNumber(1, 2);
 				var kitType = kitTypeRandomNum switch
 				{
 					1 => ChangeWeapon.KitType.Bowstring,
@@ -234,7 +235,7 @@ namespace DungeonGame
 		}
 		private static void BuildMonsterArmor(Monster monster)
 		{
-			var randomCatNum = GameHandler.GetRandomNumber(1, 7);
+			var randomCatNum = GameController.GetRandomNumber(1, 7);
 			switch (randomCatNum)
 			{
 				case 1:
@@ -375,7 +376,7 @@ namespace DungeonGame
 						"back as it rises up to its full height and growls at you.";
 					break;
 				case Monster.MonsterType.Elemental:
-					var elementalRandomNumber = GameHandler.GetRandomNumber(1, 3);
+					var elementalRandomNumber = GameController.GetRandomNumber(1, 3);
 					var elementalType = elementalRandomNumber switch
 					{
 						1 => monster._ElementalCategory == Monster.ElementalType.Fire,

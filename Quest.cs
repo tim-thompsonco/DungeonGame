@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonGame.Controllers;
+using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,17 +37,17 @@ namespace DungeonGame
 			switch (_QuestCategory)
 			{
 				case QuestType.KillCount:
-					int desiredKills = GameHandler.GetRandomNumber(20, 30);
+					int desiredKills = GameController.GetRandomNumber(20, 30);
 					_CurrentKills = 0;
 					_RequiredKills = desiredKills;
 					_QuestRewardGold = (int)_RequiredKills * 10;
 					break;
 				case QuestType.KillMonster:
-					int desiredMonsterKills = GameHandler.GetRandomNumber(10, 20);
+					int desiredMonsterKills = GameController.GetRandomNumber(10, 20);
 					_CurrentKills = 0;
 					_RequiredKills = desiredMonsterKills;
 					_QuestRewardGold = (int)_RequiredKills * 10;
-					int randomNum = GameHandler.GetRandomNumber(1, 8);
+					int randomNum = GameController.GetRandomNumber(1, 8);
 					_MonsterKillType = randomNum switch
 					{
 						1 => Monster.MonsterType.Demon,
@@ -61,8 +62,8 @@ namespace DungeonGame
 					};
 					break;
 				case QuestType.ClearLevel:
-					_TargetLevel = GameHandler.GetRandomNumber(1, 10);
-					_MonstersRemaining = RoomHandler.Rooms.Where(
+					_TargetLevel = GameController.GetRandomNumber(1, 10);
+					_MonstersRemaining = RoomController.Rooms.Where(
 						room => room.Key._Z == _TargetLevel * -1).Count(
 						room => room.Value._Monster?._HitPoints > 0);
 					_QuestRewardGold = (int)_MonstersRemaining * 10;
@@ -75,7 +76,7 @@ namespace DungeonGame
 
 		public void ShowQuest()
 		{
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				_Name);
@@ -84,7 +85,7 @@ namespace DungeonGame
 			{
 				questBorder.Append("=");
 			}
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				questBorder.ToString());
@@ -92,41 +93,41 @@ namespace DungeonGame
 			{
 				if (_Dialogue.Length - i < Settings.GetGameWidth())
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
 						_Dialogue.Substring(i, _Dialogue.Length - i));
 					continue;
 				}
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
 					_Dialogue.Substring(i, Settings.GetGameWidth()));
 			}
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				questBorder.ToString());
 			switch (_QuestCategory)
 			{
 				case QuestType.KillCount:
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
 						$"Required Kills: {_RequiredKills}");
 					break;
 				case QuestType.KillMonster:
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
 						$"Target _Monster: {_MonsterKillType}");
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
 						$"Required Kills: {_RequiredKills}");
 					break;
 				case QuestType.ClearLevel:
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
 						$"Clear _Level {_TargetLevel}");
@@ -134,16 +135,16 @@ namespace DungeonGame
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				questBorder.ToString());
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				"Rewards: ");
-			GearHandler.StoreRainbowGearOutput(GearHandler.GetItemDetails(_QuestRewardItem));
-			OutputHandler.Display.StoreUserOutput(
+			GearController.StoreRainbowGearOutput(GearController.GetItemDetails(_QuestRewardItem));
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				$"{_QuestRewardGold} gold coins");
@@ -175,7 +176,7 @@ namespace DungeonGame
 
 						break;
 					case QuestType.ClearLevel:
-						_MonstersRemaining = RoomHandler.Rooms.Where(
+						_MonstersRemaining = RoomController.Rooms.Where(
 							room => room.Key._Z == _TargetLevel * -1).Count(
 							room => room.Value._Monster?._HitPoints > 0);
 						if (_MonstersRemaining == 0)
@@ -196,13 +197,13 @@ namespace DungeonGame
 				{
 					if (questSuccess.Length - i < Settings.GetGameWidth())
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
 							questSuccess.Substring(i, questSuccess.Length - i));
 						continue;
 					}
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						questSuccess.Substring(i, Settings.GetGameWidth()));

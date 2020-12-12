@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace DungeonGame
+namespace DungeonGame.Controllers
 {
-	public static class MonsterHandler
+	public static class MonsterController
 	{
 		public static void DisplayStats(Monster monster)
 		{
 			var opponentHealthString = "Opponent HP: " + monster._HitPoints + " / " + monster._MaxHitPoints;
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				opponentHealthString);
@@ -20,8 +20,8 @@ namespace DungeonGame
 				healLineOutput.Add(Settings.FormatHealthBackground());
 				healLineOutput.Add("    ");
 			}
-			OutputHandler.Display.StoreUserOutput(healLineOutput);
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(healLineOutput);
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				"==================================================");

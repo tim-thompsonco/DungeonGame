@@ -1,3 +1,4 @@
+using DungeonGame.Controllers;
 using System;
 
 namespace DungeonGame
@@ -44,7 +45,7 @@ namespace DungeonGame
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			PlayerHandler.CalculatePlayerStats(player);
+			PlayerController.CalculatePlayerStats(player);
 			string effectName = $"{_StatCategory} (+{_ChangeAmount})";
 			player._Effects.Add(new Effect(effectName, Effect.EffectType.ChangeStat, _ChangeAmount,
 				_ChangeCurRound, _ChangeMaxRound, 1, 1, false, _StatCategory));

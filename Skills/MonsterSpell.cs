@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonGame.Controllers;
+using System;
 using System.Linq;
 
 namespace DungeonGame
@@ -65,11 +66,11 @@ namespace DungeonGame
 			{
 				attackString = $"The {monster._Name} casts a fireball and launches it at you!";
 			}
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
-			int fireSpellDamage = MonsterHandler.CalculateSpellDamage(player, monster, index);
+			int fireSpellDamage = MonsterController.CalculateSpellDamage(player, monster, index);
 			foreach (Effect effect in player._Effects.ToList())
 			{
 				switch (effect._EffectGroup)
@@ -116,7 +117,7 @@ namespace DungeonGame
 				}
 
 				string effectAbsorbString = $"Your {effect._Name} absorbed all of {monster._Name}'s attack!";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					effectAbsorbString);
@@ -124,7 +125,7 @@ namespace DungeonGame
 			}
 			player._HitPoints -= fireSpellDamage;
 			string attackSuccessString = $"The {monster._Name} hits you for {fireSpellDamage} fire damage.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
@@ -134,7 +135,7 @@ namespace DungeonGame
 			}
 
 			const string onFireString = "You burst into flame!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				onFireString);
@@ -147,11 +148,11 @@ namespace DungeonGame
 		{
 			monster._EnergyPoints -= monster._Spellbook[index]._EnergyCost;
 			string attackString = $"The {monster._Name} conjures up a frostbolt and launches it at you!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
-			int frostSpellDamage = MonsterHandler.CalculateSpellDamage(player, monster, index);
+			int frostSpellDamage = MonsterController.CalculateSpellDamage(player, monster, index);
 			foreach (Effect effect in player._Effects.ToList())
 			{
 				switch (effect._EffectGroup)
@@ -198,7 +199,7 @@ namespace DungeonGame
 				}
 
 				string effectAbsorbString = $"Your {effect._Name} absorbed all of {monster._Name}'s attack!";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					effectAbsorbString);
@@ -206,7 +207,7 @@ namespace DungeonGame
 			}
 			player._HitPoints -= frostSpellDamage;
 			string attackSuccessString = $"The {monster._Name} hits you for {frostSpellDamage} frost damage.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
@@ -215,7 +216,7 @@ namespace DungeonGame
 			if (frozenEffectIndex == -1)
 			{
 				const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be double!";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
 					frozenString);
@@ -228,11 +229,11 @@ namespace DungeonGame
 		{
 			monster._EnergyPoints -= monster._Spellbook[index]._EnergyCost;
 			string attackString = $"The {monster._Name} casts a bolt of lightning at you!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
-			int arcaneSpellDamage = MonsterHandler.CalculateSpellDamage(player, monster, index);
+			int arcaneSpellDamage = MonsterController.CalculateSpellDamage(player, monster, index);
 			foreach (Effect effect in player._Effects.ToList())
 			{
 				switch (effect._EffectGroup)
@@ -279,7 +280,7 @@ namespace DungeonGame
 				}
 
 				string effectAbsorbString = $"Your {effect._Name} absorbed all of {monster._Name}'s attack!";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					effectAbsorbString);
@@ -287,7 +288,7 @@ namespace DungeonGame
 			}
 			player._HitPoints -= arcaneSpellDamage;
 			string attackSuccessString = $"The {monster._Name} hits you for {arcaneSpellDamage} arcane damage.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);

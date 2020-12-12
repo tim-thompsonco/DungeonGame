@@ -1,3 +1,4 @@
+using DungeonGame.Controllers;
 using System;
 
 namespace DungeonGame
@@ -89,12 +90,12 @@ namespace DungeonGame
 		public static void AugmentArmorSpellInfo(Player player, int index)
 		{
 			string augmentAmountString = $"Augment Armor Amount: {player._Spellbook[index]._ChangeAmount._Amount}";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				augmentAmountString);
 			string augmentInfoString = $"Armor will be augmented for {player._Spellbook[index]._ChangeAmount._ChangeMaxRound} rounds.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				augmentInfoString);
@@ -104,7 +105,7 @@ namespace DungeonGame
 			player._ManaPoints -= player._Spellbook[index]._ManaCost;
 			int changeArmorAmount = player._Spellbook[index]._ChangeAmount._Amount;
 			string augmentString = $"You augmented your armor by {changeArmorAmount} with {player._Spellbook[index]._Name}.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				augmentString);
@@ -116,13 +117,13 @@ namespace DungeonGame
 		public static void ReflectDamageSpellInfo(Player player, int index)
 		{
 			string reflectDamageString = $"Reflect Damage Amount: {player._Spellbook[index]._ChangeAmount._Amount}";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				reflectDamageString);
 			string reflectInfoString = $"Damage up to {player._Spellbook[index]._ChangeAmount._Amount} will be reflected for " +
 				$"{player._Spellbook[index]._ChangeAmount._ChangeMaxRound} rounds.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				reflectInfoString);
@@ -131,7 +132,7 @@ namespace DungeonGame
 		{
 			player._ManaPoints -= player._Spellbook[index]._ManaCost;
 			const string intellectString = "You cast Arcane Intellect on yourself.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				intellectString);
@@ -141,7 +142,7 @@ namespace DungeonGame
 				player._Effects[arcaneIntIndex]._IsEffectExpired = true;
 			}
 			player._Intelligence += player._Spellbook[index]._ChangeAmount._Amount;
-			PlayerHandler.CalculatePlayerStats(player);
+			PlayerController.CalculatePlayerStats(player);
 			player._Effects.Add(new Effect(player._Spellbook[index]._Name,
 				Effect.EffectType.ChangeStat, player._Spellbook[index]._ChangeAmount._Amount,
 				player._Spellbook[index]._ChangeAmount._ChangeCurRound, player._Spellbook[index]._ChangeAmount._ChangeMaxRound,
@@ -150,13 +151,13 @@ namespace DungeonGame
 		public static void ArcaneIntellectSpellInfo(Player player, int index)
 		{
 			string arcaneIntString = $"Arcane Intellect Amount: {player._Spellbook[index]._ChangeAmount._Amount}";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				arcaneIntString);
 			string arcaneIntInfoString = $"_Intelligence is increased by {player._Spellbook[index]._ChangeAmount._Amount} for " +
 				$"{player._Spellbook[index]._ChangeAmount._ChangeMaxRound / 60} minutes.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				arcaneIntInfoString);
@@ -165,7 +166,7 @@ namespace DungeonGame
 		{
 			player._ManaPoints -= player._Spellbook[index]._ManaCost;
 			const string reflectString = "You create a shield around you that will reflect damage.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				reflectString);
@@ -177,17 +178,17 @@ namespace DungeonGame
 		public static void FrostOffenseSpellInfo(Player player, int index)
 		{
 			string frostAmountString = $"Instant Damage: {player._Spellbook[index]._Offensive._Amount}";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				frostAmountString);
 			string frostInfoString = $"Frost damage will freeze opponent for {player._Spellbook[index]._Offensive._AmountMaxRounds} rounds.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				frostInfoString);
 			const string frostDmgInfoString = "Frozen opponents take 1.5x physical, arcane and frost damage.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				frostDmgInfoString);
@@ -197,7 +198,7 @@ namespace DungeonGame
 			}
 
 			string frostNovaInfoString = $"Opponent will be stunned for {player._Spellbook[index]._Offensive._AmountMaxRounds} rounds.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				frostNovaInfoString);
@@ -205,7 +206,7 @@ namespace DungeonGame
 		public static void CastFrostOffense(Monster opponent, Player player, int index)
 		{
 			player._ManaPoints -= player._Spellbook[index]._ManaCost;
-			int frostSpellDamage = PlayerHandler.CalculateSpellDamage(player, opponent, index);
+			int frostSpellDamage = PlayerController.CalculateSpellDamage(player, opponent, index);
 			foreach (Effect effect in opponent._Effects)
 			{
 				switch (effect._EffectGroup)
@@ -232,7 +233,7 @@ namespace DungeonGame
 				}
 			}
 			string attackSuccessString = $"You hit the {opponent._Name} for {frostSpellDamage} frost damage.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
@@ -241,7 +242,7 @@ namespace DungeonGame
 			if (frozenEffectIndex == -1)
 			{
 				string frozenString = $"The {opponent._Name} is frozen. Physical, frost and arcane damage to it will be double!";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
 					frozenString);
@@ -262,7 +263,7 @@ namespace DungeonGame
 		public static void FireOffenseSpellInfo(Player player, int index)
 		{
 			string fireAmountString = $"Instant Damage: {player._Spellbook[index]._Offensive._Amount}";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				fireAmountString);
@@ -272,12 +273,12 @@ namespace DungeonGame
 			}
 
 			string fireOverTimeString = $"Damage Over Time: {player._Spellbook[index]._Offensive._AmountOverTime}";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				fireOverTimeString);
 			string fireInfoString = $"Fire damage over time will burn for {player._Spellbook[index]._Offensive._AmountMaxRounds} rounds.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				fireInfoString);
@@ -285,7 +286,7 @@ namespace DungeonGame
 		public static void CastFireOffense(Monster opponent, Player player, int index)
 		{
 			player._ManaPoints -= player._Spellbook[index]._ManaCost;
-			int fireSpellDamage = PlayerHandler.CalculateSpellDamage(player, opponent, index);
+			int fireSpellDamage = PlayerController.CalculateSpellDamage(player, opponent, index);
 			foreach (Effect effect in opponent._Effects)
 			{
 				switch (effect._EffectGroup)
@@ -311,7 +312,7 @@ namespace DungeonGame
 				}
 			}
 			string attackSuccessString = $"You hit the {opponent._Name} for {fireSpellDamage} fire damage.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
@@ -322,7 +323,7 @@ namespace DungeonGame
 			}
 
 			string onFireString = $"The {opponent._Name} bursts into flame!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				onFireString);
@@ -334,7 +335,7 @@ namespace DungeonGame
 		public static void ArcaneOffenseSpellInfo(Player player, int index)
 		{
 			string arcaneAmountString = $"Instant Damage: {player._Spellbook[index]._Offensive._Amount}";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				arcaneAmountString);
@@ -342,7 +343,7 @@ namespace DungeonGame
 		public static void CastArcaneOffense(Monster opponent, Player player, int index)
 		{
 			player._ManaPoints -= player._Spellbook[index]._ManaCost;
-			int arcaneSpellDamage = PlayerHandler.CalculateSpellDamage(player, opponent, index);
+			int arcaneSpellDamage = PlayerController.CalculateSpellDamage(player, opponent, index);
 			foreach (Effect effect in opponent._Effects)
 			{
 				switch (effect._EffectGroup)
@@ -368,7 +369,7 @@ namespace DungeonGame
 				}
 			}
 			string attackSuccessString = $"You hit the {opponent._Name} for {arcaneSpellDamage} arcane damage.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
@@ -377,7 +378,7 @@ namespace DungeonGame
 		public static void HealingSpellInfo(Player player, int index)
 		{
 			string healAmountString = $"Heal Amount: {player._Spellbook[index]._Healing._HealAmount}";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healAmountString);
@@ -387,12 +388,12 @@ namespace DungeonGame
 			}
 
 			string healOverTimeString = $"Heal Over Time: {player._Spellbook[index]._Healing._HealOverTime}";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healOverTimeString);
 			string healInfoString = $"Heal over time will restore health for {player._Spellbook[index]._Healing._HealMaxRounds} rounds.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healInfoString);
@@ -402,7 +403,7 @@ namespace DungeonGame
 			player._ManaPoints -= player._Spellbook[index]._ManaCost;
 			int healAmount = player._Spellbook[index]._Healing._HealAmount;
 			string healString = $"You heal yourself for {healAmount} health.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				healString);
@@ -425,7 +426,7 @@ namespace DungeonGame
 		public static void PortalSpellInfo()
 		{
 			const string portalString = "This spell will create a portal and return you to town.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				portalString);
@@ -433,14 +434,14 @@ namespace DungeonGame
 		public static void CastTownPortal(Player player, int index)
 		{
 			player._ManaPoints -= player._Spellbook[index]._ManaCost;
-			RoomHandler.SetPlayerLocation(player, player._Spellbook[index]._Portal._CoordX,
+			RoomController.SetPlayerLocation(player, player._Spellbook[index]._Portal._CoordX,
 				player._Spellbook[index]._Portal._CoordY, player._Spellbook[index]._Portal._CoordZ);
 			const string portalString = "You open a portal and step through it.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				portalString);
-			IRoom playerRoom = RoomHandler.Rooms[player._PlayerLocation];
+			IRoom playerRoom = RoomController.Rooms[player._PlayerLocation];
 			playerRoom.LookRoom();
 		}
 	}

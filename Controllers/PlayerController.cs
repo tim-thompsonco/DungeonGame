@@ -6,9 +6,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace DungeonGame
+namespace DungeonGame.Controllers
 {
-	public static class PlayerHandler
+	public static class PlayerController
 	{
 		public static bool OutOfArrows(Player player)
 		{
@@ -16,8 +16,8 @@ namespace DungeonGame
 		}
 		public static void LookAtObject(Player player, string[] input)
 		{
-			var parsedInput = InputHandler.ParseInput(input);
-			var playerRoom = RoomHandler.Rooms[player._PlayerLocation];
+			var parsedInput = InputController.ParseInput(input);
+			var playerRoom = RoomController.Rooms[player._PlayerLocation];
 			var roomMatch = playerRoom._RoomObjects.FindIndex(f =>
 				f._Name.Contains(parsedInput));
 			if (roomMatch != -1)
@@ -29,7 +29,7 @@ namespace DungeonGame
 																				 f._Name == parsedInput);
 			if (playerInvIndex != -1)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					player._Inventory[playerInvIndex]._Desc);
@@ -39,7 +39,7 @@ namespace DungeonGame
 																	f._Name == parsedInput);
 			if (playerConsIndex != -1)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					player._Consumables[playerConsIndex]._Desc);
@@ -52,7 +52,7 @@ namespace DungeonGame
 		}
 		public static void ShowInventory(Player player)
 		{
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				"Your inventory contains:");
@@ -60,7 +60,7 @@ namespace DungeonGame
 			foreach (var item in player._Inventory)
 			{
 				if (!item._Equipped) continue;
-				var itemName = GearHandler.GetItemDetails(item);
+				var itemName = GearController.GetItemDetails(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (itemName.Contains("Quiver"))
 					itemInfo.Append(" (Arrows: " + player._PlayerQuiver._Quantity + "/" + player._PlayerQuiver._MaxQuantity + ")");
@@ -70,11 +70,11 @@ namespace DungeonGame
 					var playerItem = item as IRainbowGear;
 					if (playerItem._IsRainbowGear)
 					{
-						GearHandler.StoreRainbowGearOutput(itemInfo.ToString());
+						GearController.StoreRainbowGearOutput(itemInfo.ToString());
 						continue;
 					}
 				}
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					itemInfo.ToString());
@@ -82,7 +82,7 @@ namespace DungeonGame
 			foreach (var item in player._Inventory)
 			{
 				if (item._Equipped) continue;
-				var itemName = GearHandler.GetItemDetails(item);
+				var itemName = GearController.GetItemDetails(item);
 				var itemInfo = new StringBuilder(itemName);
 				if (player._PlayerQuiver?._Name == itemName)
 					itemInfo.Append("Arrows: " + player._PlayerQuiver._Quantity + "/" + player._PlayerQuiver._MaxQuantity);
@@ -91,11 +91,11 @@ namespace DungeonGame
 					var playerItem = item as IRainbowGear;
 					if (playerItem._IsRainbowGear)
 					{
-						GearHandler.StoreRainbowGearOutput(itemInfo.ToString());
+						GearController.StoreRainbowGearOutput(itemInfo.ToString());
 						continue;
 					}
 				}
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					itemInfo.ToString());
@@ -145,18 +145,18 @@ namespace DungeonGame
 			foreach (var consumable in consumableDict)
 			{
 				var consumableString = consumable.Key + " (Quantity: " + consumable.Value + ")";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					consumableString);
 			}
 			var goldString = "_Gold: " + player._Gold + " coins.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				goldString);
 			var weightString = "_Weight: " + GetInventoryWeight(player) + "/" + player._MaxCarryWeight;
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				weightString);
@@ -173,7 +173,7 @@ namespace DungeonGame
 			player._Experience -= player._ExperienceToLevel;
 			player._ExperienceToLevel = Settings.GetBaseExperienceToLevel() * player._Level;
 			var levelUpString = "You have leveled! You are now level " + player._Level + ".";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatLevelUpText(),
 				Settings.FormatDefaultBackground(),
 				levelUpString);
@@ -190,39 +190,39 @@ namespace DungeonGame
 					"Int will increase your mana and decrease your training cost for spells and abilities.";
 				const string levelUpStatConst = "Const will increase your max hit points.";
 				DisplayPlayerStats(player);
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(),
 					Settings.FormatDefaultBackground(),
 					levelUpStatString);
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(),
 					Settings.FormatDefaultBackground(),
 					levelUpStatInfo);
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(),
 					Settings.FormatDefaultBackground(),
 					levelUpStatStr);
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(),
 					Settings.FormatDefaultBackground(),
 					levelUpStatDex);
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(),
 					Settings.FormatDefaultBackground(),
 					levelUpStatInt);
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(),
 					Settings.FormatDefaultBackground(),
 					levelUpStatConst);
-				OutputHandler.Display.RetrieveUserOutput();
-				OutputHandler.Display.ClearUserOutput();
+				OutputController.Display.RetrieveUserOutput();
+				OutputController.Display.ClearUserOutput();
 				var statNumber = 0;
 				try
 				{
-					var input = InputHandler.GetFormattedInput(Console.ReadLine());
+					var input = InputController.GetFormattedInput(Console.ReadLine());
 					if (input.Length > 1)
 					{
-						if (GameHandler.IsWholeNumber(input[1]) == false) continue;
+						if (GameController.IsWholeNumber(input[1]) == false) continue;
 						statNumber = Convert.ToInt32(input[1]);
 					}
 					switch (input[0])
@@ -279,13 +279,13 @@ namespace DungeonGame
 				}
 				catch (IndexOutOfRangeException)
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatAnnounceText(),
 						Settings.FormatDefaultBackground(),
 						"You did not select an appropriate stat!");
 				}
 			}
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(),
 				"All stats have been assigned!");
@@ -338,7 +338,7 @@ namespace DungeonGame
 		public static void DisplayPlayerStats(Player player)
 		{
 			Settings.FormatGeneralInfoText();
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				Settings.FormatTextBorder());
@@ -355,7 +355,7 @@ namespace DungeonGame
 				healLineOutput.Add(Settings.FormatHealthBackground());
 				healLineOutput.Add("    ");
 			}
-			OutputHandler.Display.StoreUserOutput(healLineOutput);
+			OutputController.Display.StoreUserOutput(healLineOutput);
 			switch (player._PlayerClass)
 			{
 				case Player.PlayerClassType.Mage:
@@ -381,7 +381,7 @@ namespace DungeonGame
 						manaLineOutput.Add(Settings.FormatManaBackground());
 						manaLineOutput.Add("    ");
 					}
-					OutputHandler.Display.StoreUserOutput(manaLineOutput);
+					OutputController.Display.StoreUserOutput(manaLineOutput);
 					break;
 				case Player.PlayerClassType.Warrior:
 					var playerRageString = "Rage: " + player._RagePoints + "/" + player._MaxRagePoints + " ";
@@ -406,7 +406,7 @@ namespace DungeonGame
 						rageLineOutput.Add(Settings.FormatRageBackground());
 						rageLineOutput.Add("    ");
 					}
-					OutputHandler.Display.StoreUserOutput(rageLineOutput);
+					OutputController.Display.StoreUserOutput(rageLineOutput);
 					break;
 				case Player.PlayerClassType.Archer:
 					var playerComboString = "Combo: " + player._ComboPoints + "/" + player._MaxComboPoints + " ";
@@ -431,7 +431,7 @@ namespace DungeonGame
 						comboLineOutput.Add(Settings.FormatComboBackground());
 						comboLineOutput.Add("    ");
 					}
-					OutputHandler.Display.StoreUserOutput(comboLineOutput);
+					OutputController.Display.StoreUserOutput(comboLineOutput);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -456,23 +456,23 @@ namespace DungeonGame
 				expLineOutput.Add(Settings.FormatExpBackground());
 				expLineOutput.Add("    ");
 			}
-			OutputHandler.Display.StoreUserOutput(expLineOutput);
+			OutputController.Display.StoreUserOutput(expLineOutput);
 			var baseStatsString = "Str: " + player._Strength + " Int: " + player._Intelligence +
 							  " Dex: " + player._Dexterity + " _Level: " + player._Level;
 			var statsSb = new StringBuilder(baseStatsString);
 			if (player._PlayerClass == Player.PlayerClassType.Archer)
 				statsSb.Append(" Arrows: " + player._PlayerQuiver?._Quantity);
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				statsSb.ToString());
 			var resistString = "Fire Resist: " + player._FireResistance + " Frost Resist: " + player._FrostResistance +
 							   " Arcane Resist: " + player._ArcaneResistance;
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				resistString);
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				Settings.FormatTextBorder());
@@ -482,7 +482,7 @@ namespace DungeonGame
 			if (player._PlayerClass != Player.PlayerClassType.Mage)
 			{
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"You have the following abilities:");
@@ -490,7 +490,7 @@ namespace DungeonGame
 				{
 					var abilityName = textInfo.ToTitleCase(ability._Name);
 					var abilityString = abilityName + ", Rank " + ability._Rank;
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						abilityString);
@@ -498,14 +498,14 @@ namespace DungeonGame
 			}
 			else if (player._PlayerClass == Player.PlayerClassType.Mage)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You're not a warrior or archer!");
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't list that.");
@@ -516,7 +516,7 @@ namespace DungeonGame
 			if (player._PlayerClass == Player.PlayerClassType.Mage)
 			{
 				var textInfo = new CultureInfo("en-US", false).TextInfo;
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"Your spellbook contains:");
@@ -524,7 +524,7 @@ namespace DungeonGame
 				{
 					var spellName = textInfo.ToTitleCase(spell._Name);
 					var spellString = spellName + ", Rank " + spell._Rank;
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						spellString);
@@ -532,14 +532,14 @@ namespace DungeonGame
 			}
 			else if (player._PlayerClass != Player.PlayerClassType.Mage)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You're not a mage!");
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't list that.");
@@ -547,23 +547,23 @@ namespace DungeonGame
 		}
 		public static void AbilityInfo(Player player, string[] input)
 		{
-			var inputName = InputHandler.ParseInput(input);
+			var inputName = InputController.ParseInput(input);
 			var index = player._Abilities.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (index != -1 && player._PlayerClass == Player.PlayerClassType.Warrior)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					textInfo.ToTitleCase(player._Abilities[index]._Name));
 				var rankString = "Rank: " + player._Abilities[index]._Rank;
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					rankString);
 				var rageCostString = "Rage Cost: " + player._Abilities[index]._RageCost;
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					rageCostString);
@@ -605,17 +605,17 @@ namespace DungeonGame
 			}
 			else if (index != -1 && player._PlayerClass == Player.PlayerClassType.Archer)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					textInfo.ToTitleCase(player._Abilities[index]._Name));
 				var rankString = "Rank: " + player._Abilities[index]._Rank;
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					rankString);
 				var comboCostString = "Combo Cost: " + player._Abilities[index]._ComboCost;
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					comboCostString);
@@ -657,14 +657,14 @@ namespace DungeonGame
 			}
 			else if (index != -1 && player._PlayerClass == Player.PlayerClassType.Mage)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You're not a warrior or archer!");
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You don't have that ability.");
@@ -683,17 +683,17 @@ namespace DungeonGame
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (index != -1 && player._PlayerClass == Player.PlayerClassType.Mage)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					textInfo.ToTitleCase(player._Spellbook[index]._Name));
 				var rankString = "Rank: " + player._Spellbook[index]._Rank;
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					rankString);
 				var manaCostString = "Mana Cost: " + player._Spellbook[index]._ManaCost;
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					manaCostString);
@@ -735,14 +735,14 @@ namespace DungeonGame
 			}
 			else if (index != -1 && player._PlayerClass != Player.PlayerClassType.Mage)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You're not a mage!");
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You don't have that spell.");
@@ -765,7 +765,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You don't have that quest.");

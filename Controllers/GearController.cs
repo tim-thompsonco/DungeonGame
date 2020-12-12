@@ -5,9 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace DungeonGame
+namespace DungeonGame.Controllers
 {
-	public static class GearHandler
+	public static class GearController
 	{
 		private static bool IsWearable(IEquipment item)
 		{
@@ -62,7 +62,7 @@ namespace DungeonGame
 				sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 				sameLineOutput.Add(itemName[i].ToString()); // What prints to display
 			}
-			OutputHandler.Display.StoreUserOutput(sameLineOutput);
+			OutputController.Display.StoreUserOutput(sameLineOutput);
 		}
 		public static void DecreaseArmorDurability(Player player)
 		{
@@ -95,7 +95,7 @@ namespace DungeonGame
 			var kitIndex = player._Consumables.FindIndex(f => f._Name.Contains(userInput[2]));
 			if (kitIndex == -1)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"What weapon kit did you want to use?");
@@ -105,7 +105,7 @@ namespace DungeonGame
 				f._Name.Contains(userInput[1].ToLowerInvariant()));
 			if (weaponIndex == -1)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"What weapon did you want to upgrade?");
@@ -116,7 +116,7 @@ namespace DungeonGame
 			var weaponName = textInfo.ToTitleCase(weapon._Name);
 			if (player._Consumables[kitIndex]._KitCategory != Consumable.KitType.Weapon)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't upgrade " + weaponName + " with that!");
@@ -127,7 +127,7 @@ namespace DungeonGame
 				player._Consumables[kitIndex]._ChangeWeapon._KitCategory == ChangeWeapon.KitType.Grindstone &&
 				weapon._WeaponGroup == Weapon.WeaponType.Bow)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't upgrade " + weaponName + " with that!");
@@ -139,13 +139,13 @@ namespace DungeonGame
 				while (!inputValid)
 				{
 					var weaponString = weaponName + " is not equipped. Are you sure you want to upgrade that?";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						weaponString);
-					OutputHandler.Display.RetrieveUserOutput();
-					OutputHandler.Display.ClearUserOutput();
-					var input = InputHandler.GetFormattedInput(Console.ReadLine());
+					OutputController.Display.RetrieveUserOutput();
+					OutputController.Display.ClearUserOutput();
+					var input = InputController.GetFormattedInput(Console.ReadLine());
 					if (input[0] == "no" || input[0] == "n") return;
 					if (input[0] == "yes" || input[0] == "y") inputValid = true;
 				}
@@ -153,7 +153,7 @@ namespace DungeonGame
 			player._Consumables[kitIndex]._ChangeWeapon.ChangeWeaponPlayer(weapon);
 			weapon._ItemValue += player._Consumables[kitIndex]._ItemValue;
 			var upgradeSuccess = "You upgraded " + weaponName + " with a weapon kit.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				upgradeSuccess);
@@ -164,7 +164,7 @@ namespace DungeonGame
 			var kitIndex = player._Consumables.FindIndex(f => f._Name.Contains(userInput[2]));
 			if (kitIndex == -1)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"What armor kit did you want to use?");
@@ -174,7 +174,7 @@ namespace DungeonGame
 				f._Name.Contains(userInput[1].ToLowerInvariant()));
 			if (armorIndex == -1)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"What armor did you want to upgrade?");
@@ -185,7 +185,7 @@ namespace DungeonGame
 			var armorName = textInfo.ToTitleCase(armor._Name);
 			if (player._Consumables[kitIndex]._KitCategory != Consumable.KitType.Armor)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't upgrade " + armorName + " with that!");
@@ -199,7 +199,7 @@ namespace DungeonGame
 				 armor._ArmorGroup != Armor.ArmorType.Plate ||
 				player._Consumables[kitIndex]._KitCategory == Consumable.KitType.Weapon)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't upgrade " + armorName + " with that!");
@@ -211,13 +211,13 @@ namespace DungeonGame
 				while (!inputValid)
 				{
 					var armorString = armorName + " is not equipped. Are you sure you want to upgrade that?";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						armorString);
-					OutputHandler.Display.BuildUserOutput();
-					OutputHandler.Display.ClearUserOutput();
-					var input = InputHandler.GetFormattedInput(Console.ReadLine());
+					OutputController.Display.BuildUserOutput();
+					OutputController.Display.ClearUserOutput();
+					var input = InputController.GetFormattedInput(Console.ReadLine());
 					if (input[0] == "no" || input[0] == "n") return;
 					if (input[0] == "yes" || input[0] == "y") inputValid = true;
 				}
@@ -225,7 +225,7 @@ namespace DungeonGame
 			player._Consumables[kitIndex]._ChangeArmor.ChangeArmorPlayer(armor);
 			armor._ItemValue += player._Consumables[kitIndex]._ItemValue;
 			var upgradeSuccess = "You upgraded " + armorName + " with an armor kit.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				upgradeSuccess);
@@ -235,7 +235,7 @@ namespace DungeonGame
 		{
 			if (input[1] == null)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"What item did you want to drop?");
@@ -243,12 +243,12 @@ namespace DungeonGame
 			}
 			var itemIndex = player._Inventory.FindIndex(
 				f => f._Name == input[1] || f._Name.Contains(input[1]));
-			var playerRoom = RoomHandler.Rooms[player._PlayerLocation];
+			var playerRoom = RoomController.Rooms[player._PlayerLocation];
 			if (itemIndex != -1)
 			{
 				if (player._Inventory[itemIndex]._Equipped)
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You have to unequip that item first!");
@@ -258,7 +258,7 @@ namespace DungeonGame
 				var dropInventoryString = "You dropped " +
 										player._Inventory[itemIndex]._Name + ".";
 				player._Inventory.RemoveAt(itemIndex);
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					dropInventoryString);
@@ -272,13 +272,13 @@ namespace DungeonGame
 				var dropConsumableString = "You dropped " +
 										  player._Consumables[itemIndex]._Name + ".";
 				player._Consumables.RemoveAt(itemIndex);
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					dropConsumableString);
 				return;
 			}
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"You don't have that item in your inventory!");
@@ -287,35 +287,35 @@ namespace DungeonGame
 		{
 			if (input[1] == null)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"What item did you want to pickup?");
 				return;
 			}
-			var playerRoom = RoomHandler.Rooms[player._PlayerLocation];
+			var playerRoom = RoomController.Rooms[player._PlayerLocation];
 			var itemIndex = playerRoom._RoomObjects.FindIndex(
 				f => f._Name == input[1] || f._Name.Contains(input[1]));
 			if (!(playerRoom._RoomObjects[itemIndex] is IEquipment item))
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't pick that up!");
 				return;
 			}
-			var playerWeight = PlayerHandler.GetInventoryWeight(player);
+			var playerWeight = PlayerController.GetInventoryWeight(player);
 			var itemWeight = item._Weight;
 			if (playerWeight + itemWeight > player._MaxCarryWeight)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't carry that much!");
 			}
 			if (itemIndex == -1)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"That item is not in the room!");
@@ -332,7 +332,7 @@ namespace DungeonGame
 			var pickupItemString = "You picked up " +
 								   playerRoom._RoomObjects[itemIndex]._Name + ".";
 			playerRoom._RoomObjects.RemoveAt(itemIndex);
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				pickupItemString);
@@ -350,7 +350,7 @@ namespace DungeonGame
 			if (item == null)
 			{
 				var noItemFoundString = "You don't have " + inputName + " in your inventory!";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					noItemFoundString);
@@ -377,13 +377,13 @@ namespace DungeonGame
 				}
 				if (IsWearable(item))
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You have already equipped that.");
 					return;
 				}
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't equip that!");
@@ -411,7 +411,7 @@ namespace DungeonGame
 			if (!weapon._Equipped)
 			{
 				var alreadyUnequipString = "You have already unequipped " + weapon._Name + ".";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					alreadyUnequipString);
@@ -419,7 +419,7 @@ namespace DungeonGame
 			}
 			weapon._Equipped = false;
 			var unequipString = "You have unequipped " + player._PlayerWeapon._Name + ".";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				unequipString);
@@ -430,7 +430,7 @@ namespace DungeonGame
 			if (!quiver._Equipped)
 			{
 				var alreadyUnequipString = "You have already unequipped " + quiver._Name + "{0}.";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					alreadyUnequipString);
@@ -438,7 +438,7 @@ namespace DungeonGame
 			}
 			quiver._Equipped = false;
 			var unequipString = "You have unequipped " + player._PlayerQuiver._Name + ".";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				unequipString);
@@ -449,7 +449,7 @@ namespace DungeonGame
 			if (!armor._Equipped)
 			{
 				var alreadyUnequipString = "You have already unequipped " + armor._Name + ".";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					alreadyUnequipString);
@@ -460,7 +460,7 @@ namespace DungeonGame
 			{
 				case Armor.ArmorSlot.Head:
 					var unequipHeadString = "You have unequipped " + player._PlayerHeadArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipHeadString);
@@ -468,7 +468,7 @@ namespace DungeonGame
 					break;
 				case Armor.ArmorSlot.Back:
 					var unequipBackString = "You have unequipped " + player._PlayerBackArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipBackString);
@@ -476,7 +476,7 @@ namespace DungeonGame
 					break;
 				case Armor.ArmorSlot.Chest:
 					var unequipChestString = "You have unequipped " + player._PlayerChestArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipChestString);
@@ -484,7 +484,7 @@ namespace DungeonGame
 					break;
 				case Armor.ArmorSlot.Wrist:
 					var unequipWristString = "You have unequipped " + player._PlayerWristArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipWristString);
@@ -492,7 +492,7 @@ namespace DungeonGame
 					break;
 				case Armor.ArmorSlot.Waist:
 					var unequipWaistString = "You have unequipped " + player._PlayerWaistArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipWaistString);
@@ -500,7 +500,7 @@ namespace DungeonGame
 					break;
 				case Armor.ArmorSlot.Legs:
 					var unequipLegsString = "You have unequipped " + player._PlayerLegsArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipLegsString);
@@ -508,7 +508,7 @@ namespace DungeonGame
 					break;
 				case Armor.ArmorSlot.Hands:
 					var unequipHandsString = "You have unequipped " + player._PlayerHandsArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipHandsString);
@@ -523,7 +523,7 @@ namespace DungeonGame
 			if (weapon._Equipped)
 			{
 				var alreadyEquipString = "You have already equipped " + weapon._Name + ".";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					alreadyEquipString);
@@ -543,7 +543,7 @@ namespace DungeonGame
 				case Weapon.WeaponType.Bow when player._CanUseBow:
 					break;
 				default:
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You cannot use that type of weapon!");
@@ -556,7 +556,7 @@ namespace DungeonGame
 			player._PlayerWeapon = weapon;
 			weapon._Equipped = true;
 			var equipSuccessString = "You have equipped " + player._PlayerWeapon._Name + ".";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				equipSuccessString);
@@ -566,7 +566,7 @@ namespace DungeonGame
 			if (quiver._Equipped)
 			{
 				var alreadyEquipString = "You have already equipped " + quiver._Name + ".";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					alreadyEquipString);
@@ -579,7 +579,7 @@ namespace DungeonGame
 			player._PlayerQuiver = quiver;
 			quiver._Equipped = true;
 			var equipString = "You have equipped " + player._PlayerQuiver._Name + ".";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				equipString);
@@ -589,7 +589,7 @@ namespace DungeonGame
 			if (armor._Equipped)
 			{
 				var alreadyEquipString = "You have already equipped " + armor._Name + ".";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					alreadyEquipString);
@@ -605,7 +605,7 @@ namespace DungeonGame
 				case Armor.ArmorType.Plate when player._CanWearPlate:
 					break;
 				default:
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You cannot wear that type of armor!");
@@ -621,7 +621,7 @@ namespace DungeonGame
 					player._PlayerHeadArmor = armor;
 					armor._Equipped = true;
 					var equipHeadString = "You have equipped " + player._PlayerHeadArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						equipHeadString);
@@ -634,7 +634,7 @@ namespace DungeonGame
 					player._PlayerBackArmor = armor;
 					armor._Equipped = true;
 					var equipBackString = "You have equipped " + player._PlayerBackArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						equipBackString);
@@ -647,7 +647,7 @@ namespace DungeonGame
 					player._PlayerChestArmor = armor;
 					armor._Equipped = true;
 					var equipChestString = "You have equipped " + player._PlayerChestArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						equipChestString);
@@ -660,7 +660,7 @@ namespace DungeonGame
 					player._PlayerWristArmor = armor;
 					armor._Equipped = true;
 					var equipWristString = "You have equipped " + player._PlayerWristArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						equipWristString);
@@ -673,7 +673,7 @@ namespace DungeonGame
 					player._PlayerWaistArmor = armor;
 					armor._Equipped = true;
 					var equipWaistString = "You have equipped " + player._PlayerWaistArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						equipWaistString);
@@ -686,7 +686,7 @@ namespace DungeonGame
 					player._PlayerLegsArmor = armor;
 					armor._Equipped = true;
 					var equipLegsString = "You have equipped " + player._PlayerLegsArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						equipLegsString);
@@ -699,7 +699,7 @@ namespace DungeonGame
 					player._PlayerHandsArmor = armor;
 					armor._Equipped = true;
 					var equipHandsString = "You have equipped " + player._PlayerHandsArmor._Name + ".";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						equipHandsString);

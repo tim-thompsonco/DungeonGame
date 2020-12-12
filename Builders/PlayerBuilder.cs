@@ -1,3 +1,4 @@
+using DungeonGame.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,7 +10,7 @@ namespace DungeonGame
 		public Player BuildNewPlayer()
 		{
 			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), "Please enter a player name.");
 			string playerName;
 			while (true)
@@ -17,17 +18,17 @@ namespace DungeonGame
 				var sameLineOutput = new List<string> {
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), "Player name: "
 				};
-				OutputHandler.Display.StoreUserOutput(sameLineOutput);
-				OutputHandler.Display.RetrieveUserOutput();
+				OutputController.Display.StoreUserOutput(sameLineOutput);
+				OutputController.Display.RetrieveUserOutput();
 				playerName = textInfo.ToTitleCase(Console.ReadLine());
-				OutputHandler.Display.ClearUserOutput();
+				OutputController.Display.ClearUserOutput();
 				var playerNameString = "Your player name is " + playerName + ", is that correct? [Y] or [N].";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), playerNameString);
-				OutputHandler.Display.RetrieveUserOutput();
+				OutputController.Display.RetrieveUserOutput();
 				Messages.RequestCommand();
-				var input = InputHandler.GetFormattedInput(Console.ReadLine());
-				OutputHandler.Display.ClearUserOutput();
+				var input = InputController.GetFormattedInput(Console.ReadLine());
+				OutputController.Display.ClearUserOutput();
 				if (input[0] == "y")
 				{
 					break;
@@ -35,37 +36,37 @@ namespace DungeonGame
 			}
 			while (true)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(),
 					Settings.FormatDefaultBackground(),
 					"Please enter your class. You can select Mage, Warrior, or Archer.");
 				var sameLineOutputClass = new List<string> {
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), "Player class: "
 				};
-				OutputHandler.Display.StoreUserOutput(sameLineOutputClass);
-				OutputHandler.Display.RetrieveUserOutput();
-				var userInput = InputHandler.GetFormattedInput(Console.ReadLine());
-				OutputHandler.Display.ClearUserOutput();
+				OutputController.Display.StoreUserOutput(sameLineOutputClass);
+				OutputController.Display.RetrieveUserOutput();
+				var userInput = InputController.GetFormattedInput(Console.ReadLine());
+				OutputController.Display.ClearUserOutput();
 				var playerClassInput = textInfo.ToTitleCase(userInput[0]);
 				if (playerClassInput != "Mage" && playerClassInput != "Warrior" && playerClassInput != "Archer")
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatAnnounceText(),
 						Settings.FormatDefaultBackground(),
 						"Invalid selection. Please enter Mage, Warrior, or Archer for your class.");
-					OutputHandler.Display.RetrieveUserOutput();
+					OutputController.Display.RetrieveUserOutput();
 					continue;
 				}
 				var playerClass = playerClassInput;
 				var playerClassString = "Your player class is " + playerClass + ", is that correct? [Y] or [N].";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), playerClassString);
 				Messages.RequestCommand();
-				OutputHandler.Display.RetrieveUserOutput();
-				var input = InputHandler.GetFormattedInput(Console.ReadLine());
+				OutputController.Display.RetrieveUserOutput();
+				var input = InputController.GetFormattedInput(Console.ReadLine());
 				if (input[0] == "y")
 				{
-					OutputHandler.Display.ClearUserOutput();
+					OutputController.Display.ClearUserOutput();
 					switch (playerClass)
 					{
 						case "Archer":
@@ -81,13 +82,13 @@ namespace DungeonGame
 							{
 								if (archerString.Length - i < Settings.GetGameWidth())
 								{
-									OutputHandler.Display.StoreUserOutput(
+									OutputController.Display.StoreUserOutput(
 										Settings.FormatAnnounceText(),
 										Settings.FormatDefaultBackground(),
 										archerString.Substring(i, archerString.Length - i));
 									continue;
 								}
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatAnnounceText(),
 									Settings.FormatDefaultBackground(),
 									archerString.Substring(i, Settings.GetGameWidth()));
@@ -104,13 +105,13 @@ namespace DungeonGame
 							{
 								if (mageString.Length - i < Settings.GetGameWidth())
 								{
-									OutputHandler.Display.StoreUserOutput(
+									OutputController.Display.StoreUserOutput(
 										Settings.FormatAnnounceText(),
 										Settings.FormatDefaultBackground(),
 										mageString.Substring(i, mageString.Length - i));
 									continue;
 								}
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatAnnounceText(),
 									Settings.FormatDefaultBackground(),
 									mageString.Substring(i, Settings.GetGameWidth()));
@@ -127,13 +128,13 @@ namespace DungeonGame
 							{
 								if (warriorString.Length - i < Settings.GetGameWidth())
 								{
-									OutputHandler.Display.StoreUserOutput(
+									OutputController.Display.StoreUserOutput(
 										Settings.FormatAnnounceText(),
 										Settings.FormatDefaultBackground(),
 										warriorString.Substring(i, warriorString.Length - i));
 									continue;
 								}
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatAnnounceText(),
 									Settings.FormatDefaultBackground(),
 									warriorString.Substring(i, Settings.GetGameWidth()));

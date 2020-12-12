@@ -1,3 +1,4 @@
+using DungeonGame.Controllers;
 using System;
 using System.Threading;
 
@@ -13,55 +14,55 @@ namespace DungeonGame
 			}
 			catch (Exception ex)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
 					$"The game window could not be resized on your computer. Error: {ex}");
 			}
 			// Game loading commands
 			Messages.GameIntro();
-			OutputHandler.Display.RetrieveUserOutput();
-			OutputHandler.Display.ClearUserOutput();
+			OutputController.Display.RetrieveUserOutput();
+			OutputController.Display.ClearUserOutput();
 			/* Load game if save game exists, and if not, build new game
 			this method must run first so rooms exists to place player in */
-			GameHandler.LoadGame();
+			GameController.LoadGame();
 			// Load player if save game exists, and if not, create a new player
-			Player player = GameHandler.LoadPlayer();
+			Player player = GameController.LoadPlayer();
 			// On loading game, display room that player starts in
-			OutputHandler.ShowUserOutput(player);
-			OutputHandler.Display.ClearUserOutput();
+			OutputController.ShowUserOutput(player);
+			OutputController.Display.ClearUserOutput();
 			// Check every second to see if any effects expired or events need to execute
 			Timer globalTimer = new Timer(
-				e => GameHandler.CheckStatus(player),
+				e => GameController.CheckStatus(player),
 				null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
-			while (!GameHandler.IsGameOver)
+			while (!GameController.IsGameOver)
 			{
-				GameHandler.RemovedExpiredEffectsAsync(player);
-				string[] input = InputHandler.GetFormattedInput(Console.ReadLine());
-				InputHandler.ProcessUserInput(player, input, globalTimer);
+				GameController.RemovedExpiredEffectsAsync(player);
+				string[] input = InputController.GetFormattedInput(Console.ReadLine());
+				InputController.ProcessUserInput(player, input, globalTimer);
 				Console.Clear();
-				OutputHandler.ShowUserOutput(player);
-				OutputHandler.Display.ClearUserOutput();
+				OutputController.ShowUserOutput(player);
+				OutputController.Display.ClearUserOutput();
 				if (player._HitPoints > 0)
 				{
 					continue;
 				}
 				/* If player dies, provide option to continue playing. If there is a saved game, player can reload
 				from it. Otherwise, player can start over and create a new game. */
-				if (GameHandler.ContinuePlaying())
+				if (GameController.ContinuePlaying())
 				{
-					GameHandler.LoadGame();
-					player = GameHandler.LoadPlayer();
-					RoomHandler.Rooms[player._PlayerLocation].LookRoom();
-					OutputHandler.ShowUserOutput(player);
-					OutputHandler.Display.ClearUserOutput();
+					GameController.LoadGame();
+					player = GameController.LoadPlayer();
+					RoomController.Rooms[player._PlayerLocation].LookRoom();
+					OutputController.ShowUserOutput(player);
+					OutputController.Display.ClearUserOutput();
 				}
 				else
 				{
-					GameHandler.IsGameOver = true;
+					GameController.IsGameOver = true;
 					Messages.GameOver();
-					OutputHandler.Display.RetrieveUserOutput();
-					OutputHandler.Display.ClearUserOutput();
+					OutputController.Display.RetrieveUserOutput();
+					OutputController.Display.ClearUserOutput();
 				}
 			}
 		}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonGame.Controllers;
+using System;
 using System.Text;
 
 namespace DungeonGame.Items
@@ -39,7 +40,7 @@ namespace DungeonGame.Items
 		public Armor(int level, ArmorSlot armorCategory)
 		{
 			_Level = level;
-			int randomArmorNum = GameHandler.GetRandomNumber(1, 3);
+			int randomArmorNum = GameController.GetRandomNumber(1, 3);
 			_ArmorGroup = randomArmorNum switch
 			{
 				1 => ArmorType.Cloth,
@@ -69,7 +70,7 @@ namespace DungeonGame.Items
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			_ArmorRating += GameHandler.GetRandomNumber(2, 4);
+			_ArmorRating += GameController.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
 			_ArmorRating += level - 1;
 			_ItemValue = _ArmorRating;
@@ -105,7 +106,7 @@ namespace DungeonGame.Items
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			_ArmorRating += GameHandler.GetRandomNumber(2, 4);
+			_ArmorRating += GameController.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
 			_ArmorRating += (level - 1) * 3;
 			_ItemValue = _ArmorRating;
@@ -141,7 +142,7 @@ namespace DungeonGame.Items
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			_ArmorRating += GameHandler.GetRandomNumber(2, 4);
+			_ArmorRating += GameController.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
 			_ArmorRating += (_Level - 1) * 3;
 			// Add modifier for rainbow gear to enhance armor rating
@@ -448,7 +449,7 @@ namespace DungeonGame.Items
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			_ArmorRating += GameHandler.GetRandomNumber(2, 4);
+			_ArmorRating += GameController.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
 			_ArmorRating += (_Level - 1) * 3;
 			// Add modifier for rainbow gear to enhance armor rating

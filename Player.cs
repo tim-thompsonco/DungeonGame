@@ -1,3 +1,4 @@
+using DungeonGame.Controllers;
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables;
 using System;
@@ -208,7 +209,7 @@ namespace DungeonGame
 
 		public int ArmorRating(Monster opponent)
 		{
-			int totalArmorRating = GearHandler.CheckArmorRating(this);
+			int totalArmorRating = GearController.CheckArmorRating(this);
 			int levelDiff = opponent._Level - _Level;
 			double armorMultiplier = 1.00 + (-(double)levelDiff / 5);
 			double adjArmorRating = totalArmorRating * armorMultiplier;
@@ -240,7 +241,7 @@ namespace DungeonGame
 			}
 			catch (NullReferenceException)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"Your weapon is not equipped! Going hand to hand!");
@@ -318,7 +319,7 @@ namespace DungeonGame
 				f => f._Name.Contains(input));
 			if (index == -1)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"What potion did you want to drink?");
@@ -329,7 +330,7 @@ namespace DungeonGame
 				case Consumable.PotionType.Health:
 					_Consumables[index]._RestoreHealth.RestoreHealthPlayer(this);
 					string drankHealthString = $"You drank a potion and replenished {_Consumables[index]._RestoreHealth._RestoreHealthAmt} health.";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						drankHealthString);
@@ -338,7 +339,7 @@ namespace DungeonGame
 				case Consumable.PotionType.Mana:
 					_Consumables[index]._RestoreMana.RestoreManaPlayer(this);
 					string drankManaString = $"You drank a potion and replenished {_Consumables[index]._RestoreMana._RestoreManaAmt} mana.";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						drankManaString);
@@ -351,7 +352,7 @@ namespace DungeonGame
 					_Consumables[index]._ChangeStat.ChangeStatPlayer(this);
 					string drankStatString = 
 						$"You drank a potion and increased {_Consumables[index]._ChangeStat._StatCategory} by {_Consumables[index]._ChangeStat._ChangeAmount}.";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						drankStatString);
@@ -368,7 +369,7 @@ namespace DungeonGame
 			{
 				Arrows arrows = _Consumables[index] as Arrows;
 				arrows.LoadPlayerQuiverWithArrows(this);
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You reloaded your quiver.");
@@ -379,7 +380,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You don't have any arrows!");
@@ -407,7 +408,7 @@ namespace DungeonGame
 					case PlayerAbility.WarriorAbility.Berserk:
 					case PlayerAbility.WarriorAbility.Disarm:
 					case PlayerAbility.WarriorAbility.Onslaught:
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
 							"You cannot use that ability outside combat!");
@@ -446,7 +447,7 @@ namespace DungeonGame
 					case PlayerAbility.ArcherAbility.Double:
 					case PlayerAbility.ArcherAbility.Wound:
 					case PlayerAbility.ArcherAbility.ImmolatingArrow:
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
 							"You cannot use that ability outside combat!");
@@ -523,7 +524,7 @@ namespace DungeonGame
 							}
 							else
 							{
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatAttackFailText(),
 									Settings.FormatDefaultBackground(),
 									"You didn't have enough rage points for the second attack!");
@@ -580,7 +581,7 @@ namespace DungeonGame
 							}
 							else
 							{
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatAttackFailText(),
 									Settings.FormatDefaultBackground(),
 									"You didn't have enough combo points for the second shot!");
@@ -621,7 +622,7 @@ namespace DungeonGame
 						}
 						else
 						{
-							OutputHandler.Display.StoreUserOutput(
+							OutputController.Display.StoreUserOutput(
 								Settings.FormatAttackFailText(),
 								Settings.FormatDefaultBackground(),
 								$"You can't ambush {opponent._Name}, you're already in combat!");
@@ -664,7 +665,7 @@ namespace DungeonGame
 					case PlayerSpell.SpellType.Fireball:
 					case PlayerSpell.SpellType.Frostbolt:
 					case PlayerSpell.SpellType.Lightning:
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
 							"You cannot use that spell outside combat!");
@@ -713,7 +714,7 @@ namespace DungeonGame
 						PlayerSpell.CastReflectDamage(this, index);
 						return;
 					case PlayerSpell.SpellType.TownPortal:
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatAttackSuccessText(),
 							Settings.FormatDefaultBackground(),
 							"You cannot cast a portal during combat!");

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonGame.Controllers;
+using System;
 using System.Linq;
 
 namespace DungeonGame
@@ -47,7 +48,7 @@ namespace DungeonGame
 		{
 			monster._EnergyPoints -= monster._Abilities[index]._EnergyCost;
 			string attackString = $"The {monster._Name} tries to sink its fangs into you and suck your blood!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
@@ -98,7 +99,7 @@ namespace DungeonGame
 				}
 
 				string effectAbsorbString = $"Your {effect._Name} absorbed all of {monster._Name}'s attack!";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					effectAbsorbString);
@@ -112,7 +113,7 @@ namespace DungeonGame
 			}
 
 			string attackSuccessString = $"The {monster._Name} leeches {leechAmount} life from you.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
@@ -129,7 +130,7 @@ namespace DungeonGame
 			{
 				attackString = $"The {monster._Name} swings its tail at you!";
 			}
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
@@ -181,7 +182,7 @@ namespace DungeonGame
 				}
 
 				string effectAbsorbString = $"Your {effect._Name} absorbed all of {monster._Name}'s attack!";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					effectAbsorbString);
@@ -196,7 +197,7 @@ namespace DungeonGame
 			{
 				attackSuccessString = $"The {monster._Name} strikes you with its tail for {attackDamage} physical damage.";
 			}
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
@@ -213,7 +214,7 @@ namespace DungeonGame
 					break;
 				case Offensive.OffensiveType.Bleed:
 					string bleedString = $"You are bleeding from {monster._Name}'s attack!";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatAttackSuccessText(),
 						Settings.FormatDefaultBackground(),
 						bleedString);

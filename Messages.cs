@@ -1,63 +1,65 @@
+using DungeonGame.Controllers;
+
 namespace DungeonGame
 {
 	public static class Messages
 	{
 		public static void RequestCommand()
 		{
-			OutputHandler.Display.StoreUserOutput(Settings.FormatAnnounceText(),
+			OutputController.Display.StoreUserOutput(Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(), "Your command: ");
 		}
 		public static void PlayerDeath()
 		{
-			OutputHandler.Display.StoreUserOutput(Settings.FormatAnnounceText(),
+			OutputController.Display.StoreUserOutput(Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(), "You have died.");
 		}
 		public static void GameOver()
 		{
-			OutputHandler.Display.StoreUserOutput(Settings.FormatAnnounceText(),
+			OutputController.Display.StoreUserOutput(Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(), "Game over.");
 		}
 		public static void InvalidCommand()
 		{
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(), "Not a valid command.");
 		}
 		public static void InvalidDirection()
 		{
 			const string outputString = "You can't go that way!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
 		}
 		public static void InvalidVendorSell()
 		{
 			const string outputString = "The vendor doesn't want that.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
 		}
 		public static void GameIntro()
 		{
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"_________ .__                  .__                 __________        .__      ___.                          ");
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"\\_   ___ \\|  |__ _____    _____|__| ____    ____   \\______   \\_____  |__| ____\\_ |__   ______  _  ________  ");
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"/    \\  \\/|  |  \\__  \\  /  ___/  |/    \\  / ___\\   |       _/\\__  \\ |  |/    \\| __ \\ /  _ \\ \\/ \\/ /  ___/  ");
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"\\     \\___|   Y  \\/ __ \\_\\___ \\|  |   |  \\/ /_/  >  |    |   \\ / __ \\|  |   |  \\ \\_\\ (  <_> )     /\\___ \\ ");
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"\\______  /___|  (____  /____  >__|___|  /\\___  /   |____|_  /(____  /__|___|  /___  /\\____/ \\/\\_//____  > ");
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"	\\/     \\/     \\/     \\/        \\//_____/           \\/      \\/        \\/    \\/                  \\/       \n");
@@ -69,12 +71,12 @@ namespace DungeonGame
 			{
 				if (gameIntroString.Length - i < Settings.GetGameWidth())
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(),
 						gameIntroString.Substring(i, gameIntroString.Length - i));
 					continue;
 				}
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(),
 					gameIntroString.Substring(i, Settings.GetGameWidth()));
 			}
@@ -94,12 +96,12 @@ namespace DungeonGame
 			{
 				if (commandHelpString.Length - i < Settings.GetGameWidth())
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(),
 						commandHelpString.Substring(i, commandHelpString.Length - i));
 					continue;
 				}
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(),
 					commandHelpString.Substring(i, Settings.GetGameWidth()));
 			}

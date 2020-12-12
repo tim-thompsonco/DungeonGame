@@ -1,4 +1,5 @@
-﻿using DungeonGame.Items;
+﻿using DungeonGame.Controllers;
+using DungeonGame.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,9 +78,9 @@ namespace DungeonGame
 			_FrostResistance = _Level * 5;
 			_ArcaneResistance = _Level * 5;
 			_MonsterCategory = monsterType;
-			int randomNumHitPoint = GameHandler.GetRandomNumber(20, 40);
+			int randomNumHitPoint = GameController.GetRandomNumber(20, 40);
 			int maxHitPoints = 80 + ((_Level - 1) * randomNumHitPoint);
-			_MaxHitPoints = GameHandler.RoundNumber(maxHitPoints);
+			_MaxHitPoints = GameController.RoundNumber(maxHitPoints);
 			_HitPoints = _MaxHitPoints;
 			if (_MonsterCategory == MonsterType.Spider)
 			{
@@ -87,17 +88,17 @@ namespace DungeonGame
 			}
 			else
 			{
-				int randomNumGold = GameHandler.GetRandomNumber(5, 10);
+				int randomNumGold = GameController.GetRandomNumber(5, 10);
 				_Gold = 10 + ((_Level - 1) * randomNumGold);
 			}
 			int expProvided = _MaxHitPoints;
-			_ExperienceProvided = GameHandler.RoundNumber(expProvided);
+			_ExperienceProvided = GameController.RoundNumber(expProvided);
 			_MaxEnergyPoints = 100 + (_Level * 10);
 			_EnergyPoints = _MaxEnergyPoints;
 			switch (_MonsterCategory)
 			{
 				case MonsterType.Skeleton:
-					int randomSkeletonType = GameHandler.GetRandomNumber(1, 3);
+					int randomSkeletonType = GameController.GetRandomNumber(1, 3);
 					_SkeletonCategory = randomSkeletonType switch
 					{
 						1 => SkeletonType.Archer,
@@ -130,8 +131,8 @@ namespace DungeonGame
 						new MonsterSpell("fireball", 50, MonsterSpell.SpellType.Fireball, _Level)};
 					break;
 				case MonsterType.Elemental:
-					int randomNum = GameHandler.GetRandomNumber(1, 3);
-					int randomPhysicalDmg = GameHandler.GetRandomNumber(20, 26);
+					int randomNum = GameController.GetRandomNumber(1, 3);
+					int randomPhysicalDmg = GameController.GetRandomNumber(20, 26);
 					_UnarmedAttackDamage = randomNum switch
 					{
 						1 => randomPhysicalDmg + ((level - 1) * 1),
@@ -139,7 +140,7 @@ namespace DungeonGame
 						3 => randomPhysicalDmg + ((level - 1) * 3),
 						_ => throw new ArgumentOutOfRangeException()
 					};
-					int randomElementalType = GameHandler.GetRandomNumber(1, 3);
+					int randomElementalType = GameController.GetRandomNumber(1, 3);
 					_ElementalCategory = randomElementalType switch
 					{
 						1 => ElementalType.Air,
@@ -259,12 +260,12 @@ namespace DungeonGame
 
 			if (addRandomChance)
 			{
-				int randomMonsterAttack = GameHandler.GetRandomNumber(1, 10);
+				int randomMonsterAttack = GameController.GetRandomNumber(1, 10);
 
 				// If an element of random chance is required, provide a 50% chance of an attack being selected at random
 				if (randomMonsterAttack > 5)
 				{
-					int randomAttackChoice = GameHandler.GetRandomNumber(0, attackOptions.Count - 1);
+					int randomAttackChoice = GameController.GetRandomNumber(0, attackOptions.Count - 1);
 
 					return attackOptions[randomAttackChoice];
 				}
@@ -314,7 +315,7 @@ namespace DungeonGame
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			GearHandler.DecreaseArmorDurability(player);
+			GearController.DecreaseArmorDurability(player);
 		}
 		private void PhysicalAttack(Player player)
 		{
@@ -348,14 +349,14 @@ namespace DungeonGame
 				else
 				{
 					string monsterDisarmed = $"The {_Name} is disarmed! They are going hand to hand!";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						monsterDisarmed);
 					attackAmount += _UnarmedAttackDamage;
 				}
 			}
-			int randomChanceToHit = GameHandler.GetRandomNumber(1, 100);
+			int randomChanceToHit = GameController.GetRandomNumber(1, 100);
 			double chanceToDodge = player._DodgeChance;
 			if (chanceToDodge > 50)
 			{
@@ -365,7 +366,7 @@ namespace DungeonGame
 			if (randomChanceToHit <= chanceToDodge)
 			{
 				string missString = $"The {_Name} missed you!";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					missString);
@@ -421,18 +422,18 @@ namespace DungeonGame
 				if (baseAttackAmount > attackAmount && attackAmount - player.ArmorRating(this) <= 0)
 				{
 					string effectAbsorbString = $"Your {effect._Name} absorbed all of {_Name}'s attack!";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatAttackFailText(),
 						Settings.FormatDefaultBackground(),
 						effectAbsorbString);
 					return;
 				}
-				GameHandler.RemovedExpiredEffectsAsync(this);
+				GameController.RemovedExpiredEffectsAsync(this);
 			}
 			if (attackAmount - player.ArmorRating(this) <= 0)
 			{
 				string armorAbsorbString = $"Your armor absorbed all of {_Name}'s attack!";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					armorAbsorbString);
@@ -441,7 +442,7 @@ namespace DungeonGame
 			{
 				attackAmount -= player.ArmorRating(this);
 				string hitString = $"The {_Name} hits you for {attackAmount} physical damage.";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
 					hitString);
@@ -450,7 +451,7 @@ namespace DungeonGame
 		}
 		public int ArmorRating(Player player)
 		{
-			int totalArmorRating = MonsterHandler.CheckArmorRating(this);
+			int totalArmorRating = MonsterController.CheckArmorRating(this);
 			int levelDiff = player._Level - _Level;
 			double armorMultiplier = 1.00 + (-(double)levelDiff / 5);
 			double adjArmorRating = totalArmorRating * armorMultiplier;
@@ -467,12 +468,12 @@ namespace DungeonGame
 			_InCombat = false;
 			_Effects.Clear();
 			string defeatString = $"You have defeated the {_Name}!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				defeatString);
 			string expGainString = $"You have gained {_ExperienceProvided} experience!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				expGainString);
@@ -483,7 +484,7 @@ namespace DungeonGame
 			_Name = $"Dead {_Name}";
 			_Desc = "A corpse of a monster you killed.";
 			player._Experience += _ExperienceProvided;
-			PlayerHandler.LevelUpCheck(player);
+			PlayerController.LevelUpCheck(player);
 			if (player._QuestLog == null)
 			{
 				return;

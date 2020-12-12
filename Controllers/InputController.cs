@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace DungeonGame
+namespace DungeonGame.Controllers
 {
-	public static class InputHandler
+	public static class InputController
 	{
 		public static string[] GetFormattedInput(string userInput)
 		{
@@ -36,7 +36,7 @@ namespace DungeonGame
 		}
 		public static void ProcessUserInput(Player player, string[] input, Timer globalTimer)
 		{
-			var playerRoom = RoomHandler.Rooms[player._PlayerLocation];
+			var playerRoom = RoomController.Rooms[player._PlayerLocation];
 			var isTownRoom = playerRoom as TownRoom;
 			var playerX = player._PlayerLocation._X;
 			var playerY = player._PlayerLocation._Y;
@@ -68,7 +68,7 @@ namespace DungeonGame
 							}
 							catch (NullReferenceException)
 							{
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"There is no vendor in the room to buy an item from.");
@@ -77,7 +77,7 @@ namespace DungeonGame
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"Buy what?");
@@ -97,7 +97,7 @@ namespace DungeonGame
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have that spell.");
@@ -106,7 +106,7 @@ namespace DungeonGame
 					{
 						if (player._PlayerClass != Player.PlayerClassType.Mage)
 						{
-							OutputHandler.Display.StoreUserOutput(
+							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't cast spells. You're not a mage!");
@@ -114,7 +114,7 @@ namespace DungeonGame
 					}
 					catch (InvalidOperationException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							player._PlayerClass != Player.PlayerClassType.Mage
@@ -123,10 +123,10 @@ namespace DungeonGame
 					}
 					break;
 				case "drop":
-					GearHandler.DropItem(player, input);
+					GearController.DropItem(player, input);
 					break;
 				case "pickup":
-					GearHandler.PickupItem(player, input);
+					GearController.PickupItem(player, input);
 					break;
 				case "use":
 					try
@@ -147,7 +147,7 @@ namespace DungeonGame
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have that ability.");
@@ -155,7 +155,7 @@ namespace DungeonGame
 					}
 					catch (ArgumentOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have that ability.");
@@ -164,7 +164,7 @@ namespace DungeonGame
 					{
 						if (player._PlayerClass == Player.PlayerClassType.Mage)
 						{
-							OutputHandler.Display.StoreUserOutput(
+							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't use abilities. You're not a warrior or archer!");
@@ -175,13 +175,13 @@ namespace DungeonGame
 						switch (player._PlayerClass)
 						{
 							case Player.PlayerClassType.Warrior:
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"You do not have enough rage to use that ability!");
 								break;
 							case Player.PlayerClassType.Archer:
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									player._PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow
@@ -189,7 +189,7 @@ namespace DungeonGame
 										: "You do not have enough combo points to use that ability!");
 								break;
 							case Player.PlayerClassType.Mage:
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"You can't use abilities. You're not a warrior or archer!");
@@ -201,17 +201,17 @@ namespace DungeonGame
 					break;
 				case "equip":
 				case "unequip":
-					GearHandler.EquipItem(player, input);
+					GearController.EquipItem(player, input);
 					break;
 				case "enhance":
 					var itemIndex = player._Inventory.FindIndex(f => f._Name.Contains(input[1]));
 					switch (player._Inventory[itemIndex])
 					{
 						case Weapon _:
-							GearHandler.UseWeaponKit(player, input);
+							GearController.UseWeaponKit(player, input);
 							break;
 						case Armor _:
-							GearHandler.UseArmorKit(player, input);
+							GearController.UseArmorKit(player, input);
 							break;
 						default:
 							Messages.InvalidCommand();
@@ -223,11 +223,11 @@ namespace DungeonGame
 					break;
 				case "i":
 				case "inventory":
-					PlayerHandler.ShowInventory(player);
+					PlayerController.ShowInventory(player);
 					break;
 				case "q":
 				case "quit":
-					var quitConfirm = GameHandler.QuitGame(player);
+					var quitConfirm = GameController.QuitGame(player);
 					if (quitConfirm)
 					{
 						globalTimer.Dispose();
@@ -239,11 +239,11 @@ namespace DungeonGame
 						case "abilities":
 							try
 							{
-								PlayerHandler.ListAbilities(player);
+								PlayerController.ListAbilities(player);
 							}
 							catch (IndexOutOfRangeException)
 							{
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"List what?");
@@ -252,11 +252,11 @@ namespace DungeonGame
 						case "spells":
 							try
 							{
-								PlayerHandler.ListSpells(player);
+								PlayerController.ListSpells(player);
 							}
 							catch (IndexOutOfRangeException)
 							{
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"List what?");
@@ -267,11 +267,11 @@ namespace DungeonGame
 				case "ability":
 					try
 					{
-						PlayerHandler.AbilityInfo(player, input);
+						PlayerController.AbilityInfo(player, input);
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"What ability did you want to know about?");
@@ -280,11 +280,11 @@ namespace DungeonGame
 				case "spell":
 					try
 					{
-						PlayerHandler.SpellInfo(player, input);
+						PlayerController.SpellInfo(player, input);
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"What spell did you want to know about?");
@@ -293,11 +293,11 @@ namespace DungeonGame
 				case "quest":
 					try
 					{
-						PlayerHandler.QuestInfo(player, input);
+						PlayerController.QuestInfo(player, input);
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"What quest did you want to know about?");
@@ -321,7 +321,7 @@ namespace DungeonGame
 							}
 							catch (NullReferenceException)
 							{
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"There is no one to turn in quests to here.");
@@ -330,7 +330,7 @@ namespace DungeonGame
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"Complete what quest?");
@@ -342,7 +342,7 @@ namespace DungeonGame
 					{
 						if (input[1] != null)
 						{
-							PlayerHandler.LookAtObject(player, input);
+							PlayerController.LookAtObject(player, input);
 						}
 					}
 					catch (IndexOutOfRangeException)
@@ -361,7 +361,7 @@ namespace DungeonGame
 							}
 							catch (Exception)
 							{
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"An error has occurred while looting.");
@@ -370,7 +370,7 @@ namespace DungeonGame
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"Loot what?");
@@ -383,14 +383,14 @@ namespace DungeonGame
 					}
 					else
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You can't drink that!");
 					}
 					break;
 				case "save":
-					GameHandler.SaveGame(player);
+					GameController.SaveGame(player);
 					break;
 				case "restore":
 					isTownRoom?._Vendor.RestorePlayer(player);
@@ -409,7 +409,7 @@ namespace DungeonGame
 							}
 							catch (NullReferenceException)
 							{
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"The vendor doesn't want that.");
@@ -418,7 +418,7 @@ namespace DungeonGame
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"Sell what?");
@@ -447,14 +447,14 @@ namespace DungeonGame
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"Repair what?");
 					}
 					catch (NullReferenceException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"There is no vendor here!");
@@ -480,14 +480,14 @@ namespace DungeonGame
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"Upgrade what?");
 					}
 					catch (NullReferenceException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"There is no trainer here!");
@@ -513,14 +513,14 @@ namespace DungeonGame
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"Train what?");
 					}
 					catch (NullReferenceException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"There is no trainer here!");
@@ -540,14 +540,14 @@ namespace DungeonGame
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"Consider what quest?");
 					}
 					catch (NullReferenceException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"There is no quest giver here!");
@@ -564,7 +564,7 @@ namespace DungeonGame
 							}
 							catch (NullReferenceException)
 							{
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"There is no vendor in the room to show inventory available for sale.");
@@ -578,7 +578,7 @@ namespace DungeonGame
 							}
 							catch (NullReferenceException)
 							{
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"There is no trainer in the room to show available upgrades.");
@@ -599,7 +599,7 @@ namespace DungeonGame
 							}
 							catch (NullReferenceException)
 							{
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"There is no one in the room to show quests.");
@@ -608,7 +608,7 @@ namespace DungeonGame
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"Show what?");
@@ -621,7 +621,7 @@ namespace DungeonGame
 						try
 						{
 							var newCoord = new Coordinate(playerX, playerY + 1, playerZ);
-							RoomHandler.ChangeRoom(player, newCoord);
+							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
 						{
@@ -640,7 +640,7 @@ namespace DungeonGame
 						try
 						{
 							var newCoord = new Coordinate(playerX, playerY - 1, playerZ);
-							RoomHandler.ChangeRoom(player, newCoord);
+							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
 						{
@@ -659,7 +659,7 @@ namespace DungeonGame
 						try
 						{
 							var newCoord = new Coordinate(playerX + 1, playerY, playerZ);
-							RoomHandler.ChangeRoom(player, newCoord);
+							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
 						{
@@ -678,7 +678,7 @@ namespace DungeonGame
 						try
 						{
 							var newCoord = new Coordinate(playerX - 1, playerY, playerZ);
-							RoomHandler.ChangeRoom(player, newCoord);
+							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
 						{
@@ -697,7 +697,7 @@ namespace DungeonGame
 						try
 						{
 							var newCoord = new Coordinate(playerX + 1, playerY + 1, playerZ);
-							RoomHandler.ChangeRoom(player, newCoord);
+							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
 						{
@@ -716,7 +716,7 @@ namespace DungeonGame
 						try
 						{
 							var newCoord = new Coordinate(playerX - 1, playerY + 1, playerZ);
-							RoomHandler.ChangeRoom(player, newCoord);
+							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
 						{
@@ -735,7 +735,7 @@ namespace DungeonGame
 						try
 						{
 							var newCoord = new Coordinate(playerX + 1, playerY - 1, playerZ);
-							RoomHandler.ChangeRoom(player, newCoord);
+							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
 						{
@@ -754,7 +754,7 @@ namespace DungeonGame
 						try
 						{
 							var newCoord = new Coordinate(playerX - 1, playerY - 1, playerZ);
-							RoomHandler.ChangeRoom(player, newCoord);
+							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
 						{
@@ -773,7 +773,7 @@ namespace DungeonGame
 						try
 						{
 							var newCoord = new Coordinate(playerX, playerY, playerZ + 1);
-							RoomHandler.ChangeRoom(player, newCoord);
+							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
 						{
@@ -792,7 +792,7 @@ namespace DungeonGame
 						try
 						{
 							var newCoord = new Coordinate(playerX, playerY, playerZ - 1);
-							RoomHandler.ChangeRoom(player, newCoord);
+							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
 						{

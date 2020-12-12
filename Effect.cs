@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonGame.Controllers;
+using System;
 
 namespace DungeonGame
 {
@@ -79,7 +80,7 @@ namespace DungeonGame
 			}
 
 			string healAmtString = $"You have been healed for {_EffectAmountOverTime} health.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				healAmtString);
@@ -113,7 +114,7 @@ namespace DungeonGame
 			}
 
 			const string blockString = "Your block effect is slowly fading away.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				blockString);
@@ -123,7 +124,7 @@ namespace DungeonGame
 			}
 
 			const string blockEndString = "You are no longer blocking damage!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				blockEndString);
@@ -137,7 +138,7 @@ namespace DungeonGame
 			}
 
 			string blockString = $"Your defensive move blocked {blockAmount} damage!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				blockString);
@@ -148,7 +149,7 @@ namespace DungeonGame
 			}
 
 			const string blockEndString = "You are no longer blocking damage!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				blockEndString);
@@ -163,7 +164,7 @@ namespace DungeonGame
 
 			_EffectCurRound += 1;
 			const string reflectString = "Your spell reflect is slowly fading away.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				reflectString);
@@ -183,7 +184,7 @@ namespace DungeonGame
 
 			_EffectCurRound += 1;
 			string reflectString = $"You reflected {reflectAmount} damage back at your opponent!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				reflectString);
@@ -204,7 +205,7 @@ namespace DungeonGame
 			_EffectCurRound += 1;
 			string changeDmgString = _EffectAmountOverTime > 0 ? $"Incoming damage is increased by {_EffectAmountOverTime}." :
 				$"Incoming damage is decreased by {-1 * _EffectAmountOverTime}.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				changeDmgString);
@@ -226,7 +227,7 @@ namespace DungeonGame
 			int changeAmount = Math.Abs(_EffectAmountOverTime);
 			string changeDmgString = _EffectAmountOverTime > 0 ? $"Your damage is increased by {changeAmount}." : 
 				$"Your damage is decreased by {changeAmount}.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				changeDmgString);
@@ -248,7 +249,7 @@ namespace DungeonGame
 			int changeAmount = Math.Abs(_EffectAmountOverTime);
 			string changeArmorString = _EffectAmountOverTime > 0 ? $"Your armor is increased by {changeAmount}." : 
 				$"Your armor is decreased by {changeAmount}.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				changeArmorString);
@@ -269,7 +270,7 @@ namespace DungeonGame
 			_EffectCurRound += 1;
 			opponent._HitPoints -= _EffectAmountOverTime;
 			string burnString = $"The {opponent._Name} burns for {_EffectAmountOverTime} fire damage.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				burnString);
@@ -290,7 +291,7 @@ namespace DungeonGame
 			_EffectCurRound += 1;
 			player._HitPoints -= _EffectAmountOverTime;
 			string burnString = $"You burn for {_EffectAmountOverTime} fire damage.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				burnString);
@@ -311,7 +312,7 @@ namespace DungeonGame
 			_EffectCurRound += 1;
 			opponent._HitPoints -= _EffectAmountOverTime;
 			string bleedString = $"The {opponent._Name} bleeds for {_EffectAmountOverTime} physical damage.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				bleedString);
@@ -332,7 +333,7 @@ namespace DungeonGame
 			_EffectCurRound += 1;
 			player._HitPoints -= _EffectAmountOverTime;
 			string bleedString = $"You bleed for {_EffectAmountOverTime} physical damage.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				bleedString);
@@ -353,7 +354,7 @@ namespace DungeonGame
 			opponent._IsStunned = true;
 			_EffectCurRound += 1;
 			string stunnedString = $"The {opponent._Name} is stunned and cannot attack.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				stunnedString);
@@ -373,7 +374,7 @@ namespace DungeonGame
 
 			_EffectCurRound += 1;
 			string frozenString = $"The {opponent._Name} is frozen. Physical, frost and arcane damage to it will be double!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				frozenString);
@@ -393,7 +394,7 @@ namespace DungeonGame
 
 			_EffectCurRound += 1;
 			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be double!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				frozenString);

@@ -1,4 +1,5 @@
-﻿using DungeonGame.Items;
+﻿using DungeonGame.Controllers;
+using DungeonGame.Items;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -82,7 +83,7 @@ namespace DungeonGame
 				case Player.PlayerClassType.Mage:
 					if (_TrainerGroup != TrainerCategory.Mage)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"They are not a trainer for your class. Go find a mage grandmaster!");
@@ -92,7 +93,7 @@ namespace DungeonGame
 				case Player.PlayerClassType.Warrior:
 					if (_TrainerGroup != TrainerCategory.Warrior)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"They are not a trainer for your class. Go find a warrior grandmaster!");
@@ -102,7 +103,7 @@ namespace DungeonGame
 				case Player.PlayerClassType.Archer:
 					if (_TrainerGroup != TrainerCategory.Archer)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"They are not a trainer for your class. Go find a archer grandmaster!");
@@ -113,28 +114,28 @@ namespace DungeonGame
 					throw new ArgumentOutOfRangeException();
 			}
 			string forSaleString = "The " + _Name + " has the following upgrades available:";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				forSaleString);
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				"");
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			if (_TrainerGroup == TrainerCategory.Mage)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"New Spells: ");
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"");
 				if (_TrainableSpells?.Count == 0)
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						"None.");
@@ -161,14 +162,14 @@ namespace DungeonGame
 							string spellName = textInfo.ToTitleCase(spell._Name +
 																 " (Rank: " + spell._Rank + ") (Cost: " + trainingCost + ")");
 							newSpellsToTrain++;
-							OutputHandler.Display.StoreUserOutput(
+							OutputController.Display.StoreUserOutput(
 								Settings.FormatInfoText(),
 								Settings.FormatDefaultBackground(),
 								spellName);
 						}
 						if (newSpellsToTrain == 0)
 						{
-							OutputHandler.Display.StoreUserOutput(
+							OutputController.Display.StoreUserOutput(
 								Settings.FormatInfoText(),
 								Settings.FormatDefaultBackground(),
 								"None.");
@@ -176,21 +177,21 @@ namespace DungeonGame
 					}
 					catch (ArgumentNullException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatInfoText(),
 							Settings.FormatDefaultBackground(),
 							"None.");
 					}
 				}
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"");
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"Existing Spells: ");
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"");
@@ -212,14 +213,14 @@ namespace DungeonGame
 					string spellName = textInfo.ToTitleCase(spell._Name +
 														 " (Rank: " + spell._Rank + ") (Cost: " + trainingCost + ")");
 					spellsToTrain++;
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						spellName);
 				}
 				if (spellsToTrain == 0)
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						"None.");
@@ -227,17 +228,17 @@ namespace DungeonGame
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"New _Abilities: ");
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"");
 				if (_TrainableAbilities?.Count == 0)
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						"None.");
@@ -264,14 +265,14 @@ namespace DungeonGame
 							string abilityName = textInfo.ToTitleCase(ability._Name +
 																 " (Rank: " + ability._Rank + ") (Cost: " + trainingCost + ")");
 							newAbilitiesToTrain++;
-							OutputHandler.Display.StoreUserOutput(
+							OutputController.Display.StoreUserOutput(
 								Settings.FormatInfoText(),
 								Settings.FormatDefaultBackground(),
 								abilityName);
 						}
 						if (newAbilitiesToTrain == 0)
 						{
-							OutputHandler.Display.StoreUserOutput(
+							OutputController.Display.StoreUserOutput(
 								Settings.FormatInfoText(),
 								Settings.FormatDefaultBackground(),
 								"None.");
@@ -279,21 +280,21 @@ namespace DungeonGame
 					}
 					catch (ArgumentNullException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatInfoText(),
 							Settings.FormatDefaultBackground(),
 							"None.");
 					}
 				}
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"");
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"Existing _Abilities: ");
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"");
@@ -315,25 +316,25 @@ namespace DungeonGame
 					string abilityName = textInfo.ToTitleCase(ability._Name +
 														   " (Rank: " + ability._Rank + ") (Cost: " + trainingCost + ")");
 					abilitiesToTrain++;
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						abilityName);
 				}
 				if (abilitiesToTrain == 0)
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						"None.");
 				}
 			}
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				string.Empty);
 			string playerGold = "Player _Gold: " + player._Gold;
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				playerGold);
@@ -342,7 +343,7 @@ namespace DungeonGame
 		{
 			if (player._PlayerClass == Player.PlayerClassType.Mage)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't train abilities. You're not a warrior or archer!");
@@ -368,14 +369,14 @@ namespace DungeonGame
 					string abilityName = textInfo.ToTitleCase(player._Abilities[player._Abilities.Count - 1]._Name);
 					string purchaseString = "You purchased " + abilityName + " (Rank " +
 										 player._Abilities[player._Abilities.Count - 1]._Rank + ") for " + trainingCost + " gold.";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						purchaseString);
 				}
 				else
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You can't afford that!");
@@ -383,7 +384,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					abilityIndex != -1 ?
@@ -394,7 +395,7 @@ namespace DungeonGame
 		{
 			if (player._PlayerClass != Player.PlayerClassType.Mage)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't train spells. You're not a mage!");
@@ -420,14 +421,14 @@ namespace DungeonGame
 					string spellName = textInfo.ToTitleCase(player._Spellbook[player._Spellbook.Count - 1]._Name);
 					string purchaseString = "You purchased " + spellName + " (Rank " +
 										 player._Spellbook[player._Spellbook.Count - 1]._Rank + ") for " + trainingCost + " gold.";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						purchaseString);
 				}
 				else
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You can't afford that!");
@@ -435,7 +436,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					spellIndex != -1 ?
@@ -446,7 +447,7 @@ namespace DungeonGame
 		{
 			if (player._PlayerClass != Player.PlayerClassType.Mage)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't upgrade spells. You're not a mage!");
@@ -510,14 +511,14 @@ namespace DungeonGame
 					string spellName = textInfo.ToTitleCase(player._Spellbook[spellIndex]._Name);
 					string purchaseString = "You upgraded " + spellName + " to Rank " +
 										 player._Spellbook[spellIndex]._Rank + " for " + trainingCost + " gold.";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						purchaseString);
 				}
 				else
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You can't afford that!");
@@ -525,7 +526,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					spellIndex != -1
@@ -537,7 +538,7 @@ namespace DungeonGame
 		{
 			if (player._PlayerClass == Player.PlayerClassType.Mage)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't upgrade abilities. You're not a warrior or archer!");
@@ -648,14 +649,14 @@ namespace DungeonGame
 					string abilityName = textInfo.ToTitleCase(player._Abilities[abilityIndex]._Name);
 					string purchaseString = "You upgraded " + abilityName + " to Rank " +
 										 player._Abilities[abilityIndex]._Rank + " for " + trainingCost + " gold.";
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						purchaseString);
 				}
 				else
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You can't afford that!");
@@ -663,7 +664,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					abilityIndex != -1
@@ -728,68 +729,68 @@ namespace DungeonGame
 				PopulateQuests(player);
 			}
 
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				"Available Quests:");
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (Quest quest in _AvailableQuests)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
 					textInfo.ToTitleCase(quest._Name));
 			}
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				"You can <consider> <quest name> if you want to obtain quest details.");
 		}
 		public void OfferQuest(Player player, string[] input)
 		{
-			string userInput = InputHandler.ParseInput(input);
+			string userInput = InputController.ParseInput(input);
 			int questIndex = _AvailableQuests.FindIndex(
 				f => f._Name.ToLowerInvariant().Contains(userInput));
 			if (questIndex != -1)
 			{
 				_AvailableQuests[questIndex].ShowQuest();
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"Will you accept this quest?");
 				Console.Clear();
-				OutputHandler.ShowUserOutput(player);
-				OutputHandler.Display.ClearUserOutput();
-				string[] questInput = InputHandler.GetFormattedInput(Console.ReadLine());
+				OutputController.ShowUserOutput(player);
+				OutputController.Display.ClearUserOutput();
+				string[] questInput = InputController.GetFormattedInput(Console.ReadLine());
 				while (questInput[0].ToLowerInvariant() != "y" && questInput[0].ToLowerInvariant() != "yes" &&
 					   questInput[0].ToLowerInvariant() != "n" && questInput[0].ToLowerInvariant() != "no")
 				{
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						textInfo.ToTitleCase(_AvailableQuests[questIndex]._Name) + " Consideration:");
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"I need either a yes or no answer here.");
 					Console.Clear();
-					OutputHandler.ShowUserOutput(player);
-					OutputHandler.Display.ClearUserOutput();
-					questInput = InputHandler.GetFormattedInput(Console.ReadLine());
+					OutputController.ShowUserOutput(player);
+					OutputController.Display.ClearUserOutput();
+					questInput = InputController.GetFormattedInput(Console.ReadLine());
 				}
 				if (questInput[0] == "y" || questInput[0] == "yes")
 				{
 					player._QuestLog.Add(_AvailableQuests[questIndex]);
 					_AvailableQuests.RemoveAt(questIndex);
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"My hero. I am adding the particulars to your quest log.");
 				}
 				else
 				{
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"Let me know if you change your mind later.");
@@ -797,7 +798,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"I don't have that quest to offer!");
@@ -805,7 +806,7 @@ namespace DungeonGame
 		}
 		public void CompleteQuest(Player player, string[] input)
 		{
-			string userInput = InputHandler.ParseInput(input);
+			string userInput = InputController.ParseInput(input);
 			int questIndex = player._QuestLog.FindIndex(
 				f => f._Name.ToLowerInvariant().Contains(userInput));
 			Quest quest = player._QuestLog[questIndex];
@@ -815,18 +816,18 @@ namespace DungeonGame
 				{
 					if (quest._QuestCompleted)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
 							"Congratulations on finishing " + quest._Name + "! Here's your reward.");
 						player._Inventory.Add(quest._QuestRewardItem);
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
 							"You have received: ");
-						GearHandler.StoreRainbowGearOutput(GearHandler.GetItemDetails(quest._QuestRewardItem));
+						GearController.StoreRainbowGearOutput(GearController.GetItemDetails(quest._QuestRewardItem));
 						player._Gold += quest._QuestRewardGold;
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
 							quest._QuestRewardGold + " gold coins.");
@@ -834,7 +835,7 @@ namespace DungeonGame
 					}
 					else
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You haven't finished that quest yet!");
@@ -843,7 +844,7 @@ namespace DungeonGame
 				else
 				{
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-					OutputHandler.Display.StoreUserOutput(
+					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"I didn't give you that quest. " + textInfo.ToTitleCase(quest._QuestGiver) + " did.");
@@ -851,7 +852,7 @@ namespace DungeonGame
 			}
 			else
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"What quest did you want to turn in?");

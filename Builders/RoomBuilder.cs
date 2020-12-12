@@ -1,3 +1,4 @@
+using DungeonGame.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -165,7 +166,7 @@ namespace DungeonGame
 			var roomCreated = false;
 			while (!roomCreated)
 			{
-				var randomNum = GameHandler.GetRandomNumber(1, 6);
+				var randomNum = GameController.GetRandomNumber(1, 6);
 				switch (randomNum)
 				{
 					case 1:

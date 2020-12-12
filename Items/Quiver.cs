@@ -1,4 +1,6 @@
-﻿namespace DungeonGame.Items
+﻿using DungeonGame.Controllers;
+
+namespace DungeonGame.Items
 {
 	public class Quiver : IEquipment
 	{
@@ -32,7 +34,7 @@
 
 		public static void DisplayOutOfArrowsMessage()
 		{
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackFailText(),
 				Settings.FormatDefaultBackground(),
 				"You ran out of arrows! Going hand to hand!");

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace DungeonGame
+namespace DungeonGame.Controllers
 {
-	public static class GameHandler
+	public static class GameController
 	{
 		private static readonly Random RndGenerate = new Random();
 		public static bool IsGameOver { get; set; }
@@ -68,7 +68,7 @@ namespace DungeonGame
 					}
 				}
 			}
-			foreach (var room in RoomHandler.Rooms.Values)
+			foreach (var room in RoomController.Rooms.Values)
 			{
 				foreach (var roomObject in room._RoomObjects.Where(
 					roomObject => roomObject?.GetType() == typeof(Monster)))
@@ -170,7 +170,7 @@ namespace DungeonGame
 								default:
 									throw new ArgumentOutOfRangeException();
 							}
-							PlayerHandler.CalculatePlayerStats(player);
+							PlayerController.CalculatePlayerStats(player);
 							break;
 						case Effect.EffectType.ChangeOpponentDamage:
 							break;
@@ -268,10 +268,10 @@ namespace DungeonGame
 			catch (FileNotFoundException)
 			{
 				player = new PlayerBuilder().BuildNewPlayer();
-				GearHandler.EquipInitialGear(player);
+				GearController.EquipInitialGear(player);
 				/* Set initial room condition for player
 				Begin game by putting player at coords 0, 7, 0, town entrance */
-				RoomHandler.SetPlayerLocation(player, 0, 4, 0);
+				RoomController.SetPlayerLocation(player, 0, 4, 0);
 			}
 			return player;
 		}
@@ -284,19 +284,19 @@ namespace DungeonGame
 					TypeNameHandling = TypeNameHandling.Auto,
 					NullValueHandling = NullValueHandling.Ignore
 				};
-				RoomHandler.Rooms = JsonConvert.DeserializeObject<Dictionary<Coordinate, IRoom>>(File.ReadAllText(
+				RoomController.Rooms = JsonConvert.DeserializeObject<Dictionary<Coordinate, IRoom>>(File.ReadAllText(
 					"gamesave.json"), serializerSettings);
 				// Insert blank space before game reload info for formatting
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
 					"");
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
 					"Reloading your saved game.");
 				// Insert blank space after game reload info for formatting
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
 					"");
@@ -304,20 +304,20 @@ namespace DungeonGame
 			catch (FileNotFoundException)
 			{
 				// Create new dungeon
-				RoomHandler.Rooms = new RoomBuilder(200, 10, 0, 4, 0).RetrieveSpawnRooms();
+				RoomController.Rooms = new RoomBuilder(200, 10, 0, 4, 0).RetrieveSpawnRooms();
 			}
 		}
 		public static bool QuitGame(Player player)
 		{
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(), "Are you sure you want to quit?");
-			OutputHandler.ShowUserOutput(player);
-			OutputHandler.Display.ClearUserOutput();
-			var input = InputHandler.GetFormattedInput(Console.ReadLine());
+			OutputController.ShowUserOutput(player);
+			OutputController.Display.ClearUserOutput();
+			var input = InputController.GetFormattedInput(Console.ReadLine());
 			Console.Clear();
 			if (input[0] != "yes" && input[0] != "y") return false;
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(), "Quitting the game.");
 			player._CanSave = true;
@@ -354,15 +354,15 @@ namespace DungeonGame
 				using (var sw = new StreamWriter("gamesave.json"))
 				using (var writer = new JsonTextWriter(sw))
 				{
-					serializerRooms.Serialize(writer, RoomHandler.Rooms, typeof(Dictionary<Coordinate, IRoom>));
+					serializerRooms.Serialize(writer, RoomController.Rooms, typeof(Dictionary<Coordinate, IRoom>));
 				}
 				outputString = "Your game has been saved.";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), outputString);
 				return;
 			}
 			outputString = "You can't save inside a dungeon! Go outside first.";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), outputString);
 		}
 		public static bool ContinuePlaying()
@@ -370,15 +370,15 @@ namespace DungeonGame
 			while (true)
 			{
 				const string continuePlayingMessage = "Do you want to keep playing? [Y/N]";
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(),
 					Settings.FormatDefaultBackground(),
 					continuePlayingMessage);
-				OutputHandler.Display.RetrieveUserOutput();
-				OutputHandler.Display.ClearUserOutput();
-				var input = InputHandler.GetFormattedInput(Console.ReadLine());
-				OutputHandler.Display.RetrieveUserOutput();
-				OutputHandler.Display.ClearUserOutput();
+				OutputController.Display.RetrieveUserOutput();
+				OutputController.Display.ClearUserOutput();
+				var input = InputController.GetFormattedInput(Console.ReadLine());
+				OutputController.Display.RetrieveUserOutput();
+				OutputController.Display.ClearUserOutput();
 				switch (input[0])
 				{
 					case "y":

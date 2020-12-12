@@ -2,16 +2,16 @@
 using System;
 using System.Linq;
 
-namespace DungeonGame
+namespace DungeonGame.Controllers
 {
-	public class CombatHandler
+	public class CombatController
 	{
 		private string[] _Input { get; set; }
 		private Monster _Opponent { get; set; }
 		private Player _Player { get; set; }
 		private bool _FleeSuccess { get; set; }
 
-		public CombatHandler(Monster opponent, Player player)
+		public CombatController(Monster opponent, Player player)
 		{
 			_Player = player;
 			_Opponent = opponent;
@@ -23,24 +23,24 @@ namespace DungeonGame
 		{
 			Console.Clear();
 			string fightStartString = $"{_Player._Name}, you have encountered a {_Opponent._Name}. Time to fight!";
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				fightStartString);
 			while (_Opponent._HitPoints > 0 && _Player._HitPoints > 0 &&
 				   _Player._InCombat && _Opponent._InCombat)
 			{
-				GameHandler.RemovedExpiredEffectsAsync(_Player);
-				GameHandler.RemovedExpiredEffectsAsync(_Opponent);
+				GameController.RemovedExpiredEffectsAsync(_Player);
+				GameController.RemovedExpiredEffectsAsync(_Opponent);
 				bool isInputValid = false;
 				// Get input and check to see if input is valid, and if not, keep trying to get input from user
 				while (!isInputValid)
 				{
 					// Show initial output that announces start of fight
-					OutputHandler.ShowUserOutput(_Player, _Opponent);
-					OutputHandler.Display.ClearUserOutput();
+					OutputController.ShowUserOutput(_Player, _Opponent);
+					OutputController.Display.ClearUserOutput();
 					// Player will attack, use ability, cast spells, etc. to cause damage
-					_Input = InputHandler.GetFormattedInput(Console.ReadLine());
+					_Input = InputController.GetFormattedInput(Console.ReadLine());
 					Console.Clear();
 					isInputValid = ProcessPlayerInput();
 				}
@@ -86,82 +86,82 @@ namespace DungeonGame
 		}
 		private void FleeCombat()
 		{
-			int randomNum = GameHandler.GetRandomNumber(1, 10);
+			int randomNum = GameController.GetRandomNumber(1, 10);
 			if (randomNum > 5)
 			{
-				OutputHandler.Display.StoreUserOutput(
+				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You have fled combat successfully!");
 				_Player._InCombat = false;
 				_Opponent._InCombat = false;
 				_FleeSuccess = true;
-				IRoom playerRoom = RoomHandler.Rooms[_Player._PlayerLocation];
+				IRoom playerRoom = RoomController.Rooms[_Player._PlayerLocation];
 				int playerX = _Player._PlayerLocation._X;
 				int playerY = _Player._PlayerLocation._Y;
 				int playerZ = _Player._PlayerLocation._Z;
 				if (playerRoom._Up != null)
 				{
 					Coordinate newCoord = new Coordinate(playerX, playerY, playerZ + 1);
-					RoomHandler.ChangeRoom(_Player, newCoord);
+					RoomController.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._East != null)
 				{
 					Coordinate newCoord = new Coordinate(playerX + 1, playerY, playerZ);
-					RoomHandler.ChangeRoom(_Player, newCoord);
+					RoomController.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._West != null)
 				{
 					Coordinate newCoord = new Coordinate(playerX - 1, playerY, playerZ);
-					RoomHandler.ChangeRoom(_Player, newCoord);
+					RoomController.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._North != null)
 				{
 					Coordinate newCoord = new Coordinate(playerX, playerY + 1, playerZ);
-					RoomHandler.ChangeRoom(_Player, newCoord);
+					RoomController.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._South != null)
 				{
 					Coordinate newCoord = new Coordinate(playerX, playerY - 1, playerZ);
-					RoomHandler.ChangeRoom(_Player, newCoord);
+					RoomController.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._NorthEast != null)
 				{
 					Coordinate newCoord = new Coordinate(playerX + 1, playerY + 1, playerZ);
-					RoomHandler.ChangeRoom(_Player, newCoord);
+					RoomController.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._NorthWest != null)
 				{
 					Coordinate newCoord = new Coordinate(playerX - 1, playerY + 1, playerZ);
-					RoomHandler.ChangeRoom(_Player, newCoord);
+					RoomController.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._SouthEast != null)
 				{
 					Coordinate newCoord = new Coordinate(playerX + 1, playerY - 1, playerZ);
-					RoomHandler.ChangeRoom(_Player, newCoord);
+					RoomController.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._SouthWest != null)
 				{
 					Coordinate newCoord = new Coordinate(playerX - 1, playerY - 1, playerZ);
-					RoomHandler.ChangeRoom(_Player, newCoord);
+					RoomController.ChangeRoom(_Player, newCoord);
 					return;
 				}
 				if (playerRoom._Down != null)
 				{
 					Coordinate newCoord = new Coordinate(playerX, playerY, playerZ - 1);
-					RoomHandler.ChangeRoom(_Player, newCoord);
+					RoomController.ChangeRoom(_Player, newCoord);
 					return;
 				}
 			}
-			OutputHandler.Display.StoreUserOutput(
+			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"You tried to flee combat but failed!");
@@ -204,7 +204,7 @@ namespace DungeonGame
 		}
 		private void ProcessOpponentEffects()
 		{
-			GameHandler.RemovedExpiredEffectsAsync(_Opponent);
+			GameController.RemovedExpiredEffectsAsync(_Opponent);
 			foreach (Effect effect in _Opponent._Effects)
 			{
 				switch (effect._EffectGroup)
@@ -242,7 +242,7 @@ namespace DungeonGame
 					if (attackDamage - _Opponent.ArmorRating(_Player) <= 0)
 					{
 						string armorAbsorbString = $"The {_Opponent._Name}'s armor absorbed all of your attack!";
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
 							armorAbsorbString);
@@ -250,7 +250,7 @@ namespace DungeonGame
 					else if (attackDamage == 0)
 					{
 						string attackFailString = $"You missed {_Opponent._Name}!";
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
 							attackFailString);
@@ -259,7 +259,7 @@ namespace DungeonGame
 					{
 						int attackAmount = attackDamage - _Opponent.ArmorRating(_Player);
 						string attackSucceedString = $"You hit the {_Opponent._Name} for {attackAmount} physical damage.";
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatAttackSuccessText(),
 							Settings.FormatDefaultBackground(),
 							attackSucceedString);
@@ -271,13 +271,13 @@ namespace DungeonGame
 					{
 						if (_Input[1] != null)
 						{
-							string spellName = InputHandler.ParseInput(_Input);
+							string spellName = InputController.ParseInput(_Input);
 							_Player.CastSpell(_Opponent, spellName);
 						}
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have that spell.");
@@ -287,7 +287,7 @@ namespace DungeonGame
 					{
 						if (_Player._PlayerClass != Player.PlayerClassType.Mage)
 						{
-							OutputHandler.Display.StoreUserOutput(
+							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't cast spells. You're not a mage!");
@@ -296,7 +296,7 @@ namespace DungeonGame
 					}
 					catch (InvalidOperationException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							_Player._PlayerClass != Player.PlayerClassType.Mage
@@ -319,7 +319,7 @@ namespace DungeonGame
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have that ability.");
@@ -327,7 +327,7 @@ namespace DungeonGame
 					}
 					catch (ArgumentOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have that ability.");
@@ -337,7 +337,7 @@ namespace DungeonGame
 					{
 						if (_Player._PlayerClass == Player.PlayerClassType.Mage)
 						{
-							OutputHandler.Display.StoreUserOutput(
+							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't use abilities. You're not a warrior or archer!");
@@ -349,19 +349,19 @@ namespace DungeonGame
 						switch (_Player._PlayerClass)
 						{
 							case Player.PlayerClassType.Mage:
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"You can't use abilities. You're not a warrior or archer!");
 								break;
 							case Player.PlayerClassType.Warrior:
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"You do not have enough rage to use that ability!");
 								break;
 							case Player.PlayerClassType.Archer:
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									_Player._PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow
@@ -376,7 +376,7 @@ namespace DungeonGame
 					break;
 				case "equip":
 				case "unequip":
-					GearHandler.EquipItem(_Player, _Input);
+					GearController.EquipItem(_Player, _Input);
 					break;
 				case "flee":
 					FleeCombat();
@@ -384,11 +384,11 @@ namespace DungeonGame
 				case "drink":
 					if (_Input.Last() == "potion")
 					{
-						_Player.DrinkPotion(InputHandler.ParseInput(_Input));
+						_Player.DrinkPotion(InputController.ParseInput(_Input));
 					}
 					else
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You can't drink that!");
@@ -400,7 +400,7 @@ namespace DungeonGame
 					break;
 				case "i":
 				case "inventory":
-					PlayerHandler.ShowInventory(_Player);
+					PlayerController.ShowInventory(_Player);
 					return false;
 				case "list":
 					switch (_Input[1])
@@ -408,11 +408,11 @@ namespace DungeonGame
 						case "abilities":
 							try
 							{
-								PlayerHandler.ListAbilities(_Player);
+								PlayerController.ListAbilities(_Player);
 							}
 							catch (IndexOutOfRangeException)
 							{
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"List what?");
@@ -422,11 +422,11 @@ namespace DungeonGame
 						case "spells":
 							try
 							{
-								PlayerHandler.ListSpells(_Player);
+								PlayerController.ListSpells(_Player);
 							}
 							catch (IndexOutOfRangeException)
 							{
-								OutputHandler.Display.StoreUserOutput(
+								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"List what?");
@@ -438,11 +438,11 @@ namespace DungeonGame
 				case "ability":
 					try
 					{
-						PlayerHandler.AbilityInfo(_Player, _Input);
+						PlayerController.AbilityInfo(_Player, _Input);
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"What ability did you want to know about?");
@@ -451,7 +451,7 @@ namespace DungeonGame
 					{
 						if (_Player._PlayerClass == Player.PlayerClassType.Mage)
 						{
-							OutputHandler.Display.StoreUserOutput(
+							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't use abilities. You're not a warrior or archer!");
@@ -461,11 +461,11 @@ namespace DungeonGame
 				case "spell":
 					try
 					{
-						PlayerHandler.SpellInfo(_Player, _Input);
+						PlayerController.SpellInfo(_Player, _Input);
 					}
 					catch (IndexOutOfRangeException)
 					{
-						OutputHandler.Display.StoreUserOutput(
+						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"What spell did you want to know about?");
@@ -474,7 +474,7 @@ namespace DungeonGame
 					{
 						if (_Player._PlayerClass != Player.PlayerClassType.Mage)
 						{
-							OutputHandler.Display.StoreUserOutput(
+							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't use spells. You're not a mage!");
