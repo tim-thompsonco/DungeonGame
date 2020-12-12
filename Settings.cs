@@ -32,13 +32,14 @@
 			{
 				return "darkred";
 			}
-
-			if (player._PlayerLocation._Z < -3)
+			else if (player._PlayerLocation._Z < -3)
 			{
 				return "darkgray";
 			}
-
-			return "gray";
+			else
+			{
+				return "gray";
+			}
 		}
 		public static string GetEmptyMapTileSizeTwo()
 		{
