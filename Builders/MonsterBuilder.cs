@@ -1,5 +1,6 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Items;
+using DungeonGame.Items.Consumables;
 using DungeonGame.Items.Consumables.Potions;
 using System;
 
@@ -138,14 +139,29 @@ namespace DungeonGame
 					monster._MonsterWeapon = new Weapon(monster._Level, Weapon.WeaponType.Axe, monster._MonsterCategory);
 					BuildMonsterArmor(monster);
 					int randomPotionNum = GameController.GetRandomNumber(1, 6);
+
+					Potion.PotionStrength potionStrength;
+					if (monster._Level <= 3)
+					{
+						potionStrength = Potion.PotionStrength.Minor;
+					}
+					else if (monster._Level < 7)
+					{
+						potionStrength = Potion.PotionStrength.Normal;
+					}
+					else
+					{
+						potionStrength = Potion.PotionStrength.Greater;
+					}
+
 					monster._MonsterItems.Add(randomPotionNum switch
 					{
-						1 => new HealthPotion(monster._Level),
-						2 => new ManaPotion(monster._Level),
-						3 => new StatPotion(monster._Level, StatPotion.StatType.Constitution),
-						4 => new StatPotion(monster._Level, StatPotion.StatType.Dexterity),
-						5 => new StatPotion(monster._Level, StatPotion.StatType.Strength),
-						6 => new StatPotion(monster._Level, StatPotion.StatType.Intelligence),
+						1 => new HealthPotion(potionStrength),
+						2 => new ManaPotion(potionStrength),
+						3 => new StatPotion(potionStrength, StatPotion.StatType.Constitution),
+						4 => new StatPotion(potionStrength, StatPotion.StatType.Dexterity),
+						5 => new StatPotion(potionStrength, StatPotion.StatType.Strength),
+						6 => new StatPotion(potionStrength, StatPotion.StatType.Intelligence),
 						_ => throw new ArgumentOutOfRangeException()
 					});
 					break;

@@ -15,47 +15,43 @@ namespace DungeonGame.Items.Consumables.Potions
 		public StatType _StatCategory { get; }
 		private readonly int _StatEffectDurationInSeconds;
 
-		public StatPotion(int level, StatType statType) : base(level)
+		public StatPotion(PotionStrength potionStrength, StatType statType) : base(potionStrength)
 		{
 			_StatCategory = statType;
-			_Name = GetPotionName(level);
-			_StatAmount = GetStatPotionAmount(level);
+			_Name = GetPotionName();
+			_StatAmount = GetStatPotionAmount();
 			_ItemValue = _StatAmount * 10 / 2;
 			_Desc = $"A {_Name} that increases {_StatCategory.ToString().ToLower()} by {_StatAmount}.";
 			_StatEffectDurationInSeconds = 600;
 		}
 
-		protected override string GetPotionName(int level)
+		protected override string GetPotionName()
 		{
-			// Potion naming format is "<potion strength> <potion type> potion" for lvl 1-3 or 7+ potions
-			if (level <= 3)
-			{
-				return $"{_PotionStrength.ToString().ToLower()} {_StatCategory.ToString().ToLower()} potion";
-			}
-			else if (level > 6)
-			{
-				return $"{_PotionStrength.ToString().ToLower()} {_StatCategory.ToString().ToLower()} potion";
-			}
-			// Potion naming format is "<potion type> potion" for lvl 4-6 potions
-			else
+			// Potion naming format is "<potion type> potion" for normal potion
+			if (_PotionStrength == PotionStrength.Normal)
 			{
 				return $"{_StatCategory.ToString().ToLower()} potion";
 			}
+			// Potion naming format is "<potion strength> <potion type> potion" for minor or greater potions
+			else
+			{
+				return $"{_PotionStrength.ToString().ToLower()} {_StatCategory.ToString().ToLower()} potion";
+			}
 		}
 
-		private int GetStatPotionAmount(int level)
+		private int GetStatPotionAmount()
 		{
-			if (level <= 3)
+			if (_PotionStrength == PotionStrength.Minor)
 			{
 				return 5;
 			}
-			else if (level > 6)
+			else if (_PotionStrength == PotionStrength.Normal)
 			{
-				return 15;
+				return 10;
 			}
 			else
 			{
-				return 10;
+				return 15;
 			}
 		}
 

@@ -6,45 +6,41 @@ namespace DungeonGame.Items.Consumables.Potions
 	{
 		public int _ManaAmount { get; }
 
-		public ManaPotion(int level) : base(level)
+		public ManaPotion(PotionStrength potionStrength) : base(potionStrength)
 		{
-			_Name = GetPotionName(level);
-			_ManaAmount = GetPotionManaAmount(level);
+			_Name = GetPotionName();
+			_ManaAmount = GetPotionManaAmount();
 			_ItemValue = _ManaAmount / 2;
 			_Desc = $"A {_Name} that restores {_ManaAmount} mana.";
 		}
 
-		protected override string GetPotionName(int level)
+		protected override string GetPotionName()
 		{
-			// Potion naming format is "<potion strength> <potion type> potion" for lvl 1-3 or 7+ potions
-			if (level <= 3)
-			{
-				return $"{_PotionStrength.ToString().ToLower()} mana potion";
-			}
-			else if (level > 6)
-			{
-				return $"{_PotionStrength.ToString().ToLower()} mana potion";
-			}
-			// Potion naming format is "<potion type> potion" for lvl 4-6 potions
-			else
+			// Potion naming format is "<potion type> potion" for normal potion
+			if (_PotionStrength == PotionStrength.Normal)
 			{
 				return $"mana potion";
 			}
+			// Potion naming format is "<potion strength> <potion type> potion" for minor or greater potions
+			else
+			{
+				return $"{_PotionStrength.ToString().ToLower()} mana potion";
+			}
 		}
 
-		private int GetPotionManaAmount(int level)
+		private int GetPotionManaAmount()
 		{
-			if (level <= 3)
+			if (_PotionStrength == PotionStrength.Minor)
 			{
 				return 50;
 			}
-			else if (level > 6)
+			else if (_PotionStrength == PotionStrength.Normal)
 			{
-				return 150;
+				return 100;
 			}
 			else
 			{
-				return 100;
+				return 150;
 			}
 		}
 

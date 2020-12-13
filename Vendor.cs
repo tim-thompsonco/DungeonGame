@@ -48,8 +48,8 @@ namespace DungeonGame
 					_VendorItems.Add(new Arrows("arrows", 15, Arrows.ArrowType.Standard));
 					break;
 				case VendorType.Healer:
-					_VendorItems.Add(new HealthPotion(1));
-					_VendorItems.Add(new ManaPotion(1));
+					_VendorItems.Add(new HealthPotion(Potion.PotionStrength.Minor));
+					_VendorItems.Add(new ManaPotion(Potion.PotionStrength.Minor));
 					break;
 				case VendorType.Shopkeeper:
 					break;
@@ -451,11 +451,11 @@ namespace DungeonGame
 
 			if (inputName.Contains("mana"))
 			{
-				_VendorItems.Add(new ManaPotion(1));
+				_VendorItems.Add(new ManaPotion(Potion.PotionStrength.Minor));
 			}
 			else if (inputName.Contains("health"))
 			{
-				_VendorItems.Add(new HealthPotion(1));
+				_VendorItems.Add(new HealthPotion(Potion.PotionStrength.Minor));
 			}
 		}
 		private void RepopulateArrows(string inputName)

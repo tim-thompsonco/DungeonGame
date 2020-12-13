@@ -1,6 +1,7 @@
 ﻿using DungeonGame;
 using DungeonGame.Controllers;
 using DungeonGame.Items;
+using DungeonGame.Items.Consumables;
 using DungeonGame.Items.Consumables.Potions;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace DungeonGameTests
 			{
 				_MaxHitPoints = 100,
 				_HitPoints = 10,
-				_Consumables = new List<Consumable> { new HealthPotion(1) }
+				_Consumables = new List<Consumable> { new HealthPotion(Potion.PotionStrength.Minor) }
 			};
 			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(HealthPotion));
 			string[] input = new[] { "drink", "health" };
@@ -45,7 +46,7 @@ namespace DungeonGameTests
 			{
 				_MaxManaPoints = 100,
 				_ManaPoints = 10,
-				_Consumables = new List<Consumable> { new ManaPotion(1) }
+				_Consumables = new List<Consumable> { new ManaPotion(Potion.PotionStrength.Minor) }
 			};
 			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(ManaPotion));
 			string[] input = new[] { "drink", "mana" };
@@ -68,7 +69,7 @@ namespace DungeonGameTests
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage)
 			{
-				_Consumables = new List<Consumable> { new StatPotion(1, StatPotion.StatType.Constitution) }
+				_Consumables = new List<Consumable> { new StatPotion(Potion.PotionStrength.Minor, StatPotion.StatType.Constitution) }
 			};
 			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(StatPotion));
 			string[] input = new[] { "drink", "constitution" };
@@ -105,7 +106,7 @@ namespace DungeonGameTests
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage)
 			{
-				_Consumables = new List<Consumable> { new StatPotion(1, StatPotion.StatType.Intelligence) }
+				_Consumables = new List<Consumable> { new StatPotion(Potion.PotionStrength.Minor, StatPotion.StatType.Intelligence) }
 			};
 			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(StatPotion));
 			string[] input = new[] { "drink", "intelligence" };
@@ -142,7 +143,7 @@ namespace DungeonGameTests
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage)
 			{
-				_Consumables = new List<Consumable> { new StatPotion(1, StatPotion.StatType.Strength) }
+				_Consumables = new List<Consumable> { new StatPotion(Potion.PotionStrength.Minor, StatPotion.StatType.Strength) }
 			};
 			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(StatPotion));
 			string[] input = new[] { "drink", "strength" };
@@ -179,7 +180,7 @@ namespace DungeonGameTests
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage)
 			{
-				_Consumables = new List<Consumable> { new StatPotion(1, StatPotion.StatType.Dexterity) }
+				_Consumables = new List<Consumable> { new StatPotion(Potion.PotionStrength.Minor, StatPotion.StatType.Dexterity) }
 			};
 			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(StatPotion));
 			string[] input = new[] { "drink", "dexterity" };

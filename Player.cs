@@ -89,7 +89,7 @@ namespace DungeonGame
 				case PlayerClassType.Mage:
 					for (int i = 0; i < 3; i++)
 					{
-						_Consumables.Add(new ManaPotion(1));
+						_Consumables.Add(new ManaPotion(Potion.PotionStrength.Minor));
 					}
 					_Spellbook = new List<PlayerSpell>();
 					_Strength = 10;
@@ -124,7 +124,7 @@ namespace DungeonGame
 				case PlayerClassType.Warrior:
 					for (int i = 0; i < 3; i++)
 					{
-						_Consumables.Add(new HealthPotion(1));
+						_Consumables.Add(new HealthPotion(Potion.PotionStrength.Minor));
 					}
 					_Abilities = new List<PlayerAbility>();
 					_Strength = 15;
@@ -164,7 +164,7 @@ namespace DungeonGame
 				case PlayerClassType.Archer:
 					for (int i = 0; i < 3; i++)
 					{
-						_Consumables.Add(new HealthPotion(1));
+						_Consumables.Add(new HealthPotion(Potion.PotionStrength.Minor));
 					}
 					_Abilities = new List<PlayerAbility>();
 					_Strength = 10;

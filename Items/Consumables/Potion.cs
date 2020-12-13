@@ -4,7 +4,7 @@ namespace DungeonGame.Items.Consumables
 {
 	public class Potion : Consumable
 	{
-		protected enum PotionStrength
+		public enum PotionStrength
 		{
 			Minor,
 			Normal,
@@ -12,29 +12,13 @@ namespace DungeonGame.Items.Consumables
 		}
 		protected PotionStrength _PotionStrength { get; set; }
 		
-		public Potion(int level) : base()
+		public Potion(PotionStrength potionStrength) : base()
 		{
 			_Weight = 1;
-			_PotionStrength = GetPotionStrength(level);
+			_PotionStrength = potionStrength;
 		}
 
-		private PotionStrength GetPotionStrength(int level)
-		{
-			if (level <= 3)
-			{
-				return PotionStrength.Minor;
-			}
-			else if (level > 6)
-			{
-				return PotionStrength.Greater;
-			}
-			else
-			{
-				return PotionStrength.Normal;
-			}
-		}
-
-		protected virtual string GetPotionName(int level)
+		protected virtual string GetPotionName()
 		{
 			throw new NotImplementedException("Potion name has not been implemented.");
 		}

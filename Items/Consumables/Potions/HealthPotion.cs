@@ -6,45 +6,41 @@ namespace DungeonGame.Items.Consumables.Potions
 	{
 		public int _HealthAmount { get; }
 
-		public HealthPotion(int level) : base(level)
+		public HealthPotion(PotionStrength potionStrength) : base(potionStrength)
 		{
-			_Name = GetPotionName(level);
-			_HealthAmount = GetPotionHealthAmount(level);
+			_Name = GetPotionName();
+			_HealthAmount = GetPotionHealthAmount();
 			_ItemValue = _HealthAmount / 2;
 			_Desc = $"A {_Name} that restores {_HealthAmount} health.";
 		}
 
-		protected override string GetPotionName(int level)
+		protected override string GetPotionName()
 		{
-			// Potion naming format is "<potion strength> <potion type> potion" for lvl 1-3 or 7+ potions
-			if (level <= 3)
-			{
-				return $"{_PotionStrength.ToString().ToLower()} health potion";
-			}
-			else if (level > 6)
-			{
-				return $"{_PotionStrength.ToString().ToLower()} health potion";
-			}
-			// Potion naming format is "<potion type> potion" for lvl 4-6 potions
-			else
+			// Potion naming format is "<potion type> potion" for normal potion
+			if (_PotionStrength == PotionStrength.Normal)
 			{
 				return $"health potion";
 			}
+			// Potion naming format is "<potion strength> <potion type> potion" for minor or greater potions
+			else
+			{
+				return $"{_PotionStrength.ToString().ToLower()} health potion";
+			}
 		}
 
-		private int GetPotionHealthAmount(int level)
+		private int GetPotionHealthAmount()
 		{
-			if (level <= 3)
+			if (_PotionStrength == PotionStrength.Minor)
 			{
 				return 50;
 			}
-			else if (level > 6)
+			else if (_PotionStrength == PotionStrength.Normal)
 			{
-				return 150;
+				return 100;
 			}
 			else
 			{
-				return 100;
+				return 150;
 			}
 		}
 
