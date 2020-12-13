@@ -19,11 +19,11 @@ namespace DungeonGame.Items.Consumables.Potions
 			// Potion naming format is "<potion strength> <potion type> potion" for lvl 1-3 or 7+ potions
 			if (level <= 3)
 			{
-				return $"{PotionStrength.Minor.ToString().ToLower()} mana potion";
+				return $"{_PotionStrength.ToString().ToLower()} mana potion";
 			}
 			else if (level > 6)
 			{
-				return $"{PotionStrength.Greater.ToString().ToLower()} mana potion";
+				return $"{_PotionStrength.ToString().ToLower()} mana potion";
 			}
 			// Potion naming format is "<potion type> potion" for lvl 4-6 potions
 			else

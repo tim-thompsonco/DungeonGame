@@ -28,23 +28,6 @@ namespace DungeonGameTests
 			MonsterBuilder.BuildMonster(monster);
 			Assert.AreEqual(0, monster._MaxHitPoints % 10);
 			Assert.AreEqual(0, monster._ExperienceProvided % 10);
-			// Test consumable potion creation
-			HealthPotion potion = new HealthPotion(3);
-			Assert.AreEqual(25, potion._ItemValue);
-			Assert.AreEqual("minor health potion", potion._Name);
-			Assert.AreEqual(50, potion._HealthAmount);
-			HealthPotion potionTwo = new HealthPotion(4);
-			Assert.AreEqual(50, potionTwo._ItemValue);
-			Assert.AreEqual("health potion", potionTwo._Name);
-			Assert.AreEqual(100, potionTwo._HealthAmount);
-			HealthPotion potionThree = new HealthPotion(6);
-			Assert.AreEqual(50, potionThree._ItemValue);
-			Assert.AreEqual("health potion", potionThree._Name);
-			Assert.AreEqual(100, potionThree._HealthAmount);
-			HealthPotion potionFour = new HealthPotion(7);
-			Assert.AreEqual(75, potionFour._ItemValue);
-			Assert.AreEqual("greater health potion", potionFour._Name);
-			Assert.AreEqual(150, potionFour._HealthAmount);
 		}
 		[Test]
 		public void ArmorUnitTests()
