@@ -1,7 +1,7 @@
 using DungeonGame;
 using DungeonGame.Controllers;
 using DungeonGame.Items;
-using DungeonGame.Items.Consumables;
+using DungeonGame.Items.Consumables.Potions;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -29,22 +29,22 @@ namespace DungeonGameTests
 			Assert.AreEqual(0, monster._MaxHitPoints % 10);
 			Assert.AreEqual(0, monster._ExperienceProvided % 10);
 			// Test consumable potion creation
-			Potion potion = new Potion(3, Potion.PotionType.Health);
+			HealthPotion potion = new HealthPotion(3);
 			Assert.AreEqual(25, potion._ItemValue);
 			Assert.AreEqual("minor health potion", potion._Name);
-			Assert.AreEqual(50, potion._RestoreHealth._RestoreHealthAmt);
-			Potion potionTwo = new Potion(4, Potion.PotionType.Health);
+			Assert.AreEqual(50, potion._HealthAmount);
+			HealthPotion potionTwo = new HealthPotion(4);
 			Assert.AreEqual(50, potionTwo._ItemValue);
 			Assert.AreEqual("health potion", potionTwo._Name);
-			Assert.AreEqual(100, potionTwo._RestoreHealth._RestoreHealthAmt);
-			Potion potionThree = new Potion(6, Potion.PotionType.Health);
+			Assert.AreEqual(100, potionTwo._HealthAmount);
+			HealthPotion potionThree = new HealthPotion(6);
 			Assert.AreEqual(50, potionThree._ItemValue);
 			Assert.AreEqual("health potion", potionThree._Name);
-			Assert.AreEqual(100, potionThree._RestoreHealth._RestoreHealthAmt);
-			Potion potionFour = new Potion(7, Potion.PotionType.Health);
+			Assert.AreEqual(100, potionThree._HealthAmount);
+			HealthPotion potionFour = new HealthPotion(7);
 			Assert.AreEqual(75, potionFour._ItemValue);
 			Assert.AreEqual("greater health potion", potionFour._Name);
-			Assert.AreEqual(150, potionFour._RestoreHealth._RestoreHealthAmt);
+			Assert.AreEqual(150, potionFour._HealthAmount);
 		}
 		[Test]
 		public void ArmorUnitTests()

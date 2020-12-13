@@ -1,7 +1,7 @@
 ﻿using DungeonGame;
 using DungeonGame.Controllers;
 using DungeonGame.Items;
-using DungeonGame.Items.Consumables;
+using DungeonGame.Items.Consumables.Potions;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,21 +20,21 @@ namespace DungeonGameTests
 			{
 				_MaxHitPoints = 100,
 				_HitPoints = 10,
-				_Consumables = new List<Consumable> { new Potion(1, Potion.PotionType.Health) }
+				_Consumables = new List<Consumable> { new HealthPotion(1) }
 			};
-			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(Potion));
+			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(HealthPotion));
 			string[] input = new[] { "drink", "health" };
 			string potionName = InputController.ParseInput(input);
 			Assert.AreEqual("health", potionName);
 			int baseHealth = player._HitPoints;
-			Potion potion = player._Consumables[potionIndex] as Potion;
-			int healAmount = potion._RestoreHealth._RestoreHealthAmt;
-			player.DrinkPotion(InputController.ParseInput(input));
+			HealthPotion potion = player._Consumables[potionIndex] as HealthPotion;
+			int healAmount = potion._HealthAmount;
+			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankHealthString = $"You drank a potion and replenished {healAmount} health.";
 			Assert.AreEqual(drankHealthString, OutputController.Display.Output[0][2]);
 			Assert.AreEqual(baseHealth + healAmount, player._HitPoints);
 			Assert.IsEmpty(player._Consumables);
-			player.DrinkPotion(InputController.ParseInput(input));
+			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
 		}
 		[Test]
@@ -45,21 +45,21 @@ namespace DungeonGameTests
 			{
 				_MaxManaPoints = 100,
 				_ManaPoints = 10,
-				_Consumables = new List<Consumable> { new Potion(1, Potion.PotionType.Mana) }
+				_Consumables = new List<Consumable> { new ManaPotion(1) }
 			};
-			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(Potion));
+			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(ManaPotion));
 			string[] input = new[] { "drink", "mana" };
 			string potionName = InputController.ParseInput(input);
 			Assert.AreEqual("mana", potionName);
 			int? baseMana = player._ManaPoints;
-			Potion potion = player._Consumables[potionIndex] as Potion;
-			int manaAmount = potion._RestoreMana._RestoreManaAmt;
-			player.DrinkPotion(InputController.ParseInput(input));
+			ManaPotion potion = player._Consumables[potionIndex] as ManaPotion;
+			int manaAmount = potion._ManaAmount;
+			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankManaString = $"You drank a potion and replenished {manaAmount} mana.";
 			Assert.AreEqual(drankManaString, OutputController.Display.Output[0][2]);
 			Assert.AreEqual(baseMana + manaAmount, player._ManaPoints);
 			Assert.IsEmpty(player._Consumables);
-			player.DrinkPotion(InputController.ParseInput(input));
+			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
 		}
 		[Test]
@@ -68,18 +68,18 @@ namespace DungeonGameTests
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage)
 			{
-				_Consumables = new List<Consumable> { new Potion(1, Potion.PotionType.Constitution) }
+				_Consumables = new List<Consumable> { new StatPotion(1, StatPotion.StatType.Constitution) }
 			};
-			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(Potion));
+			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(StatPotion));
 			string[] input = new[] { "drink", "constitution" };
 			string potionName = InputController.ParseInput(input);
 			Assert.AreEqual("constitution", potionName);
-			Potion potion = player._Consumables[potionIndex] as Potion;
-			int statAmount = potion._ChangeStat._ChangeAmount;
-			ChangeStat.StatType statType = potion._ChangeStat._StatCategory;
+			StatPotion potion = player._Consumables[potionIndex] as StatPotion;
+			int statAmount = potion._StatAmount;
+			StatPotion.StatType statType = potion._StatCategory;
 			int baseConst = player._Constitution;
 			int baseMaxHitPoints = player._MaxHitPoints;
-			player.DrinkPotion(InputController.ParseInput(input));
+			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankStatString = $"You drank a potion and increased {statType} by {statAmount}.";
 			Assert.AreEqual(drankStatString, OutputController.Display.Output[0][2]);
 			Assert.AreEqual(baseConst + statAmount, player._Constitution);
@@ -96,7 +96,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(false, player._Effects.Any());
 			Assert.AreEqual(baseConst, player._Constitution);
 			Assert.AreEqual(baseMaxHitPoints, player._MaxHitPoints);
-			player.DrinkPotion(InputController.ParseInput(input));
+			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
 		}
 		[Test]
@@ -105,18 +105,18 @@ namespace DungeonGameTests
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage)
 			{
-				_Consumables = new List<Consumable> { new Potion(1, Potion.PotionType.Intelligence) }
+				_Consumables = new List<Consumable> { new StatPotion(1, StatPotion.StatType.Intelligence) }
 			};
-			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(Potion));
+			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(StatPotion));
 			string[] input = new[] { "drink", "intelligence" };
 			string potionName = InputController.ParseInput(input);
 			Assert.AreEqual("intelligence", potionName);
-			Potion potion = player._Consumables[potionIndex] as Potion;
-			int statAmount = potion._ChangeStat._ChangeAmount;
-			ChangeStat.StatType statType = potion._ChangeStat._StatCategory;
+			StatPotion potion = player._Consumables[potionIndex] as StatPotion;
+			int statAmount = potion._StatAmount;
+			StatPotion.StatType statType = potion._StatCategory;
 			int baseInt = player._Intelligence;
 			int? baseMaxManaPoints = player._MaxManaPoints;
-			player.DrinkPotion(InputController.ParseInput(input));
+			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankStatString = $"You drank a potion and increased {statType} by {statAmount}.";
 			Assert.AreEqual(drankStatString, OutputController.Display.Output[0][2]);
 			Assert.AreEqual(baseInt + statAmount, player._Intelligence);
@@ -133,7 +133,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(false, player._Effects.Any());
 			Assert.AreEqual(baseInt, player._Intelligence);
 			Assert.AreEqual(baseMaxManaPoints, player._MaxManaPoints);
-			player.DrinkPotion(InputController.ParseInput(input));
+			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
 		}
 		[Test]
@@ -142,18 +142,18 @@ namespace DungeonGameTests
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage)
 			{
-				_Consumables = new List<Consumable> { new Potion(1, Potion.PotionType.Strength) }
+				_Consumables = new List<Consumable> { new StatPotion(1, StatPotion.StatType.Strength) }
 			};
-			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(Potion));
+			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(StatPotion));
 			string[] input = new[] { "drink", "strength" };
 			string potionName = InputController.ParseInput(input);
 			Assert.AreEqual("strength", potionName);
-			Potion potion = player._Consumables[potionIndex] as Potion;
-			int statAmount = potion._ChangeStat._ChangeAmount;
-			ChangeStat.StatType statType = potion._ChangeStat._StatCategory;
+			StatPotion potion = player._Consumables[potionIndex] as StatPotion;
+			int statAmount = potion._StatAmount;
+			StatPotion.StatType statType = potion._StatCategory;
 			int baseStr = player._Strength;
 			int baseMaxCarryWeight = player._MaxCarryWeight;
-			player.DrinkPotion(InputController.ParseInput(input));
+			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankStatString = $"You drank a potion and increased {statType} by {statAmount}.";
 			Assert.AreEqual(drankStatString, OutputController.Display.Output[0][2]);
 			Assert.AreEqual(baseStr + statAmount, player._Strength);
@@ -170,7 +170,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(false, player._Effects.Any());
 			Assert.AreEqual(baseStr, player._Strength);
 			Assert.AreEqual(baseMaxCarryWeight, player._MaxCarryWeight);
-			player.DrinkPotion(InputController.ParseInput(input));
+			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
 		}
 		[Test]
@@ -179,18 +179,18 @@ namespace DungeonGameTests
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage)
 			{
-				_Consumables = new List<Consumable> { new Potion(1, Potion.PotionType.Dexterity) }
+				_Consumables = new List<Consumable> { new StatPotion(1, StatPotion.StatType.Dexterity) }
 			};
-			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(Potion));
+			int potionIndex = player._Consumables.FindIndex(f => f.GetType() == typeof(StatPotion));
 			string[] input = new[] { "drink", "dexterity" };
 			string potionName = InputController.ParseInput(input);
 			Assert.AreEqual("dexterity", potionName);
-			Potion potion = player._Consumables[potionIndex] as Potion;
-			int statAmount = potion._ChangeStat._ChangeAmount;
-			ChangeStat.StatType statType = potion._ChangeStat._StatCategory;
+			StatPotion potion = player._Consumables[potionIndex] as StatPotion;
+			int statAmount = potion._StatAmount;
+			StatPotion.StatType statType = potion._StatCategory;
 			int baseDex = player._Dexterity;
 			double baseDodgeChance = player._DodgeChance;
-			player.DrinkPotion(InputController.ParseInput(input));
+			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankStatString = $"You drank a potion and increased {statType} by {statAmount}.";
 			Assert.AreEqual(drankStatString, OutputController.Display.Output[0][2]);
 			Assert.AreEqual(baseDex + statAmount, player._Dexterity);
@@ -207,7 +207,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(false, player._Effects.Any());
 			Assert.AreEqual(baseDex, player._Dexterity);
 			Assert.AreEqual(baseDodgeChance, player._DodgeChance);
-			player.DrinkPotion(InputController.ParseInput(input));
+			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
 		}
 		[Test]

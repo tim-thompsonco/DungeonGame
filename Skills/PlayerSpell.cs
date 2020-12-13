@@ -146,7 +146,7 @@ namespace DungeonGame
 			player._Effects.Add(new Effect(player._Spellbook[index]._Name,
 				Effect.EffectType.ChangeStat, player._Spellbook[index]._ChangeAmount._Amount,
 				player._Spellbook[index]._ChangeAmount._ChangeCurRound, player._Spellbook[index]._ChangeAmount._ChangeMaxRound,
-				1, 1, false, ChangeStat.StatType.Intelligence));
+				1, 1, false, Effect.StatType.Intelligence));
 		}
 		public static void ArcaneIntellectSpellInfo(Player player, int index)
 		{

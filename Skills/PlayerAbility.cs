@@ -204,7 +204,7 @@ namespace DungeonGame
 			player._Effects.Add(new Effect(player._Abilities[index]._Name, Effect.EffectType.ChangeStat,
 				player._Abilities[index]._ChangeAmount._Amount, player._Abilities[index]._ChangeAmount._ChangeCurRound,
 				player._Abilities[index]._ChangeAmount._ChangeMaxRound, 1, 1, false,
-				ChangeStat.StatType.Strength));
+				Effect.StatType.Strength));
 		}
 		public static void SwiftAuraAbilityInfo(Player player, int index)
 		{
@@ -238,7 +238,7 @@ namespace DungeonGame
 			player._Effects.Add(new Effect(player._Abilities[index]._Name,
 				Effect.EffectType.ChangeStat, player._Abilities[index]._ChangeAmount._Amount,
 				player._Abilities[index]._ChangeAmount._ChangeCurRound, player._Abilities[index]._ChangeAmount._ChangeMaxRound,
-				1, 1, false, ChangeStat.StatType.Dexterity));
+				1, 1, false, Effect.StatType.Dexterity));
 		}
 		public static void WarCryAbilityInfo(Player player, int index)
 		{

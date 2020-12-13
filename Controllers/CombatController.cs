@@ -384,7 +384,7 @@ namespace DungeonGame.Controllers
 				case "drink":
 					if (_Input.Last() == "potion")
 					{
-						_Player.DrinkPotion(InputController.ParseInput(_Input));
+						_Player.AttemptDrinkPotion(InputController.ParseInput(_Input));
 					}
 					else
 					{

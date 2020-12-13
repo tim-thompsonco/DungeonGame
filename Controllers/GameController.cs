@@ -155,16 +155,16 @@ namespace DungeonGame.Controllers
 						case Effect.EffectType.ChangeStat:
 							switch (player._Effects[i]._StatGroup)
 							{
-								case ChangeStat.StatType.Intelligence:
+								case Effect.StatType.Intelligence:
 									player._Intelligence -= player._Effects[i]._EffectAmountOverTime;
 									break;
-								case ChangeStat.StatType.Strength:
+								case Effect.StatType.Strength:
 									player._Strength -= player._Effects[i]._EffectAmountOverTime;
 									break;
-								case ChangeStat.StatType.Dexterity:
+								case Effect.StatType.Dexterity:
 									player._Dexterity -= player._Effects[i]._EffectAmountOverTime;
 									break;
-								case ChangeStat.StatType.Constitution:
+								case Effect.StatType.Constitution:
 									player._Constitution -= player._Effects[i]._EffectAmountOverTime;
 									break;
 								default:

@@ -1,6 +1,7 @@
 using DungeonGame.Controllers;
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables;
+using DungeonGame.Items.Consumables.Potions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,7 +89,7 @@ namespace DungeonGame
 				case PlayerClassType.Mage:
 					for (int i = 0; i < 3; i++)
 					{
-						_Consumables.Add(new Potion(1, Potion.PotionType.Mana));
+						_Consumables.Add(new ManaPotion(1));
 					}
 					_Spellbook = new List<PlayerSpell>();
 					_Strength = 10;
@@ -123,7 +124,7 @@ namespace DungeonGame
 				case PlayerClassType.Warrior:
 					for (int i = 0; i < 3; i++)
 					{
-						_Consumables.Add(new Potion(1, Potion.PotionType.Health));
+						_Consumables.Add(new HealthPotion(1));
 					}
 					_Abilities = new List<PlayerAbility>();
 					_Strength = 15;
@@ -163,7 +164,7 @@ namespace DungeonGame
 				case PlayerClassType.Archer:
 					for (int i = 0; i < 3; i++)
 					{
-						_Consumables.Add(new Potion(1, Potion.PotionType.Health));
+						_Consumables.Add(new HealthPotion(1));
 					}
 					_Abilities = new List<PlayerAbility>();
 					_Strength = 10;
@@ -313,58 +314,27 @@ namespace DungeonGame
 			}
 			return attackAmount;
 		}
-		public void DrinkPotion(string input)
+
+		public void AttemptDrinkPotion(string input)
 		{
-			int index = _Consumables.FindIndex(
-				f => f._Name.Contains(input));
+			int index = _Consumables.FindIndex(item => item._Name.Contains(input));
 
 			if (index == -1)
 			{
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
-					"What potion did you want to drink?");
-				return;
+					Settings.DrinkPotionFailMessage());
 			}
-
-			Potion potion = _Consumables[index] as Potion;
-			switch (potion._PotionCategory)
+			else
 			{
-				case Potion.PotionType.Health:
-					potion._RestoreHealth.RestoreHealthPlayer(this);
-					string drankHealthString = $"You drank a potion and replenished {potion._RestoreHealth._RestoreHealthAmt} health.";
-					OutputController.Display.StoreUserOutput(
-						Settings.FormatSuccessOutputText(),
-						Settings.FormatDefaultBackground(),
-						drankHealthString);
-					_Consumables.RemoveAt(index);
-					break;
-				case Potion.PotionType.Mana:
-					potion._RestoreMana.RestoreManaPlayer(this);
-					string drankManaString = $"You drank a potion and replenished {potion._RestoreMana._RestoreManaAmt} mana.";
-					OutputController.Display.StoreUserOutput(
-						Settings.FormatSuccessOutputText(),
-						Settings.FormatDefaultBackground(),
-						drankManaString);
-					_Consumables.RemoveAt(index);
-					break;
-				case Potion.PotionType.Intelligence:
-				case Potion.PotionType.Strength:
-				case Potion.PotionType.Dexterity:
-				case Potion.PotionType.Constitution:
-					potion._ChangeStat.ChangeStatPlayer(this);
-					string drankStatString = 
-						$"You drank a potion and increased {potion._ChangeStat._StatCategory} by {potion._ChangeStat._ChangeAmount}.";
-					OutputController.Display.StoreUserOutput(
-						Settings.FormatSuccessOutputText(),
-						Settings.FormatDefaultBackground(),
-						drankStatString);
-					_Consumables.RemoveAt(index);
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
+				Potion potionToDrink = _Consumables[index] as Potion;
+				potionToDrink.DrinkPotion(this);
+
+				_Consumables.RemoveAt(index);
 			}
 		}
+
 		public void ReloadQuiver()
 		{
 			int index = _Consumables.FindIndex(f => f.GetType() == typeof(Arrows));

@@ -19,9 +19,16 @@ namespace DungeonGame
 			Frozen,
 			ChangeStat,
 		}
+		public enum StatType
+		{
+			Intelligence,
+			Strength,
+			Dexterity,
+			Constitution
+		}
 		public string _Name { get; set; }
 		public EffectType _EffectGroup { get; set; }
-		public ChangeStat.StatType? _StatGroup { get; set; }
+		public StatType? _StatGroup { get; set; }
 		public int _EffectAmount { get; set; }
 		public int _EffectAmountOverTime { get; set; }
 		public int _EffectCurRound { get; set; }
@@ -58,7 +65,7 @@ namespace DungeonGame
 			_EffectAmountOverTime = effectAmountOverTime;
 		}
 		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
-			int effectMaxRound, double effectMultiplier, int tickDuration, bool harmful, ChangeStat.StatType statType)
+			int effectMaxRound, double effectMultiplier, int tickDuration, bool harmful, StatType statType)
 			: this(name, effectGroup, effectAmountOverTime, effectCurRound, effectMaxRound, effectMultiplier, tickDuration,
 				harmful)
 		{

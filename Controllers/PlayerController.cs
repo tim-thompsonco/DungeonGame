@@ -1,5 +1,6 @@
 ﻿using DungeonGame.Items;
 using DungeonGame.Items.Consumables;
+using DungeonGame.Items.Consumables.Potions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -107,23 +108,22 @@ namespace DungeonGame.Controllers
 				itemInfo.Append(item._Name);
 				if (item._Name.Contains("potion"))
 				{
-					Potion potion = item as Potion;
-					switch (potion._PotionCategory)
+					if (item is HealthPotion)
 					{
-						case Potion.PotionType.Health:
-							itemInfo.Append(" (+" + potion._RestoreHealth._RestoreHealthAmt + " " + potion._PotionCategory + ")");
-							break;
-						case Potion.PotionType.Mana:
-							itemInfo.Append(" (+" + potion._RestoreMana._RestoreManaAmt + " " + potion._PotionCategory + ")");
-							break;
-						case Potion.PotionType.Intelligence:
-						case Potion.PotionType.Strength:
-						case Potion.PotionType.Dexterity:
-						case Potion.PotionType.Constitution:
-							itemInfo.Append(" (+" + potion._ChangeStat._ChangeAmount + " " + potion._PotionCategory + ")");
-							break;
-						default:
-							throw new ArgumentOutOfRangeException();
+						HealthPotion potion = item as HealthPotion;
+						itemInfo.Append($" (+{potion._HealthAmount} health)");
+					}
+
+					if (item is ManaPotion)
+					{
+						ManaPotion potion = item as ManaPotion;
+						itemInfo.Append($" (+{potion._ManaAmount} mana)");
+					}
+
+					if (item is StatPotion)
+					{
+						StatPotion potion = item as StatPotion;
+						itemInfo.Append($" (+{potion._StatAmount} {potion._StatCategory})");
 					}
 				}
 				if (item.GetType() == typeof(Arrows))
