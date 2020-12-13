@@ -38,6 +38,7 @@ namespace DungeonGame.Items.Consumables.Potions
 			{
 				return 100;
 			}
+			// If potion strength is not minor or normal, then it is greater
 			else
 			{
 				return 150;
