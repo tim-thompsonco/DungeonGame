@@ -2,9 +2,8 @@
 
 namespace DungeonGame
 {
-	public interface IQuestGiver
+	public interface IQuestGiver : IName
 	{
-		string _Name { get; set; }
 		List<Quest> _AvailableQuests { get; set; }
 
 		void OfferQuest(Player player, string[] input);

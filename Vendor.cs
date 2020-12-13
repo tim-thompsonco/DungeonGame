@@ -10,7 +10,7 @@ using System.Text;
 
 namespace DungeonGame
 {
-	public class Vendor : IName, IQuestGiver
+	public class Vendor : IQuestGiver
 	{
 		public enum VendorType
 		{

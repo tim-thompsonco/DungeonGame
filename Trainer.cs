@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace DungeonGame
 {
-	public class Trainer : IName, IQuestGiver
+	public class Trainer : IQuestGiver
 	{
 		public enum TrainerCategory
 		{
