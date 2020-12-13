@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace DungeonGame.Items.Consumables
+﻿namespace DungeonGame.Items.Consumables
 {
-	public class Potion : Consumable
+	public abstract class Potion : Consumable
 	{
 		public enum PotionStrength
 		{
@@ -18,19 +16,10 @@ namespace DungeonGame.Items.Consumables
 			_PotionStrength = potionStrength;
 		}
 
-		protected virtual string GetPotionName()
-		{
-			throw new NotImplementedException("Potion name has not been implemented.");
-		}
+		protected abstract string GetPotionName();
 
-		public virtual void DrinkPotion(Player player)
-		{
-			throw new NotImplementedException("Drink potion has not been implemented.");
-		}
+		public abstract void DrinkPotion(Player player);
 
-		protected virtual void DisplayDrankPotionMessage()
-		{
-			throw new NotImplementedException("Drink potion message has not been implemented.");
-		}
+		protected abstract void DisplayDrankPotionMessage();
 	}
 }
