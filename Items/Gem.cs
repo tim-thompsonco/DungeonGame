@@ -11,7 +11,7 @@
 			Amethyst,
 			Topaz
 		}
-		public enum GemLevel
+		private enum GemLevel
 		{
 			Chipped,
 			Dull,
@@ -22,50 +22,48 @@
 		public bool _Equipped { get; set; }
 		public int _ItemValue { get; set; }
 		public int _Weight { get; set; }
-		public GemType _GemCategory { get; set; }
-		public GemLevel _GemStrength { get; set; }
+		private readonly GemType _GemType;
+		private GemLevel _GemLevel;
 
 		public Gem(int level, GemType gemType)
 		{
-			_GemCategory = gemType;
+			_GemType = gemType;
 			_Weight = 1;
 			_ItemValue = level * 20;
-			SetGemName(level, gemType);
+			SetGemLevel(level);
+			SetGemName();
 			_Desc = $"A {_Name} that is worth some money to the right vendor.";
 		}
 
-		private void SetGemName(int level, GemType gemType)
+		private void SetGemLevel(int level)
 		{
 			if (level <= 3)
 			{
-				SetChippedGemName(gemType);
+				_GemLevel = GemLevel.Chipped;
 			}
 			else if (level <= 6)
 			{
-				SetDullGemName(gemType);
+				_GemLevel = GemLevel.Dull;
 			}
+			// If gem level is not chipped or dull, then it is normal
 			else
 			{
-				SetNormalGemName(gemType);
+				_GemLevel = GemLevel.Normal;
 			}
 		}
 
-		private void SetChippedGemName(GemType gemType)
+		private void SetGemName()
 		{
-			_GemStrength = GemLevel.Chipped;
-			_Name = $"{GemLevel.Chipped} {gemType}".ToLower();
-		}
-
-		private void SetDullGemName(GemType gemType)
-		{
-			_GemStrength = GemLevel.Dull;
-			_Name = $"{GemLevel.Dull} {gemType}".ToLower();
-		}
-
-		private void SetNormalGemName(GemType gemType)
-		{
-			_GemStrength = GemLevel.Normal;
-			_Name = gemType.ToString().ToLower();
+			// Gem naming format is "<gem type>" for normal gem
+			if (_GemLevel == GemLevel.Normal)
+			{
+				_Name = _GemType.ToString().ToLower();
+			}
+			// Gem naming format is "<gem level> <gem type>" for chipped or dull gems
+			else
+			{
+				_Name = $"{_GemLevel} {_GemType}".ToLower();
+			}
 		}
 	}
 }
