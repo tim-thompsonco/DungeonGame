@@ -35,7 +35,7 @@ namespace DungeonGame
 			Timer globalTimer = new Timer(
 				e => GameController.CheckStatus(player),
 				null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
-			while (!GameController.IsGameOver)
+			while (!GameController._IsGameOver)
 			{
 				GameController.RemovedExpiredEffectsAsync(player);
 				string[] input = InputController.GetFormattedInput(Console.ReadLine());
@@ -59,7 +59,7 @@ namespace DungeonGame
 				}
 				else
 				{
-					GameController.IsGameOver = true;
+					GameController._IsGameOver = true;
 					Messages.GameOver();
 					OutputController.Display.RetrieveUserOutput();
 					OutputController.Display.ClearUserOutput();
