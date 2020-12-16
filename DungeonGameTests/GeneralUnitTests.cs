@@ -304,7 +304,7 @@ namespace DungeonGameTests
 		public void CheckStatusUnitTest()
 		{
 			Player player = new Player("placeholder", Player.PlayerClassType.Mage);
-			RoomController.Rooms = new RoomBuilder(
+			RoomController._Rooms = new RoomBuilder(
 				100, 5, 0, 4, 0).RetrieveSpawnRooms();
 			GameController.CheckStatus(player);
 			player._Spellbook.Add(new PlayerSpell(
@@ -320,7 +320,7 @@ namespace DungeonGameTests
 		{
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("placeholder", Player.PlayerClassType.Mage);
-			RoomController.Rooms = new Dictionary<Coordinate, IRoom> {
+			RoomController._Rooms = new Dictionary<Coordinate, IRoom> {
 				{new Coordinate(1, 1, 1), new DungeonRoom(1, 1)}
 			};
 			player._Spellbook.Add(new PlayerSpell(
@@ -357,18 +357,18 @@ namespace DungeonGameTests
 			Player player = new Player("placeholder", Player.PlayerClassType.Mage);
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			RoomController.Rooms = new Dictionary<Coordinate, IRoom> {
+			RoomController._Rooms = new Dictionary<Coordinate, IRoom> {
 				{new Coordinate(1, 1, 1), new DungeonRoom(1, 1)}
 			};
 			player._CanSave = true;
 			GameController.SaveGame(player);
 			Assert.AreEqual("Your game has been saved.", OutputController.Display.Output[0][2]);
 			OutputController.Display.ClearUserOutput();
-			RoomController.Rooms = null;
+			RoomController._Rooms = null;
 			GameController.LoadGame();
 			player = GameController.LoadPlayer();
 			Assert.AreEqual("placeholder", player._Name);
-			Assert.NotNull(RoomController.Rooms);
+			Assert.NotNull(RoomController._Rooms);
 			Assert.AreEqual("Reloading your saved game.", OutputController.Display.Output[1][2]);
 		}
 		[Test]

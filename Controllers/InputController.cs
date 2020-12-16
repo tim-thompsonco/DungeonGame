@@ -10,19 +10,19 @@ namespace DungeonGame.Controllers
 	{
 		public static string[] GetFormattedInput(string userInput)
 		{
-			var inputFormatted = userInput.ToLower().Trim();
-			var inputParse = inputFormatted.Split(' ');
+			string inputFormatted = userInput.ToLower().Trim();
+			string[] inputParse = inputFormatted.Split(' ');
 			return inputParse;
 		}
 		public static string ParseInput(string[] userInput)
 		{
-			var inputString = new StringBuilder();
-			for (var i = 1; i < userInput.Length; i++)
+			StringBuilder inputString = new StringBuilder();
+			for (int i = 1; i < userInput.Length; i++)
 			{
 				if (i == userInput.Length - 1)
 				{
 					// If last loop iteration, check to see if it's a number, and if so do not add to input string
-					var isNumber = int.TryParse(userInput.Last(), out var number);
+					bool isNumber = int.TryParse(userInput.Last(), out _);
 					if (isNumber)
 					{
 						continue;
@@ -31,16 +31,16 @@ namespace DungeonGame.Controllers
 				inputString.Append(userInput[i]);
 				inputString.Append(' ');
 			}
-			var parsedInput = inputString.ToString().Trim();
+			string parsedInput = inputString.ToString().Trim();
 			return parsedInput;
 		}
 		public static void ProcessUserInput(Player player, string[] input, Timer globalTimer)
 		{
-			var playerRoom = RoomController.Rooms[player._PlayerLocation];
-			var isTownRoom = playerRoom as TownRoom;
-			var playerX = player._PlayerLocation._X;
-			var playerY = player._PlayerLocation._Y;
-			var playerZ = player._PlayerLocation._Z;
+			IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
+			TownRoom isTownRoom = playerRoom as TownRoom;
+			int playerX = player._PlayerLocation._X;
+			int playerY = player._PlayerLocation._Y;
+			int playerZ = player._PlayerLocation._Z;
 			switch (input[0])
 			{
 				case "a":
@@ -55,7 +55,7 @@ namespace DungeonGame.Controllers
 						{
 							try
 							{
-								var quantityProvided = int.TryParse(input.Last(), out var quantity);
+								bool quantityProvided = int.TryParse(input.Last(), out int quantity);
 								if (!quantityProvided)
 								{
 									quantity = 1;
@@ -204,7 +204,7 @@ namespace DungeonGame.Controllers
 					GearController.EquipItem(player, input);
 					break;
 				case "enhance":
-					var itemIndex = player._Inventory.FindIndex(f => f._Name.Contains(input[1]));
+					int itemIndex = player._Inventory.FindIndex(f => f._Name.Contains(input[1]));
 					switch (player._Inventory[itemIndex])
 					{
 						case Weapon _:
@@ -227,7 +227,7 @@ namespace DungeonGame.Controllers
 					break;
 				case "q":
 				case "quit":
-					var quitConfirm = GameController.QuitGame(player);
+					bool quitConfirm = GameController.QuitGame(player);
 					if (quitConfirm)
 					{
 						globalTimer.Dispose();
@@ -433,10 +433,14 @@ namespace DungeonGame.Controllers
 							{
 								if (input[1] == "all")
 								{
-									foreach (var item in player._Inventory)
+									foreach (IEquipment item in player._Inventory)
 									{
-										if (!item._Equipped) continue;
-										var itemNameArray = new[] { input[0], item._Name };
+										if (!item._Equipped)
+										{
+											continue;
+										}
+
+										string[] itemNameArray = new[] { input[0], item._Name };
 										isTownRoom._Vendor.RepairItem(player, itemNameArray, true);
 									}
 									break;
@@ -620,7 +624,7 @@ namespace DungeonGame.Controllers
 					{
 						try
 						{
-							var newCoord = new Coordinate(playerX, playerY + 1, playerZ);
+							Coordinate newCoord = new Coordinate(playerX, playerY + 1, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
@@ -639,7 +643,7 @@ namespace DungeonGame.Controllers
 					{
 						try
 						{
-							var newCoord = new Coordinate(playerX, playerY - 1, playerZ);
+							Coordinate newCoord = new Coordinate(playerX, playerY - 1, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
@@ -658,7 +662,7 @@ namespace DungeonGame.Controllers
 					{
 						try
 						{
-							var newCoord = new Coordinate(playerX + 1, playerY, playerZ);
+							Coordinate newCoord = new Coordinate(playerX + 1, playerY, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
@@ -677,7 +681,7 @@ namespace DungeonGame.Controllers
 					{
 						try
 						{
-							var newCoord = new Coordinate(playerX - 1, playerY, playerZ);
+							Coordinate newCoord = new Coordinate(playerX - 1, playerY, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
@@ -696,7 +700,7 @@ namespace DungeonGame.Controllers
 					{
 						try
 						{
-							var newCoord = new Coordinate(playerX + 1, playerY + 1, playerZ);
+							Coordinate newCoord = new Coordinate(playerX + 1, playerY + 1, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
@@ -715,7 +719,7 @@ namespace DungeonGame.Controllers
 					{
 						try
 						{
-							var newCoord = new Coordinate(playerX - 1, playerY + 1, playerZ);
+							Coordinate newCoord = new Coordinate(playerX - 1, playerY + 1, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
@@ -734,7 +738,7 @@ namespace DungeonGame.Controllers
 					{
 						try
 						{
-							var newCoord = new Coordinate(playerX + 1, playerY - 1, playerZ);
+							Coordinate newCoord = new Coordinate(playerX + 1, playerY - 1, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
@@ -753,7 +757,7 @@ namespace DungeonGame.Controllers
 					{
 						try
 						{
-							var newCoord = new Coordinate(playerX - 1, playerY - 1, playerZ);
+							Coordinate newCoord = new Coordinate(playerX - 1, playerY - 1, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
@@ -772,7 +776,7 @@ namespace DungeonGame.Controllers
 					{
 						try
 						{
-							var newCoord = new Coordinate(playerX, playerY, playerZ + 1);
+							Coordinate newCoord = new Coordinate(playerX, playerY, playerZ + 1);
 							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)
@@ -791,7 +795,7 @@ namespace DungeonGame.Controllers
 					{
 						try
 						{
-							var newCoord = new Coordinate(playerX, playerY, playerZ - 1);
+							Coordinate newCoord = new Coordinate(playerX, playerY, playerZ - 1);
 							RoomController.ChangeRoom(player, newCoord);
 						}
 						catch (ArgumentOutOfRangeException)

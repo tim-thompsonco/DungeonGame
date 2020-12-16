@@ -53,7 +53,7 @@ namespace DungeonGame
 				{
 					GameController.LoadGame();
 					player = GameController.LoadPlayer();
-					RoomController.Rooms[player._PlayerLocation].LookRoom();
+					RoomController._Rooms[player._PlayerLocation].LookRoom();
 					OutputController.ShowUserOutput(player);
 					OutputController.Display.ClearUserOutput();
 				}

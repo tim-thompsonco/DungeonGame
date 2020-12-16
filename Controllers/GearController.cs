@@ -261,7 +261,7 @@ namespace DungeonGame.Controllers
 			}
 			int itemIndex = player._Inventory.FindIndex(
 				f => f._Name == input[1] || f._Name.Contains(input[1]));
-			IRoom playerRoom = RoomController.Rooms[player._PlayerLocation];
+			IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
 			if (itemIndex != -1)
 			{
 				if (player._Inventory[itemIndex]._Equipped)
@@ -309,7 +309,7 @@ namespace DungeonGame.Controllers
 					"What item did you want to pickup?");
 				return;
 			}
-			IRoom playerRoom = RoomController.Rooms[player._PlayerLocation];
+			IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
 			int itemIndex = playerRoom._RoomObjects.FindIndex(
 				f => f._Name == input[1] || f._Name.Contains(input[1]));
 			if (!(playerRoom._RoomObjects[itemIndex] is IEquipment item))

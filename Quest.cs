@@ -63,7 +63,7 @@ namespace DungeonGame
 					break;
 				case QuestType.ClearLevel:
 					_TargetLevel = GameController.GetRandomNumber(1, 10);
-					_MonstersRemaining = RoomController.Rooms.Where(
+					_MonstersRemaining = RoomController._Rooms.Where(
 						room => room.Key._Z == _TargetLevel * -1).Count(
 						room => room.Value._Monster?._HitPoints > 0);
 					_QuestRewardGold = (int)_MonstersRemaining * 10;
@@ -176,7 +176,7 @@ namespace DungeonGame
 
 						break;
 					case QuestType.ClearLevel:
-						_MonstersRemaining = RoomController.Rooms.Where(
+						_MonstersRemaining = RoomController._Rooms.Where(
 							room => room.Key._Z == _TargetLevel * -1).Count(
 							room => room.Value._Monster?._HitPoints > 0);
 						if (_MonstersRemaining == 0)

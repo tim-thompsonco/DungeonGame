@@ -441,7 +441,7 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				portalString);
-			IRoom playerRoom = RoomController.Rooms[player._PlayerLocation];
+			IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
 			playerRoom.LookRoom();
 		}
 	}

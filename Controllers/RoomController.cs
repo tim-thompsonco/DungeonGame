@@ -4,20 +4,24 @@ namespace DungeonGame.Controllers
 {
 	public static class RoomController
 	{
-		public static Dictionary<Coordinate, IRoom> Rooms { get; set; }
+		public static Dictionary<Coordinate, IRoom> _Rooms { get; set; }
 
 		public static void ChangeRoom(Player player, Coordinate newCoord)
 		{
 			player._PlayerLocation = newCoord;
-			var playerRoom = Rooms[player._PlayerLocation];
+			IRoom playerRoom = _Rooms[player._PlayerLocation];
 			playerRoom.LookRoom();
-			if (!playerRoom._IsDiscovered) playerRoom._IsDiscovered = true;
+			if (!playerRoom._IsDiscovered)
+			{
+				playerRoom._IsDiscovered = true;
+			}
+
 			player._CanSave = playerRoom is TownRoom;
 		}
 		public static void SetPlayerLocation(Player player, int x, int y, int z)
 		{
-			var findCoord = new Coordinate(x, y, z);
-			var room = Rooms[findCoord];
+			Coordinate findCoord = new Coordinate(x, y, z);
+			IRoom room = _Rooms[findCoord];
 			if (room != null)
 			{
 				player._PlayerLocation = findCoord;
@@ -26,7 +30,11 @@ namespace DungeonGame.Controllers
 			{
 				return;
 			}
-			if (!room._IsDiscovered) room._IsDiscovered = true;
+			if (!room._IsDiscovered)
+			{
+				room._IsDiscovered = true;
+			}
+
 			player._CanSave = room is TownRoom;
 		}
 	}

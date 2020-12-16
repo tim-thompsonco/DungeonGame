@@ -418,7 +418,7 @@ namespace DungeonGame
 			IRoom room;
 			try
 			{
-				room = RoomController.Rooms[findCoord];
+				room = RoomController._Rooms[findCoord];
 			}
 			catch (KeyNotFoundException)
 			{
@@ -428,7 +428,7 @@ namespace DungeonGame
 					"You can't attack in that direction!");
 				return;
 			}
-			DungeonRoom opponentRoom = RoomController.Rooms[findCoord] as DungeonRoom;
+			DungeonRoom opponentRoom = RoomController._Rooms[findCoord] as DungeonRoom;
 			Monster opponent = opponentRoom?._Monster;
 			if (opponent == null)
 			{

@@ -19,17 +19,17 @@ namespace DungeonGameTests
 				_MaxHitPoints = 100,
 				_HitPoints = 10
 			};
-			RoomController.Rooms = new Dictionary<Coordinate, IRoom> {
+			RoomController._Rooms = new Dictionary<Coordinate, IRoom> {
 				{new Coordinate(0, 0, 0), new DungeonRoom(1, 1)},
 				{new Coordinate(0, 1, 0), new DungeonRoom(1, 1)},
 				{new Coordinate(1, 0, 0), new DungeonRoom(1, 1)}
 			};
 			Coordinate roomOneCoord = new Coordinate(0, 1, 0);
 			Coordinate roomTwoCoord = new Coordinate(1, 0, 0);
-			RoomController.Rooms[roomTwoCoord]._Monster = null;
-			RoomController.Rooms[roomOneCoord]._Monster = new Monster(3, Monster.MonsterType.Demon)
+			RoomController._Rooms[roomTwoCoord]._Monster = null;
+			RoomController._Rooms[roomOneCoord]._Monster = new Monster(3, Monster.MonsterType.Demon)
 			{ _HitPoints = 100, _MaxHitPoints = 100 };
-			Monster monster = RoomController.Rooms[roomOneCoord]._Monster;
+			Monster monster = RoomController._Rooms[roomOneCoord]._Monster;
 			MonsterBuilder.BuildMonster(monster);
 			RoomController.SetPlayerLocation(player, 0, 0, 0);
 			GearController.EquipInitialGear(player);

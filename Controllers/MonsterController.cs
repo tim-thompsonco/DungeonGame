@@ -6,15 +6,15 @@ namespace DungeonGame.Controllers
 	{
 		public static void DisplayStats(Monster monster)
 		{
-			var opponentHealthString = "Opponent HP: " + monster._HitPoints + " / " + monster._MaxHitPoints;
+			string opponentHealthString = $"Opponent HP: {monster._HitPoints} / {monster._MaxHitPoints}";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				opponentHealthString);
-			var healLineOutput = new List<string>();
-			var hitPointMaxUnits = monster._MaxHitPoints / 10;
-			var hitPointUnits = monster._HitPoints / hitPointMaxUnits;
-			for (var i = 0; i < hitPointUnits; i++)
+			List<string> healLineOutput = new List<string>();
+			int hitPointMaxUnits = monster._MaxHitPoints / 10;
+			int hitPointUnits = monster._HitPoints / hitPointMaxUnits;
+			for (int i = 0; i < hitPointUnits; i++)
 			{
 				healLineOutput.Add(Settings.FormatGeneralInfoText());
 				healLineOutput.Add(Settings.FormatHealthBackground());
@@ -28,7 +28,7 @@ namespace DungeonGame.Controllers
 		}
 		public static int CheckArmorRating(Monster monster)
 		{
-			var totalArmorRating = 0;
+			int totalArmorRating = 0;
 			if (monster._MonsterChestArmor != null && monster._MonsterChestArmor._Equipped)
 			{
 				totalArmorRating += monster._MonsterChestArmor._ArmorRating;
@@ -49,7 +49,7 @@ namespace DungeonGame.Controllers
 			{
 				return opponent._Spellbook[index]._Offensive._Amount;
 			}
-			var damageReductionPercentage = opponent._Spellbook[index]._DamageGroup switch
+			double damageReductionPercentage = opponent._Spellbook[index]._DamageGroup switch
 			{
 				MonsterSpell.DamageType.Fire => (player._FireResistance / 100.0),
 				MonsterSpell.DamageType.Frost => (player._FrostResistance / 100.0),

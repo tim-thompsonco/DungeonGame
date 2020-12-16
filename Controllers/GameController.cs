@@ -80,7 +80,7 @@ namespace DungeonGame.Controllers
 					}
 				}
 			}
-			foreach (IRoom room in RoomController.Rooms.Values)
+			foreach (IRoom room in RoomController._Rooms.Values)
 			{
 				foreach (IName roomObject in room._RoomObjects.Where(
 					roomObject => roomObject?.GetType() == typeof(Monster)))
@@ -343,7 +343,7 @@ namespace DungeonGame.Controllers
 					TypeNameHandling = TypeNameHandling.Auto,
 					NullValueHandling = NullValueHandling.Ignore
 				};
-				RoomController.Rooms = JsonConvert.DeserializeObject<Dictionary<Coordinate, IRoom>>(File.ReadAllText(
+				RoomController._Rooms = JsonConvert.DeserializeObject<Dictionary<Coordinate, IRoom>>(File.ReadAllText(
 					"gamesave.json"), serializerSettings);
 				// Insert blank space before game reload info for formatting
 				OutputController.Display.StoreUserOutput(
@@ -363,7 +363,7 @@ namespace DungeonGame.Controllers
 			catch (FileNotFoundException)
 			{
 				// Create new dungeon
-				RoomController.Rooms = new RoomBuilder(200, 10, 0, 4, 0).RetrieveSpawnRooms();
+				RoomController._Rooms = new RoomBuilder(200, 10, 0, 4, 0).RetrieveSpawnRooms();
 			}
 		}
 		public static bool QuitGame(Player player)
@@ -417,7 +417,7 @@ namespace DungeonGame.Controllers
 				using (StreamWriter sw = new StreamWriter("gamesave.json"))
 				using (JsonTextWriter writer = new JsonTextWriter(sw))
 				{
-					serializerRooms.Serialize(writer, RoomController.Rooms, typeof(Dictionary<Coordinate, IRoom>));
+					serializerRooms.Serialize(writer, RoomController._Rooms, typeof(Dictionary<Coordinate, IRoom>));
 				}
 				outputString = "Your game has been saved.";
 				OutputController.Display.StoreUserOutput(

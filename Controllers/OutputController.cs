@@ -15,11 +15,11 @@ namespace DungeonGame.Controllers
 
 		private static UserOutput BuildMap(Player player, int height, int width)
 		{
-			var output = new UserOutput();
+			UserOutput output = new UserOutput();
 			// Draw top border of map
-			var mapBorder = new StringBuilder();
+			StringBuilder mapBorder = new StringBuilder();
 			// Minimap border needs to extend same width as minimap itself in either direction
-			for (var b = 0; b < Settings.GetMiniMapBorderWidth(); b++)
+			for (int b = 0; b < Settings.GetMiniMapBorderWidth(); b++)
 			{
 				mapBorder.Append("=");
 			}
@@ -28,25 +28,25 @@ namespace DungeonGame.Controllers
 				Settings.FormatDefaultBackground(),
 				mapBorder.ToString());
 			// Get player coordinates and room player is located in
-			var playerX = player._PlayerLocation._X;
-			var playerY = player._PlayerLocation._Y;
-			var playerZ = player._PlayerLocation._Z;
+			int playerX = player._PlayerLocation._X;
+			int playerY = player._PlayerLocation._Y;
+			int playerZ = player._PlayerLocation._Z;
 			/* Map starts drawing from top left, so it needs to decrement since
 			each new console writeline pushes screen down instead of up */
-			for (var i = playerY + height; i > playerY - height; i--)
+			for (int i = playerY + height; i > playerY - height; i--)
 			{
-				var sameLineOutput = new List<string>();
-				var startLeftPos = playerX - width;
-				var endRightPos = playerX + width - 1;
-				for (var j = startLeftPos; j <= endRightPos; j++)
+				List<string> sameLineOutput = new List<string>();
+				int startLeftPos = playerX - width;
+				int endRightPos = playerX + width - 1;
+				for (int j = startLeftPos; j <= endRightPos; j++)
 				{
-					var mapX = j;
-					var mapY = i;
-					var mapZ = playerZ;
-					var findCoord = new Coordinate(mapX, mapY, mapZ);
-					if (RoomController.Rooms.ContainsKey(findCoord))
+					int mapX = j;
+					int mapY = i;
+					int mapZ = playerZ;
+					Coordinate findCoord = new Coordinate(mapX, mapY, mapZ);
+					if (RoomController._Rooms.ContainsKey(findCoord))
 					{
-						var room = RoomController.Rooms[findCoord];
+						IRoom room = RoomController._Rooms[findCoord];
 						if (room._IsDiscovered)
 						{
 							if (j == startLeftPos)
@@ -182,43 +182,39 @@ namespace DungeonGame.Controllers
 		}
 		public static UserOutput ShowEffects(Player player)
 		{
-			var effectUserOutput = new UserOutput();
-			var badEffectUserOutput = new UserOutput();
-			var goodEffectUserOutput = new UserOutput();
+			UserOutput effectUserOutput = new UserOutput();
+			UserOutput badEffectUserOutput = new UserOutput();
+			UserOutput goodEffectUserOutput = new UserOutput();
 			// Draw title to show for player effects
 			effectUserOutput.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				"Player _Effects:");
-			var activeEffects = 0;
-			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (var effect in player._Effects)
+			int activeEffects = 0;
+			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+			foreach (Effect effect in player._Effects)
 			{
 				string effectOutput;
 				if (player._InCombat)
 				{
 					if (effect._EffectMaxRound + 1 - effect._EffectCurRound > 1)
 					{
-						effectOutput = "(" + (effect._EffectMaxRound + 1 - effect._EffectCurRound) + " rounds) " +
-									   textInfo.ToTitleCase(effect._Name);
+						effectOutput = $"({effect._EffectMaxRound + 1 - effect._EffectCurRound} rounds) {textInfo.ToTitleCase(effect._Name)}";
 					}
 					else
 					{
-						effectOutput = "(" + (effect._EffectMaxRound + 1 - effect._EffectCurRound) + " round) " +
-									   textInfo.ToTitleCase(effect._Name);
+						effectOutput = $"({effect._EffectMaxRound + 1 - effect._EffectCurRound} round) {textInfo.ToTitleCase(effect._Name)}";
 					}
 				}
 				else
 				{
 					if (effect._EffectMaxRound + 1 - effect._EffectCurRound > 1)
 					{
-						effectOutput = "(" + (effect._EffectMaxRound + 1 - effect._EffectCurRound) * effect._TickDuration +
-									   " seconds) " + textInfo.ToTitleCase(effect._Name);
+						effectOutput = $"({(effect._EffectMaxRound + 1 - effect._EffectCurRound) * effect._TickDuration} seconds) {textInfo.ToTitleCase(effect._Name)}";
 					}
 					else
 					{
-						effectOutput = "(" + (effect._EffectMaxRound + 1 - effect._EffectCurRound) * effect._TickDuration +
-									   " second) " + textInfo.ToTitleCase(effect._Name);
+						effectOutput = $"({(effect._EffectMaxRound + 1 - effect._EffectCurRound) * effect._TickDuration} second) {textInfo.ToTitleCase(effect._Name)}";
 					}
 				}
 				activeEffects++;
@@ -245,19 +241,19 @@ namespace DungeonGame.Controllers
 					"None.");
 			}
 			goodEffectUserOutput.Output.OrderBy(output => output[2]);
-			foreach (var output in goodEffectUserOutput.Output)
+			foreach (List<string> output in goodEffectUserOutput.Output)
 			{
 				effectUserOutput.Output.Add(output);
 			}
 			badEffectUserOutput.Output.OrderBy(output => output[2]);
-			foreach (var output in badEffectUserOutput.Output)
+			foreach (List<string> output in badEffectUserOutput.Output)
 			{
 				effectUserOutput.Output.Add(output);
 			}
 			// Create bottom border for effects area
-			var effectsBorder = new StringBuilder();
+			StringBuilder effectsBorder = new StringBuilder();
 			// _Effects border needs to extend same width as minimap itself in either direction
-			for (var b = 0; b < Settings.GetMiniMapBorderWidth(); b++)
+			for (int b = 0; b < Settings.GetMiniMapBorderWidth(); b++)
 			{
 				effectsBorder.Append("=");
 			}
@@ -269,28 +265,29 @@ namespace DungeonGame.Controllers
 		}
 		public static UserOutput ShowQuests(Player player)
 		{
-			var questUserOutput = new UserOutput();
+			UserOutput questUserOutput = new UserOutput();
 			// Draw title to show for player quest log
 			questUserOutput.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				"Player Quests:");
-			var quests = 0;
-			var textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (var quest in player._QuestLog)
+			int quests = 0;
+			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+			foreach (Quest quest in player._QuestLog)
 			{
-				var questOutput = quest._QuestCategory switch
+				string questOutput = quest._QuestCategory switch
 				{
-					Quest.QuestType.KillCount => (textInfo.ToTitleCase(quest._Name) + " (" + quest._CurrentKills + "/" +
-												  quest._RequiredKills + " monsters)"),
-					Quest.QuestType.KillMonster => (textInfo.ToTitleCase(quest._Name) + " (" + quest._CurrentKills + "/" +
-													quest._RequiredKills + " " + quest._MonsterKillType + "s)"),
-					Quest.QuestType.ClearLevel => (textInfo.ToTitleCase(quest._Name) + " (Lvl: " + quest._TargetLevel + " | " +
-												   quest._MonstersRemaining + " monsters left)"),
+					Quest.QuestType.KillCount => $"{textInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} monsters)",
+					Quest.QuestType.KillMonster => $"{textInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} {quest._MonsterKillType}s)",
+					Quest.QuestType.ClearLevel => $"{textInfo.ToTitleCase(quest._Name)} (Lvl: {quest._TargetLevel} | {quest._MonstersRemaining} monsters left)",
 					_ => throw new ArgumentOutOfRangeException()
 				};
-				var questStringBuilder = new StringBuilder(questOutput);
-				if (quest._QuestCompleted) questStringBuilder.Append(" (Complete)");
+				StringBuilder questStringBuilder = new StringBuilder(questOutput);
+				if (quest._QuestCompleted)
+				{
+					questStringBuilder.Append(" (Complete)");
+				}
+
 				quests++;
 				questUserOutput.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
@@ -305,9 +302,9 @@ namespace DungeonGame.Controllers
 					"None.");
 			}
 			// Create bottom border for player quest log
-			var questsBorder = new StringBuilder();
+			StringBuilder questsBorder = new StringBuilder();
 			// Quest log border needs to extend same width as minimap itself in either direction
-			for (var b = 0; b < Settings.GetMiniMapBorderWidth(); b++)
+			for (int b = 0; b < Settings.GetMiniMapBorderWidth(); b++)
 			{
 				questsBorder.Append("=");
 			}
@@ -321,7 +318,7 @@ namespace DungeonGame.Controllers
 		{
 			PlayerController.DisplayPlayerStats(player);
 			MonsterController.DisplayStats(opponent);
-			RoomController.Rooms[player._PlayerLocation].ShowCommands();
+			RoomController._Rooms[player._PlayerLocation].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = ShowEffects(player);
 			QuestDisplay = ShowQuests(player);
@@ -331,7 +328,7 @@ namespace DungeonGame.Controllers
 		public static void ShowUserOutput(Player player)
 		{
 			PlayerController.DisplayPlayerStats(player);
-			RoomController.Rooms[player._PlayerLocation].ShowCommands();
+			RoomController._Rooms[player._PlayerLocation].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = ShowEffects(player);
 			QuestDisplay = ShowQuests(player);

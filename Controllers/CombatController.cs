@@ -96,7 +96,7 @@ namespace DungeonGame.Controllers
 				_Player._InCombat = false;
 				_Opponent._InCombat = false;
 				_FleeSuccess = true;
-				IRoom playerRoom = RoomController.Rooms[_Player._PlayerLocation];
+				IRoom playerRoom = RoomController._Rooms[_Player._PlayerLocation];
 				int playerX = _Player._PlayerLocation._X;
 				int playerY = _Player._PlayerLocation._Y;
 				int playerZ = _Player._PlayerLocation._Z;

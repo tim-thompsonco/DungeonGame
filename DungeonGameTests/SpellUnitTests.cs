@@ -265,7 +265,7 @@ namespace DungeonGameTests
 			/* Town Portal should change location of player to where portal is set to, which is 0, 7, 0, town entrance */
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
-			RoomController.Rooms = new RoomBuilder(100, 5, 0, 4, 0).RetrieveSpawnRooms();
+			RoomController._Rooms = new RoomBuilder(100, 5, 0, 4, 0).RetrieveSpawnRooms();
 			player._Spellbook.Add(new PlayerSpell(
 				"town portal", 100, 1, PlayerSpell.SpellType.TownPortal, 2));
 			string[] inputInfo = new[] { "spell", "town", "portal" };
