@@ -1,4 +1,5 @@
 ﻿using DungeonGame.Items;
+using DungeonGame.Items.Consumables.Kits;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -94,6 +95,7 @@ namespace DungeonGame.Controllers
 				effect => effect._EffectGroup == Effect.EffectType.ChangeArmor).Sum(effect => effect._EffectAmountOverTime);
 			return totalArmorRating < 0 ? 0 : totalArmorRating;
 		}
+
 		public static void UseWeaponKit(Player player, string[] userInput)
 		{
 			int kitIndex = player._Consumables.FindIndex(f => f._Name.Contains(userInput[2]));
@@ -118,25 +120,6 @@ namespace DungeonGame.Controllers
 			Weapon weapon = player._Inventory[weaponIndex] as Weapon;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string weaponName = textInfo.ToTitleCase(weapon._Name);
-			if (player._Consumables[kitIndex]._KitCategory != Consumable.KitType.Weapon)
-			{
-				OutputController.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					$"You can't upgrade {weaponName} with that!");
-				return;
-			}
-			if (player._Consumables[kitIndex]._ChangeWeapon._KitCategory == ChangeWeapon.KitType.Bowstring &&
-				weapon._WeaponGroup != Weapon.WeaponType.Bow ||
-				player._Consumables[kitIndex]._ChangeWeapon._KitCategory == ChangeWeapon.KitType.Grindstone &&
-				weapon._WeaponGroup == Weapon.WeaponType.Bow)
-			{
-				OutputController.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					$"You can't upgrade {weaponName} with that!");
-				return;
-			}
 			if (!weapon._Equipped)
 			{
 				bool inputValid = false;
@@ -161,15 +144,16 @@ namespace DungeonGame.Controllers
 					}
 				}
 			}
-			player._Consumables[kitIndex]._ChangeWeapon.ChangeWeaponPlayer(weapon);
-			weapon._ItemValue += player._Consumables[kitIndex]._ItemValue;
-			string upgradeSuccess = $"You upgraded {weaponName} with a weapon kit.";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				upgradeSuccess);
-			player._Consumables.RemoveAt(kitIndex);
+
+			WeaponKit weaponKit = player._Consumables[kitIndex] as WeaponKit;
+			weaponKit.AttemptAugmentPlayerWeapon(weapon);
+
+			if (weaponKit._KitHasBeenUsed)
+			{
+				player._Consumables.RemoveAt(kitIndex);
+			}
 		}
+
 		public static void UseArmorKit(Player player, string[] userInput)
 		{
 			int kitIndex = player._Consumables.FindIndex(f => f._Name.Contains(userInput[2]));
@@ -194,28 +178,6 @@ namespace DungeonGame.Controllers
 			Armor armor = player._Inventory[armorIndex] as Armor;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string armorName = textInfo.ToTitleCase(armor._Name);
-			if (player._Consumables[kitIndex]._KitCategory != Consumable.KitType.Armor)
-			{
-				OutputController.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					$"You can't upgrade {armorName} with that!");
-				return;
-			}
-			if (player._Consumables[kitIndex]._ChangeArmor._KitCategory == ChangeArmor.KitType.Cloth &&
-				armor._ArmorGroup != Armor.ArmorType.Cloth ||
-				player._Consumables[kitIndex]._ChangeArmor._KitCategory == ChangeArmor.KitType.Leather &&
-				armor._ArmorGroup != Armor.ArmorType.Leather ||
-				player._Consumables[kitIndex]._ChangeArmor._KitCategory == ChangeArmor.KitType.Plate &&
-				 armor._ArmorGroup != Armor.ArmorType.Plate ||
-				player._Consumables[kitIndex]._KitCategory == Consumable.KitType.Weapon)
-			{
-				OutputController.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					$"You can't upgrade {armorName} with that!");
-				return;
-			}
 			if (!armor._Equipped)
 			{
 				bool inputValid = false;
@@ -240,14 +202,14 @@ namespace DungeonGame.Controllers
 					}
 				}
 			}
-			player._Consumables[kitIndex]._ChangeArmor.ChangeArmorPlayer(armor);
-			armor._ItemValue += player._Consumables[kitIndex]._ItemValue;
-			string upgradeSuccess = $"You upgraded {armorName} with an armor kit.";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				upgradeSuccess);
-			player._Consumables.RemoveAt(kitIndex);
+
+			ArmorKit armorKit = player._Consumables[kitIndex] as ArmorKit;
+			armorKit.AttemptAugmentArmorPlayer(armor);
+
+			if (armorKit._KitHasBeenUsed)
+			{
+				player._Consumables.RemoveAt(kitIndex);
+			}
 		}
 		public static void DropItem(Player player, string[] input)
 		{

@@ -1,6 +1,7 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables;
+using DungeonGame.Items.Consumables.Kits;
 using DungeonGame.Items.Consumables.Potions;
 using System;
 
@@ -231,43 +232,42 @@ namespace DungeonGame
 		}
 		private static void BuildMonsterKit(Monster monster)
 		{
-			int kitRandomNum = GameController.GetRandomNumber(1, 2);
-			Consumable.KitType kitCategory = kitRandomNum switch
-			{
-				1 => Consumable.KitType.Armor,
-				2 => Consumable.KitType.Weapon,
-				_ => throw new ArgumentOutOfRangeException()
-			};
 			int kitLevelRandomNum = GameController.GetRandomNumber(1, 3);
-			Consumable.KitLevel kitLevel = kitLevelRandomNum switch
+			Kit.KitLevel kitLevel = kitLevelRandomNum switch
 			{
-				1 => Consumable.KitLevel.Light,
-				2 => Consumable.KitLevel.Medium,
-				3 => Consumable.KitLevel.Heavy,
+				1 => Kit.KitLevel.Light,
+				2 => Kit.KitLevel.Medium,
+				3 => Kit.KitLevel.Heavy,
 				_ => throw new ArgumentOutOfRangeException()
 			};
-			if (kitCategory == Consumable.KitType.Armor)
+
+			int kitRandomNum = GameController.GetRandomNumber(1, 2);
+			if (kitRandomNum == 1)
 			{
+				// Create armor kit
 				int kitTypeRandomNum = GameController.GetRandomNumber(1, 3);
-				ChangeArmor.KitType kitType = kitTypeRandomNum switch
+				ArmorKit.KitType kitType = kitTypeRandomNum switch
 				{
-					1 => ChangeArmor.KitType.Cloth,
-					2 => ChangeArmor.KitType.Leather,
-					3 => ChangeArmor.KitType.Plate,
+					1 => ArmorKit.KitType.Cloth,
+					2 => ArmorKit.KitType.Leather,
+					3 => ArmorKit.KitType.Plate,
 					_ => throw new ArgumentOutOfRangeException()
 				};
-				monster._MonsterItems.Add(new Consumable(kitLevel, kitCategory, kitType));
+
+				monster._MonsterItems.Add(new ArmorKit(kitLevel, kitType));
 			}
 			else
 			{
+				// Create weapon kit
 				int kitTypeRandomNum = GameController.GetRandomNumber(1, 2);
-				ChangeWeapon.KitType kitType = kitTypeRandomNum switch
+				WeaponKit.KitType kitType = kitTypeRandomNum switch
 				{
-					1 => ChangeWeapon.KitType.Bowstring,
-					2 => ChangeWeapon.KitType.Grindstone,
+					1 => WeaponKit.KitType.Bowstring,
+					2 => WeaponKit.KitType.Grindstone,
 					_ => throw new ArgumentOutOfRangeException()
 				};
-				monster._MonsterItems.Add(new Consumable(kitLevel, kitCategory, kitType));
+
+				monster._MonsterItems.Add(new WeaponKit(kitLevel, kitType));
 			}
 		}
 		private static void BuildMonsterArmor(Monster monster)

@@ -2,6 +2,7 @@
 using DungeonGame.Controllers;
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables;
+using DungeonGame.Items.Consumables.Kits;
 using DungeonGame.Items.Consumables.Potions;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -216,8 +217,7 @@ namespace DungeonGameTests
 		{
 			Player player = new Player("test", Player.PlayerClassType.Mage)
 			{
-				_Consumables = new List<Consumable> {new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Armor,
-					ChangeArmor.KitType.Cloth)}
+				_Consumables = new List<Consumable> { new ArmorKit(Kit.KitLevel.Light, ArmorKit.KitType.Cloth)}
 			};
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
@@ -225,7 +225,8 @@ namespace DungeonGameTests
 			Armor armor = player._Inventory[armorIndex] as Armor;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string armorName = textInfo.ToTitleCase(player._Inventory[armorIndex]._Name);
-			int kitAmount = player._Consumables[0]._ChangeArmor._ChangeAmount;
+			ArmorKit armorKit = player._Consumables[0] as ArmorKit;
+			int kitAmount = armorKit._KitAugmentAmount;
 			string kitName = player._Consumables[0]._Name;
 			string[] input = new[] { "enhance", "doesn't exist", kitName };
 			int armorAmount = armor._ArmorRating;
@@ -244,31 +245,20 @@ namespace DungeonGameTests
 			Assert.AreEqual(upgradeSuccess, OutputController.Display.Output[2][2]);
 			Assert.AreEqual(armorAmount + kitAmount, armor._ArmorRating);
 			Assert.IsEmpty(player._Consumables);
-			player._Consumables.Add(new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Armor,
-				ChangeArmor.KitType.Leather));
+			player._Consumables.Add(new ArmorKit(Kit.KitLevel.Light, ArmorKit.KitType.Leather));
 			kitName = player._Consumables[0]._Name;
 			input = new[] { "enhance", armorName, kitName };
 			GearController.UseArmorKit(player, input);
 			string enhanceFail = $"You can't upgrade {armorName} with that!";
 			Assert.IsNotEmpty(player._Consumables);
-			Assert.AreEqual(enhanceFail
-			, OutputController.Display.Output[3][2]);
-			player._Consumables[0] = new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Weapon,
-				ChangeArmor.KitType.Cloth);
-			kitName = player._Consumables[0]._Name;
-			input = new[] { "enhance", armorName, kitName };
-			GearController.UseArmorKit(player, input);
-			Assert.IsNotEmpty(player._Consumables);
-			Assert.AreEqual(enhanceFail
-				, OutputController.Display.Output[4][2]);
+			Assert.AreEqual(enhanceFail, OutputController.Display.Output[3][2]);
 		}
 		[Test]
 		public void WeaponUpgradeKitUnitTest()
 		{
 			Player player = new Player("test", Player.PlayerClassType.Mage)
 			{
-				_Consumables = new List<Consumable> {new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Weapon,
-					ChangeWeapon.KitType.Grindstone)}
+				_Consumables = new List<Consumable> {new WeaponKit(Kit.KitLevel.Light, WeaponKit.KitType.Grindstone)}
 			};
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
@@ -276,7 +266,8 @@ namespace DungeonGameTests
 			Weapon weapon = player._Inventory[weaponIndex] as Weapon;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string weaponName = textInfo.ToTitleCase(player._Inventory[weaponIndex]._Name);
-			int kitAmount = player._Consumables[0]._ChangeWeapon._ChangeAmount;
+			WeaponKit weaponKit = player._Consumables[0] as WeaponKit;
+			int kitAmount = weaponKit._KitAugmentAmount;
 			string kitName = player._Consumables[0]._Name;
 			string[] input = new[] { "enhance", "doesn't exist", kitName };
 			int weaponAmount = weapon._RegDamage;
@@ -295,8 +286,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(upgradeSuccess, OutputController.Display.Output[2][2]);
 			Assert.AreEqual(weaponAmount + kitAmount, weapon._RegDamage);
 			Assert.IsEmpty(player._Consumables);
-			player._Consumables.Add(new Consumable(Consumable.KitLevel.Light, Consumable.KitType.Weapon,
-				ChangeWeapon.KitType.Bowstring));
+			player._Consumables.Add(new WeaponKit(Kit.KitLevel.Light, WeaponKit.KitType.Bowstring));
 			kitName = player._Consumables[0]._Name;
 			input = new[] { "enhance", weaponName, kitName };
 			GearController.UseWeaponKit(player, input);

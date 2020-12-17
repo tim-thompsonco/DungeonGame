@@ -37,8 +37,6 @@
     <Compile Include="Builders\PlayerBuilder.cs" />
     <Compile Include="Builders\RoomBuilder.cs" />
     <Compile Include="Builders\RoomBuilderHelper.cs" />
-    <Compile Include="Consumable Properties\ChangeArmor.cs" />
-    <Compile Include="Consumable Properties\ChangeWeapon.cs" />
     <Compile Include="Coordinate.cs" />
     <Compile Include="Effect.cs" />
     <Compile Include="Controllers\CombatController.cs" />
@@ -55,6 +53,9 @@
     <Compile Include="Items\Armor.cs" />
     <Compile Include="Items\Consumable.cs" />
     <Compile Include="Items\Consumables\Arrows.cs" />
+    <Compile Include="Items\Consumables\Kit.cs" />
+    <Compile Include="Items\Consumables\Kits\ArmorKit.cs" />
+    <Compile Include="Items\Consumables\Kits\WeaponKit.cs" />
     <Compile Include="Items\Consumables\Potion.cs" />
     <Compile Include="Items\Consumables\Potions\HealthPotion.cs" />
     <Compile Include="Items\Consumables\Potions\ManaPotion.cs" />
