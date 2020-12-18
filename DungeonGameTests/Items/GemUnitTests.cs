@@ -1,18 +1,14 @@
 ﻿using DungeonGame.Items;
 using NUnit.Framework;
 
-namespace DungeonGameTests.Items
-{
-	public class GemUnitTests
-	{
+namespace DungeonGameTests.Items {
+	public class GemUnitTests {
 		[SetUp]
-		public void Setup()
-		{
+		public void Setup() {
 		}
 
 		[Test]
-		public void GemCreationUnitTestLevelOne()
-		{
+		public void GemCreationUnitTestLevelOne() {
 			Gem gem = new Gem(1, Gem.GemType.Amethyst);
 			string gemDesc = $"A {gem._Name} that is worth some money to the right vendor.";
 
@@ -23,8 +19,7 @@ namespace DungeonGameTests.Items
 		}
 
 		[Test]
-		public void GemCreationUnitTestLevelThree()
-		{
+		public void GemCreationUnitTestLevelThree() {
 			Gem gem = new Gem(3, Gem.GemType.Amethyst);
 			string gemDesc = $"A {gem._Name} that is worth some money to the right vendor.";
 
@@ -35,8 +30,7 @@ namespace DungeonGameTests.Items
 		}
 
 		[Test]
-		public void GemCreationUnitTestLevelFour()
-		{
+		public void GemCreationUnitTestLevelFour() {
 			Gem gem = new Gem(4, Gem.GemType.Amethyst);
 			string gemDesc = $"A {gem._Name} that is worth some money to the right vendor.";
 
@@ -47,8 +41,7 @@ namespace DungeonGameTests.Items
 		}
 
 		[Test]
-		public void GemCreationUnitTestLevelSix()
-		{
+		public void GemCreationUnitTestLevelSix() {
 			Gem gem = new Gem(6, Gem.GemType.Amethyst);
 			string gemDesc = $"A {gem._Name} that is worth some money to the right vendor.";
 
@@ -59,8 +52,7 @@ namespace DungeonGameTests.Items
 		}
 
 		[Test]
-		public void GemCreationUnitTestLevelSeven()
-		{
+		public void GemCreationUnitTestLevelSeven() {
 			Gem gem = new Gem(7, Gem.GemType.Amethyst);
 			string gemDesc = $"A {gem._Name} that is worth some money to the right vendor.";
 

@@ -1,12 +1,9 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Players;
 
-namespace DungeonGame.Items.Consumables.Potions
-{
-	public class StatPotion : IItem, IPotion
-	{
-		public enum StatType
-		{
+namespace DungeonGame.Items.Consumables.Potions {
+	public class StatPotion : IItem, IPotion {
+		public enum StatType {
 			Intelligence,
 			Strength,
 			Dexterity,
@@ -21,8 +18,7 @@ namespace DungeonGame.Items.Consumables.Potions
 		public StatType _StatCategory { get; }
 		private readonly int _StatEffectDurationInSeconds;
 
-		public StatPotion(PotionStrength potionStrength, StatType statType)
-		{
+		public StatPotion(PotionStrength potionStrength, StatType statType) {
 			_Weight = 1;
 			_PotionStrength = potionStrength;
 			_StatCategory = statType;
@@ -33,50 +29,37 @@ namespace DungeonGame.Items.Consumables.Potions
 			_StatEffectDurationInSeconds = 600;
 		}
 
-		public string GetPotionName()
-		{
+		public string GetPotionName() {
 			// Potion naming format is "<potion type> potion" for normal potion
-			if (_PotionStrength == PotionStrength.Normal)
-			{
+			if (_PotionStrength == PotionStrength.Normal) {
 				return $"{_StatCategory.ToString().ToLower()} potion";
-			}
-			// Potion naming format is "<potion strength> <potion type> potion" for minor or greater potions
-			else
-			{
+			} else {
+				// Potion naming format is "<potion strength> <potion type> potion" for minor or greater potions
 				return $"{_PotionStrength.ToString().ToLower()} {_StatCategory.ToString().ToLower()} potion";
 			}
 		}
 
-		private int GetStatPotionAmount()
-		{
-			if (_PotionStrength == PotionStrength.Minor)
-			{
+		private int GetStatPotionAmount() {
+			if (_PotionStrength == PotionStrength.Minor) {
 				return 5;
-			}
-			else if (_PotionStrength == PotionStrength.Normal)
-			{
+			} else if (_PotionStrength == PotionStrength.Normal) {
 				return 10;
-			}
-			// If potion strength is not minor or normal, then it is greater
-			else
-			{
+			} else {
+				// If potion strength is not minor or normal, then it is greater
 				return 15;
 			}
 		}
 
-		public void DrinkPotion(Player player)
-		{
+		public void DrinkPotion(Player player) {
 			AugmentPlayerStat(player);
 			DisplayDrankPotionMessage();
 		}
 
-		private Player AugmentPlayerStat(Player player)
-		{
+		private Player AugmentPlayerStat(Player player) {
 			// Set effectStatCategory to Constitution by default so it is initialized
 			Effect.StatType effectStatCategory = Effect.StatType.Constitution;
 
-			switch(_StatCategory)
-			{
+			switch (_StatCategory) {
 				case StatType.Constitution:
 					player._Constitution += _StatAmount;
 					break;
@@ -104,8 +87,7 @@ namespace DungeonGame.Items.Consumables.Potions
 			return player;
 		}
 
-		public void DisplayDrankPotionMessage()
-		{
+		public void DisplayDrankPotionMessage() {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),

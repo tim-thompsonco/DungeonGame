@@ -4,32 +4,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DungeonGame
-{
-	public class RoomBuilder
-	{
+namespace DungeonGame {
+	public class RoomBuilder {
 		private int _Size { get; set; }
 		private int _Levels { get; set; }
 		private int _CurrentLevel { get; set; }
 		private Coordinate _LastRoomCoord { get; set; }
 		private Dictionary<Coordinate, IRoom> _SpawnedDungeonRooms { get; set; }
 
-		public RoomBuilder(int size, int levels, int startX, int startY, int startZ)
-		{
+		public RoomBuilder(int size, int levels, int startX, int startY, int startZ) {
 			// Create town to connect dungeon to
 			_SpawnedDungeonRooms = BuildTown();
 			// Dungeon build settings
 			_Size = size;
 			_Levels = levels;
 			int levelSize = size / levels;
-			for (int i = 0; i < levels; i++)
-			{
+			for (int i = 0; i < levels; i++) {
 				int levelRangeLowForLevel = i - 1 >= 1 ? i - 1 : 1;
 				int levelRangeHighForLevel = i + 2 <= 10 ? i + 1 : 10;
-				for (int j = 0; j < levelSize; j++)
-				{
-					if (i == 0 && j == 0)
-					{
+				for (int j = 0; j < levelSize; j++) {
+					if (i == 0 && j == 0) {
 						/* To connect static room to dynamic dungeon build, always have first room go down one, and the static
 						 room must always be up by one for the two to connect */
 						Coordinate firstRoomCoord = new Coordinate(startX, startY, startZ - 1);
@@ -44,8 +38,7 @@ namespace DungeonGame
 						_CurrentLevel--;
 						continue;
 					}
-					if (i > 0 && j == 0)
-					{
+					if (i > 0 && j == 0) {
 						/* To connect upper level to lower level, always have first room go down one, and the upper level
 						 room must always be up by one for the two to connect*/
 						IRoom oldRoom = _SpawnedDungeonRooms[_LastRoomCoord];
@@ -64,180 +57,151 @@ namespace DungeonGame
 				}
 			}
 			foreach (IRoom room in _SpawnedDungeonRooms.Values.Where(
-				room => room.GetType() == typeof(DungeonRoom)))
-			{
+				room => room.GetType() == typeof(DungeonRoom))) {
 				DetermineDungeonRoomCategory(room as DungeonRoom);
 				room._Name = RoomBuilderHelper.PopulateDungeonRoomName(room);
 				room._Desc = RoomBuilderHelper.PopulateDungeonRoomDesc(room);
 			}
 		}
 
-		public Dictionary<Coordinate, IRoom> RetrieveSpawnRooms()
-		{
+		public Dictionary<Coordinate, IRoom> RetrieveSpawnRooms() {
 			return _SpawnedDungeonRooms;
 		}
-		private void GenerateRoomDirections()
-		{
+		private void GenerateRoomDirections() {
 			IRoom room = _SpawnedDungeonRooms[_LastRoomCoord];
 			Coordinate coordWest = new Coordinate(_LastRoomCoord._X - 1, _LastRoomCoord._Y, _LastRoomCoord._Z);
-			if (_SpawnedDungeonRooms.ContainsKey(coordWest))
-			{
+			if (_SpawnedDungeonRooms.ContainsKey(coordWest)) {
 				IRoom westRoom = _SpawnedDungeonRooms[coordWest];
 				room._West = westRoom;
 				westRoom._East = room;
 			}
 			Coordinate coordNorthWest = new Coordinate(
 				_LastRoomCoord._X - 1, _LastRoomCoord._Y + 1, _LastRoomCoord._Z);
-			if (_SpawnedDungeonRooms.ContainsKey(coordNorthWest))
-			{
+			if (_SpawnedDungeonRooms.ContainsKey(coordNorthWest)) {
 				IRoom northWestRoom = _SpawnedDungeonRooms[coordNorthWest];
 				room._NorthWest = northWestRoom;
 				northWestRoom._SouthEast = room;
 			}
 			Coordinate coordNorth = new Coordinate(_LastRoomCoord._X, _LastRoomCoord._Y + 1, _LastRoomCoord._Z);
-			if (_SpawnedDungeonRooms.ContainsKey(coordNorth))
-			{
+			if (_SpawnedDungeonRooms.ContainsKey(coordNorth)) {
 				IRoom northRoom = _SpawnedDungeonRooms[coordNorth];
 				room._North = northRoom;
 				northRoom._South = room;
 			}
 			Coordinate coordNorthEast = new Coordinate(
 				_LastRoomCoord._X + 1, _LastRoomCoord._Y + 1, _LastRoomCoord._Z);
-			if (_SpawnedDungeonRooms.ContainsKey(coordNorthEast))
-			{
+			if (_SpawnedDungeonRooms.ContainsKey(coordNorthEast)) {
 				IRoom northEastRoom = _SpawnedDungeonRooms[coordNorthEast];
 				room._NorthEast = northEastRoom;
 				northEastRoom._SouthWest = room;
 			}
 			Coordinate coordEast = new Coordinate(_LastRoomCoord._X + 1, _LastRoomCoord._Y, _LastRoomCoord._Z);
-			if (_SpawnedDungeonRooms.ContainsKey(coordEast))
-			{
+			if (_SpawnedDungeonRooms.ContainsKey(coordEast)) {
 				IRoom eastRoom = _SpawnedDungeonRooms[coordEast];
 				room._East = eastRoom;
 				eastRoom._West = room;
 			}
 			Coordinate coordSouthEast = new Coordinate(
 				_LastRoomCoord._X + 1, _LastRoomCoord._Y - 1, _LastRoomCoord._Z);
-			if (_SpawnedDungeonRooms.ContainsKey(coordSouthEast))
-			{
+			if (_SpawnedDungeonRooms.ContainsKey(coordSouthEast)) {
 				IRoom southEastRoom = _SpawnedDungeonRooms[coordSouthEast];
 				room._SouthEast = southEastRoom;
 				southEastRoom._NorthWest = room;
 			}
 			Coordinate coordSouth = new Coordinate(_LastRoomCoord._X, _LastRoomCoord._Y - 1, _LastRoomCoord._Z);
-			if (_SpawnedDungeonRooms.ContainsKey(coordSouth))
-			{
+			if (_SpawnedDungeonRooms.ContainsKey(coordSouth)) {
 				IRoom southRoom = _SpawnedDungeonRooms[coordSouth];
 				room._South = southRoom;
 				southRoom._North = room;
 			}
 			Coordinate coordSouthWest = new Coordinate(
 				_LastRoomCoord._X - 1, _LastRoomCoord._Y - 1, _LastRoomCoord._Z);
-			if (_SpawnedDungeonRooms.ContainsKey(coordSouthWest))
-			{
+			if (_SpawnedDungeonRooms.ContainsKey(coordSouthWest)) {
 				IRoom southWestRoom = _SpawnedDungeonRooms[coordSouthWest];
 				room._SouthWest = southWestRoom;
 				southWestRoom._NorthEast = room;
 			}
 		}
-		private void GenerateStairwayRoomDirections()
-		{
+		private void GenerateStairwayRoomDirections() {
 			IRoom room = _SpawnedDungeonRooms[_LastRoomCoord];
 			Coordinate coordUp = new Coordinate(_LastRoomCoord._X, _LastRoomCoord._Y, _LastRoomCoord._Z + 1);
-			if (_SpawnedDungeonRooms.ContainsKey(coordUp))
-			{
+			if (_SpawnedDungeonRooms.ContainsKey(coordUp)) {
 				IRoom upRoom = _SpawnedDungeonRooms[coordUp];
 				room._Up = upRoom;
 				upRoom._Down = room;
 			}
 			Coordinate coordDown = new Coordinate(_LastRoomCoord._X, _LastRoomCoord._Y, _LastRoomCoord._Z - 1);
-			if (_SpawnedDungeonRooms.ContainsKey(coordDown))
-			{
+			if (_SpawnedDungeonRooms.ContainsKey(coordDown)) {
 				IRoom downRoom = _SpawnedDungeonRooms[coordDown];
 				room._Down = downRoom;
 				downRoom._Up = room;
 			}
 		}
-		private void GenerateDungeonRoom(int levelRangeLow, int levelRangeHigh)
-		{
+		private void GenerateDungeonRoom(int levelRangeLow, int levelRangeHigh) {
 			Coordinate oldCoord = _LastRoomCoord;
 			IRoom oldRoom = _SpawnedDungeonRooms[oldCoord];
 			Coordinate newRoomCoord = _LastRoomCoord; // Placeholder until value found in while loop
 			DungeonRoom newRoom = new DungeonRoom(levelRangeLow, levelRangeHigh);
 			bool roomCreated = false;
-			while (!roomCreated)
-			{
+			while (!roomCreated) {
 				int randomNum = GameController.GetRandomNumber(1, 6);
-				switch (randomNum)
-				{
+				switch (randomNum) {
 					case 1:
-						if (oldRoom._North == null)
-						{
+						if (oldRoom._North == null) {
 							newRoomCoord = new Coordinate(oldCoord._X, oldCoord._Y + 1, oldCoord._Z);
 							oldRoom._North = newRoom;
 							newRoom._South = oldRoom;
-							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord))
-							{
+							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
 								roomCreated = true;
 							}
 						}
 						break;
 					case 2:
-						if (oldRoom._NorthEast == null)
-						{
+						if (oldRoom._NorthEast == null) {
 							newRoomCoord = new Coordinate(oldCoord._X + 1, oldCoord._Y + 1, oldCoord._Z);
 							oldRoom._NorthEast = newRoom;
 							newRoom._SouthWest = oldRoom;
-							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord))
-							{
+							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
 								roomCreated = true;
 							}
 						}
 						break;
 					case 3:
-						if (oldRoom._NorthWest == null)
-						{
+						if (oldRoom._NorthWest == null) {
 							newRoomCoord = new Coordinate(oldCoord._X - 1, oldCoord._Y + 1, oldCoord._Z);
 							oldRoom._NorthWest = newRoom;
 							newRoom._SouthEast = oldRoom;
-							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord))
-							{
+							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
 								roomCreated = true;
 							}
 						}
 						break;
 					case 4:
-						if (oldRoom._South == null)
-						{
+						if (oldRoom._South == null) {
 							newRoomCoord = new Coordinate(oldCoord._X, oldCoord._Y - 1, oldCoord._Z);
 							oldRoom._South = newRoom;
 							newRoom._North = oldRoom;
-							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord))
-							{
+							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
 								roomCreated = true;
 							}
 						}
 						break;
 					case 5:
-						if (oldRoom._SouthEast == null)
-						{
+						if (oldRoom._SouthEast == null) {
 							newRoomCoord = new Coordinate(oldCoord._X + 1, oldCoord._Y - 1, oldCoord._Z);
 							oldRoom._SouthEast = newRoom;
 							newRoom._NorthWest = oldRoom;
-							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord))
-							{
+							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
 								roomCreated = true;
 							}
 						}
 						break;
 					case 6:
-						if (oldRoom._SouthWest == null)
-						{
+						if (oldRoom._SouthWest == null) {
 							newRoomCoord = new Coordinate(oldCoord._X - 1, oldCoord._Y - 1, oldCoord._Z);
 							oldRoom._SouthWest = newRoom;
 							newRoom._NorthEast = oldRoom;
-							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord))
-							{
+							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
 								roomCreated = true;
 							}
 						}
@@ -247,61 +211,49 @@ namespace DungeonGame
 			_SpawnedDungeonRooms.Add(newRoomCoord, newRoom);
 			_LastRoomCoord = newRoomCoord;
 		}
-		private static void DetermineDungeonRoomCategory(DungeonRoom room)
-		{
+		private static void DetermineDungeonRoomCategory(DungeonRoom room) {
 			int directionCount = 0;
-			if (room._Up != null)
-			{
+			if (room._Up != null) {
 				directionCount++;
 			}
 
-			if (room._Down != null)
-			{
+			if (room._Down != null) {
 				directionCount++;
 			}
 
-			if (room._North != null)
-			{
+			if (room._North != null) {
 				directionCount++;
 			}
 
-			if (room._NorthEast != null)
-			{
+			if (room._NorthEast != null) {
 				directionCount++;
 			}
 
-			if (room._NorthWest != null)
-			{
+			if (room._NorthWest != null) {
 				directionCount++;
 			}
 
-			if (room._South != null)
-			{
+			if (room._South != null) {
 				directionCount++;
 			}
 
-			if (room._SouthEast != null)
-			{
+			if (room._SouthEast != null) {
 				directionCount++;
 			}
 
-			if (room._SouthWest != null)
-			{
+			if (room._SouthWest != null) {
 				directionCount++;
 			}
 
-			if (directionCount == 0)
-			{
+			if (directionCount == 0) {
 				throw new ArgumentOutOfRangeException();
 			}
 
-			if (room._Up != null || room._Down != null)
-			{
+			if (room._Up != null || room._Down != null) {
 				room._RoomCategory = DungeonRoom.RoomType.Stairs;
 				return;
 			}
-			switch (directionCount)
-			{
+			switch (directionCount) {
 				case 1:
 					room._RoomCategory = DungeonRoom.RoomType.Corner;
 					return;
@@ -316,8 +268,7 @@ namespace DungeonGame
 					break;
 			}
 		}
-		private static Dictionary<Coordinate, IRoom> BuildTown()
-		{
+		private static Dictionary<Coordinate, IRoom> BuildTown() {
 			Dictionary<Coordinate, IRoom> town = new Dictionary<Coordinate, IRoom>();
 			string name = "Outside Dungeon Entrance";
 			string desc =

@@ -4,19 +4,15 @@ using DungeonGame.Players;
 using System;
 using System.Linq;
 
-namespace DungeonGame
-{
-	public class MonsterSpell
-	{
-		public enum DamageType
-		{
+namespace DungeonGame {
+	public class MonsterSpell {
+		public enum DamageType {
 			Physical,
 			Fire,
 			Frost,
 			Arcane
 		}
-		public enum SpellType
-		{
+		public enum SpellType {
 			Fireball,
 			Frostbolt,
 			Lightning
@@ -29,13 +25,11 @@ namespace DungeonGame
 
 		// Default constructor for JSON serialization
 		public MonsterSpell() { }
-		public MonsterSpell(string name, int energyCost, SpellType spellType, int monsterLevel)
-		{
+		public MonsterSpell(string name, int energyCost, SpellType spellType, int monsterLevel) {
 			_Name = name;
 			_EnergyCost = energyCost;
 			_SpellCategory = spellType;
-			switch (_SpellCategory)
-			{
+			switch (_SpellCategory) {
 				case SpellType.Fireball:
 					_DamageGroup = DamageType.Fire;
 					_Offensive = new Offensive(25 + ((monsterLevel - 1) * 5),
@@ -56,16 +50,12 @@ namespace DungeonGame
 			}
 		}
 
-		public static void CastFireOffense(Monster monster, Player player, int index)
-		{
+		public static void CastFireOffense(Monster monster, Player player, int index) {
 			monster._EnergyPoints -= monster._Spellbook[index]._EnergyCost;
 			string attackString;
-			if (monster._MonsterCategory == Monster.MonsterType.Dragon)
-			{
+			if (monster._MonsterCategory == Monster.MonsterType.Dragon) {
 				attackString = $"The {monster._Name} breathes a pillar of fire at you!";
-			}
-			else
-			{
+			} else {
 				attackString = $"The {monster._Name} casts a fireball and launches it at you!";
 			}
 			OutputController.Display.StoreUserOutput(
@@ -73,10 +63,8 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				attackString);
 			int fireSpellDamage = MonsterController.CalculateSpellDamage(player, monster, index);
-			foreach (Effect effect in player._Effects.ToList())
-			{
-				switch (effect._EffectGroup)
-				{
+			foreach (Effect effect in player._Effects.ToList()) {
+				switch (effect._EffectGroup) {
 					case Effect.EffectType.Healing:
 					case Effect.EffectType.ChangePlayerDamage:
 					case Effect.EffectType.ChangeArmor:
@@ -113,8 +101,7 @@ namespace DungeonGame
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-				if (fireSpellDamage > 0)
-				{
+				if (fireSpellDamage > 0) {
 					continue;
 				}
 
@@ -131,8 +118,7 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
-			if (monster._Spellbook[index]._Offensive._AmountOverTime <= 0)
-			{
+			if (monster._Spellbook[index]._Offensive._AmountOverTime <= 0) {
 				return;
 			}
 
@@ -146,8 +132,7 @@ namespace DungeonGame
 				monster._Spellbook[index]._Offensive._AmountCurRounds, monster._Spellbook[index]._Offensive._AmountMaxRounds,
 				1, 1, true));
 		}
-		public static void CastFrostOffense(Monster monster, Player player, int index)
-		{
+		public static void CastFrostOffense(Monster monster, Player player, int index) {
 			monster._EnergyPoints -= monster._Spellbook[index]._EnergyCost;
 			string attackString = $"The {monster._Name} conjures up a frostbolt and launches it at you!";
 			OutputController.Display.StoreUserOutput(
@@ -155,10 +140,8 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				attackString);
 			int frostSpellDamage = MonsterController.CalculateSpellDamage(player, monster, index);
-			foreach (Effect effect in player._Effects.ToList())
-			{
-				switch (effect._EffectGroup)
-				{
+			foreach (Effect effect in player._Effects.ToList()) {
+				switch (effect._EffectGroup) {
 					case Effect.EffectType.Healing:
 					case Effect.EffectType.ChangePlayerDamage:
 					case Effect.EffectType.ChangeArmor:
@@ -195,8 +178,7 @@ namespace DungeonGame
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-				if (frostSpellDamage > 0)
-				{
+				if (frostSpellDamage > 0) {
 					continue;
 				}
 
@@ -215,8 +197,7 @@ namespace DungeonGame
 				attackSuccessString);
 			int frozenEffectIndex = player._Effects.FindIndex(
 				e => e._EffectGroup == Effect.EffectType.Frozen);
-			if (frozenEffectIndex == -1)
-			{
+			if (frozenEffectIndex == -1) {
 				const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be double!";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
@@ -227,8 +208,7 @@ namespace DungeonGame
 				monster._Spellbook[index]._Offensive._AmountCurRounds, monster._Spellbook[index]._Offensive._AmountMaxRounds,
 				1.5, 1, true));
 		}
-		public static void CastArcaneOffense(Monster monster, Player player, int index)
-		{
+		public static void CastArcaneOffense(Monster monster, Player player, int index) {
 			monster._EnergyPoints -= monster._Spellbook[index]._EnergyCost;
 			string attackString = $"The {monster._Name} casts a bolt of lightning at you!";
 			OutputController.Display.StoreUserOutput(
@@ -236,10 +216,8 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				attackString);
 			int arcaneSpellDamage = MonsterController.CalculateSpellDamage(player, monster, index);
-			foreach (Effect effect in player._Effects.ToList())
-			{
-				switch (effect._EffectGroup)
-				{
+			foreach (Effect effect in player._Effects.ToList()) {
+				switch (effect._EffectGroup) {
 					case Effect.EffectType.Healing:
 					case Effect.EffectType.ChangePlayerDamage:
 					case Effect.EffectType.ChangeArmor:
@@ -276,8 +254,7 @@ namespace DungeonGame
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-				if (arcaneSpellDamage > 0)
-				{
+				if (arcaneSpellDamage > 0) {
 					continue;
 				}
 

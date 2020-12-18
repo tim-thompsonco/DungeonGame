@@ -3,13 +3,10 @@ using DungeonGame.Controllers;
 using DungeonGame.Players;
 using NUnit.Framework;
 
-namespace DungeonGameTests
-{
-	public class TrainerUnitTests
-	{
+namespace DungeonGameTests {
+	public class TrainerUnitTests {
 		[Test]
-		public void UpgradeSpellTest()
-		{
+		public void UpgradeSpellTest() {
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("placeholder", Player.PlayerClassType.Mage);
 			Trainer trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Mage);
@@ -45,8 +42,7 @@ namespace DungeonGameTests
 				OutputController.Display.Output[4][2]);
 		}
 		[Test]
-		public void UpgradeAbilityTest()
-		{
+		public void UpgradeAbilityTest() {
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("placeholder", Player.PlayerClassType.Archer);
 			Trainer trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Archer);
@@ -82,8 +78,7 @@ namespace DungeonGameTests
 				OutputController.Display.Output[4][2]);
 		}
 		[Test]
-		public void TrainAbilityTest()
-		{
+		public void TrainAbilityTest() {
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("placeholder", Player.PlayerClassType.Warrior);
 			Trainer trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Warrior);
@@ -117,8 +112,7 @@ namespace DungeonGameTests
 				OutputController.Display.Output[3][2]);
 		}
 		[Test]
-		public void TrainSpellTest()
-		{
+		public void TrainSpellTest() {
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("placeholder", Player.PlayerClassType.Warrior);
 			Trainer trainer = new Trainer("some name", "some desc", Trainer.TrainerCategory.Mage);

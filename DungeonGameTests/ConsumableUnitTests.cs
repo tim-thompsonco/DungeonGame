@@ -10,16 +10,12 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 
-namespace DungeonGameTests
-{
-	public class IItemUnitTests
-	{
+namespace DungeonGameTests {
+	public class IItemUnitTests {
 		[Test]
-		public void HealthPotionUnitTest()
-		{
+		public void HealthPotionUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Archer)
-			{
+			Player player = new Player("test", Player.PlayerClassType.Archer) {
 				_MaxHitPoints = 100,
 				_HitPoints = 10,
 				_Inventory = new List<IItem> { new HealthPotion(PotionStrength.Minor) }
@@ -40,11 +36,9 @@ namespace DungeonGameTests
 			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
 		}
 		[Test]
-		public void ManaPotionUnitTest()
-		{
+		public void ManaPotionUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage)
-			{
+			Player player = new Player("test", Player.PlayerClassType.Mage) {
 				_MaxManaPoints = 100,
 				_ManaPoints = 10,
 				_Inventory = new List<IItem> { new ManaPotion(PotionStrength.Minor) }
@@ -65,11 +59,9 @@ namespace DungeonGameTests
 			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
 		}
 		[Test]
-		public void ConstitutionPotionUnitTest()
-		{
+		public void ConstitutionPotionUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage)
-			{
+			Player player = new Player("test", Player.PlayerClassType.Mage) {
 				_Inventory = new List<IItem> { new StatPotion(PotionStrength.Minor, StatPotion.StatType.Constitution) }
 			};
 			int potionIndex = player._Inventory.FindIndex(f => f.GetType() == typeof(StatPotion));
@@ -88,8 +80,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(baseMaxHitPoints + (statAmount * 10), player._MaxHitPoints);
 			Assert.IsEmpty(player._Inventory);
 			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.ChangeStat);
-			for (int i = 1; i < 601; i++)
-			{
+			for (int i = 1; i < 601; i++) {
 				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				player._Effects[0].ChangeStatRound();
 			}
@@ -102,11 +93,9 @@ namespace DungeonGameTests
 			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
 		}
 		[Test]
-		public void IntelligencePotionUnitTest()
-		{
+		public void IntelligencePotionUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage)
-			{
+			Player player = new Player("test", Player.PlayerClassType.Mage) {
 				_Inventory = new List<IItem> { new StatPotion(PotionStrength.Minor, StatPotion.StatType.Intelligence) }
 			};
 			int potionIndex = player._Inventory.FindIndex(f => f.GetType() == typeof(StatPotion));
@@ -125,8 +114,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(baseMaxManaPoints + (statAmount * 10), player._MaxManaPoints);
 			Assert.IsEmpty(player._Inventory);
 			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.ChangeStat);
-			for (int i = 1; i < 601; i++)
-			{
+			for (int i = 1; i < 601; i++) {
 				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				player._Effects[0].ChangeStatRound();
 			}
@@ -139,11 +127,9 @@ namespace DungeonGameTests
 			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
 		}
 		[Test]
-		public void StrengthPotionUnitTest()
-		{
+		public void StrengthPotionUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage)
-			{
+			Player player = new Player("test", Player.PlayerClassType.Mage) {
 				_Inventory = new List<IItem> { new StatPotion(PotionStrength.Minor, StatPotion.StatType.Strength) }
 			};
 			int potionIndex = player._Inventory.FindIndex(f => f.GetType() == typeof(StatPotion));
@@ -162,8 +148,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(baseMaxCarryWeight + (statAmount * 2.5), player._MaxCarryWeight, 1);
 			Assert.IsEmpty(player._Inventory);
 			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.ChangeStat);
-			for (int i = 1; i < 601; i++)
-			{
+			for (int i = 1; i < 601; i++) {
 				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				player._Effects[0].ChangeStatRound();
 			}
@@ -176,11 +161,9 @@ namespace DungeonGameTests
 			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
 		}
 		[Test]
-		public void DexterityPotionUnitTest()
-		{
+		public void DexterityPotionUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage)
-			{
+			Player player = new Player("test", Player.PlayerClassType.Mage) {
 				_Inventory = new List<IItem> { new StatPotion(PotionStrength.Minor, StatPotion.StatType.Dexterity) }
 			};
 			int potionIndex = player._Inventory.FindIndex(f => f.GetType() == typeof(StatPotion));
@@ -199,8 +182,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(baseDodgeChance + (statAmount * 1.5), player._DodgeChance);
 			Assert.IsEmpty(player._Inventory);
 			Assert.AreEqual(player._Effects[0]._EffectGroup, Effect.EffectType.ChangeStat);
-			for (int i = 1; i < 601; i++)
-			{
+			for (int i = 1; i < 601; i++) {
 				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
 				player._Effects[0].ChangeStatRound();
 			}
@@ -213,8 +195,7 @@ namespace DungeonGameTests
 			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
 		}
 		[Test]
-		public void ArmorUpgradeKitUnitTest()
-		{
+		public void ArmorUpgradeKitUnitTest() {
 			Player player = new Player("test", Player.PlayerClassType.Mage);
 			player._Inventory.Add(new ArmorKit(KitLevel.Light, ArmorKit.KitType.Cloth));
 			GearController.EquipInitialGear(player);
@@ -252,8 +233,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(enhanceFail, OutputController.Display.Output[3][2]);
 		}
 		[Test]
-		public void WeaponUpgradeKitUnitTest()
-		{
+		public void WeaponUpgradeKitUnitTest() {
 			Player player = new Player("test", Player.PlayerClassType.Mage);
 			player._Inventory.Add(new WeaponKit(KitLevel.Light, WeaponKit.KitType.Grindstone));
 			GearController.EquipInitialGear(player);

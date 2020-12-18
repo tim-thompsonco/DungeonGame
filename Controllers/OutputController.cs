@@ -8,23 +8,19 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace DungeonGame.Controllers
-{
-	public static class OutputController
-	{
+namespace DungeonGame.Controllers {
+	public static class OutputController {
 		public static UserOutput Display = new UserOutput();
 		public static UserOutput MapDisplay = new UserOutput();
 		public static UserOutput EffectDisplay = new UserOutput();
 		public static UserOutput QuestDisplay = new UserOutput();
 
-		private static UserOutput BuildMap(Player player, int height, int width)
-		{
+		private static UserOutput BuildMap(Player player, int height, int width) {
 			UserOutput output = new UserOutput();
 			// Draw top border of map
 			StringBuilder mapBorder = new StringBuilder();
 			// Minimap border needs to extend same width as minimap itself in either direction
-			for (int b = 0; b < Settings.GetMiniMapBorderWidth(); b++)
-			{
+			for (int b = 0; b < Settings.GetMiniMapBorderWidth(); b++) {
 				mapBorder.Append("=");
 			}
 			output.StoreUserOutput(
@@ -37,35 +33,27 @@ namespace DungeonGame.Controllers
 			int playerZ = player._PlayerLocation._Z;
 			/* Map starts drawing from top left, so it needs to decrement since
 			each new console writeline pushes screen down instead of up */
-			for (int i = playerY + height; i > playerY - height; i--)
-			{
+			for (int i = playerY + height; i > playerY - height; i--) {
 				List<string> sameLineOutput = new List<string>();
 				int startLeftPos = playerX - width;
 				int endRightPos = playerX + width - 1;
-				for (int j = startLeftPos; j <= endRightPos; j++)
-				{
+				for (int j = startLeftPos; j <= endRightPos; j++) {
 					int mapX = j;
 					int mapY = i;
 					int mapZ = playerZ;
 					Coordinate findCoord = new Coordinate(mapX, mapY, mapZ);
-					if (RoomController._Rooms.ContainsKey(findCoord))
-					{
+					if (RoomController._Rooms.ContainsKey(findCoord)) {
 						IRoom room = RoomController._Rooms[findCoord];
-						if (room._IsDiscovered)
-						{
-							if (j == startLeftPos)
-							{
-								if (room._Up != null || room._Down != null)
-								{
+						if (room._IsDiscovered) {
+							if (j == startLeftPos) {
+								if (room._Up != null || room._Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 									sameLineOutput.Add(Settings.GetLeftMapBorderSizeTwo()); // What prints to display
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display
-								}
-								else
-								{
+								} else {
 									sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 									sameLineOutput.Add(Settings.GetLeftMapBorderSizeTwo()); // What prints to display
@@ -73,20 +61,15 @@ namespace DungeonGame.Controllers
 									sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 									sameLineOutput.Add(Settings.GetEmptyMapTileSizeTwo()); // What prints to display
 								}
-							}
-							else if (j == endRightPos)
-							{
-								if (room._Up != null || room._Down != null)
-								{
+							} else if (j == endRightPos) {
+								if (room._Up != null || room._Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 									sameLineOutput.Add(Settings.GetRightMapBorderSizeTwo()); // What prints to display
-								}
-								else
-								{
+								} else {
 									sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 									sameLineOutput.Add(Settings.GetEmptyMapTileSizeTwo()); // What prints to display
@@ -94,82 +77,58 @@ namespace DungeonGame.Controllers
 									sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 									sameLineOutput.Add(Settings.GetRightMapBorderSizeTwo()); // What prints to display
 								}
-							}
-							else if (mapX == playerX && mapY == playerY && mapZ == playerZ)
-							{
-								if (room._Up != null || room._Down != null)
-								{
+							} else if (mapX == playerX && mapY == playerY && mapZ == playerZ) {
+								if (room._Up != null || room._Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display
-								}
-								else
-								{
+								} else {
 									sameLineOutput.Add(Settings.FormatHiddenOutputText()); // Foreground color
 									sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
 									sameLineOutput.Add(Settings.GetEmptyMapTileSizeTwo()); // What prints to display
 								}
-							}
-							else
-							{
-								if (room._Up != null || room._Down != null)
-								{
+							} else {
+								if (room._Up != null || room._Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display
-								}
-								else
-								{
+								} else {
 									sameLineOutput.Add(Settings.GetTileColor(player)); // Foreground color
 									sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 									sameLineOutput.Add(Settings.GetEmptyMapTileSizeTwo()); // What prints to display
 								}
 							}
-						}
-						else
-						{
-							if (j == startLeftPos)
-							{
+						} else {
+							if (j == startLeftPos) {
 								sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
 								sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 								sameLineOutput.Add(Settings.GetLeftMapBorderSizeTwo()); // What prints to display
 								sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
 								sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 								sameLineOutput.Add(Settings.GetEmptyMapTileSizeTwo()); // What prints to display
-							}
-							else if (j == endRightPos)
-							{
+							} else if (j == endRightPos) {
 								sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
 								sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 								sameLineOutput.Add(Settings.GetEmptyMapTileSizeTwo()); // What prints to display
 								sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
 								sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 								sameLineOutput.Add(Settings.GetRightMapBorderSizeTwo()); // What prints to display
-							}
-							else
-							{
+							} else {
 								sameLineOutput.Add(Settings.GetTileColor(player)); // Foreground color
 								sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 								sameLineOutput.Add(Settings.GetUndiscoveredMapTileSizeTwo()); // What prints to display
 							}
 						}
-					}
-					else
-					{
-						if (j == startLeftPos)
-						{
+					} else {
+						if (j == startLeftPos) {
 							sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
 							sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 							sameLineOutput.Add(Settings.GetLeftMapBorderSizeFour()); // What prints to display
-						}
-						else if (j == endRightPos)
-						{
+						} else if (j == endRightPos) {
 							sameLineOutput.Add(Settings.FormatGeneralInfoText()); // Foreground color
 							sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 							sameLineOutput.Add(Settings.GetRightMapBorderSizeFour()); // What prints to display
-						}
-						else
-						{
+						} else {
 							sameLineOutput.Add(Settings.GetTileColor(player)); // Foreground color
 							sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 							sameLineOutput.Add(Settings.GetUndiscoveredMapTileSizeTwo()); // What prints to display
@@ -184,8 +143,7 @@ namespace DungeonGame.Controllers
 				mapBorder.ToString());
 			return output;
 		}
-		public static UserOutput ShowEffects(Player player)
-		{
+		public static UserOutput ShowEffects(Player player) {
 			UserOutput effectUserOutput = new UserOutput();
 			UserOutput badEffectUserOutput = new UserOutput();
 			UserOutput goodEffectUserOutput = new UserOutput();
@@ -196,69 +154,52 @@ namespace DungeonGame.Controllers
 				"Player _Effects:");
 			int activeEffects = 0;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (Effect effect in player._Effects)
-			{
+			foreach (Effect effect in player._Effects) {
 				string effectOutput;
-				if (player._InCombat)
-				{
-					if (effect._EffectMaxRound + 1 - effect._EffectCurRound > 1)
-					{
+				if (player._InCombat) {
+					if (effect._EffectMaxRound + 1 - effect._EffectCurRound > 1) {
 						effectOutput = $"({effect._EffectMaxRound + 1 - effect._EffectCurRound} rounds) {textInfo.ToTitleCase(effect._Name)}";
-					}
-					else
-					{
+					} else {
 						effectOutput = $"({effect._EffectMaxRound + 1 - effect._EffectCurRound} round) {textInfo.ToTitleCase(effect._Name)}";
 					}
-				}
-				else
-				{
-					if (effect._EffectMaxRound + 1 - effect._EffectCurRound > 1)
-					{
+				} else {
+					if (effect._EffectMaxRound + 1 - effect._EffectCurRound > 1) {
 						effectOutput = $"({(effect._EffectMaxRound + 1 - effect._EffectCurRound) * effect._TickDuration} seconds) {textInfo.ToTitleCase(effect._Name)}";
-					}
-					else
-					{
+					} else {
 						effectOutput = $"({(effect._EffectMaxRound + 1 - effect._EffectCurRound) * effect._TickDuration} second) {textInfo.ToTitleCase(effect._Name)}";
 					}
 				}
 				activeEffects++;
-				if (effect._IsHarmful)
-				{
+				if (effect._IsHarmful) {
 					badEffectUserOutput.StoreUserOutput(
 						Settings.FormatAttackFailText(),
 						Settings.FormatDefaultBackground(),
 						effectOutput);
-				}
-				else
-				{
+				} else {
 					goodEffectUserOutput.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
 						effectOutput);
 				}
 			}
-			if (activeEffects == 0)
-			{
+			if (activeEffects == 0) {
 				effectUserOutput.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"None.");
 			}
 			goodEffectUserOutput.Output.OrderBy(output => output[2]);
-			foreach (List<string> output in goodEffectUserOutput.Output)
-			{
+			foreach (List<string> output in goodEffectUserOutput.Output) {
 				effectUserOutput.Output.Add(output);
 			}
 			badEffectUserOutput.Output.OrderBy(output => output[2]);
-			foreach (List<string> output in badEffectUserOutput.Output)
-			{
+			foreach (List<string> output in badEffectUserOutput.Output) {
 				effectUserOutput.Output.Add(output);
 			}
 			// Create bottom border for effects area
 			StringBuilder effectsBorder = new StringBuilder();
 			// _Effects border needs to extend same width as minimap itself in either direction
-			for (int b = 0; b < Settings.GetMiniMapBorderWidth(); b++)
-			{
+			for (int b = 0; b < Settings.GetMiniMapBorderWidth(); b++) {
 				effectsBorder.Append("=");
 			}
 			effectUserOutput.StoreUserOutput(
@@ -267,8 +208,7 @@ namespace DungeonGame.Controllers
 				effectsBorder.ToString());
 			return effectUserOutput;
 		}
-		public static UserOutput ShowQuests(Player player)
-		{
+		public static UserOutput ShowQuests(Player player) {
 			UserOutput questUserOutput = new UserOutput();
 			// Draw title to show for player quest log
 			questUserOutput.StoreUserOutput(
@@ -277,18 +217,15 @@ namespace DungeonGame.Controllers
 				"Player Quests:");
 			int quests = 0;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (Quest quest in player._QuestLog)
-			{
-				string questOutput = quest._QuestCategory switch
-				{
+			foreach (Quest quest in player._QuestLog) {
+				string questOutput = quest._QuestCategory switch {
 					Quest.QuestType.KillCount => $"{textInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} monsters)",
 					Quest.QuestType.KillMonster => $"{textInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} {quest._MonsterKillType}s)",
 					Quest.QuestType.ClearLevel => $"{textInfo.ToTitleCase(quest._Name)} (Lvl: {quest._TargetLevel} | {quest._MonstersRemaining} monsters left)",
 					_ => throw new ArgumentOutOfRangeException()
 				};
 				StringBuilder questStringBuilder = new StringBuilder(questOutput);
-				if (quest._QuestCompleted)
-				{
+				if (quest._QuestCompleted) {
 					questStringBuilder.Append(" (Complete)");
 				}
 
@@ -298,8 +235,7 @@ namespace DungeonGame.Controllers
 					Settings.FormatDefaultBackground(),
 					questStringBuilder.ToString());
 			}
-			if (quests == 0)
-			{
+			if (quests == 0) {
 				questUserOutput.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
@@ -308,8 +244,7 @@ namespace DungeonGame.Controllers
 			// Create bottom border for player quest log
 			StringBuilder questsBorder = new StringBuilder();
 			// Quest log border needs to extend same width as minimap itself in either direction
-			for (int b = 0; b < Settings.GetMiniMapBorderWidth(); b++)
-			{
+			for (int b = 0; b < Settings.GetMiniMapBorderWidth(); b++) {
 				questsBorder.Append("=");
 			}
 			questUserOutput.StoreUserOutput(
@@ -318,8 +253,7 @@ namespace DungeonGame.Controllers
 				questsBorder.ToString());
 			return questUserOutput;
 		}
-		public static void ShowUserOutput(Player player, Monster opponent)
-		{
+		public static void ShowUserOutput(Player player, Monster opponent) {
 			PlayerController.DisplayPlayerStats(player);
 			MonsterController.DisplayStats(opponent);
 			RoomController._Rooms[player._PlayerLocation].ShowCommands();
@@ -329,8 +263,7 @@ namespace DungeonGame.Controllers
 			Display.BuildUserOutput();
 			Display.RetrieveUserOutput();
 		}
-		public static void ShowUserOutput(Player player)
-		{
+		public static void ShowUserOutput(Player player) {
 			PlayerController.DisplayPlayerStats(player);
 			RoomController._Rooms[player._PlayerLocation].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());

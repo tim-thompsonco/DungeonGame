@@ -3,18 +3,15 @@ using DungeonGame.Items.Consumables;
 using DungeonGame.Players;
 using NUnit.Framework;
 
-namespace DungeonGameTests.Items
-{
-	class ArrowsUnitTests
-	{
+namespace DungeonGameTests.Items {
+	class ArrowsUnitTests {
 		string arrowsName;
 		int arrowsMaxQuantity;
 		Arrows arrows;
 		Player player;
 
 		[SetUp]
-		public void Setup()
-		{
+		public void Setup() {
 			arrowsName = "arrows";
 			arrowsMaxQuantity = 50;
 			arrows = new Arrows(arrowsName, 15, Arrows.ArrowType.Standard);
@@ -22,8 +19,7 @@ namespace DungeonGameTests.Items
 		}
 
 		[Test]
-		public void ArrowsCreationTest()
-		{
+		public void ArrowsCreationTest() {
 			Assert.AreEqual(arrowsName, arrows._Name);
 			Assert.AreEqual($"A bundle of {arrows._Quantity} arrows.", arrows._Desc);
 			Assert.AreEqual(1, arrows._Weight);
@@ -32,8 +28,7 @@ namespace DungeonGameTests.Items
 		}
 
 		[Test]
-		public void PlayerHasNoQuiverUnitTest()
-		{
+		public void PlayerHasNoQuiverUnitTest() {
 			OutputController.Display.ClearUserOutput();
 
 			arrows.LoadPlayerQuiverWithArrows(player);
@@ -42,8 +37,7 @@ namespace DungeonGameTests.Items
 		}
 
 		[Test]
-		public void PlayerQuiverIsFullUnitTest()
-		{
+		public void PlayerQuiverIsFullUnitTest() {
 			GearController.EquipInitialGear(player);
 
 			arrows.LoadPlayerQuiverWithArrows(player);
@@ -53,8 +47,7 @@ namespace DungeonGameTests.Items
 		}
 
 		[Test]
-		public void PlayerQuiverIsEmptyUnitTest()
-		{
+		public void PlayerQuiverIsEmptyUnitTest() {
 			GearController.EquipInitialGear(player);
 			player._PlayerQuiver._MaxQuantity = arrowsMaxQuantity;
 			player._PlayerQuiver._Quantity = 0;
@@ -66,8 +59,7 @@ namespace DungeonGameTests.Items
 		}
 
 		[Test]
-		public void PlayerQuiverIsPartiallyEmptyUnitTest()
-		{
+		public void PlayerQuiverIsPartiallyEmptyUnitTest() {
 			GearController.EquipInitialGear(player);
 			player._PlayerQuiver._MaxQuantity = arrowsMaxQuantity;
 			player._PlayerQuiver._Quantity = 35;

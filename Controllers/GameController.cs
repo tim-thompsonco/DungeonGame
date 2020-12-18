@@ -8,44 +8,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace DungeonGame.Controllers
-{
-	public static class GameController
-	{
+namespace DungeonGame.Controllers {
+	public static class GameController {
 		private static readonly Random RndGenerate = new Random();
 		public static bool _IsGameOver { get; set; }
 		private static int _GameTicks { get; set; }
 
-		public static void CheckStatus(Player player)
-		{
+		public static void CheckStatus(Player player) {
 			_GameTicks++;
-			if (_GameTicks % player._StatReplenishInterval == 0)
-			{
+			if (_GameTicks % player._StatReplenishInterval == 0) {
 				ReplenishStatsOverTime(player);
 			}
 
-			if (player._Effects.Any())
-			{
-				foreach (Effect effect in player._Effects.Where(effect => _GameTicks % effect._TickDuration == 0).ToList())
-				{
-					switch (effect._EffectGroup)
-					{
+			if (player._Effects.Any()) {
+				foreach (Effect effect in player._Effects.Where(effect => _GameTicks % effect._TickDuration == 0).ToList()) {
+					switch (effect._EffectGroup) {
 						case Effect.EffectType.Healing:
 							effect.HealingRound(player);
 							break;
 						case Effect.EffectType.ChangePlayerDamage:
-							if (!player._InCombat && effect._Name.Contains("berserk"))
-							{
+							if (!player._InCombat && effect._Name.Contains("berserk")) {
 								effect._IsEffectExpired = true;
 							}
 							break;
 						case Effect.EffectType.ChangeArmor:
-							if (!player._InCombat && effect._Name.Contains("berserk"))
-							{
+							if (!player._InCombat && effect._Name.Contains("berserk")) {
 								effect._IsEffectExpired = true;
 							}
-							if (!player._InCombat)
-							{
+							if (!player._InCombat) {
 								effect.ChangeArmorRound();
 							}
 
@@ -68,8 +58,7 @@ namespace DungeonGame.Controllers
 							effect.ChangeStatRound();
 							break;
 						case Effect.EffectType.ChangeOpponentDamage:
-							if (!player._InCombat)
-							{
+							if (!player._InCombat) {
 								effect._IsEffectExpired = true;
 							}
 
@@ -83,27 +72,21 @@ namespace DungeonGame.Controllers
 					}
 				}
 			}
-			foreach (IRoom room in RoomController._Rooms.Values)
-			{
+			foreach (IRoom room in RoomController._Rooms.Values) {
 				foreach (IName roomObject in room._RoomObjects.Where(
-					roomObject => roomObject?.GetType() == typeof(Monster)))
-				{
+					roomObject => roomObject?.GetType() == typeof(Monster))) {
 					Monster monster = (Monster)roomObject;
 					RemovedExpiredEffectsAsync(monster);
-					if (_GameTicks % monster._StatReplenishInterval == 0 && monster._HitPoints > 0)
-					{
+					if (_GameTicks % monster._StatReplenishInterval == 0 && monster._HitPoints > 0) {
 						ReplenishStatsOverTime(monster);
 					}
 
-					if (!monster._Effects.Any())
-					{
+					if (!monster._Effects.Any()) {
 						continue;
 					}
 
-					foreach (Effect effect in monster._Effects.Where(effect => _GameTicks % effect._TickDuration == 0).ToList())
-					{
-						switch (effect._EffectGroup)
-						{
+					foreach (Effect effect in monster._Effects.Where(effect => _GameTicks % effect._TickDuration == 0).ToList()) {
+						switch (effect._EffectGroup) {
 							case Effect.EffectType.Healing:
 								break;
 							case Effect.EffectType.ChangePlayerDamage:
@@ -137,12 +120,10 @@ namespace DungeonGame.Controllers
 				}
 			}
 		}
-		public static int GetRandomNumber(int lowNum, int highNum)
-		{
+		public static int GetRandomNumber(int lowNum, int highNum) {
 			return RndGenerate.Next(lowNum, highNum + 1);
 		}
-		public static int RoundNumber(int number)
-		{
+		public static int RoundNumber(int number) {
 			int lastDigit = number % 10;
 			number /= 10;
 			int newLastDigit = lastDigit >= 5 ? 1 : 0;
@@ -150,19 +131,14 @@ namespace DungeonGame.Controllers
 			number *= 10;
 			return number;
 		}
-		public static async void RemovedExpiredEffectsAsync(Player player)
-		{
-			await Task.Run(() =>
-			{
-				for (int i = 0; i < player._Effects.Count; i++)
-				{
-					if (!player._Effects[i]._IsEffectExpired)
-					{
+		public static async void RemovedExpiredEffectsAsync(Player player) {
+			await Task.Run(() => {
+				for (int i = 0; i < player._Effects.Count; i++) {
+					if (!player._Effects[i]._IsEffectExpired) {
 						continue;
 					}
 
-					switch (player._Effects[i]._EffectGroup)
-					{
+					switch (player._Effects[i]._EffectGroup) {
 						case Effect.EffectType.Healing:
 							break;
 						case Effect.EffectType.ChangePlayerDamage:
@@ -180,8 +156,7 @@ namespace DungeonGame.Controllers
 						case Effect.EffectType.Frozen:
 							break;
 						case Effect.EffectType.ChangeStat:
-							switch (player._Effects[i]._StatGroup)
-							{
+							switch (player._Effects[i]._StatGroup) {
 								case Effect.StatType.Intelligence:
 									player._Intelligence -= player._Effects[i]._EffectAmountOverTime;
 									break;
@@ -211,19 +186,14 @@ namespace DungeonGame.Controllers
 				}
 			});
 		}
-		public static async void RemovedExpiredEffectsAsync(Monster monster)
-		{
-			await Task.Run(() =>
-			{
-				for (int i = 0; i < monster._Effects.Count; i++)
-				{
-					if (!monster._Effects[i]._IsEffectExpired)
-					{
+		public static async void RemovedExpiredEffectsAsync(Monster monster) {
+			await Task.Run(() => {
+				for (int i = 0; i < monster._Effects.Count; i++) {
+					if (!monster._Effects[i]._IsEffectExpired) {
 						continue;
 					}
 
-					switch (monster._Effects[i]._EffectGroup)
-					{
+					switch (monster._Effects[i]._EffectGroup) {
 						case Effect.EffectType.Healing:
 							break;
 						case Effect.EffectType.ChangePlayerDamage:
@@ -255,37 +225,30 @@ namespace DungeonGame.Controllers
 				}
 			});
 		}
-		private static void ReplenishStatsOverTime(Player player)
-		{
-			if (player._InCombat)
-			{
+		private static void ReplenishStatsOverTime(Player player) {
+			if (player._InCombat) {
 				return;
 			}
 
-			if (player._HitPoints < player._MaxHitPoints)
-			{
+			if (player._HitPoints < player._MaxHitPoints) {
 				player._HitPoints++;
 			}
 
-			switch (player._PlayerClass)
-			{
+			switch (player._PlayerClass) {
 				case Player.PlayerClassType.Mage:
-					if (player._ManaPoints < player._MaxManaPoints)
-					{
+					if (player._ManaPoints < player._MaxManaPoints) {
 						player._ManaPoints++;
 					}
 
 					break;
 				case Player.PlayerClassType.Warrior:
-					if (player._RagePoints < player._MaxRagePoints)
-					{
+					if (player._RagePoints < player._MaxRagePoints) {
 						player._RagePoints++;
 					}
 
 					break;
 				case Player.PlayerClassType.Archer:
-					if (player._ComboPoints < player._MaxComboPoints)
-					{
+					if (player._ComboPoints < player._MaxComboPoints) {
 						player._ComboPoints++;
 					}
 
@@ -294,41 +257,31 @@ namespace DungeonGame.Controllers
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		private static void ReplenishStatsOverTime(Monster monster)
-		{
-			if (monster._InCombat)
-			{
+		private static void ReplenishStatsOverTime(Monster monster) {
+			if (monster._InCombat) {
 				return;
 			}
 
-			if (monster._HitPoints < monster._MaxHitPoints)
-			{
+			if (monster._HitPoints < monster._MaxHitPoints) {
 				monster._HitPoints++;
 			}
 
-			if (monster._EnergyPoints < monster._MaxEnergyPoints)
-			{
+			if (monster._EnergyPoints < monster._MaxEnergyPoints) {
 				monster._EnergyPoints++;
 			}
 		}
-		public static bool IsWholeNumber(string value)
-		{
+		public static bool IsWholeNumber(string value) {
 			return value.All(char.IsNumber);
 		}
-		public static Player LoadPlayer()
-		{
+		public static Player LoadPlayer() {
 			Player player;
-			try
-			{
+			try {
 				player = JsonConvert.DeserializeObject<Player>(File.ReadAllText(
-					"playersave.json"), new JsonSerializerSettings
-					{
+					"playersave.json"), new JsonSerializerSettings {
 						TypeNameHandling = TypeNameHandling.Auto,
 						NullValueHandling = NullValueHandling.Ignore
 					});
-			}
-			catch (FileNotFoundException)
-			{
+			} catch (FileNotFoundException) {
 				player = new PlayerBuilder().BuildNewPlayer();
 				GearController.EquipInitialGear(player);
 				/* Set initial room condition for player
@@ -337,12 +290,9 @@ namespace DungeonGame.Controllers
 			}
 			return player;
 		}
-		public static void LoadGame()
-		{
-			try
-			{
-				JsonSerializerSettings serializerSettings = new JsonSerializerSettings()
-				{
+		public static void LoadGame() {
+			try {
+				JsonSerializerSettings serializerSettings = new JsonSerializerSettings() {
 					TypeNameHandling = TypeNameHandling.Auto,
 					NullValueHandling = NullValueHandling.Ignore
 				};
@@ -362,15 +312,12 @@ namespace DungeonGame.Controllers
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
 					"");
-			}
-			catch (FileNotFoundException)
-			{
+			} catch (FileNotFoundException) {
 				// Create new dungeon
 				RoomController._Rooms = new RoomBuilder(200, 10, 0, 4, 0).RetrieveSpawnRooms();
 			}
 		}
-		public static bool QuitGame(Player player)
-		{
+		public static bool QuitGame(Player player) {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(), "Are you sure you want to quit?");
@@ -378,8 +325,7 @@ namespace DungeonGame.Controllers
 			OutputController.Display.ClearUserOutput();
 			string[] input = InputController.GetFormattedInput(Console.ReadLine());
 			Console.Clear();
-			if (input[0] != "yes" && input[0] != "y")
-			{
+			if (input[0] != "yes" && input[0] != "y") {
 				return false;
 			}
 
@@ -391,13 +337,10 @@ namespace DungeonGame.Controllers
 			SaveGame(player);
 			return true;
 		}
-		public static void SaveGame(Player player)
-		{
+		public static void SaveGame(Player player) {
 			string outputString;
-			if (player._CanSave)
-			{
-				JsonSerializer serializerPlayer = new JsonSerializer()
-				{
+			if (player._CanSave) {
+				JsonSerializer serializerPlayer = new JsonSerializer() {
 					NullValueHandling = NullValueHandling.Ignore,
 					TypeNameHandling = TypeNameHandling.Auto,
 					Formatting = Formatting.Indented,
@@ -405,12 +348,10 @@ namespace DungeonGame.Controllers
 				};
 				serializerPlayer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
 				using (StreamWriter sw = new StreamWriter("playersave.json"))
-				using (JsonTextWriter writer = new JsonTextWriter(sw))
-				{
+				using (JsonTextWriter writer = new JsonTextWriter(sw)) {
 					serializerPlayer.Serialize(writer, player, typeof(Player));
 				}
-				JsonSerializer serializerRooms = new JsonSerializer()
-				{
+				JsonSerializer serializerRooms = new JsonSerializer() {
 					NullValueHandling = NullValueHandling.Ignore,
 					TypeNameHandling = TypeNameHandling.Auto,
 					Formatting = Formatting.Indented,
@@ -418,8 +359,7 @@ namespace DungeonGame.Controllers
 				};
 				serializerRooms.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
 				using (StreamWriter sw = new StreamWriter("gamesave.json"))
-				using (JsonTextWriter writer = new JsonTextWriter(sw))
-				{
+				using (JsonTextWriter writer = new JsonTextWriter(sw)) {
 					serializerRooms.Serialize(writer, RoomController._Rooms, typeof(Dictionary<Coordinate, IRoom>));
 				}
 				outputString = "Your game has been saved.";
@@ -431,10 +371,8 @@ namespace DungeonGame.Controllers
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), outputString);
 		}
-		public static bool ContinuePlaying()
-		{
-			while (true)
-			{
+		public static bool ContinuePlaying() {
+			while (true) {
 				const string continuePlayingMessage = "Do you want to keep playing? [Y/N]";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(),
@@ -445,8 +383,7 @@ namespace DungeonGame.Controllers
 				string[] input = InputController.GetFormattedInput(Console.ReadLine());
 				OutputController.Display.RetrieveUserOutput();
 				OutputController.Display.ClearUserOutput();
-				switch (input[0])
-				{
+				switch (input[0]) {
 					case "y":
 						return true;
 					case "n":

@@ -3,18 +3,12 @@ using DungeonGame.Players;
 using System;
 using System.Threading;
 
-namespace DungeonGame
-{
-	class MainClass
-	{
-		public static void Main(string[] args)
-		{
-			try
-			{
+namespace DungeonGame {
+	class MainClass {
+		public static void Main(string[] args) {
+			try {
 				Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
@@ -36,30 +30,25 @@ namespace DungeonGame
 			Timer globalTimer = new Timer(
 				e => GameController.CheckStatus(player),
 				null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
-			while (!GameController._IsGameOver)
-			{
+			while (!GameController._IsGameOver) {
 				GameController.RemovedExpiredEffectsAsync(player);
 				string[] input = InputController.GetFormattedInput(Console.ReadLine());
 				InputController.ProcessUserInput(player, input, globalTimer);
 				Console.Clear();
 				OutputController.ShowUserOutput(player);
 				OutputController.Display.ClearUserOutput();
-				if (player._HitPoints > 0)
-				{
+				if (player._HitPoints > 0) {
 					continue;
 				}
 				/* If player dies, provide option to continue playing. If there is a saved game, player can reload
 				from it. Otherwise, player can start over and create a new game. */
-				if (GameController.ContinuePlaying())
-				{
+				if (GameController.ContinuePlaying()) {
 					GameController.LoadGame();
 					player = GameController.LoadPlayer();
 					RoomController._Rooms[player._PlayerLocation].LookRoom();
 					OutputController.ShowUserOutput(player);
 					OutputController.Display.ClearUserOutput();
-				}
-				else
-				{
+				} else {
 					GameController._IsGameOver = true;
 					Messages.GameOver();
 					OutputController.Display.RetrieveUserOutput();

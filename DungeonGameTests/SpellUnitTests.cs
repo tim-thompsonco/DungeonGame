@@ -8,19 +8,14 @@ using NUnit.Framework;
 using System.Linq;
 using System.Threading;
 
-namespace DungeonGameTests
-{
-	public class SpellUnitTests
-	{
+namespace DungeonGameTests {
+	public class SpellUnitTests {
 		[Test]
-		public void FireballSpellUnitTest()
-		{
-			Player player = new Player("test", Player.PlayerClassType.Mage)
-			{ _MaxManaPoints = 100, _ManaPoints = 100, _InCombat = true };
+		public void FireballSpellUnitTest() {
+			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100, _InCombat = true };
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon)
-			{ _HitPoints = 50, _MaxHitPoints = 100, _FireResistance = 0 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 50, _MaxHitPoints = 100, _FireResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
 			player._PlayerWeapon._CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			string[] inputInfo = new[] { "spell", "fireball" };
@@ -46,8 +41,7 @@ namespace DungeonGameTests
 				OutputController.Display.Output[0][2]);
 			Assert.AreEqual($"The {monster._Name} bursts into flame!",
 				OutputController.Display.Output[1][2]);
-			for (int i = 2; i < 5; i++)
-			{
+			for (int i = 2; i < 5; i++) {
 				monster._Effects[0].OnFireRound(monster);
 				Assert.AreEqual(
 					$"The {monster._Name} burns for {monster._Effects[0]._EffectAmountOverTime} fire damage.",
@@ -60,16 +54,13 @@ namespace DungeonGameTests
 			Assert.AreEqual(10, monster._HitPoints);
 		}
 		[Test]
-		public void FrostboltSpellUnitTest()
-		{
+		public void FrostboltSpellUnitTest() {
 			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon)
-			{ _HitPoints = 100, _MaxHitPoints = 100, _FrostResistance = 0 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _FrostResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
-			{
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem._Equipped = false;
 			}
@@ -104,8 +95,7 @@ namespace DungeonGameTests
 			double totalBaseDamage = 0.0;
 			double totalFrozenDamage = 0.0;
 			double multiplier = monster._Effects[0]._EffectMultiplier;
-			for (int i = 2; i < 4; i++)
-			{
+			for (int i = 2; i < 4; i++) {
 				monster._Effects[0].FrozenRound(monster);
 				Assert.AreEqual(i, monster._Effects[0]._EffectCurRound);
 				Assert.AreEqual(frozenString, OutputController.Display.Output[i][2]);
@@ -124,16 +114,13 @@ namespace DungeonGameTests
 			Assert.AreEqual(monster._HitPoints, monsterHitPointsBefore - (int)totalFrozenDamage);
 		}
 		[Test]
-		public void LightningSpellUnitTest()
-		{
+		public void LightningSpellUnitTest() {
 			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon)
-			{ _HitPoints = 100, _MaxHitPoints = 100, _ArcaneResistance = 0 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _ArcaneResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
-			{
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem._Equipped = false;
 			}
@@ -157,10 +144,8 @@ namespace DungeonGameTests
 			Assert.AreEqual(attackSuccessString, OutputController.Display.Output[4][2]);
 		}
 		[Test]
-		public void HealSpellUnitTest()
-		{
-			Player player = new Player("test", Player.PlayerClassType.Mage)
-			{ _MaxManaPoints = 100, _ManaPoints = 100, _MaxHitPoints = 100, _HitPoints = 50 };
+		public void HealSpellUnitTest() {
+			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100, _MaxHitPoints = 100, _HitPoints = 50 };
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
 			string[] inputInfo = new[] { "spell", "heal" };
@@ -181,10 +166,8 @@ namespace DungeonGameTests
 			Assert.AreEqual(player._MaxHitPoints, player._HitPoints);
 		}
 		[Test]
-		public void RejuvenateSpellUnitTest()
-		{
-			Player player = new Player("test", Player.PlayerClassType.Mage)
-			{
+		public void RejuvenateSpellUnitTest() {
+			Player player = new Player("test", Player.PlayerClassType.Mage) {
 				_MaxManaPoints = 100,
 				_ManaPoints = 100,
 				_MaxHitPoints = 100,
@@ -213,8 +196,7 @@ namespace DungeonGameTests
 			string healString = $"You heal yourself for {player._Spellbook[spellIndex]._Healing._HealAmount} health.";
 			Assert.AreEqual(healString, OutputController.Display.Output[0][2]);
 			Assert.AreEqual(Effect.EffectType.Healing, player._Effects[0]._EffectGroup);
-			for (int i = 2; i < 5; i++)
-			{
+			for (int i = 2; i < 5; i++) {
 				player._Effects[0].HealingRound(player);
 				string healAmtString = $"You have been healed for {player._Effects[0]._EffectAmountOverTime} health.";
 				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
@@ -226,8 +208,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(false, player._Effects.Any());
 		}
 		[Test]
-		public void DiamondskinSpellUnitTest()
-		{
+		public void DiamondskinSpellUnitTest() {
 			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
@@ -253,8 +234,7 @@ namespace DungeonGameTests
 			OutputController.Display.ClearUserOutput();
 			Assert.AreEqual(true, player._Effects.Any());
 			Assert.AreEqual(Effect.EffectType.ChangeArmor, player._Effects[0]._EffectGroup);
-			for (int i = 2; i < 5; i++)
-			{
+			for (int i = 2; i < 5; i++) {
 				int augmentedArmor = GearController.CheckArmorRating(player);
 				Assert.AreEqual(baseArmor + 25, augmentedArmor);
 				player._Effects[0].ChangeArmorRound();
@@ -266,8 +246,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(false, player._Effects.Any());
 		}
 		[Test]
-		public void TownPortalSpellUnitTest()
-		{
+		public void TownPortalSpellUnitTest() {
 			/* Town Portal should change location of player to where portal is set to, which is 0, 7, 0, town entrance */
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
@@ -299,15 +278,12 @@ namespace DungeonGameTests
 			Assert.AreEqual("You open a portal and step through it.", OutputController.Display.Output[4][2]);
 		}
 		[Test]
-		public void ReflectDamageSpellUnitTest()
-		{
+		public void ReflectDamageSpellUnitTest() {
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
-			Monster monster = new Monster(3, Monster.MonsterType.Zombie)
-			{ _HitPoints = 100, _MaxHitPoints = 100 };
+			Monster monster = new Monster(3, Monster.MonsterType.Zombie) { _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
-			{
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem._Equipped = false;
 			}
@@ -334,8 +310,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(true, player._Effects.Any());
 			Assert.AreEqual(Effect.EffectType.ReflectDamage, player._Effects[0]._EffectGroup);
 			OutputController.Display.ClearUserOutput();
-			for (int i = 2; i < 5; i++)
-			{
+			for (int i = 2; i < 5; i++) {
 				int attackDamageM = monster._MonsterWeapon.Attack();
 				int index = player._Effects.FindIndex(
 					f => f._EffectGroup == Effect.EffectType.ReflectDamage);
@@ -354,8 +329,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(false, player._Effects.Any());
 		}
 		[Test]
-		public void ArcaneIntellectSpellUnitTest()
-		{
+		public void ArcaneIntellectSpellUnitTest() {
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 150, _ManaPoints = 150 };
 			player._Spellbook.Add(new PlayerSpell(
@@ -385,16 +359,14 @@ namespace DungeonGameTests
 			Assert.AreEqual(
 				baseMaxMana + player._Spellbook[spellIndex]._ChangeAmount._Amount * 10, player._MaxManaPoints);
 			Assert.AreEqual("You cast Arcane Intellect on yourself.", OutputController.Display.Output[0][2]);
-			for (int i = 0; i < 10; i++)
-			{
+			for (int i = 0; i < 10; i++) {
 				player._Effects[0].ChangeStatRound();
 			}
 			UserOutput defaultEffectOutput = OutputController.ShowEffects(player);
 			Assert.AreEqual("Player _Effects:", defaultEffectOutput.Output[0][2]);
 			Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
 			Assert.AreEqual("(590 seconds) Arcane Intellect", defaultEffectOutput.Output[1][2]);
-			for (int i = 0; i < 590; i++)
-			{
+			for (int i = 0; i < 590; i++) {
 				player._Effects[0].ChangeStatRound();
 			}
 			GameController.RemovedExpiredEffectsAsync(player);
@@ -409,18 +381,15 @@ namespace DungeonGameTests
 			Assert.AreEqual("None.", defaultEffectOutput.Output[1][2]);
 		}
 		[Test]
-		public void FrostNovaSpellUnitTest()
-		{
+		public void FrostNovaSpellUnitTest() {
 			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
 			player._Spellbook.Add(new PlayerSpell(
 				"frost nova", 40, 1, PlayerSpell.SpellType.FrostNova, 8));
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon)
-			{ _HitPoints = 100, _MaxHitPoints = 100, _FrostResistance = 0 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _FrostResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
-			{
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem._Equipped = false;
 			}
@@ -463,8 +432,7 @@ namespace DungeonGameTests
 			double totalBaseDamage = 0.0;
 			double totalFrozenDamage = 0.0;
 			double multiplier = monster._Effects[frostIndex]._EffectMultiplier;
-			for (int i = 2; i < 4; i++)
-			{
+			for (int i = 2; i < 4; i++) {
 				OutputController.Display.ClearUserOutput();
 				monster._Effects[stunIndex].StunnedRound(monster);
 				string stunnedRoundString = $"The {monster._Name} is stunned and cannot attack.";

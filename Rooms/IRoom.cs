@@ -3,10 +3,8 @@ using DungeonGame.Players;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace DungeonGame.Rooms
-{
-	public interface IRoom : IName
-	{
+namespace DungeonGame.Rooms {
+	public interface IRoom : IName {
 		bool _IsDiscovered { get; set; }
 		IRoom _North { get; set; }
 		IRoom _South { get; set; }

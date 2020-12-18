@@ -3,12 +3,9 @@ using DungeonGame.Monsters;
 using DungeonGame.Players;
 using System;
 
-namespace DungeonGame
-{
-	public class Effect
-	{
-		public enum EffectType
-		{
+namespace DungeonGame {
+	public class Effect {
+		public enum EffectType {
 			Healing,
 			ChangePlayerDamage,
 			ChangeOpponentDamage,
@@ -21,8 +18,7 @@ namespace DungeonGame
 			Frozen,
 			ChangeStat,
 		}
-		public enum StatType
-		{
+		public enum StatType {
 			Intelligence,
 			Strength,
 			Dexterity,
@@ -42,16 +38,14 @@ namespace DungeonGame
 
 		// Default constructor for JSON serialization
 		public Effect() { }
-		public Effect(string name, EffectType effectGroup, int effectAmount, int tickDuration)
-		{
+		public Effect(string name, EffectType effectGroup, int effectAmount, int tickDuration) {
 			_Name = name;
 			_EffectGroup = effectGroup;
 			_EffectAmount = effectAmount;
 			_TickDuration = tickDuration;
 		}
 		public Effect(string name, EffectType effectGroup, int effectCurRound, int effectMaxRound,
-			double effectMultiplier, int tickDuration, bool harmful)
-		{
+			double effectMultiplier, int tickDuration, bool harmful) {
 			_Name = name;
 			_EffectGroup = effectGroup;
 			_EffectCurRound = effectCurRound;
@@ -62,29 +56,24 @@ namespace DungeonGame
 		}
 		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
 			int effectMaxRound, double effectMultiplier, int tickDuration, bool harmful)
-			: this(name, effectGroup, effectCurRound, effectMaxRound, effectMultiplier, tickDuration, harmful)
-		{
+			: this(name, effectGroup, effectCurRound, effectMaxRound, effectMultiplier, tickDuration, harmful) {
 			_EffectAmountOverTime = effectAmountOverTime;
 		}
 		public Effect(string name, EffectType effectGroup, int effectAmountOverTime, int effectCurRound,
 			int effectMaxRound, double effectMultiplier, int tickDuration, bool harmful, StatType statType)
 			: this(name, effectGroup, effectAmountOverTime, effectCurRound, effectMaxRound, effectMultiplier, tickDuration,
-				harmful)
-		{
+				harmful) {
 			_StatGroup = statType;
 		}
 
-		public void HealingRound(Player player)
-		{
-			if (_IsEffectExpired)
-			{
+		public void HealingRound(Player player) {
+			if (_IsEffectExpired) {
 				return;
 			}
 
 			_EffectCurRound += 1;
 			player._HitPoints += _EffectAmountOverTime;
-			if (player._HitPoints > player._MaxHitPoints)
-			{
+			if (player._HitPoints > player._MaxHitPoints) {
 				player._HitPoints = player._MaxHitPoints;
 			}
 
@@ -93,32 +82,26 @@ namespace DungeonGame
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				healAmtString);
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 
 			_IsEffectExpired = true;
 		}
-		public void ChangeStatRound()
-		{
-			if (_IsEffectExpired)
-			{
+		public void ChangeStatRound() {
+			if (_IsEffectExpired) {
 				return;
 			}
 
 			_EffectCurRound += 1;
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 
 			_IsEffectExpired = true;
 		}
-		public void BlockDamageRound()
-		{
-			if (_IsEffectExpired)
-			{
+		public void BlockDamageRound() {
+			if (_IsEffectExpired) {
 				return;
 			}
 
@@ -127,8 +110,7 @@ namespace DungeonGame
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				blockString);
-			if (_TickDuration > 0)
-			{
+			if (_TickDuration > 0) {
 				return;
 			}
 
@@ -139,10 +121,8 @@ namespace DungeonGame
 				blockEndString);
 			_IsEffectExpired = true;
 		}
-		public void BlockDamageRound(int blockAmount)
-		{
-			if (_IsEffectExpired)
-			{
+		public void BlockDamageRound(int blockAmount) {
+			if (_IsEffectExpired) {
 				return;
 			}
 
@@ -152,8 +132,7 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				blockString);
 			_EffectAmount -= blockAmount;
-			if (_EffectAmount > 0)
-			{
+			if (_EffectAmount > 0) {
 				return;
 			}
 
@@ -164,10 +143,8 @@ namespace DungeonGame
 				blockEndString);
 			_IsEffectExpired = true;
 		}
-		public void ReflectDamageRound()
-		{
-			if (_IsEffectExpired)
-			{
+		public void ReflectDamageRound() {
+			if (_IsEffectExpired) {
 				return;
 			}
 
@@ -177,17 +154,14 @@ namespace DungeonGame
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				reflectString);
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 
 			_IsEffectExpired = true;
 		}
-		public void ReflectDamageRound(int reflectAmount)
-		{
-			if (_IsEffectExpired)
-			{
+		public void ReflectDamageRound(int reflectAmount) {
+			if (_IsEffectExpired) {
 				return;
 			}
 
@@ -197,17 +171,14 @@ namespace DungeonGame
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				reflectString);
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 
 			_IsEffectExpired = true;
 		}
-		public void ChangeOpponentDamageRound(Player player)
-		{
-			if (_IsEffectExpired || player._InCombat == false)
-			{
+		public void ChangeOpponentDamageRound(Player player) {
+			if (_IsEffectExpired || player._InCombat == false) {
 				return;
 			}
 
@@ -218,61 +189,52 @@ namespace DungeonGame
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				changeDmgString);
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 
 			_IsEffectExpired = true;
 		}
-		public void ChangePlayerDamageRound(Player player)
-		{
-			if (_IsEffectExpired || player._InCombat == false)
-			{
+		public void ChangePlayerDamageRound(Player player) {
+			if (_IsEffectExpired || player._InCombat == false) {
 				return;
 			}
 
 			_EffectCurRound += 1;
 			int changeAmount = Math.Abs(_EffectAmountOverTime);
-			string changeDmgString = _EffectAmountOverTime > 0 ? $"Your damage is increased by {changeAmount}." : 
+			string changeDmgString = _EffectAmountOverTime > 0 ? $"Your damage is increased by {changeAmount}." :
 				$"Your damage is decreased by {changeAmount}.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				changeDmgString);
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 
 			_IsEffectExpired = true;
 		}
-		public void ChangeArmorRound()
-		{
-			if (_IsEffectExpired)
-			{
+		public void ChangeArmorRound() {
+			if (_IsEffectExpired) {
 				return;
 			}
 
 			_EffectCurRound += 1;
 			int changeAmount = Math.Abs(_EffectAmountOverTime);
-			string changeArmorString = _EffectAmountOverTime > 0 ? $"Your armor is increased by {changeAmount}." : 
+			string changeArmorString = _EffectAmountOverTime > 0 ? $"Your armor is increased by {changeAmount}." :
 				$"Your armor is decreased by {changeAmount}.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				changeArmorString);
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 
 			_IsEffectExpired = true;
 		}
-		public void OnFireRound(Monster opponent)
-		{
-			if (_IsEffectExpired)
-			{
+		public void OnFireRound(Monster opponent) {
+			if (_IsEffectExpired) {
 				return;
 			}
 
@@ -283,17 +245,14 @@ namespace DungeonGame
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				burnString);
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 
 			_IsEffectExpired = true;
 		}
-		public void OnFireRound(Player player)
-		{
-			if (_IsEffectExpired)
-			{
+		public void OnFireRound(Player player) {
+			if (_IsEffectExpired) {
 				return;
 			}
 
@@ -304,17 +263,14 @@ namespace DungeonGame
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				burnString);
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 
 			_IsEffectExpired = true;
 		}
-		public void BleedingRound(Monster opponent)
-		{
-			if (_IsEffectExpired)
-			{
+		public void BleedingRound(Monster opponent) {
+			if (_IsEffectExpired) {
 				return;
 			}
 
@@ -325,17 +281,14 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				bleedString);
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 
 			_IsEffectExpired = true;
 		}
-		public void BleedingRound(Player player)
-		{
-			if (_IsEffectExpired)
-			{
+		public void BleedingRound(Player player) {
+			if (_IsEffectExpired) {
 				return;
 			}
 
@@ -346,17 +299,14 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				bleedString);
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 
 			_IsEffectExpired = true;
 		}
-		public void StunnedRound(Monster opponent)
-		{
-			if (_IsEffectExpired)
-			{
+		public void StunnedRound(Monster opponent) {
+			if (_IsEffectExpired) {
 				return;
 			}
 
@@ -367,17 +317,14 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				stunnedString);
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 
 			_IsEffectExpired = true;
 		}
-		public void FrozenRound(Monster opponent)
-		{
-			if (_IsEffectExpired)
-			{
+		public void FrozenRound(Monster opponent) {
+			if (_IsEffectExpired) {
 				return;
 			}
 
@@ -387,17 +334,14 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				frozenString);
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 
 			_IsEffectExpired = true;
 		}
-		public void FrozenRound(Player player)
-		{
-			if (_IsEffectExpired)
-			{
+		public void FrozenRound(Player player) {
+			if (_IsEffectExpired) {
 				return;
 			}
 
@@ -407,8 +351,7 @@ namespace DungeonGame
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				frozenString);
-			if (_EffectCurRound <= _EffectMaxRound)
-			{
+			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}
 

@@ -1,44 +1,35 @@
 using DungeonGame.Controllers;
 
-namespace DungeonGame
-{
-	public static class Messages
-	{
-		public static void RequestCommand()
-		{
+namespace DungeonGame {
+	public static class Messages {
+		public static void RequestCommand() {
 			OutputController.Display.StoreUserOutput(Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(), "Your command: ");
 		}
-		public static void PlayerDeath()
-		{
+		public static void PlayerDeath() {
 			OutputController.Display.StoreUserOutput(Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(), "You have died.");
 		}
-		public static void GameOver()
-		{
+		public static void GameOver() {
 			OutputController.Display.StoreUserOutput(Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(), "Game over.");
 		}
-		public static void InvalidCommand()
-		{
+		public static void InvalidCommand() {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(), "Not a valid command.");
 		}
-		public static void InvalidDirection()
-		{
+		public static void InvalidDirection() {
 			const string outputString = "You can't go that way!";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
 		}
-		public static void InvalidVendorSell()
-		{
+		public static void InvalidVendorSell() {
 			const string outputString = "The vendor doesn't want that.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
 		}
-		public static void GameIntro()
-		{
+		public static void GameIntro() {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
@@ -67,10 +58,8 @@ namespace DungeonGame
 				"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot " +
 				"and explore dungeons. Stuff you've probably done a million times already across various RPG games. At any time " +
 				"you can get help on commands by typing 'help'.";
-			for (int i = 0; i < gameIntroString.Length; i += Settings.GetGameWidth())
-			{
-				if (gameIntroString.Length - i < Settings.GetGameWidth())
-				{
+			for (int i = 0; i < gameIntroString.Length; i += Settings.GetGameWidth()) {
+				if (gameIntroString.Length - i < Settings.GetGameWidth()) {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(),
 						gameIntroString.Substring(i, gameIntroString.Length - i));
@@ -81,8 +70,7 @@ namespace DungeonGame
 					gameIntroString.Substring(i, Settings.GetGameWidth()));
 			}
 		}
-		public static void ShowCommandHelp()
-		{
+		public static void ShowCommandHelp() {
 			const string commandHelpString =
 				"_Commands: Players may move in any direction of the game using a shortkey or the full direction name. " +
 				"For example, if you wish to go north, you may type either 'N' or '_North'. If a player wishes to look " +
@@ -92,10 +80,8 @@ namespace DungeonGame
 				"commands will be shown to the player. Any object that is consumable, such as a potion, can be drank " +
 				"by typing 'drink' and then the name of the potion or object. To use armor or weapons, you must 'equip' " +
 				"them. You can 'unequip' them as well.";
-			for (int i = 0; i < commandHelpString.Length; i += Settings.GetGameWidth())
-			{
-				if (commandHelpString.Length - i < Settings.GetGameWidth())
-				{
+			for (int i = 0; i < commandHelpString.Length; i += Settings.GetGameWidth()) {
+				if (commandHelpString.Length - i < Settings.GetGameWidth()) {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(),
 						commandHelpString.Substring(i, commandHelpString.Length - i));

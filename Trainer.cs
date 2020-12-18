@@ -6,12 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace DungeonGame
-{
-	public class Trainer : IQuestGiver
-	{
-		public enum TrainerCategory
-		{
+namespace DungeonGame {
+	public class Trainer : IQuestGiver {
+		public enum TrainerCategory {
 			Archer,
 			Warrior,
 			Mage
@@ -26,14 +23,12 @@ namespace DungeonGame
 
 		// Default constructor for JSON serialization
 		public Trainer() { }
-		public Trainer(string name, string desc, TrainerCategory trainerCategory)
-		{
+		public Trainer(string name, string desc, TrainerCategory trainerCategory) {
 			_Name = name;
 			_Desc = desc;
 			_BaseCost = 25;
 			_TrainerGroup = trainerCategory;
-			switch (_TrainerGroup)
-			{
+			switch (_TrainerGroup) {
 				case TrainerCategory.Archer:
 					_TrainableAbilities = new List<PlayerAbility>
 					{
@@ -78,13 +73,10 @@ namespace DungeonGame
 			}
 		}
 
-		public void DisplayAvailableUpgrades(Player player)
-		{
-			switch (player._PlayerClass)
-			{
+		public void DisplayAvailableUpgrades(Player player) {
+			switch (player._PlayerClass) {
 				case Player.PlayerClassType.Mage:
-					if (_TrainerGroup != TrainerCategory.Mage)
-					{
+					if (_TrainerGroup != TrainerCategory.Mage) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -93,8 +85,7 @@ namespace DungeonGame
 					}
 					break;
 				case Player.PlayerClassType.Warrior:
-					if (_TrainerGroup != TrainerCategory.Warrior)
-					{
+					if (_TrainerGroup != TrainerCategory.Warrior) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -103,8 +94,7 @@ namespace DungeonGame
 					}
 					break;
 				case Player.PlayerClassType.Archer:
-					if (_TrainerGroup != TrainerCategory.Archer)
-					{
+					if (_TrainerGroup != TrainerCategory.Archer) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -125,8 +115,7 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				"");
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			if (_TrainerGroup == TrainerCategory.Mage)
-			{
+			if (_TrainerGroup == TrainerCategory.Mage) {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
@@ -135,28 +124,21 @@ namespace DungeonGame
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"");
-				if (_TrainableSpells?.Count == 0)
-				{
+				if (_TrainableSpells?.Count == 0) {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						"None.");
-				}
-				else
-				{
-					try
-					{
+				} else {
+					try {
 						int newSpellsToTrain = 0;
-						foreach (PlayerSpell spell in _TrainableSpells)
-						{
-							if (player._Level < spell._MinLevel)
-							{
+						foreach (PlayerSpell spell in _TrainableSpells) {
+							if (player._Level < spell._MinLevel) {
 								continue;
 							}
 
 							double trainingReduction = 1.0 - player._Intelligence / 100.0;
-							if (trainingReduction < 0.5)
-							{
+							if (trainingReduction < 0.5) {
 								trainingReduction = 0.5;
 							}
 
@@ -169,16 +151,13 @@ namespace DungeonGame
 								Settings.FormatDefaultBackground(),
 								spellName);
 						}
-						if (newSpellsToTrain == 0)
-						{
+						if (newSpellsToTrain == 0) {
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatInfoText(),
 								Settings.FormatDefaultBackground(),
 								"None.");
 						}
-					}
-					catch (ArgumentNullException)
-					{
+					} catch (ArgumentNullException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatInfoText(),
 							Settings.FormatDefaultBackground(),
@@ -198,16 +177,13 @@ namespace DungeonGame
 					Settings.FormatDefaultBackground(),
 					"");
 				int spellsToTrain = 0;
-				foreach (PlayerSpell spell in player._Spellbook)
-				{
-					if (player._Level == spell._Rank)
-					{
+				foreach (PlayerSpell spell in player._Spellbook) {
+					if (player._Level == spell._Rank) {
 						continue;
 					}
 
 					double trainingReduction = 1.0 - player._Intelligence / 100.0;
-					if (trainingReduction < 0.5)
-					{
+					if (trainingReduction < 0.5) {
 						trainingReduction = 0.5;
 					}
 
@@ -220,16 +196,13 @@ namespace DungeonGame
 						Settings.FormatDefaultBackground(),
 						spellName);
 				}
-				if (spellsToTrain == 0)
-				{
+				if (spellsToTrain == 0) {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						"None.");
 				}
-			}
-			else
-			{
+			} else {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
@@ -238,28 +211,21 @@ namespace DungeonGame
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"");
-				if (_TrainableAbilities?.Count == 0)
-				{
+				if (_TrainableAbilities?.Count == 0) {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						"None.");
-				}
-				else
-				{
-					try
-					{
+				} else {
+					try {
 						int newAbilitiesToTrain = 0;
-						foreach (PlayerAbility ability in _TrainableAbilities)
-						{
-							if (player._Level < ability._MinLevel)
-							{
+						foreach (PlayerAbility ability in _TrainableAbilities) {
+							if (player._Level < ability._MinLevel) {
 								continue;
 							}
 
 							double trainingReduction = 1.0 - player._Intelligence / 100.0;
-							if (trainingReduction < 0.5)
-							{
+							if (trainingReduction < 0.5) {
 								trainingReduction = 0.5;
 							}
 
@@ -272,16 +238,13 @@ namespace DungeonGame
 								Settings.FormatDefaultBackground(),
 								abilityName);
 						}
-						if (newAbilitiesToTrain == 0)
-						{
+						if (newAbilitiesToTrain == 0) {
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatInfoText(),
 								Settings.FormatDefaultBackground(),
 								"None.");
 						}
-					}
-					catch (ArgumentNullException)
-					{
+					} catch (ArgumentNullException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatInfoText(),
 							Settings.FormatDefaultBackground(),
@@ -301,16 +264,13 @@ namespace DungeonGame
 					Settings.FormatDefaultBackground(),
 					"");
 				int abilitiesToTrain = 0;
-				foreach (PlayerAbility ability in player._Abilities)
-				{
-					if (player._Level == ability._Rank)
-					{
+				foreach (PlayerAbility ability in player._Abilities) {
+					if (player._Level == ability._Rank) {
 						continue;
 					}
 
 					double trainingReduction = 1.0 - player._Intelligence / 100.0;
-					if (trainingReduction < 0.5)
-					{
+					if (trainingReduction < 0.5) {
 						trainingReduction = 0.5;
 					}
 
@@ -323,8 +283,7 @@ namespace DungeonGame
 						Settings.FormatDefaultBackground(),
 						abilityName);
 				}
-				if (abilitiesToTrain == 0)
-				{
+				if (abilitiesToTrain == 0) {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
@@ -341,10 +300,8 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				playerGold);
 		}
-		public void TrainAbility(Player player, string inputName)
-		{
-			if (player._PlayerClass == Player.PlayerClassType.Mage)
-			{
+		public void TrainAbility(Player player, string inputName) {
+			if (player._PlayerClass == Player.PlayerClassType.Mage) {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -353,17 +310,14 @@ namespace DungeonGame
 			}
 			int abilityIndex = _TrainableAbilities.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
-			if (abilityIndex != -1 && player._Level >= _TrainableAbilities[abilityIndex]._MinLevel)
-			{
+			if (abilityIndex != -1 && player._Level >= _TrainableAbilities[abilityIndex]._MinLevel) {
 				double trainingReduction = 1.0 - player._Intelligence / 100.0;
-				if (trainingReduction < 0.5)
-				{
+				if (trainingReduction < 0.5) {
 					trainingReduction = 0.5;
 				}
 
 				int trainingCost = (int)(_TrainableAbilities[abilityIndex]._MinLevel * _BaseCost * trainingReduction);
-				if (player._Gold >= trainingCost)
-				{
+				if (player._Gold >= trainingCost) {
 					player._Gold -= trainingCost;
 					player._Abilities.Add(_TrainableAbilities[abilityIndex]);
 					_TrainableAbilities.RemoveAt(abilityIndex);
@@ -375,17 +329,13 @@ namespace DungeonGame
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						purchaseString);
-				}
-				else
-				{
+				} else {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You can't afford that!");
 				}
-			}
-			else
-			{
+			} else {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -393,10 +343,8 @@ namespace DungeonGame
 						"You are not ready to train that ability. You need to level up first!" : "Train what?");
 			}
 		}
-		public void TrainSpell(Player player, string inputName)
-		{
-			if (player._PlayerClass != Player.PlayerClassType.Mage)
-			{
+		public void TrainSpell(Player player, string inputName) {
+			if (player._PlayerClass != Player.PlayerClassType.Mage) {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -405,17 +353,14 @@ namespace DungeonGame
 			}
 			int spellIndex = _TrainableSpells.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
-			if (spellIndex != -1 && player._Level >= _TrainableSpells[spellIndex]._MinLevel)
-			{
+			if (spellIndex != -1 && player._Level >= _TrainableSpells[spellIndex]._MinLevel) {
 				double trainingReduction = 1.0 - player._Intelligence / 100.0;
-				if (trainingReduction < 0.5)
-				{
+				if (trainingReduction < 0.5) {
 					trainingReduction = 0.5;
 				}
 
 				int trainingCost = (int)(_TrainableSpells[spellIndex]._MinLevel * _BaseCost * trainingReduction);
-				if (player._Gold >= trainingCost)
-				{
+				if (player._Gold >= trainingCost) {
 					player._Gold -= trainingCost;
 					player._Spellbook.Add(_TrainableSpells[spellIndex]);
 					_TrainableSpells.RemoveAt(spellIndex);
@@ -427,17 +372,13 @@ namespace DungeonGame
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						purchaseString);
-				}
-				else
-				{
+				} else {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You can't afford that!");
 				}
-			}
-			else
-			{
+			} else {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -445,10 +386,8 @@ namespace DungeonGame
 						"You are not ready to train that spell. You need to level up first!" : "Train what?");
 			}
 		}
-		public void UpgradeSpell(Player player, string inputName)
-		{
-			if (player._PlayerClass != Player.PlayerClassType.Mage)
-			{
+		public void UpgradeSpell(Player player, string inputName) {
+			if (player._PlayerClass != Player.PlayerClassType.Mage) {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -457,22 +396,18 @@ namespace DungeonGame
 			}
 			int spellIndex = player._Spellbook.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
-			if (spellIndex != -1 && player._Level >= player._Spellbook[spellIndex]._Rank + 1)
-			{
+			if (spellIndex != -1 && player._Level >= player._Spellbook[spellIndex]._Rank + 1) {
 				double trainingReduction = 1.0 - player._Intelligence / 100.0;
-				if (trainingReduction < 0.5)
-				{
+				if (trainingReduction < 0.5) {
 					trainingReduction = 0.5;
 				}
 
 				int trainingCost = (int)((player._Spellbook[spellIndex]._Rank + 1.0) * _BaseCost * trainingReduction);
-				if (player._Gold >= trainingCost)
-				{
+				if (player._Gold >= trainingCost) {
 					player._Gold -= trainingCost;
 					player._Spellbook[spellIndex]._Rank++;
 					player._Spellbook[spellIndex]._ManaCost += 10;
-					switch (player._Spellbook[spellIndex]._SpellCategory)
-					{
+					switch (player._Spellbook[spellIndex]._SpellCategory) {
 						case PlayerSpell.SpellType.Fireball:
 							player._Spellbook[spellIndex]._Offensive._Amount += 10;
 							player._Spellbook[spellIndex]._Offensive._AmountOverTime += 5;
@@ -517,17 +452,13 @@ namespace DungeonGame
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						purchaseString);
-				}
-				else
-				{
+				} else {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You can't afford that!");
 				}
-			}
-			else
-			{
+			} else {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -536,10 +467,8 @@ namespace DungeonGame
 						: "You don't have that spell to train!");
 			}
 		}
-		public void UpgradeAbility(Player player, string inputName)
-		{
-			if (player._PlayerClass == Player.PlayerClassType.Mage)
-			{
+		public void UpgradeAbility(Player player, string inputName) {
+			if (player._PlayerClass == Player.PlayerClassType.Mage) {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -548,24 +477,19 @@ namespace DungeonGame
 			}
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
-			if (abilityIndex != -1 && player._Level >= player._Abilities[abilityIndex]._Rank + 1)
-			{
+			if (abilityIndex != -1 && player._Level >= player._Abilities[abilityIndex]._Rank + 1) {
 				double trainingReduction = 1.0 - player._Intelligence / 100.0;
-				if (trainingReduction < 0.5)
-				{
+				if (trainingReduction < 0.5) {
 					trainingReduction = 0.5;
 				}
 
 				int trainingCost = (int)((player._Abilities[abilityIndex]._Rank + 1.0) * _BaseCost * trainingReduction);
-				if (player._Gold >= trainingCost)
-				{
+				if (player._Gold >= trainingCost) {
 					player._Gold -= trainingCost;
 					player._Abilities[abilityIndex]._Rank++;
-					if (player._PlayerClass == Player.PlayerClassType.Archer)
-					{
+					if (player._PlayerClass == Player.PlayerClassType.Archer) {
 						player._Abilities[abilityIndex]._ComboCost += 10;
-						switch (player._Abilities[abilityIndex]._ArcAbilityCategory)
-						{
+						switch (player._Abilities[abilityIndex]._ArcAbilityCategory) {
 							case PlayerAbility.ArcherAbility.Distance:
 								player._Abilities[abilityIndex]._Offensive._Amount += 10;
 								player._Abilities[abilityIndex]._Offensive._ChanceToSucceed += 5;
@@ -604,12 +528,9 @@ namespace DungeonGame
 							default:
 								throw new ArgumentOutOfRangeException();
 						}
-					}
-					else
-					{
+					} else {
 						player._Abilities[abilityIndex]._RageCost += 10;
-						switch (player._Abilities[abilityIndex]._WarAbilityCategory)
-						{
+						switch (player._Abilities[abilityIndex]._WarAbilityCategory) {
 							case PlayerAbility.WarriorAbility.Slash:
 								player._Abilities[abilityIndex]._Offensive._Amount += 10;
 								break;
@@ -655,17 +576,13 @@ namespace DungeonGame
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						purchaseString);
-				}
-				else
-				{
+				} else {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You can't afford that!");
 				}
-			}
-			else
-			{
+			} else {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -674,18 +591,15 @@ namespace DungeonGame
 						: "You don't have that ability to train!");
 			}
 		}
-		public void PopulateQuests(Player player)
-		{
+		public void PopulateQuests(Player player) {
 			_AvailableQuests = new List<Quest>();
-			Armor.ArmorType questArmorGroup = player._PlayerClass switch
-			{
+			Armor.ArmorType questArmorGroup = player._PlayerClass switch {
 				Player.PlayerClassType.Mage => Armor.ArmorType.Cloth,
 				Player.PlayerClassType.Warrior => Armor.ArmorType.Plate,
 				Player.PlayerClassType.Archer => Armor.ArmorType.Leather,
 				_ => throw new ArgumentOutOfRangeException()
 			};
-			switch (_TrainerGroup)
-			{
+			switch (_TrainerGroup) {
 				case TrainerCategory.Archer:
 					_AvailableQuests.Add(new Quest(
 						"Slaughterhouse",
@@ -724,10 +638,8 @@ namespace DungeonGame
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		public void ShowQuestList(Player player)
-		{
-			if (_AvailableQuests == null)
-			{
+		public void ShowQuestList(Player player) {
+			if (_AvailableQuests == null) {
 				PopulateQuests(player);
 			}
 
@@ -736,8 +648,7 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				"Available Quests:");
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (Quest quest in _AvailableQuests)
-			{
+			foreach (Quest quest in _AvailableQuests) {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
@@ -748,13 +659,11 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				"You can <consider> <quest name> if you want to obtain quest details.");
 		}
-		public void OfferQuest(Player player, string[] input)
-		{
+		public void OfferQuest(Player player, string[] input) {
 			string userInput = InputController.ParseInput(input);
 			int questIndex = _AvailableQuests.FindIndex(
 				f => f._Name.ToLower().Contains(userInput));
-			if (questIndex != -1)
-			{
+			if (questIndex != -1) {
 				_AvailableQuests[questIndex].ShowQuest();
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -765,8 +674,7 @@ namespace DungeonGame
 				OutputController.Display.ClearUserOutput();
 				string[] questInput = InputController.GetFormattedInput(Console.ReadLine());
 				while (questInput[0].ToLower() != "y" && questInput[0].ToLower() != "yes" &&
-					   questInput[0].ToLower() != "n" && questInput[0].ToLower() != "no")
-				{
+					   questInput[0].ToLower() != "n" && questInput[0].ToLower() != "no") {
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
@@ -781,43 +689,34 @@ namespace DungeonGame
 					OutputController.Display.ClearUserOutput();
 					questInput = InputController.GetFormattedInput(Console.ReadLine());
 				}
-				if (questInput[0] == "y" || questInput[0] == "yes")
-				{
+				if (questInput[0] == "y" || questInput[0] == "yes") {
 					player._QuestLog.Add(_AvailableQuests[questIndex]);
 					_AvailableQuests.RemoveAt(questIndex);
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"My hero. I am adding the particulars to your quest log.");
-				}
-				else
-				{
+				} else {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"Let me know if you change your mind later.");
 				}
-			}
-			else
-			{
+			} else {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"I don't have that quest to offer!");
 			}
 		}
-		public void CompleteQuest(Player player, string[] input)
-		{
+		public void CompleteQuest(Player player, string[] input) {
 			string userInput = InputController.ParseInput(input);
 			int questIndex = player._QuestLog.FindIndex(
 				f => f._Name.ToLower().Contains(userInput));
 			Quest quest = player._QuestLog[questIndex];
-			if (questIndex != -1)
-			{
-				if (quest._QuestGiver == _Name)
-				{
-					if (quest._QuestCompleted)
-					{
+			if (questIndex != -1) {
+				if (quest._QuestGiver == _Name) {
+					if (quest._QuestCompleted) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
@@ -834,26 +733,20 @@ namespace DungeonGame
 							Settings.FormatDefaultBackground(),
 							quest._QuestRewardGold + " gold coins.");
 						player._QuestLog.RemoveAt(questIndex);
-					}
-					else
-					{
+					} else {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You haven't finished that quest yet!");
 					}
-				}
-				else
-				{
+				} else {
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"I didn't give you that quest. " + textInfo.ToTitleCase(quest._QuestGiver) + " did.");
 				}
-			}
-			else
-			{
+			} else {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),

@@ -5,32 +5,26 @@ using DungeonGame.Players;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace DungeonGameTests.Items.Consumables.Potions
-{
-	class ManaPotionUnitTests
-	{
+namespace DungeonGameTests.Items.Consumables.Potions {
+	class ManaPotionUnitTests {
 		Player player;
 		ManaPotion potion;
 
 		[SetUp]
-		public void Setup()
-		{
+		public void Setup() {
 			potion = new ManaPotion(PotionStrength.Minor);
-			player = new Player("test", Player.PlayerClassType.Mage)
-			{
+			player = new Player("test", Player.PlayerClassType.Mage) {
 				_Inventory = new List<IItem>()
 			};
 		}
 
 		[Test]
-		public void PotionCreationTest()
-		{
+		public void PotionCreationTest() {
 			Assert.AreEqual(1, potion._Weight);
 		}
 
 		[Test]
-		public void MinorPotionCreationTest()
-		{
+		public void MinorPotionCreationTest() {
 			potion = new ManaPotion(PotionStrength.Minor);
 
 			Assert.AreEqual("minor mana potion", potion._Name);
@@ -40,8 +34,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		}
 
 		[Test]
-		public void NormalPotionCreationTest()
-		{
+		public void NormalPotionCreationTest() {
 			potion = new ManaPotion(PotionStrength.Normal);
 
 			Assert.AreEqual("mana potion", potion._Name);
@@ -51,8 +44,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		}
 
 		[Test]
-		public void GreaterPotionCreationTest()
-		{
+		public void GreaterPotionCreationTest() {
 			potion = new ManaPotion(PotionStrength.Greater);
 
 			Assert.AreEqual("greater mana potion", potion._Name);
@@ -62,8 +54,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		}
 
 		[Test]
-		public void PlayerDrinkPotionFullManaTest()
-		{
+		public void PlayerDrinkPotionFullManaTest() {
 			potion = new ManaPotion(PotionStrength.Greater);  // Greater mana potion restores 150 mana
 			player._Inventory.Add(potion);
 			player._MaxManaPoints = 200;
@@ -76,8 +67,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		}
 
 		[Test]
-		public void PlayerDrinkPotionPartialManaTest()
-		{
+		public void PlayerDrinkPotionPartialManaTest() {
 			potion = new ManaPotion(PotionStrength.Greater);  // Greater mana potion restores 150 mana
 			player._Inventory.Add(potion);
 			player._MaxManaPoints = 200;
@@ -89,8 +79,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		}
 
 		[Test]
-		public void PlayerDrinkPotionDisplayMessageTest()
-		{
+		public void PlayerDrinkPotionDisplayMessageTest() {
 			OutputController.Display.ClearUserOutput();
 			player._Inventory.Add(potion);
 			string displayMessage = $"You drank a potion and replenished {potion._ManaAmount} mana.";

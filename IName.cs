@@ -1,7 +1,5 @@
-﻿namespace DungeonGame
-{
-	public interface IName
-	{
+﻿namespace DungeonGame {
+	public interface IName {
 		string _Name { get; set; }
 	}
 }

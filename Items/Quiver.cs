@@ -1,9 +1,7 @@
 ﻿using DungeonGame.Controllers;
 
-namespace DungeonGame.Items
-{
-	public class Quiver : IItem
-	{
+namespace DungeonGame.Items {
+	public class Quiver : IItem {
 		public bool _Equipped { get; set; }
 		public int _ItemValue { get; set; }
 		public int _Quantity { get; set; }
@@ -12,8 +10,7 @@ namespace DungeonGame.Items
 		public string _Name { get; set; }
 		public string _Desc { get; set; }
 
-		public Quiver(string name, int maxQuantity, int itemValue)
-		{
+		public Quiver(string name, int maxQuantity, int itemValue) {
 			_Name = name;
 			_MaxQuantity = maxQuantity;
 			_Quantity = _MaxQuantity;
@@ -22,18 +19,15 @@ namespace DungeonGame.Items
 			_Desc = $"A {_Name} that can hold {_MaxQuantity} arrows.";
 		}
 
-		public bool HaveArrows()
-		{
+		public bool HaveArrows() {
 			return _Quantity > 0;
 		}
 
-		public void UseArrow()
-		{
+		public void UseArrow() {
 			_Quantity -= 1;
 		}
 
-		public static void DisplayOutOfArrowsMessage()
-		{
+		public static void DisplayOutOfArrowsMessage() {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackFailText(),
 				Settings.FormatDefaultBackground(),

@@ -8,16 +8,12 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DungeonGameTests
-{
-	public class VendorUnitTests
-	{
+namespace DungeonGameTests {
+	public class VendorUnitTests {
 		[Test]
-		public void BuyItemUnitTest()
-		{
+		public void BuyItemUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			Player player = new Player("placeholder", Player.PlayerClassType.Mage)
-			{
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage) {
 				_Gold = 100
 			};
 			TownRoom room = new TownRoom("test", "test",
@@ -26,12 +22,9 @@ namespace DungeonGameTests
 			string inputName = InputController.ParseInput(input);
 			int quantity;
 			bool quantityProvided = int.TryParse(input.Last(), out quantity);
-			if (!quantityProvided)
-			{
+			if (!quantityProvided) {
 				quantity = 1;
-			}
-			else
-			{
+			} else {
 				input = input.Take(input.Count() - 1).ToArray();
 			}
 			int baseGold = player._Gold;
@@ -47,11 +40,9 @@ namespace DungeonGameTests
 			Assert.AreEqual(baseGold - buyItem._ItemValue, player._Gold);
 		}
 		[Test]
-		public void BuySinglePotionUnitTest()
-		{
+		public void BuySinglePotionUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			Player player = new Player("placeholder", Player.PlayerClassType.Mage)
-			{
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage) {
 				_Gold = 100
 			};
 			TownRoom room = new TownRoom("test", "test",
@@ -60,12 +51,9 @@ namespace DungeonGameTests
 			string inputName = InputController.ParseInput(input);
 			int quantity;
 			bool quantityProvided = int.TryParse(input.Last(), out quantity);
-			if (!quantityProvided)
-			{
+			if (!quantityProvided) {
 				quantity = 1;
-			}
-			else
-			{
+			} else {
 				input = input.Take(input.Count() - 1).ToArray();
 			}
 			int baseGold = player._Gold;
@@ -81,11 +69,9 @@ namespace DungeonGameTests
 			Assert.AreEqual(baseGold - buyItem._ItemValue, player._Gold);
 		}
 		[Test]
-		public void BuyMultiplePotionUnitTest()
-		{
+		public void BuyMultiplePotionUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			Player player = new Player("placeholder", Player.PlayerClassType.Mage)
-			{
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage) {
 				_Gold = 1000,
 				_Inventory = new List<IItem>()
 			};
@@ -93,12 +79,9 @@ namespace DungeonGameTests
 				new Vendor("test", "test", Vendor.VendorType.Healer));
 			string[] input = new string[] { "buy", "health", "potion", "5" };
 			bool quantityProvided = int.TryParse(input.Last(), out int quantity);
-			if (!quantityProvided)
-			{
+			if (!quantityProvided) {
 				quantity = 1;
-			}
-			else
-			{
+			} else {
 				input = input.Take(input.Count() - 1).ToArray();
 			}
 			string inputName = InputController.ParseInput(input);
@@ -121,8 +104,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(baseGold - buyItem._ItemValue * quantity, player._Gold);
 		}
 		[Test]
-		public void SellItemUnitTest()
-		{
+		public void SellItemUnitTest() {
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("placeholder", Player.PlayerClassType.Mage) { _Gold = 100 };
 			TownRoom room = new TownRoom("test", "test",
@@ -142,11 +124,9 @@ namespace DungeonGameTests
 			Assert.AreEqual(baseGold + sellItem._ItemValue, player._Gold);
 		}
 		[Test]
-		public void SellMultipleItemsWithSameName()
-		{
+		public void SellMultipleItemsWithSameName() {
 			OutputController.Display.ClearUserOutput();
-			Player player = new Player("placeholder", Player.PlayerClassType.Mage)
-			{
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage) {
 				_Inventory = new List<IItem> {
 					new Armor(1, Armor.ArmorSlot.Back),
 					new Armor(1, Armor.ArmorSlot.Back)

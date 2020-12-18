@@ -8,20 +8,15 @@ using NUnit.Framework;
 using System.Linq;
 using System.Threading;
 
-namespace DungeonGameTests
-{
-	public class WarAbilityUnitTests
-	{
+namespace DungeonGameTests {
+	public class WarAbilityUnitTests {
 		[Test]
-		public void SlashAbilityUnitTest()
-		{
+		public void SlashAbilityUnitTest() {
 			Player player = new Player("test", Player.PlayerClassType.Warrior) { _MaxRagePoints = 100, _RagePoints = 100 };
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon)
-			{ _HitPoints = 100, _MaxHitPoints = 100 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
-			{
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem._Equipped = false;
 			}
@@ -45,15 +40,12 @@ namespace DungeonGameTests
 			Assert.AreEqual(abilitySuccessString, OutputController.Display.Output[4][2]);
 		}
 		[Test]
-		public void RendAbilityUnitTest()
-		{
+		public void RendAbilityUnitTest() {
 			Player player = new Player("test", Player.PlayerClassType.Warrior) { _MaxRagePoints = 100, _RagePoints = 100 };
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon)
-			{ _HitPoints = 100, _MaxHitPoints = 100 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
-			{
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem._Equipped = false;
 			}
@@ -88,8 +80,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(abilityCurRounds, monster._Effects[0]._EffectCurRound);
 			Assert.AreEqual(abilityMaxRounds, monster._Effects[0]._EffectMaxRound);
 			OutputController.Display.ClearUserOutput();
-			for (int i = 2; i < 5; i++)
-			{
+			for (int i = 2; i < 5; i++) {
 				monster._Effects[0].BleedingRound(monster);
 				int bleedAmount = monster._Effects[0]._EffectAmountOverTime;
 				string bleedRoundString = $"The {monster._Name} bleeds for {bleedAmount} physical damage.";
@@ -103,20 +94,16 @@ namespace DungeonGameTests
 				monster._HitPoints);
 		}
 		[Test]
-		public void ChargeAbilityUnitTest()
-		{
-			Player player = new Player("test", Player.PlayerClassType.Warrior)
-			{
+		public void ChargeAbilityUnitTest() {
+			Player player = new Player("test", Player.PlayerClassType.Warrior) {
 				_MaxRagePoints = 100,
 				_RagePoints = 100,
 				_InCombat = true
 			};
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon)
-			{ _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
-			{
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem._Equipped = false;
 			}
@@ -149,8 +136,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(abilityCurRounds, monster._Effects[0]._EffectCurRound);
 			Assert.AreEqual(abilityMaxRounds, monster._Effects[0]._EffectMaxRound);
 			OutputController.Display.ClearUserOutput();
-			for (int i = 2; i < 4; i++)
-			{
+			for (int i = 2; i < 4; i++) {
 				monster._Effects[0].StunnedRound(monster);
 				string stunnedString = $"The {monster._Name} is stunned and cannot attack.";
 				Assert.AreEqual(stunnedString, OutputController.Display.Output[i - 2][2]);
@@ -161,10 +147,8 @@ namespace DungeonGameTests
 			Assert.AreEqual(false, monster._Effects.Any());
 		}
 		[Test]
-		public void BlockAbilityUnitTest()
-		{
-			Player player = new Player("test", Player.PlayerClassType.Warrior)
-			{
+		public void BlockAbilityUnitTest() {
+			Player player = new Player("test", Player.PlayerClassType.Warrior) {
 				_MaxRagePoints = 100,
 				_RagePoints = 100,
 				_InCombat = true,
@@ -174,8 +158,7 @@ namespace DungeonGameTests
 				_Level = 3
 			};
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Zombie)
-			{ _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
+			Monster monster = new Monster(3, Monster.MonsterType.Zombie) { _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
 			monster._MonsterWeapon._CritMultiplier = 1;
 			int abilityIndex = player._Abilities.FindIndex(
@@ -205,20 +188,16 @@ namespace DungeonGameTests
 			int blockAmountRemaining = player._Effects[0]._EffectAmount;
 			Assert.AreEqual(blockAmount, blockAmountRemaining);
 			int i = 0;
-			while (blockAmountRemaining > 0)
-			{
+			while (blockAmountRemaining > 0) {
 				monster._MonsterWeapon._Durability = 100;
 				int blockAmountBefore = blockAmountRemaining;
 				monster.Attack(player);
 				blockAmountRemaining = player._Effects.Any() ? player._Effects[0]._EffectAmount : 0;
-				if (blockAmountRemaining > 0)
-				{
+				if (blockAmountRemaining > 0) {
 					Assert.AreEqual(player._MaxHitPoints, player._HitPoints);
 					string blockRoundString = $"Your defensive move blocked {(blockAmountBefore - blockAmountRemaining)} damage!";
 					Assert.AreEqual(blockRoundString, OutputController.Display.Output[i + (i * 1)][2]);
-				}
-				else
-				{
+				} else {
 					GameController.RemovedExpiredEffectsAsync(player);
 					int attackAmount = monster._MonsterWeapon.Attack() - blockAmountBefore;
 					Assert.AreEqual(player._MaxHitPoints - attackAmount, player._HitPoints);
@@ -233,10 +212,8 @@ namespace DungeonGameTests
 			}
 		}
 		[Test]
-		public void BerserkAbilityUnitTest()
-		{
-			Player player = new Player("test", Player.PlayerClassType.Warrior)
-			{
+		public void BerserkAbilityUnitTest() {
+			Player player = new Player("test", Player.PlayerClassType.Warrior) {
 				_MaxRagePoints = 100,
 				_RagePoints = 100,
 				_InCombat = true,
@@ -246,11 +223,9 @@ namespace DungeonGameTests
 			};
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon)
-			{ _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
-			{
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem._Equipped = false;
 			}
@@ -280,8 +255,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(Effect.EffectType.ChangeArmor, player._Effects[1]._EffectGroup);
 			const string berserkString = "You go into a berserk rage!";
 			Assert.AreEqual(berserkString, OutputController.Display.Output[6][2]);
-			for (int i = 2; i < 6; i++)
-			{
+			for (int i = 2; i < 6; i++) {
 				OutputController.Display.ClearUserOutput();
 				int berserkArmorAmount = player._Abilities[abilityIndex]._ChangeAmount._Amount;
 				int berserkDamageAmount = player._Abilities[abilityIndex]._Offensive._Amount;
@@ -301,10 +275,8 @@ namespace DungeonGameTests
 			Assert.AreEqual(false, player._Effects.Any());
 		}
 		[Test]
-		public void DisarmAbilityUnitTest()
-		{
-			Player player = new Player("test", Player.PlayerClassType.Warrior)
-			{
+		public void DisarmAbilityUnitTest() {
+			Player player = new Player("test", Player.PlayerClassType.Warrior) {
 				_MaxRagePoints = 100,
 				_RagePoints = 100,
 				_MaxHitPoints = 100,
@@ -312,8 +284,7 @@ namespace DungeonGameTests
 			};
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon)
-			{ _HitPoints = 100, _MaxHitPoints = 100 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Disarm);
@@ -342,10 +313,8 @@ namespace DungeonGameTests
 			Assert.AreEqual(disarmSuccessString, OutputController.Display.Output[5][2]);
 		}
 		[Test]
-		public void BandageAbilityUnitTest()
-		{
-			Player player = new Player("test", Player.PlayerClassType.Warrior)
-			{
+		public void BandageAbilityUnitTest() {
+			Player player = new Player("test", Player.PlayerClassType.Warrior) {
 				_MaxRagePoints = 100,
 				_RagePoints = 100,
 				_MaxHitPoints = 100,
@@ -382,8 +351,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(baseHitPoints + healAmount, player._HitPoints);
 			baseHitPoints = player._HitPoints;
 			OutputController.Display.ClearUserOutput();
-			for (int i = 2; i < 5; i++)
-			{
+			for (int i = 2; i < 5; i++) {
 				player._Effects[0].HealingRound(player);
 				int healOverTimeAmt = player._Effects[0]._EffectAmountOverTime;
 				string healAmtString = $"You have been healed for {healOverTimeAmt} health.";
@@ -396,8 +364,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(false, player._Effects.Any());
 		}
 		[Test]
-		public void PowerAuraAbilityUnitTest()
-		{
+		public void PowerAuraAbilityUnitTest() {
 			OutputController.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Warrior) { _MaxRagePoints = 150, _RagePoints = 150 };
 			player._Abilities.Add(new PlayerAbility(
@@ -429,8 +396,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(
 				player._MaxRagePoints, baseMaxRage + player._Abilities[abilityIndex]._ChangeAmount._Amount * 10);
 			Assert.AreEqual(Effect.EffectType.ChangeStat, player._Effects[0]._EffectGroup);
-			for (int i = 0; i < 600; i++)
-			{
+			for (int i = 0; i < 600; i++) {
 				player._Effects[0].ChangeStatRound();
 			}
 			GameController.RemovedExpiredEffectsAsync(player);
@@ -441,19 +407,16 @@ namespace DungeonGameTests
 			Assert.AreEqual(player._MaxRagePoints - rageCost, player._RagePoints);
 		}
 		[Test]
-		public void WarCryAbilityUnitTest()
-		{
+		public void WarCryAbilityUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Warrior)
-			{
+			Player player = new Player("test", Player.PlayerClassType.Warrior) {
 				_MaxRagePoints = 100,
 				_RagePoints = 100,
 				_InCombat = true
 			};
 			player._Abilities.Add(new PlayerAbility(
 				"war cry", 50, 1, PlayerAbility.WarriorAbility.WarCry, 4));
-			Monster monster = new Monster(3, Monster.MonsterType.Demon)
-			{ _HitPoints = 100, _MaxHitPoints = 100 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.WarCry);
@@ -475,8 +438,7 @@ namespace DungeonGameTests
 				OutputController.Display.Output[5][2]);
 			OutputController.Display.ClearUserOutput();
 			Assert.AreEqual(Effect.EffectType.ChangeOpponentDamage, player._Effects[0]._EffectGroup);
-			for (int i = 2; i < 5; i++)
-			{
+			for (int i = 2; i < 5; i++) {
 				int baseAttackDamageM = monster._UnarmedAttackDamage;
 				int attackDamageM = baseAttackDamageM;
 				int changeDamageAmount = player._Effects[0]._EffectAmountOverTime < attackDamageM ?
@@ -493,19 +455,16 @@ namespace DungeonGameTests
 			Assert.AreEqual(false, player._Effects.Any());
 		}
 		[Test]
-		public void OnslaughtAbilityUnitTest()
-		{
+		public void OnslaughtAbilityUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Warrior)
-			{
+			Player player = new Player("test", Player.PlayerClassType.Warrior) {
 				_MaxRagePoints = 100,
 				_RagePoints = 100,
 				_InCombat = true
 			};
 			player._Abilities.Add(new PlayerAbility(
 				"onslaught", 25, 1, PlayerAbility.WarriorAbility.Onslaught, 8));
-			Monster monster = new Monster(3, Monster.MonsterType.Demon)
-			{ _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Onslaught);

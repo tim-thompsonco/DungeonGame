@@ -4,24 +4,20 @@ using DungeonGame.Items.Consumables.Kits;
 using NUnit.Framework;
 using System.Globalization;
 
-namespace DungeonGameTests.Items.Consumables.Kits
-{
-	class WeaponKitUnitTests
-	{
+namespace DungeonGameTests.Items.Consumables.Kits {
+	class WeaponKitUnitTests {
 		WeaponKit weaponKit;
 		Weapon weapon;
 		TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 
 		[SetUp]
-		public void Setup()
-		{
+		public void Setup() {
 			weaponKit = new WeaponKit(KitLevel.Light, WeaponKit.KitType.Grindstone);
 			weapon = new Weapon(3, Weapon.WeaponType.Axe);
 		}
 
 		[Test]
-		public void LightKitCreationTest()
-		{
+		public void LightKitCreationTest() {
 			Assert.AreEqual(1, weaponKit._Weight);
 			Assert.AreEqual(1, weaponKit._KitAugmentAmount);
 			Assert.AreEqual(false, weaponKit._KitHasBeenUsed);
@@ -29,24 +25,21 @@ namespace DungeonGameTests.Items.Consumables.Kits
 		}
 
 		[Test]
-		public void MediumKitCreationTest()
-		{
+		public void MediumKitCreationTest() {
 			weaponKit = new WeaponKit(KitLevel.Medium, WeaponKit.KitType.Bowstring);
 
 			Assert.AreEqual(2, weaponKit._KitAugmentAmount);
 		}
 
 		[Test]
-		public void HeavyKitCreationTest()
-		{
+		public void HeavyKitCreationTest() {
 			weaponKit = new WeaponKit(KitLevel.Heavy, WeaponKit.KitType.Bowstring);
 
 			Assert.AreEqual(3, weaponKit._KitAugmentAmount);
 		}
 
 		[Test]
-		public void GrindstoneKitAugmentAxeSucceeds()
-		{
+		public void GrindstoneKitAugmentAxeSucceeds() {
 			OutputController.Display.ClearUserOutput();
 			int baseWeaponItemValue = weapon._ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
@@ -62,8 +55,7 @@ namespace DungeonGameTests.Items.Consumables.Kits
 		}
 
 		[Test]
-		public void GrindstoneKitAugmentBowFails()
-		{
+		public void GrindstoneKitAugmentBowFails() {
 			OutputController.Display.ClearUserOutput();
 			weapon = new Weapon(3, Weapon.WeaponType.Bow);
 			int baseWeaponItemValue = weapon._ItemValue;
@@ -80,8 +72,7 @@ namespace DungeonGameTests.Items.Consumables.Kits
 		}
 
 		[Test]
-		public void BowstringKitAugmentAxeFails()
-		{
+		public void BowstringKitAugmentAxeFails() {
 			OutputController.Display.ClearUserOutput();
 			weaponKit = new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring);
 			int baseWeaponItemValue = weapon._ItemValue;
@@ -98,8 +89,7 @@ namespace DungeonGameTests.Items.Consumables.Kits
 		}
 
 		[Test]
-		public void BowstringKitAugmentBowSucceeds()
-		{
+		public void BowstringKitAugmentBowSucceeds() {
 			OutputController.Display.ClearUserOutput();
 			weapon = new Weapon(3, Weapon.WeaponType.Bow);
 			weaponKit = new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring);

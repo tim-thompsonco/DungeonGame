@@ -5,19 +5,15 @@ using DungeonGame.Players;
 using System;
 using System.Text;
 
-namespace DungeonGame.Items
-{
-	public class Weapon : IItem, IRainbowGear, IEquipment
-	{
-		public enum DamageType
-		{
+namespace DungeonGame.Items {
+	public class Weapon : IItem, IRainbowGear, IEquipment {
+		public enum DamageType {
 			Physical,
 			Fire,
 			Frost,
 			Arcane
 		}
-		public enum WeaponType
-		{
+		public enum WeaponType {
 			Dagger,
 			OneHandedSword,
 			TwoHandedSword,
@@ -40,8 +36,7 @@ namespace DungeonGame.Items
 
 		// Default constructor for JSON serialization
 		public Weapon() { }
-		public Weapon(int level, WeaponType weaponType)
-		{
+		public Weapon(int level, WeaponType weaponType) {
 			_Level = level;
 			_WeaponGroup = weaponType;
 			_DamageGroup = DamageType.Physical;
@@ -49,20 +44,15 @@ namespace DungeonGame.Items
 			_Durability = 100;
 			int randomNum = GameController.GetRandomNumber(1, 100);
 			int randomWeaponDmg = GameController.GetRandomNumber(20, 26);
-			if (randomNum < 5)
-			{
+			if (randomNum < 5) {
 				_RegDamage = randomWeaponDmg + ((level - 1) * 3);
 				_CritMultiplier = 1.3;
 				_Quality = 3;
-			}
-			else if (randomNum < 40)
-			{
+			} else if (randomNum < 40) {
 				_RegDamage = randomWeaponDmg + ((level - 1) * 2);
 				_CritMultiplier = 1.2;
 				_Quality = 2;
-			}
-			else if (randomNum <= 100)
-			{
+			} else if (randomNum <= 100) {
 				_RegDamage = randomWeaponDmg + ((level - 1) * 1);
 				_CritMultiplier = 1.1;
 				_Quality = 1;
@@ -71,8 +61,7 @@ namespace DungeonGame.Items
 			BuildWeaponName();
 			_Desc = $"A {_Name} that causes damage when you hit stuff with it.";
 		}
-		public Weapon(WeaponType weaponType, bool isRainbowGear, Player player)
-		{
+		public Weapon(WeaponType weaponType, bool isRainbowGear, Player player) {
 			_Level = player._Level;
 			_IsRainbowGear = isRainbowGear;
 			_WeaponGroup = weaponType;
@@ -81,20 +70,15 @@ namespace DungeonGame.Items
 			_Durability = 100;
 			int randomNum = GameController.GetRandomNumber(1, 100);
 			int randomWeaponDmg = GameController.GetRandomNumber(20, 26);
-			if (randomNum < 5)
-			{
+			if (randomNum < 5) {
 				_RegDamage = randomWeaponDmg + ((_Level - 1) * 3);
 				_CritMultiplier = 1.3;
 				_Quality = 3;
-			}
-			else if (randomNum < 40)
-			{
+			} else if (randomNum < 40) {
 				_RegDamage = randomWeaponDmg + ((_Level - 1) * 2);
 				_CritMultiplier = 1.2;
 				_Quality = 2;
-			}
-			else if (randomNum <= 100)
-			{
+			} else if (randomNum <= 100) {
 				_RegDamage = randomWeaponDmg + ((_Level - 1) * 1);
 				_CritMultiplier = 1.1;
 				_Quality = 1;
@@ -106,18 +90,15 @@ namespace DungeonGame.Items
 			_Desc = $"A {_Name} that causes damage when you hit stuff with it.";
 		}
 		public Weapon(int level, WeaponType weaponType, Monster.MonsterType monsterType)
-			: this(level, weaponType)
-		{
+			: this(level, weaponType) {
 			StringBuilder sb = new StringBuilder();
-			switch (monsterType)
-			{
+			switch (monsterType) {
 				case Monster.MonsterType.Skeleton:
 					return;
 				case Monster.MonsterType.Zombie:
 					return;
 				case Monster.MonsterType.Spider:
-					sb.Append(_Quality switch
-					{
+					sb.Append(_Quality switch {
 						1 => "",
 						2 => "sturdy ",
 						3 => "fine ",
@@ -135,8 +116,7 @@ namespace DungeonGame.Items
 				case Monster.MonsterType.Troll:
 					return;
 				case Monster.MonsterType.Dragon:
-					sb.Append(_Quality switch
-					{
+					sb.Append(_Quality switch {
 						1 => "",
 						2 => "sturdy ",
 						3 => "fine ",
@@ -150,51 +130,39 @@ namespace DungeonGame.Items
 			}
 		}
 
-		private void BuildWeaponName()
-		{
+		private void BuildWeaponName() {
 			StringBuilder sb = new StringBuilder();
-			if (_WeaponGroup != WeaponType.Bow)
-			{
-				sb.Append(_Level switch
-				{
+			if (_WeaponGroup != WeaponType.Bow) {
+				sb.Append(_Level switch {
 					1 => "chipped ",
 					2 => "dull ",
 					3 => "worn ",
 					_ => ""
 				});
-			}
-			else
-			{
-				sb.Append(_Level switch
-				{
+			} else {
+				sb.Append(_Level switch {
 					1 => "cracked ",
 					2 => "worn ",
 					3 => "solid ",
 					_ => ""
 				});
 			}
-			if (_WeaponGroup != WeaponType.Bow)
-			{
-				sb.Append(_Quality switch
-				{
+			if (_WeaponGroup != WeaponType.Bow) {
+				sb.Append(_Quality switch {
 					1 => "",
 					2 => "sturdy ",
 					3 => "fine ",
 					_ => ""
 				});
-			}
-			else
-			{
-				sb.Append(_Quality switch
-				{
+			} else {
+				sb.Append(_Quality switch {
 					1 => "pine ",
 					2 => "oak ",
 					3 => "great oak ",
 					_ => ""
 				});
 			}
-			sb.Append(_WeaponGroup switch
-			{
+			sb.Append(_WeaponGroup switch {
 				WeaponType.Axe => "axe",
 				WeaponType.Bow => "bow",
 				WeaponType.Dagger => "dagger",
@@ -204,12 +172,10 @@ namespace DungeonGame.Items
 			});
 			_Name = sb.ToString();
 		}
-		private void BuildWeaponName(string rainbowName)
-		{
+		private void BuildWeaponName(string rainbowName) {
 			StringBuilder sb = new StringBuilder();
 			sb.Append($"{rainbowName} ");
-			sb.Append(_WeaponGroup switch
-			{
+			sb.Append(_WeaponGroup switch {
 				WeaponType.Axe => "axe",
 				WeaponType.Bow => "bow",
 				WeaponType.Dagger => "dagger",
@@ -219,17 +185,14 @@ namespace DungeonGame.Items
 			});
 			_Name = sb.ToString();
 		}
-		public int Attack()
-		{
-			if (!_Equipped)
-			{
+		public int Attack() {
+			if (!_Equipped) {
 				return 0;
 			}
 
 			double attackDamage = _RegDamage;
 			int chanceToCrit = GameController.GetRandomNumber(1, 100);
-			if (chanceToCrit <= 25)
-			{
+			if (chanceToCrit <= 25) {
 				attackDamage *= _CritMultiplier;
 			}
 
@@ -237,8 +200,7 @@ namespace DungeonGame.Items
 			attackDamage *= _Durability / (double)100;
 			return (int)attackDamage;
 		}
-		public void UpdateRainbowStats(Player player)
-		{
+		public void UpdateRainbowStats(Player player) {
 			_Level = player._Level;
 			int randomWeaponDmg = GameController.GetRandomNumber(20, 26);
 			_RegDamage = randomWeaponDmg + ((_Level - 1) * 3);

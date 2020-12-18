@@ -7,27 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace DungeonGame.Controllers
-{
-	public static class InputController
-	{
-		public static string[] GetFormattedInput(string userInput)
-		{
+namespace DungeonGame.Controllers {
+	public static class InputController {
+		public static string[] GetFormattedInput(string userInput) {
 			string inputFormatted = userInput.ToLower().Trim();
 			string[] inputParse = inputFormatted.Split(' ');
 			return inputParse;
 		}
-		public static string ParseInput(string[] userInput)
-		{
+		public static string ParseInput(string[] userInput) {
 			StringBuilder inputString = new StringBuilder();
-			for (int i = 1; i < userInput.Length; i++)
-			{
-				if (i == userInput.Length - 1)
-				{
+			for (int i = 1; i < userInput.Length; i++) {
+				if (i == userInput.Length - 1) {
 					// If last loop iteration, check to see if it's a number, and if so do not add to input string
 					bool isNumber = int.TryParse(userInput.Last(), out _);
-					if (isNumber)
-					{
+					if (isNumber) {
 						continue;
 					}
 				}
@@ -37,49 +30,37 @@ namespace DungeonGame.Controllers
 			string parsedInput = inputString.ToString().Trim();
 			return parsedInput;
 		}
-		public static void ProcessUserInput(Player player, string[] input, Timer globalTimer)
-		{
+		public static void ProcessUserInput(Player player, string[] input, Timer globalTimer) {
 			IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
 			TownRoom isTownRoom = playerRoom as TownRoom;
 			int playerX = player._PlayerLocation._X;
 			int playerY = player._PlayerLocation._Y;
 			int playerZ = player._PlayerLocation._Z;
-			switch (input[0])
-			{
+			switch (input[0]) {
 				case "a":
 				case "attack":
 				case "kill":
 					playerRoom.AttackOpponent(player, input, globalTimer);
 					break;
 				case "buy":
-					try
-					{
-						if (input[1] != null)
-						{
-							try
-							{
+					try {
+						if (input[1] != null) {
+							try {
 								bool quantityProvided = int.TryParse(input.Last(), out int quantity);
-								if (!quantityProvided)
-								{
+								if (!quantityProvided) {
 									quantity = 1;
-								}
-								else
-								{
+								} else {
 									input = input.Take(input.Count() - 1).ToArray();
 								}
 								isTownRoom?._Vendor.BuyItem(player, input, quantity);
-							}
-							catch (NullReferenceException)
-							{
+							} catch (NullReferenceException) {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"There is no vendor in the room to buy an item from.");
 							}
 						}
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -87,36 +68,25 @@ namespace DungeonGame.Controllers
 					}
 					break;
 				case "cast":
-					try
-					{
-						if (input[1] != null && input[1].Contains("town"))
-						{
+					try {
+						if (input[1] != null && input[1].Contains("town")) {
+							player.CastSpell(ParseInput(input));
+						} else if (input[1] != null) {
 							player.CastSpell(ParseInput(input));
 						}
-						else if (input[1] != null)
-						{
-							player.CastSpell(ParseInput(input));
-						}
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have that spell.");
-					}
-					catch (NullReferenceException)
-					{
-						if (player._PlayerClass != Player.PlayerClassType.Mage)
-						{
+					} catch (NullReferenceException) {
+						if (player._PlayerClass != Player.PlayerClassType.Mage) {
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't cast spells. You're not a mage!");
 						}
-					}
-					catch (InvalidOperationException)
-					{
+					} catch (InvalidOperationException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -132,51 +102,35 @@ namespace DungeonGame.Controllers
 					GearController.PickupItem(player, input);
 					break;
 				case "use":
-					try
-					{
-						if (input.Contains("distance"))
-						{
+					try {
+						if (input.Contains("distance")) {
 							player.UseAbility(input);
-						}
-						else if (input.Contains("ambush"))
-						{
+						} else if (input.Contains("ambush")) {
 							player.UseAbility(playerRoom._Monster, input);
 							playerRoom.AttackOpponent(player, input, globalTimer);
-						}
-						else if (input[1] != null)
-						{
+						} else if (input[1] != null) {
 							player.UseAbility(input);
 						}
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have that ability.");
 						Console.WriteLine();
-					}
-					catch (ArgumentOutOfRangeException)
-					{
+					} catch (ArgumentOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"You don't have that ability.");
-					}
-					catch (NullReferenceException)
-					{
-						if (player._PlayerClass == Player.PlayerClassType.Mage)
-						{
+					} catch (NullReferenceException) {
+						if (player._PlayerClass == Player.PlayerClassType.Mage) {
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't use abilities. You're not a warrior or archer!");
 						}
-					}
-					catch (InvalidOperationException)
-					{
-						switch (player._PlayerClass)
-						{
+					} catch (InvalidOperationException) {
+						switch (player._PlayerClass) {
 							case Player.PlayerClassType.Warrior:
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
@@ -208,8 +162,7 @@ namespace DungeonGame.Controllers
 					break;
 				case "enhance":
 					int itemIndex = player._Inventory.FindIndex(f => f._Name.Contains(input[1]));
-					switch (player._Inventory[itemIndex])
-					{
+					switch (player._Inventory[itemIndex]) {
 						case Weapon _:
 							GearController.UseWeaponKit(player, input);
 							break;
@@ -231,21 +184,16 @@ namespace DungeonGame.Controllers
 				case "q":
 				case "quit":
 					bool quitConfirm = GameController.QuitGame(player);
-					if (quitConfirm)
-					{
+					if (quitConfirm) {
 						globalTimer.Dispose();
 					}
 					break;
 				case "list":
-					switch (input[1])
-					{
+					switch (input[1]) {
 						case "abilities":
-							try
-							{
+							try {
 								PlayerController.ListAbilities(player);
-							}
-							catch (IndexOutOfRangeException)
-							{
+							} catch (IndexOutOfRangeException) {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
@@ -253,12 +201,9 @@ namespace DungeonGame.Controllers
 							}
 							break;
 						case "spells":
-							try
-							{
+							try {
 								PlayerController.ListSpells(player);
-							}
-							catch (IndexOutOfRangeException)
-							{
+							} catch (IndexOutOfRangeException) {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
@@ -268,12 +213,9 @@ namespace DungeonGame.Controllers
 					}
 					break;
 				case "ability":
-					try
-					{
+					try {
 						PlayerController.AbilityInfo(player, input);
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -281,12 +223,9 @@ namespace DungeonGame.Controllers
 					}
 					break;
 				case "spell":
-					try
-					{
+					try {
 						PlayerController.SpellInfo(player, input);
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -294,12 +233,9 @@ namespace DungeonGame.Controllers
 					}
 					break;
 				case "quest":
-					try
-					{
+					try {
 						PlayerController.QuestInfo(player, input);
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -307,32 +243,22 @@ namespace DungeonGame.Controllers
 					}
 					break;
 				case "complete":
-					try
-					{
-						if (input[1] != null)
-						{
-							try
-							{
-								if (isTownRoom?._Trainer != null)
-								{
+					try {
+						if (input[1] != null) {
+							try {
+								if (isTownRoom?._Trainer != null) {
 									isTownRoom?._Trainer.CompleteQuest(player, input);
-								}
-								else
-								{
+								} else {
 									isTownRoom?._Vendor.CompleteQuest(player, input);
 								}
-							}
-							catch (NullReferenceException)
-							{
+							} catch (NullReferenceException) {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"There is no one to turn in quests to here.");
 							}
 						}
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -341,38 +267,27 @@ namespace DungeonGame.Controllers
 					break;
 				case "l":
 				case "look":
-					try
-					{
-						if (input[1] != null)
-						{
+					try {
+						if (input[1] != null) {
 							PlayerController.LookAtObject(player, input);
 						}
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						playerRoom.LookRoom();
 					}
 					break;
 				case "loot":
-					try
-					{
-						if (input[1] != null)
-						{
-							try
-							{
+					try {
+						if (input[1] != null) {
+							try {
 								playerRoom.LootCorpse(player, input);
-							}
-							catch (Exception)
-							{
+							} catch (Exception) {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"An error has occurred while looting.");
 							}
 						}
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -380,12 +295,9 @@ namespace DungeonGame.Controllers
 					}
 					break;
 				case "drink":
-					if (input.Last() == "potion")
-					{
+					if (input.Last() == "potion") {
 						player.AttemptDrinkPotion(ParseInput(input));
-					}
-					else
-					{
+					} else {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -402,25 +314,18 @@ namespace DungeonGame.Controllers
 					Messages.ShowCommandHelp();
 					break;
 				case "sell":
-					try
-					{
-						if (input[1] != null)
-						{
-							try
-							{
+					try {
+						if (input[1] != null) {
+							try {
 								isTownRoom?._Vendor.SellItem(player, input);
-							}
-							catch (NullReferenceException)
-							{
+							} catch (NullReferenceException) {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"The vendor doesn't want that.");
 							}
 						}
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -428,18 +333,12 @@ namespace DungeonGame.Controllers
 					}
 					break;
 				case "repair":
-					try
-					{
-						if (input[1] != null)
-						{
-							if (isTownRoom != null)
-							{
-								if (input[1] == "all")
-								{
-									foreach (IItem item in player._Inventory)
-									{
-										if (!(item is IEquipment itemToRepair && itemToRepair._Equipped))
-										{
+					try {
+						if (input[1] != null) {
+							if (isTownRoom != null) {
+								if (input[1] == "all") {
+									foreach (IItem item in player._Inventory) {
+										if (!(item is IEquipment itemToRepair && itemToRepair._Equipped)) {
 											continue;
 										}
 
@@ -451,16 +350,12 @@ namespace DungeonGame.Controllers
 								isTownRoom._Vendor.RepairItem(player, input, false);
 							}
 						}
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"Repair what?");
-					}
-					catch (NullReferenceException)
-					{
+					} catch (NullReferenceException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -468,32 +363,22 @@ namespace DungeonGame.Controllers
 					}
 					break;
 				case "upgrade":
-					try
-					{
-						if (input[1] != null)
-						{
-							if (isTownRoom != null)
-							{
-								if (player._PlayerClass == Player.PlayerClassType.Mage)
-								{
+					try {
+						if (input[1] != null) {
+							if (isTownRoom != null) {
+								if (player._PlayerClass == Player.PlayerClassType.Mage) {
 									isTownRoom._Trainer.UpgradeSpell(player, ParseInput(input));
-								}
-								else
-								{
+								} else {
 									isTownRoom._Trainer.UpgradeAbility(player, ParseInput(input));
 								}
 							}
 						}
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"Upgrade what?");
-					}
-					catch (NullReferenceException)
-					{
+					} catch (NullReferenceException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -501,32 +386,22 @@ namespace DungeonGame.Controllers
 					}
 					break;
 				case "train":
-					try
-					{
-						if (input[1] != null)
-						{
-							if (isTownRoom != null)
-							{
-								if (player._PlayerClass == Player.PlayerClassType.Mage)
-								{
+					try {
+						if (input[1] != null) {
+							if (isTownRoom != null) {
+								if (player._PlayerClass == Player.PlayerClassType.Mage) {
 									isTownRoom._Trainer.TrainSpell(player, ParseInput(input));
-								}
-								else
-								{
+								} else {
 									isTownRoom._Trainer.TrainAbility(player, ParseInput(input));
 								}
 							}
 						}
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"Train what?");
-					}
-					catch (NullReferenceException)
-					{
+					} catch (NullReferenceException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -534,26 +409,18 @@ namespace DungeonGame.Controllers
 					}
 					break;
 				case "consider":
-					try
-					{
-						if (isTownRoom?._Trainer != null)
-						{
+					try {
+						if (isTownRoom?._Trainer != null) {
 							isTownRoom._Trainer.OfferQuest(player, input);
-						}
-						else
-						{
+						} else {
 							isTownRoom?._Vendor.OfferQuest(player, input);
 						}
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"Consider what quest?");
-					}
-					catch (NullReferenceException)
-					{
+					} catch (NullReferenceException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -561,60 +428,42 @@ namespace DungeonGame.Controllers
 					}
 					break;
 				case "show":
-					try
-					{
-						if (input[1].Contains("forsale"))
-						{
-							try
-							{
+					try {
+						if (input[1].Contains("forsale")) {
+							try {
 								isTownRoom?._Vendor.DisplayGearForSale();
-							}
-							catch (NullReferenceException)
-							{
+							} catch (NullReferenceException) {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"There is no vendor in the room to show inventory available for sale.");
 							}
 						}
-						if (input[1].Contains("upgrade"))
-						{
-							try
-							{
+						if (input[1].Contains("upgrade")) {
+							try {
 								isTownRoom?._Trainer.DisplayAvailableUpgrades(player);
-							}
-							catch (NullReferenceException)
-							{
+							} catch (NullReferenceException) {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"There is no trainer in the room to show available upgrades.");
 							}
 						}
-						if (input[1].Contains("quests"))
-						{
-							try
-							{
-								if (isTownRoom?._Trainer != null)
-								{
+						if (input[1].Contains("quests")) {
+							try {
+								if (isTownRoom?._Trainer != null) {
 									isTownRoom._Trainer.ShowQuestList(player);
-								}
-								else
-								{
+								} else {
 									isTownRoom?._Vendor.ShowQuestList(player);
 								}
-							}
-							catch (NullReferenceException)
-							{
+							} catch (NullReferenceException) {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"There is no one in the room to show quests.");
 							}
 						}
-					}
-					catch (IndexOutOfRangeException)
-					{
+					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -623,191 +472,131 @@ namespace DungeonGame.Controllers
 					break;
 				case "n":
 				case "north":
-					if (playerRoom._North != null)
-					{
-						try
-						{
+					if (playerRoom._North != null) {
+						try {
 							Coordinate newCoord = new Coordinate(playerX, playerY + 1, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
-						}
-						catch (ArgumentOutOfRangeException)
-						{
+						} catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
 						}
-					}
-					else
-					{
+					} else {
 						Messages.InvalidDirection();
 					}
 					break;
 				case "s":
 				case "south":
-					if (playerRoom._South != null)
-					{
-						try
-						{
+					if (playerRoom._South != null) {
+						try {
 							Coordinate newCoord = new Coordinate(playerX, playerY - 1, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
-						}
-						catch (ArgumentOutOfRangeException)
-						{
+						} catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
 						}
-					}
-					else
-					{
+					} else {
 						Messages.InvalidDirection();
 					}
 					break;
 				case "e":
 				case "east":
-					if (playerRoom._East != null)
-					{
-						try
-						{
+					if (playerRoom._East != null) {
+						try {
 							Coordinate newCoord = new Coordinate(playerX + 1, playerY, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
-						}
-						catch (ArgumentOutOfRangeException)
-						{
+						} catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
 						}
-					}
-					else
-					{
+					} else {
 						Messages.InvalidDirection();
 					}
 					break;
 				case "w":
 				case "west":
-					if (playerRoom._West != null)
-					{
-						try
-						{
+					if (playerRoom._West != null) {
+						try {
 							Coordinate newCoord = new Coordinate(playerX - 1, playerY, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
-						}
-						catch (ArgumentOutOfRangeException)
-						{
+						} catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
 						}
-					}
-					else
-					{
+					} else {
 						Messages.InvalidDirection();
 					}
 					break;
 				case "ne":
 				case "northeast":
-					if (playerRoom._NorthEast != null)
-					{
-						try
-						{
+					if (playerRoom._NorthEast != null) {
+						try {
 							Coordinate newCoord = new Coordinate(playerX + 1, playerY + 1, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
-						}
-						catch (ArgumentOutOfRangeException)
-						{
+						} catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
 						}
-					}
-					else
-					{
+					} else {
 						Messages.InvalidDirection();
 					}
 					break;
 				case "nw":
 				case "northwest":
-					if (playerRoom._NorthWest != null)
-					{
-						try
-						{
+					if (playerRoom._NorthWest != null) {
+						try {
 							Coordinate newCoord = new Coordinate(playerX - 1, playerY + 1, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
-						}
-						catch (ArgumentOutOfRangeException)
-						{
+						} catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
 						}
-					}
-					else
-					{
+					} else {
 						Messages.InvalidDirection();
 					}
 					break;
 				case "se":
 				case "southeast":
-					if (playerRoom._SouthEast != null)
-					{
-						try
-						{
+					if (playerRoom._SouthEast != null) {
+						try {
 							Coordinate newCoord = new Coordinate(playerX + 1, playerY - 1, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
-						}
-						catch (ArgumentOutOfRangeException)
-						{
+						} catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
 						}
-					}
-					else
-					{
+					} else {
 						Messages.InvalidDirection();
 					}
 					break;
 				case "sw":
 				case "southwest":
-					if (playerRoom._SouthWest != null)
-					{
-						try
-						{
+					if (playerRoom._SouthWest != null) {
+						try {
 							Coordinate newCoord = new Coordinate(playerX - 1, playerY - 1, playerZ);
 							RoomController.ChangeRoom(player, newCoord);
-						}
-						catch (ArgumentOutOfRangeException)
-						{
+						} catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
 						}
-					}
-					else
-					{
+					} else {
 						Messages.InvalidDirection();
 					}
 					break;
 				case "u":
 				case "up":
-					if (playerRoom._Up != null)
-					{
-						try
-						{
+					if (playerRoom._Up != null) {
+						try {
 							Coordinate newCoord = new Coordinate(playerX, playerY, playerZ + 1);
 							RoomController.ChangeRoom(player, newCoord);
-						}
-						catch (ArgumentOutOfRangeException)
-						{
+						} catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
 						}
-					}
-					else
-					{
+					} else {
 						Messages.InvalidDirection();
 					}
 					break;
 				case "d":
 				case "down":
-					if (playerRoom._Down != null)
-					{
-						try
-						{
+					if (playerRoom._Down != null) {
+						try {
 							Coordinate newCoord = new Coordinate(playerX, playerY, playerZ - 1);
 							RoomController.ChangeRoom(player, newCoord);
-						}
-						catch (ArgumentOutOfRangeException)
-						{
+						} catch (ArgumentOutOfRangeException) {
 							Messages.InvalidDirection();
 						}
-					}
-					else
-					{
+					} else {
 						Messages.InvalidDirection();
 					}
 					break;

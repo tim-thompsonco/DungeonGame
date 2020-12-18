@@ -4,18 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace DungeonGame
-{
-	public class PlayerBuilder
-	{
-		public Player BuildNewPlayer()
-		{
+namespace DungeonGame {
+	public class PlayerBuilder {
+		public Player BuildNewPlayer() {
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), "Please enter a player name.");
 			string playerName;
-			while (true)
-			{
+			while (true) {
 				List<string> sameLineOutput = new List<string> {
 					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), "Player name: "
 				};
@@ -30,13 +26,11 @@ namespace DungeonGame
 				Messages.RequestCommand();
 				string[] input = InputController.GetFormattedInput(Console.ReadLine());
 				OutputController.Display.ClearUserOutput();
-				if (input[0] == "y")
-				{
+				if (input[0] == "y") {
 					break;
 				}
 			}
-			while (true)
-			{
+			while (true) {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAnnounceText(),
 					Settings.FormatDefaultBackground(),
@@ -49,8 +43,7 @@ namespace DungeonGame
 				string[] userInput = InputController.GetFormattedInput(Console.ReadLine());
 				OutputController.Display.ClearUserOutput();
 				string playerClassInput = textInfo.ToTitleCase(userInput[0]);
-				if (playerClassInput != "Mage" && playerClassInput != "Warrior" && playerClassInput != "Archer")
-				{
+				if (playerClassInput != "Mage" && playerClassInput != "Warrior" && playerClassInput != "Archer") {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatAnnounceText(),
 						Settings.FormatDefaultBackground(),
@@ -65,11 +58,9 @@ namespace DungeonGame
 				Messages.RequestCommand();
 				OutputController.Display.RetrieveUserOutput();
 				string[] input = InputController.GetFormattedInput(Console.ReadLine());
-				if (input[0] == "y")
-				{
+				if (input[0] == "y") {
 					OutputController.Display.ClearUserOutput();
-					switch (playerClass)
-					{
+					switch (playerClass) {
 						case "Archer":
 							Player playerArcher = new Player(playerName, Player.PlayerClassType.Archer);
 							const string archerString =
@@ -79,10 +70,8 @@ namespace DungeonGame
 								"about an ability, you can 'ability' the ability name. For example, 'ability distance'. " +
 								"To use a bow, you must have a quiver equipped, and it must not be empty. To reload " +
 								"your quiver, you can 'reload'.";
-							for (int i = 0; i < archerString.Length; i += Settings.GetGameWidth())
-							{
-								if (archerString.Length - i < Settings.GetGameWidth())
-								{
+							for (int i = 0; i < archerString.Length; i += Settings.GetGameWidth()) {
+								if (archerString.Length - i < Settings.GetGameWidth()) {
 									OutputController.Display.StoreUserOutput(
 										Settings.FormatAnnounceText(),
 										Settings.FormatDefaultBackground(),
@@ -102,10 +91,8 @@ namespace DungeonGame
 								"'cast fireball', if you have a spell named fireball in your spellbook. To see " +
 								"the list of spells in your spellbook, you can 'list spells'. To view info " +
 								"about a spell, you can 'spell' the spell name. For example, 'spell fireball'.";
-							for (int i = 0; i < mageString.Length; i += Settings.GetGameWidth())
-							{
-								if (mageString.Length - i < Settings.GetGameWidth())
-								{
+							for (int i = 0; i < mageString.Length; i += Settings.GetGameWidth()) {
+								if (mageString.Length - i < Settings.GetGameWidth()) {
 									OutputController.Display.StoreUserOutput(
 										Settings.FormatAnnounceText(),
 										Settings.FormatDefaultBackground(),
@@ -125,10 +112,8 @@ namespace DungeonGame
 								"'use charge', if you have an ability named charge in your abilities. To see " +
 								"the list of abilities you have available, you can 'list abilities'. To view info " +
 								"about an ability, you can 'ability' the ability name. For example, 'ability charge'.";
-							for (int i = 0; i < warriorString.Length; i += Settings.GetGameWidth())
-							{
-								if (warriorString.Length - i < Settings.GetGameWidth())
-								{
+							for (int i = 0; i < warriorString.Length; i += Settings.GetGameWidth()) {
+								if (warriorString.Length - i < Settings.GetGameWidth()) {
 									OutputController.Display.StoreUserOutput(
 										Settings.FormatAnnounceText(),
 										Settings.FormatDefaultBackground(),

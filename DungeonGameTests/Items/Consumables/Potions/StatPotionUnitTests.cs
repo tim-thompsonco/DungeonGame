@@ -5,32 +5,26 @@ using DungeonGame.Players;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace DungeonGameTests.Items.Consumables.Potions
-{
-	class StatPotionUnitTests
-	{
+namespace DungeonGameTests.Items.Consumables.Potions {
+	class StatPotionUnitTests {
 		Player player;
 		StatPotion potion;
 
 		[SetUp]
-		public void Setup()
-		{
+		public void Setup() {
 			potion = new StatPotion(PotionStrength.Minor, StatPotion.StatType.Constitution);
-			player = new Player("test", Player.PlayerClassType.Archer)
-			{
+			player = new Player("test", Player.PlayerClassType.Archer) {
 				_Inventory = new List<IItem>()
 			};
 		}
 
 		[Test]
-		public void PotionCreationTest()
-		{
+		public void PotionCreationTest() {
 			Assert.AreEqual(1, potion._Weight);
 		}
 
 		[Test]
-		public void MinorPotionCreationTest()
-		{
+		public void MinorPotionCreationTest() {
 			potion = new StatPotion(PotionStrength.Minor, StatPotion.StatType.Constitution);
 
 			Assert.AreEqual("minor constitution potion", potion._Name);
@@ -40,8 +34,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		}
 
 		[Test]
-		public void NormalPotionCreationTest()
-		{
+		public void NormalPotionCreationTest() {
 			potion = new StatPotion(PotionStrength.Normal, StatPotion.StatType.Constitution);
 
 			Assert.AreEqual("constitution potion", potion._Name);
@@ -51,8 +44,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		}
 
 		[Test]
-		public void GreaterPotionCreationTest()
-		{
+		public void GreaterPotionCreationTest() {
 			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Constitution);
 
 			Assert.AreEqual("greater constitution potion", potion._Name);
@@ -62,8 +54,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		}
 
 		[Test]
-		public void PlayerDrinkPotionConstitutionTest()
-		{
+		public void PlayerDrinkPotionConstitutionTest() {
 			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Constitution);
 			player._Inventory.Add(potion);
 			player._Constitution = 20;
@@ -77,8 +68,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		}
 
 		[Test]
-		public void PlayerDrinkPotionDexterityTest()
-		{
+		public void PlayerDrinkPotionDexterityTest() {
 			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Dexterity);
 			player._Inventory.Add(potion);
 			player._Dexterity = 20;
@@ -92,8 +82,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		}
 
 		[Test]
-		public void PlayerDrinkPotionIntelligenceTest()
-		{
+		public void PlayerDrinkPotionIntelligenceTest() {
 			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Intelligence);
 			player._Inventory.Add(potion);
 			player._Intelligence = 20;
@@ -107,8 +96,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		}
 
 		[Test]
-		public void PlayerDrinkPotionStrengthTest()
-		{
+		public void PlayerDrinkPotionStrengthTest() {
 			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Strength);
 			player._Inventory.Add(potion);
 			player._Strength = 20;
@@ -122,8 +110,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		}
 
 		[Test]
-		public void PlayerDrinkPotionDisplayMessageTest()
-		{
+		public void PlayerDrinkPotionDisplayMessageTest() {
 			OutputController.Display.ClearUserOutput();
 			player._Inventory.Add(potion);
 			string displayMessage = $"You drank a potion and increased Constitution by {potion._StatAmount}.";

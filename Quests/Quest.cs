@@ -6,12 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DungeonGame.Quests
-{
-	public class Quest
-	{
-		public enum QuestType
-		{
+namespace DungeonGame.Quests {
+	public class Quest {
+		public enum QuestType {
 			KillCount,
 			KillMonster,
 			ClearLevel
@@ -30,14 +27,12 @@ namespace DungeonGame.Quests
 		public string _QuestGiver { get; set; }
 
 		public Quest(
-			string name, string dialogue, QuestType questCategory, IItem questRewardItem, string questGiver)
-		{
+			string name, string dialogue, QuestType questCategory, IItem questRewardItem, string questGiver) {
 			_Name = name;
 			_Dialogue = dialogue;
 			_QuestCategory = questCategory;
 			_QuestGiver = questGiver;
-			switch (_QuestCategory)
-			{
+			switch (_QuestCategory) {
 				case QuestType.KillCount:
 					int desiredKills = GameController.GetRandomNumber(20, 30);
 					_CurrentKills = 0;
@@ -50,8 +45,7 @@ namespace DungeonGame.Quests
 					_RequiredKills = desiredMonsterKills;
 					_QuestRewardGold = (int)_RequiredKills * 10;
 					int randomNum = GameController.GetRandomNumber(1, 8);
-					_MonsterKillType = randomNum switch
-					{
+					_MonsterKillType = randomNum switch {
 						1 => Monster.MonsterType.Demon,
 						2 => Monster.MonsterType.Dragon,
 						3 => Monster.MonsterType.Elemental,
@@ -76,25 +70,21 @@ namespace DungeonGame.Quests
 			_QuestRewardItem = questRewardItem;
 		}
 
-		public void ShowQuest()
-		{
+		public void ShowQuest() {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				_Name);
 			StringBuilder questBorder = new StringBuilder();
-			for (int i = 0; i < Settings.GetGameWidth(); i++)
-			{
+			for (int i = 0; i < Settings.GetGameWidth(); i++) {
 				questBorder.Append("=");
 			}
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				questBorder.ToString());
-			for (int i = 0; i < _Dialogue.Length; i += Settings.GetGameWidth())
-			{
-				if (_Dialogue.Length - i < Settings.GetGameWidth())
-				{
+			for (int i = 0; i < _Dialogue.Length; i += Settings.GetGameWidth()) {
+				if (_Dialogue.Length - i < Settings.GetGameWidth()) {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
 						Settings.FormatDefaultBackground(),
@@ -110,8 +100,7 @@ namespace DungeonGame.Quests
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				questBorder.ToString());
-			switch (_QuestCategory)
-			{
+			switch (_QuestCategory) {
 				case QuestType.KillCount:
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
@@ -151,28 +140,22 @@ namespace DungeonGame.Quests
 				Settings.FormatDefaultBackground(),
 				$"{_QuestRewardGold} gold coins");
 		}
-		public async void UpdateQuestProgress(Monster monster)
-		{
-			await Task.Run(() =>
-			{
-				switch (_QuestCategory)
-				{
+		public async void UpdateQuestProgress(Monster monster) {
+			await Task.Run(() => {
+				switch (_QuestCategory) {
 					case QuestType.KillCount:
 						_CurrentKills++;
-						if (_CurrentKills >= _RequiredKills)
-						{
+						if (_CurrentKills >= _RequiredKills) {
 							_QuestCompleted = true;
 						}
 
 						break;
 					case QuestType.KillMonster:
-						if (_MonsterKillType == monster._MonsterCategory)
-						{
+						if (_MonsterKillType == monster._MonsterCategory) {
 							_CurrentKills++;
 						}
 
-						if (_CurrentKills >= _RequiredKills)
-						{
+						if (_CurrentKills >= _RequiredKills) {
 							_QuestCompleted = true;
 						}
 
@@ -181,24 +164,20 @@ namespace DungeonGame.Quests
 						_MonstersRemaining = RoomController._Rooms.Where(
 							room => room.Key._Z == _TargetLevel * -1).Count(
 							room => room.Value._Monster?._HitPoints > 0);
-						if (_MonstersRemaining == 0)
-						{
+						if (_MonstersRemaining == 0) {
 							_QuestCompleted = true;
 						}
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-				if (!_QuestCompleted)
-				{
+				if (!_QuestCompleted) {
 					return;
 				}
 
 				string questSuccess = $"You have completed the quest {_Name}! Go turn it in to {_QuestGiver} and get your reward.";
-				for (int i = 0; i < questSuccess.Length; i += Settings.GetGameWidth())
-				{
-					if (questSuccess.Length - i < Settings.GetGameWidth())
-					{
+				for (int i = 0; i < questSuccess.Length; i += Settings.GetGameWidth()) {
+					if (questSuccess.Length - i < Settings.GetGameWidth()) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),

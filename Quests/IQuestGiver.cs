@@ -1,10 +1,8 @@
 ﻿using DungeonGame.Players;
 using System.Collections.Generic;
 
-namespace DungeonGame.Quests
-{
-	public interface IQuestGiver : IName
-	{
+namespace DungeonGame.Quests {
+	public interface IQuestGiver : IName {
 		List<Quest> _AvailableQuests { get; set; }
 
 		void OfferQuest(Player player, string[] input);
