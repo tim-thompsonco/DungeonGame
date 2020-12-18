@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using DungeonGame.Monsters;
+using DungeonGame.Players;
+using System.Collections.Generic;
 using System.Threading;
 
-namespace DungeonGame
+namespace DungeonGame.Rooms
 {
 	public interface IRoom : IName
 	{

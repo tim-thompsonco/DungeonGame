@@ -1,5 +1,6 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Items;
+using DungeonGame.Monsters;
 using System;
 using System.Linq;
 using System.Text;

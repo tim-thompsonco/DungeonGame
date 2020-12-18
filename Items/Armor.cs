@@ -1,5 +1,6 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Items.Equipment;
+using DungeonGame.Players;
 using System;
 using System.Text;
 

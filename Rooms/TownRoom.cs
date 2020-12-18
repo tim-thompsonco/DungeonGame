@@ -1,12 +1,14 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Items;
+using DungeonGame.Monsters;
+using DungeonGame.Players;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace DungeonGame
+namespace DungeonGame.Rooms
 {
 	public class TownRoom : IRoom
 	{

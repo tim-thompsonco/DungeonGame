@@ -1,4 +1,6 @@
-﻿namespace DungeonGame.Items.Consumables.Potions
+﻿using DungeonGame.Players;
+
+namespace DungeonGame.Items.Consumables.Potions
 {
 	public enum PotionStrength
 	{

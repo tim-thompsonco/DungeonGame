@@ -2,6 +2,8 @@ using DungeonGame;
 using DungeonGame.Controllers;
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables.Potions;
+using DungeonGame.Players;
+using DungeonGame.Rooms;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;

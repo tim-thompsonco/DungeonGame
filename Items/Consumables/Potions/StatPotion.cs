@@ -1,4 +1,5 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Players;
 
 namespace DungeonGame.Items.Consumables.Potions
 {

@@ -1,8 +1,8 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Items;
-using DungeonGame.Items.Consumables;
 using DungeonGame.Items.Consumables.Kits;
 using DungeonGame.Items.Consumables.Potions;
+using DungeonGame.Monsters;
 using System;
 
 namespace DungeonGame

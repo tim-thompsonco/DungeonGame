@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using DungeonGame.Players;
+using DungeonGame.Rooms;
+using System.Collections.Generic;
 
 namespace DungeonGame.Controllers
 {

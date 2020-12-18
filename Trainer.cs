@@ -1,5 +1,6 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Items;
+using DungeonGame.Players;
 using DungeonGame.Quests;
 using System;
 using System.Collections.Generic;

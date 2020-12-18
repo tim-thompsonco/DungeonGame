@@ -2,6 +2,9 @@
 using DungeonGame.Items.Consumables;
 using DungeonGame.Items.Equipment;
 using DungeonGame.Items.Consumables.Potions;
+using DungeonGame.Monsters;
+using DungeonGame.Players;
+using DungeonGame.Rooms;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

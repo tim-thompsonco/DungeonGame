@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DungeonGame.Players;
+using System.Collections.Generic;
 
 namespace DungeonGame.Quests
 {

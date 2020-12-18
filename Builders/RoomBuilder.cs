@@ -1,4 +1,5 @@
 using DungeonGame.Controllers;
+using DungeonGame.Rooms;
 using System;
 using System.Collections.Generic;
 using System.Linq;

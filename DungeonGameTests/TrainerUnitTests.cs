@@ -1,5 +1,6 @@
 ﻿using DungeonGame;
 using DungeonGame.Controllers;
+using DungeonGame.Players;
 using NUnit.Framework;
 
 namespace DungeonGameTests

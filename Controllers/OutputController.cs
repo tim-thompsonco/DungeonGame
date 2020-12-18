@@ -1,4 +1,7 @@
-﻿using DungeonGame.Quests;
+﻿using DungeonGame.Monsters;
+using DungeonGame.Players;
+using DungeonGame.Quests;
+using DungeonGame.Rooms;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

@@ -1,4 +1,6 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Monsters;
+using DungeonGame.Players;
 using System;
 using System.Linq;
 

@@ -1,4 +1,7 @@
 ﻿using DungeonGame.Items;
+using DungeonGame.Monsters;
+using DungeonGame.Players;
+using DungeonGame.Rooms;
 using System;
 using System.Linq;
 

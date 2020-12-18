@@ -2,6 +2,8 @@
 using DungeonGame.Controllers;
 using DungeonGame.Items;
 using DungeonGame.Items.Equipment;
+using DungeonGame.Monsters;
+using DungeonGame.Players;
 using NUnit.Framework;
 using System.Linq;
 using System.Threading;

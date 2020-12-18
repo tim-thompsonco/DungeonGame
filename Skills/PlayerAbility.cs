@@ -1,4 +1,7 @@
 using DungeonGame.Controllers;
+using DungeonGame.Monsters;
+using DungeonGame.Players;
+using DungeonGame.Rooms;
 using System;
 using System.Collections.Generic;
 

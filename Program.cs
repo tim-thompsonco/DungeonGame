@@ -1,4 +1,5 @@
 using DungeonGame.Controllers;
+using DungeonGame.Players;
 using System;
 using System.Threading;
 

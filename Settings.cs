@@ -1,4 +1,6 @@
-﻿namespace DungeonGame
+﻿using DungeonGame.Players;
+
+namespace DungeonGame
 {
 	public static class Settings
 	{

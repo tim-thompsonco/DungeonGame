@@ -1,4 +1,6 @@
-﻿namespace DungeonGame
+﻿using DungeonGame.Rooms;
+
+namespace DungeonGame
 {
 	public static class RoomBuilderHelper
 	{

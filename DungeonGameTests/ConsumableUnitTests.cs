@@ -3,6 +3,7 @@ using DungeonGame.Controllers;
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables.Kits;
 using DungeonGame.Items.Consumables.Potions;
+using DungeonGame.Players;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Globalization;

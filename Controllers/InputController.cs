@@ -1,5 +1,7 @@
 using DungeonGame.Items;
 using DungeonGame.Items.Equipment;
+using DungeonGame.Players;
+using DungeonGame.Rooms;
 using System;
 using System.Linq;
 using System.Text;

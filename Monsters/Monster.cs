@@ -1,12 +1,13 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Items;
 using DungeonGame.Items.Equipment;
+using DungeonGame.Players;
 using DungeonGame.Quests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DungeonGame
+namespace DungeonGame.Monsters
 {
 	public class Monster : IName
 	{
