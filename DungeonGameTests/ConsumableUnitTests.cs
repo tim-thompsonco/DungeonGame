@@ -282,6 +282,7 @@ namespace DungeonGameTests
 			Assert.AreEqual(weaponAmount + kitAmount, weapon._RegDamage);
 			Assert.AreEqual(0, player._Inventory.FindAll(item => item is IKit).Count);
 			player._Inventory.Add(new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring));
+			weaponKit = player._Inventory.Find(item => item is WeaponKit) as WeaponKit;
 			kitName = weaponKit._Name;
 			input = new[] { "enhance", weaponName, kitName };
 			GearController.UseWeaponKit(player, input);
@@ -289,14 +290,13 @@ namespace DungeonGameTests
 			Assert.IsNotEmpty(player._Inventory);
 			Assert.AreEqual(enhanceFail, OutputController.Display.Output[3][2]);
 			player._Inventory.Add(new Weapon(1, Weapon.WeaponType.Bow));
-			weaponIndex = player._Inventory.FindIndex(f => f._Name.Contains("bow"));
-			weapon = player._Inventory[weaponIndex] as Weapon;
+			weapon = player._Inventory.Find(item => item is Weapon && item._Name.ToLower().Contains("bow")) as Weapon;
 			weapon._Equipped = true;
-			weaponName = textInfo.ToTitleCase(player._Inventory[weaponIndex]._Name);
+			weaponName = textInfo.ToTitleCase(weapon._Name);
 			input = new[] { "enhance", weaponName, kitName };
 			GearController.UseWeaponKit(player, input);
 			upgradeSuccess = $"You upgraded {weaponName} with a weapon kit.";
-			Assert.IsEmpty(player._Inventory);
+			Assert.AreEqual(0, player._Inventory.FindAll(item => item is IKit).Count);
 			Assert.AreEqual(upgradeSuccess, OutputController.Display.Output[4][2]);
 		}
 	}
