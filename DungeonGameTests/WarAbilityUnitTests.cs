@@ -1,5 +1,7 @@
 ﻿using DungeonGame;
 using DungeonGame.Controllers;
+using DungeonGame.Items;
+using DungeonGame.Items.Equipment;
 using NUnit.Framework;
 using System.Linq;
 using System.Threading;
@@ -16,9 +18,10 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Demon)
 			{ _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IEquipment item in monster._MonsterItems.Where(item => item._Equipped))
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
 			{
-				item._Equipped = false;
+				IEquipment eItem = item as IEquipment;
+				eItem._Equipped = false;
 			}
 			string[] inputInfo = new[] { "ability", "slash" };
 			int abilityIndex = player._Abilities.FindIndex(
@@ -47,9 +50,10 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Demon)
 			{ _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IEquipment item in monster._MonsterItems.Where(item => item._Equipped))
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
 			{
-				item._Equipped = false;
+				IEquipment eItem = item as IEquipment;
+				eItem._Equipped = false;
 			}
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Rend);
@@ -109,9 +113,10 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Demon)
 			{ _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IEquipment item in monster._MonsterItems.Where(item => item._Equipped))
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
 			{
-				item._Equipped = false;
+				IEquipment eItem = item as IEquipment;
+				eItem._Equipped = false;
 			}
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Charge);
@@ -242,9 +247,10 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Demon)
 			{ _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IEquipment item in monster._MonsterItems.Where(item => item._Equipped))
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
 			{
-				item._Equipped = false;
+				IEquipment eItem = item as IEquipment;
+				eItem._Equipped = false;
 			}
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Berserk);

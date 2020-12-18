@@ -1,4 +1,5 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Items;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -265,7 +266,7 @@ namespace DungeonGame
 						"The vendor is carrying: "};
 					OutputController.Display.StoreUserOutput(sameLineOutput);
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-					foreach (IEquipment itemForSale in _Vendor._VendorItems)
+					foreach (IItem itemForSale in _Vendor._VendorItems)
 					{
 						List<string> sameLineOutputItem = new List<string>();
 						StringBuilder sb = new StringBuilder();

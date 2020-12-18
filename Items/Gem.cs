@@ -1,6 +1,6 @@
 ﻿namespace DungeonGame.Items
 {
-	public class Gem : IEquipment
+	public class Gem : IItem
 	{
 		public enum GemType
 		{

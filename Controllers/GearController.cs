@@ -1,4 +1,5 @@
 ﻿using DungeonGame.Items;
+using DungeonGame.Items.Equipment;
 using DungeonGame.Items.Consumables.Kits;
 using System;
 using System.Collections.Generic;
@@ -10,22 +11,24 @@ namespace DungeonGame.Controllers
 {
 	public static class GearController
 	{
-		private static bool IsWearable(IEquipment item)
-		{
-			return item.GetType().Name == "Armor" || item.GetType().Name == "Weapon" || item.GetType().Name == "Quiver";
-		}
 		public static void EquipInitialGear(Player player)
 		{
-			EquipWeapon(player, player._Inventory[0] as Weapon);
-			EquipArmor(player, player._Inventory[1] as Armor);
-			EquipArmor(player, player._Inventory[2] as Armor);
-			EquipArmor(player, player._Inventory[3] as Armor);
+			Weapon playerWeapon = player._Inventory.Find(item => item is Weapon) as Weapon;
+			EquipWeapon(player, playerWeapon);
+
+			List<IItem> playerArmorList = player._Inventory.FindAll(item => item is Armor);
+			foreach(IItem playerArmor in playerArmorList)
+			{
+				EquipArmor(player, (Armor)playerArmor);
+			}
+
 			if (player._PlayerClass == Player.PlayerClassType.Archer)
 			{
-				EquipQuiver(player, player._Inventory[4] as Quiver);
+				Quiver quiver = player._Inventory.Find(item => item is Quiver) as Quiver;
+				EquipQuiver(player, quiver);
 			}
 		}
-		public static string GetItemDetails(IEquipment item)
+		public static string GetItemDetails(IItem item)
 		{
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			StringBuilder itemInfo = new StringBuilder();
@@ -98,7 +101,7 @@ namespace DungeonGame.Controllers
 
 		public static void UseWeaponKit(Player player, string[] userInput)
 		{
-			int kitIndex = player._Consumables.FindIndex(f => f._Name.Contains(userInput[2]));
+			int kitIndex = player._Inventory.FindIndex(f => f._Name.Contains(userInput[2]));
 			if (kitIndex == -1)
 			{
 				OutputController.Display.StoreUserOutput(
@@ -145,18 +148,18 @@ namespace DungeonGame.Controllers
 				}
 			}
 
-			WeaponKit weaponKit = player._Consumables[kitIndex] as WeaponKit;
+			WeaponKit weaponKit = player._Inventory[kitIndex] as WeaponKit;
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
 			if (weaponKit._KitHasBeenUsed)
 			{
-				player._Consumables.RemoveAt(kitIndex);
+				player._Inventory.RemoveAt(kitIndex);
 			}
 		}
 
 		public static void UseArmorKit(Player player, string[] userInput)
 		{
-			int kitIndex = player._Consumables.FindIndex(f => f._Name.Contains(userInput[2]));
+			int kitIndex = player._Inventory.FindIndex(f => f._Name.Contains(userInput[2]));
 			if (kitIndex == -1)
 			{
 				OutputController.Display.StoreUserOutput(
@@ -203,12 +206,12 @@ namespace DungeonGame.Controllers
 				}
 			}
 
-			ArmorKit armorKit = player._Consumables[kitIndex] as ArmorKit;
+			ArmorKit armorKit = player._Inventory[kitIndex] as ArmorKit;
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
 			if (armorKit._KitHasBeenUsed)
 			{
-				player._Consumables.RemoveAt(kitIndex);
+				player._Inventory.RemoveAt(kitIndex);
 			}
 		}
 		public static void DropItem(Player player, string[] input)
@@ -226,7 +229,8 @@ namespace DungeonGame.Controllers
 			IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
 			if (itemIndex != -1)
 			{
-				if (player._Inventory[itemIndex]._Equipped)
+				IEquipment equippedItem = player._Inventory[itemIndex] as IEquipment;
+				if (equippedItem._Equipped)
 				{
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
@@ -243,17 +247,17 @@ namespace DungeonGame.Controllers
 					dropInventoryString);
 				return;
 			}
-			itemIndex = player._Consumables.FindIndex(
+			itemIndex = player._Inventory.FindIndex(
 				f => f._Name == input[1] || f._Name.Contains(input[1]));
 			if (itemIndex != -1)
 			{
-				playerRoom._RoomObjects.Add(player._Consumables[itemIndex]);
-				string dropConsumableString = $"You dropped {player._Consumables[itemIndex]._Name}.";
-				player._Consumables.RemoveAt(itemIndex);
+				playerRoom._RoomObjects.Add(player._Inventory[itemIndex]);
+				string dropInventorytring = $"You dropped {player._Inventory[itemIndex]._Name}.";
+				player._Inventory.RemoveAt(itemIndex);
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
-					dropConsumableString);
+					dropInventorytring);
 				return;
 			}
 			OutputController.Display.StoreUserOutput(
@@ -274,7 +278,7 @@ namespace DungeonGame.Controllers
 			IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
 			int itemIndex = playerRoom._RoomObjects.FindIndex(
 				f => f._Name == input[1] || f._Name.Contains(input[1]));
-			if (!(playerRoom._RoomObjects[itemIndex] is IEquipment item))
+			if (!(playerRoom._RoomObjects[itemIndex] is IItem item))
 			{
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -299,14 +303,7 @@ namespace DungeonGame.Controllers
 					"That item is not in the room!");
 				return;
 			}
-			if (playerRoom._RoomObjects[itemIndex].GetType() == typeof(Consumable))
-			{
-				player._Consumables.Add(playerRoom._RoomObjects[itemIndex] as Consumable);
-			}
-			else
-			{
-				player._Inventory.Add(playerRoom._RoomObjects[itemIndex] as IEquipment);
-			}
+			player._Inventory.Add(playerRoom._RoomObjects[itemIndex] as IItem);
 			string pickupItemString = $"You picked up {playerRoom._RoomObjects[itemIndex]._Name}.";
 			playerRoom._RoomObjects.RemoveAt(itemIndex);
 			OutputController.Display.StoreUserOutput(
@@ -323,7 +320,7 @@ namespace DungeonGame.Controllers
 				inputString.Append(' ');
 			}
 			string inputName = inputString.ToString().Trim();
-			IEquipment item = player._Inventory.Find(f => f._Name.Contains(inputName));
+			IItem item = player._Inventory.Find(f => f._Name.Contains(inputName));
 			if (item == null)
 			{
 				string noItemFoundString = $"You don't have {inputName} in your inventory!";
@@ -336,7 +333,7 @@ namespace DungeonGame.Controllers
 			string itemType = item.GetType().Name;
 			if (input[0] == "equip")
 			{
-				if (IsWearable(item) && item._Equipped == false)
+				if (item is IEquipment itemToEquip && itemToEquip._Equipped == false)
 				{
 					switch (itemType)
 					{
@@ -352,7 +349,7 @@ namespace DungeonGame.Controllers
 					}
 					return;
 				}
-				if (IsWearable(item))
+				if (item is IEquipment)
 				{
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
@@ -368,7 +365,7 @@ namespace DungeonGame.Controllers
 			}
 			if (input[0] == "unequip")
 			{
-				if (!IsWearable(item))
+				if (!(item is IEquipment))
 				{
 					return;
 				}

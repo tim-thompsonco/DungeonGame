@@ -64,8 +64,7 @@ namespace DungeonGame
 		public List<Effect> _Effects { get; set; }
 		public List<PlayerSpell> _Spellbook { get; set; }
 		public List<PlayerAbility> _Abilities { get; set; }
-		public List<Consumable> _Consumables { get; set; }
-		public List<IEquipment> _Inventory { get; set; }
+		public List<IItem> _Inventory { get; set; }
 		public List<Quest> _QuestLog { get; set; }
 
 		// Default constructor for JSON serialization
@@ -77,8 +76,7 @@ namespace DungeonGame
 			_StatReplenishInterval = 3;
 			_Level = 1;
 			_ExperienceToLevel = Settings.GetBaseExperienceToLevel();
-			_Consumables = new List<Consumable>();
-			_Inventory = new List<IEquipment>();
+			_Inventory = new List<IItem>();
 			_Effects = new List<Effect>();
 			_QuestLog = new List<Quest>();
 			_FireResistance = 5;
@@ -89,7 +87,7 @@ namespace DungeonGame
 				case PlayerClassType.Mage:
 					for (int i = 0; i < 3; i++)
 					{
-						_Consumables.Add(new ManaPotion(Potion.PotionStrength.Minor));
+						_Inventory.Add(new ManaPotion(PotionStrength.Minor));
 					}
 					_Spellbook = new List<PlayerSpell>();
 					_Strength = 10;
@@ -124,7 +122,7 @@ namespace DungeonGame
 				case PlayerClassType.Warrior:
 					for (int i = 0; i < 3; i++)
 					{
-						_Consumables.Add(new HealthPotion(Potion.PotionStrength.Minor));
+						_Inventory.Add(new HealthPotion(PotionStrength.Minor));
 					}
 					_Abilities = new List<PlayerAbility>();
 					_Strength = 15;
@@ -164,7 +162,7 @@ namespace DungeonGame
 				case PlayerClassType.Archer:
 					for (int i = 0; i < 3; i++)
 					{
-						_Consumables.Add(new HealthPotion(Potion.PotionStrength.Minor));
+						_Inventory.Add(new HealthPotion(PotionStrength.Minor));
 					}
 					_Abilities = new List<PlayerAbility>();
 					_Strength = 10;
@@ -317,7 +315,7 @@ namespace DungeonGame
 
 		public void AttemptDrinkPotion(string input)
 		{
-			int index = _Consumables.FindIndex(item => item._Name.Contains(input));
+			int index = _Inventory.FindIndex(item => item is IPotion && item._Name.Contains(input));
 
 			if (index == -1)
 			{
@@ -328,19 +326,19 @@ namespace DungeonGame
 			}
 			else
 			{
-				Potion potionToDrink = _Consumables[index] as Potion;
+				IPotion potionToDrink = _Inventory[index] as IPotion;
 				potionToDrink.DrinkPotion(this);
 
-				_Consumables.RemoveAt(index);
+				_Inventory.RemoveAt(index);
 			}
 		}
 
 		public void ReloadQuiver()
 		{
-			int index = _Consumables.FindIndex(f => f.GetType() == typeof(Arrows));
+			int index = _Inventory.FindIndex(f => f.GetType() == typeof(Arrows));
 			if (index != -1)
 			{
-				Arrows arrows = _Consumables[index] as Arrows;
+				Arrows arrows = _Inventory[index] as Arrows;
 				arrows.LoadPlayerQuiverWithArrows(this);
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
@@ -348,7 +346,7 @@ namespace DungeonGame
 					"You reloaded your quiver.");
 				if (arrows._Quantity == 0)
 				{
-					_Consumables.RemoveAt(index);
+					_Inventory.RemoveAt(index);
 				}
 			}
 			else

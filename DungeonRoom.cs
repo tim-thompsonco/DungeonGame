@@ -388,10 +388,6 @@ namespace DungeonGame
 									"You can't carry that much!");
 								return;
 							}
-							if (_Monster._MonsterItems[0] is Consumable)
-							{
-								player._Consumables.Add((Consumable)_Monster._MonsterItems[0]);
-							}
 							else
 							{
 								player._Inventory.Add(_Monster._MonsterItems[0]);
@@ -537,7 +533,7 @@ namespace DungeonGame
 					return;
 				}
 
-				foreach (IEquipment item in _Monster._MonsterItems)
+				foreach (IItem item in _Monster._MonsterItems)
 				{
 					List<string> sameLineOutputItem = new List<string>();
 					StringBuilder sb = new StringBuilder();

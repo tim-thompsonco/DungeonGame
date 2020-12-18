@@ -141,18 +141,18 @@ namespace DungeonGame
 					BuildMonsterArmor(monster);
 					int randomPotionNum = GameController.GetRandomNumber(1, 6);
 
-					Potion.PotionStrength potionStrength;
+					PotionStrength potionStrength;
 					if (monster._Level <= 3)
 					{
-						potionStrength = Potion.PotionStrength.Minor;
+						potionStrength = PotionStrength.Minor;
 					}
 					else if (monster._Level < 7)
 					{
-						potionStrength = Potion.PotionStrength.Normal;
+						potionStrength = PotionStrength.Normal;
 					}
 					else
 					{
-						potionStrength = Potion.PotionStrength.Greater;
+						potionStrength = PotionStrength.Greater;
 					}
 
 					monster._MonsterItems.Add(randomPotionNum switch
@@ -233,11 +233,11 @@ namespace DungeonGame
 		private static void BuildMonsterKit(Monster monster)
 		{
 			int kitLevelRandomNum = GameController.GetRandomNumber(1, 3);
-			Kit.KitLevel kitLevel = kitLevelRandomNum switch
+			KitLevel kitLevel = kitLevelRandomNum switch
 			{
-				1 => Kit.KitLevel.Light,
-				2 => Kit.KitLevel.Medium,
-				3 => Kit.KitLevel.Heavy,
+				1 => KitLevel.Light,
+				2 => KitLevel.Medium,
+				3 => KitLevel.Heavy,
 				_ => throw new ArgumentOutOfRangeException()
 			};
 

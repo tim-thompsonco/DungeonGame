@@ -1,4 +1,5 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Items;
 using System;
 using System.Linq;
 using System.Text;
@@ -24,11 +25,11 @@ namespace DungeonGame
 		public Monster.MonsterType? _MonsterKillType { get; set; }
 		public bool _QuestCompleted { get; set; }
 		public int _QuestRewardGold { get; set; }
-		public IEquipment _QuestRewardItem { get; set; }
+		public IItem _QuestRewardItem { get; set; }
 		public string _QuestGiver { get; set; }
 
 		public Quest(
-			string name, string dialogue, QuestType questCategory, IEquipment questRewardItem, string questGiver)
+			string name, string dialogue, QuestType questCategory, IItem questRewardItem, string questGiver)
 		{
 			_Name = name;
 			_Dialogue = dialogue;

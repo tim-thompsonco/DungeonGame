@@ -1,5 +1,6 @@
 ﻿using DungeonGame.Items;
 using DungeonGame.Items.Consumables;
+using DungeonGame.Items.Equipment;
 using DungeonGame.Items.Consumables.Potions;
 using System;
 using System.Collections.Generic;
@@ -36,20 +37,20 @@ namespace DungeonGame.Controllers
 					player._Inventory[playerInvIndex]._Desc);
 				return;
 			}
-			int playerConsIndex = player._Consumables.FindIndex(f => f._Name.Contains(input[1]) ||
+			int playerConsIndex = player._Inventory.FindIndex(f => f._Name.Contains(input[1]) ||
 																	f._Name == parsedInput);
 			if (playerConsIndex != -1)
 			{
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
-					player._Consumables[playerConsIndex]._Desc);
+					player._Inventory[playerConsIndex]._Desc);
 			}
 		}
 		public static int GetInventoryWeight(Player player)
 		{
 			return player._Inventory.Sum(item => item._Weight) +
-				   player._Consumables.Sum(consumable => consumable._Weight);
+				   player._Inventory.Sum(consumable => consumable._Weight);
 		}
 		public static void ShowInventory(Player player)
 		{
@@ -58,9 +59,9 @@ namespace DungeonGame.Controllers
 				Settings.FormatDefaultBackground(),
 				"Your inventory contains:");
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (IEquipment item in player._Inventory)
+			foreach (IItem item in player._Inventory)
 			{
-				if (!item._Equipped)
+				if (!(item is IEquipment equippableItem && equippableItem._Equipped))
 				{
 					continue;
 				}
@@ -87,9 +88,9 @@ namespace DungeonGame.Controllers
 					Settings.FormatDefaultBackground(),
 					itemInfo.ToString());
 			}
-			foreach (IEquipment item in player._Inventory)
+			foreach (IItem item in player._Inventory)
 			{
-				if (item._Equipped)
+				if (item is IEquipment equippableItem && equippableItem._Equipped)
 				{
 					continue;
 				}
@@ -116,7 +117,7 @@ namespace DungeonGame.Controllers
 					itemInfo.ToString());
 			}
 			Dictionary<string, int> consumableDict = new Dictionary<string, int>();
-			foreach (Consumable item in player._Consumables)
+			foreach (IItem item in player._Inventory)
 			{
 				StringBuilder itemInfo = new StringBuilder();
 				itemInfo.Append(item._Name);
@@ -157,11 +158,11 @@ namespace DungeonGame.Controllers
 			}
 			foreach (KeyValuePair<string, int> consumable in consumableDict)
 			{
-				string consumableString = $"{consumable.Key} (Quantity: {consumable.Value})";
+				string Inventorytring = $"{consumable.Key} (Quantity: {consumable.Value})";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
-					consumableString);
+					Inventorytring);
 			}
 			string goldString = $"_Gold: {player._Gold} coins.";
 			OutputController.Display.StoreUserOutput(
@@ -319,7 +320,7 @@ namespace DungeonGame.Controllers
 			player._ComboPoints = player._MaxComboPoints;
 			player._ManaPoints = player._MaxManaPoints;
 			// Update level for rainbow gear if any in player inventory
-			foreach (IEquipment item in player._Inventory)
+			foreach (IItem item in player._Inventory)
 			{
 				if (item is Armor || item is Weapon)
 				{

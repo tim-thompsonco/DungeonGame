@@ -1,5 +1,6 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Items;
+using DungeonGame.Items.Equipment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,7 +61,7 @@ namespace DungeonGame
 		public Armor _MonsterHandsArmor { get; set; }
 		public Armor _MonsterWaistArmor { get; set; }
 		public Armor _MonsterLegArmor { get; set; }
-		public List<IEquipment> _MonsterItems { get; set; }
+		public List<IItem> _MonsterItems { get; set; }
 		public List<Effect> _Effects { get; set; }
 		public List<MonsterSpell> _Spellbook { get; set; }
 		public List<MonsterAbility> _Abilities { get; set; }
@@ -69,7 +70,7 @@ namespace DungeonGame
 		public Monster() { }
 		public Monster(int level, MonsterType monsterType)
 		{
-			_MonsterItems = new List<IEquipment>();
+			_MonsterItems = new List<IItem>();
 			_Effects = new List<Effect>();
 			_StatReplenishInterval = 3;
 			_UnarmedAttackDamage = 5;
@@ -477,9 +478,10 @@ namespace DungeonGame
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				expGainString);
-			foreach (IEquipment loot in _MonsterItems)
+			foreach (IItem loot in _MonsterItems.Where(item => item is IEquipment))
 			{
-				loot._Equipped = false;
+				IEquipment equippableItem = loot as IEquipment;
+				equippableItem._Equipped = false;
 			}
 			_Name = $"Dead {_Name}";
 			_Desc = "A corpse of a monster you killed.";

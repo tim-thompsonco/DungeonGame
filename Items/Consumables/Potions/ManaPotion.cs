@@ -2,19 +2,26 @@
 
 namespace DungeonGame.Items.Consumables.Potions
 {
-	public class ManaPotion : Potion
+	public class ManaPotion : IItem, IPotion
 	{
+		public PotionStrength _PotionStrength { get; set; }
+		public string _Name { get; set; }
+		public string _Desc { get; set; }
+		public int _ItemValue { get; set; }
+		public int _Weight { get; set; }
 		public int _ManaAmount { get; }
 
-		public ManaPotion(PotionStrength potionStrength) : base(potionStrength)
+		public ManaPotion(PotionStrength potionStrength)
 		{
+			_Weight = 1;
+			_PotionStrength = potionStrength;
 			_Name = GetPotionName();
 			_ManaAmount = GetPotionManaAmount();
 			_ItemValue = _ManaAmount / 2;
 			_Desc = $"A {_Name} that restores {_ManaAmount} mana.";
 		}
 
-		protected override string GetPotionName()
+		public string GetPotionName()
 		{
 			// Potion naming format is "<potion type> potion" for normal potion
 			if (_PotionStrength == PotionStrength.Normal)
@@ -45,7 +52,7 @@ namespace DungeonGame.Items.Consumables.Potions
 			}
 		}
 
-		public override void DrinkPotion(Player player)
+		public void DrinkPotion(Player player)
 		{
 			RestoreManaPlayer(player);
 			DisplayDrankPotionMessage();
@@ -65,7 +72,7 @@ namespace DungeonGame.Items.Consumables.Potions
 			return player;
 		}
 
-		protected override void DisplayDrankPotionMessage()
+		public void DisplayDrankPotionMessage()
 		{
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),

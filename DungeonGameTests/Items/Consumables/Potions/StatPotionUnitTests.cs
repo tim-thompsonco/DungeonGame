@@ -1,7 +1,6 @@
 ﻿using DungeonGame;
 using DungeonGame.Controllers;
 using DungeonGame.Items;
-using DungeonGame.Items.Consumables;
 using DungeonGame.Items.Consumables.Potions;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -16,10 +15,10 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		[SetUp]
 		public void Setup()
 		{
-			potion = new StatPotion(Potion.PotionStrength.Minor, StatPotion.StatType.Constitution);
+			potion = new StatPotion(PotionStrength.Minor, StatPotion.StatType.Constitution);
 			player = new Player("test", Player.PlayerClassType.Archer)
 			{
-				_Consumables = new List<Consumable>()
+				_Inventory = new List<IItem>()
 			};
 		}
 
@@ -32,7 +31,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		[Test]
 		public void MinorPotionCreationTest()
 		{
-			potion = new StatPotion(Potion.PotionStrength.Minor, StatPotion.StatType.Constitution);
+			potion = new StatPotion(PotionStrength.Minor, StatPotion.StatType.Constitution);
 
 			Assert.AreEqual("minor constitution potion", potion._Name);
 			Assert.AreEqual("A minor constitution potion that increases constitution by 5.", potion._Desc);
@@ -43,7 +42,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		[Test]
 		public void NormalPotionCreationTest()
 		{
-			potion = new StatPotion(Potion.PotionStrength.Normal, StatPotion.StatType.Constitution);
+			potion = new StatPotion(PotionStrength.Normal, StatPotion.StatType.Constitution);
 
 			Assert.AreEqual("constitution potion", potion._Name);
 			Assert.AreEqual("A constitution potion that increases constitution by 10.", potion._Desc);
@@ -54,7 +53,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		[Test]
 		public void GreaterPotionCreationTest()
 		{
-			potion = new StatPotion(Potion.PotionStrength.Greater, StatPotion.StatType.Constitution);
+			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Constitution);
 
 			Assert.AreEqual("greater constitution potion", potion._Name);
 			Assert.AreEqual("A greater constitution potion that increases constitution by 15.", potion._Desc);
@@ -65,8 +64,8 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		[Test]
 		public void PlayerDrinkPotionConstitutionTest()
 		{
-			potion = new StatPotion(Potion.PotionStrength.Greater, StatPotion.StatType.Constitution);
-			player._Consumables.Add(potion);
+			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Constitution);
+			player._Inventory.Add(potion);
 			player._Constitution = 20;
 			int oldPlayerConst = player._Constitution;
 
@@ -80,8 +79,8 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		[Test]
 		public void PlayerDrinkPotionDexterityTest()
 		{
-			potion = new StatPotion(Potion.PotionStrength.Greater, StatPotion.StatType.Dexterity);
-			player._Consumables.Add(potion);
+			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Dexterity);
+			player._Inventory.Add(potion);
 			player._Dexterity = 20;
 			int oldPlayerDex = player._Dexterity;
 
@@ -95,8 +94,8 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		[Test]
 		public void PlayerDrinkPotionIntelligenceTest()
 		{
-			potion = new StatPotion(Potion.PotionStrength.Greater, StatPotion.StatType.Intelligence);
-			player._Consumables.Add(potion);
+			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Intelligence);
+			player._Inventory.Add(potion);
 			player._Intelligence = 20;
 			int oldPlayerInt = player._Intelligence;
 
@@ -110,8 +109,8 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		[Test]
 		public void PlayerDrinkPotionStrengthTest()
 		{
-			potion = new StatPotion(Potion.PotionStrength.Greater, StatPotion.StatType.Strength);
-			player._Consumables.Add(potion);
+			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Strength);
+			player._Inventory.Add(potion);
 			player._Strength = 20;
 			int oldPlayerStr = player._Strength;
 
@@ -126,7 +125,7 @@ namespace DungeonGameTests.Items.Consumables.Potions
 		public void PlayerDrinkPotionDisplayMessageTest()
 		{
 			OutputController.Display.ClearUserOutput();
-			player._Consumables.Add(potion);
+			player._Inventory.Add(potion);
 			string displayMessage = $"You drank a potion and increased Constitution by {potion._StatAmount}.";
 
 			potion.DrinkPotion(player);

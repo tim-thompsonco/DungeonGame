@@ -2,7 +2,7 @@
 
 namespace DungeonGame.Items
 {
-	public class Quiver : IEquipment
+	public class Quiver : IItem
 	{
 		public bool _Equipped { get; set; }
 		public int _ItemValue { get; set; }

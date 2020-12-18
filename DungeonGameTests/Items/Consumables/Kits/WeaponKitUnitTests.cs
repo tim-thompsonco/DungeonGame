@@ -1,6 +1,5 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Items;
-using DungeonGame.Items.Consumables;
 using DungeonGame.Items.Consumables.Kits;
 using NUnit.Framework;
 using System.Globalization;
@@ -16,7 +15,7 @@ namespace DungeonGameTests.Items.Consumables.Kits
 		[SetUp]
 		public void Setup()
 		{
-			weaponKit = new WeaponKit(Kit.KitLevel.Light, WeaponKit.KitType.Grindstone);
+			weaponKit = new WeaponKit(KitLevel.Light, WeaponKit.KitType.Grindstone);
 			weapon = new Weapon(3, Weapon.WeaponType.Axe);
 		}
 
@@ -32,7 +31,7 @@ namespace DungeonGameTests.Items.Consumables.Kits
 		[Test]
 		public void MediumKitCreationTest()
 		{
-			weaponKit = new WeaponKit(Kit.KitLevel.Medium, WeaponKit.KitType.Bowstring);
+			weaponKit = new WeaponKit(KitLevel.Medium, WeaponKit.KitType.Bowstring);
 
 			Assert.AreEqual(2, weaponKit._KitAugmentAmount);
 		}
@@ -40,7 +39,7 @@ namespace DungeonGameTests.Items.Consumables.Kits
 		[Test]
 		public void HeavyKitCreationTest()
 		{
-			weaponKit = new WeaponKit(Kit.KitLevel.Heavy, WeaponKit.KitType.Bowstring);
+			weaponKit = new WeaponKit(KitLevel.Heavy, WeaponKit.KitType.Bowstring);
 
 			Assert.AreEqual(3, weaponKit._KitAugmentAmount);
 		}
@@ -84,7 +83,7 @@ namespace DungeonGameTests.Items.Consumables.Kits
 		public void BowstringKitAugmentAxeFails()
 		{
 			OutputController.Display.ClearUserOutput();
-			weaponKit = new WeaponKit(Kit.KitLevel.Light, WeaponKit.KitType.Bowstring);
+			weaponKit = new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring);
 			int baseWeaponItemValue = weapon._ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
 			string weaponName = weapon._Name;
@@ -103,7 +102,7 @@ namespace DungeonGameTests.Items.Consumables.Kits
 		{
 			OutputController.Display.ClearUserOutput();
 			weapon = new Weapon(3, Weapon.WeaponType.Bow);
-			weaponKit = new WeaponKit(Kit.KitLevel.Light, WeaponKit.KitType.Bowstring);
+			weaponKit = new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring);
 			int baseWeaponItemValue = weapon._ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
 			string weaponName = weapon._Name;

@@ -1,4 +1,5 @@
 using DungeonGame.Items;
+using DungeonGame.Items.Equipment;
 using System;
 using System.Linq;
 using System.Text;
@@ -433,9 +434,9 @@ namespace DungeonGame.Controllers
 							{
 								if (input[1] == "all")
 								{
-									foreach (IEquipment item in player._Inventory)
+									foreach (IItem item in player._Inventory)
 									{
-										if (!item._Equipped)
+										if (!(item is IEquipment itemToRepair && itemToRepair._Equipped))
 										{
 											continue;
 										}

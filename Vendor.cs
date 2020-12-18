@@ -2,6 +2,7 @@
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables;
 using DungeonGame.Items.Consumables.Potions;
+using DungeonGame.Items.Equipment;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -22,7 +23,7 @@ namespace DungeonGame
 		public string _Name { get; set; }
 		public string _Desc { get; set; }
 		public VendorType _VendorCategory { get; set; }
-		public List<IEquipment> _VendorItems { get; set; }
+		public List<IItem> _VendorItems { get; set; }
 		public List<Quest> _AvailableQuests { get; set; }
 
 		// Default constructor for JSON serialization
@@ -31,7 +32,7 @@ namespace DungeonGame
 		{
 			_Name = name;
 			_Desc = desc;
-			_VendorItems = new List<IEquipment>();
+			_VendorItems = new List<IItem>();
 			_VendorCategory = vendorCategory;
 			switch (_VendorCategory)
 			{
@@ -48,8 +49,8 @@ namespace DungeonGame
 					_VendorItems.Add(new Arrows("arrows", 15, Arrows.ArrowType.Standard));
 					break;
 				case VendorType.Healer:
-					_VendorItems.Add(new HealthPotion(Potion.PotionStrength.Minor));
-					_VendorItems.Add(new ManaPotion(Potion.PotionStrength.Minor));
+					_VendorItems.Add(new HealthPotion(PotionStrength.Minor));
+					_VendorItems.Add(new ManaPotion(PotionStrength.Minor));
 					break;
 				case VendorType.Shopkeeper:
 					break;
@@ -66,13 +67,13 @@ namespace DungeonGame
 				Settings.FormatDefaultBackground(),
 				forSaleString);
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (IEquipment item in _VendorItems)
+			foreach (IItem item in _VendorItems)
 			{
 				StringBuilder itemInfo = new StringBuilder();
 				itemInfo.Append(item._Name);
-				if (item._Equipped)
+				if (item is IEquipment equippableItem && equippableItem._Equipped)
 				{
-					itemInfo.Append(" <_Equipped>");
+					itemInfo.Append(" <Equipped>");
 				}
 				switch (item)
 				{
@@ -82,13 +83,13 @@ namespace DungeonGame
 					case Weapon isItemWeapon:
 						itemInfo.Append($" (DMG: {isItemWeapon._RegDamage} CR: {isItemWeapon._CritMultiplier} Cost: {isItemWeapon._ItemValue})");
 						break;
-					case Consumable isItemConsumable:
+					default:
 						if (item.GetType() == typeof(Arrows))
 						{
 							Arrows arrows = item as Arrows;
 							itemInfo.Append($" ({arrows._Quantity})");
 						}
-						itemInfo.Append($" (Cost: {isItemConsumable._ItemValue})");
+						itemInfo.Append($" (Cost: {item._ItemValue})");
 						break;
 				}
 				string itemName = textInfo.ToTitleCase(itemInfo.ToString());
@@ -125,25 +126,18 @@ namespace DungeonGame
 					"The vendor doesn't have that available for sale!");
 				return;
 			}
-			IEquipment buyItem = _VendorItems[index];
+			IItem buyItem = _VendorItems[index];
 			if (player._Gold >= buyItem._ItemValue && quantity > 0)
 			{
 				player._Gold -= buyItem._ItemValue;
-				if (buyItem is Consumable item)
-				{
-					player._Consumables.Add(item);
-				}
-				else
-				{
-					player._Inventory.Add(buyItem);
-				}
+				player._Inventory.Add(buyItem);
 				_VendorItems.RemoveAt(index);
 				string purchaseString = $"You purchased {buyItem._Name} from the vendor for {buyItem._ItemValue} gold.";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					purchaseString);
-				if (!(buyItem is Consumable))
+				if (!(buyItem is IPotion || buyItem is Arrows))
 				{
 					return;
 				}
@@ -181,8 +175,8 @@ namespace DungeonGame
 			{
 				// Find desired object to sell
 				string inputName = InputController.ParseInput(userInput);
-				List<IEquipment> indexList = player._Inventory.FindAll(f => f._Name == inputName || f._Name.Contains(inputName));
-				IEquipment itemMatch = indexList[sellItemIndex];
+				List<IItem> indexList = player._Inventory.FindAll(f => f._Name == inputName || f._Name.Contains(inputName));
+				IItem itemMatch = indexList[sellItemIndex];
 				// Return index in player inventory of desired object to sell
 				return player._Inventory.IndexOf(itemMatch);
 			}
@@ -206,10 +200,10 @@ namespace DungeonGame
 			{
 				// Find desired object to sell
 				string inputName = InputController.ParseInput(userInput);
-				List<Consumable> indexList = player._Consumables.FindAll(f => f._Name == inputName || f._Name.Contains(inputName));
-				Consumable itemMatch = indexList[sellItemIndex];
+				List<IItem> indexList = player._Inventory.FindAll(f => f._Name == inputName || f._Name.Contains(inputName));
+				IItem itemMatch = indexList[sellItemIndex];
 				// Return index in player inventory of desired object to sell
-				return player._Consumables.IndexOf(itemMatch);
+				return player._Inventory.IndexOf(itemMatch);
 			}
 			catch (ArgumentOutOfRangeException)
 			{
@@ -239,7 +233,7 @@ namespace DungeonGame
 				index = player._Inventory.FindIndex(
 					f => f._Name == inputName || f._Name.Contains(inputName));
 			}
-			IEquipment sellItem;
+			IItem sellItem;
 			try
 			{
 				sellItem = player._Inventory[index];
@@ -254,7 +248,7 @@ namespace DungeonGame
 				}
 				if (index != -1)
 				{
-					if (!sellItem._Equipped)
+					if (!(sellItem is IEquipment equippableItem && equippableItem._Equipped))
 					{
 						player._Gold += sellItem switch
 						{
@@ -287,7 +281,7 @@ namespace DungeonGame
 				}
 				else
 				{
-					index = player._Consumables.FindIndex(
+					index = player._Inventory.FindIndex(
 						f => f._Name == inputName || f._Name.Contains(inputName));
 				}
 				if (index == -1)
@@ -298,13 +292,13 @@ namespace DungeonGame
 						"You don't have that to sell!");
 					return;
 				}
-				sellItem = player._Consumables[index];
+				sellItem = player._Inventory[index];
 				if (_VendorCategory == VendorType.Armorer || _VendorCategory == VendorType.Weaponsmith)
 				{
 					Messages.InvalidVendorSell();
 					return;
 				}
-				player._Consumables.RemoveAt(index);
+				player._Inventory.RemoveAt(index);
 				if (_VendorItems.Count == 5)
 				{
 					_VendorItems.RemoveAt(_VendorItems[0]._Name.Contains("arrow") ? 1 : 0);
@@ -451,11 +445,11 @@ namespace DungeonGame
 
 			if (inputName.Contains("mana"))
 			{
-				_VendorItems.Add(new ManaPotion(Potion.PotionStrength.Minor));
+				_VendorItems.Add(new ManaPotion(PotionStrength.Minor));
 			}
 			else if (inputName.Contains("health"))
 			{
-				_VendorItems.Add(new HealthPotion(Potion.PotionStrength.Minor));
+				_VendorItems.Add(new HealthPotion(PotionStrength.Minor));
 			}
 		}
 		private void RepopulateArrows(string inputName)

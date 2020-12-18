@@ -2,7 +2,7 @@
 
 namespace DungeonGame.Items.Consumables.Potions
 {
-	public class StatPotion : Potion
+	public class StatPotion : IItem, IPotion
 	{
 		public enum StatType
 		{
@@ -11,12 +11,19 @@ namespace DungeonGame.Items.Consumables.Potions
 			Dexterity,
 			Constitution
 		}
+		public PotionStrength _PotionStrength { get; set; }
+		public string _Name { get; set; }
+		public string _Desc { get; set; }
+		public int _ItemValue { get; set; }
+		public int _Weight { get; set; }
 		public int _StatAmount { get; }
 		public StatType _StatCategory { get; }
 		private readonly int _StatEffectDurationInSeconds;
 
-		public StatPotion(PotionStrength potionStrength, StatType statType) : base(potionStrength)
+		public StatPotion(PotionStrength potionStrength, StatType statType)
 		{
+			_Weight = 1;
+			_PotionStrength = potionStrength;
 			_StatCategory = statType;
 			_Name = GetPotionName();
 			_StatAmount = GetStatPotionAmount();
@@ -25,7 +32,7 @@ namespace DungeonGame.Items.Consumables.Potions
 			_StatEffectDurationInSeconds = 600;
 		}
 
-		protected override string GetPotionName()
+		public string GetPotionName()
 		{
 			// Potion naming format is "<potion type> potion" for normal potion
 			if (_PotionStrength == PotionStrength.Normal)
@@ -56,7 +63,7 @@ namespace DungeonGame.Items.Consumables.Potions
 			}
 		}
 
-		public override void DrinkPotion(Player player)
+		public void DrinkPotion(Player player)
 		{
 			AugmentPlayerStat(player);
 			DisplayDrankPotionMessage();
@@ -96,7 +103,7 @@ namespace DungeonGame.Items.Consumables.Potions
 			return player;
 		}
 
-		protected override void DisplayDrankPotionMessage()
+		public void DisplayDrankPotionMessage()
 		{
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),

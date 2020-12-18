@@ -1,10 +1,11 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Items.Equipment;
 using System;
 using System.Text;
 
 namespace DungeonGame.Items
 {
-	public class Armor : IEquipment, IRainbowGear
+	public class Armor : IItem, IRainbowGear, IEquipment
 	{
 		public enum ArmorSlot
 		{

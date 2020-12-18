@@ -1,6 +1,6 @@
 ﻿namespace DungeonGame.Items
 {
-	public class Loot : IEquipment
+	public class Loot : IItem
 	{
 		public string _Name { get; set; }
 		public string _Desc { get; set; }

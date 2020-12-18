@@ -1,7 +1,7 @@
 using DungeonGame;
 using DungeonGame.Controllers;
 using DungeonGame.Items;
-using DungeonGame.Items.Consumables.Potions;
+using DungeonGame.Items.Equipment;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -380,9 +380,10 @@ namespace DungeonGameTests
 			Monster monster = new Monster(3, Monster.MonsterType.Demon)
 			{ _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IEquipment item in monster._MonsterItems.Where(item => item._Equipped))
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
 			{
-				item._Equipped = false;
+				IEquipment eItem = item as IEquipment;
+				eItem._Equipped = false;
 			}
 			Assert.AreEqual(monster._Level * 5, monster._FireResistance);
 			Assert.AreEqual(monster._Level * 5, monster._FrostResistance);
@@ -409,9 +410,10 @@ namespace DungeonGameTests
 				monster = new Monster(3, Monster.MonsterType.Elemental);
 			}
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IEquipment item in player._Inventory.Where(item => item._Equipped))
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped))
 			{
-				item._Equipped = false;
+				IEquipment eItem = item as IEquipment;
+				eItem._Equipped = false;
 			}
 			Assert.AreEqual(player._Level * 5, player._FireResistance);
 			Assert.AreEqual(player._Level * 5, player._FrostResistance);

@@ -2,13 +2,18 @@
 
 namespace DungeonGame.Items.Consumables
 {
-	public class Arrows : Consumable
+	public class Arrows : IItem
 	{
 		public enum ArrowType
 		{
 			Standard
 		}
 		public ArrowType _ArrowCategory { get; set; }
+		public string _Name { get; set; }
+		public string _Desc { get; set; }
+		public int _ItemValue { get; set; }
+		public int _Weight { get; set; }
+
 		public int _Quantity { get; set; }
 
 		public Arrows(string name, int itemValue, ArrowType arrowType) : base()
