@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DungeonGame
+namespace DungeonGame.Quests
 {
 	public interface IQuestGiver : IName
 	{

@@ -1,6 +1,7 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Items;
 using DungeonGame.Items.Equipment;
+using DungeonGame.Quests;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -47,7 +47,7 @@
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\InputController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
-    <Compile Include="Interfaces\IQuestGiver.cs" />
+    <Compile Include="Quests\IQuestGiver.cs" />
     <Compile Include="Interfaces\IRainbowGear.cs" />
     <Compile Include="Items\Armor.cs" />
     <Compile Include="Items\Consumables\Arrows.cs" />
@@ -65,7 +65,7 @@
     <Compile Include="Items\Quiver.cs" />
     <Compile Include="Items\Weapon.cs" />
     <Compile Include="Messages.cs" />
-    <Compile Include="Quest.cs" />
+    <Compile Include="Quests\Quest.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Skill Properties\ChangeAmount.cs" />
     <Compile Include="Skill Properties\Defensive.cs" />
@@ -85,7 +85,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="DungeonRoom.cs" />
     <Compile Include="Interfaces\IRoom.cs" />
-    <Compile Include="Interfaces\IName.cs" />
+    <Compile Include="IName.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="TownRoom.cs" />
   </ItemGroup>
