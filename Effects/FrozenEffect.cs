@@ -22,11 +22,7 @@ namespace DungeonGame.Effects {
 				return damage;
 			}
 
-			int frozenDamage = (int)(damage * _EffectMultiplier);
-
-			FrozenRound(monster);
-
-			return frozenDamage;
+			return (int)(damage * _EffectMultiplier);
 		}
 
 		public int GetIncreasedDamageFromFrozen(int damage) {
@@ -35,14 +31,10 @@ namespace DungeonGame.Effects {
 
 			}
 
-			int frozenDamage = (int)(damage * _EffectMultiplier);
-
-			FrozenRound();
-
-			return frozenDamage;
+			return (int)(damage * _EffectMultiplier);
 		}
 
-		private void FrozenRound(Monster monster) {
+		public void FrozenRound(Monster monster) {
 			string frozenMessage = GetFrozenMessage(monster);
 			DisplayFrozenMessage(frozenMessage);
 
@@ -53,7 +45,7 @@ namespace DungeonGame.Effects {
 			}
 		}
 
-		private void FrozenRound() {
+		public void FrozenRound() {
 			string frozenMessage = GetFrozenMessage();
 			DisplayFrozenMessage(frozenMessage);
 

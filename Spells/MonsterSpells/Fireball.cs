@@ -74,6 +74,7 @@ namespace DungeonGame.Spells.MonsterSpells {
 			foreach (IEffect effect in player._Effects.ToList()) {
 				if (effect is FrozenEffect frozenEffect) {
 					spellDamage = frozenEffect.GetIncreasedDamageFromFrozen(spellDamage);
+					frozenEffect.FrozenRound();
 				}
 
 				if (effect._EffectGroup == Effect.EffectType.ChangeOpponentDamage) {
