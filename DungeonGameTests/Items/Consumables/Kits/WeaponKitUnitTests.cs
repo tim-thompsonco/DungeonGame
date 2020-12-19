@@ -8,7 +8,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 	class WeaponKitUnitTests {
 		WeaponKit weaponKit;
 		Weapon weapon;
-		TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+		readonly TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 
 		[SetUp]
 		public void Setup() {
@@ -43,8 +43,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			OutputController.Display.ClearUserOutput();
 			int baseWeaponItemValue = weapon._ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
-			string weaponName = weapon._Name;
-			string displayMessage = $"You upgraded {textInfo.ToTitleCase(weaponName)} with a weapon kit.";
+			string displayMessage = $"You upgraded {textInfo.ToTitleCase(weapon._Name)} with a weapon kit.";
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
@@ -60,8 +59,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			weapon = new Weapon(3, Weapon.WeaponType.Bow);
 			int baseWeaponItemValue = weapon._ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
-			string weaponName = weapon._Name;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(weaponName)} with that!";
+			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(weapon._Name)} with that!";
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
@@ -77,8 +75,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			weaponKit = new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring);
 			int baseWeaponItemValue = weapon._ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
-			string weaponName = weapon._Name;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(weaponName)} with that!";
+			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(weapon._Name)} with that!";
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
@@ -95,8 +92,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			weaponKit = new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring);
 			int baseWeaponItemValue = weapon._ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
-			string weaponName = weapon._Name;
-			string displayMessage = $"You upgraded {textInfo.ToTitleCase(weaponName)} with a weapon kit.";
+			string displayMessage = $"You upgraded {textInfo.ToTitleCase(weapon._Name)} with a weapon kit.";
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
