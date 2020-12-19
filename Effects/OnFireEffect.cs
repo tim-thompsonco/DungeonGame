@@ -7,17 +7,17 @@ namespace DungeonGame.Effects {
 		public string _Name { get; set; }
 		public bool _IsEffectExpired { get ; set; }
 		private readonly int _FireDamageOverTime;
-		private int _CurrentTick;
-		private readonly int _MaxTick;
+		private int _CurrentRound;
+		private readonly int _MaxRound;
 
-		public OnFireEffect(string name, int fireDamageOverTime, int maxTick) {
+		public OnFireEffect(string name, int fireDamageOverTime, int maxRound) {
 			_Name = name;
 			_FireDamageOverTime = fireDamageOverTime;
-			_CurrentTick = 1;
-			_MaxTick = maxTick;
+			_CurrentRound = 1;
+			_MaxRound = maxRound;
 		}
 
-		public void OnFireTick(Monster monster) {
+		public void OnFireRound(Monster monster) {
 			if (_IsEffectExpired) {
 				return;
 			}
@@ -27,14 +27,14 @@ namespace DungeonGame.Effects {
 			string burnMessage = GetBurnMessage(monster);
 			DisplayBurnMessage(burnMessage);
 
-			IncrementCurrentTick();
+			IncrementCurrentRound();
 
-			if (_CurrentTick > _MaxTick) {
+			if (_CurrentRound > _MaxRound) {
 				SetEffectAsExpired();
 			}
 		}
 
-		public void OnFireTick(Player player) {
+		public void OnFireRound(Player player) {
 			if (_IsEffectExpired) {
 				return;
 			}
@@ -44,9 +44,9 @@ namespace DungeonGame.Effects {
 			string burnMessage = GetBurnMessage();
 			DisplayBurnMessage(burnMessage);
 
-			IncrementCurrentTick();
+			IncrementCurrentRound();
 
-			if (_CurrentTick > _MaxTick) {
+			if (_CurrentRound > _MaxRound) {
 				SetEffectAsExpired();
 			}
 		}
@@ -78,11 +78,11 @@ namespace DungeonGame.Effects {
 				burnMessage);
 		}
 
-		private void IncrementCurrentTick() {
-			_CurrentTick++;
+		private void IncrementCurrentRound() {
+			_CurrentRound++;
 		}
 
-		private void SetEffectAsExpired() {
+		public void SetEffectAsExpired() {
 			_IsEffectExpired = true;
 		}
 	}
