@@ -1,6 +1,5 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Monsters;
-using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public class FrozenEffect : IEffect {
@@ -22,27 +21,6 @@ namespace DungeonGame.Effects {
 				return damage;
 			}
 
-			int frozenDamage = (int)(damage * _EffectMultiplier);
-
-			FrozenRound(monster);
-
-			return frozenDamage;
-		}
-
-		public int GetIncreasedDamageFromFrozen(int damage) {
-			if (_IsEffectExpired) {
-				return damage;
-
-			}
-
-			int frozenDamage = (int)(damage * _EffectMultiplier);
-
-			FrozenRound();
-
-			return frozenDamage;
-		}
-
-		private void FrozenRound(Monster monster) {
 			string frozenMessage = GetFrozenMessage(monster);
 			DisplayFrozenMessage(frozenMessage);
 
@@ -51,9 +29,16 @@ namespace DungeonGame.Effects {
 			if (_CurrentRound > _MaxRound) {
 				SetEffectAsExpired();
 			}
+
+			return (int)(damage * _EffectMultiplier);
 		}
 
-		private void FrozenRound() {
+		public int GetIncreasedDamageFromFrozen(int damage) {
+			if (_IsEffectExpired) {
+				return damage;
+
+			}
+
 			string frozenMessage = GetFrozenMessage();
 			DisplayFrozenMessage(frozenMessage);
 
@@ -62,6 +47,8 @@ namespace DungeonGame.Effects {
 			if (_CurrentRound > _MaxRound) {
 				SetEffectAsExpired();
 			}
+
+			return (int)(damage * _EffectMultiplier);
 		}
 
 		private string GetFrozenMessage(Monster monster) {
