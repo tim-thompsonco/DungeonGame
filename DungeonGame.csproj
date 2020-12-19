@@ -77,6 +77,10 @@
     <Compile Include="Skills\MonsterSpell.cs" />
     <Compile Include="Skills\PlayerAbility.cs" />
     <Compile Include="Skills\PlayerSpell.cs" />
+    <Compile Include="Spells\IChanceOfSuccessSpell.cs" />
+    <Compile Include="Spells\IMonsterOffensiveOverTimeSpell.cs" />
+    <Compile Include="Spells\IMonsterOffensiveSpell.cs" />
+    <Compile Include="Spells\MonsterSpells\Fireball.cs" />
     <Compile Include="Trainer.cs" />
     <Compile Include="UserOutput.cs" />
     <Compile Include="Vendor.cs" />
@@ -100,5 +104,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
