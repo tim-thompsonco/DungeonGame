@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using DungeonGame.Controllers;
+using DungeonGame.Effects;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 
@@ -70,9 +71,9 @@ namespace DungeonGame.Spells.MonsterSpells {
 
 			int spellDamage = DecreaseSpellDamageFromPlayerResistance(player, baseSpellDamage);
 
-			foreach (Effect effect in player._Effects.ToList()) {
-				if (effect._EffectGroup == Effect.EffectType.Frozen) {
-					spellDamage = IncreaseSpellDamageFromFrozenEffect(player, effect, spellDamage);
+			foreach (IEffect effect in player._Effects.ToList()) {
+				if (effect is FrozenEffect frozenEffect) {
+					spellDamage = frozenEffect.GetIncreasedDamageFromFrozen(spellDamage);
 				}
 
 				if (effect._EffectGroup == Effect.EffectType.ChangeOpponentDamage) {
@@ -103,15 +104,6 @@ namespace DungeonGame.Spells.MonsterSpells {
 			int reducedSpellDamage = (int)(spellDamage * (1 - damageReductionPercentage));
 
 			return reducedSpellDamage;
-		}
-
-		public int IncreaseSpellDamageFromFrozenEffect(Player player, Effect effect, int spellDamage) {
-			int frozenSpellDamage = (int)(spellDamage * effect._EffectMultiplier);
-
-			effect.FrozenRound(player);
-			effect._IsEffectExpired = true;
-
-			return frozenSpellDamage;
 		}
 
 		public int IncreaseSpellDamageFromChangeEffect(Player player, Effect effect, int spellDamage) {

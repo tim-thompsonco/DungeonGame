@@ -48,6 +48,7 @@
     <Compile Include="Controllers\InputController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Effects\BleedingEffect.cs" />
+    <Compile Include="Effects\FrozenEffect.cs" />
     <Compile Include="Effects\IEffect.cs" />
     <Compile Include="Effects\OnFireEffect.cs" />
     <Compile Include="Quests\IQuestGiver.cs" />
