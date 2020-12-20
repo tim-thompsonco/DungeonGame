@@ -49,6 +49,7 @@
     <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Effects\BleedingEffect.cs" />
     <Compile Include="Effects\BlockDamageEffect.cs" />
+    <Compile Include="Effects\ChangeArmorEffect.cs" />
     <Compile Include="Effects\ChangePlayerDamageEffect.cs" />
     <Compile Include="Effects\ChangeStatEffect.cs" />
     <Compile Include="Effects\FrozenEffect.cs" />

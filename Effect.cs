@@ -118,24 +118,5 @@ namespace DungeonGame {
 
 			_IsEffectExpired = true;
 		}
-		public void ChangeArmorRound() {
-			if (_IsEffectExpired) {
-				return;
-			}
-
-			_EffectCurRound += 1;
-			int changeAmount = Math.Abs(_EffectAmountOverTime);
-			string changeArmorString = _EffectAmountOverTime > 0 ? $"Your armor is increased by {changeAmount}." :
-				$"Your armor is decreased by {changeAmount}.";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				changeArmorString);
-			if (_EffectCurRound <= _EffectMaxRound) {
-				return;
-			}
-
-			_IsEffectExpired = true;
-		}
 	}
 }
