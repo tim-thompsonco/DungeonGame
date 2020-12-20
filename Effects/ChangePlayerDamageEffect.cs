@@ -7,7 +7,7 @@ namespace DungeonGame.Effects {
 		public bool _IsEffectExpired { get; set; }
 		public int _TickDuration { get; }
 		public string _Name { get; set; }
-		private readonly int _ChangeAmountOverTime;
+		public int _ChangeAmountOverTime { get; }
 		private int _CurrentRound;
 		private readonly int _MaxRound;
 

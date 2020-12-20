@@ -1,4 +1,5 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Effects;
 using DungeonGame.Items;
 using DungeonGame.Items.Equipment;
 using DungeonGame.Players;
@@ -59,7 +60,7 @@ namespace DungeonGame.Monsters {
 		public Armor _MonsterWaistArmor { get; set; }
 		public Armor _MonsterLegArmor { get; set; }
 		public List<IItem> _MonsterItems { get; set; }
-		public List<Effect> _Effects { get; set; }
+		public List<IEffect> _Effects { get; set; }
 		public List<MonsterSpell> _Spellbook { get; set; }
 		public List<MonsterAbility> _Abilities { get; set; }
 
@@ -67,7 +68,7 @@ namespace DungeonGame.Monsters {
 		public Monster() { }
 		public Monster(int level, MonsterType monsterType) {
 			_MonsterItems = new List<IItem>();
-			_Effects = new List<Effect>();
+			_Effects = new List<IEffect>();
 			_StatReplenishInterval = 3;
 			_UnarmedAttackDamage = 5;
 			_Level = level;
@@ -283,6 +284,7 @@ namespace DungeonGame.Monsters {
 		}
 		private void PhysicalAttack(Player player) {
 			int attackAmount = 0;
+
 			try {
 				if (_MonsterWeapon._Equipped && _MonsterWeapon._WeaponGroup != Weapon.WeaponType.Bow) {
 					attackAmount += _MonsterWeapon.Attack();
@@ -310,6 +312,7 @@ namespace DungeonGame.Monsters {
 					attackAmount += _UnarmedAttackDamage;
 				}
 			}
+
 			int randomChanceToHit = GameController.GetRandomNumber(1, 100);
 			double chanceToDodge = player._DodgeChance;
 			if (chanceToDodge > 50) {
@@ -324,27 +327,16 @@ namespace DungeonGame.Monsters {
 					missString);
 				return;
 			}
+
 			int baseAttackAmount = attackAmount;
-			foreach (Effect effect in player._Effects.ToList()) {
+
+			foreach (IEffect effect in player._Effects) {
+				if (effect is FrozenEffect frozenEffect) {
+					attackAmount = frozenEffect.GetIncreasedDamageFromFrozen(attackAmount);
+					frozenEffect.ProcessFrozenRound();
+				}
+
 				switch (effect._EffectGroup) {
-					case Effect.EffectType.Healing:
-						break;
-					case Effect.EffectType.ChangePlayerDamage:
-						break;
-					case Effect.EffectType.ChangeArmor:
-						break;
-					case Effect.EffectType.OnFire:
-						break;
-					case Effect.EffectType.Bleeding:
-						break;
-					case Effect.EffectType.Stunned:
-						break;
-					case Effect.EffectType.Frozen:
-						double frozenAttackAmount = attackAmount * effect._EffectMultiplier;
-						attackAmount = (int)frozenAttackAmount;
-						effect.FrozenRound(player);
-						effect._IsEffectExpired = true;
-						break;
 					case Effect.EffectType.ChangeOpponentDamage:
 						int changeDamageAmount = effect._EffectAmountOverTime < attackAmount ?
 							effect._EffectAmountOverTime : attackAmount;

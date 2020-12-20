@@ -1,4 +1,5 @@
 using DungeonGame.Controllers;
+using DungeonGame.Effects;
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables;
 using DungeonGame.Items.Consumables.Potions;
@@ -60,7 +61,7 @@ namespace DungeonGame.Players {
 		public Armor _PlayerLegsArmor { get; set; }
 		public Weapon _PlayerWeapon { get; set; }
 		public Coordinate _PlayerLocation { get; set; }
-		public List<Effect> _Effects { get; set; }
+		public List<IEffect> _Effects { get; set; }
 		public List<PlayerSpell> _Spellbook { get; set; }
 		public List<PlayerAbility> _Abilities { get; set; }
 		public List<IItem> _Inventory { get; set; }
@@ -75,7 +76,7 @@ namespace DungeonGame.Players {
 			_Level = 1;
 			_ExperienceToLevel = Settings.GetBaseExperienceToLevel();
 			_Inventory = new List<IItem>();
-			_Effects = new List<Effect>();
+			_Effects = new List<IEffect>();
 			_QuestLog = new List<Quest>();
 			_FireResistance = 5;
 			_FrostResistance = 5;
@@ -207,8 +208,10 @@ namespace DungeonGame.Players {
 			double adjArmorRating = totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
 		}
-		public int PhysicalAttack(Monster opponent) {
+
+		public int PhysicalAttack(Monster monster) {
 			int attackAmount = 0;
+
 			try {
 				if (_PlayerWeapon._Equipped && _PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow) {
 					attackAmount = _PlayerWeapon.Attack();
@@ -232,66 +235,20 @@ namespace DungeonGame.Players {
 					"Your weapon is not equipped! Going hand to hand!");
 				attackAmount = 5;
 			}
-			foreach (Effect effect in _Effects) {
-				switch (effect._EffectGroup) {
-					case Effect.EffectType.Healing:
-						break;
-					case Effect.EffectType.ChangePlayerDamage:
-						attackAmount += effect._EffectAmountOverTime;
-						break;
-					case Effect.EffectType.ChangeArmor:
-						break;
-					case Effect.EffectType.OnFire:
-						break;
-					case Effect.EffectType.Bleeding:
-						break;
-					case Effect.EffectType.Stunned:
-						break;
-					case Effect.EffectType.Frozen:
-						break;
-					case Effect.EffectType.ReflectDamage:
-						break;
-					case Effect.EffectType.ChangeStat:
-						break;
-					case Effect.EffectType.ChangeOpponentDamage:
-						break;
-					case Effect.EffectType.BlockDamage:
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
+
+			foreach (IEffect effect in _Effects) {
+				if (effect is ChangePlayerDamageEffect changeEffect) {
+					attackAmount += changeEffect._ChangeAmountOverTime;
 				}
 			}
-			foreach (Effect effect in opponent._Effects) {
-				switch (effect._EffectGroup) {
-					case Effect.EffectType.Healing:
-						break;
-					case Effect.EffectType.ChangePlayerDamage:
-						break;
-					case Effect.EffectType.ChangeArmor:
-						break;
-					case Effect.EffectType.OnFire:
-						break;
-					case Effect.EffectType.Bleeding:
-						break;
-					case Effect.EffectType.Stunned:
-						break;
-					case Effect.EffectType.Frozen:
-						double frozenAttackAmount = attackAmount * effect._EffectMultiplier;
-						attackAmount = (int)frozenAttackAmount;
-						effect.FrozenRound(opponent);
-						break;
-					case Effect.EffectType.ReflectDamage:
-						break;
-					case Effect.EffectType.ChangeStat:
-						break;
-					case Effect.EffectType.ChangeOpponentDamage:
-						break;
-					case Effect.EffectType.BlockDamage:
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
+
+			foreach (IEffect effect in monster._Effects) {
+				if (effect is FrozenEffect frozenEffect) {
+					attackAmount = frozenEffect.GetIncreasedDamageFromFrozen(attackAmount);
+					frozenEffect.ProcessFrozenRound(monster);
 				}
 			}
+
 			return attackAmount;
 		}
 
