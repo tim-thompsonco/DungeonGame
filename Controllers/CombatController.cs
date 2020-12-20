@@ -1,4 +1,5 @@
-﻿using DungeonGame.Items;
+﻿using DungeonGame.Effects;
+using DungeonGame.Items;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 using DungeonGame.Rooms;
@@ -144,66 +145,53 @@ namespace DungeonGame.Controllers {
 				Settings.FormatDefaultBackground(),
 				"You tried to flee combat but failed!");
 		}
+
 		private void ProcessPlayerEffects() {
-			foreach (Effect effect in _Player._Effects) {
-				switch (effect._EffectGroup) {
-					case Effect.EffectType.Healing:
-						effect.HealingRound(_Player);
-						break;
-					case Effect.EffectType.ChangePlayerDamage:
-						effect.ChangePlayerDamageRound(_Player);
-						break;
-					case Effect.EffectType.ChangeArmor:
-						effect.ChangeArmorRound();
-						break;
-					case Effect.EffectType.OnFire:
-						effect.OnFireRound(_Player);
-						break;
-					case Effect.EffectType.Bleeding:
-						effect.BleedingRound(_Player);
-						break;
-					case Effect.EffectType.Stunned:
-						break;
-					case Effect.EffectType.Frozen:
-						effect.FrozenRound(_Player);
-						break;
-					case Effect.EffectType.ChangeStat:
-					case Effect.EffectType.ChangeOpponentDamage:
-					case Effect.EffectType.BlockDamage:
-					case Effect.EffectType.ReflectDamage:
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
+			foreach (IEffect effect in _Player._Effects) {
+				if (effect is HealingEffect healingEffect) {
+					healingEffect.ProcessHealingRound(_Player);
+				}
+
+				if (effect is ChangePlayerDamageEffect changePlayerDmgEffect) {
+					changePlayerDmgEffect.ProcessChangePlayerDamageRound(_Player);
+				}
+
+				if (effect is ChangeArmorEffect changeArmorEffect) {
+					changeArmorEffect.ProcessChangeArmorRound();
+				}
+
+				if (effect is BurningEffect burningEffect) {
+					burningEffect.ProcessBurningRound(_Player);
+				}
+
+				if (effect is BleedingEffect bleedingEffect) {
+					bleedingEffect.ProcessBleedingRound(_Player);
+				}
+
+				if (effect is FrozenEffect frozenEffect) {
+					frozenEffect.ProcessFrozenRound();
 				}
 			}
 		}
+
 		private void ProcessOpponentEffects() {
 			GameController.RemovedExpiredEffectsAsync(_Opponent);
-			foreach (Effect effect in _Opponent._Effects) {
-				switch (effect._EffectGroup) {
-					case Effect.EffectType.Healing:
-					case Effect.EffectType.ChangePlayerDamage:
-					case Effect.EffectType.ChangeArmor:
-					case Effect.EffectType.Frozen:
-					case Effect.EffectType.ChangeOpponentDamage:
-					case Effect.EffectType.ReflectDamage:
-					case Effect.EffectType.ChangeStat:
-					case Effect.EffectType.BlockDamage:
-						break;
-					case Effect.EffectType.OnFire:
-						effect.OnFireRound(_Opponent);
-						break;
-					case Effect.EffectType.Bleeding:
-						effect.BleedingRound(_Opponent);
-						break;
-					case Effect.EffectType.Stunned:
-						effect.StunnedRound(_Opponent);
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
+
+			foreach (IEffect effect in _Opponent._Effects) {
+				if (effect is BurningEffect burningEffect) {
+					burningEffect.ProcessBurningRound(_Opponent);
+				}
+
+				if (effect is BleedingEffect bleedingEffect) {
+					bleedingEffect.ProcessBleedingRound(_Opponent);
+				}
+
+				if (effect is StunnedEffect stunnedEffect) {
+					stunnedEffect.ProcessStunnedRound(_Opponent);
 				}
 			}
 		}
+
 		private bool ProcessPlayerInput() {
 			switch (_Input[0]) {
 				case "f":
