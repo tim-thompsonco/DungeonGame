@@ -147,6 +147,8 @@ namespace DungeonGame.Controllers {
 		}
 
 		private void ProcessPlayerEffects() {
+			GameController.RemovedExpiredEffectsAsync(_Player);
+
 			foreach (IEffect effect in _Player._Effects) {
 				if (effect is HealingEffect healingEffect) {
 					healingEffect.ProcessHealingRound(_Player);

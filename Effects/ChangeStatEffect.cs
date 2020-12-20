@@ -34,6 +34,7 @@ namespace DungeonGame.Effects {
 
 			if (_CurrentRound > _MaxRound) {
 				SetEffectAsExpired();
+
 				RestorePlayerStatToNormal(player);
 			}
 		}

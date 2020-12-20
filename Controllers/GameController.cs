@@ -1,12 +1,13 @@
-﻿using DungeonGame.Monsters;
+﻿using DungeonGame.Effects;
+using DungeonGame.Monsters;
 using DungeonGame.Players;
 using DungeonGame.Rooms;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace DungeonGame.Controllers {
 	public static class GameController {
@@ -16,62 +17,65 @@ namespace DungeonGame.Controllers {
 
 		public static void CheckStatus(Player player) {
 			_GameTicks++;
+
 			if (_GameTicks % player._StatReplenishInterval == 0) {
 				ReplenishStatsOverTime(player);
 			}
 
 			if (player._Effects.Any()) {
-				foreach (Effect effect in player._Effects.Where(effect => _GameTicks % effect._TickDuration == 0).ToList()) {
-					switch (effect._EffectGroup) {
-						case Effect.EffectType.Healing:
-							effect.HealingRound(player);
-							break;
-						case Effect.EffectType.ChangePlayerDamage:
-							if (!player._InCombat && effect._Name.Contains("berserk")) {
-								effect._IsEffectExpired = true;
-							}
-							break;
-						case Effect.EffectType.ChangeArmor:
-							if (!player._InCombat && effect._Name.Contains("berserk")) {
-								effect._IsEffectExpired = true;
-							}
-							if (!player._InCombat) {
-								effect.ChangeArmorRound();
-							}
+				foreach (IEffect effect in player._Effects.Where(effect => _GameTicks % effect._TickDuration == 0).ToList()) {
+					if (effect is HealingEffect healingEffect) {
+						healingEffect.ProcessHealingRound(player);
+					}
 
-							break;
-						case Effect.EffectType.OnFire:
-							effect.OnFireRound(player);
-							break;
-						case Effect.EffectType.Bleeding:
-							effect.BleedingRound(player);
-							break;
-						case Effect.EffectType.Stunned:
-							continue;
-						case Effect.EffectType.Frozen:
-							effect.FrozenRound(player);
-							break;
-						case Effect.EffectType.ReflectDamage:
-							effect.ReflectDamageRound();
-							break;
-						case Effect.EffectType.ChangeStat:
-							effect.ChangeStatRound();
-							break;
-						case Effect.EffectType.ChangeOpponentDamage:
-							if (!player._InCombat) {
-								effect._IsEffectExpired = true;
-							}
+					if (effect is ChangePlayerDamageEffect changePlayerDmgEffect && !player._InCombat && effect._Name.Contains("berserk")) {
+						changePlayerDmgEffect.ProcessChangePlayerDamageRound(player);
+					}
 
-							effect.ChangeOpponentDamageRound(player);
-							break;
-						case Effect.EffectType.BlockDamage:
-							effect.BlockDamageRound();
-							break;
-						default:
-							throw new ArgumentOutOfRangeException();
+					if (effect is ChangeArmorEffect changeArmorEffect) {
+						if (!player._InCombat && effect._Name.Contains("berserk")) {
+							changeArmorEffect._IsEffectExpired = true;
+						}
+
+						if (!player._InCombat) {
+							changeArmorEffect.ProcessChangeArmorRound();
+						}
+					}
+
+					if (effect is BurningEffect burningEffect) {
+						burningEffect.ProcessBurningRound(player);
+					}
+
+					if (effect is BleedingEffect bleedingEffect) {
+						bleedingEffect.ProcessBleedingRound(player);
+					}
+
+					if (effect is FrozenEffect frozenEffect) {
+						frozenEffect.ProcessFrozenRound();
+					}
+
+					if (effect is ReflectDamageEffect reflectDmgEffect) {
+						reflectDmgEffect.ProcessReflectDamageRound();
+					}
+
+					if (effect is ChangeStatEffect changeStatEffect) {
+						changeStatEffect.ProcessChangeStatRound(player);
+					}
+
+					if (effect is ChangeMonsterDamageEffect changeMonsterDmgEffect) {
+						if (!player._InCombat) {
+							effect._IsEffectExpired = true;
+						}
+
+						changeMonsterDmgEffect.ProcessChangeMonsterDamageRound(player);
+					}
+
+					if (effect is BlockDamageEffect blockDamageEffect && !player._InCombat) {
+						blockDamageEffect.ProcessBlockDamageRound();
 					}
 				}
 			}
+
 			foreach (IRoom room in RoomController._Rooms.Values) {
 				foreach (IName roomObject in room._RoomObjects.Where(
 					roomObject => roomObject?.GetType() == typeof(Monster))) {
@@ -85,44 +89,31 @@ namespace DungeonGame.Controllers {
 						continue;
 					}
 
-					foreach (Effect effect in monster._Effects.Where(effect => _GameTicks % effect._TickDuration == 0).ToList()) {
-						switch (effect._EffectGroup) {
-							case Effect.EffectType.Healing:
-								break;
-							case Effect.EffectType.ChangePlayerDamage:
-								break;
-							case Effect.EffectType.ChangeArmor:
-								break;
-							case Effect.EffectType.OnFire:
-								effect.OnFireRound(monster);
-								break;
-							case Effect.EffectType.Bleeding:
-								effect.BleedingRound(monster);
-								break;
-							case Effect.EffectType.Stunned:
-								effect.StunnedRound(monster);
-								break;
-							case Effect.EffectType.Frozen:
-								effect.FrozenRound(monster);
-								break;
-							case Effect.EffectType.ReflectDamage:
-								break;
-							case Effect.EffectType.ChangeStat:
-								break;
-							case Effect.EffectType.ChangeOpponentDamage:
-								break;
-							case Effect.EffectType.BlockDamage:
-								break;
-							default:
-								throw new ArgumentOutOfRangeException();
+					foreach (IEffect effect in monster._Effects.Where(effect => _GameTicks % effect._TickDuration == 0).ToList()) {
+						if (effect is BurningEffect burningEffect) {
+							burningEffect.ProcessBurningRound(monster);
+						}
+
+						if (effect is BleedingEffect bleedingEffect) {
+							bleedingEffect.ProcessBleedingRound(monster);
+						}
+
+						if (effect is StunnedEffect stunnedEffect) {
+							stunnedEffect.ProcessStunnedRound(monster);
+						}
+
+						if (effect is FrozenEffect frozenEffect) {
+							frozenEffect.ProcessFrozenRound(monster);
 						}
 					}
 				}
 			}
 		}
+
 		public static int GetRandomNumber(int lowNum, int highNum) {
 			return RndGenerate.Next(lowNum, highNum + 1);
 		}
+
 		public static int RoundNumber(int number) {
 			int lastDigit = number % 10;
 			number /= 10;
@@ -131,54 +122,31 @@ namespace DungeonGame.Controllers {
 			number *= 10;
 			return number;
 		}
+
 		public static async void RemovedExpiredEffectsAsync(Player player) {
 			await Task.Run(() => {
-				foreach (Effect effect in player._Effects.ToList()) {
+				foreach (IEffect effect in player._Effects.ToList()) {
 					if (effect._IsEffectExpired) {
 						player._Effects.Remove(effect);
 					}
 				}
 			});
 		}
+
 		public static async void RemovedExpiredEffectsAsync(Monster monster) {
 			await Task.Run(() => {
-				for (int i = 0; i < monster._Effects.Count; i++) {
-					if (!monster._Effects[i]._IsEffectExpired) {
-						continue;
+				foreach (IEffect effect in monster._Effects.ToList()) {
+					if (effect is StunnedEffect && effect._IsEffectExpired) {
+						monster._IsStunned = false;
 					}
 
-					switch (monster._Effects[i]._EffectGroup) {
-						case Effect.EffectType.Healing:
-							break;
-						case Effect.EffectType.ChangePlayerDamage:
-							break;
-						case Effect.EffectType.ChangeArmor:
-							break;
-						case Effect.EffectType.OnFire:
-							break;
-						case Effect.EffectType.Bleeding:
-							break;
-						case Effect.EffectType.Stunned:
-							monster._IsStunned = false;
-							break;
-						case Effect.EffectType.ReflectDamage:
-							break;
-						case Effect.EffectType.Frozen:
-							break;
-						case Effect.EffectType.ChangeStat:
-							break;
-						case Effect.EffectType.ChangeOpponentDamage:
-							break;
-						case Effect.EffectType.BlockDamage:
-							break;
-						default:
-							throw new ArgumentOutOfRangeException();
+					if (effect._IsEffectExpired) {
+						monster._Effects.Remove(effect);
 					}
-					monster._Effects.RemoveAt(i);
-					i--; // Keep i at same amount, since effects.count will decrease, to keep checking effect list properly
 				}
 			});
 		}
+
 		private static void ReplenishStatsOverTime(Player player) {
 			if (player._InCombat) {
 				return;
@@ -211,6 +179,7 @@ namespace DungeonGame.Controllers {
 					throw new ArgumentOutOfRangeException();
 			}
 		}
+
 		private static void ReplenishStatsOverTime(Monster monster) {
 			if (monster._InCombat) {
 				return;
@@ -224,9 +193,11 @@ namespace DungeonGame.Controllers {
 				monster._EnergyPoints++;
 			}
 		}
+
 		public static bool IsWholeNumber(string value) {
 			return value.All(char.IsNumber);
 		}
+
 		public static Player LoadPlayer() {
 			Player player;
 			try {
@@ -244,6 +215,7 @@ namespace DungeonGame.Controllers {
 			}
 			return player;
 		}
+
 		public static void LoadGame() {
 			try {
 				JsonSerializerSettings serializerSettings = new JsonSerializerSettings() {
@@ -271,6 +243,7 @@ namespace DungeonGame.Controllers {
 				RoomController._Rooms = new RoomBuilder(200, 10, 0, 4, 0).RetrieveSpawnRooms();
 			}
 		}
+
 		public static bool QuitGame(Player player) {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(),
@@ -291,6 +264,7 @@ namespace DungeonGame.Controllers {
 			SaveGame(player);
 			return true;
 		}
+
 		public static void SaveGame(Player player) {
 			string outputString;
 			if (player._CanSave) {
@@ -325,6 +299,7 @@ namespace DungeonGame.Controllers {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(), outputString);
 		}
+
 		public static bool ContinuePlaying() {
 			while (true) {
 				const string continuePlayingMessage = "Do you want to keep playing? [Y/N]";
