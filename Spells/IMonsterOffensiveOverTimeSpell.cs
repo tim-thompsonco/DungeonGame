@@ -1,11 +1,11 @@
-﻿using DungeonGame.Players;
+﻿//using DungeonGame.Players;
 
-namespace DungeonGame.Spells {
-	public interface IMonsterOffensiveOverTimeSpell {
-		int _DamageOverTimeAmount { get; }
-		int _MaxDamageRounds { get; }
+//namespace DungeonGame.Spells {
+//	public interface IMonsterOffensiveOverTimeSpell {
+//		int _DamageOverTimeAmount { get; }
+//		int _MaxDamageRounds { get; }
 
-		void DisplayDamageOverTimeMessage();
-		void AddDamageOverTimeEffect(Player player);
-	}
-}
+//		void DisplayDamageOverTimeMessage();
+//		void AddDamageOverTimeEffect(Player player);
+//	}
+//}
