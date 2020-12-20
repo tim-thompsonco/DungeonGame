@@ -38,7 +38,6 @@
     <Compile Include="Builders\RoomBuilder.cs" />
     <Compile Include="Builders\RoomBuilderHelper.cs" />
     <Compile Include="Coordinate.cs" />
-    <Compile Include="Effect.cs" />
     <Compile Include="Controllers\CombatController.cs" />
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\GearController.cs" />
@@ -57,6 +56,7 @@
     <Compile Include="Effects\HealingEffect.cs" />
     <Compile Include="Effects\IEffect.cs" />
     <Compile Include="Effects\BurningEffect.cs" />
+    <Compile Include="Effects\ReflectDamageEffect.cs" />
     <Compile Include="Effects\StunnedEffect.cs" />
     <Compile Include="Quests\IQuestGiver.cs" />
     <Compile Include="Interfaces\IRainbowGear.cs" />
