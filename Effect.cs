@@ -100,23 +100,5 @@ namespace DungeonGame {
 
 			_IsEffectExpired = true;
 		}
-		public void ChangeOpponentDamageRound(Player player) {
-			if (_IsEffectExpired || player._InCombat == false) {
-				return;
-			}
-
-			_EffectCurRound += 1;
-			string changeDmgString = _EffectAmountOverTime > 0 ? $"Incoming damage is increased by {_EffectAmountOverTime}." :
-				$"Incoming damage is decreased by {-1 * _EffectAmountOverTime}.";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				changeDmgString);
-			if (_EffectCurRound <= _EffectMaxRound) {
-				return;
-			}
-
-			_IsEffectExpired = true;
-		}
 	}
 }
