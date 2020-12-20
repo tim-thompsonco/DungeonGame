@@ -24,7 +24,7 @@ namespace DungeonGame.Effects {
 			_StatType = statType;
 		}
 
-		public void ChangeStatRound(Player player) {
+		public void ProcessChangeStatRound(Player player) {
 			if (_IsEffectExpired) {
 				return;
 			}

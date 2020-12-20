@@ -66,29 +66,6 @@ namespace DungeonGame {
 			_StatGroup = statType;
 		}
 
-		public void HealingRound(Player player) {
-			if (_IsEffectExpired) {
-				return;
-			}
-
-			_EffectCurRound += 1;
-			player._HitPoints += _EffectAmountOverTime;
-			if (player._HitPoints > player._MaxHitPoints) {
-				player._HitPoints = player._MaxHitPoints;
-			}
-
-			string healAmtString = $"You have been healed for {_EffectAmountOverTime} health.";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				healAmtString);
-			if (_EffectCurRound <= _EffectMaxRound) {
-				return;
-			}
-
-			_IsEffectExpired = true;
-		}
-		
 		public void BlockDamageRound() {
 			if (_IsEffectExpired) {
 				return;

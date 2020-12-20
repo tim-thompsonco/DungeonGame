@@ -50,8 +50,9 @@
     <Compile Include="Effects\BleedingEffect.cs" />
     <Compile Include="Effects\ChangeStatEffect.cs" />
     <Compile Include="Effects\FrozenEffect.cs" />
+    <Compile Include="Effects\HealingEffect.cs" />
     <Compile Include="Effects\IEffect.cs" />
-    <Compile Include="Effects\OnFireEffect.cs" />
+    <Compile Include="Effects\BurningEffect.cs" />
     <Compile Include="Quests\IQuestGiver.cs" />
     <Compile Include="Interfaces\IRainbowGear.cs" />
     <Compile Include="Items\Armor.cs" />

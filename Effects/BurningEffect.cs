@@ -3,21 +3,21 @@ using DungeonGame.Monsters;
 using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
-	public class OnFireEffect : IEffect {
+	public class BurningEffect : IEffect {
 		public string _Name { get; set; }
 		public bool _IsEffectExpired { get ; set; }
 		private readonly int _FireDamageOverTime;
 		private int _CurrentRound;
 		private readonly int _MaxRound;
 
-		public OnFireEffect(string name, int fireDamageOverTime, int maxRound) {
+		public BurningEffect(string name, int fireDamageOverTime, int maxRound) {
 			_Name = name;
 			_FireDamageOverTime = fireDamageOverTime;
 			_CurrentRound = 1;
 			_MaxRound = maxRound;
 		}
 
-		public void OnFireRound(Monster monster) {
+		public void ProcessBurningRound(Monster monster) {
 			if (_IsEffectExpired) {
 				return;
 			}
@@ -34,7 +34,7 @@ namespace DungeonGame.Effects {
 			}
 		}
 
-		public void OnFireRound(Player player) {
+		public void ProcessBurningRound(Player player) {
 			if (_IsEffectExpired) {
 				return;
 			}

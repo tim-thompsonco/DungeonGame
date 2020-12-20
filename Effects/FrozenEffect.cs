@@ -34,7 +34,7 @@ namespace DungeonGame.Effects {
 			return (int)(damage * _EffectMultiplier);
 		}
 
-		public void FrozenRound(Monster monster) {
+		public void ProcessFrozenRound(Monster monster) {
 			string frozenMessage = GetFrozenMessage(monster);
 			DisplayFrozenMessage(frozenMessage);
 
@@ -45,7 +45,7 @@ namespace DungeonGame.Effects {
 			}
 		}
 
-		public void FrozenRound() {
+		public void ProcessFrozenRound() {
 			string frozenMessage = GetFrozenMessage();
 			DisplayFrozenMessage(frozenMessage);
 

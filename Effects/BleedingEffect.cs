@@ -17,7 +17,7 @@ namespace DungeonGame.Effects {
 			_MaxRound = maxRound;
 		}
 
-		public void BleedingRound(Monster monster) {
+		public void ProcessBleedingRound(Monster monster) {
 			if (_IsEffectExpired) {
 				return;
 			}
@@ -34,7 +34,7 @@ namespace DungeonGame.Effects {
 			}
 		}
 
-		public void BleedingRound(Player player) {
+		public void ProcessBleedingRound(Player player) {
 			if (_IsEffectExpired) {
 				return;
 			}
