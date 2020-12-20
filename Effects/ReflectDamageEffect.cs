@@ -31,14 +31,14 @@ namespace DungeonGame.Effects {
 			}
 		}
 
-		public void ProcessReflectDamageRound(int incomingDamage) {
+		public void ProcessReflectDamageRound(int reflectedAmount) {
 			if (_IsEffectExpired) {
 				return;
 			}
 
 			IncrementCurrentRound();
 
-			DisplayReflectDamageMessage(incomingDamage);
+			DisplayReflectDamageMessage(reflectedAmount);
 
 			if (_CurrentRound > _MaxRound) {
 				SetEffectAsExpired();
@@ -58,15 +58,8 @@ namespace DungeonGame.Effects {
 				reflectString);
 		}
 
-		private void DisplayReflectDamageMessage(int incomingDamage) {
-			int reflectAmount;
-			if (incomingDamage < _ReflectDamageAmount) {
-				reflectAmount = incomingDamage;
-			} else {
-				reflectAmount = _ReflectDamageAmount;
-			}
-
-			string reflectString = $"You reflected {reflectAmount} damage back at your opponent!";
+		private void DisplayReflectDamageMessage(int reflectedAmount) {
+			string reflectString = $"You reflected {reflectedAmount} damage back at your opponent!";
 
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
@@ -76,6 +69,14 @@ namespace DungeonGame.Effects {
 
 		public void SetEffectAsExpired() {
 			_IsEffectExpired = true;
+		}
+
+		public int GetReflectedDamageAmount(int incomingDamage) {
+			if (_ReflectDamageAmount < incomingDamage) {
+				return _ReflectDamageAmount;
+			} else {
+				return incomingDamage;
+			}
 		}
 	}
 }

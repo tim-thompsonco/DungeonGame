@@ -7,14 +7,14 @@ namespace DungeonGame.Effects {
 		public bool _IsEffectExpired { get; set; }
 		public int _TickDuration { get; }
 		public string _Name { get; set; }
-		public int _ChangeAmountOverTime { get; }
+		private readonly int _ChangeAmount;
 		private int _CurrentRound;
 		private readonly int _MaxRound;
 
-		public ChangePlayerDamageEffect(int tickDuration, string name, int changeAmountOverTime, int maxRound) {
+		public ChangePlayerDamageEffect(int tickDuration, string name, int changeAmount, int maxRound) {
 			_TickDuration = tickDuration;
 			_Name = name;
-			_ChangeAmountOverTime = changeAmountOverTime;
+			_ChangeAmount = changeAmount;
 			_CurrentRound = 1;
 			_MaxRound = maxRound;
 		}
@@ -38,9 +38,9 @@ namespace DungeonGame.Effects {
 		}
 
 		private void DisplayChangeDamageMessage() {
-			int changeAmount = Math.Abs(_ChangeAmountOverTime);
+			int changeAmount = Math.Abs(_ChangeAmount);
 
-			string changeDmgString = _ChangeAmountOverTime > 0 ? $"Your damage is increased by {changeAmount}." :
+			string changeDmgString = _ChangeAmount > 0 ? $"Your damage is increased by {changeAmount}." :
 				$"Your damage is decreased by {changeAmount}.";
 
 			OutputController.Display.StoreUserOutput(
@@ -51,6 +51,10 @@ namespace DungeonGame.Effects {
 
 		public void SetEffectAsExpired() {
 			_IsEffectExpired = true;
+		}
+
+		public int GetUpdatedDamageFromChange(int attackAmount) {
+			return attackAmount + _ChangeAmount;
 		}
 	}
 }

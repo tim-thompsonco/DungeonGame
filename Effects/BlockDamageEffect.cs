@@ -68,12 +68,8 @@ namespace DungeonGame.Effects {
 				blockEndString);
 		}
 
-		public int GetDamageAmountAfterBlockReduction(int incomingDamageAmount) {
-			if (incomingDamageAmount > _BlockAmount) {
-				return incomingDamageAmount - _BlockAmount;
-			} else {
-				return 0;
-			}
+		public int GetDecreasedDamageFromBlock(int incomingDamage) {
+			return incomingDamage - GetBlockReductionAmount(incomingDamage);
 		}
 	}
 }

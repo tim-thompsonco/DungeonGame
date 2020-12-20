@@ -333,34 +333,34 @@ namespace DungeonGame.Monsters {
 			foreach (IEffect effect in player._Effects) {
 				if (effect is FrozenEffect frozenEffect) {
 					attackAmount = frozenEffect.GetIncreasedDamageFromFrozen(attackAmount);
+
 					frozenEffect.ProcessFrozenRound();
 				}
 
-				switch (effect._EffectGroup) {
-					case Effect.EffectType.ChangeOpponentDamage:
-						int changeDamageAmount = effect._EffectAmountOverTime < attackAmount ?
-							effect._EffectAmountOverTime : attackAmount;
-						effect.ChangeOpponentDamageRound(player);
-						attackAmount += changeDamageAmount;
-						break;
-					case Effect.EffectType.BlockDamage:
-						int blockAmount = effect._EffectAmount < attackAmount ?
-							effect._EffectAmount : attackAmount;
-						effect.BlockDamageRound(blockAmount);
-						attackAmount -= blockAmount;
-						break;
-					case Effect.EffectType.ReflectDamage:
-						int reflectAmount = effect._EffectAmountOverTime < attackAmount ?
-							effect._EffectAmountOverTime : attackAmount;
-						_HitPoints -= reflectAmount;
-						effect.ReflectDamageRound(reflectAmount);
-						attackAmount -= reflectAmount;
-						break;
-					case Effect.EffectType.ChangeStat:
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
+				if (effect is ChangeMonsterDamageEffect changeMonsterDmgEffect) {
+					attackAmount = changeMonsterDmgEffect.GetUpdatedDamageFromChange(attackAmount);
+
+					changeMonsterDmgEffect.ProcessChangeMonsterDamageRound(player);
 				}
+
+				if (effect is BlockDamageEffect blockDamageEffect) {
+					int incomingDamage = attackAmount;
+
+					attackAmount = blockDamageEffect.GetDecreasedDamageFromBlock(incomingDamage);
+
+					blockDamageEffect.ProcessBlockDamageRound(incomingDamage);
+				}
+
+				if (effect is ReflectDamageEffect reflectDamageEffect) {
+					int reflectAmount = reflectDamageEffect.GetReflectedDamageAmount(attackAmount);
+
+					_HitPoints -= reflectAmount;
+
+					reflectDamageEffect.ProcessReflectDamageRound(reflectAmount);
+
+					attackAmount -= reflectAmount;
+				}
+
 				if (baseAttackAmount > attackAmount && attackAmount - player.ArmorRating(this) <= 0) {
 					string effectAbsorbString = $"Your {effect._Name} absorbed all of {_Name}'s attack!";
 					OutputController.Display.StoreUserOutput(
@@ -371,6 +371,7 @@ namespace DungeonGame.Monsters {
 				}
 				GameController.RemovedExpiredEffectsAsync(this);
 			}
+
 			if (attackAmount - player.ArmorRating(this) <= 0) {
 				string armorAbsorbString = $"Your armor absorbed all of {_Name}'s attack!";
 				OutputController.Display.StoreUserOutput(
