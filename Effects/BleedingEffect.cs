@@ -4,8 +4,9 @@ using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public class BleedingEffect : IEffect {
-		public string _Name { get; set; }
 		public bool _IsEffectExpired { get; set; }
+		public int _TickDuration { get; }
+		public string _Name { get; set; }
 		private readonly int _BleedDamageOverTime;
 		private int _CurrentRound;
 		private readonly int _MaxRound;

@@ -1,11 +1,11 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Monsters;
-using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public class FrozenEffect : IEffect {
-		public string _Name { get; set; }
 		public bool _IsEffectExpired { get; set; }
+		public int _TickDuration { get; }
+		public string _Name { get; set; }
 		private readonly double _EffectMultiplier;
 		private int _CurrentRound;
 		private readonly int _MaxRound;

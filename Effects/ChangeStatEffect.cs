@@ -10,6 +10,7 @@ namespace DungeonGame.Effects {
 			Constitution
 		}
 		public bool _IsEffectExpired { get; set; }
+		public int _TickDuration { get; }
 		public StatType _StatType { get; set; }
 		public string _Name { get; set; }
 		private int _StatAmount;

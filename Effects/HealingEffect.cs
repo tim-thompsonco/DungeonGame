@@ -3,12 +3,12 @@ using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public class HealingEffect : IEffect {
-		public string _Name { get; set; }
 		public bool _IsEffectExpired { get; set; }
+		public string _Name { get; set; }
+		public int _TickDuration { get; }
 		private readonly int _HealOverTimeAmount;
 		private int _CurrentRound;
 		private readonly int _MaxRound;
-		private readonly int _TickDuration;
 
 		public HealingEffect(string name, int healOverTimeAmount, int tickDuration, int maxRound) {
 			_Name = name;

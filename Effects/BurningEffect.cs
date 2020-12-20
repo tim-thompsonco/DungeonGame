@@ -6,6 +6,7 @@ namespace DungeonGame.Effects {
 	public class BurningEffect : IEffect {
 		public string _Name { get; set; }
 		public bool _IsEffectExpired { get ; set; }
+		public int _TickDuration { get; }
 		private readonly int _FireDamageOverTime;
 		private int _CurrentRound;
 		private readonly int _MaxRound;
