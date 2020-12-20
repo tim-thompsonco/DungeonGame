@@ -88,18 +88,7 @@ namespace DungeonGame {
 
 			_IsEffectExpired = true;
 		}
-		public void ChangeStatRound() {
-			if (_IsEffectExpired) {
-				return;
-			}
-
-			_EffectCurRound += 1;
-			if (_EffectCurRound <= _EffectMaxRound) {
-				return;
-			}
-
-			_IsEffectExpired = true;
-		}
+		
 		public void BlockDamageRound() {
 			if (_IsEffectExpired) {
 				return;
@@ -233,78 +222,7 @@ namespace DungeonGame {
 
 			_IsEffectExpired = true;
 		}
-		public void OnFireRound(Monster opponent) {
-			if (_IsEffectExpired) {
-				return;
-			}
-
-			_EffectCurRound += 1;
-			opponent._HitPoints -= _EffectAmountOverTime;
-			string burnString = $"The {opponent._Name} burns for {_EffectAmountOverTime} fire damage.";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatOnFireText(),
-				Settings.FormatDefaultBackground(),
-				burnString);
-			if (_EffectCurRound <= _EffectMaxRound) {
-				return;
-			}
-
-			_IsEffectExpired = true;
-		}
-		public void OnFireRound(Player player) {
-			if (_IsEffectExpired) {
-				return;
-			}
-
-			_EffectCurRound += 1;
-			player._HitPoints -= _EffectAmountOverTime;
-			string burnString = $"You burn for {_EffectAmountOverTime} fire damage.";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatOnFireText(),
-				Settings.FormatDefaultBackground(),
-				burnString);
-			if (_EffectCurRound <= _EffectMaxRound) {
-				return;
-			}
-
-			_IsEffectExpired = true;
-		}
-		public void BleedingRound(Monster opponent) {
-			if (_IsEffectExpired) {
-				return;
-			}
-
-			_EffectCurRound += 1;
-			opponent._HitPoints -= _EffectAmountOverTime;
-			string bleedString = $"The {opponent._Name} bleeds for {_EffectAmountOverTime} physical damage.";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatAttackSuccessText(),
-				Settings.FormatDefaultBackground(),
-				bleedString);
-			if (_EffectCurRound <= _EffectMaxRound) {
-				return;
-			}
-
-			_IsEffectExpired = true;
-		}
-		public void BleedingRound(Player player) {
-			if (_IsEffectExpired) {
-				return;
-			}
-
-			_EffectCurRound += 1;
-			player._HitPoints -= _EffectAmountOverTime;
-			string bleedString = $"You bleed for {_EffectAmountOverTime} physical damage.";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatAttackSuccessText(),
-				Settings.FormatDefaultBackground(),
-				bleedString);
-			if (_EffectCurRound <= _EffectMaxRound) {
-				return;
-			}
-
-			_IsEffectExpired = true;
-		}
+		
 		public void StunnedRound(Monster opponent) {
 			if (_IsEffectExpired) {
 				return;
@@ -317,40 +235,6 @@ namespace DungeonGame {
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				stunnedString);
-			if (_EffectCurRound <= _EffectMaxRound) {
-				return;
-			}
-
-			_IsEffectExpired = true;
-		}
-		public void FrozenRound(Monster opponent) {
-			if (_IsEffectExpired) {
-				return;
-			}
-
-			_EffectCurRound += 1;
-			string frozenString = $"The {opponent._Name} is frozen. Physical, frost and arcane damage to it will be double!";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatAttackSuccessText(),
-				Settings.FormatDefaultBackground(),
-				frozenString);
-			if (_EffectCurRound <= _EffectMaxRound) {
-				return;
-			}
-
-			_IsEffectExpired = true;
-		}
-		public void FrozenRound(Player player) {
-			if (_IsEffectExpired) {
-				return;
-			}
-
-			_EffectCurRound += 1;
-			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be double!";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatAttackSuccessText(),
-				Settings.FormatDefaultBackground(),
-				frozenString);
 			if (_EffectCurRound <= _EffectMaxRound) {
 				return;
 			}

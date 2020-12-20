@@ -133,56 +133,10 @@ namespace DungeonGame.Controllers {
 		}
 		public static async void RemovedExpiredEffectsAsync(Player player) {
 			await Task.Run(() => {
-				for (int i = 0; i < player._Effects.Count; i++) {
-					if (!player._Effects[i]._IsEffectExpired) {
-						continue;
+				foreach (Effect effect in player._Effects.ToList()) {
+					if (effect._IsEffectExpired) {
+						player._Effects.Remove(effect);
 					}
-
-					switch (player._Effects[i]._EffectGroup) {
-						case Effect.EffectType.Healing:
-							break;
-						case Effect.EffectType.ChangePlayerDamage:
-							break;
-						case Effect.EffectType.ChangeArmor:
-							break;
-						case Effect.EffectType.OnFire:
-							break;
-						case Effect.EffectType.Bleeding:
-							break;
-						case Effect.EffectType.Stunned:
-							break;
-						case Effect.EffectType.ReflectDamage:
-							break;
-						case Effect.EffectType.Frozen:
-							break;
-						case Effect.EffectType.ChangeStat:
-							switch (player._Effects[i]._StatGroup) {
-								case Effect.StatType.Intelligence:
-									player._Intelligence -= player._Effects[i]._EffectAmountOverTime;
-									break;
-								case Effect.StatType.Strength:
-									player._Strength -= player._Effects[i]._EffectAmountOverTime;
-									break;
-								case Effect.StatType.Dexterity:
-									player._Dexterity -= player._Effects[i]._EffectAmountOverTime;
-									break;
-								case Effect.StatType.Constitution:
-									player._Constitution -= player._Effects[i]._EffectAmountOverTime;
-									break;
-								default:
-									throw new ArgumentOutOfRangeException();
-							}
-							PlayerController.CalculatePlayerStats(player);
-							break;
-						case Effect.EffectType.ChangeOpponentDamage:
-							break;
-						case Effect.EffectType.BlockDamage:
-							break;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
-					player._Effects.RemoveAt(i);
-					i--; // Keep i at same amount, since effects.count will decrease, to keep checking effect list properly
 				}
 			});
 		}
