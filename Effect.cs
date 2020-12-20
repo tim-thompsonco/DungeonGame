@@ -66,49 +66,6 @@ namespace DungeonGame {
 			_StatGroup = statType;
 		}
 
-		public void BlockDamageRound() {
-			if (_IsEffectExpired) {
-				return;
-			}
-
-			const string blockString = "Your block effect is slowly fading away.";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				blockString);
-			if (_TickDuration > 0) {
-				return;
-			}
-
-			const string blockEndString = "You are no longer blocking damage!";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				blockEndString);
-			_IsEffectExpired = true;
-		}
-		public void BlockDamageRound(int blockAmount) {
-			if (_IsEffectExpired) {
-				return;
-			}
-
-			string blockString = $"Your defensive move blocked {blockAmount} damage!";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				blockString);
-			_EffectAmount -= blockAmount;
-			if (_EffectAmount > 0) {
-				return;
-			}
-
-			const string blockEndString = "You are no longer blocking damage!";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				blockEndString);
-			_IsEffectExpired = true;
-		}
 		public void ReflectDamageRound() {
 			if (_IsEffectExpired) {
 				return;
