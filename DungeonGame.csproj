@@ -55,6 +55,7 @@
     <Compile Include="Effects\HealingEffect.cs" />
     <Compile Include="Effects\IEffect.cs" />
     <Compile Include="Effects\BurningEffect.cs" />
+    <Compile Include="Effects\StunnedEffect.cs" />
     <Compile Include="Quests\IQuestGiver.cs" />
     <Compile Include="Interfaces\IRainbowGear.cs" />
     <Compile Include="Items\Armor.cs" />

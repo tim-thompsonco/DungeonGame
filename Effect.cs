@@ -137,24 +137,5 @@ namespace DungeonGame {
 
 			_IsEffectExpired = true;
 		}
-		
-		public void StunnedRound(Monster opponent) {
-			if (_IsEffectExpired) {
-				return;
-			}
-
-			opponent._IsStunned = true;
-			_EffectCurRound += 1;
-			string stunnedString = $"The {opponent._Name} is stunned and cannot attack.";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatAttackSuccessText(),
-				Settings.FormatDefaultBackground(),
-				stunnedString);
-			if (_EffectCurRound <= _EffectMaxRound) {
-				return;
-			}
-
-			_IsEffectExpired = true;
-		}
 	}
 }
