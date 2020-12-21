@@ -1,4 +1,5 @@
-﻿using DungeonGame.Items;
+﻿using DungeonGame.Effects;
+using DungeonGame.Items;
 using DungeonGame.Items.Equipment;
 using DungeonGame.Items.Consumables.Kits;
 using DungeonGame.Players;
@@ -65,23 +66,30 @@ namespace DungeonGame.Controllers {
 			player._PlayerHeadArmor?.DecreaseDurability();
 			player._PlayerLegsArmor?.DecreaseDurability();
 		}
+
 		public static int CheckArmorRating(Player player) {
 			int totalArmorRating = 0;
+
 			if (player._PlayerChestArmor != null && player._PlayerChestArmor._Equipped) {
 				totalArmorRating += (int)player._PlayerChestArmor.GetArmorRating();
 			}
+
 			if (player._PlayerHeadArmor != null && player._PlayerHeadArmor._Equipped) {
 				totalArmorRating += (int)player._PlayerHeadArmor.GetArmorRating();
 			}
+
 			if (player._PlayerLegsArmor != null && player._PlayerLegsArmor._Equipped) {
 				totalArmorRating += (int)player._PlayerLegsArmor.GetArmorRating();
 			}
+
 			if (!player._InCombat) {
 				return totalArmorRating;
 			}
 
-			totalArmorRating += player._Effects.Where(
-				effect => effect._EffectGroup == Effect.EffectType.ChangeArmor).Sum(effect => effect._EffectAmountOverTime);
+			foreach (ChangeArmorEffect effect in player._Effects) {
+				totalArmorRating += effect._ChangeArmorAmount;
+			}
+
 			return totalArmorRating < 0 ? 0 : totalArmorRating;
 		}
 

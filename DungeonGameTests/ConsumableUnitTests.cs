@@ -70,7 +70,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("constitution", potionName);
 			StatPotion potion = player._Inventory[potionIndex] as StatPotion;
 			int statAmount = potion._StatAmount;
-			StatPotion.StatType statType = potion._StatCategory;
+			StatPotion.StatType statType = potion._StatType;
 			int baseConst = player._Constitution;
 			int baseMaxHitPoints = player._MaxHitPoints;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
@@ -104,7 +104,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("intelligence", potionName);
 			StatPotion potion = player._Inventory[potionIndex] as StatPotion;
 			int statAmount = potion._StatAmount;
-			StatPotion.StatType statType = potion._StatCategory;
+			StatPotion.StatType statType = potion._StatType;
 			int baseInt = player._Intelligence;
 			int? baseMaxManaPoints = player._MaxManaPoints;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
@@ -138,7 +138,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("strength", potionName);
 			StatPotion potion = player._Inventory[potionIndex] as StatPotion;
 			int statAmount = potion._StatAmount;
-			StatPotion.StatType statType = potion._StatCategory;
+			StatPotion.StatType statType = potion._StatType;
 			int baseStr = player._Strength;
 			int baseMaxCarryWeight = player._MaxCarryWeight;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
@@ -172,7 +172,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("dexterity", potionName);
 			StatPotion potion = player._Inventory[potionIndex] as StatPotion;
 			int statAmount = potion._StatAmount;
-			StatPotion.StatType statType = potion._StatCategory;
+			StatPotion.StatType statType = potion._StatType;
 			int baseDex = player._Dexterity;
 			double baseDodgeChance = player._DodgeChance;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));

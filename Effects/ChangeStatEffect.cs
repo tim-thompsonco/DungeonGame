@@ -13,7 +13,7 @@ namespace DungeonGame.Effects {
 		public int _TickDuration { get; }
 		public StatType _StatType { get; set; }
 		public string _Name { get; set; }
-		private int _StatAmount;
+		private readonly int _StatAmount;
 		private int _CurrentRound;
 		private readonly int _MaxRound;
 

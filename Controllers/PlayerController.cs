@@ -1,4 +1,5 @@
-﻿using DungeonGame.Items;
+﻿using DungeonGame.Effects;
+using DungeonGame.Items;
 using DungeonGame.Items.Consumables;
 using DungeonGame.Items.Equipment;
 using DungeonGame.Items.Consumables.Potions;
@@ -117,7 +118,7 @@ namespace DungeonGame.Controllers {
 
 					if (item is StatPotion) {
 						StatPotion potion = item as StatPotion;
-						itemInfo.Append($" (+{potion._StatAmount} {potion._StatCategory})");
+						itemInfo.Append($" (+{potion._StatAmount} {potion._StatType})");
 					}
 				}
 				if (item.GetType() == typeof(Arrows)) {
@@ -157,9 +158,10 @@ namespace DungeonGame.Controllers {
 				return;
 			}
 
-			foreach (Effect effect in player._Effects.ToList().Where(effect => effect._IsHarmful = true)) {
+			foreach (IEffect effect in player._Effects.ToList()) {
 				effect._IsEffectExpired = true;
 			}
+
 			player._Level++;
 			player._Experience -= player._ExperienceToLevel;
 			player._ExperienceToLevel = Settings.GetBaseExperienceToLevel() * player._Level;
