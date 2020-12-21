@@ -6,29 +6,11 @@ namespace DungeonGame.Effects {
 		public string _Name { get; set; }
 		public int _TickDuration { get; }
 		private int _BlockAmount;
-		private int _CurrentRound;
-		private readonly int _MaxRound;
 
-		public BlockDamageEffect(string name, int tickDuration, int blockAmount, int maxRound) {
+		public BlockDamageEffect(string name, int tickDuration, int blockAmount) {
 			_Name = name;
 			_TickDuration = tickDuration;
 			_BlockAmount = blockAmount;
-			_CurrentRound = 1;
-			_MaxRound = maxRound;
-		}
-
-		public void ProcessBlockDamageRound() {
-			if (_IsEffectExpired) {
-				return;
-			}
-
-			IncrementCurrentRound();
-
-			if (_CurrentRound > _MaxRound) {
-				SetEffectAsExpired();
-
-				DisplayBlockEffectExpiredMessage();
-			}
 		}
 
 		public void ProcessBlockDamageRound(int incomingDamageAmount) {
@@ -46,10 +28,6 @@ namespace DungeonGame.Effects {
 
 				DisplayBlockEffectExpiredMessage();
 			}
-		}
-
-		private void IncrementCurrentRound() {
-			_CurrentRound++;
 		}
 
 		private int GetBlockReductionAmount(int incomingDamageAmount) {
