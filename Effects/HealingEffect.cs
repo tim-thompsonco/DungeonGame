@@ -12,7 +12,7 @@ namespace DungeonGame.Effects {
 		private readonly int _HealOverTimeAmount;
 
 		public HealingEffect(string name, int maxRound, int healOverTimeAmount) {
-			_TickDuration = 1;
+			_TickDuration = 10;
 			_IsHarmful = false;
 			_Name = name;
 			_CurrentRound = 1;

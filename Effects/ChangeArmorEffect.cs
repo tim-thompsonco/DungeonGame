@@ -12,7 +12,7 @@ namespace DungeonGame.Effects {
 		public int _ChangeArmorAmount { get; }
 
 		public ChangeArmorEffect(string name, int maxRound, int changeArmorAmount) {
-			_TickDuration = 1;
+			_TickDuration = 10;
 			_IsHarmful = false;
 			_Name = name;
 			_CurrentRound = 1;

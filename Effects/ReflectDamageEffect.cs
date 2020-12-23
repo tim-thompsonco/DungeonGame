@@ -11,7 +11,7 @@ namespace DungeonGame.Effects {
 		private readonly int _ReflectDamageAmount;
 
 		public ReflectDamageEffect(string name, int maxRound, int reflectDamageAmount) {
-			_TickDuration = 1;
+			_TickDuration = 10;
 			_IsHarmful = false;
 			_Name = name;
 			_CurrentRound = 1;

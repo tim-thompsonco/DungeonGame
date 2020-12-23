@@ -111,8 +111,8 @@ namespace DungeonGame {
 				augmentString);
 
 			player._Effects.Add(
-				new ChangeArmorEffect(10, player._Spellbook[index]._Name, player._Spellbook[index]._ChangeAmount._Amount,
-					player._Spellbook[index]._ChangeAmount._ChangeMaxRound));
+				new ChangeArmorEffect(player._Spellbook[index]._Name, player._Spellbook[index]._ChangeAmount._ChangeMaxRound, 
+					player._Spellbook[index]._ChangeAmount._Amount));
 		}
 
 		public static void ReflectDamageSpellInfo(Player player, int index) {
@@ -148,8 +148,8 @@ namespace DungeonGame {
 			PlayerController.CalculatePlayerStats(player);
 
 			player._Effects.Add(
-				new ChangeStatEffect(player._Spellbook[index]._Name, player._Spellbook[index]._ChangeAmount._Amount,
-					player._Spellbook[index]._ChangeAmount._ChangeMaxRound, ChangeStatEffect.StatType.Intelligence));
+				new ChangeStatEffect(player._Spellbook[index]._Name, player._Spellbook[index]._ChangeAmount._ChangeMaxRound,
+					ChangeStatEffect.StatType.Intelligence, player._Spellbook[index]._ChangeAmount._Amount));
 		}
 
 		public static void ArcaneIntellectSpellInfo(Player player, int index) {
@@ -176,8 +176,8 @@ namespace DungeonGame {
 				reflectString);
 
 			player._Effects.Add(
-				new ReflectDamageEffect(10, player._Spellbook[index]._Name, player._Spellbook[index]._ChangeAmount._Amount, 
-					player._Spellbook[index]._ChangeAmount._ChangeMaxRound));
+				new ReflectDamageEffect(player._Spellbook[index]._Name, player._Spellbook[index]._ChangeAmount._ChangeMaxRound,
+					player._Spellbook[index]._ChangeAmount._Amount));
 		}
 
 		public static void FrostOffenseSpellInfo(Player player, int index) {
@@ -241,7 +241,7 @@ namespace DungeonGame {
 				return;
 			}
 
-			monster._Effects.Add(new StunnedEffect(player._Spellbook[index]._Name, 1, player._Spellbook[index]._Offensive._AmountMaxRounds));
+			monster._Effects.Add(new StunnedEffect(player._Spellbook[index]._Name, player._Spellbook[index]._Offensive._AmountMaxRounds));
 		}
 
 		public static void FireOffenseSpellInfo(Player player, int index) {
@@ -370,8 +370,8 @@ namespace DungeonGame {
 				return;
 			}
 
-			player._Effects.Add(new HealingEffect(player._Spellbook[index]._Name, player._Spellbook[index]._Healing._HealOverTime,
-				10, player._Spellbook[index]._Healing._HealMaxRounds));
+			player._Effects.Add(new HealingEffect(player._Spellbook[index]._Name, player._Spellbook[index]._Healing._HealMaxRounds,
+				player._Spellbook[index]._Healing._HealOverTime));
 		}
 
 		public static void PortalSpellInfo() {
