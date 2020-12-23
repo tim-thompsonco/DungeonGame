@@ -33,7 +33,7 @@ namespace DungeonGameTests.Items {
 
 			arrows.LoadPlayerQuiverWithArrows(player);
 
-			Assert.AreEqual("You don't have a quiver to reload!", OutputController.Display.Output[0][2]);
+			Assert.AreEqual("You don't have a quiver to reload!", OutputController.Display._Output[0][2]);
 		}
 
 		[Test]

@@ -189,13 +189,13 @@ namespace DungeonGame.Controllers {
 					Settings.FormatDefaultBackground(),
 					"None.");
 			}
-			goodEffectUserOutput.Output.OrderBy(output => output[2]);
-			foreach (List<string> output in goodEffectUserOutput.Output) {
-				effectUserOutput.Output.Add(output);
+			goodEffectUserOutput._Output.OrderBy(output => output[2]);
+			foreach (List<string> output in goodEffectUserOutput._Output) {
+				effectUserOutput._Output.Add(output);
 			}
-			badEffectUserOutput.Output.OrderBy(output => output[2]);
-			foreach (List<string> output in badEffectUserOutput.Output) {
-				effectUserOutput.Output.Add(output);
+			badEffectUserOutput._Output.OrderBy(output => output[2]);
+			foreach (List<string> output in badEffectUserOutput._Output) {
+				effectUserOutput._Output.Add(output);
 			}
 			// Create bottom border for effects area
 			StringBuilder effectsBorder = new StringBuilder();

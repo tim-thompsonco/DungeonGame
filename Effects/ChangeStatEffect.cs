@@ -18,12 +18,12 @@ namespace DungeonGame.Effects {
 		public StatType _StatType { get; set; }
 		private readonly int _StatAmount;
 
-		public ChangeStatEffect(string name, int maxRound, StatType statType, int statAmount) {
+		public ChangeStatEffect(string name, StatType statType, int statAmount) {
 			_TickDuration = 1;
 			_IsHarmful = false;
 			_Name = name;
 			_CurrentRound = 1;
-			_MaxRound = maxRound;
+			_MaxRound = 600;			// Stat effect should last 10 minutes
 			_StatType = statType;
 			_StatAmount = statAmount;
 		}

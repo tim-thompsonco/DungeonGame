@@ -1,26 +1,26 @@
-﻿using DungeonGame.Controllers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DungeonGame.Controllers;
 
 namespace DungeonGame {
 	public class UserOutput {
-		public List<List<string>> Output { get; set; }
+		public List<List<string>> _Output { get; set; }
 
 		public UserOutput() {
-			Output = new List<List<string>>();
+			_Output = new List<List<string>>();
 		}
 
 		public void StoreUserOutput(string textColorName, string backColorName, string outputData) {
-			Output.Add(new List<string> { textColorName, backColorName, outputData });
+			_Output.Add(new List<string> { textColorName, backColorName, outputData });
 		}
 		public void StoreUserOutput(List<string> outputLine) {
-			Output.Add(outputLine);
+			_Output.Add(outputLine);
 		}
 		public void RetrieveUserOutput() {
 			// Var i is iterating through each row of output
-			foreach (List<string> line in Output.ToList()) {
+			foreach (List<string> line in _Output.ToList()) {
 				// var j is iterating through each column of each row of output
 				for (int i = 0; i < line.Count; i += 3) {
 					string textColor = line[i];
@@ -68,11 +68,11 @@ namespace DungeonGame {
 		}
 		public void BuildUserOutput() {
 			// Var i is iterating through each row of output
-			for (int i = 0; i < OutputController.MapDisplay.Output.Count; i++) {
+			for (int i = 0; i < OutputController.MapDisplay._Output.Count; i++) {
 				int lineCount = 0;
-				if (i < Output.Count) {
-					for (int c = 2; c < Output[i].Count; c += 3) {
-						lineCount += Output[i][c].Length;
+				if (i < _Output.Count) {
+					for (int c = 2; c < _Output[i].Count; c += 3) {
+						lineCount += _Output[i][c].Length;
 					}
 				}
 				int bufferAmount = Settings.GetGameWidth() - lineCount + Settings.GetBufferGap();
@@ -80,10 +80,10 @@ namespace DungeonGame {
 				for (int b = 0; b < bufferAmount; b++) {
 					bufferStringBuilder.Append(" ");
 				}
-				if (i < Output.Count) {
-					Output[i].Add(Settings.FormatGeneralInfoText());
-					Output[i].Add(Settings.FormatDefaultBackground());
-					Output[i].Add(bufferStringBuilder.ToString());
+				if (i < _Output.Count) {
+					_Output[i].Add(Settings.FormatGeneralInfoText());
+					_Output[i].Add(Settings.FormatDefaultBackground());
+					_Output[i].Add(bufferStringBuilder.ToString());
 				} else {
 					StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
@@ -91,21 +91,21 @@ namespace DungeonGame {
 						bufferStringBuilder.ToString());
 				}
 				// var j is iterating through each column of each row of output
-				for (int j = 0; j < OutputController.MapDisplay.Output[i].Count; j += 3) {
-					Output[i].Add(OutputController.MapDisplay?.Output[i][j]);
-					Output[i].Add(OutputController.MapDisplay?.Output[i][j + 1]);
-					Output[i].Add(OutputController.MapDisplay?.Output[i][j + 2]);
+				for (int j = 0; j < OutputController.MapDisplay._Output[i].Count; j += 3) {
+					_Output[i].Add(OutputController.MapDisplay?._Output[i][j]);
+					_Output[i].Add(OutputController.MapDisplay?._Output[i][j + 1]);
+					_Output[i].Add(OutputController.MapDisplay?._Output[i][j + 2]);
 				}
 			}
 			// Var k is iterating through each row of output
 			// Build effect display underneath map display
 			int lc = 0;
-			for (int k = OutputController.MapDisplay.Output.Count;
-				k < OutputController.EffectDisplay.Output.Count + OutputController.MapDisplay.Output.Count; k++) {
+			for (int k = OutputController.MapDisplay._Output.Count;
+				k < OutputController.EffectDisplay._Output.Count + OutputController.MapDisplay._Output.Count; k++) {
 				int lineCount = 0;
-				if (k < Output.Count) {
-					for (int d = 2; d < Output[k].Count; d += 3) {
-						lineCount += Output[k][d].Length;
+				if (k < _Output.Count) {
+					for (int d = 2; d < _Output[k].Count; d += 3) {
+						lineCount += _Output[k][d].Length;
 					}
 				}
 				int bufferAmount = Settings.GetGameWidth() - lineCount + Settings.GetBufferGap();
@@ -113,10 +113,10 @@ namespace DungeonGame {
 				for (int e = 0; e < bufferAmount; e++) {
 					bufferStringBuilder.Append(" ");
 				}
-				if (k < Output.Count) {
-					Output[k].Add(Settings.FormatGeneralInfoText());
-					Output[k].Add(Settings.FormatDefaultBackground());
-					Output[k].Add(bufferStringBuilder.ToString());
+				if (k < _Output.Count) {
+					_Output[k].Add(Settings.FormatGeneralInfoText());
+					_Output[k].Add(Settings.FormatDefaultBackground());
+					_Output[k].Add(bufferStringBuilder.ToString());
 				} else {
 					StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
@@ -124,11 +124,11 @@ namespace DungeonGame {
 						bufferStringBuilder.ToString());
 				}
 				// var l is iterating through each column of each row of output
-				for (int l = 0; l < OutputController.EffectDisplay.Output[lc].Count; l += 3) {
-					Output[k].Add(OutputController.EffectDisplay?.Output[lc][l]);
-					Output[k].Add(OutputController.EffectDisplay?.Output[lc][l + 1]);
-					Output[k].Add(OutputController.EffectDisplay?.Output[lc][l + 2]);
-					if (lc + 1 < OutputController.EffectDisplay.Output.Count) {
+				for (int l = 0; l < OutputController.EffectDisplay._Output[lc].Count; l += 3) {
+					_Output[k].Add(OutputController.EffectDisplay?._Output[lc][l]);
+					_Output[k].Add(OutputController.EffectDisplay?._Output[lc][l + 1]);
+					_Output[k].Add(OutputController.EffectDisplay?._Output[lc][l + 2]);
+					if (lc + 1 < OutputController.EffectDisplay._Output.Count) {
 						lc++;
 					}
 				}
@@ -136,13 +136,13 @@ namespace DungeonGame {
 			// Var m is iterating through each row of output
 			// Build questlog display underneath effect display
 			lc = 0;
-			for (int m = OutputController.MapDisplay.Output.Count + OutputController.EffectDisplay.Output.Count;
-				m < OutputController.EffectDisplay.Output.Count + OutputController.MapDisplay.Output.Count +
-				OutputController.QuestDisplay.Output.Count; m++) {
+			for (int m = OutputController.MapDisplay._Output.Count + OutputController.EffectDisplay._Output.Count;
+				m < OutputController.EffectDisplay._Output.Count + OutputController.MapDisplay._Output.Count +
+				OutputController.QuestDisplay._Output.Count; m++) {
 				int lineCount = 0;
-				if (m < Output.Count) {
-					for (int d = 2; d < Output[m].Count; d += 3) {
-						lineCount += Output[m][d].Length;
+				if (m < _Output.Count) {
+					for (int d = 2; d < _Output[m].Count; d += 3) {
+						lineCount += _Output[m][d].Length;
 					}
 				}
 				int bufferAmount = Settings.GetGameWidth() - lineCount + Settings.GetBufferGap();
@@ -150,10 +150,10 @@ namespace DungeonGame {
 				for (int e = 0; e < bufferAmount; e++) {
 					bufferStringBuilder.Append(" ");
 				}
-				if (m < Output.Count) {
-					Output[m].Add(Settings.FormatGeneralInfoText());
-					Output[m].Add(Settings.FormatDefaultBackground());
-					Output[m].Add(bufferStringBuilder.ToString());
+				if (m < _Output.Count) {
+					_Output[m].Add(Settings.FormatGeneralInfoText());
+					_Output[m].Add(Settings.FormatDefaultBackground());
+					_Output[m].Add(bufferStringBuilder.ToString());
 				} else {
 					StoreUserOutput(
 						Settings.FormatGeneralInfoText(),
@@ -161,20 +161,20 @@ namespace DungeonGame {
 						bufferStringBuilder.ToString());
 				}
 				// var n is iterating through each column of each row of output
-				for (int n = 0; n < OutputController.QuestDisplay.Output[lc].Count; n += 3) {
-					Output[m].Add(OutputController.QuestDisplay?.Output[lc][n]);
-					Output[m].Add(OutputController.QuestDisplay?.Output[lc][n + 1]);
-					Output[m].Add(OutputController.QuestDisplay?.Output[lc][n + 2]);
-					if (lc + 1 < OutputController.QuestDisplay.Output.Count) {
+				for (int n = 0; n < OutputController.QuestDisplay._Output[lc].Count; n += 3) {
+					_Output[m].Add(OutputController.QuestDisplay?._Output[lc][n]);
+					_Output[m].Add(OutputController.QuestDisplay?._Output[lc][n + 1]);
+					_Output[m].Add(OutputController.QuestDisplay?._Output[lc][n + 2]);
+					if (lc + 1 < OutputController.QuestDisplay._Output.Count) {
 						lc++;
 					}
 				}
 			}
 		}
 		public void ClearUserOutput() {
-			int removeLines = Output.Count;
+			int removeLines = _Output.Count;
 			for (int i = 0; i < removeLines; i++) {
-				Output.RemoveAt(removeLines - i - 1);
+				_Output.RemoveAt(removeLines - i - 1);
 			}
 		}
 	}

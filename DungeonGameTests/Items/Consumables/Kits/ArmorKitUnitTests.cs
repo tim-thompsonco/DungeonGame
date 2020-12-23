@@ -47,7 +47,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(true, armorKit._KitHasBeenUsed);
 			Assert.AreEqual(baseArmorItemValue + armorKit._ItemValue, armor._ItemValue);
 			Assert.AreEqual(baseArmorRating + armorKit._KitAugmentAmount, armor._ArmorRating);
@@ -63,7 +63,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(false, armorKit._KitHasBeenUsed);
 			Assert.AreEqual(baseArmorItemValue, armor._ItemValue);
 			Assert.AreEqual(baseArmorRating, armor._ArmorRating);
@@ -79,7 +79,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(false, armorKit._KitHasBeenUsed);
 			Assert.AreEqual(baseArmorItemValue, armor._ItemValue);
 			Assert.AreEqual(baseArmorRating, armor._ArmorRating);
@@ -96,7 +96,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(true, armorKit._KitHasBeenUsed);
 			Assert.AreEqual(baseArmorItemValue + armorKit._ItemValue, armor._ItemValue);
 			Assert.AreEqual(baseArmorRating + armorKit._KitAugmentAmount, armor._ArmorRating);
@@ -112,7 +112,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(false, armorKit._KitHasBeenUsed);
 			Assert.AreEqual(baseArmorItemValue, armor._ItemValue);
 			Assert.AreEqual(baseArmorRating, armor._ArmorRating);
@@ -129,7 +129,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(false, armorKit._KitHasBeenUsed);
 			Assert.AreEqual(baseArmorItemValue, armor._ItemValue);
 			Assert.AreEqual(baseArmorRating, armor._ArmorRating);
@@ -146,7 +146,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(true, armorKit._KitHasBeenUsed);
 			Assert.AreEqual(baseArmorItemValue + armorKit._ItemValue, armor._ItemValue);
 			Assert.AreEqual(baseArmorRating + armorKit._KitAugmentAmount, armor._ArmorRating);
@@ -162,7 +162,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(false, armorKit._KitHasBeenUsed);
 			Assert.AreEqual(baseArmorItemValue, armor._ItemValue);
 			Assert.AreEqual(baseArmorRating, armor._ArmorRating);
@@ -179,7 +179,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(false, armorKit._KitHasBeenUsed);
 			Assert.AreEqual(baseArmorItemValue, armor._ItemValue);
 			Assert.AreEqual(baseArmorRating, armor._ArmorRating);

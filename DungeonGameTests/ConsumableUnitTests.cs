@@ -29,11 +29,11 @@ namespace DungeonGameTests {
 			int healAmount = potion._HealthAmount;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankHealthString = $"You drank a potion and replenished {healAmount} health.";
-			Assert.AreEqual(drankHealthString, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(drankHealthString, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(baseHealth + healAmount, player._HitPoints);
 			Assert.IsEmpty(player._Inventory);
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
-			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
+			Assert.AreEqual("What potion did you want to drink?", OutputController.Display._Output[1][2]);
 		}
 		[Test]
 		public void ManaPotionUnitTest() {
@@ -52,11 +52,11 @@ namespace DungeonGameTests {
 			int manaAmount = potion._ManaAmount;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankManaString = $"You drank a potion and replenished {manaAmount} mana.";
-			Assert.AreEqual(drankManaString, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(drankManaString, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(baseMana + manaAmount, player._ManaPoints);
 			Assert.IsEmpty(player._Inventory);
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
-			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
+			Assert.AreEqual("What potion did you want to drink?", OutputController.Display._Output[1][2]);
 		}
 		[Test]
 		public void ConstitutionPotionUnitTest() {
@@ -75,7 +75,7 @@ namespace DungeonGameTests {
 			int baseMaxHitPoints = player._MaxHitPoints;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankStatString = $"You drank a potion and increased {statType} by {statAmount}.";
-			Assert.AreEqual(drankStatString, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(drankStatString, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(baseConst + statAmount, player._Constitution);
 			Assert.AreEqual(baseMaxHitPoints + (statAmount * 10), player._MaxHitPoints);
 			Assert.IsEmpty(player._Inventory);
@@ -90,7 +90,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(baseConst, player._Constitution);
 			Assert.AreEqual(baseMaxHitPoints, player._MaxHitPoints);
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
-			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
+			Assert.AreEqual("What potion did you want to drink?", OutputController.Display._Output[1][2]);
 		}
 		[Test]
 		public void IntelligencePotionUnitTest() {
@@ -109,7 +109,7 @@ namespace DungeonGameTests {
 			int? baseMaxManaPoints = player._MaxManaPoints;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankStatString = $"You drank a potion and increased {statType} by {statAmount}.";
-			Assert.AreEqual(drankStatString, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(drankStatString, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(baseInt + statAmount, player._Intelligence);
 			Assert.AreEqual(baseMaxManaPoints + (statAmount * 10), player._MaxManaPoints);
 			Assert.IsEmpty(player._Inventory);
@@ -124,7 +124,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(baseInt, player._Intelligence);
 			Assert.AreEqual(baseMaxManaPoints, player._MaxManaPoints);
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
-			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
+			Assert.AreEqual("What potion did you want to drink?", OutputController.Display._Output[1][2]);
 		}
 		[Test]
 		public void StrengthPotionUnitTest() {
@@ -143,7 +143,7 @@ namespace DungeonGameTests {
 			int baseMaxCarryWeight = player._MaxCarryWeight;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankStatString = $"You drank a potion and increased {statType} by {statAmount}.";
-			Assert.AreEqual(drankStatString, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(drankStatString, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(baseStr + statAmount, player._Strength);
 			Assert.AreEqual(baseMaxCarryWeight + (statAmount * 2.5), player._MaxCarryWeight, 1);
 			Assert.IsEmpty(player._Inventory);
@@ -158,7 +158,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(baseStr, player._Strength);
 			Assert.AreEqual(baseMaxCarryWeight, player._MaxCarryWeight);
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
-			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
+			Assert.AreEqual("What potion did you want to drink?", OutputController.Display._Output[1][2]);
 		}
 		[Test]
 		public void DexterityPotionUnitTest() {
@@ -177,7 +177,7 @@ namespace DungeonGameTests {
 			double baseDodgeChance = player._DodgeChance;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankStatString = $"You drank a potion and increased {statType} by {statAmount}.";
-			Assert.AreEqual(drankStatString, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(drankStatString, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(baseDex + statAmount, player._Dexterity);
 			Assert.AreEqual(baseDodgeChance + (statAmount * 1.5), player._DodgeChance);
 			Assert.IsEmpty(player._Inventory);
@@ -192,7 +192,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(baseDex, player._Dexterity);
 			Assert.AreEqual(baseDodgeChance, player._DodgeChance);
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
-			Assert.AreEqual("What potion did you want to drink?", OutputController.Display.Output[1][2]);
+			Assert.AreEqual("What potion did you want to drink?", OutputController.Display._Output[1][2]);
 		}
 		[Test]
 		public void ArmorUpgradeKitUnitTest() {
@@ -211,17 +211,17 @@ namespace DungeonGameTests {
 			int armorAmount = armor._ArmorRating;
 			GearController.UseArmorKit(player, input);
 			const string upgradeFail = "What armor did you want to upgrade?";
-			Assert.AreEqual(upgradeFail, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(upgradeFail, OutputController.Display._Output[0][2]);
 			Assert.IsNotEmpty(player._Inventory);
 			input = new[] { "enhance", armorName, "doesn't exist" };
 			GearController.UseArmorKit(player, input);
 			const string kitFail = "What armor kit did you want to use?";
-			Assert.AreEqual(kitFail, OutputController.Display.Output[1][2]);
+			Assert.AreEqual(kitFail, OutputController.Display._Output[1][2]);
 			Assert.IsNotEmpty(player._Inventory);
 			input = new[] { "enhance", armorName, kitName };
 			GearController.UseArmorKit(player, input);
 			string upgradeSuccess = $"You upgraded {armorName} with an armor kit.";
-			Assert.AreEqual(upgradeSuccess, OutputController.Display.Output[2][2]);
+			Assert.AreEqual(upgradeSuccess, OutputController.Display._Output[2][2]);
 			Assert.AreEqual(armorAmount + kitAmount, armor._ArmorRating);
 			Assert.AreEqual(0, player._Inventory.FindAll(item => item is IKit).Count);
 			player._Inventory.Add(new ArmorKit(KitLevel.Light, ArmorKit.KitType.Leather));
@@ -230,7 +230,7 @@ namespace DungeonGameTests {
 			GearController.UseArmorKit(player, input);
 			string enhanceFail = $"You can't upgrade {armorName} with that!";
 			Assert.IsNotEmpty(player._Inventory);
-			Assert.AreEqual(enhanceFail, OutputController.Display.Output[3][2]);
+			Assert.AreEqual(enhanceFail, OutputController.Display._Output[3][2]);
 		}
 		[Test]
 		public void WeaponUpgradeKitUnitTest() {
@@ -249,17 +249,17 @@ namespace DungeonGameTests {
 			int weaponAmount = weapon._RegDamage;
 			GearController.UseWeaponKit(player, input);
 			const string upgradeFail = "What weapon did you want to upgrade?";
-			Assert.AreEqual(upgradeFail, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(upgradeFail, OutputController.Display._Output[0][2]);
 			Assert.IsNotEmpty(player._Inventory);
 			input = new[] { "enhance", weaponName, "doesn't exist" };
 			GearController.UseWeaponKit(player, input);
 			const string kitFail = "What weapon kit did you want to use?";
-			Assert.AreEqual(kitFail, OutputController.Display.Output[1][2]);
+			Assert.AreEqual(kitFail, OutputController.Display._Output[1][2]);
 			Assert.IsNotEmpty(player._Inventory);
 			input = new[] { "enhance", weaponName, kitName };
 			GearController.UseWeaponKit(player, input);
 			string upgradeSuccess = $"You upgraded {weaponName} with a weapon kit.";
-			Assert.AreEqual(upgradeSuccess, OutputController.Display.Output[2][2]);
+			Assert.AreEqual(upgradeSuccess, OutputController.Display._Output[2][2]);
 			Assert.AreEqual(weaponAmount + kitAmount, weapon._RegDamage);
 			Assert.AreEqual(0, player._Inventory.FindAll(item => item is IKit).Count);
 			player._Inventory.Add(new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring));
@@ -269,7 +269,7 @@ namespace DungeonGameTests {
 			GearController.UseWeaponKit(player, input);
 			string enhanceFail = $"You can't upgrade {weaponName} with that!";
 			Assert.IsNotEmpty(player._Inventory);
-			Assert.AreEqual(enhanceFail, OutputController.Display.Output[3][2]);
+			Assert.AreEqual(enhanceFail, OutputController.Display._Output[3][2]);
 			player._Inventory.Add(new Weapon(1, Weapon.WeaponType.Bow));
 			weapon = player._Inventory.Find(item => item is Weapon && item._Name.ToLower().Contains("bow")) as Weapon;
 			weapon._Equipped = true;
@@ -278,7 +278,7 @@ namespace DungeonGameTests {
 			GearController.UseWeaponKit(player, input);
 			upgradeSuccess = $"You upgraded {weaponName} with a weapon kit.";
 			Assert.AreEqual(0, player._Inventory.FindAll(item => item is IKit).Count);
-			Assert.AreEqual(upgradeSuccess, OutputController.Display.Output[4][2]);
+			Assert.AreEqual(upgradeSuccess, OutputController.Display._Output[4][2]);
 		}
 	}
 }

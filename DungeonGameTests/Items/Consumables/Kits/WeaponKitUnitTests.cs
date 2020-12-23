@@ -47,7 +47,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(true, weaponKit._KitHasBeenUsed);
 			Assert.AreEqual(baseWeaponItemValue + weaponKit._ItemValue, weapon._ItemValue);
 			Assert.AreEqual(baseWeaponDamage + weaponKit._KitAugmentAmount, weapon._RegDamage);
@@ -63,7 +63,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(false, weaponKit._KitHasBeenUsed);
 			Assert.AreEqual(baseWeaponItemValue, weapon._ItemValue);
 			Assert.AreEqual(baseWeaponDamage, weapon._RegDamage);
@@ -79,7 +79,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(false, weaponKit._KitHasBeenUsed);
 			Assert.AreEqual(baseWeaponItemValue, weapon._ItemValue);
 			Assert.AreEqual(baseWeaponDamage, weapon._RegDamage);
@@ -96,7 +96,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
 			Assert.AreEqual(true, weaponKit._KitHasBeenUsed);
 			Assert.AreEqual(baseWeaponItemValue + weaponKit._ItemValue, weapon._ItemValue);
 			Assert.AreEqual(baseWeaponDamage + weaponKit._KitAugmentAmount, weapon._RegDamage);

@@ -82,7 +82,7 @@ namespace DungeonGame.Items.Consumables.Potions {
 
 			string effectName = $"{_StatType} (+{_StatAmount})";
 
-			player._Effects.Add(new ChangeStatEffect(effectName, _StatAmount, _StatEffectDurationInSeconds, effectStatCategory));
+			player._Effects.Add(new ChangeStatEffect(effectName, effectStatCategory, _StatAmount));
 
 			return player;
 		}

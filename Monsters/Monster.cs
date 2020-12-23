@@ -64,8 +64,6 @@ namespace DungeonGame.Monsters {
 		public List<MonsterSpell> _Spellbook { get; set; }
 		public List<MonsterAbility> _Abilities { get; set; }
 
-		// Default constructor for JSON deserialization
-		public Monster() { }
 		public Monster(int level, MonsterType monsterType) {
 			_MonsterItems = new List<IItem>();
 			_Effects = new List<IEffect>();
@@ -252,13 +250,13 @@ namespace DungeonGame.Monsters {
 				case AttackOption.AttackType.Spell:
 					switch (_Spellbook[attackOption._AttackIndex]._SpellCategory) {
 						case MonsterSpell.SpellType.Fireball:
-							MonsterSpell.CastFireOffense(this, player, attackOption._AttackIndex);
+							_Spellbook[attackOption._AttackIndex].CastFireOffense(this, player, attackOption._AttackIndex);
 							break;
 						case MonsterSpell.SpellType.Frostbolt:
-							MonsterSpell.CastFrostOffense(this, player, attackOption._AttackIndex);
+							_Spellbook[attackOption._AttackIndex].CastFrostOffense(this, player, attackOption._AttackIndex);
 							break;
 						case MonsterSpell.SpellType.Lightning:
-							MonsterSpell.CastArcaneOffense(this, player, attackOption._AttackIndex);
+							_Spellbook[attackOption._AttackIndex].CastArcaneOffense(this, player, attackOption._AttackIndex);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
