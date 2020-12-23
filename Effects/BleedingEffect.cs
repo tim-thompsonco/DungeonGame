@@ -7,15 +7,18 @@ namespace DungeonGame.Effects {
 		public bool _IsEffectExpired { get; set; }
 		public int _TickDuration { get; }
 		public string _Name { get; set; }
+		public bool _IsHarmful { get; }
+		public int _CurrentRound { get; set; }
+		public int _MaxRound { get; }
 		private readonly int _BleedDamageOverTime;
-		private int _CurrentRound;
-		private readonly int _MaxRound;
 
-		public BleedingEffect(string name, int bleedDamageOverTime, int maxRound) {
+		public BleedingEffect(string name, int maxRound, int bleedDamageOverTime) {
+			_TickDuration = 1;
+			_IsHarmful = true;
 			_Name = name;
-			_BleedDamageOverTime = bleedDamageOverTime;
 			_CurrentRound = 1;
 			_MaxRound = maxRound;
+			_BleedDamageOverTime = bleedDamageOverTime;
 		}
 
 		public void ProcessBleedingRound(Monster monster) {

@@ -5,16 +5,19 @@ namespace DungeonGame.Effects {
 	public class FrozenEffect : IEffect {
 		public bool _IsEffectExpired { get; set; }
 		public int _TickDuration { get; }
+		public bool _IsHarmful { get; }
 		public string _Name { get; set; }
+		public int _CurrentRound { get; set; }
+		public int _MaxRound { get; }
 		private readonly double _EffectMultiplier;
-		private int _CurrentRound;
-		private readonly int _MaxRound;
 
 		public FrozenEffect(string name, int maxRound) {
+			_TickDuration = 1;
+			_IsHarmful = true;
 			_Name = name;
-			_EffectMultiplier = 1.5;
 			_CurrentRound = 1;
 			_MaxRound = maxRound;
+			_EffectMultiplier = 1.5;
 		}
 
 		public int GetIncreasedDamageFromFrozen(Monster monster, int damage) {

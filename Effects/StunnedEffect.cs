@@ -4,14 +4,16 @@ using DungeonGame.Monsters;
 namespace DungeonGame.Effects {
 	public class StunnedEffect : IEffect {
 		public bool _IsEffectExpired { get; set; }
-		public string _Name { get; set; }
 		public int _TickDuration { get; }
-		private int _CurrentRound;
-		private readonly int _MaxRound;
+		public bool _IsHarmful { get; }
+		public string _Name { get; set; }
+		public int _CurrentRound { get; set; }
+		public int _MaxRound { get; }
 
-		public StunnedEffect(string name, int tickDuration, int maxRound) {
+		public StunnedEffect(string name, int maxRound) {
+			_TickDuration = 1;
+			_IsHarmful = true;
 			_Name = name;
-			_TickDuration = tickDuration;
 			_CurrentRound = 1;
 			_MaxRound = maxRound;
 		}

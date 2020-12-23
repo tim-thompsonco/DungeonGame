@@ -4,18 +4,20 @@ using DungeonGame.Players;
 namespace DungeonGame.Effects {
 	public class HealingEffect : IEffect {
 		public bool _IsEffectExpired { get; set; }
-		public string _Name { get; set; }
 		public int _TickDuration { get; }
+		public bool _IsHarmful { get; }
+		public string _Name { get; set; }
+		public int _CurrentRound { get; set; }
+		public int _MaxRound { get; }
 		private readonly int _HealOverTimeAmount;
-		private int _CurrentRound;
-		private readonly int _MaxRound;
 
-		public HealingEffect(string name, int healOverTimeAmount, int tickDuration, int maxRound) {
+		public HealingEffect(string name, int maxRound, int healOverTimeAmount) {
+			_TickDuration = 1;
+			_IsHarmful = false;
 			_Name = name;
-			_HealOverTimeAmount = healOverTimeAmount;
-			_TickDuration = tickDuration;
 			_CurrentRound = 1;
 			_MaxRound = maxRound;
+			_HealOverTimeAmount = healOverTimeAmount;
 		}
 
 		public void ProcessHealingRound(Player player) {

@@ -6,17 +6,19 @@ namespace DungeonGame.Effects {
 	public class ChangePlayerDamageEffect : IEffect {
 		public bool _IsEffectExpired { get; set; }
 		public int _TickDuration { get; }
+		public bool _IsHarmful { get; }
 		public string _Name { get; set; }
+		public int _CurrentRound { get; set; }
+		public int _MaxRound { get; }
 		private readonly int _ChangeAmount;
-		private int _CurrentRound;
-		private readonly int _MaxRound;
 
-		public ChangePlayerDamageEffect(int tickDuration, string name, int changeAmount, int maxRound) {
-			_TickDuration = tickDuration;
+		public ChangePlayerDamageEffect(string name, int maxRound, int changeAmount) {
+			_TickDuration = 1;
+			_IsHarmful = false;
 			_Name = name;
-			_ChangeAmount = changeAmount;
 			_CurrentRound = 1;
 			_MaxRound = maxRound;
+			_ChangeAmount = changeAmount;
 		}
 
 		public void ProcessChangePlayerDamageRound(Player player) {

@@ -4,18 +4,21 @@ using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public class BurningEffect : IEffect {
-		public string _Name { get; set; }
 		public bool _IsEffectExpired { get; set; }
 		public int _TickDuration { get; }
+		public bool _IsHarmful { get; }
+		public string _Name { get; set; }
+		public int _CurrentRound { get; set; }
+		public int _MaxRound { get; }
 		private readonly int _FireDamageOverTime;
-		private int _CurrentRound;
-		private readonly int _MaxRound;
 
-		public BurningEffect(string name, int fireDamageOverTime, int maxRound) {
+		public BurningEffect(string name, int maxRound, int fireDamageOverTime) {
+			_TickDuration = 1;
+			_IsHarmful = true;
 			_Name = name;
-			_FireDamageOverTime = fireDamageOverTime;
 			_CurrentRound = 1;
 			_MaxRound = maxRound;
+			_FireDamageOverTime = fireDamageOverTime;
 		}
 
 		public void ProcessBurningRound(Monster monster) {

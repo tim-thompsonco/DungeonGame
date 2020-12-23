@@ -3,14 +3,36 @@
 namespace DungeonGame.Effects {
 	public class BlockDamageEffect : IEffect {
 		public bool _IsEffectExpired { get; set; }
-		public string _Name { get; set; }
 		public int _TickDuration { get; }
+		public bool _IsHarmful { get; }
+		public string _Name { get; set; }
+		public int _CurrentRound { get; set; }
+		public int _MaxRound { get; }
 		private int _BlockAmount;
 
-		public BlockDamageEffect(string name, int tickDuration, int blockAmount) {
+		public BlockDamageEffect(string name, int blockAmount) {
+			_TickDuration = 1;
+			_IsHarmful = false;
 			_Name = name;
-			_TickDuration = tickDuration;
+			_CurrentRound = 1;
+			_MaxRound = 3;
 			_BlockAmount = blockAmount;
+		}
+
+		public void ProcessBlockDamageRound() {
+			if (_IsEffectExpired) {
+				return;
+			}
+
+			DisplayBlockEffectFadingMessage();
+
+			IncrementCurrentRound();
+
+			if (_BlockAmount <= 0) {
+				SetEffectAsExpired();
+
+				DisplayBlockEffectExpiredMessage();
+			}
 		}
 
 		public void ProcessBlockDamageRound(int incomingDamageAmount) {
@@ -23,11 +45,26 @@ namespace DungeonGame.Effects {
 
 			DecreaseBlockAmountByIncomingDamage(incomingDamageAmount);
 
+			IncrementCurrentRound();
+
 			if (_BlockAmount <= 0) {
 				SetEffectAsExpired();
 
 				DisplayBlockEffectExpiredMessage();
 			}
+		}
+
+		private void DisplayBlockEffectFadingMessage() {
+			const string blockFadeString = "Your block effect is fading away.";
+
+			OutputController.Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				blockFadeString);
+		}
+
+		private void IncrementCurrentRound() {
+			_CurrentRound++;
 		}
 
 		private int GetBlockReductionAmount(int incomingDamageAmount) {

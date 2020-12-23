@@ -11,18 +11,21 @@ namespace DungeonGame.Effects {
 		}
 		public bool _IsEffectExpired { get; set; }
 		public int _TickDuration { get; }
-		public StatType _StatType { get; set; }
+		public bool _IsHarmful { get; }
 		public string _Name { get; set; }
+		public int _CurrentRound { get; set; }
+		public int _MaxRound { get; }
+		public StatType _StatType { get; set; }
 		private readonly int _StatAmount;
-		private int _CurrentRound;
-		private readonly int _MaxRound;
 
-		public ChangeStatEffect(string name, int statAmount, int maxRound, StatType statType) {
+		public ChangeStatEffect(string name, int maxRound, StatType statType, int statAmount) {
+			_TickDuration = 1;
+			_IsHarmful = false;
 			_Name = name;
-			_StatAmount = statAmount;
 			_CurrentRound = 1;
 			_MaxRound = maxRound;
 			_StatType = statType;
+			_StatAmount = statAmount;
 		}
 
 		public void ProcessChangeStatRound(Player player) {

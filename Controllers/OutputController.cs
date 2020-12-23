@@ -1,4 +1,5 @@
-﻿using DungeonGame.Monsters;
+﻿using DungeonGame.Effects;
+using DungeonGame.Monsters;
 using DungeonGame.Players;
 using DungeonGame.Quests;
 using DungeonGame.Rooms;
@@ -14,6 +15,7 @@ namespace DungeonGame.Controllers {
 		public static UserOutput MapDisplay = new UserOutput();
 		public static UserOutput EffectDisplay = new UserOutput();
 		public static UserOutput QuestDisplay = new UserOutput();
+		private static readonly TextInfo TextInfo = new CultureInfo("en-US", false).TextInfo;
 
 		private static UserOutput BuildMap(Player player, int height, int width) {
 			UserOutput output = new UserOutput();
@@ -153,20 +155,19 @@ namespace DungeonGame.Controllers {
 				Settings.FormatDefaultBackground(),
 				"Player _Effects:");
 			int activeEffects = 0;
-			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (Effect effect in player._Effects) {
+			foreach (IEffect effect in player._Effects) {
 				string effectOutput;
 				if (player._InCombat) {
-					if (effect._EffectMaxRound + 1 - effect._EffectCurRound > 1) {
-						effectOutput = $"({effect._EffectMaxRound + 1 - effect._EffectCurRound} rounds) {textInfo.ToTitleCase(effect._Name)}";
+					if (effect._MaxRound + 1 - effect._CurrentRound > 1) {
+						effectOutput = $"({effect._MaxRound + 1 - effect._CurrentRound} rounds) {TextInfo.ToTitleCase(effect._Name)}";
 					} else {
-						effectOutput = $"({effect._EffectMaxRound + 1 - effect._EffectCurRound} round) {textInfo.ToTitleCase(effect._Name)}";
+						effectOutput = $"({effect._MaxRound + 1 - effect._CurrentRound} round) {TextInfo.ToTitleCase(effect._Name)}";
 					}
 				} else {
-					if (effect._EffectMaxRound + 1 - effect._EffectCurRound > 1) {
-						effectOutput = $"({(effect._EffectMaxRound + 1 - effect._EffectCurRound) * effect._TickDuration} seconds) {textInfo.ToTitleCase(effect._Name)}";
+					if (effect._MaxRound + 1 - effect._CurrentRound > 1) {
+						effectOutput = $"({(effect._MaxRound + 1 - effect._CurrentRound) * effect._TickDuration} seconds) {TextInfo.ToTitleCase(effect._Name)}";
 					} else {
-						effectOutput = $"({(effect._EffectMaxRound + 1 - effect._EffectCurRound) * effect._TickDuration} second) {textInfo.ToTitleCase(effect._Name)}";
+						effectOutput = $"({(effect._MaxRound + 1 - effect._CurrentRound) * effect._TickDuration} second) {TextInfo.ToTitleCase(effect._Name)}";
 					}
 				}
 				activeEffects++;
@@ -216,12 +217,11 @@ namespace DungeonGame.Controllers {
 				Settings.FormatDefaultBackground(),
 				"Player Quests:");
 			int quests = 0;
-			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (Quest quest in player._QuestLog) {
 				string questOutput = quest._QuestCategory switch {
-					Quest.QuestType.KillCount => $"{textInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} monsters)",
-					Quest.QuestType.KillMonster => $"{textInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} {quest._MonsterKillType}s)",
-					Quest.QuestType.ClearLevel => $"{textInfo.ToTitleCase(quest._Name)} (Lvl: {quest._TargetLevel} | {quest._MonstersRemaining} monsters left)",
+					Quest.QuestType.KillCount => $"{TextInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} monsters)",
+					Quest.QuestType.KillMonster => $"{TextInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} {quest._MonsterKillType}s)",
+					Quest.QuestType.ClearLevel => $"{TextInfo.ToTitleCase(quest._Name)} (Lvl: {quest._TargetLevel} | {quest._MonstersRemaining} monsters left)",
 					_ => throw new ArgumentOutOfRangeException()
 				};
 				StringBuilder questStringBuilder = new StringBuilder(questOutput);

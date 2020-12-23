@@ -5,17 +5,19 @@ namespace DungeonGame.Effects {
 	public class ChangeArmorEffect : IEffect {
 		public bool _IsEffectExpired { get; set; }
 		public int _TickDuration { get; }
+		public bool _IsHarmful { get; }
 		public string _Name { get; set; }
+		public int _CurrentRound { get; set; }
+		public int _MaxRound { get; }
 		public int _ChangeArmorAmount { get; }
-		private int _CurrentRound;
-		private readonly int _MaxRound;
 
-		public ChangeArmorEffect(int tickDuration, string name, int changeArmorAmount, int maxRound) {
-			_TickDuration = tickDuration;
+		public ChangeArmorEffect(string name, int maxRound, int changeArmorAmount) {
+			_TickDuration = 1;
+			_IsHarmful = false;
 			_Name = name;
-			_ChangeArmorAmount = changeArmorAmount;
 			_CurrentRound = 1;
 			_MaxRound = maxRound;
+			_ChangeArmorAmount = changeArmorAmount;
 		}
 
 		public void ProcessChangeArmorRound() {
