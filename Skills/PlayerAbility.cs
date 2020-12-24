@@ -195,8 +195,8 @@ namespace DungeonGame {
 
 			PlayerController.CalculatePlayerStats(player);
 
-			player._Effects.Add(new ChangeStatEffect(player._Abilities[index]._Name, player._Abilities[index]._ChangeAmount._Amount,
-				player._Abilities[index]._ChangeAmount._ChangeMaxRound, ChangeStatEffect.StatType.Strength));
+			player._Effects.Add(new ChangeStatEffect(player._Abilities[index]._Name, player._Abilities[index]._ChangeAmount._ChangeMaxRound,
+				ChangeStatEffect.StatType.Strength, player._Abilities[index]._ChangeAmount._Amount));
 		}
 
 		public static void SwiftAuraAbilityInfo(Player player, int index) {
@@ -231,8 +231,8 @@ namespace DungeonGame {
 
 			PlayerController.CalculatePlayerStats(player);
 
-			player._Effects.Add(new ChangeStatEffect(player._Abilities[index]._Name, player._Abilities[index]._ChangeAmount._Amount,
-				player._Abilities[index]._ChangeAmount._ChangeMaxRound, ChangeStatEffect.StatType.Dexterity));
+			player._Effects.Add(new ChangeStatEffect(player._Abilities[index]._Name, player._Abilities[index]._ChangeAmount._ChangeMaxRound,
+				ChangeStatEffect.StatType.Dexterity, player._Abilities[index]._ChangeAmount._Amount));
 		}
 
 		public static void WarCryAbilityInfo(Player player, int index) {
@@ -258,8 +258,8 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				warCryString);
 
-			player._Effects.Add(new ChangeMonsterDamageEffect(1, player._Abilities[index]._Name, player._Abilities[index]._ChangeAmount._Amount,
-				player._Abilities[index]._ChangeAmount._ChangeMaxRound));
+			player._Effects.Add(new ChangeMonsterDamageEffect(player._Abilities[index]._Name, player._Abilities[index]._ChangeAmount._ChangeMaxRound,
+				player._Abilities[index]._ChangeAmount._Amount));
 		}
 
 		public static void StunAbilityInfo(Player player, int index) {
@@ -305,7 +305,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				stunString);
 
-			monster._Effects.Add(new StunnedEffect(player._Abilities[index]._Name, 1, player._Abilities[index]._Stun._StunMaxRounds));
+			monster._Effects.Add(new StunnedEffect(player._Abilities[index]._Name, player._Abilities[index]._Stun._StunMaxRounds));
 		}
 
 		public static void BerserkAbilityInfo(Player player, int index) {
@@ -335,10 +335,10 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				berserkString);
 
-			player._Effects.Add(new ChangePlayerDamageEffect(1, $"{player._Abilities[index]._Name} Damage Increase",
-				player._Abilities[index]._Offensive._Amount, player._Abilities[index]._ChangeAmount._ChangeMaxRound));
-			player._Effects.Add(new ChangeArmorEffect(1, $"{player._Abilities[index]._Name} Armor Decrease",
-				player._Abilities[index]._ChangeAmount._Amount, player._Abilities[index]._ChangeAmount._ChangeMaxRound));
+			player._Effects.Add(new ChangePlayerDamageEffect($"{player._Abilities[index]._Name} Damage Increase",
+				player._Abilities[index]._ChangeAmount._ChangeMaxRound, player._Abilities[index]._Offensive._Amount));
+			player._Effects.Add(new ChangeArmorEffect($"{player._Abilities[index]._Name} Armor Decrease",
+				player._Abilities[index]._ChangeAmount._ChangeMaxRound, player._Abilities[index]._ChangeAmount._Amount));
 		}
 
 		public static void DistanceAbilityInfo(Player player, int index) {
@@ -476,7 +476,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				blockString);
 
-			player._Effects.Add(new BlockDamageEffect(player._Abilities[index]._Name, 10, blockAmount));
+			player._Effects.Add(new BlockDamageEffect(player._Abilities[index]._Name, blockAmount));
 		}
 
 		public static void BandageAbilityInfo(Player player, int index) {
@@ -527,8 +527,8 @@ namespace DungeonGame {
 				return;
 			}
 
-			player._Effects.Add(new HealingEffect(player._Abilities[index]._Name, player._Abilities[index]._Healing._HealOverTime,
-				10, player._Abilities[index]._Healing._HealMaxRounds));
+			player._Effects.Add(new HealingEffect(player._Abilities[index]._Name, player._Abilities[index]._Healing._HealMaxRounds, 
+				player._Abilities[index]._Healing._HealOverTime));
 		}
 
 		public static void DisarmAbilityInfo(Player player, int index) {
