@@ -1,4 +1,5 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Effects;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 using System;
@@ -23,8 +24,6 @@ namespace DungeonGame {
 		public Offensive _Offensive { get; set; }
 		public int _EnergyCost { get; set; }
 
-		// Default constructor for JSON serialization
-		public MonsterAbility() { }
 		public MonsterAbility(string name, int energyCost, Ability abilityCategory, int monsterLevel) {
 			_Name = name;
 			_EnergyCost = energyCost;
@@ -40,67 +39,28 @@ namespace DungeonGame {
 			};
 		}
 
-		public static void UseBloodLeechAbility(Monster monster, Player player, int index) {
+		public void UseBloodLeechAbility(Monster monster, Player player, int index) {
 			monster._EnergyPoints -= monster._Abilities[index]._EnergyCost;
+
 			string attackString = $"The {monster._Name} tries to sink its fangs into you and suck your blood!";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
-			int leechAmount = monster._Abilities[index]._Offensive._Amount;
-			foreach (Effect effect in player._Effects.ToList()) {
-				switch (effect._EffectGroup) {
-					case Effect.EffectType.Healing:
-					case Effect.EffectType.ChangePlayerDamage:
-					case Effect.EffectType.ChangeArmor:
-					case Effect.EffectType.OnFire:
-					case Effect.EffectType.Bleeding:
-					case Effect.EffectType.Stunned:
-					case Effect.EffectType.ChangeStat:
-						break;
-					case Effect.EffectType.Frozen:
-						double frozenAttackAmount = leechAmount * effect._EffectMultiplier;
-						leechAmount = (int)frozenAttackAmount;
-						effect.FrozenRound(player);
-						effect._IsEffectExpired = true;
-						break;
-					case Effect.EffectType.ChangeOpponentDamage:
-						int changeDamageAmount = effect._EffectAmountOverTime < leechAmount ?
-							effect._EffectAmountOverTime : leechAmount;
-						effect.ChangeOpponentDamageRound(player);
-						leechAmount += changeDamageAmount;
-						break;
-					case Effect.EffectType.BlockDamage:
-						int blockAmount = effect._EffectAmount < leechAmount ?
-							effect._EffectAmount : leechAmount;
-						effect.BlockDamageRound(blockAmount);
-						leechAmount -= blockAmount;
-						break;
-					case Effect.EffectType.ReflectDamage:
-						int reflectAmount = effect._EffectAmountOverTime < leechAmount ?
-							effect._EffectAmountOverTime : leechAmount;
-						monster._HitPoints -= reflectAmount;
-						effect.ReflectDamageRound(reflectAmount);
-						leechAmount -= reflectAmount;
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-				if (leechAmount > 0) {
-					continue;
-				}
 
-				string effectAbsorbString = $"Your {effect._Name} absorbed all of {monster._Name}'s attack!";
-				OutputController.Display.StoreUserOutput(
-					Settings.FormatAttackFailText(),
-					Settings.FormatDefaultBackground(),
-					effectAbsorbString);
+			int leechAmount = monster._Abilities[index]._Offensive._Amount;
+			leechAmount = AdjustAbilityDamageFromPlayerEffects(player, monster, leechAmount);
+
+			if (leechAmount == 0) {
 				return;
 			}
+			
 			player._HitPoints -= leechAmount;
-			monster._HitPoints += leechAmount;
-			if (monster._HitPoints > monster._MaxHitPoints) {
+			
+			if (monster._HitPoints + leechAmount > monster._MaxHitPoints) {
 				monster._HitPoints = monster._MaxHitPoints;
+			} else {
+				monster._HitPoints += leechAmount;
 			}
 
 			string attackSuccessString = $"The {monster._Name} leeches {leechAmount} life from you.";
@@ -109,101 +69,94 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 		}
-		public static void UseOffenseDamageAbility(Monster monster, Player player, int index) {
+
+		private int AdjustAbilityDamageFromPlayerEffects(Player player, Monster monster, int abilityDamage) {
+			foreach (IEffect effect in player._Effects.ToList()) {
+				if (effect is FrozenEffect frozenEffect) {
+					frozenEffect.ProcessFrozenRound();
+				}
+
+				if (effect is ChangeMonsterDamageEffect changeMonsterDmgEffect) {
+					abilityDamage = changeMonsterDmgEffect.GetUpdatedDamageFromChange(abilityDamage);
+
+					changeMonsterDmgEffect.ProcessChangeMonsterDamageRound(player);
+				}
+
+				if (effect is BlockDamageEffect blockDmgEffect) {
+					int baseAbilityDamage = abilityDamage;
+
+					abilityDamage = blockDmgEffect.GetDecreasedDamageFromBlock(abilityDamage);
+
+					blockDmgEffect.ProcessBlockDamageRound(baseAbilityDamage);
+				}
+
+				if (effect is ReflectDamageEffect reflectDmgEffect) {
+					int baseSpellDamage = abilityDamage;
+
+					abilityDamage = reflectDmgEffect.GetReflectedDamageAmount(abilityDamage);
+
+					reflectDmgEffect.ProcessReflectDamageRound(baseSpellDamage);
+				}
+
+				if (abilityDamage <= 0) {
+					string effectAbsorbString = $"Your {effect._Name} absorbed all of {monster._Name}'s attack!";
+					OutputController.Display.StoreUserOutput(
+						Settings.FormatAttackFailText(),
+						Settings.FormatDefaultBackground(),
+						effectAbsorbString);
+
+					return 0;
+				}
+			}
+
+			return abilityDamage;
+		}
+
+		public void UseOffenseDamageAbility(Monster monster, Player player, int index) {
 			monster._EnergyPoints -= monster._Abilities[index]._EnergyCost;
+
 			string attackString;
 			if (monster._MonsterCategory == Monster.MonsterType.Spider) {
 				attackString = $"The {monster._Name} tries to bite you!";
 			} else {
 				attackString = $"The {monster._Name} swings its tail at you!";
 			}
+
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
-			int attackDamage = monster._Abilities[index]._Offensive._Amount;
-			foreach (Effect effect in player._Effects.ToList()) {
-				switch (effect._EffectGroup) {
-					case Effect.EffectType.Healing:
-					case Effect.EffectType.ChangePlayerDamage:
-					case Effect.EffectType.ChangeArmor:
-					case Effect.EffectType.OnFire:
-					case Effect.EffectType.Bleeding:
-					case Effect.EffectType.Stunned:
-						break;
-					case Effect.EffectType.Frozen:
-						double frozenAttackAmount = attackDamage * effect._EffectMultiplier;
-						attackDamage = (int)frozenAttackAmount;
-						effect.FrozenRound(player);
-						effect._IsEffectExpired = true;
-						break;
-					case Effect.EffectType.ChangeOpponentDamage:
-						int changeDamageAmount = effect._EffectAmountOverTime < attackDamage ?
-							effect._EffectAmountOverTime : attackDamage;
-						effect.ChangeOpponentDamageRound(player);
-						attackDamage += changeDamageAmount;
-						break;
-					case Effect.EffectType.BlockDamage:
-						int blockAmount = effect._EffectAmount < attackDamage ?
-							effect._EffectAmount : attackDamage;
-						effect.BlockDamageRound(blockAmount);
-						attackDamage -= blockAmount;
-						break;
-					case Effect.EffectType.ReflectDamage:
-						int reflectAmount = effect._EffectAmountOverTime < attackDamage ?
-							effect._EffectAmountOverTime : attackDamage;
-						monster._HitPoints -= reflectAmount;
-						effect.ReflectDamageRound(reflectAmount);
-						attackDamage -= reflectAmount;
-						break;
-					case Effect.EffectType.ChangeStat:
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-				if (attackDamage > 0) {
-					continue;
-				}
 
-				string effectAbsorbString = $"Your {effect._Name} absorbed all of {monster._Name}'s attack!";
-				OutputController.Display.StoreUserOutput(
-					Settings.FormatAttackFailText(),
-					Settings.FormatDefaultBackground(),
-					effectAbsorbString);
-				return;
-			}
+			int attackDamage = monster._Abilities[index]._Offensive._Amount;
+			attackDamage = AdjustAbilityDamageFromPlayerEffects(player, monster, attackDamage);
+
 			string attackSuccessString;
 			if (monster._MonsterCategory == Monster.MonsterType.Spider) {
 				attackSuccessString = $"The {monster._Name} bites you for {attackDamage} physical damage.";
 			} else {
 				attackSuccessString = $"The {monster._Name} strikes you with its tail for {attackDamage} physical damage.";
 			}
+
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
+
 			player._HitPoints -= attackDamage;
+
 			if (monster._Abilities[index]._Offensive._AmountOverTime <= 0) {
 				return;
 			}
 
-			switch (monster._Abilities[index]._Offensive._OffensiveGroup) {
-				case Offensive.OffensiveType.Normal:
-				case Offensive.OffensiveType.Fire:
-					break;
-				case Offensive.OffensiveType.Bleed:
-					string bleedString = $"You are bleeding from {monster._Name}'s attack!";
-					OutputController.Display.StoreUserOutput(
-						Settings.FormatAttackSuccessText(),
-						Settings.FormatDefaultBackground(),
-						bleedString);
-					player._Effects.Add(new Effect(monster._Abilities[index]._Name,
-						Effect.EffectType.Bleeding, monster._Abilities[index]._Offensive._AmountOverTime,
-						monster._Abilities[index]._Offensive._AmountCurRounds, monster._Abilities[index]._Offensive._AmountMaxRounds,
-						1, 1, true));
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
+			if (monster._Abilities[index]._Offensive._OffensiveGroup is Offensive.OffensiveType.Bleed) {
+				string bleedString = $"You are bleeding from {monster._Name}'s attack!";
+				OutputController.Display.StoreUserOutput(
+					Settings.FormatAttackSuccessText(),
+					Settings.FormatDefaultBackground(),
+					bleedString);
+
+				player._Effects.Add(new BleedingEffect(monster._Abilities[index]._Name,
+					monster._Abilities[index]._Offensive._AmountMaxRounds, monster._Abilities[index]._Offensive._AmountOverTime));
 			}
 		}
 	}
