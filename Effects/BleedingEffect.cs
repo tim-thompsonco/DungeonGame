@@ -10,7 +10,7 @@ namespace DungeonGame.Effects {
 		public bool _IsHarmful { get; }
 		public int _CurrentRound { get; set; }
 		public int _MaxRound { get; }
-		private readonly int _BleedDamageOverTime;
+		public int _BleedDamageOverTime { get; }
 
 		public BleedingEffect(string name, int maxRound, int bleedDamageOverTime) {
 			_TickDuration = 1;

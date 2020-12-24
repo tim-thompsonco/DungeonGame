@@ -10,7 +10,7 @@ namespace DungeonGame.Effects {
 		public string _Name { get; set; }
 		public int _CurrentRound { get; set; }
 		public int _MaxRound { get; }
-		private readonly int _FireDamageOverTime;
+		public int _FireDamageOverTime { get; }
 
 		public BurningEffect(string name, int maxRound, int fireDamageOverTime) {
 			_TickDuration = 1;

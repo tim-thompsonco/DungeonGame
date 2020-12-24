@@ -9,7 +9,7 @@ namespace DungeonGame.Effects {
 		public string _Name { get; set; }
 		public int _CurrentRound { get; set; }
 		public int _MaxRound { get; }
-		private readonly double _EffectMultiplier;
+		public double _EffectMultiplier { get; }
 
 		public FrozenEffect(string name, int maxRound) {
 			_TickDuration = 1;

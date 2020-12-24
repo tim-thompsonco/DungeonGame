@@ -266,10 +266,10 @@ namespace DungeonGame.Monsters {
 					switch (_Abilities[attackOption._AttackIndex]._AbilityCategory) {
 						case MonsterAbility.Ability.PoisonBite:
 						case MonsterAbility.Ability.TailWhip:
-							MonsterAbility.UseOffenseDamageAbility(this, player, attackOption._AttackIndex);
+							_Abilities[attackOption._AttackIndex].UseOffenseDamageAbility(this, player, attackOption._AttackIndex);
 							break;
 						case MonsterAbility.Ability.BloodLeech:
-							MonsterAbility.UseBloodLeechAbility(this, player, attackOption._AttackIndex);
+							_Abilities[attackOption._AttackIndex].UseBloodLeechAbility(this, player, attackOption._AttackIndex);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();

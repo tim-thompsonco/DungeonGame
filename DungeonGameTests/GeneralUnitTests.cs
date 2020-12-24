@@ -1,5 +1,6 @@
 using DungeonGame;
 using DungeonGame.Controllers;
+using DungeonGame.Effects;
 using DungeonGame.Items;
 using DungeonGame.Items.Equipment;
 using DungeonGame.Monsters;
@@ -314,8 +315,7 @@ namespace DungeonGameTests {
 			for (int i = 0; i < 10; i++) {
 				GameController.CheckStatus(player);
 			}
-			player._Effects.Add(new Effect("burning", Effect.EffectType.OnFire, 5,
-				1, 3, 1, 10, true));
+			player._Effects.Add(new BurningEffect("burning", 3, 5));
 			Assert.AreEqual("Your spell reflect is slowly fading away.", OutputController.Display._Output[0][2]);
 			player.CastSpell("rejuvenate");
 			defaultEffectOutput = OutputController.ShowEffects(player);
@@ -391,7 +391,7 @@ namespace DungeonGameTests {
 			double resistanceMod = (100 - arcaneResistance) / 100.0;
 			int spellIndex = monster._Spellbook.FindIndex(
 				f => f._SpellCategory == MonsterSpell.SpellType.Lightning);
-			MonsterSpell.CastArcaneOffense(monster, player, spellIndex);
+			monster._Spellbook[spellIndex].CastArcaneOffense(monster, player, spellIndex);
 			int reducedDamage = (int)(monster._Spellbook[spellIndex]._Offensive._Amount * resistanceMod);
 			Assert.AreEqual(player._HitPoints, player._MaxHitPoints - reducedDamage);
 		}

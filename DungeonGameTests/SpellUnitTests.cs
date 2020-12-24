@@ -36,7 +36,7 @@ namespace DungeonGameTests {
 			player.CastSpell(monster, spellName);
 			Assert.AreEqual(player._MaxManaPoints - player._Spellbook[spellIndex]._ManaCost, player._ManaPoints);
 			Assert.AreEqual(25, monster._HitPoints);
-			Assert.AreEqual(3, monster._Effects[0]._EffectMaxRound);
+			Assert.AreEqual(3, monster._Effects[0]._MaxRound);
 			Assert.AreEqual($"You hit the {monster._Name} for {player._Spellbook[spellIndex]._Offensive._Amount} fire damage.",
 				OutputController.Display._Output[0][2]);
 			Assert.AreEqual($"The {monster._Name} bursts into flame!",
@@ -46,7 +46,7 @@ namespace DungeonGameTests {
 				Assert.AreEqual(
 					$"The {monster._Name} burns for {monster._Effects[0]._EffectAmountOverTime} fire damage.",
 					OutputController.Display._Output[i][2]);
-				Assert.AreEqual(i, monster._Effects[0]._EffectCurRound);
+				Assert.AreEqual(i, monster._Effects[0]._CurrentRound);
 				GameController.RemovedExpiredEffectsAsync(monster);
 				Thread.Sleep(1000);
 			}
@@ -85,8 +85,8 @@ namespace DungeonGameTests {
 			player.CastSpell(monster, spellName);
 			Assert.AreEqual(player._MaxManaPoints - player._Spellbook[spellIndex]._ManaCost, player._ManaPoints);
 			Assert.AreEqual(85, monster._HitPoints);
-			Assert.AreEqual(1, monster._Effects[0]._EffectCurRound);
-			Assert.AreEqual(2, monster._Effects[0]._EffectMaxRound);
+			Assert.AreEqual(1, monster._Effects[0]._CurrentRound);
+			Assert.AreEqual(2, monster._Effects[0]._MaxRound);
 			string attackString = $"You hit the {monster._Name} for {player._Spellbook[spellIndex]._Offensive._Amount} frost damage.";
 			Assert.AreEqual(attackString, OutputController.Display._Output[0][2]);
 			string frozenString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be double!";
@@ -97,7 +97,7 @@ namespace DungeonGameTests {
 			double multiplier = monster._Effects[0]._EffectMultiplier;
 			for (int i = 2; i < 4; i++) {
 				monster._Effects[0].FrozenRound(monster);
-				Assert.AreEqual(i, monster._Effects[0]._EffectCurRound);
+				Assert.AreEqual(i, monster._Effects[0]._CurrentRound);
 				Assert.AreEqual(frozenString, OutputController.Display._Output[i][2]);
 				player._PlayerWeapon._Durability = 100;
 				double frozenDamage = player.PhysicalAttack(monster);
@@ -199,7 +199,7 @@ namespace DungeonGameTests {
 			for (int i = 2; i < 5; i++) {
 				player._Effects[0].HealingRound(player);
 				string healAmtString = $"You have been healed for {player._Effects[0]._EffectAmountOverTime} health.";
-				Assert.AreEqual(i, player._Effects[0]._EffectCurRound);
+				Assert.AreEqual(i, player._Effects[0]._CurrentRound);
 				Assert.AreEqual(healAmtString, OutputController.Display._Output[i - 1][2]);
 				Assert.AreEqual(70 + ((i - 1) * player._Effects[0]._EffectAmountOverTime), player._HitPoints);
 			}
@@ -424,10 +424,10 @@ namespace DungeonGameTests {
 			int stunIndex = monster._Effects.FindIndex(
 				f => f._EffectGroup == Effect.EffectType.Stunned);
 			Assert.AreEqual(85, monster._HitPoints);
-			Assert.AreEqual(1, monster._Effects[frostIndex]._EffectCurRound);
-			Assert.AreEqual(1, monster._Effects[stunIndex]._EffectCurRound);
-			Assert.AreEqual(2, monster._Effects[frostIndex]._EffectMaxRound);
-			Assert.AreEqual(2, monster._Effects[stunIndex]._EffectMaxRound);
+			Assert.AreEqual(1, monster._Effects[frostIndex]._CurrentRound);
+			Assert.AreEqual(1, monster._Effects[stunIndex]._CurrentRound);
+			Assert.AreEqual(2, monster._Effects[frostIndex]._MaxRound);
+			Assert.AreEqual(2, monster._Effects[stunIndex]._MaxRound);
 			int monsterHitPointsBefore = monster._HitPoints;
 			double totalBaseDamage = 0.0;
 			double totalFrozenDamage = 0.0;
@@ -438,10 +438,10 @@ namespace DungeonGameTests {
 				string stunnedRoundString = $"The {monster._Name} is stunned and cannot attack.";
 				Assert.AreEqual(stunnedRoundString, OutputController.Display._Output[0][2]);
 				Assert.AreEqual(true, monster._IsStunned);
-				Assert.AreEqual(i, monster._Effects[stunIndex]._EffectCurRound);
+				Assert.AreEqual(i, monster._Effects[stunIndex]._CurrentRound);
 				player._PlayerWeapon._Durability = 100;
 				double frozenDamage = player.PhysicalAttack(monster);
-				Assert.AreEqual(i, monster._Effects[frostIndex]._EffectCurRound);
+				Assert.AreEqual(i, monster._Effects[frostIndex]._CurrentRound);
 				string frozenRoundString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be double!";
 				Assert.AreEqual(frozenRoundString, OutputController.Display._Output[1][2]);
 				monster._HitPoints -= (int)frozenDamage;
