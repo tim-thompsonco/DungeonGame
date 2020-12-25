@@ -8,7 +8,7 @@ namespace DungeonGame.Effects {
 		public string _Name { get; set; }
 		public int _CurrentRound { get; set; }
 		public int _MaxRound { get; }
-		private int _BlockAmount;
+		public int _BlockAmount { get; set; }
 
 		public BlockDamageEffect(string name, int blockAmount) {
 			_TickDuration = 1;

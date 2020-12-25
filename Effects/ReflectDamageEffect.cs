@@ -8,7 +8,7 @@ namespace DungeonGame.Effects {
 		public string _Name { get; set; }
 		public int _CurrentRound { get; set; }
 		public int _MaxRound { get; }
-		private readonly int _ReflectDamageAmount;
+		public int _ReflectDamageAmount { get; }
 
 		public ReflectDamageEffect(string name, int maxRound, int reflectDamageAmount) {
 			_TickDuration = 10;

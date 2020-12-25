@@ -10,7 +10,7 @@ namespace DungeonGame.Effects {
 		public string _Name { get; set; }
 		public int _CurrentRound { get; set; }
 		public int _MaxRound { get; }
-		private readonly int _ChangeAmount;
+		public int _ChangeAmount { get; }
 
 		public ChangeMonsterDamageEffect(string name, int maxRound, int changeAmount) {
 			_TickDuration = 1;

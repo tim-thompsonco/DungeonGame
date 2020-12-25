@@ -64,7 +64,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 
 			Assert.AreEqual(oldPlayerConst + potion._StatAmount, player._Constitution);
 			Assert.AreEqual(1, player._Effects.Count);
-			Assert.AreEqual(600, player._Effects[0]._EffectMaxRound);
+			Assert.AreEqual(600, player._Effects[0]._MaxRound);
 		}
 
 		[Test]
@@ -78,7 +78,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 
 			Assert.AreEqual(oldPlayerDex + potion._StatAmount, player._Dexterity);
 			Assert.AreEqual(1, player._Effects.Count);
-			Assert.AreEqual(600, player._Effects[0]._EffectMaxRound);
+			Assert.AreEqual(600, player._Effects[0]._MaxRound);
 		}
 
 		[Test]
@@ -92,7 +92,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 
 			Assert.AreEqual(oldPlayerInt + potion._StatAmount, player._Intelligence);
 			Assert.AreEqual(1, player._Effects.Count);
-			Assert.AreEqual(600, player._Effects[0]._EffectMaxRound);
+			Assert.AreEqual(600, player._Effects[0]._MaxRound);
 		}
 
 		[Test]
@@ -106,7 +106,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 
 			Assert.AreEqual(oldPlayerStr + potion._StatAmount, player._Strength);
 			Assert.AreEqual(1, player._Effects.Count);
-			Assert.AreEqual(600, player._Effects[0]._EffectMaxRound);
+			Assert.AreEqual(600, player._Effects[0]._MaxRound);
 		}
 
 		[Test]
