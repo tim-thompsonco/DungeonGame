@@ -295,8 +295,8 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				onFireString);
 
-			monster._Effects.Add(new BurningEffect(player._Spellbook[index]._Name, player._Spellbook[index]._Offensive._AmountOverTime,
-				player._Spellbook[index]._Offensive._AmountMaxRounds));
+			monster._Effects.Add(new BurningEffect(player._Spellbook[index]._Name, player._Spellbook[index]._Offensive._AmountMaxRounds,
+				player._Spellbook[index]._Offensive._AmountOverTime));
 		}
 
 		public static void ArcaneOffenseSpellInfo(Player player, int index) {

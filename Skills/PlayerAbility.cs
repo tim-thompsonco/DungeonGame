@@ -648,8 +648,8 @@ namespace DungeonGame {
 						Settings.FormatDefaultBackground(),
 						bleedString);
 
-					monster._Effects.Add(new BleedingEffect(player._Abilities[index]._Name, player._Abilities[index]._Offensive._AmountOverTime,
-						player._Abilities[index]._Offensive._AmountMaxRounds));
+					monster._Effects.Add(new BleedingEffect(player._Abilities[index]._Name, player._Abilities[index]._Offensive._AmountMaxRounds,
+						player._Abilities[index]._Offensive._AmountOverTime));
 					break;
 				case Offensive.OffensiveType.Fire:
 					string onFireString = $"The {monster._Name} bursts into flame!";
@@ -658,8 +658,8 @@ namespace DungeonGame {
 						Settings.FormatDefaultBackground(),
 						onFireString);
 
-					monster._Effects.Add(new BurningEffect(player._Abilities[index]._Name, player._Abilities[index]._Offensive._AmountOverTime,
-						player._Abilities[index]._Offensive._AmountMaxRounds));
+					monster._Effects.Add(new BurningEffect(player._Abilities[index]._Name, player._Abilities[index]._Offensive._AmountMaxRounds,
+						player._Abilities[index]._Offensive._AmountOverTime));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
