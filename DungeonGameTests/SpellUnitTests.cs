@@ -91,7 +91,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(2, monster._Effects[0]._MaxRound);
 			string attackString = $"You hit the {monster._Name} for {player._Spellbook[spellIndex]._Offensive._Amount} frost damage.";
 			Assert.AreEqual(attackString, OutputController.Display._Output[0][2]);
-			string frozenString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be double!";
+			string frozenString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be increased by 50%!";
 			Assert.AreEqual(frozenString, OutputController.Display._Output[1][2]);
 			FrozenEffect frozenEffect = monster._Effects[0] as FrozenEffect;
 			int monsterHitPointsBefore = monster._HitPoints;
@@ -420,7 +420,7 @@ namespace DungeonGameTests {
 			player.CastSpell(monster, spellName);
 			string attackSuccessString = $"You hit the {monster._Name} for {player._Spellbook[spellIndex]._Offensive._Amount} frost damage.";
 			Assert.AreEqual(attackSuccessString, OutputController.Display._Output[7][2]);
-			string frozenString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be double!";
+			string frozenString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be increased!";
 			Assert.AreEqual(frozenString, OutputController.Display._Output[8][2]);
 			OutputController.Display.ClearUserOutput();
 			Assert.AreEqual(player._ManaPoints, player._MaxManaPoints - player._Spellbook[spellIndex]._ManaCost);
@@ -447,7 +447,7 @@ namespace DungeonGameTests {
 				player._PlayerWeapon._Durability = 100;
 				double frozenDamage = player.PhysicalAttack(monster);
 				Assert.AreEqual(i, monster._Effects[frostIndex]._CurrentRound);
-				string frozenRoundString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be double!";
+				string frozenRoundString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be increased by 50%!";
 				Assert.AreEqual(frozenRoundString, OutputController.Display._Output[1][2]);
 				monster._HitPoints -= (int)frozenDamage;
 				totalBaseDamage += baseDamage;

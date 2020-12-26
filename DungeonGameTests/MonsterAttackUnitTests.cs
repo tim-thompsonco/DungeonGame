@@ -86,7 +86,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(attackString, OutputController.Display._Output[0][2]);
 			string attackSuccessString = $"The {monster._Name} hits you for {spellDamage} frost damage.";
 			Assert.AreEqual(attackSuccessString, OutputController.Display._Output[1][2]);
-			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be double!";
+			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be increased by 50%!";
 			Assert.AreEqual(frozenString, OutputController.Display._Output[2][2]);
 			Assert.AreEqual(true, player._Effects[0] is FrozenEffect);
 			FrozenEffect frozenEffect = player._Effects[0] as FrozenEffect;
@@ -98,11 +98,10 @@ namespace DungeonGameTests {
 				int baseDamage = monster._MonsterWeapon._RegDamage;
 				int frozenDamage = (int)(monster._MonsterWeapon._RegDamage * multiplier);
 				Assert.AreEqual(frozenDamage, baseDamage * multiplier, 1);
-				frozenEffect.ProcessFrozenRound();
-				Assert.AreEqual(i, player._Effects[0]._CurrentRound);
-				Assert.AreEqual(frozenString, OutputController.Display._Output[i + 1][2]);
 				monster._MonsterWeapon._Durability = 100;
 				monster.Attack(player);
+				Assert.AreEqual(i, player._Effects[0]._CurrentRound);
+				Assert.AreEqual(frozenString, OutputController.Display._Output[i][2]);
 				Assert.AreEqual(playerHitPointsBefore - frozenDamage, player._HitPoints, 7);
 			}
 			GameController.RemovedExpiredEffectsAsync(player);

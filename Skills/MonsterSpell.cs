@@ -157,15 +157,13 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 
-			if (player._Effects.OfType<FrozenEffect>().Any()) {
-				const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be double!";
-				OutputController.Display.StoreUserOutput(
-					Settings.FormatAttackSuccessText(),
-					Settings.FormatDefaultBackground(),
-					frozenString);
-			}
-
 			player._Effects.Add(new FrozenEffect(monster._Spellbook[index]._Name, monster._Spellbook[index]._Offensive._AmountMaxRounds));
+
+			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be increased by 50%!";
+			OutputController.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				frozenString);
 		}
 
 		public void CastArcaneOffense(Monster monster, Player player, int index) {

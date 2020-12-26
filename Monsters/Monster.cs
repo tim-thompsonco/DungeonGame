@@ -328,7 +328,7 @@ namespace DungeonGame.Monsters {
 
 			int baseAttackAmount = attackAmount;
 
-			foreach (IEffect effect in player._Effects) {
+			foreach (IEffect effect in player._Effects.Where(effect => effect._IsEffectExpired == false)) {
 				if (effect is FrozenEffect frozenEffect) {
 					attackAmount = frozenEffect.GetIncreasedDamageFromFrozen(attackAmount);
 
@@ -367,6 +367,7 @@ namespace DungeonGame.Monsters {
 						effectAbsorbString);
 					return;
 				}
+
 				GameController.RemovedExpiredEffectsAsync(this);
 			}
 

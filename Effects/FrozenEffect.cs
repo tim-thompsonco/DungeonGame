@@ -38,6 +38,10 @@ namespace DungeonGame.Effects {
 		}
 
 		public void ProcessFrozenRound(Monster monster) {
+			if (_IsEffectExpired) {
+				return;
+			}
+
 			string frozenMessage = GetFrozenMessage(monster);
 			DisplayFrozenMessage(frozenMessage);
 
@@ -49,6 +53,10 @@ namespace DungeonGame.Effects {
 		}
 
 		public void ProcessFrozenRound() {
+			if (_IsEffectExpired) {
+				return;
+			}
+
 			string frozenMessage = GetFrozenMessage();
 			DisplayFrozenMessage(frozenMessage);
 

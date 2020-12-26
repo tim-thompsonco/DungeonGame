@@ -224,18 +224,15 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 
-			bool monsterFrozen = monster._Effects.Where(effect => effect is FrozenEffect).Any();
-			if (monsterFrozen) {
-				string frozenString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be double!";
-				OutputController.Display.StoreUserOutput(
-					Settings.FormatAttackSuccessText(),
-					Settings.FormatDefaultBackground(),
-					frozenString);
-			}
-
 			monster._HitPoints -= frostSpellDamage;
 
 			monster._Effects.Add(new FrozenEffect(player._Spellbook[index]._Name, player._Spellbook[index]._Offensive._AmountMaxRounds));
+
+			string frozenString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be increased by 50%!";
+			OutputController.Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				frozenString);
 
 			if (player._Spellbook[index]._SpellCategory != SpellType.FrostNova) {
 				return;
