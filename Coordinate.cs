@@ -41,8 +41,8 @@ namespace DungeonGame {
 		// Overrides the ConvertFrom method of TypeConverter.
 		public override object ConvertFrom(ITypeDescriptorContext context,
 			CultureInfo culture, object value) {
-			if (value is string) {
-				string[] v = ((string)value).Split(new char[] { ',' });
+			if (value is string str) {
+				string[] v = str.Split(new char[] { ',' });
 				return new Coordinate(int.Parse(v[0]), int.Parse(v[1]), int.Parse(v[2]));
 			}
 			return base.ConvertFrom(context, culture, value);

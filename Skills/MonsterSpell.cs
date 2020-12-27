@@ -32,7 +32,7 @@ namespace DungeonGame {
 				case SpellType.Fireball:
 					_DamageGroup = DamageType.Fire;
 					_Offensive = new Offensive(25 + ((monsterLevel - 1) * 5),
-						5 + (monsterLevel - 1) * 2, 1, 3,
+						5 + ((monsterLevel - 1) * 2), 1, 3,
 						Offensive.OffensiveType.Fire);
 					break;
 				case SpellType.Frostbolt:

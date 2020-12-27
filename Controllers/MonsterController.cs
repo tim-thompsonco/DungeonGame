@@ -42,9 +42,9 @@ namespace DungeonGame.Controllers {
 				return opponent._Spellbook[index]._Offensive._Amount;
 			}
 			double damageReductionPercentage = opponent._Spellbook[index]._DamageGroup switch {
-				MonsterSpell.DamageType.Fire => (player._FireResistance / 100.0),
-				MonsterSpell.DamageType.Frost => (player._FrostResistance / 100.0),
-				MonsterSpell.DamageType.Arcane => (player._ArcaneResistance / 100.0),
+				MonsterSpell.DamageType.Fire => player._FireResistance / 100.0,
+				MonsterSpell.DamageType.Frost => player._FrostResistance / 100.0,
+				MonsterSpell.DamageType.Arcane => player._ArcaneResistance / 100.0,
 				_ => 0.0
 			};
 			return (int)(opponent._Spellbook[index]._Offensive._Amount * (1 - damageReductionPercentage));

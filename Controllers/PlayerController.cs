@@ -722,9 +722,9 @@ namespace DungeonGame.Controllers {
 				return player._Abilities[index]._Offensive._Amount;
 			}
 			double damageReductionPercentage = player._Abilities[index]._DamageGroup switch {
-				PlayerAbility.DamageType.Fire => (opponent._FireResistance / 100.0),
-				PlayerAbility.DamageType.Frost => (opponent._FrostResistance / 100.0),
-				PlayerAbility.DamageType.Arcane => (opponent._ArcaneResistance / 100.0),
+				PlayerAbility.DamageType.Fire => opponent._FireResistance / 100.0,
+				PlayerAbility.DamageType.Frost => opponent._FrostResistance / 100.0,
+				PlayerAbility.DamageType.Arcane => opponent._ArcaneResistance / 100.0,
 				_ => 0.0
 			};
 			return (int)(player._Abilities[index]._Offensive._Amount * (1 - damageReductionPercentage));
@@ -734,9 +734,9 @@ namespace DungeonGame.Controllers {
 				return player._Spellbook[index]._Offensive._Amount;
 			}
 			double damageReductionPercentage = player._Spellbook[index]._DamageGroup switch {
-				PlayerSpell.DamageType.Fire => (opponent._FireResistance / 100.0),
-				PlayerSpell.DamageType.Frost => (opponent._FrostResistance / 100.0),
-				PlayerSpell.DamageType.Arcane => (opponent._ArcaneResistance / 100.0),
+				PlayerSpell.DamageType.Fire => opponent._FireResistance / 100.0,
+				PlayerSpell.DamageType.Frost => opponent._FrostResistance / 100.0,
+				PlayerSpell.DamageType.Arcane => opponent._ArcaneResistance / 100.0,
 				_ => 0.0
 			};
 			return (int)(player._Spellbook[index]._Offensive._Amount * (1 - damageReductionPercentage));

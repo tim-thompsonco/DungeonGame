@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace DungeonGame {
 	class MainClass {
-		public static void Main(string[] args) {
+		public static void Main() {
 			try {
 				Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
 			} catch (Exception ex) {

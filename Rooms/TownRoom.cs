@@ -194,9 +194,7 @@ namespace DungeonGame.Rooms {
 			OutputController.Display.StoreUserOutput(sameLineOutput);
 			ShowDirections();
 		}
-		private string CalculateNpcLevelDiff(Player player) {
-			return null; // Not using this method for vendors, no reason to attack them
-		}
+		
 		public void LookNpc(string[] input, Player player) {
 			StringBuilder inputString = new StringBuilder();
 			for (int i = 1; i < input.Length; i++) {

@@ -6,9 +6,6 @@ using System.Linq;
 
 namespace DungeonGame {
 	public class RoomBuilder {
-		private int _Size { get; set; }
-		private int _Levels { get; set; }
-		private int _CurrentLevel { get; set; }
 		private Coordinate _LastRoomCoord { get; set; }
 		private Dictionary<Coordinate, IRoom> _SpawnedDungeonRooms { get; set; }
 
@@ -16,8 +13,6 @@ namespace DungeonGame {
 			// Create town to connect dungeon to
 			_SpawnedDungeonRooms = BuildTown();
 			// Dungeon build settings
-			_Size = size;
-			_Levels = levels;
 			int levelSize = size / levels;
 			for (int i = 0; i < levels; i++) {
 				int levelRangeLowForLevel = i - 1 >= 1 ? i - 1 : 1;
@@ -35,7 +30,6 @@ namespace DungeonGame {
 						_LastRoomCoord = firstRoomCoord;
 						GenerateRoomDirections();
 						GenerateStairwayRoomDirections();
-						_CurrentLevel--;
 						continue;
 					}
 					if (i > 0 && j == 0) {
@@ -49,7 +43,6 @@ namespace DungeonGame {
 						newLevelRoom._Up = oldRoom;
 						_SpawnedDungeonRooms.Add(newRoomCoord, newLevelRoom);
 						_LastRoomCoord = newRoomCoord;
-						_CurrentLevel--;
 						continue;
 					}
 					GenerateDungeonRoom(levelRangeLowForLevel, levelRangeHighForLevel);
@@ -67,6 +60,7 @@ namespace DungeonGame {
 		public Dictionary<Coordinate, IRoom> RetrieveSpawnRooms() {
 			return _SpawnedDungeonRooms;
 		}
+
 		private void GenerateRoomDirections() {
 			IRoom room = _SpawnedDungeonRooms[_LastRoomCoord];
 			Coordinate coordWest = new Coordinate(_LastRoomCoord._X - 1, _LastRoomCoord._Y, _LastRoomCoord._Z);
@@ -122,6 +116,7 @@ namespace DungeonGame {
 				southWestRoom._NorthEast = room;
 			}
 		}
+
 		private void GenerateStairwayRoomDirections() {
 			IRoom room = _SpawnedDungeonRooms[_LastRoomCoord];
 			Coordinate coordUp = new Coordinate(_LastRoomCoord._X, _LastRoomCoord._Y, _LastRoomCoord._Z + 1);
@@ -137,6 +132,7 @@ namespace DungeonGame {
 				downRoom._Up = room;
 			}
 		}
+
 		private void GenerateDungeonRoom(int levelRangeLow, int levelRangeHigh) {
 			Coordinate oldCoord = _LastRoomCoord;
 			IRoom oldRoom = _SpawnedDungeonRooms[oldCoord];
@@ -268,6 +264,7 @@ namespace DungeonGame {
 					break;
 			}
 		}
+
 		private static Dictionary<Coordinate, IRoom> BuildTown() {
 			Dictionary<Coordinate, IRoom> town = new Dictionary<Coordinate, IRoom>();
 			string name = "Outside Dungeon Entrance";

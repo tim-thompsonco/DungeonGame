@@ -213,7 +213,6 @@ namespace DungeonGame {
 			int frostSpellDamage = PlayerController.CalculateSpellDamage(player, monster, index);
 
 			foreach (FrozenEffect effect in monster._Effects) {
-				double frozenAttackAmount = effect.GetIncreasedDamageFromFrozen(frostSpellDamage);
 				effect.ProcessFrozenRound(monster);
 				effect._IsEffectExpired = true;
 			}

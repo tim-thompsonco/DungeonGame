@@ -20,14 +20,6 @@ namespace DungeonGame.Effects {
 			_EffectMultiplier = 1.5;
 		}
 
-		public int GetIncreasedDamageFromFrozen(Monster monster, int damage) {
-			if (_IsEffectExpired) {
-				return damage;
-			}
-
-			return (int)(damage * _EffectMultiplier);
-		}
-
 		public int GetIncreasedDamageFromFrozen(int damage) {
 			if (_IsEffectExpired) {
 				return damage;

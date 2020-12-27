@@ -16,7 +16,7 @@ namespace DungeonGame.Items.Consumables.Kits {
 		public KitLevel _KitLevel { get; }
 		public int _KitAugmentAmount { get; set; }
 		public TextInfo _TextInfo { get; set; }
-		private KitType _KitType;
+		private readonly KitType _KitType;
 
 		public ArmorKit(KitLevel kitLevel, KitType kitType) {
 			_KitLevel = kitLevel;

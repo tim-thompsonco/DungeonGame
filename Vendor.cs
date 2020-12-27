@@ -127,7 +127,7 @@ namespace DungeonGame {
 				}
 
 				if (_VendorCategory == VendorType.Healer) {
-					RepopulateHealerPotion(player, inputName);
+					RepopulateHealerPotion(inputName);
 				} else {
 					RepopulateArrows(inputName);
 				}
@@ -364,7 +364,8 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				noRestoreString);
 		}
-		private void RepopulateHealerPotion(Player player, string inputName) {
+
+		private void RepopulateHealerPotion(string inputName) {
 			int potionIndex = _VendorItems.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
 			if (potionIndex != -1) {
@@ -377,6 +378,7 @@ namespace DungeonGame {
 				_VendorItems.Add(new HealthPotion(PotionStrength.Minor));
 			}
 		}
+
 		private void RepopulateArrows(string inputName) {
 			int arrowIndex = _VendorItems.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));

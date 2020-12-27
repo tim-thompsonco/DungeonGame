@@ -137,7 +137,7 @@ namespace DungeonGame {
 								continue;
 							}
 
-							double trainingReduction = 1.0 - player._Intelligence / 100.0;
+							double trainingReduction = 1.0 - (player._Intelligence / 100.0);
 							if (trainingReduction < 0.5) {
 								trainingReduction = 0.5;
 							}
@@ -182,7 +182,7 @@ namespace DungeonGame {
 						continue;
 					}
 
-					double trainingReduction = 1.0 - player._Intelligence / 100.0;
+					double trainingReduction = 1.0 - (player._Intelligence / 100.0);
 					if (trainingReduction < 0.5) {
 						trainingReduction = 0.5;
 					}
@@ -224,7 +224,7 @@ namespace DungeonGame {
 								continue;
 							}
 
-							double trainingReduction = 1.0 - player._Intelligence / 100.0;
+							double trainingReduction = 1.0 - (player._Intelligence / 100.0);
 							if (trainingReduction < 0.5) {
 								trainingReduction = 0.5;
 							}
@@ -269,7 +269,7 @@ namespace DungeonGame {
 						continue;
 					}
 
-					double trainingReduction = 1.0 - player._Intelligence / 100.0;
+					double trainingReduction = 1.0 - (player._Intelligence / 100.0);
 					if (trainingReduction < 0.5) {
 						trainingReduction = 0.5;
 					}
@@ -311,7 +311,7 @@ namespace DungeonGame {
 			int abilityIndex = _TrainableAbilities.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
 			if (abilityIndex != -1 && player._Level >= _TrainableAbilities[abilityIndex]._MinLevel) {
-				double trainingReduction = 1.0 - player._Intelligence / 100.0;
+				double trainingReduction = 1.0 - (player._Intelligence / 100.0);
 				if (trainingReduction < 0.5) {
 					trainingReduction = 0.5;
 				}
@@ -354,7 +354,7 @@ namespace DungeonGame {
 			int spellIndex = _TrainableSpells.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
 			if (spellIndex != -1 && player._Level >= _TrainableSpells[spellIndex]._MinLevel) {
-				double trainingReduction = 1.0 - player._Intelligence / 100.0;
+				double trainingReduction = 1.0 - (player._Intelligence / 100.0);
 				if (trainingReduction < 0.5) {
 					trainingReduction = 0.5;
 				}
@@ -397,7 +397,7 @@ namespace DungeonGame {
 			int spellIndex = player._Spellbook.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
 			if (spellIndex != -1 && player._Level >= player._Spellbook[spellIndex]._Rank + 1) {
-				double trainingReduction = 1.0 - player._Intelligence / 100.0;
+				double trainingReduction = 1.0 - (player._Intelligence / 100.0);
 				if (trainingReduction < 0.5) {
 					trainingReduction = 0.5;
 				}
@@ -478,7 +478,7 @@ namespace DungeonGame {
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._Name == inputName || f._Name.Contains(inputName));
 			if (abilityIndex != -1 && player._Level >= player._Abilities[abilityIndex]._Rank + 1) {
-				double trainingReduction = 1.0 - player._Intelligence / 100.0;
+				double trainingReduction = 1.0 - (player._Intelligence / 100.0);
 				if (trainingReduction < 0.5) {
 					trainingReduction = 0.5;
 				}
