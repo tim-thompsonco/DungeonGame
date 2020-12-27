@@ -239,16 +239,12 @@ namespace DungeonGame.Players {
 			foreach (IEffect effect in _Effects) {
 				if (effect is ChangePlayerDamageEffect changeEffect) {
 					attackAmount = changeEffect.GetUpdatedDamageFromChange(attackAmount);
-
-					changeEffect.ProcessChangePlayerDamageRound(this);
 				}
 			}
 
 			foreach (IEffect effect in monster._Effects) {
 				if (effect is FrozenEffect frozenEffect) {
 					attackAmount = frozenEffect.GetIncreasedDamageFromFrozen(attackAmount);
-
-					frozenEffect.ProcessFrozenRound(monster);
 				}
 			}
 

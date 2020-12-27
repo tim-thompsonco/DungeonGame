@@ -420,7 +420,7 @@ namespace DungeonGameTests {
 			player.CastSpell(monster, spellName);
 			string attackSuccessString = $"You hit the {monster._Name} for {player._Spellbook[spellIndex]._Offensive._Amount} frost damage.";
 			Assert.AreEqual(attackSuccessString, OutputController.Display._Output[7][2]);
-			string frozenString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be increased!";
+			string frozenString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be increased by 50%!";
 			Assert.AreEqual(frozenString, OutputController.Display._Output[8][2]);
 			OutputController.Display.ClearUserOutput();
 			Assert.AreEqual(player._ManaPoints, player._MaxManaPoints - player._Spellbook[spellIndex]._ManaCost);
@@ -440,6 +440,7 @@ namespace DungeonGameTests {
 			for (int i = 2; i < 4; i++) {
 				OutputController.Display.ClearUserOutput();
 				stunnedEffect.ProcessStunnedRound(monster);
+				frozenEffect.ProcessFrozenRound(monster);
 				string stunnedRoundString = $"The {monster._Name} is stunned and cannot attack.";
 				Assert.AreEqual(stunnedRoundString, OutputController.Display._Output[0][2]);
 				Assert.AreEqual(true, monster._IsStunned);

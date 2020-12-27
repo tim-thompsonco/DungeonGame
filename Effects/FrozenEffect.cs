@@ -70,7 +70,7 @@ namespace DungeonGame.Effects {
 		private string GetFrozenMessage(Monster monster) {
 			int percentIncrease = (int)((_EffectMultiplier - 1) * 100);
 
-			return $"The {monster._Name} is frozen. Any damage from an attack is increased by {percentIncrease}%!";
+			return $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be increased by {percentIncrease}%!";
 		}
 
 		private string GetFrozenMessage() {
