@@ -113,7 +113,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(false, monster._Effects.Any());
 			int finalBaseDamageWithMod = (int)(totalBaseDamage * multiplier);
 			int finalTotalFrozenDamage = (int)totalFrozenDamage;
-			Assert.AreEqual(finalTotalFrozenDamage, finalBaseDamageWithMod, 7);
+			Assert.AreEqual(finalTotalFrozenDamage, finalBaseDamageWithMod, 14);
 			Assert.AreEqual(monster._HitPoints, monsterHitPointsBefore - (int)totalFrozenDamage);
 		}
 		[Test]
@@ -460,7 +460,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(false, monster._IsStunned);
 			int finalBaseDamageWithMod = (int)(totalBaseDamage * multiplier);
 			int finalTotalFrozenDamage = (int)totalFrozenDamage;
-			Assert.AreEqual(finalTotalFrozenDamage, finalBaseDamageWithMod, 7);
+			Assert.AreEqual(finalTotalFrozenDamage, finalBaseDamageWithMod, 14);
 			Assert.AreEqual(monster._HitPoints, monsterHitPointsBefore - (int)totalFrozenDamage);
 		}
 	}

@@ -103,8 +103,9 @@ namespace DungeonGame.Rooms {
 				if (monsterName.Last() == inputName || _Monster._Name == inputName ||
 					_Monster._Name.Contains(input.Last()) || _Monster != null) {
 					if (_Monster._HitPoints > 0) {
-						CombatController fightEvent = new CombatController(_Monster, player);
-						fightEvent.StartCombat();
+						player._InCombat = true;
+						_Monster._InCombat = true;
+						CombatController.StartCombat(player, _Monster);
 						if (player._HitPoints <= 0) {
 							Messages.PlayerDeath();
 						}

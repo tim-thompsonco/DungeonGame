@@ -1,16 +1,12 @@
-﻿//using DungeonGame.Effects;
-//using DungeonGame.Monsters;
-//using DungeonGame.Players;
+﻿using DungeonGame.Monsters;
+using DungeonGame.Players;
 
-//namespace DungeonGame.Spells {
-//	public interface IMonsterOffensiveSpell : IName {
-//		int _DamageAmount { get; }
-//		int _ManaCost { get; }
+namespace DungeonGame.Spells {
+	public interface IMonsterOffensiveSpell : IName {
+		int _DamageAmount { get; }
+		int _ManaCost { get; }
 
-//		void CastSpell(Monster monster, Player player);
-//		int CalculateSpellDamage(Monster monster, Player player);
-//		int DecreaseSpellDamageFromPlayerResistance(Player player, int spellDamage);
-//		void DisplayEffectAbsorbedAllDamageMessage(Monster monster, IEffect effect);
-//		void DisplaySuccessfulAttackMessage(Monster monster, int spellDamage);
-//	}
-//}
+		void CastSpell(Monster monster, Player player);
+		void DisplaySuccessfulAttackMessage(Monster monster, int spellDamage);
+	}
+}

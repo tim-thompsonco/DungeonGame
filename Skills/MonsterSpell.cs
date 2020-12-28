@@ -3,7 +3,6 @@ using DungeonGame.Effects;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 using System;
-using System.Linq;
 
 namespace DungeonGame {
 	public class MonsterSpell {
@@ -65,7 +64,7 @@ namespace DungeonGame {
 				attackString);
 
 			int fireSpellDamage = MonsterController.CalculateSpellDamage(player, monster, index);
-			fireSpellDamage = AdjustSpellDamageFromPlayerEffects(player, monster, fireSpellDamage);
+			fireSpellDamage = CombatController.GetMonsterAttackDamageUpdatedFromPlayerEffects(player, monster, fireSpellDamage);
 
 			if (fireSpellDamage == 0) {
 				return;
@@ -91,48 +90,6 @@ namespace DungeonGame {
 			}
 		}
 
-		private int AdjustSpellDamageFromPlayerEffects(Player player, Monster monster, int spellDamage) {
-			foreach (IEffect effect in player._Effects.ToList()) {
-				if (effect is FrozenEffect frozenEffect) {
-					frozenEffect.ProcessFrozenRound();
-				}
-
-				if (effect is ChangeMonsterDamageEffect changeMonsterDmgEffect) {
-					spellDamage = changeMonsterDmgEffect.GetUpdatedDamageFromChange(spellDamage);
-
-					changeMonsterDmgEffect.ProcessChangeMonsterDamageRound(player);
-				}
-
-				if (effect is BlockDamageEffect blockDmgEffect) {
-					int baseSpellDamage = spellDamage;
-
-					spellDamage = blockDmgEffect.GetDecreasedDamageFromBlock(spellDamage);
-
-					blockDmgEffect.ProcessBlockDamageRound(baseSpellDamage);
-				}
-
-				if (effect is ReflectDamageEffect reflectDmgEffect) {
-					int baseSpellDamage = spellDamage;
-
-					spellDamage = reflectDmgEffect.GetReflectedDamageAmount(spellDamage);
-
-					reflectDmgEffect.ProcessReflectDamageRound(baseSpellDamage);
-				}
-
-				if (spellDamage <= 0) {
-					string effectAbsorbString = $"Your {effect._Name} absorbed all of {monster._Name}'s attack!";
-					OutputController.Display.StoreUserOutput(
-						Settings.FormatAttackFailText(),
-						Settings.FormatDefaultBackground(),
-						effectAbsorbString);
-
-					return 0;
-				}
-			}
-
-			return spellDamage;
-		}
-
 		public void CastFrostOffense(Monster monster, Player player, int index) {
 			monster._EnergyPoints -= monster._Spellbook[index]._EnergyCost;
 
@@ -143,7 +100,7 @@ namespace DungeonGame {
 				attackString);
 
 			int frostSpellDamage = MonsterController.CalculateSpellDamage(player, monster, index);
-			frostSpellDamage = AdjustSpellDamageFromPlayerEffects(player, monster, frostSpellDamage);
+			frostSpellDamage = CombatController.GetMonsterAttackDamageUpdatedFromPlayerEffects(player, monster, frostSpellDamage);
 
 			if (frostSpellDamage == 0) {
 				return;
@@ -176,7 +133,7 @@ namespace DungeonGame {
 				attackString);
 
 			int arcaneSpellDamage = MonsterController.CalculateSpellDamage(player, monster, index);
-			arcaneSpellDamage = AdjustSpellDamageFromPlayerEffects(player, monster, arcaneSpellDamage);
+			arcaneSpellDamage = CombatController.GetMonsterAttackDamageUpdatedFromPlayerEffects(player, monster, arcaneSpellDamage);
 
 			if (arcaneSpellDamage == 0) {
 				return;
