@@ -361,7 +361,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(
 				baseMana - player._Spellbook[spellIndex]._ManaCost, player._ManaPoints);
 			Assert.AreEqual(
-				baseMaxMana + player._Spellbook[spellIndex]._ChangeAmount._Amount * 10, player._MaxManaPoints);
+				baseMaxMana + (player._Spellbook[spellIndex]._ChangeAmount._Amount * 10), player._MaxManaPoints);
 			Assert.AreEqual("You cast Arcane Intellect on yourself.", OutputController.Display._Output[0][2]);
 			ChangeStatEffect changeStatEffect = player._Effects[0] as ChangeStatEffect;
 			for (int i = 0; i < 10; i++) {
