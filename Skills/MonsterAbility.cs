@@ -40,7 +40,7 @@ namespace DungeonGame {
 		}
 
 		public void UseBloodLeechAbility(Monster monster, Player player, int index) {
-			monster._EnergyPoints -= monster._Abilities[index]._EnergyCost;
+			monster.EnergyPoints -= monster.Abilities[index]._EnergyCost;
 
 			string attackString = $"The {monster.Name} tries to sink its fangs into you and suck your blood!";
 			OutputController.Display.StoreUserOutput(
@@ -48,7 +48,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackString);
 
-			int leechAmount = monster._Abilities[index]._Offensive._Amount;
+			int leechAmount = monster.Abilities[index]._Offensive._Amount;
 			leechAmount = AdjustAbilityDamageFromPlayerEffects(player, monster, leechAmount);
 
 			if (leechAmount == 0) {
@@ -57,10 +57,10 @@ namespace DungeonGame {
 
 			player._HitPoints -= leechAmount;
 
-			if (monster._HitPoints + leechAmount > monster._MaxHitPoints) {
-				monster._HitPoints = monster._MaxHitPoints;
+			if (monster.HitPoints + leechAmount > monster.MaxHitPoints) {
+				monster.HitPoints = monster.MaxHitPoints;
 			} else {
-				monster._HitPoints += leechAmount;
+				monster.HitPoints += leechAmount;
 			}
 
 			string attackSuccessString = $"The {monster.Name} leeches {leechAmount} life from you.";
@@ -113,10 +113,10 @@ namespace DungeonGame {
 		}
 
 		public void UseOffenseDamageAbility(Monster monster, Player player, int index) {
-			monster._EnergyPoints -= monster._Abilities[index]._EnergyCost;
+			monster.EnergyPoints -= monster.Abilities[index]._EnergyCost;
 
 			string attackString;
-			if (monster._MonsterCategory == Monster.MonsterType.Spider) {
+			if (monster.MonsterCategory == Monster.MonsterType.Spider) {
 				attackString = $"The {monster.Name} tries to bite you!";
 			} else {
 				attackString = $"The {monster.Name} swings its tail at you!";
@@ -127,11 +127,11 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackString);
 
-			int attackDamage = monster._Abilities[index]._Offensive._Amount;
+			int attackDamage = monster.Abilities[index]._Offensive._Amount;
 			attackDamage = AdjustAbilityDamageFromPlayerEffects(player, monster, attackDamage);
 
 			string attackSuccessString;
-			if (monster._MonsterCategory == Monster.MonsterType.Spider) {
+			if (monster.MonsterCategory == Monster.MonsterType.Spider) {
 				attackSuccessString = $"The {monster.Name} bites you for {attackDamage} physical damage.";
 			} else {
 				attackSuccessString = $"The {monster.Name} strikes you with its tail for {attackDamage} physical damage.";
@@ -144,19 +144,19 @@ namespace DungeonGame {
 
 			player._HitPoints -= attackDamage;
 
-			if (monster._Abilities[index]._Offensive._AmountOverTime <= 0) {
+			if (monster.Abilities[index]._Offensive._AmountOverTime <= 0) {
 				return;
 			}
 
-			if (monster._Abilities[index]._Offensive._OffensiveGroup is Offensive.OffensiveType.Bleed) {
+			if (monster.Abilities[index]._Offensive._OffensiveGroup is Offensive.OffensiveType.Bleed) {
 				string bleedString = $"You are bleeding from {monster.Name}'s attack!";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
 					bleedString);
 
-				player._Effects.Add(new BleedingEffect(monster._Abilities[index]._Name,
-					monster._Abilities[index]._Offensive._AmountMaxRounds, monster._Abilities[index]._Offensive._AmountOverTime));
+				player._Effects.Add(new BleedingEffect(monster.Abilities[index]._Name,
+					monster.Abilities[index]._Offensive._AmountMaxRounds, monster.Abilities[index]._Offensive._AmountOverTime));
 			}
 		}
 	}

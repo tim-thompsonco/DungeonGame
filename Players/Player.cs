@@ -204,7 +204,7 @@ namespace DungeonGame.Players {
 
 		public int ArmorRating(Monster opponent) {
 			int totalArmorRating = GearController.CheckArmorRating(this);
-			int levelDiff = opponent._Level - _Level;
+			int levelDiff = opponent.Level - _Level;
 			double armorMultiplier = 1.00 + (-(double)levelDiff / 5);
 			double adjArmorRating = totalArmorRating * armorMultiplier;
 			return (int)adjArmorRating;
@@ -243,7 +243,7 @@ namespace DungeonGame.Players {
 				}
 			}
 
-			foreach (IEffect effect in monster._Effects) {
+			foreach (IEffect effect in monster.Effects) {
 				if (effect is FrozenEffect frozenEffect) {
 					attackAmount = frozenEffect.GetIncreasedDamageFromFrozen(attackAmount);
 				}

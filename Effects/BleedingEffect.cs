@@ -53,7 +53,7 @@ namespace DungeonGame.Effects {
 		}
 
 		private Monster DecreaseHealthFromBleeding(Monster monster) {
-			monster._HitPoints -= BleedDamageOverTime;
+			monster.HitPoints -= BleedDamageOverTime;
 
 			return monster;
 		}

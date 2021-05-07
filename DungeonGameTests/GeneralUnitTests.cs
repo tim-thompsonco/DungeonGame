@@ -27,8 +27,8 @@ namespace DungeonGameTests {
 			if values smoothed correctly, % should be 0 */
 			Monster monster = new Monster(1, Monster.MonsterType.Skeleton);
 			MonsterBuilder.BuildMonster(monster);
-			Assert.AreEqual(0, monster._MaxHitPoints % 10);
-			Assert.AreEqual(0, monster._ExperienceProvided % 10);
+			Assert.AreEqual(0, monster.MaxHitPoints % 10);
+			Assert.AreEqual(0, monster.ExperienceProvided % 10);
 		}
 		[Test]
 		public void ArmorUnitTests() {
@@ -56,7 +56,7 @@ namespace DungeonGameTests {
 			// _Name check
 			Monster skeletonLevelOne = new Monster(1, Monster.MonsterType.Skeleton);
 			MonsterBuilder.BuildMonster(skeletonLevelOne);
-			Weapon skeletonWeapon = skeletonLevelOne._MonsterWeapon;
+			Weapon skeletonWeapon = skeletonLevelOne.MonsterWeapon;
 			switch (skeletonWeapon._Quality) {
 				case 1:
 					switch (skeletonWeapon._WeaponGroup) {
@@ -117,7 +117,7 @@ namespace DungeonGameTests {
 			// _Name check
 			Monster spiderLevelOne = new Monster(1, Monster.MonsterType.Spider);
 			MonsterBuilder.BuildMonster(spiderLevelOne);
-			Weapon spiderWeapon = spiderLevelOne._MonsterWeapon;
+			Weapon spiderWeapon = spiderLevelOne.MonsterWeapon;
 			switch (spiderWeapon._Quality) {
 				case 1:
 					switch (spiderWeapon._WeaponGroup) {
@@ -166,7 +166,7 @@ namespace DungeonGameTests {
 			// _Name check
 			Monster zombieLevelThree = new Monster(3, Monster.MonsterType.Zombie);
 			MonsterBuilder.BuildMonster(zombieLevelThree);
-			Weapon zombieWeapon = zombieLevelThree._MonsterWeapon;
+			Weapon zombieWeapon = zombieLevelThree.MonsterWeapon;
 			switch (zombieWeapon._Quality) {
 				case 1:
 					switch (zombieWeapon._WeaponGroup) {
@@ -215,7 +215,7 @@ namespace DungeonGameTests {
 			// _Name check
 			Monster demonLevelTwo = new Monster(2, Monster.MonsterType.Demon);
 			MonsterBuilder.BuildMonster(demonLevelTwo);
-			Weapon demonWeapon = demonLevelTwo._MonsterWeapon;
+			Weapon demonWeapon = demonLevelTwo.MonsterWeapon;
 			switch (demonWeapon._Quality) {
 				case 1:
 					switch (demonWeapon._WeaponGroup) {
@@ -352,16 +352,16 @@ namespace DungeonGameTests {
 			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
+			foreach (IItem item in monster.MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem.Equipped = false;
 			}
-			Assert.AreEqual(monster._Level * 5, monster._FireResistance);
-			Assert.AreEqual(monster._Level * 5, monster._FrostResistance);
-			Assert.AreEqual(monster._Level * 5, monster._ArcaneResistance);
-			int arcaneResistance = monster._ArcaneResistance;
+			Assert.AreEqual(monster.Level * 5, monster.FireResistance);
+			Assert.AreEqual(monster.Level * 5, monster.FrostResistance);
+			Assert.AreEqual(monster.Level * 5, monster.ArcaneResistance);
+			int arcaneResistance = monster.ArcaneResistance;
 			double resistanceMod = (100 - arcaneResistance) / 100.0;
 			string[] input = new[] { "cast", "lightning" };
 			int spellIndex = player._Spellbook.FindIndex(
@@ -369,7 +369,7 @@ namespace DungeonGameTests {
 			string spellName = InputController.ParseInput(input);
 			player.CastSpell(monster, spellName);
 			int reducedDamage = (int)(player._Spellbook[spellIndex]._Offensive._Amount * resistanceMod);
-			Assert.AreEqual(monster._HitPoints, monster._MaxHitPoints - reducedDamage);
+			Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - reducedDamage);
 		}
 		[Test]
 		public void PlayerResistanceUnitTest() {
@@ -377,11 +377,11 @@ namespace DungeonGameTests {
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Elemental);
-			while (monster._ElementalCategory != Monster.ElementalType.Air) {
+			while (monster.ElementalCategory != Monster.ElementalType.Air) {
 				monster = new Monster(3, Monster.MonsterType.Elemental);
 			}
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
+			foreach (IItem item in monster.MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem.Equipped = false;
 			}
@@ -390,26 +390,26 @@ namespace DungeonGameTests {
 			Assert.AreEqual(player._Level * 5, player._ArcaneResistance);
 			int arcaneResistance = player._ArcaneResistance;
 			double resistanceMod = (100 - arcaneResistance) / 100.0;
-			int spellIndex = monster._Spellbook.FindIndex(
+			int spellIndex = monster.Spellbook.FindIndex(
 				f => f._SpellCategory == MonsterSpell.SpellType.Lightning);
-			monster._Spellbook[spellIndex].CastArcaneOffense(monster, player, spellIndex);
-			int reducedDamage = (int)(monster._Spellbook[spellIndex]._Offensive._Amount * resistanceMod);
+			monster.Spellbook[spellIndex].CastArcaneOffense(monster, player, spellIndex);
+			int reducedDamage = (int)(monster.Spellbook[spellIndex]._Offensive._Amount * resistanceMod);
 			Assert.AreEqual(player._HitPoints, player._MaxHitPoints - reducedDamage);
 		}
 		[Test]
 		public void MonsterResistanceLevelUnitTest() {
 			Monster monster = new Monster(1, Monster.MonsterType.Vampire);
-			Assert.AreEqual(monster._Level * 5, monster._FireResistance);
-			Assert.AreEqual(monster._Level * 5, monster._FrostResistance);
-			Assert.AreEqual(monster._Level * 5, monster._ArcaneResistance);
+			Assert.AreEqual(monster.Level * 5, monster.FireResistance);
+			Assert.AreEqual(monster.Level * 5, monster.FrostResistance);
+			Assert.AreEqual(monster.Level * 5, monster.ArcaneResistance);
 			monster = new Monster(3, Monster.MonsterType.Elemental);
-			Assert.AreEqual(monster._Level * 5, monster._FireResistance);
-			Assert.AreEqual(monster._Level * 5, monster._FrostResistance);
-			Assert.AreEqual(monster._Level * 5, monster._ArcaneResistance);
+			Assert.AreEqual(monster.Level * 5, monster.FireResistance);
+			Assert.AreEqual(monster.Level * 5, monster.FrostResistance);
+			Assert.AreEqual(monster.Level * 5, monster.ArcaneResistance);
 			monster = new Monster(10, Monster.MonsterType.Dragon);
-			Assert.AreEqual(monster._Level * 5, monster._FireResistance);
-			Assert.AreEqual(monster._Level * 5, monster._FrostResistance);
-			Assert.AreEqual(monster._Level * 5, monster._ArcaneResistance);
+			Assert.AreEqual(monster.Level * 5, monster.FireResistance);
+			Assert.AreEqual(monster.Level * 5, monster.FrostResistance);
+			Assert.AreEqual(monster.Level * 5, monster.ArcaneResistance);
 		}
 	}
 }

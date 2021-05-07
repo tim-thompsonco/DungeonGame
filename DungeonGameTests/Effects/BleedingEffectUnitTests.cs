@@ -43,10 +43,10 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void MonsterHasBleedingEffectUnitTest() {
-			monster._Effects.Add(new BleedingEffect(effectName, maxRound, bleedDamageOverTime));
+			monster.Effects.Add(new BleedingEffect(effectName, maxRound, bleedDamageOverTime));
 
-			Assert.AreEqual(1, monster._Effects.Count);
-			Assert.AreEqual(true, monster._Effects[0] is BleedingEffect);
+			Assert.AreEqual(1, monster.Effects.Count);
+			Assert.AreEqual(true, monster.Effects[0] is BleedingEffect);
 		}
 
 		[Test]
@@ -67,13 +67,13 @@ namespace DungeonGameTests.Effects {
 		[Test]
 		public void ProcessBleedingEffectRoundMonsterUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			monster._Effects.Add(new BleedingEffect(effectName, maxRound, bleedDamageOverTime));
-			BleedingEffect bleedEffect = monster._Effects.Find(effect => effect is BleedingEffect) as BleedingEffect;
+			monster.Effects.Add(new BleedingEffect(effectName, maxRound, bleedDamageOverTime));
+			BleedingEffect bleedEffect = monster.Effects.Find(effect => effect is BleedingEffect) as BleedingEffect;
 			string bleedMessage = $"The {monster.Name} bleeds for {bleedDamageOverTime} physical damage.";
 
 			bleedEffect.ProcessBleedingRound(monster);
 
-			Assert.AreEqual(monster._MaxHitPoints - bleedDamageOverTime, monster._HitPoints);
+			Assert.AreEqual(monster.MaxHitPoints - bleedDamageOverTime, monster.HitPoints);
 			Assert.AreEqual(bleedMessage, OutputController.Display.Output[0][2]);
 			Assert.AreEqual(2, bleedEffect.CurrentRound);
 			Assert.AreEqual(false, bleedEffect.IsEffectExpired);
@@ -94,8 +94,8 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void MonsterBleedingEffectDoesNotExpireWhenCurrentRoundEqualsMaxRoundUnitTest() {
-			monster._Effects.Add(new BleedingEffect(effectName, maxRound, bleedDamageOverTime));
-			BleedingEffect bleedEffect = monster._Effects.Find(effect => effect is BleedingEffect) as BleedingEffect;
+			monster.Effects.Add(new BleedingEffect(effectName, maxRound, bleedDamageOverTime));
+			BleedingEffect bleedEffect = monster.Effects.Find(effect => effect is BleedingEffect) as BleedingEffect;
 
 			for (int i = 0; i < maxRound - 1; i++) {
 				bleedEffect.ProcessBleedingRound(monster);
@@ -120,8 +120,8 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void MonsterBleedingEffectExpiresWhenCurrentRoundGreaterThanMaxRoundUnitTest() {
-			monster._Effects.Add(new BleedingEffect(effectName, maxRound, bleedDamageOverTime));
-			BleedingEffect bleedEffect = monster._Effects.Find(effect => effect is BleedingEffect) as BleedingEffect;
+			monster.Effects.Add(new BleedingEffect(effectName, maxRound, bleedDamageOverTime));
+			BleedingEffect bleedEffect = monster.Effects.Find(effect => effect is BleedingEffect) as BleedingEffect;
 
 			for (int i = 0; i < maxRound; i++) {
 				bleedEffect.ProcessBleedingRound(monster);
@@ -148,13 +148,13 @@ namespace DungeonGameTests.Effects {
 		[Test]
 		public void ExpiredBleedingEffectDoesNotAffectMonsterUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			monster._Effects.Add(new BleedingEffect(effectName, maxRound, bleedDamageOverTime));
-			BleedingEffect bleedEffect = monster._Effects.Find(effect => effect is BleedingEffect) as BleedingEffect;
+			monster.Effects.Add(new BleedingEffect(effectName, maxRound, bleedDamageOverTime));
+			BleedingEffect bleedEffect = monster.Effects.Find(effect => effect is BleedingEffect) as BleedingEffect;
 			bleedEffect.IsEffectExpired = true;
 
 			bleedEffect.ProcessBleedingRound(monster);
 
-			Assert.AreEqual(monster._MaxHitPoints, monster._HitPoints);
+			Assert.AreEqual(monster.MaxHitPoints, monster.HitPoints);
 			Assert.AreEqual(0, OutputController.Display.Output.Count);
 			Assert.AreEqual(1, bleedEffect.CurrentRound);
 		}

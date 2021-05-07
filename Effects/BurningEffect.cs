@@ -53,7 +53,7 @@ namespace DungeonGame.Effects {
 		}
 
 		private Monster DecreaseHealthFromBurnDamage(Monster monster) {
-			monster._HitPoints -= FireDamageOverTime;
+			monster.HitPoints -= FireDamageOverTime;
 
 			return monster;
 		}

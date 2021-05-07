@@ -298,7 +298,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 
-			monster._HitPoints -= abilityDamage;
+			monster.HitPoints -= abilityDamage;
 
 			string stunString = $"The {monster.Name} is stunned!";
 			OutputController.Display.StoreUserOutput(
@@ -306,7 +306,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				stunString);
 
-			monster._Effects.Add(new StunnedEffect(player._Abilities[index]._Name, player._Abilities[index]._Stun._StunMaxRounds));
+			monster.Effects.Add(new StunnedEffect(player._Abilities[index]._Name, player._Abilities[index]._Stun._StunMaxRounds));
 		}
 
 		public static void BerserkAbilityInfo(Player player, int index) {
@@ -441,13 +441,13 @@ namespace DungeonGame {
 					attackString);
 			} else {
 				Settings.FormatAttackSuccessText();
-				opponent._HitPoints -= player._Abilities[index]._Offensive._Amount;
+				opponent.HitPoints -= player._Abilities[index]._Offensive._Amount;
 				string shootString = $"You successfully shot {opponent.Name} from afar for {player._Abilities[index]._Offensive._Amount} damage!";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					shootString);
-				if (opponent._HitPoints <= 0) {
+				if (opponent.HitPoints <= 0) {
 					opponent.MonsterDeath(player);
 				}
 			}
@@ -549,7 +549,7 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(),
 					disarmFailString);
 			} else {
-				opponent._MonsterWeapon.Equipped = false;
+				opponent.MonsterWeapon.Equipped = false;
 				string disarmSuccessString = $"You successfully disarmed {opponent.Name}!";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
@@ -627,7 +627,7 @@ namespace DungeonGame {
 			}
 
 			int abilityDamage = PlayerController.CalculateAbilityDamage(player, monster, index);
-			monster._HitPoints -= abilityDamage;
+			monster.HitPoints -= abilityDamage;
 
 			string abilitySuccessString = $"Your {player._Abilities[index]._Name} hit the {monster.Name} for {abilityDamage} physical damage.";
 			OutputController.Display.StoreUserOutput(
@@ -649,7 +649,7 @@ namespace DungeonGame {
 						Settings.FormatDefaultBackground(),
 						bleedString);
 
-					monster._Effects.Add(new BleedingEffect(player._Abilities[index]._Name, player._Abilities[index]._Offensive._AmountMaxRounds,
+					monster.Effects.Add(new BleedingEffect(player._Abilities[index]._Name, player._Abilities[index]._Offensive._AmountMaxRounds,
 						player._Abilities[index]._Offensive._AmountOverTime));
 					break;
 				case Offensive.OffensiveType.Fire:
@@ -659,7 +659,7 @@ namespace DungeonGame {
 						Settings.FormatDefaultBackground(),
 						onFireString);
 
-					monster._Effects.Add(new BurningEffect(player._Abilities[index]._Name, player._Abilities[index]._Offensive._AmountMaxRounds,
+					monster.Effects.Add(new BurningEffect(player._Abilities[index]._Name, player._Abilities[index]._Offensive._AmountMaxRounds,
 						player._Abilities[index]._Offensive._AmountOverTime));
 					break;
 				default:

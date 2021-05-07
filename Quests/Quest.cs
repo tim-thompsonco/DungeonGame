@@ -61,7 +61,7 @@ namespace DungeonGame.Quests {
 					_TargetLevel = GameController.GetRandomNumber(1, 10);
 					_MonstersRemaining = RoomController._Rooms.Where(
 						room => room.Key.Z == _TargetLevel * -1).Count(
-						room => room.Value._Monster?._HitPoints > 0);
+						room => room.Value._Monster?.HitPoints > 0);
 					_QuestRewardGold = (int)_MonstersRemaining * 10;
 					break;
 				default:
@@ -151,7 +151,7 @@ namespace DungeonGame.Quests {
 
 						break;
 					case QuestType.KillMonster:
-						if (_MonsterKillType == monster._MonsterCategory) {
+						if (_MonsterKillType == monster.MonsterCategory) {
 							_CurrentKills++;
 						}
 
@@ -163,7 +163,7 @@ namespace DungeonGame.Quests {
 					case QuestType.ClearLevel:
 						_MonstersRemaining = RoomController._Rooms.Where(
 							room => room.Key.Z == _TargetLevel * -1).Count(
-							room => room.Value._Monster?._HitPoints > 0);
+							room => room.Value._Monster?.HitPoints > 0);
 						if (_MonstersRemaining == 0) {
 							_QuestCompleted = true;
 						}

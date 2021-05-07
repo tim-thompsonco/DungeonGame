@@ -82,15 +82,15 @@ namespace DungeonGame.Controllers {
 					roomObject => roomObject?.GetType() == typeof(Monster))) {
 					Monster monster = (Monster)roomObject;
 					RemovedExpiredEffectsAsync(monster);
-					if (_GameTicks % monster._StatReplenishInterval == 0 && monster._HitPoints > 0) {
+					if (_GameTicks % monster.StatReplenishInterval == 0 && monster.HitPoints > 0) {
 						ReplenishStatsOverTime(monster);
 					}
 
-					if (!monster._Effects.Any()) {
+					if (!monster.Effects.Any()) {
 						continue;
 					}
 
-					foreach (IEffect effect in monster._Effects.Where(effect => _GameTicks % effect.TickDuration == 0).ToList()) {
+					foreach (IEffect effect in monster.Effects.Where(effect => _GameTicks % effect.TickDuration == 0).ToList()) {
 						if (effect is BurningEffect burningEffect) {
 							burningEffect.ProcessBurningRound(monster);
 						}
@@ -136,13 +136,13 @@ namespace DungeonGame.Controllers {
 
 		public static async void RemovedExpiredEffectsAsync(Monster monster) {
 			await Task.Run(() => {
-				foreach (IEffect effect in monster._Effects.ToList()) {
+				foreach (IEffect effect in monster.Effects.ToList()) {
 					if (effect is StunnedEffect && effect.IsEffectExpired) {
-						monster._IsStunned = false;
+						monster.IsStunned = false;
 					}
 
 					if (effect.IsEffectExpired) {
-						monster._Effects.Remove(effect);
+						monster.Effects.Remove(effect);
 					}
 				}
 			});
@@ -182,16 +182,16 @@ namespace DungeonGame.Controllers {
 		}
 
 		private static void ReplenishStatsOverTime(Monster monster) {
-			if (monster._InCombat) {
+			if (monster.InCombat) {
 				return;
 			}
 
-			if (monster._HitPoints < monster._MaxHitPoints) {
-				monster._HitPoints++;
+			if (monster.HitPoints < monster.MaxHitPoints) {
+				monster.HitPoints++;
 			}
 
-			if (monster._EnergyPoints < monster._MaxEnergyPoints) {
-				monster._EnergyPoints++;
+			if (monster.EnergyPoints < monster.MaxEnergyPoints) {
+				monster.EnergyPoints++;
 			}
 		}
 

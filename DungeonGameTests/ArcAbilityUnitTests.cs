@@ -30,7 +30,7 @@ namespace DungeonGameTests {
 			Coordinate roomOneCoord = new Coordinate(0, 1, 0);
 			Coordinate roomTwoCoord = new Coordinate(1, 0, 0);
 			RoomController._Rooms[roomTwoCoord]._Monster = null;
-			RoomController._Rooms[roomOneCoord]._Monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
+			RoomController._Rooms[roomOneCoord]._Monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100 };
 			Monster monster = RoomController._Rooms[roomOneCoord]._Monster;
 			MonsterBuilder.BuildMonster(monster);
 			RoomController.SetPlayerLocation(player, 0, 0, 0);
@@ -80,7 +80,7 @@ namespace DungeonGameTests {
 			string shootString = $"You successfully shot {monster.Name} from afar for {abilityDmg} damage!";
 			Assert.AreEqual(shootString, OutputController.Display.Output[9][2]);
 			Assert.AreEqual(player._MaxComboPoints - comboCost, player._ComboPoints);
-			Assert.AreEqual(monster._MaxHitPoints - abilityDmg, monster._HitPoints);
+			Assert.AreEqual(monster.MaxHitPoints - abilityDmg, monster.HitPoints);
 		}
 		[Test]
 		public void GutShotAbilityUnitTest() {
@@ -92,9 +92,9 @@ namespace DungeonGameTests {
 			};
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
+			foreach (IItem item in monster.MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem.Equipped = false;
 			}
@@ -125,24 +125,24 @@ namespace DungeonGameTests {
 			Assert.AreEqual(abilitySuccessString, OutputController.Display.Output[6][2]);
 			string bleedString = $"The {monster.Name} is bleeding!";
 			Assert.AreEqual(bleedString, OutputController.Display.Output[7][2]);
-			Assert.AreEqual(true, monster._Effects[0] is BleedingEffect);
-			Assert.AreEqual(monster._MaxHitPoints - abilityDamage, monster._HitPoints);
-			Assert.AreEqual(abilityCurRounds, monster._Effects[0].CurrentRound);
-			Assert.AreEqual(abilityMaxRounds, monster._Effects[0].MaxRound);
+			Assert.AreEqual(true, monster.Effects[0] is BleedingEffect);
+			Assert.AreEqual(monster.MaxHitPoints - abilityDamage, monster.HitPoints);
+			Assert.AreEqual(abilityCurRounds, monster.Effects[0].CurrentRound);
+			Assert.AreEqual(abilityMaxRounds, monster.Effects[0].MaxRound);
 			OutputController.Display.ClearUserOutput();
 			for (int i = 2; i < 5; i++) {
-				BleedingEffect bleedEffect = monster._Effects[0] as BleedingEffect;
+				BleedingEffect bleedEffect = monster.Effects[0] as BleedingEffect;
 				bleedEffect.ProcessBleedingRound(monster);
 				int bleedAmount = bleedEffect.BleedDamageOverTime;
 				string bleedRoundString = $"The {monster.Name} bleeds for {bleedAmount} physical damage.";
 				Assert.AreEqual(bleedRoundString, OutputController.Display.Output[i - 2][2]);
-				Assert.AreEqual(i, monster._Effects[0].CurrentRound);
+				Assert.AreEqual(i, monster.Effects[0].CurrentRound);
 				GameController.RemovedExpiredEffectsAsync(monster);
 				Thread.Sleep(1000);
 			}
-			Assert.AreEqual(false, monster._Effects.Any());
-			Assert.AreEqual(monster._MaxHitPoints - abilityDamage - abilityDamageOverTime * abilityMaxRounds,
-				monster._HitPoints);
+			Assert.AreEqual(false, monster.Effects.Any());
+			Assert.AreEqual(monster.MaxHitPoints - abilityDamage - abilityDamageOverTime * abilityMaxRounds,
+				monster.HitPoints);
 		}
 		[Test]
 		public void PreciseShotAbilityUnitTest() {
@@ -154,9 +154,9 @@ namespace DungeonGameTests {
 			};
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
+			foreach (IItem item in monster.MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem.Equipped = false;
 			}
@@ -177,7 +177,7 @@ namespace DungeonGameTests {
 			int? comboCost = player._Abilities[abilityIndex]._ComboCost;
 			Assert.AreEqual(player._MaxComboPoints - comboCost, player._ComboPoints);
 			int abilityDamage = player._Abilities[abilityIndex]._Offensive._Amount;
-			Assert.AreEqual(monster._HitPoints, monster._MaxHitPoints - abilityDamage);
+			Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - abilityDamage);
 			string abilitySuccessString = $"Your {player._Abilities[abilityIndex]._Name} hit the {monster.Name} for {abilityDamage} physical damage.";
 			Assert.AreEqual(abilitySuccessString, OutputController.Display.Output[4][2]);
 		}
@@ -191,9 +191,9 @@ namespace DungeonGameTests {
 			};
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100, InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
+			foreach (IItem item in monster.MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem.Equipped = false;
 			}
@@ -222,21 +222,21 @@ namespace DungeonGameTests {
 			Assert.AreEqual(attackSuccessString, OutputController.Display.Output[5][2]);
 			string stunString = $"The {monster.Name} is stunned!";
 			Assert.AreEqual(stunString, OutputController.Display.Output[6][2]);
-			Assert.AreEqual(monster._MaxHitPoints - abilityDamage, monster._HitPoints);
-			Assert.AreEqual(true, monster._Effects[0] is StunnedEffect);
-			Assert.AreEqual(abilityCurRounds, monster._Effects[0].CurrentRound);
-			Assert.AreEqual(abilityMaxRounds, monster._Effects[0].MaxRound);
+			Assert.AreEqual(monster.MaxHitPoints - abilityDamage, monster.HitPoints);
+			Assert.AreEqual(true, monster.Effects[0] is StunnedEffect);
+			Assert.AreEqual(abilityCurRounds, monster.Effects[0].CurrentRound);
+			Assert.AreEqual(abilityMaxRounds, monster.Effects[0].MaxRound);
 			OutputController.Display.ClearUserOutput();
 			for (int i = 2; i < 5; i++) {
-				StunnedEffect stunnedEffect = monster._Effects[0] as StunnedEffect;
+				StunnedEffect stunnedEffect = monster.Effects[0] as StunnedEffect;
 				stunnedEffect.ProcessStunnedRound(monster);
 				string stunnedString = $"The {monster.Name} is stunned and cannot attack.";
 				Assert.AreEqual(stunnedString, OutputController.Display.Output[i - 2][2]);
-				Assert.AreEqual(i, monster._Effects[0].CurrentRound);
+				Assert.AreEqual(i, monster.Effects[0].CurrentRound);
 				GameController.RemovedExpiredEffectsAsync(monster);
 				Thread.Sleep(1000);
 			}
-			Assert.AreEqual(false, monster._Effects.Any());
+			Assert.AreEqual(false, monster.Effects.Any());
 		}
 		[Test]
 		public void WoundShotAbilityUnitTest() {
@@ -248,9 +248,9 @@ namespace DungeonGameTests {
 			};
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
+			foreach (IItem item in monster.MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem.Equipped = false;
 			}
@@ -281,24 +281,24 @@ namespace DungeonGameTests {
 			Assert.AreEqual(abilitySuccessString, OutputController.Display.Output[6][2]);
 			string bleedString = $"The {monster.Name} is bleeding!";
 			Assert.AreEqual(bleedString, OutputController.Display.Output[7][2]);
-			Assert.AreEqual(true, monster._Effects[0] is BleedingEffect);
-			Assert.AreEqual(monster._MaxHitPoints - abilityDamage, monster._HitPoints);
-			Assert.AreEqual(abilityCurRounds, monster._Effects[0].CurrentRound);
-			Assert.AreEqual(abilityMaxRounds, monster._Effects[0].MaxRound);
+			Assert.AreEqual(true, monster.Effects[0] is BleedingEffect);
+			Assert.AreEqual(monster.MaxHitPoints - abilityDamage, monster.HitPoints);
+			Assert.AreEqual(abilityCurRounds, monster.Effects[0].CurrentRound);
+			Assert.AreEqual(abilityMaxRounds, monster.Effects[0].MaxRound);
 			OutputController.Display.ClearUserOutput();
 			for (int i = 2; i < 7; i++) {
-				BleedingEffect bleedEffect = monster._Effects[0] as BleedingEffect;
+				BleedingEffect bleedEffect = monster.Effects[0] as BleedingEffect;
 				bleedEffect.ProcessBleedingRound(monster);
 				int bleedAmount = bleedEffect.BleedDamageOverTime;
 				string bleedRoundString = $"The {monster.Name} bleeds for {bleedAmount} physical damage.";
 				Assert.AreEqual(bleedRoundString, OutputController.Display.Output[i - 2][2]);
-				Assert.AreEqual(i, monster._Effects[0].CurrentRound);
+				Assert.AreEqual(i, monster.Effects[0].CurrentRound);
 				GameController.RemovedExpiredEffectsAsync(monster);
 			}
 			Thread.Sleep(1000);
-			Assert.AreEqual(false, monster._Effects.Any());
-			Assert.AreEqual(monster._MaxHitPoints - abilityDamage - abilityDamageOverTime * abilityMaxRounds,
-				monster._HitPoints);
+			Assert.AreEqual(false, monster.Effects.Any());
+			Assert.AreEqual(monster.MaxHitPoints - abilityDamage - abilityDamageOverTime * abilityMaxRounds,
+				monster.HitPoints);
 		}
 		[Test]
 		public void DoubleShotAbilityUnitTest() {
@@ -310,7 +310,7 @@ namespace DungeonGameTests {
 			};
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100, InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._ArcAbilityCategory == PlayerAbility.ArcherAbility.Double);
@@ -331,15 +331,15 @@ namespace DungeonGameTests {
 			Assert.AreEqual(arrowCount - 2, player._PlayerQuiver.Quantity);
 			int? comboCost = player._Abilities[abilityIndex]._ComboCost;
 			int hitAmount = player._Abilities[abilityIndex]._Offensive._Amount;
-			Assert.AreEqual(monster._MaxHitPoints - (2 * hitAmount), monster._HitPoints);
+			Assert.AreEqual(monster.MaxHitPoints - (2 * hitAmount), monster.HitPoints);
 			Assert.AreEqual(player._MaxComboPoints - (2 * comboCost), player._ComboPoints);
 			string attackString = $"Your double shot hit the {monster.Name} for 25 physical damage.";
 			Assert.AreEqual(attackString, OutputController.Display.Output[5][2]);
 			Assert.AreEqual(attackString, OutputController.Display.Output[6][2]);
 			player._MaxComboPoints = 25;
 			player._ComboPoints = player._MaxComboPoints;
-			monster._MaxHitPoints = 100;
-			monster._HitPoints = monster._MaxHitPoints;
+			monster.MaxHitPoints = 100;
+			monster.HitPoints = monster.MaxHitPoints;
 			arrowCount = player._PlayerQuiver.Quantity;
 			player.UseAbility(monster, input);
 			Assert.AreEqual(arrowCount - 1, player._PlayerQuiver.Quantity);
@@ -448,7 +448,7 @@ namespace DungeonGameTests {
 			};
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true, _FireResistance = 0 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100, InCombat = true, FireResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
 			player._PlayerWeapon._CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			player._Abilities.Add(new PlayerAbility(
@@ -469,23 +469,23 @@ namespace DungeonGameTests {
 			Assert.AreEqual(player._ComboPoints, player._MaxComboPoints - player._Abilities[index]._ComboCost);
 			string attackString = $"Your immolating arrow hit the {monster.Name} for 25 physical damage.";
 			Assert.AreEqual(attackString, OutputController.Display.Output[6][2]);
-			Assert.AreEqual(monster._HitPoints,
-				monster._MaxHitPoints - player._Abilities[index]._Offensive._Amount);
+			Assert.AreEqual(monster.HitPoints,
+				monster.MaxHitPoints - player._Abilities[index]._Offensive._Amount);
 			OutputController.Display.ClearUserOutput();
-			Assert.AreEqual(true, monster._Effects[0] is BurningEffect);
-			Assert.AreEqual(3, monster._Effects[0].MaxRound);
-			BurningEffect burnEffect = monster._Effects[0] as BurningEffect;
+			Assert.AreEqual(true, monster.Effects[0] is BurningEffect);
+			Assert.AreEqual(3, monster.Effects[0].MaxRound);
+			BurningEffect burnEffect = monster.Effects[0] as BurningEffect;
 			for (int i = 0; i < 3; i++) {
-				int baseHitPoints = monster._HitPoints;
+				int baseHitPoints = monster.HitPoints;
 				burnEffect.ProcessBurningRound(monster);
-				Assert.AreEqual(i + 2, monster._Effects[0].CurrentRound);
-				Assert.AreEqual(monster._HitPoints, baseHitPoints - burnEffect.FireDamageOverTime);
+				Assert.AreEqual(i + 2, monster.Effects[0].CurrentRound);
+				Assert.AreEqual(monster.HitPoints, baseHitPoints - burnEffect.FireDamageOverTime);
 				string burnString = $"The {monster.Name} burns for {burnEffect.FireDamageOverTime} fire damage.";
 				Assert.AreEqual(burnString, OutputController.Display.Output[i][2]);
 				GameController.RemovedExpiredEffectsAsync(monster);
 				Thread.Sleep(1000);
 			}
-			Assert.AreEqual(false, monster._Effects.Any());
+			Assert.AreEqual(false, monster.Effects.Any());
 		}
 		[Test]
 		public void AmbushAbilityUnitTest() {
@@ -497,7 +497,7 @@ namespace DungeonGameTests {
 			};
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
+			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
 			player._Abilities.Add(new PlayerAbility(
 				"ambush", 75, 1, PlayerAbility.ArcherAbility.Ambush, 4));
@@ -523,7 +523,7 @@ namespace DungeonGameTests {
 			string attackString = "Your ambush hit the " + monster.Name + " for " + abilityDamage + " physical damage.";
 			Assert.AreEqual(arrowCount - 1, player._PlayerQuiver.Quantity);
 			Assert.AreEqual(attackString, OutputController.Display.Output[6][2]);
-			Assert.AreEqual(monster._HitPoints, monster._MaxHitPoints - abilityDamage);
+			Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - abilityDamage);
 		}
 	}
 }

@@ -48,12 +48,12 @@ namespace DungeonGame.Spells.MonsterSpells {
 		}
 
 		private void DeductManaCost(Monster monster) {
-			monster._EnergyPoints -= _ManaCost;
+			monster.EnergyPoints -= _ManaCost;
 		}
 
 		private void DisplaySpellAttackMessage(Monster monster) {
 			string attackString;
-			if (monster._MonsterCategory == Monster.MonsterType.Dragon) {
+			if (monster.MonsterCategory == Monster.MonsterType.Dragon) {
 				attackString = $"The {monster.Name} breathes a pillar of fire at you!";
 			} else {
 				attackString = $"The {monster.Name} casts a fireball and launches it at you!";

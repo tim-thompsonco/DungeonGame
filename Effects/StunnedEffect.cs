@@ -20,7 +20,7 @@ namespace DungeonGame.Effects {
 				return;
 			}
 
-			monster._IsStunned = true;
+			monster.IsStunned = true;
 
 			IncrementCurrentRound();
 

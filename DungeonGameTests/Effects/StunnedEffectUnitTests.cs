@@ -29,17 +29,17 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void MonsterHasStunnedEffectUnitTest() {
-			monster._Effects.Add(new StunnedEffect(effectName, maxRound));
+			monster.Effects.Add(new StunnedEffect(effectName, maxRound));
 
-			Assert.AreEqual(1, monster._Effects.Count);
-			Assert.AreEqual(true, monster._Effects[0] is StunnedEffect);
+			Assert.AreEqual(1, monster.Effects.Count);
+			Assert.AreEqual(true, monster.Effects[0] is StunnedEffect);
 		}
 
 		[Test]
 		public void ProcessStunnedEffectRoundMonsterUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			monster._Effects.Add(new StunnedEffect(effectName, maxRound));
-			StunnedEffect stunnedEffect = (StunnedEffect)monster._Effects.Find(effect => effect is StunnedEffect);
+			monster.Effects.Add(new StunnedEffect(effectName, maxRound));
+			StunnedEffect stunnedEffect = (StunnedEffect)monster.Effects.Find(effect => effect is StunnedEffect);
 			string stunnedMessage = $"The {monster.Name} is stunned and cannot attack.";
 
 			stunnedEffect.ProcessStunnedRound(monster);
@@ -51,8 +51,8 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void MonsterStunnedEffectDoesNotExpireWhenCurrentRoundEqualsMaxRoundUnitTest() {
-			monster._Effects.Add(new StunnedEffect(effectName, maxRound));
-			StunnedEffect stunnedEffect = (StunnedEffect)monster._Effects.Find(effect => effect is StunnedEffect);
+			monster.Effects.Add(new StunnedEffect(effectName, maxRound));
+			StunnedEffect stunnedEffect = (StunnedEffect)monster.Effects.Find(effect => effect is StunnedEffect);
 
 			for (int i = 0; i < maxRound - 1; i++) {
 				stunnedEffect.ProcessStunnedRound(monster);
@@ -64,8 +64,8 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void MonsterStunnedEffectExpiresWhenCurrentRoundGreaterThanMaxRoundUnitTest() {
-			monster._Effects.Add(new StunnedEffect(effectName, maxRound));
-			StunnedEffect stunnedEffect = (StunnedEffect)monster._Effects.Find(effect => effect is StunnedEffect);
+			monster.Effects.Add(new StunnedEffect(effectName, maxRound));
+			StunnedEffect stunnedEffect = (StunnedEffect)monster.Effects.Find(effect => effect is StunnedEffect);
 
 			for (int i = 0; i < maxRound; i++) {
 				stunnedEffect.ProcessStunnedRound(monster);
@@ -78,8 +78,8 @@ namespace DungeonGameTests.Effects {
 		[Test]
 		public void ExpiredBleedingEffectDoesNotAffectMonsterUnitTest() {
 			OutputController.Display.ClearUserOutput();
-			monster._Effects.Add(new StunnedEffect(effectName, maxRound));
-			StunnedEffect stunnedEffect = (StunnedEffect)monster._Effects.Find(effect => effect is StunnedEffect);
+			monster.Effects.Add(new StunnedEffect(effectName, maxRound));
+			StunnedEffect stunnedEffect = (StunnedEffect)monster.Effects.Find(effect => effect is StunnedEffect);
 			stunnedEffect.IsEffectExpired = true;
 
 			stunnedEffect.ProcessStunnedRound(monster);

@@ -211,7 +211,7 @@ namespace DungeonGame {
 
 			int frostSpellDamage = PlayerController.CalculateSpellDamage(player, monster, index);
 
-			foreach (FrozenEffect effect in monster._Effects) {
+			foreach (FrozenEffect effect in monster.Effects) {
 				effect.ProcessFrozenRound(monster);
 				effect.IsEffectExpired = true;
 			}
@@ -222,9 +222,9 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 
-			monster._HitPoints -= frostSpellDamage;
+			monster.HitPoints -= frostSpellDamage;
 
-			monster._Effects.Add(new FrozenEffect(player._Spellbook[index]._Name, player._Spellbook[index]._Offensive._AmountMaxRounds));
+			monster.Effects.Add(new FrozenEffect(player._Spellbook[index]._Name, player._Spellbook[index]._Offensive._AmountMaxRounds));
 
 			string frozenString = $"The {monster.Name} is frozen. Physical, frost and arcane damage to it will be increased by 50%!";
 			OutputController.Display.StoreUserOutput(
@@ -236,7 +236,7 @@ namespace DungeonGame {
 				return;
 			}
 
-			monster._Effects.Add(new StunnedEffect(player._Spellbook[index]._Name, player._Spellbook[index]._Offensive._AmountMaxRounds));
+			monster.Effects.Add(new StunnedEffect(player._Spellbook[index]._Name, player._Spellbook[index]._Offensive._AmountMaxRounds));
 		}
 
 		public static void FireOffenseSpellInfo(Player player, int index) {
@@ -266,7 +266,7 @@ namespace DungeonGame {
 
 			int fireSpellDamage = PlayerController.CalculateSpellDamage(player, monster, index);
 
-			foreach (FrozenEffect effect in monster._Effects) {
+			foreach (FrozenEffect effect in monster.Effects) {
 				fireSpellDamage = effect.GetIncreasedDamageFromFrozen(fireSpellDamage);
 				effect.ProcessFrozenRound(monster);
 				effect.IsEffectExpired = true;
@@ -278,7 +278,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 
-			monster._HitPoints -= fireSpellDamage;
+			monster.HitPoints -= fireSpellDamage;
 
 			if (player._Spellbook[index]._Offensive._AmountOverTime <= 0) {
 				return;
@@ -290,7 +290,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				onFireString);
 
-			monster._Effects.Add(new BurningEffect(player._Spellbook[index]._Name, player._Spellbook[index]._Offensive._AmountMaxRounds,
+			monster.Effects.Add(new BurningEffect(player._Spellbook[index]._Name, player._Spellbook[index]._Offensive._AmountMaxRounds,
 				player._Spellbook[index]._Offensive._AmountOverTime));
 		}
 
@@ -307,7 +307,7 @@ namespace DungeonGame {
 
 			int arcaneSpellDamage = PlayerController.CalculateSpellDamage(player, monster, index);
 
-			foreach (FrozenEffect effect in monster._Effects) {
+			foreach (FrozenEffect effect in monster.Effects) {
 				arcaneSpellDamage = effect.GetIncreasedDamageFromFrozen(arcaneSpellDamage);
 				effect.ProcessFrozenRound(monster);
 				effect.IsEffectExpired = true;
@@ -319,7 +319,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 
-			monster._HitPoints -= arcaneSpellDamage;
+			monster.HitPoints -= arcaneSpellDamage;
 		}
 
 		public static void HealingSpellInfo(Player player, int index) {

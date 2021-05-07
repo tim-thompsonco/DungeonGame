@@ -21,8 +21,8 @@ namespace DungeonGame.Controllers {
 				Settings.FormatDefaultBackground(),
 				fightStartString);
 
-			while (monster._HitPoints > 0 && player._HitPoints > 0 &&
-				   player._InCombat && monster._InCombat) {
+			while (monster.HitPoints > 0 && player._HitPoints > 0 &&
+				   player._InCombat && monster.InCombat) {
 				GameController.RemovedExpiredEffectsAsync(player);
 				GameController.RemovedExpiredEffectsAsync(monster);
 
@@ -47,29 +47,29 @@ namespace DungeonGame.Controllers {
 				}
 
 				// Check to see if player attack killed monster
-				if (monster._HitPoints <= 0) {
+				if (monster.HitPoints <= 0) {
 					monster.MonsterDeath(player);
 					return;
 				}
 
-				if (monster._Effects.Any()) {
+				if (monster.Effects.Any()) {
 					ProcessOpponentEffects(monster);
 				}
 
 				// Check to see if damage over time effects killed monster
-				if (monster._HitPoints <= 0) {
+				if (monster.HitPoints <= 0) {
 					monster.MonsterDeath(player);
 					return;
 				}
 
-				if (monster._IsStunned) {
+				if (monster.IsStunned) {
 					continue;
 				}
 
 				monster.Attack(player);
 
 				// Check at end of round to see if monster was killed by combat round
-				if (monster._HitPoints > 0) {
+				if (monster.HitPoints > 0) {
 					continue;
 				}
 
@@ -87,7 +87,7 @@ namespace DungeonGame.Controllers {
 					Settings.FormatDefaultBackground(),
 					"You have fled combat successfully!");
 				player._InCombat = false;
-				monster._InCombat = false;
+				monster.InCombat = false;
 				_FleeSuccess = true;
 				IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
 				int playerX = player._PlayerLocation.X;
@@ -227,7 +227,7 @@ namespace DungeonGame.Controllers {
 		private static void ProcessOpponentEffects(Monster monster) {
 			GameController.RemovedExpiredEffectsAsync(monster);
 
-			foreach (IEffect effect in monster._Effects) {
+			foreach (IEffect effect in monster.Effects) {
 				if (effect is BurningEffect burningEffect) {
 					burningEffect.ProcessBurningRound(monster);
 				}
@@ -266,7 +266,7 @@ namespace DungeonGame.Controllers {
 							Settings.FormatAttackSuccessText(),
 							Settings.FormatDefaultBackground(),
 							attackSucceedString);
-						monster._HitPoints -= attackAmount;
+						monster.HitPoints -= attackAmount;
 					}
 					break;
 				case "cast":

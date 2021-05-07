@@ -15,7 +15,7 @@ namespace DungeonGame.Coordinates {
 		}
 
 		public override int GetHashCode() {
-			return X + 100 ^ Y + 100 ^ Z + 100;
+			return (X + 100) ^ (Y + 100) ^ (Z + 100);
 		}
 
 		public override bool Equals(object obj) {

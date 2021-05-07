@@ -102,9 +102,9 @@ namespace DungeonGame.Rooms {
 				string[] monsterName = _Monster.Name.Split(' ');
 				if (monsterName.Last() == inputName || _Monster.Name == inputName ||
 					_Monster.Name.Contains(input.Last()) || _Monster != null) {
-					if (_Monster._HitPoints > 0) {
+					if (_Monster.HitPoints > 0) {
 						player._InCombat = true;
-						_Monster._InCombat = true;
+						_Monster.InCombat = true;
 						CombatController.StartCombat(player, _Monster);
 						if (player._HitPoints <= 0) {
 							Messages.PlayerDeath();
@@ -134,7 +134,7 @@ namespace DungeonGame.Rooms {
 		public void ShowCommands() {
 			List<string> sameLineOutput = new List<string> {
 			Settings.FormatGeneralInfoText(), Settings.FormatDefaultBackground(), "Available _Commands: "};
-			if (_Monster != null && _Monster._InCombat && _CombatCommands != null) {
+			if (_Monster != null && _Monster.InCombat && _CombatCommands != null) {
 				int objCombatCount = _CombatCommands.Count;
 				foreach (string command in _CombatCommands) {
 					StringBuilder sb = new StringBuilder();
@@ -299,19 +299,19 @@ namespace DungeonGame.Rooms {
 			string inputName = inputString.ToString().Trim();
 			string[] monsterName = _Monster.Name.Split(' ');
 			if (monsterName.Last() == inputName || _Monster.Name.Contains(inputName)) {
-				if (_Monster._HitPoints <= 0 && _Monster._WasLooted == false) {
-					int goldLooted = _Monster._Gold;
-					player._Gold += _Monster._Gold;
+				if (_Monster.HitPoints <= 0 && _Monster.WasLooted == false) {
+					int goldLooted = _Monster.Gold;
+					player._Gold += _Monster.Gold;
 					try {
-						_Monster._Gold = 0;
+						_Monster.Gold = 0;
 						string lootGoldString = $"You looted {goldLooted} gold coins from the {_Monster.Name}!";
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
 							lootGoldString);
-						while (_Monster._MonsterItems.Count > 0) {
+						while (_Monster.MonsterItems.Count > 0) {
 							int playerWeight = PlayerController.GetInventoryWeight(player);
-							int itemWeight = _Monster._MonsterItems[0].Weight;
+							int itemWeight = _Monster.MonsterItems[0].Weight;
 							if (playerWeight + itemWeight > player._MaxCarryWeight) {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
@@ -319,16 +319,16 @@ namespace DungeonGame.Rooms {
 									"You can't carry that much!");
 								return;
 							} else {
-								player._Inventory.Add(_Monster._MonsterItems[0]);
+								player._Inventory.Add(_Monster.MonsterItems[0]);
 							}
-							string lootItemString = $"You looted {_Monster._MonsterItems[0].Name} from the {_Monster.Name}!";
+							string lootItemString = $"You looted {_Monster.MonsterItems[0].Name} from the {_Monster.Name}!";
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatSuccessOutputText(),
 								Settings.FormatDefaultBackground(),
 								lootItemString);
-							_Monster._MonsterItems.RemoveAt(0);
+							_Monster.MonsterItems.RemoveAt(0);
 						}
-						_Monster._WasLooted = true;
+						_Monster.WasLooted = true;
 						int monsterIndex = _RoomObjects.FindIndex(
 							f => f.Name == _Monster.Name);
 						if (monsterIndex != -1) {
@@ -336,7 +336,7 @@ namespace DungeonGame.Rooms {
 						}
 					} catch (InvalidOperationException) {
 					}
-				} else if (_Monster._WasLooted) {
+				} else if (_Monster.WasLooted) {
 					string alreadyLootString = $"You already looted {_Monster.Name}!";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
@@ -363,7 +363,7 @@ namespace DungeonGame.Rooms {
 
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string monsterName = textInfo.ToTitleCase(_Monster.Name);
-			int levelDiff = player._Level - _Monster._Level;
+			int levelDiff = player._Level - _Monster.Level;
 			StringBuilder difficultyStringBuilder = new StringBuilder();
 			difficultyStringBuilder.Append("Difficulty: ");
 			if (levelDiff >= 3) {
@@ -410,18 +410,18 @@ namespace DungeonGame.Rooms {
 			string inputName = inputString.ToString().Trim();
 			string[] monsterName = _Monster.Name.Split(' ');
 			if (monsterName.Last() == inputName || _Monster.Name.Contains(inputName)) {
-				for (int i = 0; i < _Monster._Desc.Length; i += Settings.GetGameWidth()) {
-					if (_Monster._Desc.Length - i < Settings.GetGameWidth()) {
+				for (int i = 0; i < _Monster.Desc.Length; i += Settings.GetGameWidth()) {
+					if (_Monster.Desc.Length - i < Settings.GetGameWidth()) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatRoomOutputText(),
 							Settings.FormatDefaultBackground(),
-							_Monster._Desc.Substring(i, _Monster._Desc.Length - i));
+							_Monster.Desc.Substring(i, _Monster.Desc.Length - i));
 						continue;
 					}
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatRoomOutputText(),
 						Settings.FormatDefaultBackground(),
-						_Monster._Desc.Substring(i, Settings.GetGameWidth()));
+						_Monster.Desc.Substring(i, Settings.GetGameWidth()));
 				}
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatRoomOutputText(),
@@ -433,11 +433,11 @@ namespace DungeonGame.Rooms {
 					"It is carrying: "};
 				OutputController.Display.StoreUserOutput(sameLineOutput);
 				TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-				if (_Monster._MonsterItems == null) {
+				if (_Monster.MonsterItems == null) {
 					return;
 				}
 
-				foreach (IItem item in _Monster._MonsterItems) {
+				foreach (IItem item in _Monster.MonsterItems) {
 					List<string> sameLineOutputItem = new List<string>();
 					StringBuilder sb = new StringBuilder();
 					string itemTitle = item.Name;
