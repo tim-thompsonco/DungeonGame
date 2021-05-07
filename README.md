@@ -2,6 +2,8 @@
 
 <p>This is my fun project to finish what I started with C when I was 14. My goal at the time was to build a simple text dungeon game. I didn't really understand OOP at the time, so that didn't go too far, but now I have learned OOP with C# from some courses on Udemy. The intent of this game was to provide as much coding practice as possible in C# and OOP, hence why I have not placed much of an emphasis on a very fancy GUI, since the goal is to build code rather than work with a game engine such as Unity. Everything in this game, from the combat engine, to the GUI, was built from scratch by me for this reason.</p>
 
+<p>Update 5/7/21: This was my first project which I started in November 2019. The majority of the code does not currently reflect how I write code, but I am focusing on this project again, for practice in refactoring old legacy code. The game itself runs fine, but for current code quality examples, please review either recent commits or the Effects class files since those have already been refactored.</p>
+
 <div><img src="gameintro.png"></div>
 
 <div><img src="gamegui.png"></div>
