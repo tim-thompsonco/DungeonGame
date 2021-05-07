@@ -15,7 +15,7 @@ namespace DungeonGame {
 					$"The game window could not be resized on your computer. Error: {ex}");
 			}
 			// Game loading commands
-			Messages.GameIntro();
+			Messages.ShowGameIntro();
 			OutputController.Display.RetrieveUserOutput();
 			OutputController.Display.ClearUserOutput();
 			/* Load game if save game exists, and if not, build new game

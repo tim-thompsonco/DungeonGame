@@ -283,6 +283,13 @@ namespace DungeonGame.Controllers {
 				message);
 		}
 
+		public static void StoreFailureMessage(string message) {
+			Display.StoreUserOutput(
+				Settings.FormatFailureOutputText(),
+				Settings.FormatDefaultBackground(),
+				message);
+		}
+
 		public static void StoreOnFireMessage(string message) {
 			Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
@@ -300,6 +307,13 @@ namespace DungeonGame.Controllers {
 		public static void StoreAttackFailMessage(string message) {
 			Display.StoreUserOutput(
 				Settings.FormatAttackFailText(),
+				Settings.FormatDefaultBackground(),
+				message);
+		}
+
+		public static void StoreAnnounceMessage(string message) {
+			Display.StoreUserOutput(
+				Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(),
 				message);
 		}

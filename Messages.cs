@@ -3,73 +3,61 @@ using DungeonGame.Controllers;
 namespace DungeonGame {
 	public static class Messages {
 		public static void RequestCommand() {
-			OutputController.Display.StoreUserOutput(Settings.FormatAnnounceText(),
-				Settings.FormatDefaultBackground(), "Your command: ");
+			OutputController.StoreAnnounceMessage("Your command: ");
 		}
+
 		public static void PlayerDeath() {
-			OutputController.Display.StoreUserOutput(Settings.FormatAnnounceText(),
-				Settings.FormatDefaultBackground(), "You have died.");
+			OutputController.StoreAnnounceMessage("You have died.");
 		}
+
 		public static void GameOver() {
-			OutputController.Display.StoreUserOutput(Settings.FormatAnnounceText(),
-				Settings.FormatDefaultBackground(), "Game over.");
+			OutputController.StoreAnnounceMessage("Game over.");
 		}
+
 		public static void InvalidCommand() {
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(),
-				Settings.FormatDefaultBackground(), "Not a valid command.");
+			OutputController.StoreFailureMessage("Not a valid command.");
 		}
+
 		public static void InvalidDirection() {
-			const string outputString = "You can't go that way!";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
+			OutputController.StoreFailureMessage("You can't go that way!");
 		}
+
 		public static void InvalidVendorSell() {
-			const string outputString = "The vendor doesn't want that.";
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(), Settings.FormatDefaultBackground(), outputString);
+			OutputController.StoreFailureMessage("The vendor doesn't want that.");
 		}
-		public static void GameIntro() {
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(),
-				Settings.FormatDefaultBackground(),
+
+		public static void ShowGameIntro() {
+			OutputController.StoreFailureMessage(
 				"_________ .__                  .__                 __________        .__      ___.                          ");
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(),
-				Settings.FormatDefaultBackground(),
+			OutputController.StoreFailureMessage(
 				"\\_   ___ \\|  |__ _____    _____|__| ____    ____   \\______   \\_____  |__| ____\\_ |__   ______  _  ________  ");
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatFailureOutputText(),
-				Settings.FormatDefaultBackground(),
+			OutputController.StoreFailureMessage(
 				"/    \\  \\/|  |  \\__  \\  /  ___/  |/    \\  / ___\\   |       _/\\__  \\ |  |/    \\| __ \\ /  _ \\ \\/ \\/ /  ___/  ");
-			OutputController.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					"\\     \\___|   Y  \\/ __ \\_\\___ \\|  |   |  \\/ /_/  >  |    |   \\ / __ \\|  |   |  \\ \\_\\ (  <_> )     /\\___ \\ ");
-			OutputController.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					"\\______  /___|  (____  /____  >__|___|  /\\___  /   |____|_  /(____  /__|___|  /___  /\\____/ \\/\\_//____  > ");
-			OutputController.Display.StoreUserOutput(
-					Settings.FormatFailureOutputText(),
-					Settings.FormatDefaultBackground(),
-					"	\\/     \\/     \\/     \\/        \\//_____/           \\/      \\/        \\/    \\/                  \\/       \n");
+			OutputController.StoreFailureMessage(
+				"\\     \\___|   Y  \\/ __ \\_\\___ \\|  |   |  \\/ /_/  >  |    |   \\ / __ \\|  |   |  \\ \\_\\ (  <_> )     /\\___ \\ ");
+			OutputController.StoreFailureMessage(
+				"\\______  /___|  (____  /____  >__|___|  /\\___  /   |____|_  /(____  /__|___|  /___  /\\____/ \\/\\_//____  > ");
+			OutputController.StoreFailureMessage(
+				"	\\/     \\/     \\/     \\/        \\//_____/           \\/      \\/        \\/    \\/                  \\/       \n");
+
 			const string gameIntroString =
 				"Welcome to Chasing Rainbows! This is a text-based dungeon crawler game where you can fight monsters, get loot " +
 				"and explore dungeons. Stuff you've probably done a million times already across various RPG games. At any time " +
 				"you can get help on commands by typing 'help'.";
+
 			for (int i = 0; i < gameIntroString.Length; i += Settings.GetGameWidth()) {
-				if (gameIntroString.Length - i < Settings.GetGameWidth()) {
-					OutputController.Display.StoreUserOutput(
-						Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(),
-						gameIntroString.Substring(i, gameIntroString.Length - i));
-					continue;
-				}
-				OutputController.Display.StoreUserOutput(
-					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(),
-					gameIntroString.Substring(i, Settings.GetGameWidth()));
+				SetSingleOutputLineForDisplay(gameIntroString, i);
 			}
 		}
+
+		private static void SetSingleOutputLineForDisplay(string outputString, int index) {
+			if (outputString.Length - index < Settings.GetGameWidth()) {
+				OutputController.StoreAnnounceMessage(outputString.Substring(index, outputString.Length - index));
+			} else {
+				OutputController.StoreAnnounceMessage(outputString.Substring(index, Settings.GetGameWidth()));
+			}
+		}
+
 		public static void ShowCommandHelp() {
 			const string commandHelpString =
 				"_Commands: Players may move in any direction of the game using a shortkey or the full direction name. " +
@@ -80,16 +68,9 @@ namespace DungeonGame {
 				"commands will be shown to the player. Any object that is consumable, such as a potion, can be drank " +
 				"by typing 'drink' and then the name of the potion or object. To use armor or weapons, you must 'equip' " +
 				"them. You can 'unequip' them as well.";
+
 			for (int i = 0; i < commandHelpString.Length; i += Settings.GetGameWidth()) {
-				if (commandHelpString.Length - i < Settings.GetGameWidth()) {
-					OutputController.Display.StoreUserOutput(
-						Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(),
-						commandHelpString.Substring(i, commandHelpString.Length - i));
-					continue;
-				}
-				OutputController.Display.StoreUserOutput(
-					Settings.FormatAnnounceText(), Settings.FormatDefaultBackground(),
-					commandHelpString.Substring(i, Settings.GetGameWidth()));
+				SetSingleOutputLineForDisplay(commandHelpString, i);
 			}
 		}
 	}
