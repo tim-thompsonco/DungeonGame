@@ -1,4 +1,5 @@
-﻿using DungeonGame.Effects;
+﻿using DungeonGame.Coordinates;
+using DungeonGame.Effects;
 using DungeonGame.Items;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
@@ -89,9 +90,9 @@ namespace DungeonGame.Controllers {
 				monster._InCombat = false;
 				_FleeSuccess = true;
 				IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
-				int playerX = player._PlayerLocation._X;
-				int playerY = player._PlayerLocation._Y;
-				int playerZ = player._PlayerLocation._Z;
+				int playerX = player._PlayerLocation.X;
+				int playerY = player._PlayerLocation.Y;
+				int playerZ = player._PlayerLocation.Z;
 				if (playerRoom._Up != null) {
 					Coordinate newCoord = new Coordinate(playerX, playerY, playerZ + 1);
 					RoomController.ChangeRoom(player, newCoord);

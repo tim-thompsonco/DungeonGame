@@ -1,4 +1,5 @@
-﻿using DungeonGame.Players;
+﻿using DungeonGame.Coordinates;
+using DungeonGame.Players;
 using DungeonGame.Rooms;
 using System.Collections.Generic;
 

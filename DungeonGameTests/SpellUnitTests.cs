@@ -1,5 +1,6 @@
 ﻿using DungeonGame;
 using DungeonGame.Controllers;
+using DungeonGame.Coordinates;
 using DungeonGame.Effects;
 using DungeonGame.Items;
 using DungeonGame.Items.Equipment;
@@ -269,17 +270,17 @@ namespace DungeonGameTests {
 			Assert.AreEqual(portalString, OutputController.Display.Output[3][2]);
 			Coordinate newCoord = new Coordinate(-2, 6, 0);
 			player._PlayerLocation = newCoord;
-			Assert.AreEqual(-2, player._PlayerLocation._X);
-			Assert.AreEqual(6, player._PlayerLocation._Y);
-			Assert.AreEqual(0, player._PlayerLocation._Z);
+			Assert.AreEqual(-2, player._PlayerLocation.X);
+			Assert.AreEqual(6, player._PlayerLocation.Y);
+			Assert.AreEqual(0, player._PlayerLocation.Z);
 			string[] input = new[] { "cast", "town", "portal" };
 			string spellName = InputController.ParseInput(input);
 			Assert.AreEqual("town portal", spellName);
 			player.CastSpell(spellName);
 			Assert.AreEqual(player._MaxManaPoints - player._Spellbook[spellIndex]._ManaCost, player._ManaPoints);
-			Assert.AreEqual(0, player._PlayerLocation._X);
-			Assert.AreEqual(7, player._PlayerLocation._Y);
-			Assert.AreEqual(0, player._PlayerLocation._Z);
+			Assert.AreEqual(0, player._PlayerLocation.X);
+			Assert.AreEqual(7, player._PlayerLocation.Y);
+			Assert.AreEqual(0, player._PlayerLocation.Z);
 			Assert.AreEqual("You open a portal and step through it.", OutputController.Display.Output[4][2]);
 		}
 		[Test]

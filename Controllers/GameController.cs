@@ -1,4 +1,5 @@
-﻿using DungeonGame.Effects;
+﻿using DungeonGame.Coordinates;
+using DungeonGame.Effects;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 using DungeonGame.Rooms;

@@ -1,5 +1,6 @@
 ﻿using DungeonGame;
 using DungeonGame.Controllers;
+using DungeonGame.Coordinates;
 using DungeonGame.Effects;
 using DungeonGame.Items;
 using DungeonGame.Items.Equipment;

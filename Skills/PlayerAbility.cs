@@ -1,4 +1,5 @@
 using DungeonGame.Controllers;
+using DungeonGame.Coordinates;
 using DungeonGame.Effects;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
@@ -358,9 +359,9 @@ namespace DungeonGame {
 				"Usage example if monster is in room to north. 'use distance north'");
 		}
 		public static void UseDistanceAbility(Player player, int index, string direction) {
-			int targetX = player._PlayerLocation._X;
-			int targetY = player._PlayerLocation._Y;
-			int targetZ = player._PlayerLocation._Z;
+			int targetX = player._PlayerLocation.X;
+			int targetY = player._PlayerLocation.Y;
+			int targetZ = player._PlayerLocation.Z;
 			switch (direction) {
 				case "n":
 				case "north":

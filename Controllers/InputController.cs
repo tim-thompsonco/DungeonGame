@@ -1,3 +1,4 @@
+using DungeonGame.Coordinates;
 using DungeonGame.Items;
 using DungeonGame.Items.Equipment;
 using DungeonGame.Players;
@@ -33,9 +34,9 @@ namespace DungeonGame.Controllers {
 		public static void ProcessUserInput(Player player, string[] input, Timer globalTimer) {
 			IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
 			TownRoom isTownRoom = playerRoom as TownRoom;
-			int playerX = player._PlayerLocation._X;
-			int playerY = player._PlayerLocation._Y;
-			int playerZ = player._PlayerLocation._Z;
+			int playerX = player._PlayerLocation.X;
+			int playerY = player._PlayerLocation.Y;
+			int playerZ = player._PlayerLocation.Z;
 			switch (input[0]) {
 				case "a":
 				case "attack":

@@ -1,4 +1,5 @@
-﻿using DungeonGame.Effects;
+﻿using DungeonGame.Coordinates;
+using DungeonGame.Effects;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 using DungeonGame.Quests;
@@ -30,9 +31,9 @@ namespace DungeonGame.Controllers {
 				Settings.FormatDefaultBackground(),
 				mapBorder.ToString());
 			// Get player coordinates and room player is located in
-			int playerX = player._PlayerLocation._X;
-			int playerY = player._PlayerLocation._Y;
-			int playerZ = player._PlayerLocation._Z;
+			int playerX = player._PlayerLocation.X;
+			int playerY = player._PlayerLocation.Y;
+			int playerZ = player._PlayerLocation.Z;
 			/* Map starts drawing from top left, so it needs to decrement since
 			each new console writeline pushes screen down instead of up */
 			for (int i = playerY + height; i > playerY - height; i--) {

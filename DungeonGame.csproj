@@ -37,7 +37,7 @@
     <Compile Include="Builders\PlayerBuilder.cs" />
     <Compile Include="Builders\RoomBuilder.cs" />
     <Compile Include="Builders\RoomBuilderHelper.cs" />
-    <Compile Include="Coordinate.cs" />
+    <Compile Include="Coordinates\Coordinate.cs" />
     <Compile Include="Controllers\CombatController.cs" />
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\GearController.cs" />
@@ -46,6 +46,7 @@
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\InputController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
+    <Compile Include="Coordinates\CoordinateConverter.cs" />
     <Compile Include="Effects\BleedingEffect.cs" />
     <Compile Include="Effects\BlockDamageEffect.cs" />
     <Compile Include="Effects\ChangeArmorEffect.cs" />

@@ -1,4 +1,5 @@
 using DungeonGame.Controllers;
+using DungeonGame.Coordinates;
 using DungeonGame.Rooms;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace DungeonGame {
 						 room must always be up by one for the two to connect*/
 						IRoom oldRoom = _SpawnedDungeonRooms[_LastRoomCoord];
 						Coordinate oldCoord = _LastRoomCoord;
-						Coordinate newRoomCoord = new Coordinate(oldCoord._X, oldCoord._Y, oldCoord._Z - 1);
+						Coordinate newRoomCoord = new Coordinate(oldCoord.X, oldCoord.Y, oldCoord.Z - 1);
 						DungeonRoom newLevelRoom = new DungeonRoom(levelRangeLowForLevel, levelRangeHighForLevel);
 						oldRoom._Down = newLevelRoom;
 						newLevelRoom._Up = oldRoom;
@@ -63,53 +64,53 @@ namespace DungeonGame {
 
 		private void GenerateRoomDirections() {
 			IRoom room = _SpawnedDungeonRooms[_LastRoomCoord];
-			Coordinate coordWest = new Coordinate(_LastRoomCoord._X - 1, _LastRoomCoord._Y, _LastRoomCoord._Z);
+			Coordinate coordWest = new Coordinate(_LastRoomCoord.X - 1, _LastRoomCoord.Y, _LastRoomCoord.Z);
 			if (_SpawnedDungeonRooms.ContainsKey(coordWest)) {
 				IRoom westRoom = _SpawnedDungeonRooms[coordWest];
 				room._West = westRoom;
 				westRoom._East = room;
 			}
 			Coordinate coordNorthWest = new Coordinate(
-				_LastRoomCoord._X - 1, _LastRoomCoord._Y + 1, _LastRoomCoord._Z);
+				_LastRoomCoord.X - 1, _LastRoomCoord.Y + 1, _LastRoomCoord.Z);
 			if (_SpawnedDungeonRooms.ContainsKey(coordNorthWest)) {
 				IRoom northWestRoom = _SpawnedDungeonRooms[coordNorthWest];
 				room._NorthWest = northWestRoom;
 				northWestRoom._SouthEast = room;
 			}
-			Coordinate coordNorth = new Coordinate(_LastRoomCoord._X, _LastRoomCoord._Y + 1, _LastRoomCoord._Z);
+			Coordinate coordNorth = new Coordinate(_LastRoomCoord.X, _LastRoomCoord.Y + 1, _LastRoomCoord.Z);
 			if (_SpawnedDungeonRooms.ContainsKey(coordNorth)) {
 				IRoom northRoom = _SpawnedDungeonRooms[coordNorth];
 				room._North = northRoom;
 				northRoom._South = room;
 			}
 			Coordinate coordNorthEast = new Coordinate(
-				_LastRoomCoord._X + 1, _LastRoomCoord._Y + 1, _LastRoomCoord._Z);
+				_LastRoomCoord.X + 1, _LastRoomCoord.Y + 1, _LastRoomCoord.Z);
 			if (_SpawnedDungeonRooms.ContainsKey(coordNorthEast)) {
 				IRoom northEastRoom = _SpawnedDungeonRooms[coordNorthEast];
 				room._NorthEast = northEastRoom;
 				northEastRoom._SouthWest = room;
 			}
-			Coordinate coordEast = new Coordinate(_LastRoomCoord._X + 1, _LastRoomCoord._Y, _LastRoomCoord._Z);
+			Coordinate coordEast = new Coordinate(_LastRoomCoord.X + 1, _LastRoomCoord.Y, _LastRoomCoord.Z);
 			if (_SpawnedDungeonRooms.ContainsKey(coordEast)) {
 				IRoom eastRoom = _SpawnedDungeonRooms[coordEast];
 				room._East = eastRoom;
 				eastRoom._West = room;
 			}
 			Coordinate coordSouthEast = new Coordinate(
-				_LastRoomCoord._X + 1, _LastRoomCoord._Y - 1, _LastRoomCoord._Z);
+				_LastRoomCoord.X + 1, _LastRoomCoord.Y - 1, _LastRoomCoord.Z);
 			if (_SpawnedDungeonRooms.ContainsKey(coordSouthEast)) {
 				IRoom southEastRoom = _SpawnedDungeonRooms[coordSouthEast];
 				room._SouthEast = southEastRoom;
 				southEastRoom._NorthWest = room;
 			}
-			Coordinate coordSouth = new Coordinate(_LastRoomCoord._X, _LastRoomCoord._Y - 1, _LastRoomCoord._Z);
+			Coordinate coordSouth = new Coordinate(_LastRoomCoord.X, _LastRoomCoord.Y - 1, _LastRoomCoord.Z);
 			if (_SpawnedDungeonRooms.ContainsKey(coordSouth)) {
 				IRoom southRoom = _SpawnedDungeonRooms[coordSouth];
 				room._South = southRoom;
 				southRoom._North = room;
 			}
 			Coordinate coordSouthWest = new Coordinate(
-				_LastRoomCoord._X - 1, _LastRoomCoord._Y - 1, _LastRoomCoord._Z);
+				_LastRoomCoord.X - 1, _LastRoomCoord.Y - 1, _LastRoomCoord.Z);
 			if (_SpawnedDungeonRooms.ContainsKey(coordSouthWest)) {
 				IRoom southWestRoom = _SpawnedDungeonRooms[coordSouthWest];
 				room._SouthWest = southWestRoom;
@@ -119,13 +120,13 @@ namespace DungeonGame {
 
 		private void GenerateStairwayRoomDirections() {
 			IRoom room = _SpawnedDungeonRooms[_LastRoomCoord];
-			Coordinate coordUp = new Coordinate(_LastRoomCoord._X, _LastRoomCoord._Y, _LastRoomCoord._Z + 1);
+			Coordinate coordUp = new Coordinate(_LastRoomCoord.X, _LastRoomCoord.Y, _LastRoomCoord.Z + 1);
 			if (_SpawnedDungeonRooms.ContainsKey(coordUp)) {
 				IRoom upRoom = _SpawnedDungeonRooms[coordUp];
 				room._Up = upRoom;
 				upRoom._Down = room;
 			}
-			Coordinate coordDown = new Coordinate(_LastRoomCoord._X, _LastRoomCoord._Y, _LastRoomCoord._Z - 1);
+			Coordinate coordDown = new Coordinate(_LastRoomCoord.X, _LastRoomCoord.Y, _LastRoomCoord.Z - 1);
 			if (_SpawnedDungeonRooms.ContainsKey(coordDown)) {
 				IRoom downRoom = _SpawnedDungeonRooms[coordDown];
 				room._Down = downRoom;
@@ -144,7 +145,7 @@ namespace DungeonGame {
 				switch (randomNum) {
 					case 1:
 						if (oldRoom._North == null) {
-							newRoomCoord = new Coordinate(oldCoord._X, oldCoord._Y + 1, oldCoord._Z);
+							newRoomCoord = new Coordinate(oldCoord.X, oldCoord.Y + 1, oldCoord.Z);
 							oldRoom._North = newRoom;
 							newRoom._South = oldRoom;
 							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
@@ -154,7 +155,7 @@ namespace DungeonGame {
 						break;
 					case 2:
 						if (oldRoom._NorthEast == null) {
-							newRoomCoord = new Coordinate(oldCoord._X + 1, oldCoord._Y + 1, oldCoord._Z);
+							newRoomCoord = new Coordinate(oldCoord.X + 1, oldCoord.Y + 1, oldCoord.Z);
 							oldRoom._NorthEast = newRoom;
 							newRoom._SouthWest = oldRoom;
 							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
@@ -164,7 +165,7 @@ namespace DungeonGame {
 						break;
 					case 3:
 						if (oldRoom._NorthWest == null) {
-							newRoomCoord = new Coordinate(oldCoord._X - 1, oldCoord._Y + 1, oldCoord._Z);
+							newRoomCoord = new Coordinate(oldCoord.X - 1, oldCoord.Y + 1, oldCoord.Z);
 							oldRoom._NorthWest = newRoom;
 							newRoom._SouthEast = oldRoom;
 							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
@@ -174,7 +175,7 @@ namespace DungeonGame {
 						break;
 					case 4:
 						if (oldRoom._South == null) {
-							newRoomCoord = new Coordinate(oldCoord._X, oldCoord._Y - 1, oldCoord._Z);
+							newRoomCoord = new Coordinate(oldCoord.X, oldCoord.Y - 1, oldCoord.Z);
 							oldRoom._South = newRoom;
 							newRoom._North = oldRoom;
 							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
@@ -184,7 +185,7 @@ namespace DungeonGame {
 						break;
 					case 5:
 						if (oldRoom._SouthEast == null) {
-							newRoomCoord = new Coordinate(oldCoord._X + 1, oldCoord._Y - 1, oldCoord._Z);
+							newRoomCoord = new Coordinate(oldCoord.X + 1, oldCoord.Y - 1, oldCoord.Z);
 							oldRoom._SouthEast = newRoom;
 							newRoom._NorthWest = oldRoom;
 							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
@@ -194,7 +195,7 @@ namespace DungeonGame {
 						break;
 					case 6:
 						if (oldRoom._SouthWest == null) {
-							newRoomCoord = new Coordinate(oldCoord._X - 1, oldCoord._Y - 1, oldCoord._Z);
+							newRoomCoord = new Coordinate(oldCoord.X - 1, oldCoord.Y - 1, oldCoord.Z);
 							oldRoom._SouthWest = newRoom;
 							newRoom._NorthEast = oldRoom;
 							if (!_SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {

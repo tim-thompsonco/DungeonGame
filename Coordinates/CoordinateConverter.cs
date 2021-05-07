@@ -2,30 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 
-namespace DungeonGame {
-	[TypeConverter(typeof(CoordinateConverter))]
-	public class Coordinate : IEquatable<Coordinate> {
-		public int _X { get; }
-		public int _Y { get; }
-		public int _Z { get; }
-
-		public Coordinate(int x, int y, int z) {
-			_X = x;
-			_Y = y;
-			_Z = z;
-		}
-
-		public override int GetHashCode() {
-			return (_X + 100) ^ (_Y + 100) ^ (_Z + 100);
-		}
-		public override bool Equals(object obj) {
-			return Equals(obj as Coordinate);
-		}
-		public bool Equals(Coordinate obj) {
-			return obj != null && obj._X == _X && obj._Y == _Y && obj._Z == _Z;
-		}
-	}
-
+namespace DungeonGame.Coordinates {
 	public class CoordinateConverter : TypeConverter {
 		// Overrides the CanConvertFrom method of TypeConverter.
 		// The ITypeDescriptorContext interface provides the context for the
@@ -51,7 +28,7 @@ namespace DungeonGame {
 		public override object ConvertTo(ITypeDescriptorContext context,
 			CultureInfo culture, object value, Type destinationType) {
 			if (destinationType == typeof(string)) {
-				return ((Coordinate)value)._X + "," + ((Coordinate)value)._Y + "," + ((Coordinate)value)._Z;
+				return ((Coordinate)value).X + "," + ((Coordinate)value).Y + "," + ((Coordinate)value).Z;
 			}
 			return base.ConvertTo(context, culture, value, destinationType);
 		}
