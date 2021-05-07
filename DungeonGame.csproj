@@ -32,7 +32,8 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AttackOption.cs" />
+    <Compile Include="AttackOptions\AttackOption.cs" />
+    <Compile Include="AttackOptions\AttackType.cs" />
     <Compile Include="Builders\MonsterBuilder.cs" />
     <Compile Include="Builders\PlayerBuilder.cs" />
     <Compile Include="Builders\RoomBuilder.cs" />

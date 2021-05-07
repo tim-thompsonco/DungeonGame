@@ -1,4 +1,5 @@
 ﻿using DungeonGame;
+using DungeonGame.AttackOptions;
 using DungeonGame.Controllers;
 using DungeonGame.Effects;
 using DungeonGame.Items;
@@ -18,10 +19,10 @@ namespace DungeonGameTests {
 			MonsterBuilder.BuildMonster(monster);
 			OutputController.Display.ClearUserOutput();
 			AttackOption attackChoice = monster.DetermineAttack(player, false);
-			Assert.AreEqual(AttackOption.AttackType.Spell, attackChoice._AttackCategory);
+			Assert.AreEqual(AttackOption.AttackType.Spell, attackChoice.AttackCategory);
 			monster._EnergyPoints = 0;
 			attackChoice = monster.DetermineAttack(player, false);
-			Assert.AreEqual(AttackOption.AttackType.Physical, attackChoice._AttackCategory);
+			Assert.AreEqual(AttackOption.AttackType.Physical, attackChoice.AttackCategory);
 		}
 		[Test]
 		public void FireballSpellUnitTest() {
