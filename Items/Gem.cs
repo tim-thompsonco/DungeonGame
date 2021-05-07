@@ -14,20 +14,20 @@
 			Normal
 		}
 		public string Name { get; set; }
-		public string _Desc { get; set; }
+		public string Desc { get; set; }
 		public bool _Equipped { get; set; }
-		public int _ItemValue { get; set; }
-		public int _Weight { get; set; }
+		public int ItemValue { get; set; }
+		public int Weight { get; set; }
 		private readonly GemType _GemType;
 		private GemLevel _GemLevel;
 
 		public Gem(int level, GemType gemType) {
 			_GemType = gemType;
-			_Weight = 1;
-			_ItemValue = level * 20;
+			Weight = 1;
+			ItemValue = level * 20;
 			SetGemLevel(level);
 			SetGemName();
-			_Desc = $"A {Name} that is worth some money to the right vendor.";
+			Desc = $"A {Name} that is worth some money to the right vendor.";
 		}
 
 		private void SetGemLevel(int level) {

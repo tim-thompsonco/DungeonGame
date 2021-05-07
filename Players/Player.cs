@@ -213,16 +213,16 @@ namespace DungeonGame.Players {
 			int attackAmount = 0;
 
 			try {
-				if (_PlayerWeapon._Equipped && _PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow) {
+				if (_PlayerWeapon.Equipped && _PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow) {
 					attackAmount = _PlayerWeapon.Attack();
 				}
-				if (_PlayerWeapon._Equipped &&
+				if (_PlayerWeapon.Equipped &&
 					_PlayerWeapon._WeaponGroup == Weapon.WeaponType.Bow &&
 					_PlayerQuiver.HaveArrows()) {
 					_PlayerQuiver.UseArrow();
 					attackAmount = _PlayerWeapon.Attack();
 				}
-				if (_PlayerWeapon._Equipped &&
+				if (_PlayerWeapon.Equipped &&
 					_PlayerWeapon._WeaponGroup == Weapon.WeaponType.Bow &&
 					!_PlayerQuiver.HaveArrows()) {
 					Quiver.DisplayOutOfArrowsMessage();
@@ -276,7 +276,7 @@ namespace DungeonGame.Players {
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You reloaded your quiver.");
-				if (arrows._Quantity == 0) {
+				if (arrows.Quantity == 0) {
 					_Inventory.RemoveAt(index);
 				}
 			} else {

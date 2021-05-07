@@ -21,18 +21,18 @@ namespace DungeonGame.Items {
 			Bow
 		}
 		public string Name { get; set; }
-		public string _Desc { get; set; }
+		public string Desc { get; set; }
 		public int _RegDamage { get; set; }
-		public int _ItemValue { get; set; }
+		public int ItemValue { get; set; }
 		public DamageType _DamageGroup { get; set; }
 		public WeaponType _WeaponGroup { get; set; }
 		public double _CritMultiplier { get; set; }
-		public bool _Equipped { get; set; }
+		public bool Equipped { get; set; }
 		public int _Level { get; set; }
 		public int _Durability { get; set; }
 		public int _Quality { get; set; }
-		public int _Weight { get; set; }
-		public bool _IsRainbowGear { get; set; }
+		public int Weight { get; set; }
+		public bool IsRainbowGear { get; set; }
 
 		// Default constructor for JSON serialization
 		public Weapon() { }
@@ -40,7 +40,7 @@ namespace DungeonGame.Items {
 			_Level = level;
 			_WeaponGroup = weaponType;
 			_DamageGroup = DamageType.Physical;
-			_Weight = _WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
+			Weight = _WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
 			_Durability = 100;
 			int randomNum = GameController.GetRandomNumber(1, 100);
 			int randomWeaponDmg = GameController.GetRandomNumber(20, 26);
@@ -57,16 +57,16 @@ namespace DungeonGame.Items {
 				_CritMultiplier = 1.1;
 				_Quality = 1;
 			}
-			_ItemValue = _RegDamage;
+			ItemValue = _RegDamage;
 			BuildWeaponName();
-			_Desc = $"A {Name} that causes damage when you hit stuff with it.";
+			Desc = $"A {Name} that causes damage when you hit stuff with it.";
 		}
 		public Weapon(WeaponType weaponType, bool isRainbowGear, Player player) {
 			_Level = player._Level;
-			_IsRainbowGear = isRainbowGear;
+			IsRainbowGear = isRainbowGear;
 			_WeaponGroup = weaponType;
 			_DamageGroup = DamageType.Physical;
-			_Weight = _WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
+			Weight = _WeaponGroup == WeaponType.TwoHandedSword ? 4 : 2;
 			_Durability = 100;
 			int randomNum = GameController.GetRandomNumber(1, 100);
 			int randomWeaponDmg = GameController.GetRandomNumber(20, 26);
@@ -85,9 +85,9 @@ namespace DungeonGame.Items {
 			}
 			// Add modifier for rainbow gear to enhance weapon damage
 			_RegDamage += 15;
-			_ItemValue = _RegDamage;
+			ItemValue = _RegDamage;
 			BuildWeaponName("rainbow");
-			_Desc = $"A {Name} that causes damage when you hit stuff with it.";
+			Desc = $"A {Name} that causes damage when you hit stuff with it.";
 		}
 		public Weapon(int level, WeaponType weaponType, Monster.MonsterType monsterType)
 			: this(level, weaponType) {
@@ -186,7 +186,7 @@ namespace DungeonGame.Items {
 			Name = sb.ToString();
 		}
 		public int Attack() {
-			if (!_Equipped) {
+			if (!Equipped) {
 				return 0;
 			}
 
@@ -208,7 +208,7 @@ namespace DungeonGame.Items {
 			_Quality = 3;
 			// Add modifier for rainbow gear to enhance weapon damage
 			_RegDamage += 15;
-			_ItemValue = _RegDamage;
+			ItemValue = _RegDamage;
 		}
 	}
 }

@@ -338,7 +338,7 @@ namespace DungeonGame.Controllers {
 							if (isTownRoom != null) {
 								if (input[1] == "all") {
 									foreach (IItem item in player._Inventory) {
-										if (!(item is IEquipment itemToRepair && itemToRepair._Equipped)) {
+										if (!(item is IEquipment itemToRepair && itemToRepair.Equipped)) {
 											continue;
 										}
 

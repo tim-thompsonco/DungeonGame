@@ -20,7 +20,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 
 		[Test]
 		public void PotionCreationTest() {
-			Assert.AreEqual(1, potion._Weight);
+			Assert.AreEqual(1, potion.Weight);
 		}
 
 		[Test]
@@ -28,9 +28,9 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 			potion = new ManaPotion(PotionStrength.Minor);
 
 			Assert.AreEqual("minor mana potion", potion.Name);
-			Assert.AreEqual("A minor mana potion that restores 50 mana.", potion._Desc);
-			Assert.AreEqual(50, potion._ManaAmount);
-			Assert.AreEqual(25, potion._ItemValue);
+			Assert.AreEqual("A minor mana potion that restores 50 mana.", potion.Desc);
+			Assert.AreEqual(50, potion.ManaAmount);
+			Assert.AreEqual(25, potion.ItemValue);
 		}
 
 		[Test]
@@ -38,9 +38,9 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 			potion = new ManaPotion(PotionStrength.Normal);
 
 			Assert.AreEqual("mana potion", potion.Name);
-			Assert.AreEqual("A mana potion that restores 100 mana.", potion._Desc);
-			Assert.AreEqual(100, potion._ManaAmount);
-			Assert.AreEqual(50, potion._ItemValue);
+			Assert.AreEqual("A mana potion that restores 100 mana.", potion.Desc);
+			Assert.AreEqual(100, potion.ManaAmount);
+			Assert.AreEqual(50, potion.ItemValue);
 		}
 
 		[Test]
@@ -48,9 +48,9 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 			potion = new ManaPotion(PotionStrength.Greater);
 
 			Assert.AreEqual("greater mana potion", potion.Name);
-			Assert.AreEqual("A greater mana potion that restores 150 mana.", potion._Desc);
-			Assert.AreEqual(150, potion._ManaAmount);
-			Assert.AreEqual(75, potion._ItemValue);
+			Assert.AreEqual("A greater mana potion that restores 150 mana.", potion.Desc);
+			Assert.AreEqual(150, potion.ManaAmount);
+			Assert.AreEqual(75, potion.ItemValue);
 		}
 
 		[Test]
@@ -63,7 +63,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 
 			potion.DrinkPotion(player);
 
-			Assert.AreEqual(oldPlayerMana + potion._ManaAmount, player._ManaPoints);
+			Assert.AreEqual(oldPlayerMana + potion.ManaAmount, player._ManaPoints);
 		}
 
 		[Test]
@@ -82,7 +82,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 		public void PlayerDrinkPotionDisplayMessageTest() {
 			OutputController.Display.ClearUserOutput();
 			player._Inventory.Add(potion);
-			string displayMessage = $"You drank a potion and replenished {potion._ManaAmount} mana.";
+			string displayMessage = $"You drank a potion and replenished {potion.ManaAmount} mana.";
 
 			potion.DrinkPotion(player);
 

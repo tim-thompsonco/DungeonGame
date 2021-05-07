@@ -17,9 +17,9 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			string[] inputInfo = new[] { "ability", "slash" };
 			int abilityIndex = player._Abilities.FindIndex(
@@ -46,9 +46,9 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Rend);
@@ -104,9 +104,9 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Charge);
@@ -226,9 +226,9 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._WarAbilityCategory == PlayerAbility.WarriorAbility.Berserk);
@@ -305,13 +305,13 @@ namespace DungeonGameTests {
 			player.UseAbility(monster, input);
 			int? rageCost = player._Abilities[abilityIndex]._RageCost;
 			Assert.AreEqual(player._MaxRagePoints - rageCost, player._RagePoints);
-			Assert.AreEqual(true, monster._MonsterWeapon._Equipped);
+			Assert.AreEqual(true, monster._MonsterWeapon.Equipped);
 			string disarmFailString = $"You tried to disarm {monster.Name} but failed!";
 			Assert.AreEqual(disarmFailString, OutputController.Display._Output[4][2]);
 			player._Abilities[abilityIndex]._Offensive._Amount = 100; // Set disarm success chance to 100% for test
 			player.UseAbility(monster, input);
 			Assert.AreEqual(player._MaxRagePoints - (rageCost * 2), player._RagePoints);
-			Assert.AreEqual(false, monster._MonsterWeapon._Equipped);
+			Assert.AreEqual(false, monster._MonsterWeapon.Equipped);
 			string disarmSuccessString = $"You successfully disarmed {monster.Name}!";
 			Assert.AreEqual(disarmSuccessString, OutputController.Display._Output[5][2]);
 		}

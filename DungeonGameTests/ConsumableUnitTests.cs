@@ -27,7 +27,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("health", potionName);
 			int baseHealth = player._HitPoints;
 			HealthPotion potion = player._Inventory[potionIndex] as HealthPotion;
-			int healAmount = potion._HealthAmount;
+			int healAmount = potion.HealthAmount;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankHealthString = $"You drank a potion and replenished {healAmount} health.";
 			Assert.AreEqual(drankHealthString, OutputController.Display._Output[0][2]);
@@ -50,7 +50,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("mana", potionName);
 			int? baseMana = player._ManaPoints;
 			ManaPotion potion = player._Inventory[potionIndex] as ManaPotion;
-			int manaAmount = potion._ManaAmount;
+			int manaAmount = potion.ManaAmount;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
 			string drankManaString = $"You drank a potion and replenished {manaAmount} mana.";
 			Assert.AreEqual(drankManaString, OutputController.Display._Output[0][2]);
@@ -70,8 +70,8 @@ namespace DungeonGameTests {
 			string potionName = InputController.ParseInput(input);
 			Assert.AreEqual("constitution", potionName);
 			StatPotion potion = player._Inventory[potionIndex] as StatPotion;
-			int statAmount = potion._StatAmount;
-			StatPotion.StatType statType = potion._StatType;
+			int statAmount = potion.StatAmount;
+			StatPotion.StatType statType = potion.StatPotionType;
 			int baseConst = player._Constitution;
 			int baseMaxHitPoints = player._MaxHitPoints;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
@@ -105,8 +105,8 @@ namespace DungeonGameTests {
 			string potionName = InputController.ParseInput(input);
 			Assert.AreEqual("intelligence", potionName);
 			StatPotion potion = player._Inventory[potionIndex] as StatPotion;
-			int statAmount = potion._StatAmount;
-			StatPotion.StatType statType = potion._StatType;
+			int statAmount = potion.StatAmount;
+			StatPotion.StatType statType = potion.StatPotionType;
 			int baseInt = player._Intelligence;
 			int? baseMaxManaPoints = player._MaxManaPoints;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
@@ -140,8 +140,8 @@ namespace DungeonGameTests {
 			string potionName = InputController.ParseInput(input);
 			Assert.AreEqual("strength", potionName);
 			StatPotion potion = player._Inventory[potionIndex] as StatPotion;
-			int statAmount = potion._StatAmount;
-			StatPotion.StatType statType = potion._StatType;
+			int statAmount = potion.StatAmount;
+			StatPotion.StatType statType = potion.StatPotionType;
 			int baseStr = player._Strength;
 			int baseMaxCarryWeight = player._MaxCarryWeight;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
@@ -175,8 +175,8 @@ namespace DungeonGameTests {
 			string potionName = InputController.ParseInput(input);
 			Assert.AreEqual("dexterity", potionName);
 			StatPotion potion = player._Inventory[potionIndex] as StatPotion;
-			int statAmount = potion._StatAmount;
-			StatPotion.StatType statType = potion._StatType;
+			int statAmount = potion.StatAmount;
+			StatPotion.StatType statType = potion.StatPotionType;
 			int baseDex = player._Dexterity;
 			double baseDodgeChance = player._DodgeChance;
 			player.AttemptDrinkPotion(InputController.ParseInput(input));
@@ -210,10 +210,10 @@ namespace DungeonGameTests {
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string armorName = textInfo.ToTitleCase(player._Inventory[armorIndex].Name);
 			ArmorKit armorKit = player._Inventory.Find(item => item is ArmorKit) as ArmorKit;
-			int kitAmount = armorKit._KitAugmentAmount;
+			int kitAmount = armorKit.KitAugmentAmount;
 			string kitName = armorKit.Name;
 			string[] input = new[] { "enhance", "doesn't exist", kitName };
-			int armorAmount = armor._ArmorRating;
+			int armorAmount = armor.ArmorRating;
 			GearController.UseArmorKit(player, input);
 			const string upgradeFail = "What armor did you want to upgrade?";
 			Assert.AreEqual(upgradeFail, OutputController.Display._Output[0][2]);
@@ -227,7 +227,7 @@ namespace DungeonGameTests {
 			GearController.UseArmorKit(player, input);
 			string upgradeSuccess = $"You upgraded {armorName} with an armor kit.";
 			Assert.AreEqual(upgradeSuccess, OutputController.Display._Output[2][2]);
-			Assert.AreEqual(armorAmount + kitAmount, armor._ArmorRating);
+			Assert.AreEqual(armorAmount + kitAmount, armor.ArmorRating);
 			Assert.AreEqual(0, player._Inventory.FindAll(item => item is IKit).Count);
 			player._Inventory.Add(new ArmorKit(KitLevel.Light, ArmorKit.KitType.Leather));
 			kitName = player._Inventory.Find(item => item is ArmorKit).Name;
@@ -248,7 +248,7 @@ namespace DungeonGameTests {
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string weaponName = textInfo.ToTitleCase(player._Inventory[weaponIndex].Name);
 			WeaponKit weaponKit = player._Inventory.Find(item => item is WeaponKit) as WeaponKit;
-			int kitAmount = weaponKit._KitAugmentAmount;
+			int kitAmount = weaponKit.KitAugmentAmount;
 			string kitName = weaponKit.Name;
 			string[] input = new[] { "enhance", "doesn't exist", kitName };
 			int weaponAmount = weapon._RegDamage;
@@ -277,7 +277,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(enhanceFail, OutputController.Display._Output[3][2]);
 			player._Inventory.Add(new Weapon(1, Weapon.WeaponType.Bow));
 			weapon = player._Inventory.Find(item => item is Weapon && item.Name.ToLower().Contains("bow")) as Weapon;
-			weapon._Equipped = true;
+			weapon.Equipped = true;
 			weaponName = textInfo.ToTitleCase(weapon.Name);
 			input = new[] { "enhance", weaponName, kitName };
 			GearController.UseWeaponKit(player, input);

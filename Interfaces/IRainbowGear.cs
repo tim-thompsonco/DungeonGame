@@ -2,7 +2,7 @@
 
 namespace DungeonGame {
 	public interface IRainbowGear {
-		bool _IsRainbowGear { get; set; }
+		bool IsRainbowGear { get; set; }
 
 		void UpdateRainbowStats(Player player);
 	}

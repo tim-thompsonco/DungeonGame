@@ -165,7 +165,7 @@ namespace DungeonGame.Monsters {
 
 		public AttackOption DetermineAttack(Player player, bool addRandomChance) {
 			List<AttackOption> attackOptions = new List<AttackOption>();
-			if (_MonsterWeapon != null && _MonsterWeapon._Equipped) {
+			if (_MonsterWeapon != null && _MonsterWeapon.Equipped) {
 				attackOptions.Add(new
 					AttackOption(AttackOption.AttackType.Physical,
 						_MonsterWeapon._RegDamage - player.ArmorRating(this), -1));
@@ -284,16 +284,16 @@ namespace DungeonGame.Monsters {
 			int attackAmount = 0;
 
 			try {
-				if (_MonsterWeapon._Equipped && _MonsterWeapon._WeaponGroup != Weapon.WeaponType.Bow) {
+				if (_MonsterWeapon.Equipped && _MonsterWeapon._WeaponGroup != Weapon.WeaponType.Bow) {
 					attackAmount += _MonsterWeapon.Attack();
 				}
-				if (_MonsterWeapon._Equipped &&
+				if (_MonsterWeapon.Equipped &&
 					_MonsterWeapon._WeaponGroup == Weapon.WeaponType.Bow &&
 					_MonsterQuiver.HaveArrows()) {
 					_MonsterQuiver.UseArrow();
 					attackAmount += _MonsterWeapon.Attack();
 				}
-				if (_MonsterWeapon._Equipped &&
+				if (_MonsterWeapon.Equipped &&
 					_MonsterWeapon._WeaponGroup == Weapon.WeaponType.Bow &&
 					!_MonsterQuiver.HaveArrows()) {
 					attackAmount += _UnarmedAttackDamage;
@@ -414,7 +414,7 @@ namespace DungeonGame.Monsters {
 				expGainString);
 			foreach (IItem loot in _MonsterItems.Where(item => item is IEquipment)) {
 				IEquipment equippableItem = loot as IEquipment;
-				equippableItem._Equipped = false;
+				equippableItem.Equipped = false;
 			}
 			Name = $"Dead {Name}";
 			_Desc = "A corpse of a monster you killed.";

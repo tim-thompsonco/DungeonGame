@@ -548,7 +548,7 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(),
 					disarmFailString);
 			} else {
-				opponent._MonsterWeapon._Equipped = false;
+				opponent._MonsterWeapon.Equipped = false;
 				string disarmSuccessString = $"You successfully disarmed {opponent.Name}!";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),

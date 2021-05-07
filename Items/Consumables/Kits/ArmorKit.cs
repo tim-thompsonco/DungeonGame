@@ -9,30 +9,30 @@ namespace DungeonGame.Items.Consumables.Kits {
 			Plate
 		}
 		public string Name { get; set; }
-		public string _Desc { get; set; }
-		public int _ItemValue { get; set; }
-		public int _Weight { get; set; }
-		public bool _KitHasBeenUsed { get; set; }
-		public KitLevel _KitLevel { get; }
-		public int _KitAugmentAmount { get; set; }
-		public TextInfo _TextInfo { get; set; }
-		private readonly KitType _KitType;
+		public string Desc { get; set; }
+		public int ItemValue { get; set; }
+		public int Weight { get; set; }
+		public bool KitHasBeenUsed { get; set; }
+		public KitLevel ArmorKitLevel { get; }
+		public int KitAugmentAmount { get; set; }
+		public TextInfo TextInfo { get; set; }
+		private readonly KitType ArmorKitType;
 
 		public ArmorKit(KitLevel kitLevel, KitType kitType) {
-			_KitLevel = kitLevel;
-			_KitType = kitType;
-			_TextInfo = new CultureInfo("en-US", false).TextInfo;
-			_Weight = 1;
-			_KitAugmentAmount = GetKitAugmentAmount();
-			_ItemValue = _KitAugmentAmount * 10;
-			Name = $"{kitLevel.ToString().ToLower()} {_KitType.ToString().ToLower()} armor kit";
-			_Desc = $"A single-use {Name} that increases armor rating by {_KitAugmentAmount} for one armor item.";
+			ArmorKitLevel = kitLevel;
+			ArmorKitType = kitType;
+			TextInfo = new CultureInfo("en-US", false).TextInfo;
+			Weight = 1;
+			KitAugmentAmount = GetKitAugmentAmount();
+			ItemValue = KitAugmentAmount * 10;
+			Name = $"{kitLevel.ToString().ToLower()} {ArmorKitType.ToString().ToLower()} armor kit";
+			Desc = $"A single-use {Name} that increases armor rating by {KitAugmentAmount} for one armor item.";
 		}
 
 		public int GetKitAugmentAmount() {
-			if (_KitLevel == KitLevel.Light) {
+			if (ArmorKitLevel == KitLevel.Light) {
 				return 1;
-			} else if (_KitLevel == KitLevel.Medium) {
+			} else if (ArmorKitLevel == KitLevel.Medium) {
 				return 2;
 			} else {
 				// If kit level is not light or medium, then it is heavy
@@ -54,11 +54,11 @@ namespace DungeonGame.Items.Consumables.Kits {
 		}
 
 		private bool ArmorKitMatchesArmorType(Armor armor) {
-			if (_KitType == KitType.Cloth && armor._ArmorGroup == Armor.ArmorType.Cloth) {
+			if (ArmorKitType == KitType.Cloth && armor.ArmorGroup == Armor.ArmorType.Cloth) {
 				return true;
-			} else if (_KitType == KitType.Leather && armor._ArmorGroup == Armor.ArmorType.Leather) {
+			} else if (ArmorKitType == KitType.Leather && armor.ArmorGroup == Armor.ArmorType.Leather) {
 				return true;
-			} else if (_KitType == KitType.Plate && armor._ArmorGroup == Armor.ArmorType.Plate) {
+			} else if (ArmorKitType == KitType.Plate && armor.ArmorGroup == Armor.ArmorType.Plate) {
 				return true;
 			}
 
@@ -66,33 +66,33 @@ namespace DungeonGame.Items.Consumables.Kits {
 		}
 
 		private Armor AugmentArmorRating(Armor armor) {
-			armor._ArmorRating += _KitAugmentAmount;
+			armor.ArmorRating += KitAugmentAmount;
 
 			return armor;
 		}
 
 		private Armor AugmentArmorItemValue(Armor armor) {
-			armor._ItemValue += _ItemValue;
+			armor.ItemValue += ItemValue;
 
 			return armor;
 		}
 
 		public void SetKitAsUsed() {
-			_KitHasBeenUsed = true;
+			KitHasBeenUsed = true;
 		}
 
 		private void DisplayAugmentFailMessage(Armor armor) {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
-				$"You can't upgrade {_TextInfo.ToTitleCase(armor.Name)} with that!");
+				$"You can't upgrade {TextInfo.ToTitleCase(armor.Name)} with that!");
 		}
 
 		private void DisplayAugmentSuccessMessage(Armor armor) {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
-				$"You upgraded {_TextInfo.ToTitleCase(armor.Name)} with an armor kit.");
+				$"You upgraded {TextInfo.ToTitleCase(armor.Name)} with an armor kit.");
 		}
 	}
 }

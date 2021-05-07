@@ -156,7 +156,7 @@ namespace DungeonGame {
 					throw new ArgumentOutOfRangeException();
 			}
 			if (monster._MonsterCategory != Monster.MonsterType.Elemental) {
-				monster._MonsterWeapon._Equipped = true;
+				monster._MonsterWeapon.Equipped = true;
 			}
 
 			if (monster._MonsterWeapon != null) {
@@ -233,43 +233,43 @@ namespace DungeonGame {
 			switch (randomCatNum) {
 				case 1:
 					monster._MonsterBackArmor = new Armor(monster._Level, Armor.ArmorSlot.Back) {
-						_Equipped = true
+						Equipped = true
 					};
 					monster._MonsterItems.Add(monster._MonsterBackArmor);
 					break;
 				case 2:
 					monster._MonsterChestArmor = new Armor(monster._Level, Armor.ArmorSlot.Chest) {
-						_Equipped = true
+						Equipped = true
 					};
 					monster._MonsterItems.Add(monster._MonsterChestArmor);
 					break;
 				case 3:
 					monster._MonsterHeadArmor = new Armor(monster._Level, Armor.ArmorSlot.Head) {
-						_Equipped = true
+						Equipped = true
 					};
 					monster._MonsterItems.Add(monster._MonsterHeadArmor);
 					break;
 				case 4:
 					monster._MonsterLegArmor = new Armor(monster._Level, Armor.ArmorSlot.Legs) {
-						_Equipped = true
+						Equipped = true
 					};
 					monster._MonsterItems.Add(monster._MonsterLegArmor);
 					break;
 				case 5:
 					monster._MonsterWaistArmor = new Armor(monster._Level, Armor.ArmorSlot.Waist) {
-						_Equipped = true
+						Equipped = true
 					};
 					monster._MonsterItems.Add(monster._MonsterWaistArmor);
 					break;
 				case 6:
 					monster._MonsterWristArmor = new Armor(monster._Level, Armor.ArmorSlot.Wrist) {
-						_Equipped = true
+						Equipped = true
 					};
 					monster._MonsterItems.Add(monster._MonsterWristArmor);
 					break;
 				case 7:
 					monster._MonsterHandsArmor = new Armor(monster._Level, Armor.ArmorSlot.Hands) {
-						_Equipped = true
+						Equipped = true
 					};
 					monster._MonsterItems.Add(monster._MonsterHandsArmor);
 					break;

@@ -21,10 +21,10 @@ namespace DungeonGameTests.Items {
 		[Test]
 		public void ArrowsCreationTest() {
 			Assert.AreEqual(arrowsName, arrows.Name);
-			Assert.AreEqual($"A bundle of {arrows._Quantity} arrows.", arrows._Desc);
-			Assert.AreEqual(1, arrows._Weight);
-			Assert.AreEqual(arrowsMaxQuantity, arrows._Quantity);
-			Assert.AreEqual(15, arrows._ItemValue);
+			Assert.AreEqual($"A bundle of {arrows.Quantity} arrows.", arrows.Desc);
+			Assert.AreEqual(1, arrows.Weight);
+			Assert.AreEqual(arrowsMaxQuantity, arrows.Quantity);
+			Assert.AreEqual(15, arrows.ItemValue);
 		}
 
 		[Test]
@@ -43,7 +43,7 @@ namespace DungeonGameTests.Items {
 			arrows.LoadPlayerQuiverWithArrows(player);
 
 			Assert.AreEqual(player._PlayerQuiver._Quantity, player._PlayerQuiver._MaxQuantity);
-			Assert.AreEqual(arrowsMaxQuantity, arrows._Quantity);
+			Assert.AreEqual(arrowsMaxQuantity, arrows.Quantity);
 		}
 
 		[Test]
@@ -55,7 +55,7 @@ namespace DungeonGameTests.Items {
 			arrows.LoadPlayerQuiverWithArrows(player);
 
 			Assert.AreEqual(player._PlayerQuiver._Quantity, player._PlayerQuiver._MaxQuantity);
-			Assert.AreEqual(0, arrows._Quantity);
+			Assert.AreEqual(0, arrows.Quantity);
 		}
 
 		[Test]
@@ -68,7 +68,7 @@ namespace DungeonGameTests.Items {
 			arrows.LoadPlayerQuiverWithArrows(player);
 
 			Assert.AreEqual(player._PlayerQuiver._Quantity, player._PlayerQuiver._MaxQuantity);
-			Assert.AreEqual(arrowsMaxQuantity - arrowsToLoad, arrows._Quantity);
+			Assert.AreEqual(arrowsMaxQuantity - arrowsToLoad, arrows.Quantity);
 		}
 	}
 }

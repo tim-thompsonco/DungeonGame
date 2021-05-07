@@ -93,9 +93,9 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._ArcAbilityCategory == PlayerAbility.ArcherAbility.Gut);
@@ -155,9 +155,9 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			string[] inputInfo = new[] { "ability", "precise" };
 			int abilityIndex = player._Abilities.FindIndex(
@@ -192,9 +192,9 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _InCombat = true };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._ArcAbilityCategory == PlayerAbility.ArcherAbility.Stun);
@@ -249,9 +249,9 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			int abilityIndex = player._Abilities.FindIndex(
 				f => f._ArcAbilityCategory == PlayerAbility.ArcherAbility.Wound);

@@ -3,36 +3,36 @@ using DungeonGame.Players;
 
 namespace DungeonGame.Items.Consumables.Potions {
 	public class ManaPotion : IItem, IPotion {
-		public PotionStrength _PotionStrength { get; set; }
+		public PotionStrength ManaPotionStrength { get; set; }
 		public string Name { get; set; }
-		public string _Desc { get; set; }
-		public int _ItemValue { get; set; }
-		public int _Weight { get; set; }
-		public int _ManaAmount { get; }
+		public string Desc { get; set; }
+		public int ItemValue { get; set; }
+		public int Weight { get; set; }
+		public int ManaAmount { get; }
 
 		public ManaPotion(PotionStrength potionStrength) {
-			_Weight = 1;
-			_PotionStrength = potionStrength;
+			Weight = 1;
+			ManaPotionStrength = potionStrength;
 			Name = GetPotionName();
-			_ManaAmount = GetPotionManaAmount();
-			_ItemValue = _ManaAmount / 2;
-			_Desc = $"A {Name} that restores {_ManaAmount} mana.";
+			ManaAmount = GetPotionManaAmount();
+			ItemValue = ManaAmount / 2;
+			Desc = $"A {Name} that restores {ManaAmount} mana.";
 		}
 
 		public string GetPotionName() {
 			// Potion naming format is "<potion type> potion" for normal potion
-			if (_PotionStrength == PotionStrength.Normal) {
+			if (ManaPotionStrength == PotionStrength.Normal) {
 				return $"mana potion";
 			} else {
 				// Potion naming format is "<potion strength> <potion type> potion" for minor or greater potions
-				return $"{_PotionStrength.ToString().ToLower()} mana potion";
+				return $"{ManaPotionStrength.ToString().ToLower()} mana potion";
 			}
 		}
 
 		private int GetPotionManaAmount() {
-			if (_PotionStrength == PotionStrength.Minor) {
+			if (ManaPotionStrength == PotionStrength.Minor) {
 				return 50;
-			} else if (_PotionStrength == PotionStrength.Normal) {
+			} else if (ManaPotionStrength == PotionStrength.Normal) {
 				return 100;
 			} else {
 				// If potion strength is not minor or normal, then it is greater
@@ -46,10 +46,10 @@ namespace DungeonGame.Items.Consumables.Potions {
 		}
 
 		private Player RestoreManaPlayer(Player player) {
-			if (player._ManaPoints + _ManaAmount > player._MaxManaPoints) {
+			if (player._ManaPoints + ManaAmount > player._MaxManaPoints) {
 				player._ManaPoints = player._MaxManaPoints;
 			} else {
-				player._ManaPoints += _ManaAmount;
+				player._ManaPoints += ManaAmount;
 			}
 
 			return player;
@@ -59,7 +59,7 @@ namespace DungeonGame.Items.Consumables.Potions {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
-				$"You drank a potion and replenished {_ManaAmount} mana.");
+				$"You drank a potion and replenished {ManaAmount} mana.");
 		}
 	}
 }

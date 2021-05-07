@@ -3,20 +3,20 @@
 namespace DungeonGame.Items {
 	public class Quiver : IItem {
 		public bool _Equipped { get; set; }
-		public int _ItemValue { get; set; }
+		public int ItemValue { get; set; }
 		public int _Quantity { get; set; }
 		public int _MaxQuantity { get; set; }
-		public int _Weight { get; set; }
+		public int Weight { get; set; }
 		public string Name { get; set; }
-		public string _Desc { get; set; }
+		public string Desc { get; set; }
 
 		public Quiver(string name, int maxQuantity, int itemValue) {
 			Name = name;
 			_MaxQuantity = maxQuantity;
 			_Quantity = _MaxQuantity;
-			_ItemValue = itemValue;
-			_Weight = 1;
-			_Desc = $"A {Name} that can hold {_MaxQuantity} arrows.";
+			ItemValue = itemValue;
+			Weight = 1;
+			Desc = $"A {Name} that can hold {_MaxQuantity} arrows.";
 		}
 
 		public bool HaveArrows() {

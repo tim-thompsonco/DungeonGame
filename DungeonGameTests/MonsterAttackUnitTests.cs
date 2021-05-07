@@ -71,9 +71,9 @@ namespace DungeonGameTests {
 			monster._MonsterWeapon._CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			int spellIndex = monster._Spellbook.FindIndex(
 				f => f._SpellCategory == MonsterSpell.SpellType.Frostbolt);
-			foreach (IItem item in player._Inventory.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in player._Inventory.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			monster._Spellbook[spellIndex].CastFrostOffense(monster, player, spellIndex);
 			int spellCost = monster._Spellbook[spellIndex]._EnergyCost;
@@ -119,9 +119,9 @@ namespace DungeonGameTests {
 			MonsterBuilder.BuildMonster(monster);
 			int spellIndex = monster._Spellbook.FindIndex(
 				f => f._SpellCategory == MonsterSpell.SpellType.Lightning);
-			foreach (IItem item in player._Inventory.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in player._Inventory.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			monster._Spellbook[spellIndex].CastArcaneOffense(monster, player, spellIndex);
 			int spellCost = monster._Spellbook[spellIndex]._EnergyCost;
@@ -141,9 +141,9 @@ namespace DungeonGameTests {
 			MonsterBuilder.BuildMonster(monster);
 			int abilityIndex = monster._Abilities.FindIndex(
 				f => f._AbilityCategory == MonsterAbility.Ability.BloodLeech);
-			foreach (IItem item in player._Inventory.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in player._Inventory.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			int monsterHealthBase = monster._HitPoints;
 			monster._Abilities[abilityIndex].UseBloodLeechAbility(monster, player, abilityIndex);
@@ -165,9 +165,9 @@ namespace DungeonGameTests {
 			MonsterBuilder.BuildMonster(monster);
 			int abilityIndex = monster._Abilities.FindIndex(
 				f => f._AbilityCategory == MonsterAbility.Ability.PoisonBite);
-			foreach (IItem item in player._Inventory.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in player._Inventory.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			monster._Abilities[abilityIndex].UseOffenseDamageAbility(monster, player, abilityIndex);
 			int abilityCost = monster._Abilities[abilityIndex]._EnergyCost;
@@ -209,9 +209,9 @@ namespace DungeonGameTests {
 			MonsterBuilder.BuildMonster(monster);
 			int abilityIndex = monster._Abilities.FindIndex(
 				f => f._AbilityCategory == MonsterAbility.Ability.TailWhip);
-			foreach (IItem item in player._Inventory.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in player._Inventory.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			monster._Abilities[abilityIndex].UseOffenseDamageAbility(monster, player, abilityIndex);
 			int abilityCost = monster._Abilities[abilityIndex]._EnergyCost;
@@ -231,9 +231,9 @@ namespace DungeonGameTests {
 			MonsterBuilder.BuildMonster(monster);
 			int spellIndex = monster._Spellbook.FindIndex(
 				f => f._SpellCategory == MonsterSpell.SpellType.Fireball);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			monster._MonsterWeapon._CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			monster._Spellbook[spellIndex].CastFireOffense(monster, player, spellIndex);

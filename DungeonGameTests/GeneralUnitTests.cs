@@ -36,17 +36,17 @@ namespace DungeonGameTests {
 			int[] testArrClothHead = new[] { 4, 5, 6 };
 			Armor testArmorClothHead = new Armor(
 				1, Armor.ArmorType.Cloth, Armor.ArmorSlot.Head);
-			CollectionAssert.Contains(testArrClothHead, testArmorClothHead._ArmorRating);
+			CollectionAssert.Contains(testArrClothHead, testArmorClothHead.ArmorRating);
 			// Test case 2, level 3 chest leather armor, armor rating should be 15 to 17
 			int[] testArrLeatherChest = new[] { 15, 16, 17 };
 			Armor testArmorLeatherChest = new Armor(
 				3, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest);
-			CollectionAssert.Contains(testArrLeatherChest, testArmorLeatherChest._ArmorRating);
+			CollectionAssert.Contains(testArrLeatherChest, testArmorLeatherChest.ArmorRating);
 			// Test case 3, level 2 legs plate armor, armor rating should be 12 to 14
 			int[] testArrPlateLegs = new[] { 12, 13, 14 };
 			Armor testArmorPlateLegs = new Armor(
 				2, Armor.ArmorType.Plate, Armor.ArmorSlot.Legs);
-			CollectionAssert.Contains(testArrPlateLegs, testArmorPlateLegs._ArmorRating);
+			CollectionAssert.Contains(testArrPlateLegs, testArmorPlateLegs.ArmorRating);
 		}
 		[Test]
 		public void WeaponUnitTests() {
@@ -353,9 +353,9 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			Assert.AreEqual(monster._Level * 5, monster._FireResistance);
 			Assert.AreEqual(monster._Level * 5, monster._FrostResistance);
@@ -380,9 +380,9 @@ namespace DungeonGameTests {
 				monster = new Monster(3, Monster.MonsterType.Elemental);
 			}
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			Assert.AreEqual(player._Level * 5, player._FireResistance);
 			Assert.AreEqual(player._Level * 5, player._FrostResistance);

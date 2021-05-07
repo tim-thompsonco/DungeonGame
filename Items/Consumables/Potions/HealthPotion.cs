@@ -3,36 +3,36 @@ using DungeonGame.Players;
 
 namespace DungeonGame.Items.Consumables.Potions {
 	public class HealthPotion : IItem, IPotion {
-		public PotionStrength _PotionStrength { get; }
+		public PotionStrength HealthPotionStrength { get; }
 		public string Name { get; set; }
-		public string _Desc { get; set; }
-		public int _ItemValue { get; set; }
-		public int _Weight { get; set; }
-		public int _HealthAmount { get; }
+		public string Desc { get; set; }
+		public int ItemValue { get; set; }
+		public int Weight { get; set; }
+		public int HealthAmount { get; }
 
 		public HealthPotion(PotionStrength potionStrength) {
-			_Weight = 1;
-			_PotionStrength = potionStrength;
+			Weight = 1;
+			HealthPotionStrength = potionStrength;
 			Name = GetPotionName();
-			_HealthAmount = GetPotionHealthAmount();
-			_ItemValue = _HealthAmount / 2;
-			_Desc = $"A {Name} that restores {_HealthAmount} health.";
+			HealthAmount = GetPotionHealthAmount();
+			ItemValue = HealthAmount / 2;
+			Desc = $"A {Name} that restores {HealthAmount} health.";
 		}
 
 		public string GetPotionName() {
 			// Potion naming format is "<potion type> potion" for normal potion
-			if (_PotionStrength == PotionStrength.Normal) {
+			if (HealthPotionStrength == PotionStrength.Normal) {
 				return $"health potion";
 			} else {
 				// Potion naming format is "<potion strength> <potion type> potion" for minor or greater potions
-				return $"{_PotionStrength.ToString().ToLower()} health potion";
+				return $"{HealthPotionStrength.ToString().ToLower()} health potion";
 			}
 		}
 
 		public int GetPotionHealthAmount() {
-			if (_PotionStrength == PotionStrength.Minor) {
+			if (HealthPotionStrength == PotionStrength.Minor) {
 				return 50;
-			} else if (_PotionStrength == PotionStrength.Normal) {
+			} else if (HealthPotionStrength == PotionStrength.Normal) {
 				return 100;
 			} else {
 				// If potion strength is not minor or normal, then it is greater
@@ -46,10 +46,10 @@ namespace DungeonGame.Items.Consumables.Potions {
 		}
 
 		private Player RestoreHealthPlayer(Player player) {
-			if (player._HitPoints + _HealthAmount > player._MaxHitPoints) {
+			if (player._HitPoints + HealthAmount > player._MaxHitPoints) {
 				player._HitPoints = player._MaxHitPoints;
 			} else {
-				player._HitPoints += _HealthAmount;
+				player._HitPoints += HealthAmount;
 			}
 
 			return player;
@@ -59,7 +59,7 @@ namespace DungeonGame.Items.Consumables.Potions {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
-				$"You drank a potion and replenished {_HealthAmount} health.");
+				$"You drank a potion and replenished {HealthAmount} health.");
 		}
 	}
 }

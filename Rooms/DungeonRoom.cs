@@ -311,7 +311,7 @@ namespace DungeonGame.Rooms {
 							lootGoldString);
 						while (_Monster._MonsterItems.Count > 0) {
 							int playerWeight = PlayerController.GetInventoryWeight(player);
-							int itemWeight = _Monster._MonsterItems[0]._Weight;
+							int itemWeight = _Monster._MonsterItems[0].Weight;
 							if (playerWeight + itemWeight > player._MaxCarryWeight) {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),

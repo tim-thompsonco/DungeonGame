@@ -62,9 +62,9 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _FrostResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			string[] inputInfo = new[] { "spell", "frostbolt" };
 			int spellIndex = player._Spellbook.FindIndex(
@@ -123,9 +123,9 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _ArcaneResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			string[] inputInfo = new[] { "spell", "lightning" };
 			int spellIndex = player._Spellbook.FindIndex(
@@ -288,9 +288,9 @@ namespace DungeonGameTests {
 			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
 			Monster monster = new Monster(3, Monster.MonsterType.Zombie) { _HitPoints = 100, _MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			player._Spellbook.Add(new PlayerSpell(
 				"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 4));
@@ -394,9 +394,9 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { _HitPoints = 100, _MaxHitPoints = 100, _FrostResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
-			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem._Equipped)) {
+			foreach (IItem item in monster._MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
-				eItem._Equipped = false;
+				eItem.Equipped = false;
 			}
 			int spellIndex = player._Spellbook.FindIndex(
 				f => f._SpellCategory == PlayerSpell.SpellType.FrostNova);

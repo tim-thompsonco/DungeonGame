@@ -32,7 +32,7 @@ namespace DungeonGame.Controllers {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
-					player._Inventory[playerInvIndex]._Desc);
+					player._Inventory[playerInvIndex].Desc);
 				return;
 			}
 			int playerConsIndex = player._Inventory.FindIndex(f => f.Name.Contains(input[1]) ||
@@ -41,12 +41,12 @@ namespace DungeonGame.Controllers {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
-					player._Inventory[playerConsIndex]._Desc);
+					player._Inventory[playerConsIndex].Desc);
 			}
 		}
 		public static int GetInventoryWeight(Player player) {
-			return player._Inventory.Sum(item => item._Weight) +
-				   player._Inventory.Sum(consumable => consumable._Weight);
+			return player._Inventory.Sum(item => item.Weight) +
+				   player._Inventory.Sum(consumable => consumable.Weight);
 		}
 		public static void ShowInventory(Player player) {
 			OutputController.Display.StoreUserOutput(
@@ -55,7 +55,7 @@ namespace DungeonGame.Controllers {
 				"Your inventory contains:");
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			foreach (IItem item in player._Inventory) {
-				if (!(item is IEquipment equippableItem && equippableItem._Equipped)) {
+				if (!(item is IEquipment equippableItem && equippableItem.Equipped)) {
 					continue;
 				}
 
@@ -68,7 +68,7 @@ namespace DungeonGame.Controllers {
 				itemInfo.Append(" <_Equipped>");
 				if (item is Armor || item is Weapon) {
 					IRainbowGear playerItem = item as IRainbowGear;
-					if (playerItem._IsRainbowGear) {
+					if (playerItem.IsRainbowGear) {
 						GearController.StoreRainbowGearOutput(itemInfo.ToString());
 						continue;
 					}
@@ -79,7 +79,7 @@ namespace DungeonGame.Controllers {
 					itemInfo.ToString());
 			}
 			foreach (IItem item in player._Inventory) {
-				if (item is IEquipment equippableItem && equippableItem._Equipped) {
+				if (item is IEquipment equippableItem && equippableItem.Equipped) {
 					continue;
 				}
 
@@ -91,7 +91,7 @@ namespace DungeonGame.Controllers {
 
 				if (item is Armor || item is Weapon) {
 					IRainbowGear playerItem = item as IRainbowGear;
-					if (playerItem._IsRainbowGear) {
+					if (playerItem.IsRainbowGear) {
 						GearController.StoreRainbowGearOutput(itemInfo.ToString());
 						continue;
 					}
@@ -108,22 +108,22 @@ namespace DungeonGame.Controllers {
 				if (item.Name.Contains("potion")) {
 					if (item is HealthPotion) {
 						HealthPotion potion = item as HealthPotion;
-						itemInfo.Append($" (+{potion._HealthAmount} health)");
+						itemInfo.Append($" (+{potion.HealthAmount} health)");
 					}
 
 					if (item is ManaPotion) {
 						ManaPotion potion = item as ManaPotion;
-						itemInfo.Append($" (+{potion._ManaAmount} mana)");
+						itemInfo.Append($" (+{potion.ManaAmount} mana)");
 					}
 
 					if (item is StatPotion) {
 						StatPotion potion = item as StatPotion;
-						itemInfo.Append($" (+{potion._StatAmount} {potion._StatType})");
+						itemInfo.Append($" (+{potion.StatAmount} {potion.StatPotionType})");
 					}
 				}
 				if (item.GetType() == typeof(Arrows)) {
 					Arrows arrows = item as Arrows;
-					itemInfo.Append($" ({arrows._Quantity})");
+					itemInfo.Append($" ({arrows.Quantity})");
 				}
 				string itemName = textInfo.ToTitleCase(itemInfo.ToString());
 				if (!consumableDict.ContainsKey(itemName)) {
@@ -279,7 +279,7 @@ namespace DungeonGame.Controllers {
 			foreach (IItem item in player._Inventory) {
 				if (item is Armor || item is Weapon) {
 					IRainbowGear rainbowItem = (IRainbowGear)item;
-					if (rainbowItem != null && rainbowItem._IsRainbowGear) {
+					if (rainbowItem != null && rainbowItem.IsRainbowGear) {
 						rainbowItem.UpdateRainbowStats(player);
 					}
 				}

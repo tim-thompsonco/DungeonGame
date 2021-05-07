@@ -66,22 +66,22 @@ namespace DungeonGame {
 			foreach (IItem item in _VendorItems) {
 				StringBuilder itemInfo = new StringBuilder();
 				itemInfo.Append(item.Name);
-				if (item is IEquipment equippableItem && equippableItem._Equipped) {
+				if (item is IEquipment equippableItem && equippableItem.Equipped) {
 					itemInfo.Append(" <Equipped>");
 				}
 				switch (item) {
 					case Armor isItemArmor:
-						itemInfo.Append($" (AR: {isItemArmor._ArmorRating} Cost: {isItemArmor._ItemValue})");
+						itemInfo.Append($" (AR: {isItemArmor.ArmorRating} Cost: {isItemArmor.ItemValue})");
 						break;
 					case Weapon isItemWeapon:
-						itemInfo.Append($" (DMG: {isItemWeapon._RegDamage} CR: {isItemWeapon._CritMultiplier} Cost: {isItemWeapon._ItemValue})");
+						itemInfo.Append($" (DMG: {isItemWeapon._RegDamage} CR: {isItemWeapon._CritMultiplier} Cost: {isItemWeapon.ItemValue})");
 						break;
 					default:
 						if (item.GetType() == typeof(Arrows)) {
 							Arrows arrows = item as Arrows;
-							itemInfo.Append($" ({arrows._Quantity})");
+							itemInfo.Append($" ({arrows.Quantity})");
 						}
-						itemInfo.Append($" (Cost: {item._ItemValue})");
+						itemInfo.Append($" (Cost: {item.ItemValue})");
 						break;
 				}
 				string itemName = textInfo.ToTitleCase(itemInfo.ToString());
@@ -113,11 +113,11 @@ namespace DungeonGame {
 				return;
 			}
 			IItem buyItem = _VendorItems[index];
-			if (player._Gold >= buyItem._ItemValue && quantity > 0) {
-				player._Gold -= buyItem._ItemValue;
+			if (player._Gold >= buyItem.ItemValue && quantity > 0) {
+				player._Gold -= buyItem.ItemValue;
 				player._Inventory.Add(buyItem);
 				_VendorItems.RemoveAt(index);
-				string purchaseString = $"You purchased {buyItem.Name} from the vendor for {buyItem._ItemValue} gold.";
+				string purchaseString = $"You purchased {buyItem.Name} from the vendor for {buyItem.ItemValue} gold.";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -209,14 +209,14 @@ namespace DungeonGame {
 						return;
 				}
 				if (index != -1) {
-					if (!(sellItem is IEquipment equippableItem && equippableItem._Equipped)) {
+					if (!(sellItem is IEquipment equippableItem && equippableItem.Equipped)) {
 						player._Gold += sellItem switch {
-							Armor armor => (int)(sellItem._ItemValue * (armor._Durability / 100.0)),
-							Weapon weapon => (int)(sellItem._ItemValue * (weapon._Durability / 100.0)),
-							_ => sellItem._ItemValue
+							Armor armor => (int)(sellItem.ItemValue * (armor.Durability / 100.0)),
+							Weapon weapon => (int)(sellItem.ItemValue * (weapon._Durability / 100.0)),
+							_ => sellItem.ItemValue
 						};
 						player._Inventory.RemoveAt(index);
-						string soldString = $"You sold {sellItem.Name} to the vendor for {sellItem._ItemValue} gold.";
+						string soldString = $"You sold {sellItem.Name} to the vendor for {sellItem.ItemValue} gold.";
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -254,7 +254,7 @@ namespace DungeonGame {
 				}
 
 				_VendorItems.Add(sellItem);
-				string soldString = $"You sold {sellItem.Name} to the vendor for {sellItem._ItemValue} gold.";
+				string soldString = $"You sold {sellItem.Name} to the vendor for {sellItem.ItemValue} gold.";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -268,12 +268,12 @@ namespace DungeonGame {
 			if (index != -1) {
 				switch (_VendorCategory) {
 					case VendorType.Armorer:
-						if (player._Inventory[index] is Armor repairArmor && repairArmor._Equipped) {
-							int durabilityRepairArmor = 100 - repairArmor._Durability;
-							float repairCostArmor = repairArmor._ItemValue * (durabilityRepairArmor / 100f);
+						if (player._Inventory[index] is Armor repairArmor && repairArmor.Equipped) {
+							int durabilityRepairArmor = 100 - repairArmor.Durability;
+							float repairCostArmor = repairArmor.ItemValue * (durabilityRepairArmor / 100f);
 							if (player._Gold >= (int)repairCostArmor) {
 								player._Gold -= (int)repairCostArmor;
-								repairArmor._Durability = 100;
+								repairArmor.Durability = 100;
 								string repairArmorString = $"Your {repairArmor.Name} has been repaired for {(int)repairCostArmor} gold.";
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatSuccessOutputText(),
@@ -300,7 +300,7 @@ namespace DungeonGame {
 					case VendorType.Weaponsmith:
 						if (player._Inventory[index] is Weapon repairWeapon) {
 							int durabilityRepairWeapon = 100 - repairWeapon._Durability;
-							float repairCostWeapon = repairWeapon._ItemValue * (durabilityRepairWeapon / 100f);
+							float repairCostWeapon = repairWeapon.ItemValue * (durabilityRepairWeapon / 100f);
 							if (player._Gold >= repairCostWeapon) {
 								player._Gold -= (int)repairCostWeapon;
 								repairWeapon._Durability = 100;

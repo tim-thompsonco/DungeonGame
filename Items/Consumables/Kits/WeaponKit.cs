@@ -8,30 +8,30 @@ namespace DungeonGame.Items.Consumables.Kits {
 			Bowstring
 		}
 		public string Name { get; set; }
-		public string _Desc { get; set; }
-		public int _ItemValue { get; set; }
-		public int _Weight { get; set; }
-		public bool _KitHasBeenUsed { get; set; }
-		public KitLevel _KitLevel { get; set; }
-		public KitType _KitType { get; set; }
-		public int _KitAugmentAmount { get; set; }
-		public TextInfo _TextInfo { get; set; }
+		public string Desc { get; set; }
+		public int ItemValue { get; set; }
+		public int Weight { get; set; }
+		public bool KitHasBeenUsed { get; set; }
+		public KitLevel WeaponKitLevel { get; set; }
+		public KitType WeaponKitType { get; set; }
+		public int KitAugmentAmount { get; set; }
+		public TextInfo TextInfo { get; set; }
 
 		public WeaponKit(KitLevel kitLevel, KitType kitType) {
-			_KitLevel = kitLevel;
-			_KitType = kitType;
-			_TextInfo = new CultureInfo("en-US", false).TextInfo;
-			_Weight = 1;
-			_KitAugmentAmount = GetKitAugmentAmount();
-			_ItemValue = _KitAugmentAmount * 10;
-			Name = $"{kitLevel.ToString().ToLower()} {_KitType.ToString().ToLower()} weapon kit";
-			_Desc = $"A single-use {Name} that increases weapon damage by {_KitAugmentAmount} for one weapon item.";
+			WeaponKitLevel = kitLevel;
+			WeaponKitType = kitType;
+			TextInfo = new CultureInfo("en-US", false).TextInfo;
+			Weight = 1;
+			KitAugmentAmount = GetKitAugmentAmount();
+			ItemValue = KitAugmentAmount * 10;
+			Name = $"{kitLevel.ToString().ToLower()} {WeaponKitType.ToString().ToLower()} weapon kit";
+			Desc = $"A single-use {Name} that increases weapon damage by {KitAugmentAmount} for one weapon item.";
 		}
 
 		public int GetKitAugmentAmount() {
-			if (_KitLevel == KitLevel.Light) {
+			if (WeaponKitLevel == KitLevel.Light) {
 				return 1;
-			} else if (_KitLevel == KitLevel.Medium) {
+			} else if (WeaponKitLevel == KitLevel.Medium) {
 				return 2;
 			} else {
 				// If kit level is not light or medium, then it is heavy
@@ -53,11 +53,11 @@ namespace DungeonGame.Items.Consumables.Kits {
 		}
 
 		private bool WeaponKitMatchesWeaponType(Weapon weapon) {
-			if (_KitType == KitType.Bowstring && weapon._WeaponGroup == Weapon.WeaponType.Bow) {
+			if (WeaponKitType == KitType.Bowstring && weapon._WeaponGroup == Weapon.WeaponType.Bow) {
 				return true;
 			}
 			// A grindstone can be used on any weapon group except bow
-			else if (_KitType == KitType.Grindstone && weapon._WeaponGroup != Weapon.WeaponType.Bow) {
+			else if (WeaponKitType == KitType.Grindstone && weapon._WeaponGroup != Weapon.WeaponType.Bow) {
 				return true;
 			}
 
@@ -65,33 +65,33 @@ namespace DungeonGame.Items.Consumables.Kits {
 		}
 
 		private Weapon AugmentWeaponDamage(Weapon weapon) {
-			weapon._RegDamage += _KitAugmentAmount;
+			weapon._RegDamage += KitAugmentAmount;
 
 			return weapon;
 		}
 
 		private Weapon AugmentWeaponItemValue(Weapon weapon) {
-			weapon._ItemValue += _ItemValue;
+			weapon.ItemValue += ItemValue;
 
 			return weapon;
 		}
 
 		public void SetKitAsUsed() {
-			_KitHasBeenUsed = true;
+			KitHasBeenUsed = true;
 		}
 
 		private void DisplayAugmentFailMessage(Weapon weapon) {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
-				$"You can't upgrade {_TextInfo.ToTitleCase(weapon.Name)} with that!");
+				$"You can't upgrade {TextInfo.ToTitleCase(weapon.Name)} with that!");
 		}
 
 		private void DisplayAugmentSuccessMessage(Weapon weapon) {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
-				$"You upgraded {_TextInfo.ToTitleCase(weapon.Name)} with a weapon kit.");
+				$"You upgraded {TextInfo.ToTitleCase(weapon.Name)} with a weapon kit.");
 		}
 	}
 }
