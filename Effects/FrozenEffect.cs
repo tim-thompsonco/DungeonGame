@@ -68,10 +68,7 @@ namespace DungeonGame.Effects {
 		}
 
 		private void DisplayFrozenMessage(string frozenMessage) {
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatOnFireText(),
-				Settings.FormatDefaultBackground(),
-				frozenMessage);
+			OutputController.StoreOnFireMessage(frozenMessage);
 		}
 
 		private void IncrementCurrentRound() {

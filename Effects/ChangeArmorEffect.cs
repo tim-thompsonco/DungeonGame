@@ -41,10 +41,7 @@ namespace DungeonGame.Effects {
 			string changeArmorString = ChangeArmorAmount > 0 ? $"Your armor is increased by {changeAmount}." :
 				$"Your armor is decreased by {changeAmount}.";
 
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				changeArmorString);
+			OutputController.StoreSuccessMessage(changeArmorString);
 		}
 
 		public void SetEffectAsExpired() {

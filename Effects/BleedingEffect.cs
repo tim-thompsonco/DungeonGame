@@ -73,10 +73,7 @@ namespace DungeonGame.Effects {
 		}
 
 		private void DisplayBleedMessage(string bleedMessage) {
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatOnFireText(),
-				Settings.FormatDefaultBackground(),
-				bleedMessage);
+			OutputController.StoreOnFireMessage(bleedMessage);
 		}
 
 		private void IncrementCurrentRound() {

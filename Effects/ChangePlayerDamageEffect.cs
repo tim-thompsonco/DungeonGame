@@ -42,10 +42,7 @@ namespace DungeonGame.Effects {
 			string changeDmgString = _changeAmount > 0 ? $"Your damage is increased by {changeAmount}." :
 				$"Your damage is decreased by {changeAmount}.";
 
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				changeDmgString);
+			OutputController.StoreSuccessMessage(changeDmgString);
 		}
 
 		public void SetEffectAsExpired() {

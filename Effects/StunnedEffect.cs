@@ -38,10 +38,7 @@ namespace DungeonGame.Effects {
 		private void DisplayStunnedMessage(Monster monster) {
 			string stunnedString = $"The {monster.Name} is stunned and cannot attack.";
 
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatAttackSuccessText(),
-				Settings.FormatDefaultBackground(),
-				stunnedString);
+			OutputController.StoreAttackSuccessMessage(stunnedString);
 		}
 
 		public void SetEffectAsExpired() {

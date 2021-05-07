@@ -51,19 +51,13 @@ namespace DungeonGame.Effects {
 		private void DisplayReflectEffectFadingMessage() {
 			const string reflectString = "Your spell reflect is slowly fading away.";
 
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				reflectString);
+			OutputController.StoreSuccessMessage(reflectString);
 		}
 
 		private void DisplayReflectDamageMessage(int reflectedAmount) {
 			string reflectString = $"You reflected {reflectedAmount} damage back at your opponent!";
 
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				reflectString);
+			OutputController.StoreSuccessMessage(reflectString);
 		}
 
 		public void SetEffectAsExpired() {

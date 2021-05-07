@@ -46,10 +46,7 @@ namespace DungeonGame.Effects {
 		private void DisplayPlayerHealedMessage() {
 			string healAmtString = $"You have been healed for {HealOverTimeAmount} health.";
 
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				healAmtString);
+			OutputController.StoreSuccessMessage(healAmtString);
 		}
 
 		private void IncrementCurrentRound() {

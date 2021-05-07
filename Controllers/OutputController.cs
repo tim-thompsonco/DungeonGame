@@ -12,10 +12,10 @@ using System.Text;
 namespace DungeonGame.Controllers {
 	public static class OutputController {
 		public static UserOutput Display = new UserOutput();
-		public static UserOutput MapDisplay = new UserOutput();
 		public static UserOutput EffectDisplay = new UserOutput();
+		public static UserOutput MapDisplay = new UserOutput();
 		public static UserOutput QuestDisplay = new UserOutput();
-		private static readonly TextInfo TextInfo = new CultureInfo("en-US", false).TextInfo;
+		private static readonly TextInfo _textInfo = new CultureInfo("en-US", false).TextInfo;
 
 		private static UserOutput BuildMap(Player player, int height, int width) {
 			UserOutput output = new UserOutput();
@@ -159,15 +159,15 @@ namespace DungeonGame.Controllers {
 				string effectOutput;
 				if (player._InCombat) {
 					if (effect.MaxRound + 1 - effect.CurrentRound > 1) {
-						effectOutput = $"({effect.MaxRound + 1 - effect.CurrentRound} rounds) {TextInfo.ToTitleCase(effect.Name)}";
+						effectOutput = $"({effect.MaxRound + 1 - effect.CurrentRound} rounds) {_textInfo.ToTitleCase(effect.Name)}";
 					} else {
-						effectOutput = $"({effect.MaxRound + 1 - effect.CurrentRound} round) {TextInfo.ToTitleCase(effect.Name)}";
+						effectOutput = $"({effect.MaxRound + 1 - effect.CurrentRound} round) {_textInfo.ToTitleCase(effect.Name)}";
 					}
 				} else {
 					if (effect.MaxRound + 1 - effect.CurrentRound > 1) {
-						effectOutput = $"({(effect.MaxRound + 1 - effect.CurrentRound) * effect.TickDuration} seconds) {TextInfo.ToTitleCase(effect.Name)}";
+						effectOutput = $"({(effect.MaxRound + 1 - effect.CurrentRound) * effect.TickDuration} seconds) {_textInfo.ToTitleCase(effect.Name)}";
 					} else {
-						effectOutput = $"({(effect.MaxRound + 1 - effect.CurrentRound) * effect.TickDuration} second) {TextInfo.ToTitleCase(effect.Name)}";
+						effectOutput = $"({(effect.MaxRound + 1 - effect.CurrentRound) * effect.TickDuration} second) {_textInfo.ToTitleCase(effect.Name)}";
 					}
 				}
 				activeEffects++;
@@ -219,9 +219,9 @@ namespace DungeonGame.Controllers {
 			int quests = 0;
 			foreach (Quest quest in player._QuestLog) {
 				string questOutput = quest._QuestCategory switch {
-					Quest.QuestType.KillCount => $"{TextInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} monsters)",
-					Quest.QuestType.KillMonster => $"{TextInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} {quest._MonsterKillType}s)",
-					Quest.QuestType.ClearLevel => $"{TextInfo.ToTitleCase(quest._Name)} (Lvl: {quest._TargetLevel} | {quest._MonstersRemaining} monsters left)",
+					Quest.QuestType.KillCount => $"{_textInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} monsters)",
+					Quest.QuestType.KillMonster => $"{_textInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} {quest._MonsterKillType}s)",
+					Quest.QuestType.ClearLevel => $"{_textInfo.ToTitleCase(quest._Name)} (Lvl: {quest._TargetLevel} | {quest._MonstersRemaining} monsters left)",
 					_ => throw new ArgumentOutOfRangeException()
 				};
 				StringBuilder questStringBuilder = new StringBuilder(questOutput);
@@ -253,6 +253,7 @@ namespace DungeonGame.Controllers {
 				questsBorder.ToString());
 			return questUserOutput;
 		}
+
 		public static void ShowUserOutput(Player player, Monster opponent) {
 			PlayerController.DisplayPlayerStats(player);
 			MonsterController.DisplayStats(opponent);
@@ -263,6 +264,7 @@ namespace DungeonGame.Controllers {
 			Display.BuildUserOutput();
 			Display.RetrieveUserOutput();
 		}
+
 		public static void ShowUserOutput(Player player) {
 			PlayerController.DisplayPlayerStats(player);
 			RoomController._Rooms[player._PlayerLocation].ShowCommands();
@@ -271,6 +273,27 @@ namespace DungeonGame.Controllers {
 			QuestDisplay = ShowQuests(player);
 			Display.BuildUserOutput();
 			Display.RetrieveUserOutput();
+		}
+
+		public static void StoreSuccessMessage(string message) {
+			Display.StoreUserOutput(
+				Settings.FormatSuccessOutputText(),
+				Settings.FormatDefaultBackground(),
+				message);
+		}
+
+		public static void StoreOnFireMessage(string message) {
+			Display.StoreUserOutput(
+				Settings.FormatOnFireText(),
+				Settings.FormatDefaultBackground(),
+				message);
+		}
+
+		public static void StoreAttackSuccessMessage(string message) {
+			Display.StoreUserOutput(
+				Settings.FormatAttackSuccessText(),
+				Settings.FormatDefaultBackground(),
+				message);
 		}
 	}
 }

@@ -53,10 +53,7 @@ namespace DungeonGame.Effects {
 		private void DisplayBlockEffectFadingMessage() {
 			const string blockFadeString = "Your block effect is fading away.";
 
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				blockFadeString);
+			OutputController.StoreSuccessMessage(blockFadeString);
 		}
 
 		private void IncrementCurrentRound() {
@@ -74,10 +71,7 @@ namespace DungeonGame.Effects {
 		private void DisplayBlockedDamageMessage(int blockedDamageAmount) {
 			string blockString = $"Your defensive move blocked {blockedDamageAmount} damage!";
 
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				blockString);
+			OutputController.StoreSuccessMessage(blockString);
 		}
 
 		private void DecreaseBlockAmountByIncomingDamage(int incomingDamageAmount) {
@@ -95,10 +89,7 @@ namespace DungeonGame.Effects {
 		private void DisplayBlockEffectExpiredMessage() {
 			const string blockEndString = "You are no longer blocking damage!";
 
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatSuccessOutputText(),
-				Settings.FormatDefaultBackground(),
-				blockEndString);
+			OutputController.StoreSuccessMessage(blockEndString);
 		}
 
 		public int GetDecreasedDamageFromBlock(int incomingDamage) {

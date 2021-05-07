@@ -73,10 +73,7 @@ namespace DungeonGame.Effects {
 		}
 
 		private void DisplayBurnMessage(string burnMessage) {
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatOnFireText(),
-				Settings.FormatDefaultBackground(),
-				burnMessage);
+			OutputController.StoreOnFireMessage(burnMessage);
 		}
 
 		private void IncrementCurrentRound() {
