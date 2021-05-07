@@ -8,7 +8,7 @@ namespace DungeonGame.Items.Consumables.Kits {
 			Leather,
 			Plate
 		}
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public string _Desc { get; set; }
 		public int _ItemValue { get; set; }
 		public int _Weight { get; set; }
@@ -25,8 +25,8 @@ namespace DungeonGame.Items.Consumables.Kits {
 			_Weight = 1;
 			_KitAugmentAmount = GetKitAugmentAmount();
 			_ItemValue = _KitAugmentAmount * 10;
-			_Name = $"{kitLevel.ToString().ToLower()} {_KitType.ToString().ToLower()} armor kit";
-			_Desc = $"A single-use {_Name} that increases armor rating by {_KitAugmentAmount} for one armor item.";
+			Name = $"{kitLevel.ToString().ToLower()} {_KitType.ToString().ToLower()} armor kit";
+			_Desc = $"A single-use {Name} that increases armor rating by {_KitAugmentAmount} for one armor item.";
 		}
 
 		public int GetKitAugmentAmount() {
@@ -85,14 +85,14 @@ namespace DungeonGame.Items.Consumables.Kits {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
-				$"You can't upgrade {_TextInfo.ToTitleCase(armor._Name)} with that!");
+				$"You can't upgrade {_TextInfo.ToTitleCase(armor.Name)} with that!");
 		}
 
 		private void DisplayAugmentSuccessMessage(Armor armor) {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
-				$"You upgraded {_TextInfo.ToTitleCase(armor._Name)} with an armor kit.");
+				$"You upgraded {_TextInfo.ToTitleCase(armor.Name)} with an armor kit.");
 		}
 	}
 }

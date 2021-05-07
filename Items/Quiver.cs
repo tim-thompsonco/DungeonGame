@@ -7,16 +7,16 @@ namespace DungeonGame.Items {
 		public int _Quantity { get; set; }
 		public int _MaxQuantity { get; set; }
 		public int _Weight { get; set; }
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public string _Desc { get; set; }
 
 		public Quiver(string name, int maxQuantity, int itemValue) {
-			_Name = name;
+			Name = name;
 			_MaxQuantity = maxQuantity;
 			_Quantity = _MaxQuantity;
 			_ItemValue = itemValue;
 			_Weight = 1;
-			_Desc = $"A {_Name} that can hold {_MaxQuantity} arrows.";
+			_Desc = $"A {Name} that can hold {_MaxQuantity} arrows.";
 		}
 
 		public bool HaveArrows() {

@@ -252,7 +252,7 @@ namespace DungeonGame.Players {
 		}
 
 		public void AttemptDrinkPotion(string input) {
-			int index = _Inventory.FindIndex(item => item is IPotion && item._Name.Contains(input));
+			int index = _Inventory.FindIndex(item => item is IPotion && item.Name.Contains(input));
 
 			if (index == -1) {
 				OutputController.Display.StoreUserOutput(
@@ -492,7 +492,7 @@ namespace DungeonGame.Players {
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatAttackFailText(),
 								Settings.FormatDefaultBackground(),
-								$"You can't ambush {opponent._Name}, you're already in combat!");
+								$"You can't ambush {opponent.Name}, you're already in combat!");
 						}
 						return;
 					default:

@@ -20,7 +20,7 @@ namespace DungeonGameTests.Items {
 
 		[Test]
 		public void ArrowsCreationTest() {
-			Assert.AreEqual(arrowsName, arrows._Name);
+			Assert.AreEqual(arrowsName, arrows.Name);
 			Assert.AreEqual($"A bundle of {arrows._Quantity} arrows.", arrows._Desc);
 			Assert.AreEqual(1, arrows._Weight);
 			Assert.AreEqual(arrowsMaxQuantity, arrows._Quantity);

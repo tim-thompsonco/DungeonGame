@@ -13,7 +13,7 @@
 			Dull,
 			Normal
 		}
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public string _Desc { get; set; }
 		public bool _Equipped { get; set; }
 		public int _ItemValue { get; set; }
@@ -27,7 +27,7 @@
 			_ItemValue = level * 20;
 			SetGemLevel(level);
 			SetGemName();
-			_Desc = $"A {_Name} that is worth some money to the right vendor.";
+			_Desc = $"A {Name} that is worth some money to the right vendor.";
 		}
 
 		private void SetGemLevel(int level) {
@@ -45,11 +45,11 @@
 		private void SetGemName() {
 			// Gem naming format is "<gem type>" for normal gem
 			if (_GemLevel == GemLevel.Normal) {
-				_Name = _GemType.ToString().ToLower();
+				Name = _GemType.ToString().ToLower();
 			}
 			// Gem naming format is "<gem level> <gem type>" for chipped or dull gems
 			else {
-				_Name = $"{_GemLevel} {_GemType}".ToLower();
+				Name = $"{_GemLevel} {_GemType}".ToLower();
 			}
 		}
 	}

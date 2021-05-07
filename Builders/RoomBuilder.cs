@@ -52,7 +52,7 @@ namespace DungeonGame {
 			foreach (IRoom room in _SpawnedDungeonRooms.Values.Where(
 				room => room.GetType() == typeof(DungeonRoom))) {
 				DetermineDungeonRoomCategory(room as DungeonRoom);
-				room._Name = RoomBuilderHelper.PopulateDungeonRoomName(room);
+				room.Name = RoomBuilderHelper.PopulateDungeonRoomName(room);
 				room._Desc = RoomBuilderHelper.PopulateDungeonRoomDesc(room);
 			}
 		}

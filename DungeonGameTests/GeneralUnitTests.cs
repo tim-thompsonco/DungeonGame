@@ -60,13 +60,13 @@ namespace DungeonGameTests {
 				case 1:
 					switch (skeletonWeapon._WeaponGroup) {
 						case Weapon.WeaponType.Dagger:
-							Assert.AreEqual("chipped dagger", skeletonWeapon._Name);
+							Assert.AreEqual("chipped dagger", skeletonWeapon.Name);
 							break;
 						case Weapon.WeaponType.OneHandedSword:
-							Assert.AreEqual("chipped sword (1H)", skeletonWeapon._Name);
+							Assert.AreEqual("chipped sword (1H)", skeletonWeapon.Name);
 							break;
 						case Weapon.WeaponType.TwoHandedSword:
-							Assert.AreEqual("chipped sword (2H)", skeletonWeapon._Name);
+							Assert.AreEqual("chipped sword (2H)", skeletonWeapon.Name);
 							break;
 						case Weapon.WeaponType.Axe:
 						case Weapon.WeaponType.Bow:
@@ -78,13 +78,13 @@ namespace DungeonGameTests {
 				case 2:
 					switch (skeletonWeapon._WeaponGroup) {
 						case Weapon.WeaponType.Dagger:
-							Assert.AreEqual("chipped sturdy dagger", skeletonWeapon._Name);
+							Assert.AreEqual("chipped sturdy dagger", skeletonWeapon.Name);
 							break;
 						case Weapon.WeaponType.OneHandedSword:
-							Assert.AreEqual("chipped sturdy sword (1H)", skeletonWeapon._Name);
+							Assert.AreEqual("chipped sturdy sword (1H)", skeletonWeapon.Name);
 							break;
 						case Weapon.WeaponType.TwoHandedSword:
-							Assert.AreEqual("chipped sturdy sword (2H)", skeletonWeapon._Name);
+							Assert.AreEqual("chipped sturdy sword (2H)", skeletonWeapon.Name);
 							break;
 						case Weapon.WeaponType.Axe:
 						case Weapon.WeaponType.Bow:
@@ -96,13 +96,13 @@ namespace DungeonGameTests {
 				case 3:
 					switch (skeletonWeapon._WeaponGroup) {
 						case Weapon.WeaponType.Dagger:
-							Assert.AreEqual("chipped fine dagger", skeletonWeapon._Name);
+							Assert.AreEqual("chipped fine dagger", skeletonWeapon.Name);
 							break;
 						case Weapon.WeaponType.OneHandedSword:
-							Assert.AreEqual("chipped fine sword (1H)", skeletonWeapon._Name);
+							Assert.AreEqual("chipped fine sword (1H)", skeletonWeapon.Name);
 							break;
 						case Weapon.WeaponType.TwoHandedSword:
-							Assert.AreEqual("chipped fine sword (2H)", skeletonWeapon._Name);
+							Assert.AreEqual("chipped fine sword (2H)", skeletonWeapon.Name);
 							break;
 						case Weapon.WeaponType.Axe:
 						case Weapon.WeaponType.Bow:
@@ -121,7 +121,7 @@ namespace DungeonGameTests {
 				case 1:
 					switch (spiderWeapon._WeaponGroup) {
 						case Weapon.WeaponType.Dagger:
-							Assert.AreEqual("venomous fang", spiderWeapon._Name);
+							Assert.AreEqual("venomous fang", spiderWeapon.Name);
 							break;
 						case Weapon.WeaponType.OneHandedSword:
 						case Weapon.WeaponType.TwoHandedSword:
@@ -135,7 +135,7 @@ namespace DungeonGameTests {
 				case 2:
 					switch (spiderWeapon._WeaponGroup) {
 						case Weapon.WeaponType.Dagger:
-							Assert.AreEqual("sturdy venomous fang", spiderWeapon._Name);
+							Assert.AreEqual("sturdy venomous fang", spiderWeapon.Name);
 							break;
 						case Weapon.WeaponType.OneHandedSword:
 						case Weapon.WeaponType.TwoHandedSword:
@@ -149,7 +149,7 @@ namespace DungeonGameTests {
 				case 3:
 					switch (spiderWeapon._WeaponGroup) {
 						case Weapon.WeaponType.Dagger:
-							Assert.AreEqual("fine venomous fang", spiderWeapon._Name);
+							Assert.AreEqual("fine venomous fang", spiderWeapon.Name);
 							break;
 						case Weapon.WeaponType.OneHandedSword:
 						case Weapon.WeaponType.TwoHandedSword:
@@ -175,7 +175,7 @@ namespace DungeonGameTests {
 						case Weapon.WeaponType.Bow:
 							break;
 						case Weapon.WeaponType.Axe:
-							Assert.AreEqual("worn axe", zombieWeapon._Name);
+							Assert.AreEqual("worn axe", zombieWeapon.Name);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -189,7 +189,7 @@ namespace DungeonGameTests {
 						case Weapon.WeaponType.Bow:
 							break;
 						case Weapon.WeaponType.Axe:
-							Assert.AreEqual("worn sturdy axe", zombieWeapon._Name);
+							Assert.AreEqual("worn sturdy axe", zombieWeapon.Name);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -203,7 +203,7 @@ namespace DungeonGameTests {
 						case Weapon.WeaponType.Bow:
 							break;
 						case Weapon.WeaponType.Axe:
-							Assert.AreEqual("worn fine axe", zombieWeapon._Name);
+							Assert.AreEqual("worn fine axe", zombieWeapon.Name);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -222,13 +222,13 @@ namespace DungeonGameTests {
 						case Weapon.WeaponType.Bow:
 							break;
 						case Weapon.WeaponType.OneHandedSword:
-							Assert.AreEqual("dull sword (1H)", demonWeapon._Name);
+							Assert.AreEqual("dull sword (1H)", demonWeapon.Name);
 							break;
 						case Weapon.WeaponType.TwoHandedSword:
-							Assert.AreEqual("dull sword (2H)", demonWeapon._Name);
+							Assert.AreEqual("dull sword (2H)", demonWeapon.Name);
 							break;
 						case Weapon.WeaponType.Axe:
-							Assert.AreEqual("dull axe", demonWeapon._Name);
+							Assert.AreEqual("dull axe", demonWeapon.Name);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -240,13 +240,13 @@ namespace DungeonGameTests {
 						case Weapon.WeaponType.Bow:
 							break;
 						case Weapon.WeaponType.OneHandedSword:
-							Assert.AreEqual("dull sturdy sword (1H)", demonWeapon._Name);
+							Assert.AreEqual("dull sturdy sword (1H)", demonWeapon.Name);
 							break;
 						case Weapon.WeaponType.TwoHandedSword:
-							Assert.AreEqual("dull sturdy sword (2H)", demonWeapon._Name);
+							Assert.AreEqual("dull sturdy sword (2H)", demonWeapon.Name);
 							break;
 						case Weapon.WeaponType.Axe:
-							Assert.AreEqual("dull sturdy axe", demonWeapon._Name);
+							Assert.AreEqual("dull sturdy axe", demonWeapon.Name);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -258,13 +258,13 @@ namespace DungeonGameTests {
 						case Weapon.WeaponType.Bow:
 							break;
 						case Weapon.WeaponType.OneHandedSword:
-							Assert.AreEqual("dull fine sword (1H)", demonWeapon._Name);
+							Assert.AreEqual("dull fine sword (1H)", demonWeapon.Name);
 							break;
 						case Weapon.WeaponType.TwoHandedSword:
-							Assert.AreEqual("dull fine sword (2H)", demonWeapon._Name);
+							Assert.AreEqual("dull fine sword (2H)", demonWeapon.Name);
 							break;
 						case Weapon.WeaponType.Axe:
-							Assert.AreEqual("dull fine axe", demonWeapon._Name);
+							Assert.AreEqual("dull fine axe", demonWeapon.Name);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();

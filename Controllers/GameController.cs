@@ -23,18 +23,18 @@ namespace DungeonGame.Controllers {
 			}
 
 			if (player._Effects.Any()) {
-				foreach (IEffect effect in player._Effects.Where(effect => _GameTicks % effect._TickDuration == 0).ToList()) {
+				foreach (IEffect effect in player._Effects.Where(effect => _GameTicks % effect.TickDuration == 0).ToList()) {
 					if (effect is HealingEffect healingEffect) {
 						healingEffect.ProcessHealingRound(player);
 					}
 
-					if (effect is ChangePlayerDamageEffect changePlayerDmgEffect && !player._InCombat && effect._Name.Contains("berserk")) {
+					if (effect is ChangePlayerDamageEffect changePlayerDmgEffect && !player._InCombat && effect.Name.Contains("berserk")) {
 						changePlayerDmgEffect.ProcessChangePlayerDamageRound(player);
 					}
 
 					if (effect is ChangeArmorEffect changeArmorEffect) {
-						if (!player._InCombat && effect._Name.Contains("berserk")) {
-							changeArmorEffect._IsEffectExpired = true;
+						if (!player._InCombat && effect.Name.Contains("berserk")) {
+							changeArmorEffect.IsEffectExpired = true;
 						}
 
 						if (!player._InCombat) {
@@ -64,7 +64,7 @@ namespace DungeonGame.Controllers {
 
 					if (effect is ChangeMonsterDamageEffect changeMonsterDmgEffect) {
 						if (!player._InCombat) {
-							effect._IsEffectExpired = true;
+							effect.IsEffectExpired = true;
 						}
 
 						changeMonsterDmgEffect.ProcessChangeMonsterDamageRound(player);
@@ -89,7 +89,7 @@ namespace DungeonGame.Controllers {
 						continue;
 					}
 
-					foreach (IEffect effect in monster._Effects.Where(effect => _GameTicks % effect._TickDuration == 0).ToList()) {
+					foreach (IEffect effect in monster._Effects.Where(effect => _GameTicks % effect.TickDuration == 0).ToList()) {
 						if (effect is BurningEffect burningEffect) {
 							burningEffect.ProcessBurningRound(monster);
 						}
@@ -126,7 +126,7 @@ namespace DungeonGame.Controllers {
 		public static async void RemovedExpiredEffectsAsync(Player player) {
 			await Task.Run(() => {
 				foreach (IEffect effect in player._Effects.ToList()) {
-					if (effect._IsEffectExpired) {
+					if (effect.IsEffectExpired) {
 						player._Effects.Remove(effect);
 					}
 				}
@@ -136,11 +136,11 @@ namespace DungeonGame.Controllers {
 		public static async void RemovedExpiredEffectsAsync(Monster monster) {
 			await Task.Run(() => {
 				foreach (IEffect effect in monster._Effects.ToList()) {
-					if (effect is StunnedEffect && effect._IsEffectExpired) {
+					if (effect is StunnedEffect && effect.IsEffectExpired) {
 						monster._IsStunned = false;
 					}
 
-					if (effect._IsEffectExpired) {
+					if (effect.IsEffectExpired) {
 						monster._Effects.Remove(effect);
 					}
 				}

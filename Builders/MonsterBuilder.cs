@@ -280,7 +280,7 @@ namespace DungeonGame {
 				case Monster.MonsterType.Skeleton:
 					switch (monster._SkeletonCategory) {
 						case Monster.SkeletonType.Warrior:
-							monster._Name = monster._Level switch {
+							monster.Name = monster._Level switch {
 								1 => $"skeleton {monster._SkeletonCategory.ToString().ToLower()}",
 								2 => "skeleton fighter",
 								3 => "skeleton warrior",
@@ -295,10 +295,10 @@ namespace DungeonGame {
 							};
 							break;
 						case Monster.SkeletonType.Archer:
-							monster._Name = $"skeleton {monster._SkeletonCategory.ToString().ToLower()}";
+							monster.Name = $"skeleton {monster._SkeletonCategory.ToString().ToLower()}";
 							break;
 						case Monster.SkeletonType.Mage:
-							monster._Name = $"skeleton {monster._SkeletonCategory.ToString().ToLower()}";
+							monster.Name = $"skeleton {monster._SkeletonCategory.ToString().ToLower()}";
 							break;
 						case null:
 							break;
@@ -306,11 +306,11 @@ namespace DungeonGame {
 							throw new ArgumentOutOfRangeException();
 					}
 					monster._Desc =
-						$"A {monster._Name} stands in front of you. Its bones look worn and damaged from years of fighting. A ghastly yellow glow " +
+						$"A {monster.Name} stands in front of you. Its bones look worn and damaged from years of fighting. A ghastly yellow glow " +
 						$"surrounds it, which is the only indication of the magic that must exist to reanimate it.";
 					break;
 				case Monster.MonsterType.Zombie:
-					monster._Name = monster._Level switch {
+					monster.Name = monster._Level switch {
 						1 => "zombie",
 						2 => "rotting zombie",
 						3 => "vicious zombie",
@@ -324,12 +324,12 @@ namespace DungeonGame {
 						_ => throw new ArgumentOutOfRangeException()
 					};
 					monster._Desc =
-						$"A {monster._Name} stares at you, it's face frozen in a look of indifference to the fact a bug is crawling out of it's empty " +
+						$"A {monster.Name} stares at you, it's face frozen in a look of indifference to the fact a bug is crawling out of it's empty " +
 						$"eye sockets. In one hand, it drags a weapon against the ground, as it stares at you menacingly. Bones, muscle and tendons are " +
 						$"visible through many gashes and tears in it's rotting skin.";
 					break;
 				case Monster.MonsterType.Spider:
-					monster._Name = monster._Level switch {
+					monster.Name = monster._Level switch {
 						1 => "spider",
 						2 => "black spider",
 						3 => "huge spider",
@@ -343,11 +343,11 @@ namespace DungeonGame {
 						_ => throw new ArgumentOutOfRangeException()
 					};
 					monster._Desc =
-						$"A {monster._Name} about the size of a large bear skitters down the corridor towards you. Coarse hair sticks out from every direction " +
+						$"A {monster.Name} about the size of a large bear skitters down the corridor towards you. Coarse hair sticks out from every direction " +
 						$"on it's thorax and legs. It's many eyes stare at you, legs ending in sharp claws carrying it closer as it hisses hungrily.";
 					break;
 				case Monster.MonsterType.Demon:
-					monster._Name = monster._Level switch {
+					monster.Name = monster._Level switch {
 						1 => "lesser demon",
 						2 => "demon",
 						3 => "horned demon",
@@ -361,7 +361,7 @@ namespace DungeonGame {
 						_ => throw new ArgumentOutOfRangeException()
 					};
 					monster._Desc =
-						$"A {monster._Name} stands before you with two horns sticking out of it's head. It's eyes glint yellow and a look of pure hatred adorns its " +
+						$"A {monster.Name} stands before you with two horns sticking out of it's head. It's eyes glint yellow and a look of pure hatred adorns its " +
 						$"face. Leathery wings spread out on either side of its back as it rises up to its full height and growls at you.";
 					break;
 				case Monster.MonsterType.Elemental:
@@ -372,7 +372,7 @@ namespace DungeonGame {
 						3 => monster._ElementalCategory == Monster.ElementalType.Air,
 						_ => throw new ArgumentOutOfRangeException()
 					};
-					monster._Name = monster._Level switch {
+					monster.Name = monster._Level switch {
 						1 => $"lesser {monster._ElementalCategory.ToString().ToLower()} elemental",
 						2 => $"{monster._ElementalCategory.ToString().ToLower()} elemental",
 						3 => $"large {monster._ElementalCategory.ToString().ToLower()} elemental",
@@ -386,11 +386,11 @@ namespace DungeonGame {
 						_ => throw new ArgumentOutOfRangeException()
 					};
 					monster._Desc =
-						$"A {monster._Name} stands before you, shimmering out of the essence that it is created from. It has no expression on its face, but the " +
+						$"A {monster.Name} stands before you, shimmering out of the essence that it is created from. It has no expression on its face, but the " +
 						$"aggressiveness is clear when it appears to start casting a ball of {monster._ElementalCategory.ToString().ToLower()} to throw at you.";
 					break;
 				case Monster.MonsterType.Vampire:
-					monster._Name = monster._Level switch {
+					monster.Name = monster._Level switch {
 						1 => "young vampire neophyte",
 						2 => "young vampire acolyte",
 						3 => "young vampire warrior",
@@ -404,11 +404,11 @@ namespace DungeonGame {
 						_ => throw new ArgumentOutOfRangeException()
 					};
 					monster._Desc =
-						$"A {monster._Name} stands in front of you. It has a pale, ghoulish cast to it's skin, and  you can see those trademark canines as it smiles " +
+						$"A {monster.Name} stands in front of you. It has a pale, ghoulish cast to it's skin, and  you can see those trademark canines as it smiles " +
 						$"cruelly at you. It does not look friendly but it does look like it's ready to kill you and drink your blood.";
 					break;
 				case Monster.MonsterType.Troll:
-					monster._Name = monster._Level switch {
+					monster.Name = monster._Level switch {
 						1 => "troll",
 						2 => "troll fighter",
 						3 => "troll warrior",
@@ -422,11 +422,11 @@ namespace DungeonGame {
 						_ => throw new ArgumentOutOfRangeException()
 					};
 					monster._Desc =
-						$"A {monster._Name} stands in front of you. It has a bracelet of bones around both of its wrists and tusks sprout from each corner of its mouth. " +
+						$"A {monster.Name} stands in front of you. It has a bracelet of bones around both of its wrists and tusks sprout from each corner of its mouth. " +
 						$"As it eyes you apprehensively, it clutches its weapon a little tighter, thinking of how to dissect you with it.";
 					break;
 				case Monster.MonsterType.Dragon:
-					monster._Name = monster._Level switch {
+					monster.Name = monster._Level switch {
 						1 => "lesser dragon",
 						2 => "dragon",
 						3 => "winged dragon",
@@ -440,9 +440,9 @@ namespace DungeonGame {
 						_ => throw new ArgumentOutOfRangeException()
 					};
 					monster._Desc = monster._Level < 3 ?
-						$"A {monster._Name} stands before you, scaled claws clicking and clacking against the ground as it paces back and forth. It is small enough not to " +
+						$"A {monster.Name} stands before you, scaled claws clicking and clacking against the ground as it paces back and forth. It is small enough not to " +
 						$"have any wings, but as it breathes in deeply and you can see fire forming in the back of its mouth, that doesn't seem to matter." :
-						$"A {monster._Name} stands before you, scaled claws clicking and clacking against the ground shortly before it spreads its wings and roars at you. As " +
+						$"A {monster.Name} stands before you, scaled claws clicking and clacking against the ground shortly before it spreads its wings and roars at you. As " +
 						$"it's leathery wings extend to their full wingspan, it breathes in deeply, and you can see fire forming in the back of its mouth.";
 					break;
 				default:

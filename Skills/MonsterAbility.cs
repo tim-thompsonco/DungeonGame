@@ -42,7 +42,7 @@ namespace DungeonGame {
 		public void UseBloodLeechAbility(Monster monster, Player player, int index) {
 			monster._EnergyPoints -= monster._Abilities[index]._EnergyCost;
 
-			string attackString = $"The {monster._Name} tries to sink its fangs into you and suck your blood!";
+			string attackString = $"The {monster.Name} tries to sink its fangs into you and suck your blood!";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -54,16 +54,16 @@ namespace DungeonGame {
 			if (leechAmount == 0) {
 				return;
 			}
-			
+
 			player._HitPoints -= leechAmount;
-			
+
 			if (monster._HitPoints + leechAmount > monster._MaxHitPoints) {
 				monster._HitPoints = monster._MaxHitPoints;
 			} else {
 				monster._HitPoints += leechAmount;
 			}
 
-			string attackSuccessString = $"The {monster._Name} leeches {leechAmount} life from you.";
+			string attackSuccessString = $"The {monster.Name} leeches {leechAmount} life from you.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -99,7 +99,7 @@ namespace DungeonGame {
 				}
 
 				if (abilityDamage <= 0) {
-					string effectAbsorbString = $"Your {effect._Name} absorbed all of {monster._Name}'s attack!";
+					string effectAbsorbString = $"Your {effect.Name} absorbed all of {monster.Name}'s attack!";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatAttackFailText(),
 						Settings.FormatDefaultBackground(),
@@ -117,9 +117,9 @@ namespace DungeonGame {
 
 			string attackString;
 			if (monster._MonsterCategory == Monster.MonsterType.Spider) {
-				attackString = $"The {monster._Name} tries to bite you!";
+				attackString = $"The {monster.Name} tries to bite you!";
 			} else {
-				attackString = $"The {monster._Name} swings its tail at you!";
+				attackString = $"The {monster.Name} swings its tail at you!";
 			}
 
 			OutputController.Display.StoreUserOutput(
@@ -132,9 +132,9 @@ namespace DungeonGame {
 
 			string attackSuccessString;
 			if (monster._MonsterCategory == Monster.MonsterType.Spider) {
-				attackSuccessString = $"The {monster._Name} bites you for {attackDamage} physical damage.";
+				attackSuccessString = $"The {monster.Name} bites you for {attackDamage} physical damage.";
 			} else {
-				attackSuccessString = $"The {monster._Name} strikes you with its tail for {attackDamage} physical damage.";
+				attackSuccessString = $"The {monster.Name} strikes you with its tail for {attackDamage} physical damage.";
 			}
 
 			OutputController.Display.StoreUserOutput(
@@ -149,7 +149,7 @@ namespace DungeonGame {
 			}
 
 			if (monster._Abilities[index]._Offensive._OffensiveGroup is Offensive.OffensiveType.Bleed) {
-				string bleedString = $"You are bleeding from {monster._Name}'s attack!";
+				string bleedString = $"You are bleeding from {monster.Name}'s attack!";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),

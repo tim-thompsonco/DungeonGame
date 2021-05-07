@@ -37,7 +37,7 @@ namespace DungeonGameTests {
 				player._RagePoints);
 			int abilityDamage = player._Abilities[abilityIndex]._Offensive._Amount;
 			Assert.AreEqual(monster._HitPoints, monster._MaxHitPoints - abilityDamage);
-			string abilitySuccessString = $"Your {player._Abilities[abilityIndex]._Name} hit the {monster._Name} for {abilityDamage} physical damage.";
+			string abilitySuccessString = $"Your {player._Abilities[abilityIndex]._Name} hit the {monster.Name} for {abilityDamage} physical damage.";
 			Assert.AreEqual(abilitySuccessString, OutputController.Display._Output[4][2]);
 		}
 		[Test]
@@ -71,22 +71,22 @@ namespace DungeonGameTests {
 			int abilityDamageOverTime = player._Abilities[abilityIndex]._Offensive._AmountOverTime;
 			int abilityCurRounds = player._Abilities[abilityIndex]._Offensive._AmountCurRounds;
 			int abilityMaxRounds = player._Abilities[abilityIndex]._Offensive._AmountMaxRounds;
-			string abilitySuccessString = $"Your {player._Abilities[abilityIndex]._Name} hit the {monster._Name} for {abilityDamage} physical damage.";
+			string abilitySuccessString = $"Your {player._Abilities[abilityIndex]._Name} hit the {monster.Name} for {abilityDamage} physical damage.";
 			Assert.AreEqual(abilitySuccessString, OutputController.Display._Output[6][2]);
-			string bleedString = $"The {monster._Name} is bleeding!";
+			string bleedString = $"The {monster.Name} is bleeding!";
 			Assert.AreEqual(bleedString, OutputController.Display._Output[7][2]);
 			Assert.AreEqual(true, monster._Effects[0] is BleedingEffect);
 			Assert.AreEqual(monster._MaxHitPoints - abilityDamage, monster._HitPoints);
-			Assert.AreEqual(abilityCurRounds, monster._Effects[0]._CurrentRound);
-			Assert.AreEqual(abilityMaxRounds, monster._Effects[0]._MaxRound);
+			Assert.AreEqual(abilityCurRounds, monster._Effects[0].CurrentRound);
+			Assert.AreEqual(abilityMaxRounds, monster._Effects[0].MaxRound);
 			BleedingEffect bleedEffect = monster._Effects[0] as BleedingEffect;
 			OutputController.Display.ClearUserOutput();
 			for (int i = 2; i < 5; i++) {
 				bleedEffect.ProcessBleedingRound(monster);
-				int bleedAmount = bleedEffect._BleedDamageOverTime;
-				string bleedRoundString = $"The {monster._Name} bleeds for {bleedAmount} physical damage.";
+				int bleedAmount = bleedEffect.BleedDamageOverTime;
+				string bleedRoundString = $"The {monster.Name} bleeds for {bleedAmount} physical damage.";
 				Assert.AreEqual(bleedRoundString, OutputController.Display._Output[i - 2][2]);
-				Assert.AreEqual(i, monster._Effects[0]._CurrentRound);
+				Assert.AreEqual(i, monster._Effects[0].CurrentRound);
 				GameController.RemovedExpiredEffectsAsync(monster);
 				Thread.Sleep(1000);
 			}
@@ -127,21 +127,21 @@ namespace DungeonGameTests {
 			int abilityDamage = player._Abilities[abilityIndex]._Stun._DamageAmount;
 			int abilityCurRounds = player._Abilities[abilityIndex]._Stun._StunCurRounds;
 			int abilityMaxRounds = player._Abilities[abilityIndex]._Stun._StunMaxRounds;
-			string attackSuccessString = $"You {player._Abilities[abilityIndex]._Name} the {monster._Name} for {abilityDamage} physical damage.";
+			string attackSuccessString = $"You {player._Abilities[abilityIndex]._Name} the {monster.Name} for {abilityDamage} physical damage.";
 			Assert.AreEqual(attackSuccessString, OutputController.Display._Output[5][2]);
-			string stunString = $"The {monster._Name} is stunned!";
+			string stunString = $"The {monster.Name} is stunned!";
 			Assert.AreEqual(stunString, OutputController.Display._Output[6][2]);
 			Assert.AreEqual(monster._MaxHitPoints - abilityDamage, monster._HitPoints);
 			Assert.AreEqual(true, monster._Effects[0] is StunnedEffect);
-			Assert.AreEqual(abilityCurRounds, monster._Effects[0]._CurrentRound);
-			Assert.AreEqual(abilityMaxRounds, monster._Effects[0]._MaxRound);
+			Assert.AreEqual(abilityCurRounds, monster._Effects[0].CurrentRound);
+			Assert.AreEqual(abilityMaxRounds, monster._Effects[0].MaxRound);
 			StunnedEffect stunnedEffect = monster._Effects[0] as StunnedEffect;
 			OutputController.Display.ClearUserOutput();
 			for (int i = 2; i < 4; i++) {
 				stunnedEffect.ProcessStunnedRound(monster);
-				string stunnedString = $"The {monster._Name} is stunned and cannot attack.";
+				string stunnedString = $"The {monster.Name} is stunned and cannot attack.";
 				Assert.AreEqual(stunnedString, OutputController.Display._Output[i - 2][2]);
-				Assert.AreEqual(i, monster._Effects[0]._CurrentRound);
+				Assert.AreEqual(i, monster._Effects[0].CurrentRound);
 				GameController.RemovedExpiredEffectsAsync(monster);
 				Thread.Sleep(1000);
 			}
@@ -206,7 +206,7 @@ namespace DungeonGameTests {
 					Assert.AreEqual(blockEndString, OutputController.Display._Output[i + 3][2]);
 					Thread.Sleep(1000);
 					Assert.AreEqual(false, player._Effects.Any());
-					string hitString = $"The {monster._Name} hits you for {attackAmount} physical damage.";
+					string hitString = $"The {monster.Name} hits you for {attackAmount} physical damage.";
 					Assert.AreEqual(hitString, OutputController.Display._Output[i + 4][2]);
 				}
 				i++;
@@ -306,13 +306,13 @@ namespace DungeonGameTests {
 			int? rageCost = player._Abilities[abilityIndex]._RageCost;
 			Assert.AreEqual(player._MaxRagePoints - rageCost, player._RagePoints);
 			Assert.AreEqual(true, monster._MonsterWeapon._Equipped);
-			string disarmFailString = $"You tried to disarm {monster._Name} but failed!";
+			string disarmFailString = $"You tried to disarm {monster.Name} but failed!";
 			Assert.AreEqual(disarmFailString, OutputController.Display._Output[4][2]);
 			player._Abilities[abilityIndex]._Offensive._Amount = 100; // Set disarm success chance to 100% for test
 			player.UseAbility(monster, input);
 			Assert.AreEqual(player._MaxRagePoints - (rageCost * 2), player._RagePoints);
 			Assert.AreEqual(false, monster._MonsterWeapon._Equipped);
-			string disarmSuccessString = $"You successfully disarmed {monster._Name}!";
+			string disarmSuccessString = $"You successfully disarmed {monster.Name}!";
 			Assert.AreEqual(disarmSuccessString, OutputController.Display._Output[5][2]);
 		}
 		[Test]
@@ -359,7 +359,7 @@ namespace DungeonGameTests {
 				healEffect.ProcessHealingRound(player);
 				int healOverTimeAmt = healEffect._HealOverTimeAmount;
 				string healAmtString = $"You have been healed for {healOverTimeAmt} health.";
-				Assert.AreEqual(i, player._Effects[0]._CurrentRound);
+				Assert.AreEqual(i, player._Effects[0].CurrentRound);
 				Assert.AreEqual(healAmtString, OutputController.Display._Output[i - 2][2]);
 				Assert.AreEqual(baseHitPoints + ((i - 1) * healOverTimeAmt), player._HitPoints);
 			}
@@ -453,7 +453,7 @@ namespace DungeonGameTests {
 				Assert.AreEqual(baseAttackDamageM - changeDamageAmount, attackDamageM);
 				changeMonsterDmgEffect.ProcessChangeMonsterDamageRound(player);
 				string changeDmgString = $"Incoming damage is decreased by {-1 * changeMonsterDmgEffect._ChangeAmount}.";
-				Assert.AreEqual(i, player._Effects[0]._CurrentRound);
+				Assert.AreEqual(i, player._Effects[0].CurrentRound);
 				Assert.AreEqual(changeDmgString, OutputController.Display._Output[i - 2][2]);
 			}
 			GameController.RemovedExpiredEffectsAsync(player);
@@ -491,7 +491,7 @@ namespace DungeonGameTests {
 			int hitAmount = player._Abilities[abilityIndex]._Offensive._Amount;
 			Assert.AreEqual(monster._MaxHitPoints - (2 * hitAmount), monster._HitPoints);
 			Assert.AreEqual(player._MaxRagePoints - (2 * rageCost), player._RagePoints);
-			string attackString = $"Your onslaught hit the {monster._Name} for 25 physical damage.";
+			string attackString = $"Your onslaught hit the {monster.Name} for 25 physical damage.";
 			Assert.AreEqual(attackString, OutputController.Display._Output[5][2]);
 			Assert.AreEqual(attackString, OutputController.Display._Output[6][2]);
 			player._MaxRagePoints = 25;

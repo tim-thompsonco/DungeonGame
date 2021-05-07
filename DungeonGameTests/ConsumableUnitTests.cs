@@ -83,7 +83,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(true, player._Effects[0] is ChangeStatEffect);
 			ChangeStatEffect changeStatEffect = player._Effects[0] as ChangeStatEffect;
 			for (int i = 1; i < 601; i++) {
-				Assert.AreEqual(i, player._Effects[0]._CurrentRound);
+				Assert.AreEqual(i, player._Effects[0].CurrentRound);
 				changeStatEffect.ProcessChangeStatRound(player);
 			}
 			GameController.RemovedExpiredEffectsAsync(player);
@@ -118,7 +118,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(true, player._Effects[0] is ChangeStatEffect);
 			ChangeStatEffect changeStatEffect = player._Effects[0] as ChangeStatEffect;
 			for (int i = 1; i < 601; i++) {
-				Assert.AreEqual(i, player._Effects[0]._CurrentRound);
+				Assert.AreEqual(i, player._Effects[0].CurrentRound);
 				changeStatEffect.ProcessChangeStatRound(player);
 			}
 			GameController.RemovedExpiredEffectsAsync(player);
@@ -153,7 +153,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(true, player._Effects[0] is ChangeStatEffect);
 			ChangeStatEffect changeStatEffect = player._Effects[0] as ChangeStatEffect;
 			for (int i = 1; i < 601; i++) {
-				Assert.AreEqual(i, player._Effects[0]._CurrentRound);
+				Assert.AreEqual(i, player._Effects[0].CurrentRound);
 				changeStatEffect.ProcessChangeStatRound(player);
 			}
 			GameController.RemovedExpiredEffectsAsync(player);
@@ -188,7 +188,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(true, player._Effects[0] is ChangeStatEffect);
 			ChangeStatEffect changeStatEffect = player._Effects[0] as ChangeStatEffect;
 			for (int i = 1; i < 601; i++) {
-				Assert.AreEqual(i, player._Effects[0]._CurrentRound);
+				Assert.AreEqual(i, player._Effects[0].CurrentRound);
 				changeStatEffect.ProcessChangeStatRound(player);
 			}
 			GameController.RemovedExpiredEffectsAsync(player);
@@ -205,13 +205,13 @@ namespace DungeonGameTests {
 			player._Inventory.Add(new ArmorKit(KitLevel.Light, ArmorKit.KitType.Cloth));
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			int armorIndex = player._Inventory.FindIndex(f => f._Name.Contains("cloth"));
+			int armorIndex = player._Inventory.FindIndex(f => f.Name.Contains("cloth"));
 			Armor armor = player._Inventory[armorIndex] as Armor;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			string armorName = textInfo.ToTitleCase(player._Inventory[armorIndex]._Name);
+			string armorName = textInfo.ToTitleCase(player._Inventory[armorIndex].Name);
 			ArmorKit armorKit = player._Inventory.Find(item => item is ArmorKit) as ArmorKit;
 			int kitAmount = armorKit._KitAugmentAmount;
-			string kitName = armorKit._Name;
+			string kitName = armorKit.Name;
 			string[] input = new[] { "enhance", "doesn't exist", kitName };
 			int armorAmount = armor._ArmorRating;
 			GearController.UseArmorKit(player, input);
@@ -230,7 +230,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(armorAmount + kitAmount, armor._ArmorRating);
 			Assert.AreEqual(0, player._Inventory.FindAll(item => item is IKit).Count);
 			player._Inventory.Add(new ArmorKit(KitLevel.Light, ArmorKit.KitType.Leather));
-			kitName = player._Inventory.Find(item => item is ArmorKit)._Name;
+			kitName = player._Inventory.Find(item => item is ArmorKit).Name;
 			input = new[] { "enhance", armorName, kitName };
 			GearController.UseArmorKit(player, input);
 			string enhanceFail = $"You can't upgrade {armorName} with that!";
@@ -243,13 +243,13 @@ namespace DungeonGameTests {
 			player._Inventory.Add(new WeaponKit(KitLevel.Light, WeaponKit.KitType.Grindstone));
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
-			int weaponIndex = player._Inventory.FindIndex(f => f._Name.Contains("dagger"));
+			int weaponIndex = player._Inventory.FindIndex(f => f.Name.Contains("dagger"));
 			Weapon weapon = player._Inventory[weaponIndex] as Weapon;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			string weaponName = textInfo.ToTitleCase(player._Inventory[weaponIndex]._Name);
+			string weaponName = textInfo.ToTitleCase(player._Inventory[weaponIndex].Name);
 			WeaponKit weaponKit = player._Inventory.Find(item => item is WeaponKit) as WeaponKit;
 			int kitAmount = weaponKit._KitAugmentAmount;
-			string kitName = weaponKit._Name;
+			string kitName = weaponKit.Name;
 			string[] input = new[] { "enhance", "doesn't exist", kitName };
 			int weaponAmount = weapon._RegDamage;
 			GearController.UseWeaponKit(player, input);
@@ -269,16 +269,16 @@ namespace DungeonGameTests {
 			Assert.AreEqual(0, player._Inventory.FindAll(item => item is IKit).Count);
 			player._Inventory.Add(new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring));
 			weaponKit = player._Inventory.Find(item => item is WeaponKit) as WeaponKit;
-			kitName = weaponKit._Name;
+			kitName = weaponKit.Name;
 			input = new[] { "enhance", weaponName, kitName };
 			GearController.UseWeaponKit(player, input);
 			string enhanceFail = $"You can't upgrade {weaponName} with that!";
 			Assert.IsNotEmpty(player._Inventory);
 			Assert.AreEqual(enhanceFail, OutputController.Display._Output[3][2]);
 			player._Inventory.Add(new Weapon(1, Weapon.WeaponType.Bow));
-			weapon = player._Inventory.Find(item => item is Weapon && item._Name.ToLower().Contains("bow")) as Weapon;
+			weapon = player._Inventory.Find(item => item is Weapon && item.Name.ToLower().Contains("bow")) as Weapon;
 			weapon._Equipped = true;
-			weaponName = textInfo.ToTitleCase(weapon._Name);
+			weaponName = textInfo.ToTitleCase(weapon.Name);
 			input = new[] { "enhance", weaponName, kitName };
 			GearController.UseWeaponKit(player, input);
 			upgradeSuccess = $"You upgraded {weaponName} with a weapon kit.";

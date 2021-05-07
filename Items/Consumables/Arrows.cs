@@ -7,7 +7,7 @@ namespace DungeonGame.Items.Consumables {
 			Standard
 		}
 		public ArrowType _ArrowCategory { get; set; }
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public string _Desc { get; set; }
 		public int _ItemValue { get; set; }
 		public int _Weight { get; set; }
@@ -15,7 +15,7 @@ namespace DungeonGame.Items.Consumables {
 		public int _Quantity { get; set; }
 
 		public Arrows(string name, int itemValue, ArrowType arrowType) : base() {
-			_Name = name;
+			Name = name;
 			_ItemValue = itemValue;
 			_ArrowCategory = arrowType;
 			_Weight = 1;

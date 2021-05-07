@@ -43,7 +43,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			OutputController.Display.ClearUserOutput();
 			int baseArmorItemValue = armor._ItemValue;
 			int baseArmorRating = armor._ArmorRating;
-			string displayMessage = $"You upgraded {textInfo.ToTitleCase(armor._Name)} with an armor kit.";
+			string displayMessage = $"You upgraded {textInfo.ToTitleCase(armor.Name)} with an armor kit.";
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
@@ -59,7 +59,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			armor = new Armor(3, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest);
 			int baseArmorItemValue = armor._ItemValue;
 			int baseArmorRating = armor._ArmorRating;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor._Name)} with that!";
+			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor.Name)} with that!";
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
@@ -75,7 +75,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			armor = new Armor(3, Armor.ArmorType.Plate, Armor.ArmorSlot.Chest);
 			int baseArmorItemValue = armor._ItemValue;
 			int baseArmorRating = armor._ArmorRating;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor._Name)} with that!";
+			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor.Name)} with that!";
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
@@ -92,7 +92,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			armor = new Armor(3, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest);
 			int baseArmorItemValue = armor._ItemValue;
 			int baseArmorRating = armor._ArmorRating;
-			string displayMessage = $"You upgraded {textInfo.ToTitleCase(armor._Name)} with an armor kit.";
+			string displayMessage = $"You upgraded {textInfo.ToTitleCase(armor.Name)} with an armor kit.";
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
@@ -108,7 +108,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			armorKit = new ArmorKit(KitLevel.Light, ArmorKit.KitType.Leather);
 			int baseArmorItemValue = armor._ItemValue;
 			int baseArmorRating = armor._ArmorRating;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor._Name)} with that!";
+			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor.Name)} with that!";
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
@@ -125,7 +125,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			armor = new Armor(3, Armor.ArmorType.Plate, Armor.ArmorSlot.Chest);
 			int baseArmorItemValue = armor._ItemValue;
 			int baseArmorRating = armor._ArmorRating;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor._Name)} with that!";
+			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor.Name)} with that!";
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
@@ -142,7 +142,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			armor = new Armor(3, Armor.ArmorType.Plate, Armor.ArmorSlot.Chest);
 			int baseArmorItemValue = armor._ItemValue;
 			int baseArmorRating = armor._ArmorRating;
-			string displayMessage = $"You upgraded {textInfo.ToTitleCase(armor._Name)} with an armor kit.";
+			string displayMessage = $"You upgraded {textInfo.ToTitleCase(armor.Name)} with an armor kit.";
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
@@ -158,7 +158,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			armorKit = new ArmorKit(KitLevel.Light, ArmorKit.KitType.Plate);
 			int baseArmorItemValue = armor._ItemValue;
 			int baseArmorRating = armor._ArmorRating;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor._Name)} with that!";
+			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor.Name)} with that!";
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
@@ -175,7 +175,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			armor = new Armor(3, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest);
 			int baseArmorItemValue = armor._ItemValue;
 			int baseArmorRating = armor._ArmorRating;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor._Name)} with that!";
+			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor.Name)} with that!";
 
 			armorKit.AttemptAugmentArmorPlayer(armor);
 

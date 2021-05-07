@@ -27,7 +27,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 		public void MinorPotionCreationTest() {
 			potion = new HealthPotion(PotionStrength.Minor);
 
-			Assert.AreEqual("minor health potion", potion._Name);
+			Assert.AreEqual("minor health potion", potion.Name);
 			Assert.AreEqual("A minor health potion that restores 50 health.", potion._Desc);
 			Assert.AreEqual(50, potion._HealthAmount);
 			Assert.AreEqual(25, potion._ItemValue);
@@ -37,7 +37,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 		public void NormalPotionCreationTest() {
 			potion = new HealthPotion(PotionStrength.Normal);
 
-			Assert.AreEqual("health potion", potion._Name);
+			Assert.AreEqual("health potion", potion.Name);
 			Assert.AreEqual("A health potion that restores 100 health.", potion._Desc);
 			Assert.AreEqual(100, potion._HealthAmount);
 			Assert.AreEqual(50, potion._ItemValue);
@@ -47,7 +47,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 		public void GreaterPotionCreationTest() {
 			potion = new HealthPotion(PotionStrength.Greater);
 
-			Assert.AreEqual("greater health potion", potion._Name);
+			Assert.AreEqual("greater health potion", potion.Name);
 			Assert.AreEqual("A greater health potion that restores 150 health.", potion._Desc);
 			Assert.AreEqual(150, potion._HealthAmount);
 			Assert.AreEqual(75, potion._ItemValue);

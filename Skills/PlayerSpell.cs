@@ -4,7 +4,6 @@ using DungeonGame.Monsters;
 using DungeonGame.Players;
 using DungeonGame.Rooms;
 using System;
-using System.Linq;
 
 namespace DungeonGame {
 	public class PlayerSpell {
@@ -111,7 +110,7 @@ namespace DungeonGame {
 				augmentString);
 
 			player._Effects.Add(
-				new ChangeArmorEffect(player._Spellbook[index]._Name, player._Spellbook[index]._ChangeAmount._ChangeMaxRound, 
+				new ChangeArmorEffect(player._Spellbook[index]._Name, player._Spellbook[index]._ChangeAmount._ChangeMaxRound,
 					player._Spellbook[index]._ChangeAmount._Amount));
 		}
 
@@ -138,9 +137,9 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				intellectString);
 
-			int arcaneIntIndex = player._Effects.FindIndex(e => e._Name == player._Spellbook[index]._Name);
+			int arcaneIntIndex = player._Effects.FindIndex(e => e.Name == player._Spellbook[index]._Name);
 			if (arcaneIntIndex != -1) {
-				player._Effects[arcaneIntIndex]._IsEffectExpired = true;
+				player._Effects[arcaneIntIndex].IsEffectExpired = true;
 			}
 
 			player._Intelligence += player._Spellbook[index]._ChangeAmount._Amount;
@@ -214,10 +213,10 @@ namespace DungeonGame {
 
 			foreach (FrozenEffect effect in monster._Effects) {
 				effect.ProcessFrozenRound(monster);
-				effect._IsEffectExpired = true;
+				effect.IsEffectExpired = true;
 			}
 
-			string attackSuccessString = $"You hit the {monster._Name} for {frostSpellDamage} frost damage.";
+			string attackSuccessString = $"You hit the {monster.Name} for {frostSpellDamage} frost damage.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -227,7 +226,7 @@ namespace DungeonGame {
 
 			monster._Effects.Add(new FrozenEffect(player._Spellbook[index]._Name, player._Spellbook[index]._Offensive._AmountMaxRounds));
 
-			string frozenString = $"The {monster._Name} is frozen. Physical, frost and arcane damage to it will be increased by 50%!";
+			string frozenString = $"The {monster.Name} is frozen. Physical, frost and arcane damage to it will be increased by 50%!";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -270,10 +269,10 @@ namespace DungeonGame {
 			foreach (FrozenEffect effect in monster._Effects) {
 				fireSpellDamage = effect.GetIncreasedDamageFromFrozen(fireSpellDamage);
 				effect.ProcessFrozenRound(monster);
-				effect._IsEffectExpired = true;
+				effect.IsEffectExpired = true;
 			}
 
-			string attackSuccessString = $"You hit the {monster._Name} for {fireSpellDamage} fire damage.";
+			string attackSuccessString = $"You hit the {monster.Name} for {fireSpellDamage} fire damage.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -285,7 +284,7 @@ namespace DungeonGame {
 				return;
 			}
 
-			string onFireString = $"The {monster._Name} bursts into flame!";
+			string onFireString = $"The {monster.Name} bursts into flame!";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
@@ -311,10 +310,10 @@ namespace DungeonGame {
 			foreach (FrozenEffect effect in monster._Effects) {
 				arcaneSpellDamage = effect.GetIncreasedDamageFromFrozen(arcaneSpellDamage);
 				effect.ProcessFrozenRound(monster);
-				effect._IsEffectExpired = true;
+				effect.IsEffectExpired = true;
 			}
 
-			string attackSuccessString = $"You hit the {monster._Name} for {arcaneSpellDamage} arcane damage.";
+			string attackSuccessString = $"You hit the {monster.Name} for {arcaneSpellDamage} arcane damage.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),

@@ -20,7 +20,7 @@ namespace DungeonGame.Items {
 			Leather,
 			Plate
 		}
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public string _Desc { get; set; }
 		public ArmorSlot _ArmorCategory { get; set; }
 		public ArmorType _ArmorGroup { get; set; }
@@ -71,7 +71,7 @@ namespace DungeonGame.Items {
 			_Durability = 100;
 			BuildArmorName();
 			SetArmorWeight();
-			_Desc = $"A {_Name}.";
+			_Desc = $"A {Name}.";
 		}
 		// Constructor to define specific armor slot for players, vendors
 		public Armor(int level, ArmorType armorGroup, ArmorSlot armorCategory) {
@@ -104,7 +104,7 @@ namespace DungeonGame.Items {
 			_Durability = 100;
 			BuildArmorName();
 			SetArmorWeight();
-			_Desc = $"A {_Name}.";
+			_Desc = $"A {Name}.";
 		}
 		public Armor(ArmorType armorGroup, ArmorSlot armorCategory, bool isRainbowGear, Player player) {
 			_Level = player._Level;
@@ -139,7 +139,7 @@ namespace DungeonGame.Items {
 			_Durability = 100;
 			BuildArmorName("rainbow");
 			SetArmorWeight();
-			_Desc = $"A {_Name}.";
+			_Desc = $"A {Name}.";
 		}
 
 		private void SetArmorWeight() {
@@ -294,7 +294,7 @@ namespace DungeonGame.Items {
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			_Name = sb.ToString();
+			Name = sb.ToString();
 		}
 		private void BuildArmorName(string rainbowName) {
 			StringBuilder sb = new StringBuilder();
@@ -384,7 +384,7 @@ namespace DungeonGame.Items {
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			_Name = sb.ToString();
+			Name = sb.ToString();
 		}
 		public void DecreaseDurability() {
 			_Durability -= 1;

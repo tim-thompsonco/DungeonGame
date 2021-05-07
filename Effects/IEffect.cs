@@ -1,10 +1,10 @@
 ﻿namespace DungeonGame.Effects {
 	public interface IEffect : IName {
-		bool _IsEffectExpired { get; set; }
-		bool _IsHarmful { get; }
-		int _TickDuration { get; }
-		int _CurrentRound { get; set; }
-		int _MaxRound { get; }
+		bool IsEffectExpired { get; set; }
+		bool IsHarmful { get; }
+		int TickDuration { get; }
+		int CurrentRound { get; set; }
+		int MaxRound { get; }
 
 		void SetEffectAsExpired();
 	}

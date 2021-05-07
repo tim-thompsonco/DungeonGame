@@ -4,7 +4,7 @@ using DungeonGame.Players;
 namespace DungeonGame.Items.Consumables.Potions {
 	public class ManaPotion : IItem, IPotion {
 		public PotionStrength _PotionStrength { get; set; }
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public string _Desc { get; set; }
 		public int _ItemValue { get; set; }
 		public int _Weight { get; set; }
@@ -13,10 +13,10 @@ namespace DungeonGame.Items.Consumables.Potions {
 		public ManaPotion(PotionStrength potionStrength) {
 			_Weight = 1;
 			_PotionStrength = potionStrength;
-			_Name = GetPotionName();
+			Name = GetPotionName();
 			_ManaAmount = GetPotionManaAmount();
 			_ItemValue = _ManaAmount / 2;
-			_Desc = $"A {_Name} that restores {_ManaAmount} mana.";
+			_Desc = $"A {Name} that restores {_ManaAmount} mana.";
 		}
 
 		public string GetPotionName() {

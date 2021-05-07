@@ -1,8 +1,8 @@
 ﻿using DungeonGame.Effects;
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables;
-using DungeonGame.Items.Equipment;
 using DungeonGame.Items.Consumables.Potions;
+using DungeonGame.Items.Equipment;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 using DungeonGame.Rooms;
@@ -21,13 +21,13 @@ namespace DungeonGame.Controllers {
 			string parsedInput = InputController.ParseInput(input);
 			IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
 			int roomMatch = playerRoom._RoomObjects.FindIndex(f =>
-				f._Name.Contains(parsedInput));
+				f.Name.Contains(parsedInput));
 			if (roomMatch != -1) {
 				playerRoom.LookNpc(input, player);
 				return;
 			}
-			int playerInvIndex = player._Inventory.FindIndex(f => f._Name.Contains(input[1]) ||
-																				 f._Name == parsedInput);
+			int playerInvIndex = player._Inventory.FindIndex(f => f.Name.Contains(input[1]) ||
+																				 f.Name == parsedInput);
 			if (playerInvIndex != -1) {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
@@ -35,8 +35,8 @@ namespace DungeonGame.Controllers {
 					player._Inventory[playerInvIndex]._Desc);
 				return;
 			}
-			int playerConsIndex = player._Inventory.FindIndex(f => f._Name.Contains(input[1]) ||
-																	f._Name == parsedInput);
+			int playerConsIndex = player._Inventory.FindIndex(f => f.Name.Contains(input[1]) ||
+																	f.Name == parsedInput);
 			if (playerConsIndex != -1) {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
@@ -85,7 +85,7 @@ namespace DungeonGame.Controllers {
 
 				string itemName = GearController.GetItemDetails(item);
 				StringBuilder itemInfo = new StringBuilder(itemName);
-				if (player._PlayerQuiver?._Name == itemName) {
+				if (player._PlayerQuiver?.Name == itemName) {
 					itemInfo.Append($"Arrows: {player._PlayerQuiver._Quantity}/{player._PlayerQuiver._MaxQuantity}");
 				}
 
@@ -104,8 +104,8 @@ namespace DungeonGame.Controllers {
 			Dictionary<string, int> consumableDict = new Dictionary<string, int>();
 			foreach (IItem item in player._Inventory) {
 				StringBuilder itemInfo = new StringBuilder();
-				itemInfo.Append(item._Name);
-				if (item._Name.Contains("potion")) {
+				itemInfo.Append(item.Name);
+				if (item.Name.Contains("potion")) {
 					if (item is HealthPotion) {
 						HealthPotion potion = item as HealthPotion;
 						itemInfo.Append($" (+{potion._HealthAmount} health)");
@@ -159,7 +159,7 @@ namespace DungeonGame.Controllers {
 			}
 
 			foreach (IEffect effect in player._Effects.ToList()) {
-				effect._IsEffectExpired = true;
+				effect.IsEffectExpired = true;
 			}
 
 			player._Level++;

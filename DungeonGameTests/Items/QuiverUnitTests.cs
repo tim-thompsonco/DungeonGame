@@ -14,7 +14,7 @@ namespace DungeonGameTests.Items {
 
 		[Test]
 		public void QuiverCreationTest() {
-			Assert.AreEqual(quiverName, quiver._Name);
+			Assert.AreEqual(quiverName, quiver.Name);
 			Assert.AreEqual($"A {quiverName} that can hold {quiver._MaxQuantity} arrows.", quiver._Desc);
 			Assert.AreEqual(1, quiver._Weight);
 			Assert.AreEqual(30, quiver._Quantity);

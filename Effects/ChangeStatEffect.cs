@@ -9,33 +9,33 @@ namespace DungeonGame.Effects {
 			Dexterity,
 			Constitution
 		}
-		public bool _IsEffectExpired { get; set; }
-		public int _TickDuration { get; }
-		public bool _IsHarmful { get; }
-		public string _Name { get; set; }
-		public int _CurrentRound { get; set; }
-		public int _MaxRound { get; }
+		public bool IsEffectExpired { get; set; }
+		public int TickDuration { get; }
+		public bool IsHarmful { get; }
+		public string Name { get; set; }
+		public int CurrentRound { get; set; }
+		public int MaxRound { get; }
 		public StatType _StatType { get; set; }
 		private readonly int _StatAmount;
 
 		public ChangeStatEffect(string name, int maxRound, StatType statType, int statAmount) {
-			_TickDuration = 1;
-			_IsHarmful = false;
-			_Name = name;
-			_CurrentRound = 1;
-			_MaxRound = maxRound;
+			TickDuration = 1;
+			IsHarmful = false;
+			Name = name;
+			CurrentRound = 1;
+			MaxRound = maxRound;
 			_StatType = statType;
 			_StatAmount = statAmount;
 		}
 
 		public void ProcessChangeStatRound(Player player) {
-			if (_IsEffectExpired) {
+			if (IsEffectExpired) {
 				return;
 			}
 
 			IncrementCurrentRound();
 
-			if (_CurrentRound > _MaxRound) {
+			if (CurrentRound > MaxRound) {
 				SetEffectAsExpired();
 
 				RestorePlayerStatToNormal(player);
@@ -43,11 +43,11 @@ namespace DungeonGame.Effects {
 		}
 
 		private void IncrementCurrentRound() {
-			_CurrentRound++;
+			CurrentRound++;
 		}
 
 		public void SetEffectAsExpired() {
-			_IsEffectExpired = true;
+			IsEffectExpired = true;
 		}
 
 		private void RestorePlayerStatToNormal(Player player) {

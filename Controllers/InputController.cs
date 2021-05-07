@@ -161,7 +161,7 @@ namespace DungeonGame.Controllers {
 					GearController.EquipItem(player, input);
 					break;
 				case "enhance":
-					int itemIndex = player._Inventory.FindIndex(f => f._Name.Contains(input[1]));
+					int itemIndex = player._Inventory.FindIndex(f => f.Name.Contains(input[1]));
 					switch (player._Inventory[itemIndex]) {
 						case Weapon _:
 							GearController.UseWeaponKit(player, input);
@@ -342,7 +342,7 @@ namespace DungeonGame.Controllers {
 											continue;
 										}
 
-										string[] itemNameArray = new[] { input[0], item._Name };
+										string[] itemNameArray = new[] { input[0], item.Name };
 										isTownRoom._Vendor.RepairItem(player, itemNameArray, true);
 									}
 									break;

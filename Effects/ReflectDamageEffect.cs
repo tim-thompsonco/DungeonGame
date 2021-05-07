@@ -2,25 +2,25 @@
 
 namespace DungeonGame.Effects {
 	public class ReflectDamageEffect : IEffect {
-		public bool _IsEffectExpired { get; set; }
-		public int _TickDuration { get; }
-		public bool _IsHarmful { get; }
-		public string _Name { get; set; }
-		public int _CurrentRound { get; set; }
-		public int _MaxRound { get; }
+		public bool IsEffectExpired { get; set; }
+		public int TickDuration { get; }
+		public bool IsHarmful { get; }
+		public string Name { get; set; }
+		public int CurrentRound { get; set; }
+		public int MaxRound { get; }
 		public int _ReflectDamageAmount { get; }
 
 		public ReflectDamageEffect(string name, int maxRound, int reflectDamageAmount) {
-			_TickDuration = 10;
-			_IsHarmful = false;
-			_Name = name;
-			_CurrentRound = 1;
-			_MaxRound = maxRound;
+			TickDuration = 10;
+			IsHarmful = false;
+			Name = name;
+			CurrentRound = 1;
+			MaxRound = maxRound;
 			_ReflectDamageAmount = reflectDamageAmount;
 		}
 
 		public void ProcessReflectDamageRound() {
-			if (_IsEffectExpired) {
+			if (IsEffectExpired) {
 				return;
 			}
 
@@ -28,13 +28,13 @@ namespace DungeonGame.Effects {
 
 			DisplayReflectEffectFadingMessage();
 
-			if (_CurrentRound > _MaxRound) {
+			if (CurrentRound > MaxRound) {
 				SetEffectAsExpired();
 			}
 		}
 
 		public void ProcessReflectDamageRound(int reflectedAmount) {
-			if (_IsEffectExpired) {
+			if (IsEffectExpired) {
 				return;
 			}
 
@@ -42,13 +42,13 @@ namespace DungeonGame.Effects {
 
 			DisplayReflectDamageMessage(reflectedAmount);
 
-			if (_CurrentRound > _MaxRound) {
+			if (CurrentRound > MaxRound) {
 				SetEffectAsExpired();
 			}
 		}
 
 		private void IncrementCurrentRound() {
-			_CurrentRound++;
+			CurrentRound++;
 		}
 
 		private void DisplayReflectEffectFadingMessage() {
@@ -70,7 +70,7 @@ namespace DungeonGame.Effects {
 		}
 
 		public void SetEffectAsExpired() {
-			_IsEffectExpired = true;
+			IsEffectExpired = true;
 		}
 
 		public int GetReflectedDamageAmount(int incomingDamage) {

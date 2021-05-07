@@ -27,7 +27,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 		public void MinorPotionCreationTest() {
 			potion = new ManaPotion(PotionStrength.Minor);
 
-			Assert.AreEqual("minor mana potion", potion._Name);
+			Assert.AreEqual("minor mana potion", potion.Name);
 			Assert.AreEqual("A minor mana potion that restores 50 mana.", potion._Desc);
 			Assert.AreEqual(50, potion._ManaAmount);
 			Assert.AreEqual(25, potion._ItemValue);
@@ -37,7 +37,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 		public void NormalPotionCreationTest() {
 			potion = new ManaPotion(PotionStrength.Normal);
 
-			Assert.AreEqual("mana potion", potion._Name);
+			Assert.AreEqual("mana potion", potion.Name);
 			Assert.AreEqual("A mana potion that restores 100 mana.", potion._Desc);
 			Assert.AreEqual(100, potion._ManaAmount);
 			Assert.AreEqual(50, potion._ItemValue);
@@ -47,7 +47,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 		public void GreaterPotionCreationTest() {
 			potion = new ManaPotion(PotionStrength.Greater);
 
-			Assert.AreEqual("greater mana potion", potion._Name);
+			Assert.AreEqual("greater mana potion", potion.Name);
 			Assert.AreEqual("A greater mana potion that restores 150 mana.", potion._Desc);
 			Assert.AreEqual(150, potion._ManaAmount);
 			Assert.AreEqual(75, potion._ItemValue);

@@ -21,7 +21,7 @@ namespace DungeonGame.Rooms {
 		public IRoom _SouthEast { get; set; }
 		public IRoom _Up { get; set; }
 		public IRoom _Down { get; set; }
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public string _Desc { get; set; }
 		public List<string> _Commands { get; set; }
 		// List of objects in room (including Vendors)
@@ -34,7 +34,7 @@ namespace DungeonGame.Rooms {
 		public TownRoom() { }
 		public TownRoom(string name, string desc) {
 			_RoomObjects = new List<IName>();
-			_Name = name;
+			Name = name;
 			_Desc = desc;
 			_Commands = new List<string> {
 				"[I]nventory",
@@ -145,7 +145,7 @@ namespace DungeonGame.Rooms {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
-				_Name);
+				Name);
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -175,7 +175,7 @@ namespace DungeonGame.Rooms {
 				TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (IName item in _RoomObjects) {
 					StringBuilder sb = new StringBuilder();
-					string itemTitle = item._Name;
+					string itemTitle = item.Name;
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
 					if (_RoomObjects[objCount - 1] != item) {
@@ -194,7 +194,7 @@ namespace DungeonGame.Rooms {
 			OutputController.Display.StoreUserOutput(sameLineOutput);
 			ShowDirections();
 		}
-		
+
 		public void LookNpc(string[] input, Player player) {
 			StringBuilder inputString = new StringBuilder();
 			for (int i = 1; i < input.Length; i++) {
@@ -203,10 +203,10 @@ namespace DungeonGame.Rooms {
 			}
 			string inputName = inputString.ToString().Trim();
 			int nameIndex = _RoomObjects.FindIndex(
-				f => f._Name == inputName || f._Name.Contains(inputName));
+				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (_RoomObjects[nameIndex].GetType() == typeof(Vendor)) {
-				string[] vendorName = _Vendor._Name.Split(' ');
-				if (vendorName.Last() == inputName || _Vendor._Name == inputName) {
+				string[] vendorName = _Vendor.Name.Split(' ');
+				if (vendorName.Last() == inputName || _Vendor.Name == inputName) {
 					for (int i = 0; i < _Vendor._Desc.Length; i += Settings.GetGameWidth()) {
 						if (_Vendor._Desc.Length - i < Settings.GetGameWidth()) {
 							OutputController.Display.StoreUserOutput(
@@ -229,7 +229,7 @@ namespace DungeonGame.Rooms {
 					foreach (IItem itemForSale in _Vendor._VendorItems) {
 						List<string> sameLineOutputItem = new List<string>();
 						StringBuilder sb = new StringBuilder();
-						string itemTitle = itemForSale._Name;
+						string itemTitle = itemForSale.Name;
 						itemTitle = textInfo.ToTitleCase(itemTitle);
 						sb.Append(itemTitle);
 						sameLineOutputItem.Add(Settings.FormatRoomOutputText());
@@ -245,8 +245,8 @@ namespace DungeonGame.Rooms {
 						noVendorString);
 				}
 			} else {
-				string[] trainerName = _Trainer._Name.Split(' ');
-				if (trainerName.Last() == inputName || _Trainer._Name == inputName) {
+				string[] trainerName = _Trainer.Name.Split(' ');
+				if (trainerName.Last() == inputName || _Trainer.Name == inputName) {
 					for (int i = 0; i < _Trainer._Desc.Length; i += Settings.GetGameWidth()) {
 						if (_Trainer._Desc.Length - i < Settings.GetGameWidth()) {
 							OutputController.Display.StoreUserOutput(

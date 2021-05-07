@@ -4,25 +4,25 @@ using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public class BurningEffect : IEffect {
-		public bool _IsEffectExpired { get; set; }
-		public int _TickDuration { get; }
-		public bool _IsHarmful { get; }
-		public string _Name { get; set; }
-		public int _CurrentRound { get; set; }
-		public int _MaxRound { get; }
+		public bool IsEffectExpired { get; set; }
+		public int TickDuration { get; }
+		public bool IsHarmful { get; }
+		public string Name { get; set; }
+		public int CurrentRound { get; set; }
+		public int MaxRound { get; }
 		public int _FireDamageOverTime { get; }
 
 		public BurningEffect(string name, int maxRound, int fireDamageOverTime) {
-			_TickDuration = 10;
-			_IsHarmful = true;
-			_Name = name;
-			_CurrentRound = 1;
-			_MaxRound = maxRound;
+			TickDuration = 10;
+			IsHarmful = true;
+			Name = name;
+			CurrentRound = 1;
+			MaxRound = maxRound;
 			_FireDamageOverTime = fireDamageOverTime;
 		}
 
 		public void ProcessBurningRound(Monster monster) {
-			if (_IsEffectExpired) {
+			if (IsEffectExpired) {
 				return;
 			}
 
@@ -33,13 +33,13 @@ namespace DungeonGame.Effects {
 
 			IncrementCurrentRound();
 
-			if (_CurrentRound > _MaxRound) {
+			if (CurrentRound > MaxRound) {
 				SetEffectAsExpired();
 			}
 		}
 
 		public void ProcessBurningRound(Player player) {
-			if (_IsEffectExpired) {
+			if (IsEffectExpired) {
 				return;
 			}
 
@@ -50,7 +50,7 @@ namespace DungeonGame.Effects {
 
 			IncrementCurrentRound();
 
-			if (_CurrentRound > _MaxRound) {
+			if (CurrentRound > MaxRound) {
 				SetEffectAsExpired();
 			}
 		}
@@ -68,7 +68,7 @@ namespace DungeonGame.Effects {
 		}
 
 		private string GetBurnMessage(Monster monster) {
-			return $"The {monster._Name} burns for {_FireDamageOverTime} fire damage.";
+			return $"The {monster.Name} burns for {_FireDamageOverTime} fire damage.";
 		}
 
 		private string GetBurnMessage() {
@@ -83,11 +83,11 @@ namespace DungeonGame.Effects {
 		}
 
 		private void IncrementCurrentRound() {
-			_CurrentRound++;
+			CurrentRound++;
 		}
 
 		public void SetEffectAsExpired() {
-			_IsEffectExpired = true;
+			IsEffectExpired = true;
 		}
 	}
 }

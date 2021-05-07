@@ -4,25 +4,25 @@ using System;
 
 namespace DungeonGame.Effects {
 	public class ChangeMonsterDamageEffect : IEffect {
-		public bool _IsEffectExpired { get; set; }
-		public int _TickDuration { get; }
-		public bool _IsHarmful { get; }
-		public string _Name { get; set; }
-		public int _CurrentRound { get; set; }
-		public int _MaxRound { get; }
+		public bool IsEffectExpired { get; set; }
+		public int TickDuration { get; }
+		public bool IsHarmful { get; }
+		public string Name { get; set; }
+		public int CurrentRound { get; set; }
+		public int MaxRound { get; }
 		public int _ChangeAmount { get; }
 
 		public ChangeMonsterDamageEffect(string name, int maxRound, int changeAmount) {
-			_TickDuration = 1;
-			_IsHarmful = false;
-			_Name = name;
-			_CurrentRound = 1;
-			_MaxRound = maxRound;
+			TickDuration = 1;
+			IsHarmful = false;
+			Name = name;
+			CurrentRound = 1;
+			MaxRound = maxRound;
 			_ChangeAmount = changeAmount;
 		}
 
 		public void ProcessChangeMonsterDamageRound(Player player) {
-			if (_IsEffectExpired || player._InCombat == false) {
+			if (IsEffectExpired || player._InCombat == false) {
 				return;
 			}
 
@@ -30,13 +30,13 @@ namespace DungeonGame.Effects {
 
 			DisplayChangeDamageMessage();
 
-			if (_CurrentRound > _MaxRound) {
+			if (CurrentRound > MaxRound) {
 				SetEffectAsExpired();
 			}
 		}
 
 		private void IncrementCurrentRound() {
-			_CurrentRound++;
+			CurrentRound++;
 		}
 
 		private void DisplayChangeDamageMessage() {
@@ -52,7 +52,7 @@ namespace DungeonGame.Effects {
 		}
 
 		public void SetEffectAsExpired() {
-			_IsEffectExpired = true;
+			IsEffectExpired = true;
 		}
 
 		public int GetUpdatedDamageFromChange(int attackAmount) {

@@ -4,25 +4,25 @@ using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public class BleedingEffect : IEffect {
-		public bool _IsEffectExpired { get; set; }
-		public int _TickDuration { get; }
-		public string _Name { get; set; }
-		public bool _IsHarmful { get; }
-		public int _CurrentRound { get; set; }
-		public int _MaxRound { get; }
-		public int _BleedDamageOverTime { get; }
+		public bool IsEffectExpired { get; set; }
+		public int TickDuration { get; }
+		public string Name { get; set; }
+		public bool IsHarmful { get; }
+		public int CurrentRound { get; set; }
+		public int MaxRound { get; }
+		public int BleedDamageOverTime { get; }
 
 		public BleedingEffect(string name, int maxRound, int bleedDamageOverTime) {
-			_TickDuration = 1;
-			_IsHarmful = true;
-			_Name = name;
-			_CurrentRound = 1;
-			_MaxRound = maxRound;
-			_BleedDamageOverTime = bleedDamageOverTime;
+			TickDuration = 1;
+			IsHarmful = true;
+			Name = name;
+			CurrentRound = 1;
+			MaxRound = maxRound;
+			BleedDamageOverTime = bleedDamageOverTime;
 		}
 
 		public void ProcessBleedingRound(Monster monster) {
-			if (_IsEffectExpired) {
+			if (IsEffectExpired) {
 				return;
 			}
 
@@ -33,13 +33,13 @@ namespace DungeonGame.Effects {
 
 			IncrementCurrentRound();
 
-			if (_CurrentRound > _MaxRound) {
+			if (CurrentRound > MaxRound) {
 				SetEffectAsExpired();
 			}
 		}
 
 		public void ProcessBleedingRound(Player player) {
-			if (_IsEffectExpired) {
+			if (IsEffectExpired) {
 				return;
 			}
 
@@ -50,29 +50,29 @@ namespace DungeonGame.Effects {
 
 			IncrementCurrentRound();
 
-			if (_CurrentRound > _MaxRound) {
+			if (CurrentRound > MaxRound) {
 				SetEffectAsExpired();
 			}
 		}
 
 		private Monster DecreaseHealthFromBleeding(Monster monster) {
-			monster._HitPoints -= _BleedDamageOverTime;
+			monster._HitPoints -= BleedDamageOverTime;
 
 			return monster;
 		}
 
 		private Player DecreaseHealthFromBleeding(Player player) {
-			player._HitPoints -= _BleedDamageOverTime;
+			player._HitPoints -= BleedDamageOverTime;
 
 			return player;
 		}
 
 		private string GetBleedMessage(Monster monster) {
-			return $"The {monster._Name} bleeds for {_BleedDamageOverTime} physical damage.";
+			return $"The {monster.Name} bleeds for {BleedDamageOverTime} physical damage.";
 		}
 
 		private string GetBleedMessage() {
-			return $"You bleed for {_BleedDamageOverTime} physical damage.";
+			return $"You bleed for {BleedDamageOverTime} physical damage.";
 		}
 
 		private void DisplayBleedMessage(string bleedMessage) {
@@ -83,11 +83,11 @@ namespace DungeonGame.Effects {
 		}
 
 		private void IncrementCurrentRound() {
-			_CurrentRound++;
+			CurrentRound++;
 		}
 
 		public void SetEffectAsExpired() {
-			_IsEffectExpired = true;
+			IsEffectExpired = true;
 		}
 	}
 }

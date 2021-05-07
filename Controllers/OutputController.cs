@@ -158,20 +158,20 @@ namespace DungeonGame.Controllers {
 			foreach (IEffect effect in player._Effects) {
 				string effectOutput;
 				if (player._InCombat) {
-					if (effect._MaxRound + 1 - effect._CurrentRound > 1) {
-						effectOutput = $"({effect._MaxRound + 1 - effect._CurrentRound} rounds) {TextInfo.ToTitleCase(effect._Name)}";
+					if (effect.MaxRound + 1 - effect.CurrentRound > 1) {
+						effectOutput = $"({effect.MaxRound + 1 - effect.CurrentRound} rounds) {TextInfo.ToTitleCase(effect.Name)}";
 					} else {
-						effectOutput = $"({effect._MaxRound + 1 - effect._CurrentRound} round) {TextInfo.ToTitleCase(effect._Name)}";
+						effectOutput = $"({effect.MaxRound + 1 - effect.CurrentRound} round) {TextInfo.ToTitleCase(effect.Name)}";
 					}
 				} else {
-					if (effect._MaxRound + 1 - effect._CurrentRound > 1) {
-						effectOutput = $"({(effect._MaxRound + 1 - effect._CurrentRound) * effect._TickDuration} seconds) {TextInfo.ToTitleCase(effect._Name)}";
+					if (effect.MaxRound + 1 - effect.CurrentRound > 1) {
+						effectOutput = $"({(effect.MaxRound + 1 - effect.CurrentRound) * effect.TickDuration} seconds) {TextInfo.ToTitleCase(effect.Name)}";
 					} else {
-						effectOutput = $"({(effect._MaxRound + 1 - effect._CurrentRound) * effect._TickDuration} second) {TextInfo.ToTitleCase(effect._Name)}";
+						effectOutput = $"({(effect.MaxRound + 1 - effect.CurrentRound) * effect.TickDuration} second) {TextInfo.ToTitleCase(effect.Name)}";
 					}
 				}
 				activeEffects++;
-				if (effect._IsHarmful) {
+				if (effect.IsHarmful) {
 					badEffectUserOutput.StoreUserOutput(
 						Settings.FormatAttackFailText(),
 						Settings.FormatDefaultBackground(),

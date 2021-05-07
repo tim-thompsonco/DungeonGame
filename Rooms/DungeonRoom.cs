@@ -30,7 +30,7 @@ namespace DungeonGame.Rooms {
 		public IRoom _SouthEast { get; set; }
 		public IRoom _Up { get; set; }
 		public IRoom _Down { get; set; }
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public string _Desc { get; set; }
 		public int _DungeonLevel { get; set; }
 		public List<string> _Commands { get; set; }
@@ -99,9 +99,9 @@ namespace DungeonGame.Rooms {
 					inputString.Append(' ');
 				}
 				string inputName = inputString.ToString().Trim();
-				string[] monsterName = _Monster._Name.Split(' ');
-				if (monsterName.Last() == inputName || _Monster._Name == inputName ||
-					_Monster._Name.Contains(input.Last()) || _Monster != null) {
+				string[] monsterName = _Monster.Name.Split(' ');
+				if (monsterName.Last() == inputName || _Monster.Name == inputName ||
+					_Monster.Name.Contains(input.Last()) || _Monster != null) {
 					if (_Monster._HitPoints > 0) {
 						player._InCombat = true;
 						_Monster._InCombat = true;
@@ -110,7 +110,7 @@ namespace DungeonGame.Rooms {
 							Messages.PlayerDeath();
 						}
 					} else {
-						string monsterDeadString = $"The {_Monster._Name} is already dead.";
+						string monsterDeadString = $"The {_Monster.Name} is already dead.";
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -242,7 +242,7 @@ namespace DungeonGame.Rooms {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatRoomOutputText(),
 				Settings.FormatDefaultBackground(),
-				_Name);
+				Name);
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -271,7 +271,7 @@ namespace DungeonGame.Rooms {
 				TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 				foreach (IName item in _RoomObjects) {
 					StringBuilder sb = new StringBuilder();
-					string itemTitle = item._Name;
+					string itemTitle = item.Name;
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
 					if (_RoomObjects[objCount - 1] != item) {
@@ -297,14 +297,14 @@ namespace DungeonGame.Rooms {
 				inputString.Append(' ');
 			}
 			string inputName = inputString.ToString().Trim();
-			string[] monsterName = _Monster._Name.Split(' ');
-			if (monsterName.Last() == inputName || _Monster._Name.Contains(inputName)) {
+			string[] monsterName = _Monster.Name.Split(' ');
+			if (monsterName.Last() == inputName || _Monster.Name.Contains(inputName)) {
 				if (_Monster._HitPoints <= 0 && _Monster._WasLooted == false) {
 					int goldLooted = _Monster._Gold;
 					player._Gold += _Monster._Gold;
 					try {
 						_Monster._Gold = 0;
-						string lootGoldString = $"You looted {goldLooted} gold coins from the {_Monster._Name}!";
+						string lootGoldString = $"You looted {goldLooted} gold coins from the {_Monster.Name}!";
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -321,7 +321,7 @@ namespace DungeonGame.Rooms {
 							} else {
 								player._Inventory.Add(_Monster._MonsterItems[0]);
 							}
-							string lootItemString = $"You looted {_Monster._MonsterItems[0]._Name} from the {_Monster._Name}!";
+							string lootItemString = $"You looted {_Monster._MonsterItems[0].Name} from the {_Monster.Name}!";
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatSuccessOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -330,14 +330,14 @@ namespace DungeonGame.Rooms {
 						}
 						_Monster._WasLooted = true;
 						int monsterIndex = _RoomObjects.FindIndex(
-							f => f._Name == _Monster._Name);
+							f => f.Name == _Monster.Name);
 						if (monsterIndex != -1) {
 							_RoomObjects.RemoveAt(monsterIndex);
 						}
 					} catch (InvalidOperationException) {
 					}
 				} else if (_Monster._WasLooted) {
-					string alreadyLootString = $"You already looted {_Monster._Name}!";
+					string alreadyLootString = $"You already looted {_Monster.Name}!";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -362,7 +362,7 @@ namespace DungeonGame.Rooms {
 			}
 
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			string monsterName = textInfo.ToTitleCase(_Monster._Name);
+			string monsterName = textInfo.ToTitleCase(_Monster.Name);
 			int levelDiff = player._Level - _Monster._Level;
 			StringBuilder difficultyStringBuilder = new StringBuilder();
 			difficultyStringBuilder.Append("Difficulty: ");
@@ -408,8 +408,8 @@ namespace DungeonGame.Rooms {
 				inputString.Append(' ');
 			}
 			string inputName = inputString.ToString().Trim();
-			string[] monsterName = _Monster._Name.Split(' ');
-			if (monsterName.Last() == inputName || _Monster._Name.Contains(inputName)) {
+			string[] monsterName = _Monster.Name.Split(' ');
+			if (monsterName.Last() == inputName || _Monster.Name.Contains(inputName)) {
 				for (int i = 0; i < _Monster._Desc.Length; i += Settings.GetGameWidth()) {
 					if (_Monster._Desc.Length - i < Settings.GetGameWidth()) {
 						OutputController.Display.StoreUserOutput(
@@ -440,7 +440,7 @@ namespace DungeonGame.Rooms {
 				foreach (IItem item in _Monster._MonsterItems) {
 					List<string> sameLineOutputItem = new List<string>();
 					StringBuilder sb = new StringBuilder();
-					string itemTitle = item._Name;
+					string itemTitle = item.Name;
 					itemTitle = textInfo.ToTitleCase(itemTitle);
 					sb.Append(itemTitle);
 					sameLineOutputItem.Add(Settings.FormatRoomOutputText());

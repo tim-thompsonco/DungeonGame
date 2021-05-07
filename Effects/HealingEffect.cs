@@ -3,25 +3,25 @@ using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public class HealingEffect : IEffect {
-		public bool _IsEffectExpired { get; set; }
-		public int _TickDuration { get; }
-		public bool _IsHarmful { get; }
-		public string _Name { get; set; }
-		public int _CurrentRound { get; set; }
-		public int _MaxRound { get; }
+		public bool IsEffectExpired { get; set; }
+		public int TickDuration { get; }
+		public bool IsHarmful { get; }
+		public string Name { get; set; }
+		public int CurrentRound { get; set; }
+		public int MaxRound { get; }
 		public int _HealOverTimeAmount { get; }
 
 		public HealingEffect(string name, int maxRound, int healOverTimeAmount) {
-			_TickDuration = 10;
-			_IsHarmful = false;
-			_Name = name;
-			_CurrentRound = 1;
-			_MaxRound = maxRound;
+			TickDuration = 10;
+			IsHarmful = false;
+			Name = name;
+			CurrentRound = 1;
+			MaxRound = maxRound;
 			_HealOverTimeAmount = healOverTimeAmount;
 		}
 
 		public void ProcessHealingRound(Player player) {
-			if (_IsEffectExpired) {
+			if (IsEffectExpired) {
 				return;
 			}
 
@@ -31,7 +31,7 @@ namespace DungeonGame.Effects {
 
 			IncrementCurrentRound();
 
-			if (_CurrentRound > _MaxRound) {
+			if (CurrentRound > MaxRound) {
 				SetEffectAsExpired();
 			}
 		}
@@ -56,11 +56,11 @@ namespace DungeonGame.Effects {
 		}
 
 		private void IncrementCurrentRound() {
-			_CurrentRound++;
+			CurrentRound++;
 		}
 
 		public void SetEffectAsExpired() {
-			_IsEffectExpired = true;
+			IsEffectExpired = true;
 		}
 	}
 }

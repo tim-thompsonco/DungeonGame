@@ -13,7 +13,7 @@ namespace DungeonGame {
 			Warrior,
 			Mage
 		}
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public string _Desc { get; set; }
 		public TrainerCategory _TrainerGroup { get; set; }
 		public int _BaseCost { get; set; }
@@ -24,7 +24,7 @@ namespace DungeonGame {
 		// Default constructor for JSON serialization
 		public Trainer() { }
 		public Trainer(string name, string desc, TrainerCategory trainerCategory) {
-			_Name = name;
+			Name = name;
 			_Desc = desc;
 			_BaseCost = 25;
 			_TrainerGroup = trainerCategory;
@@ -105,7 +105,7 @@ namespace DungeonGame {
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			string forSaleString = "The " + _Name + " has the following upgrades available:";
+			string forSaleString = "The " + Name + " has the following upgrades available:";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
@@ -609,7 +609,7 @@ namespace DungeonGame {
 						"there's nothing left. Do that, come back here, and you'll get a reward. ",
 						Quest.QuestType.ClearLevel,
 						new Armor(questArmorGroup, Armor.ArmorSlot.Hands, true, player),
-						_Name));
+						Name));
 					break;
 				case TrainerCategory.Warrior:
 					_AvailableQuests.Add(new Quest(
@@ -620,7 +620,7 @@ namespace DungeonGame {
 						"then they won't be so likely to stray from the dungeon. Go take care of this for me will you? ",
 						Quest.QuestType.KillMonster,
 						new Armor(questArmorGroup, Armor.ArmorSlot.Back, true, player),
-						_Name));
+						Name));
 					break;
 				case TrainerCategory.Mage:
 					_AvailableQuests.Add(new Quest(
@@ -632,7 +632,7 @@ namespace DungeonGame {
 						"a reasonable offer to me.",
 						Quest.QuestType.KillCount,
 						new Armor(questArmorGroup, Armor.ArmorSlot.Chest, true, player),
-						_Name));
+						Name));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -715,7 +715,7 @@ namespace DungeonGame {
 				f => f._Name.ToLower().Contains(userInput));
 			Quest quest = player._QuestLog[questIndex];
 			if (questIndex != -1) {
-				if (quest._QuestGiver == _Name) {
+				if (quest._QuestGiver == Name) {
 					if (quest._QuestCompleted) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using DungeonGame.Effects;
+﻿using DungeonGame.Effects;
 using DungeonGame.Items;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 using DungeonGame.Rooms;
+using System;
+using System.Linq;
 
 namespace DungeonGame.Controllers {
 	public static class CombatController {
@@ -14,7 +14,7 @@ namespace DungeonGame.Controllers {
 		public static void StartCombat(Player player, Monster monster) {
 			Console.Clear();
 
-			string fightStartString = $"{player._Name}, you have encountered a {monster._Name}. Time to fight!";
+			string fightStartString = $"{player._Name}, you have encountered a {monster.Name}. Time to fight!";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
@@ -180,7 +180,7 @@ namespace DungeonGame.Controllers {
 				}
 
 				if (attackDamage <= 0) {
-					string effectAbsorbString = $"Your {effect._Name} absorbed all of {monster._Name}'s attack!";
+					string effectAbsorbString = $"Your {effect.Name} absorbed all of {monster.Name}'s attack!";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatAttackFailText(),
 						Settings.FormatDefaultBackground(),
@@ -247,20 +247,20 @@ namespace DungeonGame.Controllers {
 				case "fight":
 					int attackDamage = player.PhysicalAttack(monster);
 					if (attackDamage - monster.ArmorRating(player) <= 0) {
-						string armorAbsorbString = $"The {monster._Name}'s armor absorbed all of your attack!";
+						string armorAbsorbString = $"The {monster.Name}'s armor absorbed all of your attack!";
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
 							armorAbsorbString);
 					} else if (attackDamage == 0) {
-						string attackFailString = $"You missed {monster._Name}!";
+						string attackFailString = $"You missed {monster.Name}!";
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
 							attackFailString);
 					} else {
 						int attackAmount = attackDamage - monster.ArmorRating(player);
-						string attackSucceedString = $"You hit the {monster._Name} for {attackAmount} physical damage.";
+						string attackSucceedString = $"You hit the {monster.Name} for {attackAmount} physical damage.";
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatAttackSuccessText(),
 							Settings.FormatDefaultBackground(),

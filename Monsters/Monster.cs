@@ -30,7 +30,7 @@ namespace DungeonGame.Monsters {
 			Archer,
 			Mage
 		}
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public string _Desc { get; set; }
 		public int _Level { get; set; }
 		public int _MaxHitPoints { get; set; }
@@ -302,7 +302,7 @@ namespace DungeonGame.Monsters {
 				if (_MonsterCategory == MonsterType.Elemental) {
 					attackAmount += _UnarmedAttackDamage;
 				} else {
-					string monsterDisarmed = $"The {_Name} is disarmed! They are going hand to hand!";
+					string monsterDisarmed = $"The {Name} is disarmed! They are going hand to hand!";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -318,7 +318,7 @@ namespace DungeonGame.Monsters {
 			}
 
 			if (randomChanceToHit <= chanceToDodge) {
-				string missString = $"The {_Name} missed you!";
+				string missString = $"The {Name} missed you!";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
@@ -328,7 +328,7 @@ namespace DungeonGame.Monsters {
 
 			int baseAttackAmount = attackAmount;
 
-			foreach (IEffect effect in player._Effects.Where(effect => effect._IsEffectExpired == false)) {
+			foreach (IEffect effect in player._Effects.Where(effect => effect.IsEffectExpired == false)) {
 				if (effect is FrozenEffect frozenEffect) {
 					attackAmount = frozenEffect.GetIncreasedDamageFromFrozen(attackAmount);
 
@@ -360,7 +360,7 @@ namespace DungeonGame.Monsters {
 				}
 
 				if (baseAttackAmount > attackAmount && attackAmount - player.ArmorRating(this) <= 0) {
-					string effectAbsorbString = $"Your {effect._Name} absorbed all of {_Name}'s attack!";
+					string effectAbsorbString = $"Your {effect.Name} absorbed all of {Name}'s attack!";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatAttackFailText(),
 						Settings.FormatDefaultBackground(),
@@ -372,14 +372,14 @@ namespace DungeonGame.Monsters {
 			}
 
 			if (attackAmount - player.ArmorRating(this) <= 0) {
-				string armorAbsorbString = $"Your armor absorbed all of {_Name}'s attack!";
+				string armorAbsorbString = $"Your armor absorbed all of {Name}'s attack!";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					armorAbsorbString);
 			} else if (attackAmount - player.ArmorRating(this) > 0) {
 				attackAmount -= player.ArmorRating(this);
-				string hitString = $"The {_Name} hits you for {attackAmount} physical damage.";
+				string hitString = $"The {Name} hits you for {attackAmount} physical damage.";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
@@ -402,7 +402,7 @@ namespace DungeonGame.Monsters {
 			player._InCombat = false;
 			_InCombat = false;
 			_Effects.Clear();
-			string defeatString = $"You have defeated the {_Name}!";
+			string defeatString = $"You have defeated the {Name}!";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
@@ -416,7 +416,7 @@ namespace DungeonGame.Monsters {
 				IEquipment equippableItem = loot as IEquipment;
 				equippableItem._Equipped = false;
 			}
-			_Name = $"Dead {_Name}";
+			Name = $"Dead {Name}";
 			_Desc = "A corpse of a monster you killed.";
 			player._Experience += _ExperienceProvided;
 			PlayerController.LevelUpCheck(player);

@@ -5,14 +5,14 @@ using DungeonGame.Players;
 
 namespace DungeonGame.Spells.MonsterSpells {
 	public class Fireball : IMonsterOffensiveSpell, IMonsterOffensiveOverTimeSpell {
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public int _ManaCost { get; }
 		public int _DamageAmount { get; }
 		public int _DamageOverTimeAmount { get; }
 		public int _MaxDamageRounds { get; }
 
 		public Fireball(int monsterLevel) {
-			_Name = GetType().Name.ToLower();
+			Name = GetType().Name.ToLower();
 			_ManaCost = 50;
 			_DamageAmount = GetDamageAmount(monsterLevel);
 			_DamageOverTimeAmount = GetDamageOverTimeAmount(monsterLevel);
@@ -54,9 +54,9 @@ namespace DungeonGame.Spells.MonsterSpells {
 		private void DisplaySpellAttackMessage(Monster monster) {
 			string attackString;
 			if (monster._MonsterCategory == Monster.MonsterType.Dragon) {
-				attackString = $"The {monster._Name} breathes a pillar of fire at you!";
+				attackString = $"The {monster.Name} breathes a pillar of fire at you!";
 			} else {
-				attackString = $"The {monster._Name} casts a fireball and launches it at you!";
+				attackString = $"The {monster.Name} casts a fireball and launches it at you!";
 			}
 
 			OutputController.Display.StoreUserOutput(
@@ -80,7 +80,7 @@ namespace DungeonGame.Spells.MonsterSpells {
 		}
 
 		public void DisplaySuccessfulAttackMessage(Monster monster, int spellDamage) {
-			string attackSuccessString = $"The {monster._Name} hits you for {spellDamage} fire damage.";
+			string attackSuccessString = $"The {monster.Name} hits you for {spellDamage} fire damage.";
 
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
@@ -89,7 +89,7 @@ namespace DungeonGame.Spells.MonsterSpells {
 		}
 
 		public void AddDamageOverTimeEffect(Player player) {
-			player._Effects.Add(new BurningEffect(_Name, _MaxDamageRounds, _DamageOverTimeAmount));
+			player._Effects.Add(new BurningEffect(Name, _MaxDamageRounds, _DamageOverTimeAmount));
 		}
 
 		public void DisplayDamageOverTimeMessage() {

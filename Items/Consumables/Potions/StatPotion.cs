@@ -11,7 +11,7 @@ namespace DungeonGame.Items.Consumables.Potions {
 			Constitution
 		}
 		public PotionStrength _PotionStrength { get; set; }
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public string _Desc { get; set; }
 		public int _ItemValue { get; set; }
 		public int _Weight { get; set; }
@@ -23,10 +23,10 @@ namespace DungeonGame.Items.Consumables.Potions {
 			_Weight = 1;
 			_PotionStrength = potionStrength;
 			_StatType = statType;
-			_Name = GetPotionName();
+			Name = GetPotionName();
 			_StatAmount = GetStatPotionAmount();
 			_ItemValue = _StatAmount * 10 / 2;
-			_Desc = $"A {_Name} that increases {_StatType.ToString().ToLower()} by {_StatAmount}.";
+			_Desc = $"A {Name} that increases {_StatType.ToString().ToLower()} by {_StatAmount}.";
 			_StatEffectDurationInSeconds = 600;
 		}
 

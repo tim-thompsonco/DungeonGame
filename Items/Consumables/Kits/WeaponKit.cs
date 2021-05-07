@@ -7,7 +7,7 @@ namespace DungeonGame.Items.Consumables.Kits {
 			Grindstone,
 			Bowstring
 		}
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public string _Desc { get; set; }
 		public int _ItemValue { get; set; }
 		public int _Weight { get; set; }
@@ -24,8 +24,8 @@ namespace DungeonGame.Items.Consumables.Kits {
 			_Weight = 1;
 			_KitAugmentAmount = GetKitAugmentAmount();
 			_ItemValue = _KitAugmentAmount * 10;
-			_Name = $"{kitLevel.ToString().ToLower()} {_KitType.ToString().ToLower()} weapon kit";
-			_Desc = $"A single-use {_Name} that increases weapon damage by {_KitAugmentAmount} for one weapon item.";
+			Name = $"{kitLevel.ToString().ToLower()} {_KitType.ToString().ToLower()} weapon kit";
+			_Desc = $"A single-use {Name} that increases weapon damage by {_KitAugmentAmount} for one weapon item.";
 		}
 
 		public int GetKitAugmentAmount() {
@@ -84,14 +84,14 @@ namespace DungeonGame.Items.Consumables.Kits {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
-				$"You can't upgrade {_TextInfo.ToTitleCase(weapon._Name)} with that!");
+				$"You can't upgrade {_TextInfo.ToTitleCase(weapon.Name)} with that!");
 		}
 
 		private void DisplayAugmentSuccessMessage(Weapon weapon) {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
-				$"You upgraded {_TextInfo.ToTitleCase(weapon._Name)} with a weapon kit.");
+				$"You upgraded {_TextInfo.ToTitleCase(weapon.Name)} with a weapon kit.");
 		}
 	}
 }

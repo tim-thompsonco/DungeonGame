@@ -20,7 +20,7 @@ namespace DungeonGame.Items {
 			Axe,
 			Bow
 		}
-		public string _Name { get; set; }
+		public string Name { get; set; }
 		public string _Desc { get; set; }
 		public int _RegDamage { get; set; }
 		public int _ItemValue { get; set; }
@@ -59,7 +59,7 @@ namespace DungeonGame.Items {
 			}
 			_ItemValue = _RegDamage;
 			BuildWeaponName();
-			_Desc = $"A {_Name} that causes damage when you hit stuff with it.";
+			_Desc = $"A {Name} that causes damage when you hit stuff with it.";
 		}
 		public Weapon(WeaponType weaponType, bool isRainbowGear, Player player) {
 			_Level = player._Level;
@@ -87,7 +87,7 @@ namespace DungeonGame.Items {
 			_RegDamage += 15;
 			_ItemValue = _RegDamage;
 			BuildWeaponName("rainbow");
-			_Desc = $"A {_Name} that causes damage when you hit stuff with it.";
+			_Desc = $"A {Name} that causes damage when you hit stuff with it.";
 		}
 		public Weapon(int level, WeaponType weaponType, Monster.MonsterType monsterType)
 			: this(level, weaponType) {
@@ -105,7 +105,7 @@ namespace DungeonGame.Items {
 						_ => ""
 					});
 					sb.Append("venomous fang");
-					_Name = sb.ToString();
+					Name = sb.ToString();
 					return;
 				case Monster.MonsterType.Demon:
 					return;
@@ -123,7 +123,7 @@ namespace DungeonGame.Items {
 						_ => ""
 					});
 					sb.Append("dragon fang");
-					_Name = sb.ToString();
+					Name = sb.ToString();
 					return;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(monsterType), monsterType, null);
@@ -170,7 +170,7 @@ namespace DungeonGame.Items {
 				WeaponType.TwoHandedSword => "sword (2H)",
 				_ => ""
 			});
-			_Name = sb.ToString();
+			Name = sb.ToString();
 		}
 		private void BuildWeaponName(string rainbowName) {
 			StringBuilder sb = new StringBuilder();
@@ -183,7 +183,7 @@ namespace DungeonGame.Items {
 				WeaponType.TwoHandedSword => "sword (2H)",
 				_ => ""
 			});
-			_Name = sb.ToString();
+			Name = sb.ToString();
 		}
 		public int Attack() {
 			if (!_Equipped) {

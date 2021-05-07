@@ -43,7 +43,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			OutputController.Display.ClearUserOutput();
 			int baseWeaponItemValue = weapon._ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
-			string displayMessage = $"You upgraded {textInfo.ToTitleCase(weapon._Name)} with a weapon kit.";
+			string displayMessage = $"You upgraded {textInfo.ToTitleCase(weapon.Name)} with a weapon kit.";
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
@@ -59,7 +59,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			weapon = new Weapon(3, Weapon.WeaponType.Bow);
 			int baseWeaponItemValue = weapon._ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(weapon._Name)} with that!";
+			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(weapon.Name)} with that!";
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
@@ -75,7 +75,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			weaponKit = new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring);
 			int baseWeaponItemValue = weapon._ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(weapon._Name)} with that!";
+			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(weapon.Name)} with that!";
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
@@ -92,7 +92,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 			weaponKit = new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring);
 			int baseWeaponItemValue = weapon._ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
-			string displayMessage = $"You upgraded {textInfo.ToTitleCase(weapon._Name)} with a weapon kit.";
+			string displayMessage = $"You upgraded {textInfo.ToTitleCase(weapon.Name)} with a weapon kit.";
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 

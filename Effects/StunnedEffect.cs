@@ -3,23 +3,23 @@ using DungeonGame.Monsters;
 
 namespace DungeonGame.Effects {
 	public class StunnedEffect : IEffect {
-		public bool _IsEffectExpired { get; set; }
-		public int _TickDuration { get; }
-		public bool _IsHarmful { get; }
-		public string _Name { get; set; }
-		public int _CurrentRound { get; set; }
-		public int _MaxRound { get; }
+		public bool IsEffectExpired { get; set; }
+		public int TickDuration { get; }
+		public bool IsHarmful { get; }
+		public string Name { get; set; }
+		public int CurrentRound { get; set; }
+		public int MaxRound { get; }
 
 		public StunnedEffect(string name, int maxRound) {
-			_TickDuration = 1;
-			_IsHarmful = true;
-			_Name = name;
-			_CurrentRound = 1;
-			_MaxRound = maxRound;
+			TickDuration = 1;
+			IsHarmful = true;
+			Name = name;
+			CurrentRound = 1;
+			MaxRound = maxRound;
 		}
 
 		public void ProcessStunnedRound(Monster monster) {
-			if (_IsEffectExpired) {
+			if (IsEffectExpired) {
 				return;
 			}
 
@@ -29,17 +29,17 @@ namespace DungeonGame.Effects {
 
 			DisplayStunnedMessage(monster);
 
-			if (_CurrentRound > _MaxRound) {
+			if (CurrentRound > MaxRound) {
 				SetEffectAsExpired();
 			}
 		}
 
 		private void IncrementCurrentRound() {
-			_CurrentRound++;
+			CurrentRound++;
 		}
 
 		private void DisplayStunnedMessage(Monster monster) {
-			string stunnedString = $"The {monster._Name} is stunned and cannot attack.";
+			string stunnedString = $"The {monster.Name} is stunned and cannot attack.";
 
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
@@ -48,7 +48,7 @@ namespace DungeonGame.Effects {
 		}
 
 		public void SetEffectAsExpired() {
-			_IsEffectExpired = true;
+			IsEffectExpired = true;
 		}
 	}
 }

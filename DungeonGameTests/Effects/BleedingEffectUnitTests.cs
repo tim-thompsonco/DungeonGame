@@ -25,12 +25,12 @@ namespace DungeonGameTests.Effects {
 		public void CreateBleedingEffectUnitTest() {
 			BleedingEffect bleedEffect = new BleedingEffect(effectName, maxRound, bleedDamageOverTime);
 
-			Assert.AreEqual(1, bleedEffect._TickDuration);
-			Assert.AreEqual(true, bleedEffect._IsHarmful);
-			Assert.AreEqual(effectName, bleedEffect._Name);
-			Assert.AreEqual(1, bleedEffect._CurrentRound);
-			Assert.AreEqual(maxRound, bleedEffect._MaxRound);
-			Assert.AreEqual(bleedDamageOverTime, bleedEffect._BleedDamageOverTime);
+			Assert.AreEqual(1, bleedEffect.TickDuration);
+			Assert.AreEqual(true, bleedEffect.IsHarmful);
+			Assert.AreEqual(effectName, bleedEffect.Name);
+			Assert.AreEqual(1, bleedEffect.CurrentRound);
+			Assert.AreEqual(maxRound, bleedEffect.MaxRound);
+			Assert.AreEqual(bleedDamageOverTime, bleedEffect.BleedDamageOverTime);
 		}
 
 		[Test]
@@ -60,8 +60,8 @@ namespace DungeonGameTests.Effects {
 
 			Assert.AreEqual(player._MaxHitPoints - bleedDamageOverTime, player._HitPoints);
 			Assert.AreEqual(bleedMessage, OutputController.Display._Output[0][2]);
-			Assert.AreEqual(2, bleedEffect._CurrentRound);
-			Assert.AreEqual(false, bleedEffect._IsEffectExpired);
+			Assert.AreEqual(2, bleedEffect.CurrentRound);
+			Assert.AreEqual(false, bleedEffect.IsEffectExpired);
 		}
 
 		[Test]
@@ -69,14 +69,14 @@ namespace DungeonGameTests.Effects {
 			OutputController.Display.ClearUserOutput();
 			monster._Effects.Add(new BleedingEffect(effectName, maxRound, bleedDamageOverTime));
 			BleedingEffect bleedEffect = monster._Effects.Find(effect => effect is BleedingEffect) as BleedingEffect;
-			string bleedMessage = $"The {monster._Name} bleeds for {bleedDamageOverTime} physical damage.";
+			string bleedMessage = $"The {monster.Name} bleeds for {bleedDamageOverTime} physical damage.";
 
 			bleedEffect.ProcessBleedingRound(monster);
 
 			Assert.AreEqual(monster._MaxHitPoints - bleedDamageOverTime, monster._HitPoints);
 			Assert.AreEqual(bleedMessage, OutputController.Display._Output[0][2]);
-			Assert.AreEqual(2, bleedEffect._CurrentRound);
-			Assert.AreEqual(false, bleedEffect._IsEffectExpired);
+			Assert.AreEqual(2, bleedEffect.CurrentRound);
+			Assert.AreEqual(false, bleedEffect.IsEffectExpired);
 		}
 
 		[Test]
@@ -88,8 +88,8 @@ namespace DungeonGameTests.Effects {
 				bleedEffect.ProcessBleedingRound(player);
 			}
 
-			Assert.AreEqual(3, bleedEffect._CurrentRound);
-			Assert.AreEqual(false, bleedEffect._IsEffectExpired);
+			Assert.AreEqual(3, bleedEffect.CurrentRound);
+			Assert.AreEqual(false, bleedEffect.IsEffectExpired);
 		}
 
 		[Test]
@@ -101,8 +101,8 @@ namespace DungeonGameTests.Effects {
 				bleedEffect.ProcessBleedingRound(monster);
 			}
 
-			Assert.AreEqual(3, bleedEffect._CurrentRound);
-			Assert.AreEqual(false, bleedEffect._IsEffectExpired);
+			Assert.AreEqual(3, bleedEffect.CurrentRound);
+			Assert.AreEqual(false, bleedEffect.IsEffectExpired);
 		}
 
 		[Test]
@@ -114,8 +114,8 @@ namespace DungeonGameTests.Effects {
 				bleedEffect.ProcessBleedingRound(player);
 			}
 
-			Assert.AreEqual(4, bleedEffect._CurrentRound);
-			Assert.AreEqual(true, bleedEffect._IsEffectExpired);
+			Assert.AreEqual(4, bleedEffect.CurrentRound);
+			Assert.AreEqual(true, bleedEffect.IsEffectExpired);
 		}
 
 		[Test]
@@ -127,8 +127,8 @@ namespace DungeonGameTests.Effects {
 				bleedEffect.ProcessBleedingRound(monster);
 			}
 
-			Assert.AreEqual(4, bleedEffect._CurrentRound);
-			Assert.AreEqual(true, bleedEffect._IsEffectExpired);
+			Assert.AreEqual(4, bleedEffect.CurrentRound);
+			Assert.AreEqual(true, bleedEffect.IsEffectExpired);
 		}
 
 		[Test]
@@ -136,13 +136,13 @@ namespace DungeonGameTests.Effects {
 			OutputController.Display.ClearUserOutput();
 			player._Effects.Add(new BleedingEffect(effectName, maxRound, bleedDamageOverTime));
 			BleedingEffect bleedEffect = player._Effects.Find(effect => effect is BleedingEffect) as BleedingEffect;
-			bleedEffect._IsEffectExpired = true;
+			bleedEffect.IsEffectExpired = true;
 
 			bleedEffect.ProcessBleedingRound(player);
 
 			Assert.AreEqual(player._MaxHitPoints, player._HitPoints);
 			Assert.AreEqual(0, OutputController.Display._Output.Count);
-			Assert.AreEqual(1, bleedEffect._CurrentRound);
+			Assert.AreEqual(1, bleedEffect.CurrentRound);
 		}
 
 		[Test]
@@ -150,13 +150,13 @@ namespace DungeonGameTests.Effects {
 			OutputController.Display.ClearUserOutput();
 			monster._Effects.Add(new BleedingEffect(effectName, maxRound, bleedDamageOverTime));
 			BleedingEffect bleedEffect = monster._Effects.Find(effect => effect is BleedingEffect) as BleedingEffect;
-			bleedEffect._IsEffectExpired = true;
+			bleedEffect.IsEffectExpired = true;
 
 			bleedEffect.ProcessBleedingRound(monster);
 
 			Assert.AreEqual(monster._MaxHitPoints, monster._HitPoints);
 			Assert.AreEqual(0, OutputController.Display._Output.Count);
-			Assert.AreEqual(1, bleedEffect._CurrentRound);
+			Assert.AreEqual(1, bleedEffect.CurrentRound);
 		}
 	}
 }

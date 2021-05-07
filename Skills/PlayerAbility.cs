@@ -186,9 +186,9 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				powerAuraString);
 
-			int powerAuraIndex = player._Effects.FindIndex(e => e._Name == player._Abilities[index]._Name);
+			int powerAuraIndex = player._Effects.FindIndex(e => e.Name == player._Abilities[index]._Name);
 			if (powerAuraIndex != -1) {
-				player._Effects[powerAuraIndex]._IsEffectExpired = true;
+				player._Effects[powerAuraIndex].IsEffectExpired = true;
 			}
 
 			player._Strength += player._Abilities[index]._ChangeAmount._Amount;
@@ -222,9 +222,9 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				swiftAuraString);
 
-			int swiftAuraIndex = player._Effects.FindIndex(e => e._Name == player._Abilities[index]._Name);
+			int swiftAuraIndex = player._Effects.FindIndex(e => e.Name == player._Abilities[index]._Name);
 			if (swiftAuraIndex != -1) {
-				player._Effects[swiftAuraIndex]._IsEffectExpired = true;
+				player._Effects[swiftAuraIndex].IsEffectExpired = true;
 			}
 
 			player._Dexterity += player._Abilities[index]._ChangeAmount._Amount;
@@ -291,7 +291,7 @@ namespace DungeonGame {
 
 			int abilityDamage = player._Abilities[index]._Stun._DamageAmount;
 
-			string attackSuccessString = $"You {player._Abilities[index]._Name} the {monster._Name} for {abilityDamage} physical damage.";
+			string attackSuccessString = $"You {player._Abilities[index]._Name} the {monster.Name} for {abilityDamage} physical damage.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -299,7 +299,7 @@ namespace DungeonGame {
 
 			monster._HitPoints -= abilityDamage;
 
-			string stunString = $"The {monster._Name} is stunned!";
+			string stunString = $"The {monster.Name} is stunned!";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -433,7 +433,7 @@ namespace DungeonGame {
 			}
 			int successChance = GameController.GetRandomNumber(1, 100);
 			if (successChance > player._Abilities[index]._Offensive._ChanceToSucceed) {
-				string attackString = $"You tried to shoot {opponent._Name} from afar but failed!";
+				string attackString = $"You tried to shoot {opponent.Name} from afar but failed!";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
@@ -441,7 +441,7 @@ namespace DungeonGame {
 			} else {
 				Settings.FormatAttackSuccessText();
 				opponent._HitPoints -= player._Abilities[index]._Offensive._Amount;
-				string shootString = $"You successfully shot {opponent._Name} from afar for {player._Abilities[index]._Offensive._Amount} damage!";
+				string shootString = $"You successfully shot {opponent.Name} from afar for {player._Abilities[index]._Offensive._Amount} damage!";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
@@ -527,7 +527,7 @@ namespace DungeonGame {
 				return;
 			}
 
-			player._Effects.Add(new HealingEffect(player._Abilities[index]._Name, player._Abilities[index]._Healing._HealMaxRounds, 
+			player._Effects.Add(new HealingEffect(player._Abilities[index]._Name, player._Abilities[index]._Healing._HealMaxRounds,
 				player._Abilities[index]._Healing._HealOverTime));
 		}
 
@@ -542,14 +542,14 @@ namespace DungeonGame {
 			DeductAbilityCost(player, index);
 			int successChance = GameController.GetRandomNumber(1, 100);
 			if (successChance > player._Abilities[index]._Offensive._Amount) {
-				string disarmFailString = $"You tried to disarm {opponent._Name} but failed!";
+				string disarmFailString = $"You tried to disarm {opponent.Name} but failed!";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					disarmFailString);
 			} else {
 				opponent._MonsterWeapon._Equipped = false;
-				string disarmSuccessString = $"You successfully disarmed {opponent._Name}!";
+				string disarmSuccessString = $"You successfully disarmed {opponent.Name}!";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
@@ -628,7 +628,7 @@ namespace DungeonGame {
 			int abilityDamage = PlayerController.CalculateAbilityDamage(player, monster, index);
 			monster._HitPoints -= abilityDamage;
 
-			string abilitySuccessString = $"Your {player._Abilities[index]._Name} hit the {monster._Name} for {abilityDamage} physical damage.";
+			string abilitySuccessString = $"Your {player._Abilities[index]._Name} hit the {monster.Name} for {abilityDamage} physical damage.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -642,7 +642,7 @@ namespace DungeonGame {
 				case Offensive.OffensiveType.Normal:
 					break;
 				case Offensive.OffensiveType.Bleed:
-					string bleedString = $"The {monster._Name} is bleeding!";
+					string bleedString = $"The {monster.Name} is bleeding!";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatAttackSuccessText(),
 						Settings.FormatDefaultBackground(),
@@ -652,7 +652,7 @@ namespace DungeonGame {
 						player._Abilities[index]._Offensive._AmountOverTime));
 					break;
 				case Offensive.OffensiveType.Fire:
-					string onFireString = $"The {monster._Name} bursts into flame!";
+					string onFireString = $"The {monster.Name} bursts into flame!";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatOnFireText(),
 						Settings.FormatDefaultBackground(),

@@ -53,9 +53,9 @@ namespace DungeonGame {
 
 			string attackString;
 			if (monster._MonsterCategory == Monster.MonsterType.Dragon) {
-				attackString = $"The {monster._Name} breathes a pillar of fire at you!";
+				attackString = $"The {monster.Name} breathes a pillar of fire at you!";
 			} else {
-				attackString = $"The {monster._Name} casts a fireball and launches it at you!";
+				attackString = $"The {monster.Name} casts a fireball and launches it at you!";
 			}
 
 			OutputController.Display.StoreUserOutput(
@@ -72,7 +72,7 @@ namespace DungeonGame {
 
 			player._HitPoints -= fireSpellDamage;
 
-			string attackSuccessString = $"The {monster._Name} hits you for {fireSpellDamage} fire damage.";
+			string attackSuccessString = $"The {monster.Name} hits you for {fireSpellDamage} fire damage.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -85,7 +85,7 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(),
 					onFireString);
 				player._Effects.Add(
-					new BurningEffect(monster._Spellbook[index]._Name, monster._Spellbook[index]._Offensive._AmountMaxRounds, 
+					new BurningEffect(monster._Spellbook[index]._Name, monster._Spellbook[index]._Offensive._AmountMaxRounds,
 						monster._Spellbook[index]._Offensive._AmountOverTime));
 			}
 		}
@@ -93,7 +93,7 @@ namespace DungeonGame {
 		public void CastFrostOffense(Monster monster, Player player, int index) {
 			monster._EnergyPoints -= monster._Spellbook[index]._EnergyCost;
 
-			string attackString = $"The {monster._Name} conjures up a frostbolt and launches it at you!";
+			string attackString = $"The {monster.Name} conjures up a frostbolt and launches it at you!";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -108,7 +108,7 @@ namespace DungeonGame {
 
 			player._HitPoints -= frostSpellDamage;
 
-			string attackSuccessString = $"The {monster._Name} hits you for {frostSpellDamage} frost damage.";
+			string attackSuccessString = $"The {monster.Name} hits you for {frostSpellDamage} frost damage.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -126,7 +126,7 @@ namespace DungeonGame {
 		public void CastArcaneOffense(Monster monster, Player player, int index) {
 			monster._EnergyPoints -= monster._Spellbook[index]._EnergyCost;
 
-			string attackString = $"The {monster._Name} casts a bolt of lightning at you!";
+			string attackString = $"The {monster.Name} casts a bolt of lightning at you!";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -141,7 +141,7 @@ namespace DungeonGame {
 
 			player._HitPoints -= arcaneSpellDamage;
 
-			string attackSuccessString = $"The {monster._Name} hits you for {arcaneSpellDamage} arcane damage.";
+			string attackSuccessString = $"The {monster.Name} hits you for {arcaneSpellDamage} arcane damage.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
