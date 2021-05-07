@@ -207,18 +207,18 @@ namespace DungeonGame.Rooms {
 			if (_RoomObjects[nameIndex].GetType() == typeof(Vendor)) {
 				string[] vendorName = _Vendor.Name.Split(' ');
 				if (vendorName.Last() == inputName || _Vendor.Name == inputName) {
-					for (int i = 0; i < _Vendor._Desc.Length; i += Settings.GetGameWidth()) {
-						if (_Vendor._Desc.Length - i < Settings.GetGameWidth()) {
+					for (int i = 0; i < _Vendor.Desc.Length; i += Settings.GetGameWidth()) {
+						if (_Vendor.Desc.Length - i < Settings.GetGameWidth()) {
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatRoomOutputText(),
 								Settings.FormatDefaultBackground(),
-								_Vendor._Desc.Substring(i, _Vendor._Desc.Length - i));
+								_Vendor.Desc.Substring(i, _Vendor.Desc.Length - i));
 							continue;
 						}
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatRoomOutputText(),
 							Settings.FormatDefaultBackground(),
-							_Vendor._Desc.Substring(i, Settings.GetGameWidth()));
+							_Vendor.Desc.Substring(i, Settings.GetGameWidth()));
 					}
 					List<string> sameLineOutput = new List<string> {
 						Settings.FormatRoomOutputText(),
@@ -226,7 +226,7 @@ namespace DungeonGame.Rooms {
 						"The vendor is carrying: "};
 					OutputController.Display.StoreUserOutput(sameLineOutput);
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-					foreach (IItem itemForSale in _Vendor._VendorItems) {
+					foreach (IItem itemForSale in _Vendor.VendorItems) {
 						List<string> sameLineOutputItem = new List<string>();
 						StringBuilder sb = new StringBuilder();
 						string itemTitle = itemForSale.Name;

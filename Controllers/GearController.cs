@@ -88,7 +88,7 @@ namespace DungeonGame.Controllers {
 
 			foreach (IEffect effect in player._Effects.Where(effect => effect is ChangeArmorEffect)) {
 				ChangeArmorEffect changeArmorEffect = effect as ChangeArmorEffect;
-				totalArmorRating += changeArmorEffect._ChangeArmorAmount;
+				totalArmorRating += changeArmorEffect.ChangeArmorAmount;
 			}
 
 			return totalArmorRating < 0 ? 0 : totalArmorRating;

@@ -4,21 +4,18 @@ using System;
 
 namespace DungeonGame.Effects {
 	public class ChangeMonsterDamageEffect : IEffect {
+		public int ChangeAmount { get; }
+		public int CurrentRound { get; set; } = 1;
 		public bool IsEffectExpired { get; set; }
-		public int TickDuration { get; }
 		public bool IsHarmful { get; }
-		public string Name { get; set; }
-		public int CurrentRound { get; set; }
 		public int MaxRound { get; }
-		public int _ChangeAmount { get; }
+		public string Name { get; set; }
+		public int TickDuration { get; } = 1;
 
 		public ChangeMonsterDamageEffect(string name, int maxRound, int changeAmount) {
-			TickDuration = 1;
-			IsHarmful = false;
 			Name = name;
-			CurrentRound = 1;
 			MaxRound = maxRound;
-			_ChangeAmount = changeAmount;
+			ChangeAmount = changeAmount;
 		}
 
 		public void ProcessChangeMonsterDamageRound(Player player) {
@@ -40,9 +37,9 @@ namespace DungeonGame.Effects {
 		}
 
 		private void DisplayChangeDamageMessage() {
-			int changeAmount = Math.Abs(_ChangeAmount);
+			int changeAmount = Math.Abs(ChangeAmount);
 
-			string changeDmgString = _ChangeAmount > 0 ? $"Incoming damage is increased by {changeAmount}." :
+			string changeDmgString = ChangeAmount > 0 ? $"Incoming damage is increased by {changeAmount}." :
 				$"Incoming damage is decreased by {changeAmount}.";
 
 			OutputController.Display.StoreUserOutput(
@@ -56,7 +53,7 @@ namespace DungeonGame.Effects {
 		}
 
 		public int GetUpdatedDamageFromChange(int attackAmount) {
-			return attackAmount + _ChangeAmount;
+			return attackAmount + ChangeAmount;
 		}
 	}
 }

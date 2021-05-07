@@ -2,21 +2,18 @@
 
 namespace DungeonGame.Effects {
 	public class ReflectDamageEffect : IEffect {
+		public int CurrentRound { get; set; } = 1;
 		public bool IsEffectExpired { get; set; }
-		public int TickDuration { get; }
 		public bool IsHarmful { get; }
-		public string Name { get; set; }
-		public int CurrentRound { get; set; }
 		public int MaxRound { get; }
-		public int _ReflectDamageAmount { get; }
+		public string Name { get; set; }
+		public int ReflectDamageAmount { get; }
+		public int TickDuration { get; } = 10;
 
 		public ReflectDamageEffect(string name, int maxRound, int reflectDamageAmount) {
-			TickDuration = 10;
-			IsHarmful = false;
 			Name = name;
-			CurrentRound = 1;
 			MaxRound = maxRound;
-			_ReflectDamageAmount = reflectDamageAmount;
+			ReflectDamageAmount = reflectDamageAmount;
 		}
 
 		public void ProcessReflectDamageRound() {
@@ -74,8 +71,8 @@ namespace DungeonGame.Effects {
 		}
 
 		public int GetReflectedDamageAmount(int incomingDamage) {
-			if (_ReflectDamageAmount < incomingDamage) {
-				return _ReflectDamageAmount;
+			if (ReflectDamageAmount < incomingDamage) {
+				return ReflectDamageAmount;
 			} else {
 				return incomingDamage;
 			}

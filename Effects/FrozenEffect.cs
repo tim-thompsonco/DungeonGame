@@ -3,21 +3,17 @@ using DungeonGame.Monsters;
 
 namespace DungeonGame.Effects {
 	public class FrozenEffect : IEffect {
+		public int CurrentRound { get; set; } = 1;
+		public double EffectMultiplier { get; } = 1.5;
 		public bool IsEffectExpired { get; set; }
-		public int TickDuration { get; }
-		public bool IsHarmful { get; }
-		public string Name { get; set; }
-		public int CurrentRound { get; set; }
+		public bool IsHarmful { get; } = true;
 		public int MaxRound { get; }
-		public double _EffectMultiplier { get; }
+		public string Name { get; set; }
+		public int TickDuration { get; } = 1;
 
 		public FrozenEffect(string name, int maxRound) {
-			TickDuration = 1;
-			IsHarmful = true;
 			Name = name;
-			CurrentRound = 1;
 			MaxRound = maxRound;
-			_EffectMultiplier = 1.5;
 		}
 
 		public int GetIncreasedDamageFromFrozen(int damage) {
@@ -26,7 +22,7 @@ namespace DungeonGame.Effects {
 
 			}
 
-			return (int)(damage * _EffectMultiplier);
+			return (int)(damage * EffectMultiplier);
 		}
 
 		public void ProcessFrozenRound(Monster monster) {
@@ -60,13 +56,13 @@ namespace DungeonGame.Effects {
 		}
 
 		private string GetFrozenMessage(Monster monster) {
-			int percentIncrease = (int)((_EffectMultiplier - 1) * 100);
+			int percentIncrease = (int)((EffectMultiplier - 1) * 100);
 
 			return $"The {monster.Name} is frozen. Physical, frost and arcane damage to it will be increased by {percentIncrease}%!";
 		}
 
 		private string GetFrozenMessage() {
-			int percentIncrease = (int)((_EffectMultiplier - 1) * 100);
+			int percentIncrease = (int)((EffectMultiplier - 1) * 100);
 
 			return $"You are frozen. Physical, frost and arcane damage to you will be increased by {percentIncrease}%!";
 		}

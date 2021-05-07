@@ -3,21 +3,18 @@ using System;
 
 namespace DungeonGame.Effects {
 	public class ChangeArmorEffect : IEffect {
+		public int ChangeArmorAmount { get; }
+		public int CurrentRound { get; set; } = 1;
 		public bool IsEffectExpired { get; set; }
-		public int TickDuration { get; }
 		public bool IsHarmful { get; }
-		public string Name { get; set; }
-		public int CurrentRound { get; set; }
 		public int MaxRound { get; }
-		public int _ChangeArmorAmount { get; }
+		public string Name { get; set; }
+		public int TickDuration { get; } = 10;
 
 		public ChangeArmorEffect(string name, int maxRound, int changeArmorAmount) {
-			TickDuration = 10;
-			IsHarmful = false;
 			Name = name;
-			CurrentRound = 1;
 			MaxRound = maxRound;
-			_ChangeArmorAmount = changeArmorAmount;
+			ChangeArmorAmount = changeArmorAmount;
 		}
 
 		public void ProcessChangeArmorRound() {
@@ -39,9 +36,9 @@ namespace DungeonGame.Effects {
 		}
 
 		private void DisplayChangeArmorMessage() {
-			int changeAmount = Math.Abs(_ChangeArmorAmount);
+			int changeAmount = Math.Abs(ChangeArmorAmount);
 
-			string changeArmorString = _ChangeArmorAmount > 0 ? $"Your armor is increased by {changeAmount}." :
+			string changeArmorString = ChangeArmorAmount > 0 ? $"Your armor is increased by {changeAmount}." :
 				$"Your armor is decreased by {changeAmount}.";
 
 			OutputController.Display.StoreUserOutput(

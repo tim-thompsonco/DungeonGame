@@ -3,18 +3,15 @@ using DungeonGame.Monsters;
 
 namespace DungeonGame.Effects {
 	public class StunnedEffect : IEffect {
+		public int CurrentRound { get; set; } = 1;
 		public bool IsEffectExpired { get; set; }
-		public int TickDuration { get; }
-		public bool IsHarmful { get; }
-		public string Name { get; set; }
-		public int CurrentRound { get; set; }
+		public bool IsHarmful { get; } = true;
 		public int MaxRound { get; }
+		public string Name { get; set; }
+		public int TickDuration { get; } = 1;
 
 		public StunnedEffect(string name, int maxRound) {
-			TickDuration = 1;
-			IsHarmful = true;
 			Name = name;
-			CurrentRound = 1;
 			MaxRound = maxRound;
 		}
 

@@ -20,34 +20,34 @@ namespace DungeonGame {
 			Shopkeeper
 		}
 		public string Name { get; set; }
-		public string _Desc { get; set; }
-		public VendorType _VendorCategory { get; set; }
-		public List<IItem> _VendorItems { get; set; }
+		public string Desc { get; set; }
+		public VendorType VendorCategory { get; set; }
+		public List<IItem> VendorItems { get; set; }
 		public List<Quest> _AvailableQuests { get; set; }
 
 		// Default constructor for JSON serialization
 		public Vendor() { }
 		public Vendor(string name, string desc, VendorType vendorCategory) {
 			Name = name;
-			_Desc = desc;
-			_VendorItems = new List<IItem>();
-			_VendorCategory = vendorCategory;
-			switch (_VendorCategory) {
+			Desc = desc;
+			VendorItems = new List<IItem>();
+			VendorCategory = vendorCategory;
+			switch (VendorCategory) {
 				case VendorType.Armorer:
-					_VendorItems.Add(
+					VendorItems.Add(
 						new Armor(1, Armor.ArmorType.Leather, Armor.ArmorSlot.Head));
-					_VendorItems.Add(
+					VendorItems.Add(
 						new Armor(1, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest));
-					_VendorItems.Add(
+					VendorItems.Add(
 						new Armor(1, Armor.ArmorType.Leather, Armor.ArmorSlot.Legs));
 					break;
 				case VendorType.Weaponsmith:
-					_VendorItems.Add(new Weapon(1, Weapon.WeaponType.OneHandedSword));
-					_VendorItems.Add(new Arrows("arrows", 15, Arrows.ArrowType.Standard));
+					VendorItems.Add(new Weapon(1, Weapon.WeaponType.OneHandedSword));
+					VendorItems.Add(new Arrows("arrows", 15, Arrows.ArrowType.Standard));
 					break;
 				case VendorType.Healer:
-					_VendorItems.Add(new HealthPotion(PotionStrength.Minor));
-					_VendorItems.Add(new ManaPotion(PotionStrength.Minor));
+					VendorItems.Add(new HealthPotion(PotionStrength.Minor));
+					VendorItems.Add(new ManaPotion(PotionStrength.Minor));
 					break;
 				case VendorType.Shopkeeper:
 					break;
@@ -63,7 +63,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				forSaleString);
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (IItem item in _VendorItems) {
+			foreach (IItem item in VendorItems) {
 				StringBuilder itemInfo = new StringBuilder();
 				itemInfo.Append(item.Name);
 				if (item is IEquipment equippableItem && equippableItem.Equipped) {
@@ -98,11 +98,11 @@ namespace DungeonGame {
 
 			string inputName = InputController.ParseInput(userInput);
 			int index = -1;
-			if (_VendorCategory == VendorType.Healer) {
-				index = _VendorItems.FindIndex(
+			if (VendorCategory == VendorType.Healer) {
+				index = VendorItems.FindIndex(
 					f => f.Name == inputName || f.Name.Contains(inputName));
 			} else {
-				index = _VendorItems.FindIndex(
+				index = VendorItems.FindIndex(
 					f => f.Name == inputName || f.Name.Contains(userInput.Last()));
 			}
 			if (index == -1) {
@@ -112,11 +112,11 @@ namespace DungeonGame {
 					"The vendor doesn't have that available for sale!");
 				return;
 			}
-			IItem buyItem = _VendorItems[index];
+			IItem buyItem = VendorItems[index];
 			if (player._Gold >= buyItem.ItemValue && quantity > 0) {
 				player._Gold -= buyItem.ItemValue;
 				player._Inventory.Add(buyItem);
-				_VendorItems.RemoveAt(index);
+				VendorItems.RemoveAt(index);
 				string purchaseString = $"You purchased {buyItem.Name} from the vendor for {buyItem.ItemValue} gold.";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
@@ -126,7 +126,7 @@ namespace DungeonGame {
 					return;
 				}
 
-				if (_VendorCategory == VendorType.Healer) {
+				if (VendorCategory == VendorType.Healer) {
 					RepopulateHealerPotion(inputName);
 				} else {
 					RepopulateArrows(inputName);
@@ -201,10 +201,10 @@ namespace DungeonGame {
 			try {
 				sellItem = player._Inventory[index];
 				switch (sellItem) {
-					case Armor _ when _VendorCategory == VendorType.Healer || _VendorCategory == VendorType.Weaponsmith:
+					case Armor _ when VendorCategory == VendorType.Healer || VendorCategory == VendorType.Weaponsmith:
 						Messages.InvalidVendorSell();
 						return;
-					case Weapon _ when _VendorCategory == VendorType.Healer || _VendorCategory == VendorType.Armorer:
+					case Weapon _ when VendorCategory == VendorType.Healer || VendorCategory == VendorType.Armorer:
 						Messages.InvalidVendorSell();
 						return;
 				}
@@ -244,16 +244,16 @@ namespace DungeonGame {
 					return;
 				}
 				sellItem = player._Inventory[index];
-				if (_VendorCategory == VendorType.Armorer || _VendorCategory == VendorType.Weaponsmith) {
+				if (VendorCategory == VendorType.Armorer || VendorCategory == VendorType.Weaponsmith) {
 					Messages.InvalidVendorSell();
 					return;
 				}
 				player._Inventory.RemoveAt(index);
-				if (_VendorItems.Count == 5) {
-					_VendorItems.RemoveAt(_VendorItems[0].Name.Contains("arrow") ? 1 : 0);
+				if (VendorItems.Count == 5) {
+					VendorItems.RemoveAt(VendorItems[0].Name.Contains("arrow") ? 1 : 0);
 				}
 
-				_VendorItems.Add(sellItem);
+				VendorItems.Add(sellItem);
 				string soldString = $"You sold {sellItem.Name} to the vendor for {sellItem.ItemValue} gold.";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
@@ -266,7 +266,7 @@ namespace DungeonGame {
 			int index = player._Inventory.FindIndex(
 				f => f.Name == parsedInput || f.Name.Contains(userInput.Last()));
 			if (index != -1) {
-				switch (_VendorCategory) {
+				switch (VendorCategory) {
 					case VendorType.Armorer:
 						if (player._Inventory[index] is Armor repairArmor && repairArmor.Equipped) {
 							int durabilityRepairArmor = 100 - repairArmor.Durability;
@@ -329,7 +329,7 @@ namespace DungeonGame {
 						break;
 					case VendorType.Healer:
 					case VendorType.Shopkeeper:
-						string noRepairString = $"{_VendorCategory}s don't repair equipment.";
+						string noRepairString = $"{VendorCategory}s don't repair equipment.";
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
@@ -346,7 +346,7 @@ namespace DungeonGame {
 				"That item is not in your inventory.");
 		}
 		public void RestorePlayer(Player player) {
-			if (_VendorCategory == VendorType.Healer) {
+			if (VendorCategory == VendorType.Healer) {
 				player._HitPoints = player._MaxHitPoints;
 				player._RagePoints = player._MaxRagePoints;
 				player._ManaPoints = player._MaxManaPoints;
@@ -366,27 +366,27 @@ namespace DungeonGame {
 		}
 
 		private void RepopulateHealerPotion(string inputName) {
-			int potionIndex = _VendorItems.FindIndex(
+			int potionIndex = VendorItems.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (potionIndex != -1) {
 				return;
 			}
 
 			if (inputName.Contains("mana")) {
-				_VendorItems.Add(new ManaPotion(PotionStrength.Minor));
+				VendorItems.Add(new ManaPotion(PotionStrength.Minor));
 			} else if (inputName.Contains("health")) {
-				_VendorItems.Add(new HealthPotion(PotionStrength.Minor));
+				VendorItems.Add(new HealthPotion(PotionStrength.Minor));
 			}
 		}
 
 		private void RepopulateArrows(string inputName) {
-			int arrowIndex = _VendorItems.FindIndex(
+			int arrowIndex = VendorItems.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
 			if (arrowIndex != -1) {
 				return;
 			}
 
-			_VendorItems.Add(new Arrows("arrows", 15, Arrows.ArrowType.Standard));
+			VendorItems.Add(new Arrows("arrows", 15, Arrows.ArrowType.Standard));
 		}
 		public void PopulateQuests(Player player) {
 			_AvailableQuests = new List<Quest>();
@@ -396,7 +396,7 @@ namespace DungeonGame {
 				Player.PlayerClassType.Archer => Armor.ArmorType.Leather,
 				_ => throw new ArgumentOutOfRangeException()
 			};
-			switch (_VendorCategory) {
+			switch (VendorCategory) {
 				case VendorType.Armorer:
 					_AvailableQuests.Add(new Quest(
 						"Bring The Mallet To Them",

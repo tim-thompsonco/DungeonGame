@@ -4,19 +4,16 @@ using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public class BleedingEffect : IEffect {
-		public bool IsEffectExpired { get; set; }
-		public int TickDuration { get; }
-		public string Name { get; set; }
-		public bool IsHarmful { get; }
-		public int CurrentRound { get; set; }
-		public int MaxRound { get; }
 		public int BleedDamageOverTime { get; }
+		public int CurrentRound { get; set; } = 1;
+		public bool IsEffectExpired { get; set; }
+		public bool IsHarmful { get; } = true;
+		public int MaxRound { get; }
+		public string Name { get; set; }
+		public int TickDuration { get; } = 1;
 
 		public BleedingEffect(string name, int maxRound, int bleedDamageOverTime) {
-			TickDuration = 1;
-			IsHarmful = true;
 			Name = name;
-			CurrentRound = 1;
 			MaxRound = maxRound;
 			BleedDamageOverTime = bleedDamageOverTime;
 		}

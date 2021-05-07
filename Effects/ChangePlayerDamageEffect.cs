@@ -4,21 +4,18 @@ using System;
 
 namespace DungeonGame.Effects {
 	public class ChangePlayerDamageEffect : IEffect {
+		public int CurrentRound { get; set; } = 1;
 		public bool IsEffectExpired { get; set; }
-		public int TickDuration { get; }
 		public bool IsHarmful { get; }
-		public string Name { get; set; }
-		public int CurrentRound { get; set; }
 		public int MaxRound { get; }
-		private readonly int _ChangeAmount;
+		public string Name { get; set; }
+		public int TickDuration { get; } = 1;
+		private readonly int _changeAmount;
 
 		public ChangePlayerDamageEffect(string name, int maxRound, int changeAmount) {
-			TickDuration = 1;
-			IsHarmful = false;
 			Name = name;
-			CurrentRound = 1;
 			MaxRound = maxRound;
-			_ChangeAmount = changeAmount;
+			_changeAmount = changeAmount;
 		}
 
 		public void ProcessChangePlayerDamageRound(Player player) {
@@ -40,9 +37,9 @@ namespace DungeonGame.Effects {
 		}
 
 		private void DisplayChangeDamageMessage() {
-			int changeAmount = Math.Abs(_ChangeAmount);
+			int changeAmount = Math.Abs(_changeAmount);
 
-			string changeDmgString = _ChangeAmount > 0 ? $"Your damage is increased by {changeAmount}." :
+			string changeDmgString = _changeAmount > 0 ? $"Your damage is increased by {changeAmount}." :
 				$"Your damage is decreased by {changeAmount}.";
 
 			OutputController.Display.StoreUserOutput(
@@ -56,7 +53,7 @@ namespace DungeonGame.Effects {
 		}
 
 		public int GetUpdatedDamageFromChange(int attackAmount) {
-			return attackAmount + _ChangeAmount;
+			return attackAmount + _changeAmount;
 		}
 	}
 }

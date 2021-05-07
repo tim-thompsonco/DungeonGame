@@ -59,7 +59,7 @@ namespace DungeonGameTests.Effects {
 			bleedEffect.ProcessBleedingRound(player);
 
 			Assert.AreEqual(player._MaxHitPoints - bleedDamageOverTime, player._HitPoints);
-			Assert.AreEqual(bleedMessage, OutputController.Display._Output[0][2]);
+			Assert.AreEqual(bleedMessage, OutputController.Display.Output[0][2]);
 			Assert.AreEqual(2, bleedEffect.CurrentRound);
 			Assert.AreEqual(false, bleedEffect.IsEffectExpired);
 		}
@@ -74,7 +74,7 @@ namespace DungeonGameTests.Effects {
 			bleedEffect.ProcessBleedingRound(monster);
 
 			Assert.AreEqual(monster._MaxHitPoints - bleedDamageOverTime, monster._HitPoints);
-			Assert.AreEqual(bleedMessage, OutputController.Display._Output[0][2]);
+			Assert.AreEqual(bleedMessage, OutputController.Display.Output[0][2]);
 			Assert.AreEqual(2, bleedEffect.CurrentRound);
 			Assert.AreEqual(false, bleedEffect.IsEffectExpired);
 		}
@@ -141,7 +141,7 @@ namespace DungeonGameTests.Effects {
 			bleedEffect.ProcessBleedingRound(player);
 
 			Assert.AreEqual(player._MaxHitPoints, player._HitPoints);
-			Assert.AreEqual(0, OutputController.Display._Output.Count);
+			Assert.AreEqual(0, OutputController.Display.Output.Count);
 			Assert.AreEqual(1, bleedEffect.CurrentRound);
 		}
 
@@ -155,7 +155,7 @@ namespace DungeonGameTests.Effects {
 			bleedEffect.ProcessBleedingRound(monster);
 
 			Assert.AreEqual(monster._MaxHitPoints, monster._HitPoints);
-			Assert.AreEqual(0, OutputController.Display._Output.Count);
+			Assert.AreEqual(0, OutputController.Display.Output.Count);
 			Assert.AreEqual(1, bleedEffect.CurrentRound);
 		}
 	}

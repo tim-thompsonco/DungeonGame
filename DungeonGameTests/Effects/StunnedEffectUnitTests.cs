@@ -44,7 +44,7 @@ namespace DungeonGameTests.Effects {
 
 			stunnedEffect.ProcessStunnedRound(monster);
 
-			Assert.AreEqual(stunnedMessage, OutputController.Display._Output[0][2]);
+			Assert.AreEqual(stunnedMessage, OutputController.Display.Output[0][2]);
 			Assert.AreEqual(2, stunnedEffect.CurrentRound);
 			Assert.AreEqual(false, stunnedEffect.IsEffectExpired);
 		}
@@ -84,7 +84,7 @@ namespace DungeonGameTests.Effects {
 
 			stunnedEffect.ProcessStunnedRound(monster);
 
-			Assert.AreEqual(0, OutputController.Display._Output.Count);
+			Assert.AreEqual(0, OutputController.Display.Output.Count);
 			Assert.AreEqual(1, stunnedEffect.CurrentRound);
 		}
 	}

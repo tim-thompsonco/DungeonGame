@@ -117,7 +117,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 
 			potion.DrinkPotion(player);
 
-			Assert.AreEqual(displayMessage, OutputController.Display._Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
 		}
 	}
 }
