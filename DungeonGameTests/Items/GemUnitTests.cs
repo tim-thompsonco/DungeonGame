@@ -1,4 +1,4 @@
-﻿using DungeonGame.Items;
+﻿using DungeonGame.Items.Gems;
 using NUnit.Framework;
 
 namespace DungeonGameTests.Items {
@@ -9,7 +9,7 @@ namespace DungeonGameTests.Items {
 
 		[Test]
 		public void GemCreationUnitTestLevelOne() {
-			Gem gem = new Gem(1, Gem.GemType.Amethyst);
+			Gem gem = new Gem(1, GemType.Amethyst);
 			string gemDesc = $"A {gem.Name} that is worth some money to the right vendor.";
 
 			Assert.AreEqual(1, gem.Weight);
@@ -20,7 +20,7 @@ namespace DungeonGameTests.Items {
 
 		[Test]
 		public void GemCreationUnitTestLevelThree() {
-			Gem gem = new Gem(3, Gem.GemType.Amethyst);
+			Gem gem = new Gem(3, GemType.Amethyst);
 			string gemDesc = $"A {gem.Name} that is worth some money to the right vendor.";
 
 			Assert.AreEqual(1, gem.Weight);
@@ -31,7 +31,7 @@ namespace DungeonGameTests.Items {
 
 		[Test]
 		public void GemCreationUnitTestLevelFour() {
-			Gem gem = new Gem(4, Gem.GemType.Amethyst);
+			Gem gem = new Gem(4, GemType.Amethyst);
 			string gemDesc = $"A {gem.Name} that is worth some money to the right vendor.";
 
 			Assert.AreEqual(1, gem.Weight);
@@ -42,7 +42,7 @@ namespace DungeonGameTests.Items {
 
 		[Test]
 		public void GemCreationUnitTestLevelSix() {
-			Gem gem = new Gem(6, Gem.GemType.Amethyst);
+			Gem gem = new Gem(6, GemType.Amethyst);
 			string gemDesc = $"A {gem.Name} that is worth some money to the right vendor.";
 
 			Assert.AreEqual(1, gem.Weight);
@@ -53,7 +53,7 @@ namespace DungeonGameTests.Items {
 
 		[Test]
 		public void GemCreationUnitTestLevelSeven() {
-			Gem gem = new Gem(7, Gem.GemType.Amethyst);
+			Gem gem = new Gem(7, GemType.Amethyst);
 			string gemDesc = $"A {gem.Name} that is worth some money to the right vendor.";
 
 			Assert.AreEqual(1, gem.Weight);

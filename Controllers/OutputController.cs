@@ -295,5 +295,12 @@ namespace DungeonGame.Controllers {
 				Settings.FormatDefaultBackground(),
 				message);
 		}
+
+		public static void StoreAttackFailMessage(string message) {
+			Display.StoreUserOutput(
+				Settings.FormatAttackFailText(),
+				Settings.FormatDefaultBackground(),
+				message);
+		}
 	}
 }

@@ -62,7 +62,7 @@ namespace DungeonGame.Controllers {
 				string itemName = GearController.GetItemDetails(item);
 				StringBuilder itemInfo = new StringBuilder(itemName);
 				if (itemName.Contains("Quiver")) {
-					itemInfo.Append($" (Arrows: {player._PlayerQuiver._Quantity}/{player._PlayerQuiver._MaxQuantity})");
+					itemInfo.Append($" (Arrows: {player._PlayerQuiver.Quantity}/{player._PlayerQuiver.MaxQuantity})");
 				}
 
 				itemInfo.Append(" <_Equipped>");
@@ -86,7 +86,7 @@ namespace DungeonGame.Controllers {
 				string itemName = GearController.GetItemDetails(item);
 				StringBuilder itemInfo = new StringBuilder(itemName);
 				if (player._PlayerQuiver?.Name == itemName) {
-					itemInfo.Append($"Arrows: {player._PlayerQuiver._Quantity}/{player._PlayerQuiver._MaxQuantity}");
+					itemInfo.Append($"Arrows: {player._PlayerQuiver.Quantity}/{player._PlayerQuiver.MaxQuantity}");
 				}
 
 				if (item is Armor || item is Weapon) {
@@ -439,7 +439,7 @@ namespace DungeonGame.Controllers {
 			string baseStatsString = $"Str: {player._Strength} Int: {player._Intelligence} Dex: {player._Dexterity} _Level: {player._Level}";
 			StringBuilder statsSb = new StringBuilder(baseStatsString);
 			if (player._PlayerClass == Player.PlayerClassType.Archer) {
-				statsSb.Append($" Arrows: {player._PlayerQuiver?._Quantity}");
+				statsSb.Append($" Arrows: {player._PlayerQuiver?.Quantity}");
 			}
 
 			OutputController.Display.StoreUserOutput(

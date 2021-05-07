@@ -59,6 +59,8 @@
     <Compile Include="Effects\ReflectDamageEffect.cs" />
     <Compile Include="Effects\StatType.cs" />
     <Compile Include="Effects\StunnedEffect.cs" />
+    <Compile Include="Items\Gems\GemLevel.cs" />
+    <Compile Include="Items\Gems\GemType.cs" />
     <Compile Include="Quests\IQuestGiver.cs" />
     <Compile Include="Interfaces\IRainbowGear.cs" />
     <Compile Include="Items\Armor.cs" />
@@ -72,7 +74,7 @@
     <Compile Include="Items\Consumables\Potions\HealthPotion.cs" />
     <Compile Include="Items\Consumables\Potions\ManaPotion.cs" />
     <Compile Include="Items\Consumables\Potions\StatPotion.cs" />
-    <Compile Include="Items\Gem.cs" />
+    <Compile Include="Items\Gems\Gem.cs" />
     <Compile Include="Items\Loot.cs" />
     <Compile Include="Items\Quiver.cs" />
     <Compile Include="Items\Weapon.cs" />

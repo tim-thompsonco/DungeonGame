@@ -15,10 +15,10 @@ namespace DungeonGameTests.Items {
 		[Test]
 		public void QuiverCreationTest() {
 			Assert.AreEqual(quiverName, quiver.Name);
-			Assert.AreEqual($"A {quiverName} that can hold {quiver._MaxQuantity} arrows.", quiver.Desc);
+			Assert.AreEqual($"A {quiverName} that can hold {quiver.MaxQuantity} arrows.", quiver.Desc);
 			Assert.AreEqual(1, quiver.Weight);
-			Assert.AreEqual(30, quiver._Quantity);
-			Assert.AreEqual(30, quiver._MaxQuantity);
+			Assert.AreEqual(30, quiver.Quantity);
+			Assert.AreEqual(30, quiver.MaxQuantity);
 			Assert.AreEqual(25, quiver.ItemValue);
 		}
 
@@ -33,12 +33,12 @@ namespace DungeonGameTests.Items {
 		public void QuiverUseArrowTest() {
 			quiver.UseArrow();
 
-			Assert.AreEqual(29, quiver._Quantity);
+			Assert.AreEqual(29, quiver.Quantity);
 		}
 
 		[Test]
 		public void QuiverHaveArrowsFalseTest() {
-			quiver._Quantity = 0;
+			quiver.Quantity = 0;
 			bool quiverHasArrows = quiver.HaveArrows();
 
 			Assert.AreEqual(quiverHasArrows, false);

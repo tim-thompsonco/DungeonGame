@@ -2,36 +2,34 @@
 
 namespace DungeonGame.Items {
 	public class Quiver : IItem {
-		public bool _Equipped { get; set; }
-		public int ItemValue { get; set; }
-		public int _Quantity { get; set; }
-		public int _MaxQuantity { get; set; }
-		public int Weight { get; set; }
-		public string Name { get; set; }
 		public string Desc { get; set; }
+		public bool Equipped { get; set; }
+		public int ItemValue { get; set; }
+		public int MaxQuantity { get; set; }
+		public string Name { get; set; }
+		public int Quantity { get; set; }
+		public int Weight { get; set; } = 1;
 
 		public Quiver(string name, int maxQuantity, int itemValue) {
 			Name = name;
-			_MaxQuantity = maxQuantity;
-			_Quantity = _MaxQuantity;
+			MaxQuantity = maxQuantity;
+			Quantity = MaxQuantity;
 			ItemValue = itemValue;
-			Weight = 1;
-			Desc = $"A {Name} that can hold {_MaxQuantity} arrows.";
+			Desc = $"A {Name} that can hold {MaxQuantity} arrows.";
 		}
 
 		public bool HaveArrows() {
-			return _Quantity > 0;
+			return Quantity > 0;
 		}
 
 		public void UseArrow() {
-			_Quantity -= 1;
+			Quantity -= 1;
 		}
 
 		public static void DisplayOutOfArrowsMessage() {
-			OutputController.Display.StoreUserOutput(
-				Settings.FormatAttackFailText(),
-				Settings.FormatDefaultBackground(),
-				"You ran out of arrows! Going hand to hand!");
+			const string attackFailMessage = "You ran out of arrows! Going hand to hand!";
+
+			OutputController.StoreAttackFailMessage(attackFailMessage);
 		}
 	}
 }

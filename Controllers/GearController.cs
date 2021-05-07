@@ -361,7 +361,7 @@ namespace DungeonGame.Controllers {
 			player._PlayerWeapon = null;
 		}
 		private static void UnequipQuiver(Player player, Quiver quiver) {
-			if (!quiver._Equipped) {
+			if (!quiver.Equipped) {
 				string alreadyUnequipString = $"You have already unequipped {quiver.Name}.";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -369,7 +369,7 @@ namespace DungeonGame.Controllers {
 					alreadyUnequipString);
 				return;
 			}
-			quiver._Equipped = false;
+			quiver.Equipped = false;
 			string unequipString = $"You have unequipped {player._PlayerQuiver.Name}.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
@@ -488,7 +488,7 @@ namespace DungeonGame.Controllers {
 				equipSuccessString);
 		}
 		private static void EquipQuiver(Player player, Quiver quiver) {
-			if (quiver._Equipped) {
+			if (quiver.Equipped) {
 				string alreadyEquipString = $"You have already equipped {quiver.Name}.";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -496,11 +496,11 @@ namespace DungeonGame.Controllers {
 					alreadyEquipString);
 				return;
 			}
-			if (player._PlayerQuiver != null && player._PlayerQuiver._Equipped) {
+			if (player._PlayerQuiver != null && player._PlayerQuiver.Equipped) {
 				UnequipQuiver(player, player._PlayerQuiver);
 			}
 			player._PlayerQuiver = quiver;
-			quiver._Equipped = true;
+			quiver.Equipped = true;
 			string equipString = $"You have equipped {player._PlayerQuiver.Name}.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),

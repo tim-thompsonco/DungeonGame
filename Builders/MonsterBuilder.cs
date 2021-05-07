@@ -2,6 +2,7 @@
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables.Kits;
 using DungeonGame.Items.Consumables.Potions;
+using DungeonGame.Items.Gems;
 using DungeonGame.Monsters;
 using System;
 
@@ -167,29 +168,29 @@ namespace DungeonGame {
 				return;
 			}
 
-			monster._MonsterQuiver._Equipped = true;
+			monster._MonsterQuiver.Equipped = true;
 			monster._MonsterItems.Add(monster._MonsterQuiver);
 		}
 		private static void BuildMonsterGem(Monster monster) {
 			int randomGemNum = GameController.GetRandomNumber(1, 6);
 			switch (randomGemNum) {
 				case 1:
-					monster._MonsterItems.Add(new Gem(monster._Level, Gem.GemType.Amethyst));
+					monster._MonsterItems.Add(new Gem(monster._Level, GemType.Amethyst));
 					break;
 				case 2:
-					monster._MonsterItems.Add(new Gem(monster._Level, Gem.GemType.Diamond));
+					monster._MonsterItems.Add(new Gem(monster._Level, GemType.Diamond));
 					break;
 				case 3:
-					monster._MonsterItems.Add(new Gem(monster._Level, Gem.GemType.Emerald));
+					monster._MonsterItems.Add(new Gem(monster._Level, GemType.Emerald));
 					break;
 				case 4:
-					monster._MonsterItems.Add(new Gem(monster._Level, Gem.GemType.Ruby));
+					monster._MonsterItems.Add(new Gem(monster._Level, GemType.Ruby));
 					break;
 				case 5:
-					monster._MonsterItems.Add(new Gem(monster._Level, Gem.GemType.Sapphire));
+					monster._MonsterItems.Add(new Gem(monster._Level, GemType.Sapphire));
 					break;
 				case 6:
-					monster._MonsterItems.Add(new Gem(monster._Level, Gem.GemType.Topaz));
+					monster._MonsterItems.Add(new Gem(monster._Level, GemType.Topaz));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
