@@ -42,32 +42,32 @@ namespace DungeonGameTests.Items {
 
 			arrows.LoadPlayerQuiverWithArrows(player);
 
-			Assert.AreEqual(player._PlayerQuiver.Quantity, player._PlayerQuiver.MaxQuantity);
+			Assert.AreEqual(player.PlayerQuiver.Quantity, player.PlayerQuiver.MaxQuantity);
 			Assert.AreEqual(arrowsMaxQuantity, arrows.Quantity);
 		}
 
 		[Test]
 		public void PlayerQuiverIsEmptyUnitTest() {
 			GearController.EquipInitialGear(player);
-			player._PlayerQuiver.MaxQuantity = arrowsMaxQuantity;
-			player._PlayerQuiver.Quantity = 0;
+			player.PlayerQuiver.MaxQuantity = arrowsMaxQuantity;
+			player.PlayerQuiver.Quantity = 0;
 
 			arrows.LoadPlayerQuiverWithArrows(player);
 
-			Assert.AreEqual(player._PlayerQuiver.Quantity, player._PlayerQuiver.MaxQuantity);
+			Assert.AreEqual(player.PlayerQuiver.Quantity, player.PlayerQuiver.MaxQuantity);
 			Assert.AreEqual(0, arrows.Quantity);
 		}
 
 		[Test]
 		public void PlayerQuiverIsPartiallyEmptyUnitTest() {
 			GearController.EquipInitialGear(player);
-			player._PlayerQuiver.MaxQuantity = arrowsMaxQuantity;
-			player._PlayerQuiver.Quantity = 35;
-			int arrowsToLoad = player._PlayerQuiver.MaxQuantity - player._PlayerQuiver.Quantity;
+			player.PlayerQuiver.MaxQuantity = arrowsMaxQuantity;
+			player.PlayerQuiver.Quantity = 35;
+			int arrowsToLoad = player.PlayerQuiver.MaxQuantity - player.PlayerQuiver.Quantity;
 
 			arrows.LoadPlayerQuiverWithArrows(player);
 
-			Assert.AreEqual(player._PlayerQuiver.Quantity, player._PlayerQuiver.MaxQuantity);
+			Assert.AreEqual(player.PlayerQuiver.Quantity, player.PlayerQuiver.MaxQuantity);
 			Assert.AreEqual(arrowsMaxQuantity - arrowsToLoad, arrows.Quantity);
 		}
 	}

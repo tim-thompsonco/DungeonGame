@@ -55,7 +55,7 @@ namespace DungeonGame {
 				return;
 			}
 
-			player._HitPoints -= leechAmount;
+			player.HitPoints -= leechAmount;
 
 			if (monster.HitPoints + leechAmount > monster.MaxHitPoints) {
 				monster.HitPoints = monster.MaxHitPoints;
@@ -71,7 +71,7 @@ namespace DungeonGame {
 		}
 
 		private int AdjustAbilityDamageFromPlayerEffects(Player player, Monster monster, int abilityDamage) {
-			foreach (IEffect effect in player._Effects.ToList()) {
+			foreach (IEffect effect in player.Effects.ToList()) {
 				if (effect is FrozenEffect frozenEffect) {
 					frozenEffect.ProcessFrozenRound();
 				}
@@ -142,7 +142,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 
-			player._HitPoints -= attackDamage;
+			player.HitPoints -= attackDamage;
 
 			if (monster.Abilities[index]._Offensive._AmountOverTime <= 0) {
 				return;
@@ -155,7 +155,7 @@ namespace DungeonGame {
 					Settings.FormatDefaultBackground(),
 					bleedString);
 
-				player._Effects.Add(new BleedingEffect(monster.Abilities[index]._Name,
+				player.Effects.Add(new BleedingEffect(monster.Abilities[index]._Name,
 					monster.Abilities[index]._Offensive._AmountMaxRounds, monster.Abilities[index]._Offensive._AmountOverTime));
 			}
 		}

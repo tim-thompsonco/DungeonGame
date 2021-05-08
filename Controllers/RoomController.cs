@@ -8,20 +8,20 @@ namespace DungeonGame.Controllers {
 		public static Dictionary<Coordinate, IRoom> _Rooms { get; set; }
 
 		public static void ChangeRoom(Player player, Coordinate newCoord) {
-			player._PlayerLocation = newCoord;
-			IRoom playerRoom = _Rooms[player._PlayerLocation];
+			player.PlayerLocation = newCoord;
+			IRoom playerRoom = _Rooms[player.PlayerLocation];
 			playerRoom.LookRoom();
 			if (!playerRoom._IsDiscovered) {
 				playerRoom._IsDiscovered = true;
 			}
 
-			player._CanSave = playerRoom is TownRoom;
+			player.CanSave = playerRoom is TownRoom;
 		}
 		public static void SetPlayerLocation(Player player, int x, int y, int z) {
 			Coordinate findCoord = new Coordinate(x, y, z);
 			IRoom room = _Rooms[findCoord];
 			if (room != null) {
-				player._PlayerLocation = findCoord;
+				player.PlayerLocation = findCoord;
 			} else {
 				return;
 			}
@@ -29,7 +29,7 @@ namespace DungeonGame.Controllers {
 				room._IsDiscovered = true;
 			}
 
-			player._CanSave = room is TownRoom;
+			player.CanSave = room is TownRoom;
 		}
 	}
 }

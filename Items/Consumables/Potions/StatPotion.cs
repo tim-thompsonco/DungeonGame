@@ -62,18 +62,18 @@ namespace DungeonGame.Items.Consumables.Potions {
 
 			switch (StatPotionType) {
 				case StatType.Constitution:
-					player._Constitution += StatAmount;
+					player.Constitution += StatAmount;
 					break;
 				case StatType.Dexterity:
-					player._Dexterity += StatAmount;
+					player.Dexterity += StatAmount;
 					effectStatCategory = ChangeStatEffect.StatType.Dexterity;
 					break;
 				case StatType.Intelligence:
-					player._Intelligence += StatAmount;
+					player.Intelligence += StatAmount;
 					effectStatCategory = ChangeStatEffect.StatType.Intelligence;
 					break;
 				case StatType.Strength:
-					player._Strength += StatAmount;
+					player.Strength += StatAmount;
 					effectStatCategory = ChangeStatEffect.StatType.Strength;
 					break;
 			}
@@ -82,7 +82,7 @@ namespace DungeonGame.Items.Consumables.Potions {
 
 			string effectName = $"{StatPotionType} (+{StatAmount})";
 
-			player._Effects.Add(new ChangeStatEffect(effectName, _statEffectDurationInSeconds, effectStatCategory, StatAmount));
+			player.Effects.Add(new ChangeStatEffect(effectName, _statEffectDurationInSeconds, effectStatCategory, StatAmount));
 
 			return player;
 		}

@@ -76,7 +76,7 @@ namespace DungeonGame.Spells.MonsterSpells {
 		}
 
 		private void DeductSpellDamageFromPlayerHealth(Player player, int spellDamage) {
-			player._HitPoints -= spellDamage;
+			player.HitPoints -= spellDamage;
 		}
 
 		public void DisplaySuccessfulAttackMessage(Monster monster, int spellDamage) {
@@ -89,7 +89,7 @@ namespace DungeonGame.Spells.MonsterSpells {
 		}
 
 		public void AddDamageOverTimeEffect(Player player) {
-			player._Effects.Add(new BurningEffect(Name, _MaxDamageRounds, _DamageOverTimeAmount));
+			player.Effects.Add(new BurningEffect(Name, _MaxDamageRounds, _DamageOverTimeAmount));
 		}
 
 		public void DisplayDamageOverTimeMessage() {

@@ -59,7 +59,7 @@ namespace DungeonGame.Effects {
 		}
 
 		private Player DecreaseHealthFromBleeding(Player player) {
-			player._HitPoints -= BleedDamageOverTime;
+			player.HitPoints -= BleedDamageOverTime;
 
 			return player;
 		}
@@ -82,6 +82,10 @@ namespace DungeonGame.Effects {
 
 		public void SetEffectAsExpired() {
 			IsEffectExpired = true;
+		}
+
+		public void ProcessRound() {
+			throw new System.NotImplementedException();
 		}
 	}
 }

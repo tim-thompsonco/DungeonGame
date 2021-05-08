@@ -70,7 +70,7 @@ namespace DungeonGame {
 				return;
 			}
 
-			player._HitPoints -= fireSpellDamage;
+			player.HitPoints -= fireSpellDamage;
 
 			string attackSuccessString = $"The {monster.Name} hits you for {fireSpellDamage} fire damage.";
 			OutputController.Display.StoreUserOutput(
@@ -84,7 +84,7 @@ namespace DungeonGame {
 					Settings.FormatOnFireText(),
 					Settings.FormatDefaultBackground(),
 					onFireString);
-				player._Effects.Add(
+				player.Effects.Add(
 					new BurningEffect(monster.Spellbook[index]._Name, monster.Spellbook[index]._Offensive._AmountMaxRounds,
 						monster.Spellbook[index]._Offensive._AmountOverTime));
 			}
@@ -106,7 +106,7 @@ namespace DungeonGame {
 				return;
 			}
 
-			player._HitPoints -= frostSpellDamage;
+			player.HitPoints -= frostSpellDamage;
 
 			string attackSuccessString = $"The {monster.Name} hits you for {frostSpellDamage} frost damage.";
 			OutputController.Display.StoreUserOutput(
@@ -114,7 +114,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 
-			player._Effects.Add(new FrozenEffect(monster.Spellbook[index]._Name, monster.Spellbook[index]._Offensive._AmountMaxRounds));
+			player.Effects.Add(new FrozenEffect(monster.Spellbook[index]._Name, monster.Spellbook[index]._Offensive._AmountMaxRounds));
 
 			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be increased by 50%!";
 			OutputController.Display.StoreUserOutput(
@@ -139,7 +139,7 @@ namespace DungeonGame {
 				return;
 			}
 
-			player._HitPoints -= arcaneSpellDamage;
+			player.HitPoints -= arcaneSpellDamage;
 
 			string attackSuccessString = $"The {monster.Name} hits you for {arcaneSpellDamage} arcane damage.";
 			OutputController.Display.StoreUserOutput(

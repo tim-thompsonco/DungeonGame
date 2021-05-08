@@ -46,10 +46,10 @@ namespace DungeonGame.Items.Consumables.Potions {
 		}
 
 		private Player RestoreManaPlayer(Player player) {
-			if (player._ManaPoints + ManaAmount > player._MaxManaPoints) {
-				player._ManaPoints = player._MaxManaPoints;
+			if (player.ManaPoints + ManaAmount > player.MaxManaPoints) {
+				player.ManaPoints = player.MaxManaPoints;
 			} else {
-				player._ManaPoints += ManaAmount;
+				player.ManaPoints += ManaAmount;
 			}
 
 			return player;

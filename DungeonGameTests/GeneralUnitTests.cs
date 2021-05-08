@@ -276,11 +276,11 @@ namespace DungeonGameTests {
 		[Test]
 		public void PlayerMaxLevelUnitTest() {
 			/* Player should not be able to go beyond level 10 */
-			Player player = new Player("placeholder", Player.PlayerClassType.Mage) { _Level = 10 };
-			player._Experience = player._ExperienceToLevel - 1;
-			player._Experience++;
+			Player player = new Player("placeholder", Player.PlayerClassType.Mage) { Level = 10 };
+			player.Experience = player.ExperienceToLevel - 1;
+			player.Experience++;
 			PlayerController.LevelUpCheck(player);
-			Assert.AreEqual(10, player._Level);
+			Assert.AreEqual(10, player.Level);
 		}
 		[Test]
 		public void CheckStatusUnitTest() {
@@ -288,7 +288,7 @@ namespace DungeonGameTests {
 			RoomController._Rooms = new RoomBuilder(
 				100, 5, 0, 4, 0).RetrieveSpawnRooms();
 			GameController.CheckStatus(player);
-			player._Spellbook.Add(new PlayerSpell(
+			player.Spellbook.Add(new PlayerSpell(
 				"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 1));
 			player.CastSpell("reflect");
 			for (int i = 0; i <= 30; i++) {
@@ -302,7 +302,7 @@ namespace DungeonGameTests {
 			RoomController._Rooms = new Dictionary<Coordinate, IRoom> {
 				{new Coordinate(1, 1, 1), new DungeonRoom(1, 1)}
 			};
-			player._Spellbook.Add(new PlayerSpell(
+			player.Spellbook.Add(new PlayerSpell(
 				"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 1));
 			UserOutput defaultEffectOutput = OutputController.ShowEffects(player);
 			Assert.AreEqual("Player _Effects:", defaultEffectOutput.Output[0][2]);
@@ -316,7 +316,7 @@ namespace DungeonGameTests {
 			for (int i = 0; i < 10; i++) {
 				GameController.CheckStatus(player);
 			}
-			player._Effects.Add(new BurningEffect("burning", 3, 5));
+			player.Effects.Add(new BurningEffect("burning", 3, 5));
 			Assert.AreEqual("Your spell reflect is slowly fading away.", OutputController.Display.Output[0][2]);
 			player.CastSpell("rejuvenate");
 			defaultEffectOutput = OutputController.ShowEffects(player);
@@ -336,20 +336,20 @@ namespace DungeonGameTests {
 			RoomController._Rooms = new Dictionary<Coordinate, IRoom> {
 				{new Coordinate(1, 1, 1), new DungeonRoom(1, 1)}
 			};
-			player._CanSave = true;
+			player.CanSave = true;
 			GameController.SaveGame(player);
 			Assert.AreEqual("Your game has been saved.", OutputController.Display.Output[0][2]);
 			OutputController.Display.ClearUserOutput();
 			RoomController._Rooms = null;
 			GameController.LoadGame();
 			player = GameController.LoadPlayer();
-			Assert.AreEqual("placeholder", player._Name);
+			Assert.AreEqual("placeholder", player.Name);
 			Assert.NotNull(RoomController._Rooms);
 			Assert.AreEqual("Reloading your saved game.", OutputController.Display.Output[1][2]);
 		}
 		[Test]
 		public void MonsterResistanceUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
+			Player player = new Player("test", Player.PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100 };
@@ -364,16 +364,16 @@ namespace DungeonGameTests {
 			int arcaneResistance = monster.ArcaneResistance;
 			double resistanceMod = (100 - arcaneResistance) / 100.0;
 			string[] input = new[] { "cast", "lightning" };
-			int spellIndex = player._Spellbook.FindIndex(
-				f => f._SpellCategory == PlayerSpell.SpellType.Lightning);
+			int spellIndex = player.Spellbook.FindIndex(
+				f => f.SpellCategory == PlayerSpell.SpellType.Lightning);
 			string spellName = InputController.ParseInput(input);
 			player.CastSpell(monster, spellName);
-			int reducedDamage = (int)(player._Spellbook[spellIndex]._Offensive._Amount * resistanceMod);
+			int reducedDamage = (int)(player.Spellbook[spellIndex].Offensive._Amount * resistanceMod);
 			Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - reducedDamage);
 		}
 		[Test]
 		public void PlayerResistanceUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage) { _MaxManaPoints = 100, _ManaPoints = 100 };
+			Player player = new Player("test", Player.PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
 			GearController.EquipInitialGear(player);
 			OutputController.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Elemental);
@@ -385,16 +385,16 @@ namespace DungeonGameTests {
 				IEquipment eItem = item as IEquipment;
 				eItem.Equipped = false;
 			}
-			Assert.AreEqual(player._Level * 5, player._FireResistance);
-			Assert.AreEqual(player._Level * 5, player._FrostResistance);
-			Assert.AreEqual(player._Level * 5, player._ArcaneResistance);
-			int arcaneResistance = player._ArcaneResistance;
+			Assert.AreEqual(player.Level * 5, player.FireResistance);
+			Assert.AreEqual(player.Level * 5, player.FrostResistance);
+			Assert.AreEqual(player.Level * 5, player.ArcaneResistance);
+			int arcaneResistance = player.ArcaneResistance;
 			double resistanceMod = (100 - arcaneResistance) / 100.0;
 			int spellIndex = monster.Spellbook.FindIndex(
 				f => f._SpellCategory == MonsterSpell.SpellType.Lightning);
 			monster.Spellbook[spellIndex].CastArcaneOffense(monster, player, spellIndex);
 			int reducedDamage = (int)(monster.Spellbook[spellIndex]._Offensive._Amount * resistanceMod);
-			Assert.AreEqual(player._HitPoints, player._MaxHitPoints - reducedDamage);
+			Assert.AreEqual(player.HitPoints, player.MaxHitPoints - reducedDamage);
 		}
 		[Test]
 		public void MonsterResistanceLevelUnitTest() {

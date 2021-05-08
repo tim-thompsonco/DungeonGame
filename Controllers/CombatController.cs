@@ -9,20 +9,20 @@ using System.Linq;
 
 namespace DungeonGame.Controllers {
 	public static class CombatController {
-		private static string[] _Input { get; set; }
-		private static bool _FleeSuccess { get; set; }
+		private static string[] Input { get; set; }
+		private static bool FleeSuccess { get; set; }
 
 		public static void StartCombat(Player player, Monster monster) {
 			Console.Clear();
 
-			string fightStartString = $"{player._Name}, you have encountered a {monster.Name}. Time to fight!";
+			string fightStartString = $"{player.Name}, you have encountered a {monster.Name}. Time to fight!";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				fightStartString);
 
-			while (monster.HitPoints > 0 && player._HitPoints > 0 &&
-				   player._InCombat && monster.InCombat) {
+			while (monster.HitPoints > 0 && player.HitPoints > 0 &&
+				   player.InCombat && monster.InCombat) {
 				GameController.RemovedExpiredEffectsAsync(player);
 				GameController.RemovedExpiredEffectsAsync(monster);
 
@@ -33,16 +33,16 @@ namespace DungeonGame.Controllers {
 					OutputController.ShowUserOutput(player, monster);
 					OutputController.Display.ClearUserOutput();
 					// Player will attack, use ability, cast spells, etc. to cause damage
-					_Input = InputController.GetFormattedInput(Console.ReadLine());
+					Input = InputController.GetFormattedInput(Console.ReadLine());
 					Console.Clear();
 					isInputValid = ProcessPlayerInput(player, monster);
 				}
 
-				if (player._Effects.Any()) {
+				if (player.Effects.Any()) {
 					ProcessPlayerEffects(player);
 				}
 
-				if (_FleeSuccess) {
+				if (FleeSuccess) {
 					return;
 				}
 
@@ -86,13 +86,13 @@ namespace DungeonGame.Controllers {
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You have fled combat successfully!");
-				player._InCombat = false;
+				player.InCombat = false;
 				monster.InCombat = false;
-				_FleeSuccess = true;
-				IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
-				int playerX = player._PlayerLocation.X;
-				int playerY = player._PlayerLocation.Y;
-				int playerZ = player._PlayerLocation.Z;
+				FleeSuccess = true;
+				IRoom playerRoom = RoomController._Rooms[player.PlayerLocation];
+				int playerX = player.PlayerLocation.X;
+				int playerY = player.PlayerLocation.Y;
+				int playerZ = player.PlayerLocation.Z;
 				if (playerRoom._Up != null) {
 					Coordinate newCoord = new Coordinate(playerX, playerY, playerZ + 1);
 					RoomController.ChangeRoom(player, newCoord);
@@ -151,7 +151,7 @@ namespace DungeonGame.Controllers {
 		}
 
 		public static int GetMonsterAttackDamageUpdatedFromPlayerEffects(Player player, Monster monster, int attackDamage) {
-			foreach (IEffect effect in player._Effects.ToList()) {
+			foreach (IEffect effect in player.Effects.ToList()) {
 				if (effect is FrozenEffect frozenEffect) {
 					attackDamage = frozenEffect.GetIncreasedDamageFromFrozen(attackDamage);
 
@@ -197,7 +197,7 @@ namespace DungeonGame.Controllers {
 		private static void ProcessPlayerEffects(Player player) {
 			GameController.RemovedExpiredEffectsAsync(player);
 
-			foreach (IEffect effect in player._Effects) {
+			foreach (IEffect effect in player.Effects) {
 				if (effect is HealingEffect healingEffect) {
 					healingEffect.ProcessHealingRound(player);
 				}
@@ -230,20 +230,16 @@ namespace DungeonGame.Controllers {
 			foreach (IEffect effect in monster.Effects) {
 				if (effect is BurningEffect burningEffect) {
 					burningEffect.ProcessBurningRound(monster);
-				}
-
-				if (effect is BleedingEffect bleedingEffect) {
+				} else if (effect is BleedingEffect bleedingEffect) {
 					bleedingEffect.ProcessBleedingRound(monster);
-				}
-
-				if (effect is StunnedEffect stunnedEffect) {
-					stunnedEffect.ProcessStunnedRound(monster);
+				} else {
+					effect.ProcessRound();
 				}
 			}
 		}
 
 		private static bool ProcessPlayerInput(Player player, Monster monster) {
-			switch (_Input[0]) {
+			switch (Input[0]) {
 				case "f":
 				case "fight":
 					int attackDamage = player.PhysicalAttack(monster);
@@ -271,8 +267,8 @@ namespace DungeonGame.Controllers {
 					break;
 				case "cast":
 					try {
-						if (_Input[1] != null) {
-							string spellName = InputController.ParseInput(_Input);
+						if (Input[1] != null) {
+							string spellName = InputController.ParseInput(Input);
 							player.CastSpell(monster, spellName);
 						}
 					} catch (IndexOutOfRangeException) {
@@ -282,7 +278,7 @@ namespace DungeonGame.Controllers {
 							"You don't have that spell.");
 						return false;
 					} catch (NullReferenceException) {
-						if (player._PlayerClass != Player.PlayerClassType.Mage) {
+						if (player.PlayerClass != Player.PlayerClassType.Mage) {
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -293,7 +289,7 @@ namespace DungeonGame.Controllers {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
-							player._PlayerClass != Player.PlayerClassType.Mage
+							player.PlayerClass != Player.PlayerClassType.Mage
 								? "You can't cast spells. You're not a mage!"
 								: "You do not have enough mana to cast that spell!");
 						return false;
@@ -301,11 +297,11 @@ namespace DungeonGame.Controllers {
 					break;
 				case "use":
 					try {
-						if (_Input[1] != null && _Input[1] != "bandage") {
-							player.UseAbility(monster, _Input);
+						if (Input[1] != null && Input[1] != "bandage") {
+							player.UseAbility(monster, Input);
 						}
-						if (_Input[1] != null && _Input[1] == "bandage") {
-							player.UseAbility(_Input);
+						if (Input[1] != null && Input[1] == "bandage") {
+							player.UseAbility(Input);
 						}
 					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
@@ -320,7 +316,7 @@ namespace DungeonGame.Controllers {
 							"You don't have that ability.");
 						return false;
 					} catch (NullReferenceException) {
-						if (player._PlayerClass == Player.PlayerClassType.Mage) {
+						if (player.PlayerClass == Player.PlayerClassType.Mage) {
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -328,7 +324,7 @@ namespace DungeonGame.Controllers {
 							return false;
 						}
 					} catch (InvalidOperationException) {
-						switch (player._PlayerClass) {
+						switch (player.PlayerClass) {
 							case Player.PlayerClassType.Mage:
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
@@ -345,7 +341,7 @@ namespace DungeonGame.Controllers {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
-									player._PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow
+									player.PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow
 										? "You do not have a bow equipped!"
 										: "You do not have enough combo points to use that ability!");
 								break;
@@ -357,14 +353,14 @@ namespace DungeonGame.Controllers {
 					break;
 				case "equip":
 				case "unequip":
-					GearController.EquipItem(player, _Input);
+					GearController.EquipItem(player, Input);
 					break;
 				case "flee":
 					FleeCombat(player, monster);
 					break;
 				case "drink":
-					if (_Input.Last() == "potion") {
-						player.AttemptDrinkPotion(InputController.ParseInput(_Input));
+					if (Input.Last() == "potion") {
+						player.AttemptDrinkPotion(InputController.ParseInput(Input));
 					} else {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
@@ -381,7 +377,7 @@ namespace DungeonGame.Controllers {
 					PlayerController.ShowInventory(player);
 					return false;
 				case "list":
-					switch (_Input[1]) {
+					switch (Input[1]) {
 						case "abilities":
 							try {
 								PlayerController.ListAbilities(player);
@@ -408,14 +404,14 @@ namespace DungeonGame.Controllers {
 					return false;
 				case "ability":
 					try {
-						PlayerController.AbilityInfo(player, _Input);
+						PlayerController.AbilityInfo(player, Input);
 					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"What ability did you want to know about?");
 					} catch (NullReferenceException) {
-						if (player._PlayerClass == Player.PlayerClassType.Mage) {
+						if (player.PlayerClass == Player.PlayerClassType.Mage) {
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -425,14 +421,14 @@ namespace DungeonGame.Controllers {
 					return false;
 				case "spell":
 					try {
-						PlayerController.SpellInfo(player, _Input);
+						PlayerController.SpellInfo(player, Input);
 					} catch (IndexOutOfRangeException) {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"What spell did you want to know about?");
 					} catch (NullReferenceException) {
-						if (player._PlayerClass != Player.PlayerClassType.Mage) {
+						if (player.PlayerClass != Player.PlayerClassType.Mage) {
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),

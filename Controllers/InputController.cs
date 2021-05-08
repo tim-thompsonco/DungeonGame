@@ -32,11 +32,11 @@ namespace DungeonGame.Controllers {
 			return parsedInput;
 		}
 		public static void ProcessUserInput(Player player, string[] input, Timer globalTimer) {
-			IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
+			IRoom playerRoom = RoomController._Rooms[player.PlayerLocation];
 			TownRoom isTownRoom = playerRoom as TownRoom;
-			int playerX = player._PlayerLocation.X;
-			int playerY = player._PlayerLocation.Y;
-			int playerZ = player._PlayerLocation.Z;
+			int playerX = player.PlayerLocation.X;
+			int playerY = player.PlayerLocation.Y;
+			int playerZ = player.PlayerLocation.Z;
 			switch (input[0]) {
 				case "a":
 				case "attack":
@@ -81,7 +81,7 @@ namespace DungeonGame.Controllers {
 							Settings.FormatDefaultBackground(),
 							"You don't have that spell.");
 					} catch (NullReferenceException) {
-						if (player._PlayerClass != Player.PlayerClassType.Mage) {
+						if (player.PlayerClass != Player.PlayerClassType.Mage) {
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -91,7 +91,7 @@ namespace DungeonGame.Controllers {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
-							player._PlayerClass != Player.PlayerClassType.Mage
+							player.PlayerClass != Player.PlayerClassType.Mage
 								? "You can't cast spells. You're not a mage!"
 								: "You do not have enough mana to cast that spell!");
 					}
@@ -124,14 +124,14 @@ namespace DungeonGame.Controllers {
 							Settings.FormatDefaultBackground(),
 							"You don't have that ability.");
 					} catch (NullReferenceException) {
-						if (player._PlayerClass == Player.PlayerClassType.Mage) {
+						if (player.PlayerClass == Player.PlayerClassType.Mage) {
 							OutputController.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
 								"You can't use abilities. You're not a warrior or archer!");
 						}
 					} catch (InvalidOperationException) {
-						switch (player._PlayerClass) {
+						switch (player.PlayerClass) {
 							case Player.PlayerClassType.Warrior:
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
@@ -142,7 +142,7 @@ namespace DungeonGame.Controllers {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
-									player._PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow
+									player.PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow
 										? "You do not have a bow equipped!"
 										: "You do not have enough combo points to use that ability!");
 								break;
@@ -162,8 +162,8 @@ namespace DungeonGame.Controllers {
 					GearController.EquipItem(player, input);
 					break;
 				case "enhance":
-					int itemIndex = player._Inventory.FindIndex(f => f.Name.Contains(input[1]));
-					switch (player._Inventory[itemIndex]) {
+					int itemIndex = player.Inventory.FindIndex(f => f.Name.Contains(input[1]));
+					switch (player.Inventory[itemIndex]) {
 						case Weapon _:
 							GearController.UseWeaponKit(player, input);
 							break;
@@ -338,7 +338,7 @@ namespace DungeonGame.Controllers {
 						if (input[1] != null) {
 							if (isTownRoom != null) {
 								if (input[1] == "all") {
-									foreach (IItem item in player._Inventory) {
+									foreach (IItem item in player.Inventory) {
 										if (!(item is IEquipment itemToRepair && itemToRepair.Equipped)) {
 											continue;
 										}
@@ -367,7 +367,7 @@ namespace DungeonGame.Controllers {
 					try {
 						if (input[1] != null) {
 							if (isTownRoom != null) {
-								if (player._PlayerClass == Player.PlayerClassType.Mage) {
+								if (player.PlayerClass == Player.PlayerClassType.Mage) {
 									isTownRoom._Trainer.UpgradeSpell(player, ParseInput(input));
 								} else {
 									isTownRoom._Trainer.UpgradeAbility(player, ParseInput(input));
@@ -390,7 +390,7 @@ namespace DungeonGame.Controllers {
 					try {
 						if (input[1] != null) {
 							if (isTownRoom != null) {
-								if (player._PlayerClass == Player.PlayerClassType.Mage) {
+								if (player.PlayerClass == Player.PlayerClassType.Mage) {
 									isTownRoom._Trainer.TrainSpell(player, ParseInput(input));
 								} else {
 									isTownRoom._Trainer.TrainAbility(player, ParseInput(input));

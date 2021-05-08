@@ -113,9 +113,9 @@ namespace DungeonGame {
 				return;
 			}
 			IItem buyItem = VendorItems[index];
-			if (player._Gold >= buyItem.ItemValue && quantity > 0) {
-				player._Gold -= buyItem.ItemValue;
-				player._Inventory.Add(buyItem);
+			if (player.Gold >= buyItem.ItemValue && quantity > 0) {
+				player.Gold -= buyItem.ItemValue;
+				player.Inventory.Add(buyItem);
 				VendorItems.RemoveAt(index);
 				string purchaseString = $"You purchased {buyItem.Name} from the vendor for {buyItem.ItemValue} gold.";
 				OutputController.Display.StoreUserOutput(
@@ -151,10 +151,10 @@ namespace DungeonGame {
 			try {
 				// Find desired object to sell
 				string inputName = InputController.ParseInput(userInput);
-				List<IItem> indexList = player._Inventory.FindAll(f => f.Name == inputName || f.Name.Contains(inputName));
+				List<IItem> indexList = player.Inventory.FindAll(f => f.Name == inputName || f.Name.Contains(inputName));
 				IItem itemMatch = indexList[sellItemIndex];
 				// Return index in player inventory of desired object to sell
-				return player._Inventory.IndexOf(itemMatch);
+				return player.Inventory.IndexOf(itemMatch);
 			} catch (ArgumentOutOfRangeException) {
 				// Using -2 to indicate that this is a multiple item sell attempt but the item does not exist
 				return -2;
@@ -171,10 +171,10 @@ namespace DungeonGame {
 			try {
 				// Find desired object to sell
 				string inputName = InputController.ParseInput(userInput);
-				List<IItem> indexList = player._Inventory.FindAll(f => f.Name == inputName || f.Name.Contains(inputName));
+				List<IItem> indexList = player.Inventory.FindAll(f => f.Name == inputName || f.Name.Contains(inputName));
 				IItem itemMatch = indexList[sellItemIndex];
 				// Return index in player inventory of desired object to sell
-				return player._Inventory.IndexOf(itemMatch);
+				return player.Inventory.IndexOf(itemMatch);
 			} catch (ArgumentOutOfRangeException) {
 				// Using -2 to indicate that this is a multiple item sell attempt but the item does not exist
 				return -2;
@@ -194,12 +194,12 @@ namespace DungeonGame {
 			if (multipleItemIndex != -1) {
 				index = multipleItemIndex;
 			} else {
-				index = player._Inventory.FindIndex(
+				index = player.Inventory.FindIndex(
 					f => f.Name == inputName || f.Name.Contains(inputName));
 			}
 			IItem sellItem;
 			try {
-				sellItem = player._Inventory[index];
+				sellItem = player.Inventory[index];
 				switch (sellItem) {
 					case Armor _ when VendorCategory == VendorType.Healer || VendorCategory == VendorType.Weaponsmith:
 						Messages.InvalidVendorSell();
@@ -210,12 +210,12 @@ namespace DungeonGame {
 				}
 				if (index != -1) {
 					if (!(sellItem is IEquipment equippableItem && equippableItem.Equipped)) {
-						player._Gold += sellItem switch {
+						player.Gold += sellItem switch {
 							Armor armor => (int)(sellItem.ItemValue * (armor.Durability / 100.0)),
 							Weapon weapon => (int)(sellItem.ItemValue * (weapon._Durability / 100.0)),
 							_ => sellItem.ItemValue
 						};
-						player._Inventory.RemoveAt(index);
+						player.Inventory.RemoveAt(index);
 						string soldString = $"You sold {sellItem.Name} to the vendor for {sellItem.ItemValue} gold.";
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
@@ -233,7 +233,7 @@ namespace DungeonGame {
 				if (multipleItemIndex != -1) {
 					index = multipleItemIndex;
 				} else {
-					index = player._Inventory.FindIndex(
+					index = player.Inventory.FindIndex(
 						f => f.Name == inputName || f.Name.Contains(inputName));
 				}
 				if (index == -1) {
@@ -243,12 +243,12 @@ namespace DungeonGame {
 						"You don't have that to sell!");
 					return;
 				}
-				sellItem = player._Inventory[index];
+				sellItem = player.Inventory[index];
 				if (VendorCategory == VendorType.Armorer || VendorCategory == VendorType.Weaponsmith) {
 					Messages.InvalidVendorSell();
 					return;
 				}
-				player._Inventory.RemoveAt(index);
+				player.Inventory.RemoveAt(index);
 				if (VendorItems.Count == 5) {
 					VendorItems.RemoveAt(VendorItems[0].Name.Contains("arrow") ? 1 : 0);
 				}
@@ -263,16 +263,16 @@ namespace DungeonGame {
 		}
 		public void RepairItem(Player player, string[] userInput, bool repairAll) {
 			string parsedInput = InputController.ParseInput(userInput);
-			int index = player._Inventory.FindIndex(
+			int index = player.Inventory.FindIndex(
 				f => f.Name == parsedInput || f.Name.Contains(userInput.Last()));
 			if (index != -1) {
 				switch (VendorCategory) {
 					case VendorType.Armorer:
-						if (player._Inventory[index] is Armor repairArmor && repairArmor.Equipped) {
+						if (player.Inventory[index] is Armor repairArmor && repairArmor.Equipped) {
 							int durabilityRepairArmor = 100 - repairArmor.Durability;
 							float repairCostArmor = repairArmor.ItemValue * (durabilityRepairArmor / 100f);
-							if (player._Gold >= (int)repairCostArmor) {
-								player._Gold -= (int)repairCostArmor;
+							if (player.Gold >= (int)repairCostArmor) {
+								player.Gold -= (int)repairCostArmor;
 								repairArmor.Durability = 100;
 								string repairArmorString = $"Your {repairArmor.Name} has been repaired for {(int)repairCostArmor} gold.";
 								OutputController.Display.StoreUserOutput(
@@ -298,11 +298,11 @@ namespace DungeonGame {
 						}
 						break;
 					case VendorType.Weaponsmith:
-						if (player._Inventory[index] is Weapon repairWeapon) {
+						if (player.Inventory[index] is Weapon repairWeapon) {
 							int durabilityRepairWeapon = 100 - repairWeapon._Durability;
 							float repairCostWeapon = repairWeapon.ItemValue * (durabilityRepairWeapon / 100f);
-							if (player._Gold >= repairCostWeapon) {
-								player._Gold -= (int)repairCostWeapon;
+							if (player.Gold >= repairCostWeapon) {
+								player.Gold -= (int)repairCostWeapon;
 								repairWeapon._Durability = 100;
 								string repairWeaponString = $"Your {repairWeapon.Name} has been repaired for {(int)repairCostWeapon} gold.";
 								OutputController.Display.StoreUserOutput(
@@ -347,10 +347,10 @@ namespace DungeonGame {
 		}
 		public void RestorePlayer(Player player) {
 			if (VendorCategory == VendorType.Healer) {
-				player._HitPoints = player._MaxHitPoints;
-				player._RagePoints = player._MaxRagePoints;
-				player._ManaPoints = player._MaxManaPoints;
-				player._ComboPoints = player._MaxComboPoints;
+				player.HitPoints = player.MaxHitPoints;
+				player.RagePoints = player.MaxRagePoints;
+				player.ManaPoints = player.MaxManaPoints;
+				player.ComboPoints = player.MaxComboPoints;
 				string restoreString = $"You have been restored by the {Name}.";
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
@@ -390,7 +390,7 @@ namespace DungeonGame {
 		}
 		public void PopulateQuests(Player player) {
 			_AvailableQuests = new List<Quest>();
-			Armor.ArmorType questArmorGroup = player._PlayerClass switch {
+			Armor.ArmorType questArmorGroup = player.PlayerClass switch {
 				Player.PlayerClassType.Mage => Armor.ArmorType.Cloth,
 				Player.PlayerClassType.Warrior => Armor.ArmorType.Plate,
 				Player.PlayerClassType.Archer => Armor.ArmorType.Leather,
@@ -506,7 +506,7 @@ namespace DungeonGame {
 					questInput = InputController.GetFormattedInput(Console.ReadLine());
 				}
 				if (questInput[0] == "y" || questInput[0] == "yes") {
-					player._QuestLog.Add(_AvailableQuests[questIndex]);
+					player.QuestLog.Add(_AvailableQuests[questIndex]);
 					_AvailableQuests.RemoveAt(questIndex);
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
@@ -527,9 +527,9 @@ namespace DungeonGame {
 		}
 		public void CompleteQuest(Player player, string[] input) {
 			string userInput = InputController.ParseInput(input);
-			int questIndex = player._QuestLog.FindIndex(
+			int questIndex = player.QuestLog.FindIndex(
 				f => f._Name.ToLower().Contains(userInput));
-			Quest quest = player._QuestLog[questIndex];
+			Quest quest = player.QuestLog[questIndex];
 			if (questIndex != -1) {
 				if (quest._QuestGiver == Name) {
 					if (quest._QuestCompleted) {
@@ -537,18 +537,18 @@ namespace DungeonGame {
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
 							$"Congratulations on finishing {quest._Name}! Here's your reward.");
-						player._Inventory.Add(quest._QuestRewardItem);
+						player.Inventory.Add(quest._QuestRewardItem);
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
 							"You have received: ");
 						GearController.StoreRainbowGearOutput(GearController.GetItemDetails(quest._QuestRewardItem));
-						player._Gold += quest._QuestRewardGold;
+						player.Gold += quest._QuestRewardGold;
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
 							$"{quest._QuestRewardGold} gold coins.");
-						player._QuestLog.RemoveAt(questIndex);
+						player.QuestLog.RemoveAt(questIndex);
 					} else {
 						OutputController.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),

@@ -47,5 +47,9 @@ namespace DungeonGame.Effects {
 		public void SetEffectAsExpired() {
 			IsEffectExpired = true;
 		}
+
+		public void ProcessRound() {
+			throw new NotImplementedException();
+		}
 	}
 }

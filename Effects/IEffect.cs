@@ -7,5 +7,6 @@
 		int MaxRound { get; }
 
 		void SetEffectAsExpired();
+		void ProcessRound();
 	}
 }

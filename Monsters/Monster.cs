@@ -1,6 +1,7 @@
 ﻿using DungeonGame.AttackOptions;
 using DungeonGame.Controllers;
 using DungeonGame.Effects;
+using DungeonGame.Interfaces;
 using DungeonGame.Items;
 using DungeonGame.Items.Equipment;
 using DungeonGame.Players;
@@ -10,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace DungeonGame.Monsters {
-	public class Monster : IName {
+	public class Monster : IName, IEffectHolder {
 		public enum MonsterType {
 			Skeleton,
 			Zombie,
@@ -313,7 +314,7 @@ namespace DungeonGame.Monsters {
 			}
 
 			int randomChanceToHit = GameController.GetRandomNumber(1, 100);
-			double chanceToDodge = player._DodgeChance;
+			double chanceToDodge = player.DodgeChance;
 			if (chanceToDodge > 50) {
 				chanceToDodge = 50;
 			}
@@ -329,7 +330,7 @@ namespace DungeonGame.Monsters {
 
 			int baseAttackAmount = attackAmount;
 
-			foreach (IEffect effect in player._Effects.Where(effect => effect.IsEffectExpired == false)) {
+			foreach (IEffect effect in player.Effects.Where(effect => effect.IsEffectExpired == false)) {
 				if (effect is FrozenEffect frozenEffect) {
 					attackAmount = frozenEffect.GetIncreasedDamageFromFrozen(attackAmount);
 
@@ -385,12 +386,12 @@ namespace DungeonGame.Monsters {
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
 					hitString);
-				player._HitPoints -= attackAmount;
+				player.HitPoints -= attackAmount;
 			}
 		}
 		public int ArmorRating(Player player) {
 			int totalArmorRating = MonsterController.CheckArmorRating(this);
-			int levelDiff = player._Level - Level;
+			int levelDiff = player.Level - Level;
 			double armorMultiplier = 1.00 + (-(double)levelDiff / 5);
 			double adjArmorRating = totalArmorRating * armorMultiplier;
 			if (ElementalCategory != null) {
@@ -400,7 +401,7 @@ namespace DungeonGame.Monsters {
 			return (int)adjArmorRating;
 		}
 		public void MonsterDeath(Player player) {
-			player._InCombat = false;
+			player.InCombat = false;
 			InCombat = false;
 			Effects.Clear();
 			string defeatString = $"You have defeated the {Name}!";
@@ -419,13 +420,13 @@ namespace DungeonGame.Monsters {
 			}
 			Name = $"Dead {Name}";
 			Desc = "A corpse of a monster you killed.";
-			player._Experience += ExperienceProvided;
+			player.Experience += ExperienceProvided;
 			PlayerController.LevelUpCheck(player);
-			if (player._QuestLog == null) {
+			if (player.QuestLog == null) {
 				return;
 			}
 
-			foreach (Quest quest in player._QuestLog) {
+			foreach (Quest quest in player.QuestLog) {
 				quest.UpdateQuestProgress(this);
 			}
 		}

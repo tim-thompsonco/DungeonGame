@@ -43,16 +43,20 @@ namespace DungeonGame.Effects {
 
 		private void RestorePlayerStatToNormal(Player player) {
 			if (EffectStatType is StatType.Intelligence) {
-				player._Intelligence -= _statAmount;
+				player.Intelligence -= _statAmount;
 			} else if (EffectStatType is StatType.Strength) {
-				player._Strength -= _statAmount;
+				player.Strength -= _statAmount;
 			} else if (EffectStatType is StatType.Dexterity) {
-				player._Dexterity -= _statAmount;
+				player.Dexterity -= _statAmount;
 			} else if (EffectStatType is StatType.Constitution) {
-				player._Constitution -= _statAmount;
+				player.Constitution -= _statAmount;
 			}
 
 			PlayerController.CalculatePlayerStats(player);
+		}
+
+		public void ProcessRound() {
+			throw new System.NotImplementedException();
 		}
 	}
 }

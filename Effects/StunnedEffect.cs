@@ -1,4 +1,5 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Interfaces;
 using DungeonGame.Monsters;
 
 namespace DungeonGame.Effects {
@@ -6,28 +7,32 @@ namespace DungeonGame.Effects {
 		public int CurrentRound { get; set; } = 1;
 		public bool IsEffectExpired { get; set; }
 		public bool IsHarmful { get; } = true;
+		public IEffectHolder EffectHolder { get; }
 		public int MaxRound { get; }
 		public string Name { get; set; }
 		public int TickDuration { get; } = 1;
 
-		public StunnedEffect(string name, int maxRound) {
-			Name = name;
-			MaxRound = maxRound;
+		public StunnedEffect(EffectSettings effectSettings) {
+			EffectHolder = effectSettings.EffectHolder;
+			Name = effectSettings.Name;
+			MaxRound = effectSettings.MaxRound;
 		}
 
-		public void ProcessStunnedRound(Monster monster) {
+		public void ProcessRound() {
 			if (IsEffectExpired) {
 				return;
 			}
 
-			monster.IsStunned = true;
+			if (EffectHolder is Monster monster) {
+				monster.IsStunned = true;
 
-			IncrementCurrentRound();
+				IncrementCurrentRound();
 
-			DisplayStunnedMessage(monster);
+				DisplayStunnedMessage(monster);
 
-			if (CurrentRound > MaxRound) {
-				SetEffectAsExpired();
+				if (CurrentRound > MaxRound) {
+					SetEffectAsExpired();
+				}
 			}
 		}
 

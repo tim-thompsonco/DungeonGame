@@ -95,5 +95,9 @@ namespace DungeonGame.Effects {
 		public int GetDecreasedDamageFromBlock(int incomingDamage) {
 			return incomingDamage - GetBlockReductionAmount(incomingDamage);
 		}
+
+		public void ProcessRound() {
+			throw new System.NotImplementedException();
+		}
 	}
 }

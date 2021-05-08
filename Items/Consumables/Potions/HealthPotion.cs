@@ -46,10 +46,10 @@ namespace DungeonGame.Items.Consumables.Potions {
 		}
 
 		private Player RestoreHealthPlayer(Player player) {
-			if (player._HitPoints + HealthAmount > player._MaxHitPoints) {
-				player._HitPoints = player._MaxHitPoints;
+			if (player.HitPoints + HealthAmount > player.MaxHitPoints) {
+				player.HitPoints = player.MaxHitPoints;
 			} else {
-				player._HitPoints += HealthAmount;
+				player.HitPoints += HealthAmount;
 			}
 
 			return player;

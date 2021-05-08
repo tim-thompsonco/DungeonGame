@@ -71,5 +71,9 @@ namespace DungeonGame.Effects {
 				return incomingDamage;
 			}
 		}
+
+		public void ProcessRound() {
+			throw new System.NotImplementedException();
+		}
 	}
 }

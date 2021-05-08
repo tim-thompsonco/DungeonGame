@@ -13,16 +13,16 @@ using System.Text;
 namespace DungeonGame.Controllers {
 	public static class GearController {
 		public static void EquipInitialGear(Player player) {
-			Weapon playerWeapon = player._Inventory.Find(item => item is Weapon) as Weapon;
+			Weapon playerWeapon = player.Inventory.Find(item => item is Weapon) as Weapon;
 			EquipWeapon(player, playerWeapon);
 
-			List<IItem> playerArmorList = player._Inventory.FindAll(item => item is Armor);
+			List<IItem> playerArmorList = player.Inventory.FindAll(item => item is Armor);
 			foreach (IItem playerArmor in playerArmorList) {
 				EquipArmor(player, (Armor)playerArmor);
 			}
 
-			if (player._PlayerClass == Player.PlayerClassType.Archer) {
-				Quiver quiver = player._Inventory.Find(item => item is Quiver) as Quiver;
+			if (player.PlayerClass == Player.PlayerClassType.Archer) {
+				Quiver quiver = player.Inventory.Find(item => item is Quiver) as Quiver;
 				EquipQuiver(player, quiver);
 			}
 		}
@@ -62,31 +62,31 @@ namespace DungeonGame.Controllers {
 			OutputController.Display.StoreUserOutput(sameLineOutput);
 		}
 		public static void DecreaseArmorDurability(Player player) {
-			player._PlayerChestArmor?.DecreaseDurability();
-			player._PlayerHeadArmor?.DecreaseDurability();
-			player._PlayerLegsArmor?.DecreaseDurability();
+			player.PlayerChestArmor?.DecreaseDurability();
+			player.PlayerHeadArmor?.DecreaseDurability();
+			player.PlayerLegsArmor?.DecreaseDurability();
 		}
 
 		public static int CheckArmorRating(Player player) {
 			int totalArmorRating = 0;
 
-			if (player._PlayerChestArmor != null && player._PlayerChestArmor.Equipped) {
-				totalArmorRating += (int)player._PlayerChestArmor.GetArmorRating();
+			if (player.PlayerChestArmor != null && player.PlayerChestArmor.Equipped) {
+				totalArmorRating += (int)player.PlayerChestArmor.GetArmorRating();
 			}
 
-			if (player._PlayerHeadArmor != null && player._PlayerHeadArmor.Equipped) {
-				totalArmorRating += (int)player._PlayerHeadArmor.GetArmorRating();
+			if (player.PlayerHeadArmor != null && player.PlayerHeadArmor.Equipped) {
+				totalArmorRating += (int)player.PlayerHeadArmor.GetArmorRating();
 			}
 
-			if (player._PlayerLegsArmor != null && player._PlayerLegsArmor.Equipped) {
-				totalArmorRating += (int)player._PlayerLegsArmor.GetArmorRating();
+			if (player.PlayerLegsArmor != null && player.PlayerLegsArmor.Equipped) {
+				totalArmorRating += (int)player.PlayerLegsArmor.GetArmorRating();
 			}
 
-			if (!player._InCombat) {
+			if (!player.InCombat) {
 				return totalArmorRating;
 			}
 
-			foreach (IEffect effect in player._Effects.Where(effect => effect is ChangeArmorEffect)) {
+			foreach (IEffect effect in player.Effects.Where(effect => effect is ChangeArmorEffect)) {
 				ChangeArmorEffect changeArmorEffect = effect as ChangeArmorEffect;
 				totalArmorRating += changeArmorEffect.ChangeArmorAmount;
 			}
@@ -95,7 +95,7 @@ namespace DungeonGame.Controllers {
 		}
 
 		public static void UseWeaponKit(Player player, string[] userInput) {
-			int kitIndex = player._Inventory.FindIndex(f => f.Name.Contains(userInput[2]));
+			int kitIndex = player.Inventory.FindIndex(f => f.Name.Contains(userInput[2]));
 			if (kitIndex == -1) {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -103,7 +103,7 @@ namespace DungeonGame.Controllers {
 					"What weapon kit did you want to use?");
 				return;
 			}
-			int weaponIndex = player._Inventory.FindIndex(f =>
+			int weaponIndex = player.Inventory.FindIndex(f =>
 				f.Name.Contains(userInput[1].ToLower()));
 			if (weaponIndex == -1) {
 				OutputController.Display.StoreUserOutput(
@@ -112,7 +112,7 @@ namespace DungeonGame.Controllers {
 					"What weapon did you want to upgrade?");
 				return;
 			}
-			Weapon weapon = player._Inventory[weaponIndex] as Weapon;
+			Weapon weapon = player.Inventory[weaponIndex] as Weapon;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string weaponName = textInfo.ToTitleCase(weapon.Name);
 			if (!weapon.Equipped) {
@@ -136,16 +136,16 @@ namespace DungeonGame.Controllers {
 				}
 			}
 
-			WeaponKit weaponKit = player._Inventory[kitIndex] as WeaponKit;
+			WeaponKit weaponKit = player.Inventory[kitIndex] as WeaponKit;
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
 			if (weaponKit.KitHasBeenUsed) {
-				player._Inventory.RemoveAt(kitIndex);
+				player.Inventory.RemoveAt(kitIndex);
 			}
 		}
 
 		public static void UseArmorKit(Player player, string[] userInput) {
-			int kitIndex = player._Inventory.FindIndex(f => f.Name.Contains(userInput[2]));
+			int kitIndex = player.Inventory.FindIndex(f => f.Name.Contains(userInput[2]));
 			if (kitIndex == -1) {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -153,7 +153,7 @@ namespace DungeonGame.Controllers {
 					"What armor kit did you want to use?");
 				return;
 			}
-			int armorIndex = player._Inventory.FindIndex(f =>
+			int armorIndex = player.Inventory.FindIndex(f =>
 				f.Name.Contains(userInput[1].ToLower()));
 			if (armorIndex == -1) {
 				OutputController.Display.StoreUserOutput(
@@ -162,7 +162,7 @@ namespace DungeonGame.Controllers {
 					"What armor did you want to upgrade?");
 				return;
 			}
-			Armor armor = player._Inventory[armorIndex] as Armor;
+			Armor armor = player.Inventory[armorIndex] as Armor;
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string armorName = textInfo.ToTitleCase(armor.Name);
 			if (!armor.Equipped) {
@@ -186,11 +186,11 @@ namespace DungeonGame.Controllers {
 				}
 			}
 
-			ArmorKit armorKit = player._Inventory[kitIndex] as ArmorKit;
+			ArmorKit armorKit = player.Inventory[kitIndex] as ArmorKit;
 			armorKit.AttemptAugmentArmorPlayer(armor);
 
 			if (armorKit.KitHasBeenUsed) {
-				player._Inventory.RemoveAt(kitIndex);
+				player.Inventory.RemoveAt(kitIndex);
 			}
 		}
 		public static void DropItem(Player player, string[] input) {
@@ -201,11 +201,11 @@ namespace DungeonGame.Controllers {
 					"What item did you want to drop?");
 				return;
 			}
-			int itemIndex = player._Inventory.FindIndex(
+			int itemIndex = player.Inventory.FindIndex(
 				f => f.Name == input[1] || f.Name.Contains(input[1]));
-			IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
+			IRoom playerRoom = RoomController._Rooms[player.PlayerLocation];
 			if (itemIndex != -1) {
-				IEquipment equippedItem = player._Inventory[itemIndex] as IEquipment;
+				IEquipment equippedItem = player.Inventory[itemIndex] as IEquipment;
 				if (equippedItem.Equipped) {
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
@@ -213,21 +213,21 @@ namespace DungeonGame.Controllers {
 						"You have to unequip that item first!");
 					return;
 				}
-				playerRoom._RoomObjects.Add(player._Inventory[itemIndex]);
-				string dropInventoryString = $"You dropped {player._Inventory[itemIndex].Name}.";
-				player._Inventory.RemoveAt(itemIndex);
+				playerRoom._RoomObjects.Add(player.Inventory[itemIndex]);
+				string dropInventoryString = $"You dropped {player.Inventory[itemIndex].Name}.";
+				player.Inventory.RemoveAt(itemIndex);
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
 					dropInventoryString);
 				return;
 			}
-			itemIndex = player._Inventory.FindIndex(
+			itemIndex = player.Inventory.FindIndex(
 				f => f.Name == input[1] || f.Name.Contains(input[1]));
 			if (itemIndex != -1) {
-				playerRoom._RoomObjects.Add(player._Inventory[itemIndex]);
-				string dropInventorytring = $"You dropped {player._Inventory[itemIndex].Name}.";
-				player._Inventory.RemoveAt(itemIndex);
+				playerRoom._RoomObjects.Add(player.Inventory[itemIndex]);
+				string dropInventorytring = $"You dropped {player.Inventory[itemIndex].Name}.";
+				player.Inventory.RemoveAt(itemIndex);
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatSuccessOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -247,7 +247,7 @@ namespace DungeonGame.Controllers {
 					"What item did you want to pickup?");
 				return;
 			}
-			IRoom playerRoom = RoomController._Rooms[player._PlayerLocation];
+			IRoom playerRoom = RoomController._Rooms[player.PlayerLocation];
 			int itemIndex = playerRoom._RoomObjects.FindIndex(
 				f => f.Name == input[1] || f.Name.Contains(input[1]));
 			if (!(playerRoom._RoomObjects[itemIndex] is IItem item)) {
@@ -259,7 +259,7 @@ namespace DungeonGame.Controllers {
 			}
 			int playerWeight = PlayerController.GetInventoryWeight(player);
 			int itemWeight = item.Weight;
-			if (playerWeight + itemWeight > player._MaxCarryWeight) {
+			if (playerWeight + itemWeight > player.MaxCarryWeight) {
 				OutputController.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -272,7 +272,7 @@ namespace DungeonGame.Controllers {
 					"That item is not in the room!");
 				return;
 			}
-			player._Inventory.Add(playerRoom._RoomObjects[itemIndex] as IItem);
+			player.Inventory.Add(playerRoom._RoomObjects[itemIndex] as IItem);
 			string pickupItemString = $"You picked up {playerRoom._RoomObjects[itemIndex].Name}.";
 			playerRoom._RoomObjects.RemoveAt(itemIndex);
 			OutputController.Display.StoreUserOutput(
@@ -287,7 +287,7 @@ namespace DungeonGame.Controllers {
 				inputString.Append(' ');
 			}
 			string inputName = inputString.ToString().Trim();
-			IItem item = player._Inventory.Find(f => f.Name.Contains(inputName));
+			IItem item = player.Inventory.Find(f => f.Name.Contains(inputName));
 			if (item == null) {
 				string noItemFoundString = $"You don't have {inputName} in your inventory!";
 				OutputController.Display.StoreUserOutput(
@@ -353,12 +353,12 @@ namespace DungeonGame.Controllers {
 				return;
 			}
 			weapon.Equipped = false;
-			string unequipString = $"You have unequipped {player._PlayerWeapon.Name}.";
+			string unequipString = $"You have unequipped {player.PlayerWeapon.Name}.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				unequipString);
-			player._PlayerWeapon = null;
+			player.PlayerWeapon = null;
 		}
 		private static void UnequipQuiver(Player player, Quiver quiver) {
 			if (!quiver.Equipped) {
@@ -370,12 +370,12 @@ namespace DungeonGame.Controllers {
 				return;
 			}
 			quiver.Equipped = false;
-			string unequipString = $"You have unequipped {player._PlayerQuiver.Name}.";
+			string unequipString = $"You have unequipped {player.PlayerQuiver.Name}.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				unequipString);
-			player._PlayerQuiver = null;
+			player.PlayerQuiver = null;
 		}
 		private static void UnequipArmor(Player player, Armor armor) {
 			if (!armor.Equipped) {
@@ -389,60 +389,60 @@ namespace DungeonGame.Controllers {
 			armor.Equipped = false;
 			switch (armor.ArmorCategory) {
 				case Armor.ArmorSlot.Head:
-					string unequipHeadString = $"You have unequipped {player._PlayerHeadArmor.Name}.";
+					string unequipHeadString = $"You have unequipped {player.PlayerHeadArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipHeadString);
-					player._PlayerHeadArmor = null;
+					player.PlayerHeadArmor = null;
 					break;
 				case Armor.ArmorSlot.Back:
-					string unequipBackString = $"You have unequipped {player._PlayerBackArmor.Name}.";
+					string unequipBackString = $"You have unequipped {player.PlayerBackArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipBackString);
-					player._PlayerBackArmor = null;
+					player.PlayerBackArmor = null;
 					break;
 				case Armor.ArmorSlot.Chest:
-					string unequipChestString = $"You have unequipped {player._PlayerChestArmor.Name}.";
+					string unequipChestString = $"You have unequipped {player.PlayerChestArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipChestString);
-					player._PlayerChestArmor = null;
+					player.PlayerChestArmor = null;
 					break;
 				case Armor.ArmorSlot.Wrist:
-					string unequipWristString = $"You have unequipped {player._PlayerWristArmor.Name}.";
+					string unequipWristString = $"You have unequipped {player.PlayerWristArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipWristString);
-					player._PlayerWristArmor = null;
+					player.PlayerWristArmor = null;
 					break;
 				case Armor.ArmorSlot.Waist:
-					string unequipWaistString = $"You have unequipped {player._PlayerWaistArmor.Name}.";
+					string unequipWaistString = $"You have unequipped {player.PlayerWaistArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipWaistString);
-					player._PlayerWaistArmor = null;
+					player.PlayerWaistArmor = null;
 					break;
 				case Armor.ArmorSlot.Legs:
-					string unequipLegsString = $"You have unequipped {player._PlayerLegsArmor.Name}.";
+					string unequipLegsString = $"You have unequipped {player.PlayerLegsArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipLegsString);
-					player._PlayerLegsArmor = null;
+					player.PlayerLegsArmor = null;
 					break;
 				case Armor.ArmorSlot.Hands:
-					string unequipHandsString = $"You have unequipped {player._PlayerHandsArmor.Name}.";
+					string unequipHandsString = $"You have unequipped {player.PlayerHandsArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						unequipHandsString);
-					player._PlayerHandsArmor = null;
+					player.PlayerHandsArmor = null;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -459,15 +459,15 @@ namespace DungeonGame.Controllers {
 			}
 			// Check to see if player can use weapon, if so, continue, otherwise return output error msg
 			switch (weapon._WeaponGroup) {
-				case Weapon.WeaponType.Dagger when player._CanUseDagger:
+				case Weapon.WeaponType.Dagger when player.CanUseDagger:
 					break;
-				case Weapon.WeaponType.OneHandedSword when player._CanUseOneHandedSword:
+				case Weapon.WeaponType.OneHandedSword when player.CanUseOneHandedSword:
 					break;
-				case Weapon.WeaponType.TwoHandedSword when player._CanUseTwoHandedSword:
+				case Weapon.WeaponType.TwoHandedSword when player.CanUseTwoHandedSword:
 					break;
-				case Weapon.WeaponType.Axe when player._CanUseAxe:
+				case Weapon.WeaponType.Axe when player.CanUseAxe:
 					break;
-				case Weapon.WeaponType.Bow when player._CanUseBow:
+				case Weapon.WeaponType.Bow when player.CanUseBow:
 					break;
 				default:
 					OutputController.Display.StoreUserOutput(
@@ -476,12 +476,12 @@ namespace DungeonGame.Controllers {
 						"You cannot use that type of weapon!");
 					return;
 			}
-			if (player._PlayerWeapon != null && player._PlayerWeapon.Equipped) {
-				UnequipWeapon(player, player._PlayerWeapon);
+			if (player.PlayerWeapon != null && player.PlayerWeapon.Equipped) {
+				UnequipWeapon(player, player.PlayerWeapon);
 			}
-			player._PlayerWeapon = weapon;
+			player.PlayerWeapon = weapon;
 			weapon.Equipped = true;
-			string equipSuccessString = $"You have equipped {player._PlayerWeapon.Name}.";
+			string equipSuccessString = $"You have equipped {player.PlayerWeapon.Name}.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
@@ -496,12 +496,12 @@ namespace DungeonGame.Controllers {
 					alreadyEquipString);
 				return;
 			}
-			if (player._PlayerQuiver != null && player._PlayerQuiver.Equipped) {
-				UnequipQuiver(player, player._PlayerQuiver);
+			if (player.PlayerQuiver != null && player.PlayerQuiver.Equipped) {
+				UnequipQuiver(player, player.PlayerQuiver);
 			}
-			player._PlayerQuiver = quiver;
+			player.PlayerQuiver = quiver;
 			quiver.Equipped = true;
-			string equipString = $"You have equipped {player._PlayerQuiver.Name}.";
+			string equipString = $"You have equipped {player.PlayerQuiver.Name}.";
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
@@ -518,11 +518,11 @@ namespace DungeonGame.Controllers {
 			}
 			// Check to see if player can use armor type, if so, continue, otherwise return output error msg
 			switch (armor.ArmorGroup) {
-				case Armor.ArmorType.Cloth when player._CanWearCloth:
+				case Armor.ArmorType.Cloth when player.CanWearCloth:
 					break;
-				case Armor.ArmorType.Leather when player._CanWearLeather:
+				case Armor.ArmorType.Leather when player.CanWearLeather:
 					break;
-				case Armor.ArmorType.Plate when player._CanWearPlate:
+				case Armor.ArmorType.Plate when player.CanWearPlate:
 					break;
 				default:
 					OutputController.Display.StoreUserOutput(
@@ -533,84 +533,84 @@ namespace DungeonGame.Controllers {
 			}
 			switch (armor.ArmorCategory) {
 				case Armor.ArmorSlot.Head:
-					if (player._PlayerHeadArmor != null && player._PlayerHeadArmor.Equipped) {
-						UnequipArmor(player, player._PlayerHeadArmor);
+					if (player.PlayerHeadArmor != null && player.PlayerHeadArmor.Equipped) {
+						UnequipArmor(player, player.PlayerHeadArmor);
 					}
-					player._PlayerHeadArmor = armor;
+					player.PlayerHeadArmor = armor;
 					armor.Equipped = true;
-					string equipHeadString = $"You have equipped {player._PlayerHeadArmor.Name}.";
+					string equipHeadString = $"You have equipped {player.PlayerHeadArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						equipHeadString);
 					break;
 				case Armor.ArmorSlot.Back:
-					if (player._PlayerBackArmor != null && player._PlayerBackArmor.Equipped) {
-						UnequipArmor(player, player._PlayerBackArmor);
+					if (player.PlayerBackArmor != null && player.PlayerBackArmor.Equipped) {
+						UnequipArmor(player, player.PlayerBackArmor);
 					}
-					player._PlayerBackArmor = armor;
+					player.PlayerBackArmor = armor;
 					armor.Equipped = true;
-					string equipBackString = $"You have equipped {player._PlayerBackArmor.Name}.";
+					string equipBackString = $"You have equipped {player.PlayerBackArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						equipBackString);
 					break;
 				case Armor.ArmorSlot.Chest:
-					if (player._PlayerChestArmor != null && player._PlayerChestArmor.Equipped) {
-						UnequipArmor(player, player._PlayerChestArmor);
+					if (player.PlayerChestArmor != null && player.PlayerChestArmor.Equipped) {
+						UnequipArmor(player, player.PlayerChestArmor);
 					}
-					player._PlayerChestArmor = armor;
+					player.PlayerChestArmor = armor;
 					armor.Equipped = true;
-					string equipChestString = $"You have equipped {player._PlayerChestArmor.Name}.";
+					string equipChestString = $"You have equipped {player.PlayerChestArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						equipChestString);
 					break;
 				case Armor.ArmorSlot.Wrist:
-					if (player._PlayerWristArmor != null && player._PlayerWristArmor.Equipped) {
-						UnequipArmor(player, player._PlayerWristArmor);
+					if (player.PlayerWristArmor != null && player.PlayerWristArmor.Equipped) {
+						UnequipArmor(player, player.PlayerWristArmor);
 					}
-					player._PlayerWristArmor = armor;
+					player.PlayerWristArmor = armor;
 					armor.Equipped = true;
-					string equipWristString = $"You have equipped {player._PlayerWristArmor.Name}.";
+					string equipWristString = $"You have equipped {player.PlayerWristArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						equipWristString);
 					break;
 				case Armor.ArmorSlot.Waist:
-					if (player._PlayerWaistArmor != null && player._PlayerWaistArmor.Equipped) {
-						UnequipArmor(player, player._PlayerWaistArmor);
+					if (player.PlayerWaistArmor != null && player.PlayerWaistArmor.Equipped) {
+						UnequipArmor(player, player.PlayerWaistArmor);
 					}
-					player._PlayerWaistArmor = armor;
+					player.PlayerWaistArmor = armor;
 					armor.Equipped = true;
-					string equipWaistString = $"You have equipped {player._PlayerWaistArmor.Name}.";
+					string equipWaistString = $"You have equipped {player.PlayerWaistArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						equipWaistString);
 					break;
 				case Armor.ArmorSlot.Legs:
-					if (player._PlayerLegsArmor != null && player._PlayerLegsArmor.Equipped) {
-						UnequipArmor(player, player._PlayerLegsArmor);
+					if (player.PlayerLegsArmor != null && player.PlayerLegsArmor.Equipped) {
+						UnequipArmor(player, player.PlayerLegsArmor);
 					}
-					player._PlayerLegsArmor = armor;
+					player.PlayerLegsArmor = armor;
 					armor.Equipped = true;
-					string equipLegsString = $"You have equipped {player._PlayerLegsArmor.Name}.";
+					string equipLegsString = $"You have equipped {player.PlayerLegsArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),
 						equipLegsString);
 					break;
 				case Armor.ArmorSlot.Hands:
-					if (player._PlayerHandsArmor != null && player._PlayerHandsArmor.Equipped) {
-						UnequipArmor(player, player._PlayerHandsArmor);
+					if (player.PlayerHandsArmor != null && player.PlayerHandsArmor.Equipped) {
+						UnequipArmor(player, player.PlayerHandsArmor);
 					}
-					player._PlayerHandsArmor = armor;
+					player.PlayerHandsArmor = armor;
 					armor.Equipped = true;
-					string equipHandsString = $"You have equipped {player._PlayerHandsArmor.Name}.";
+					string equipHandsString = $"You have equipped {player.PlayerHandsArmor.Name}.";
 					OutputController.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
 						Settings.FormatDefaultBackground(),

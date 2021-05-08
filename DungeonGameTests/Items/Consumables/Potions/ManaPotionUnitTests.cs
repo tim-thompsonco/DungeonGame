@@ -14,7 +14,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 		public void Setup() {
 			potion = new ManaPotion(PotionStrength.Minor);
 			player = new Player("test", Player.PlayerClassType.Mage) {
-				_Inventory = new List<IItem>()
+				Inventory = new List<IItem>()
 			};
 		}
 
@@ -56,32 +56,32 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 		[Test]
 		public void PlayerDrinkPotionFullManaTest() {
 			potion = new ManaPotion(PotionStrength.Greater);  // Greater mana potion restores 150 mana
-			player._Inventory.Add(potion);
-			player._MaxManaPoints = 200;
-			player._ManaPoints = 25;
-			int? oldPlayerMana = player._ManaPoints;
+			player.Inventory.Add(potion);
+			player.MaxManaPoints = 200;
+			player.ManaPoints = 25;
+			int? oldPlayerMana = player.ManaPoints;
 
 			potion.DrinkPotion(player);
 
-			Assert.AreEqual(oldPlayerMana + potion.ManaAmount, player._ManaPoints);
+			Assert.AreEqual(oldPlayerMana + potion.ManaAmount, player.ManaPoints);
 		}
 
 		[Test]
 		public void PlayerDrinkPotionPartialManaTest() {
 			potion = new ManaPotion(PotionStrength.Greater);  // Greater mana potion restores 150 mana
-			player._Inventory.Add(potion);
-			player._MaxManaPoints = 200;
-			player._ManaPoints = 100;
+			player.Inventory.Add(potion);
+			player.MaxManaPoints = 200;
+			player.ManaPoints = 100;
 
 			potion.DrinkPotion(player);
 
-			Assert.AreEqual(player._MaxManaPoints, player._ManaPoints);
+			Assert.AreEqual(player.MaxManaPoints, player.ManaPoints);
 		}
 
 		[Test]
 		public void PlayerDrinkPotionDisplayMessageTest() {
 			OutputController.Display.ClearUserOutput();
-			player._Inventory.Add(potion);
+			player.Inventory.Add(potion);
 			string displayMessage = $"You drank a potion and replenished {potion.ManaAmount} mana.";
 
 			potion.DrinkPotion(player);

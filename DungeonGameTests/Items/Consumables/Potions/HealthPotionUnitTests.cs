@@ -14,7 +14,7 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 		public void Setup() {
 			potion = new HealthPotion(PotionStrength.Minor);
 			player = new Player("test", Player.PlayerClassType.Archer) {
-				_Inventory = new List<IItem>()
+				Inventory = new List<IItem>()
 			};
 		}
 
@@ -56,32 +56,32 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 		[Test]
 		public void PlayerDrinkPotionFullHealthTest() {
 			potion = new HealthPotion(PotionStrength.Greater);  // Greater health potion restores 150 health
-			player._Inventory.Add(potion);
-			player._MaxHitPoints = 200;
-			player._HitPoints = 25;
-			int oldPlayerHP = player._HitPoints;
+			player.Inventory.Add(potion);
+			player.MaxHitPoints = 200;
+			player.HitPoints = 25;
+			int oldPlayerHP = player.HitPoints;
 
 			potion.DrinkPotion(player);
 
-			Assert.AreEqual(oldPlayerHP + potion.HealthAmount, player._HitPoints);
+			Assert.AreEqual(oldPlayerHP + potion.HealthAmount, player.HitPoints);
 		}
 
 		[Test]
 		public void PlayerDrinkPotionPartialHealthTest() {
 			potion = new HealthPotion(PotionStrength.Greater);  // Greater health potion restores 150 health
-			player._Inventory.Add(potion);
-			player._MaxHitPoints = 200;
-			player._HitPoints = 100;
+			player.Inventory.Add(potion);
+			player.MaxHitPoints = 200;
+			player.HitPoints = 100;
 
 			potion.DrinkPotion(player);
 
-			Assert.AreEqual(player._MaxHitPoints, player._HitPoints);
+			Assert.AreEqual(player.MaxHitPoints, player.HitPoints);
 		}
 
 		[Test]
 		public void PlayerDrinkPotionDisplayMessageTest() {
 			OutputController.Display.ClearUserOutput();
-			player._Inventory.Add(potion);
+			player.Inventory.Add(potion);
 			string displayMessage = $"You drank a potion and replenished {potion.HealthAmount} health.";
 
 			potion.DrinkPotion(player);

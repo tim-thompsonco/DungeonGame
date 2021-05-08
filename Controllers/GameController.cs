@@ -12,33 +12,33 @@ using System.Threading.Tasks;
 
 namespace DungeonGame.Controllers {
 	public static class GameController {
-		private static readonly Random RndGenerate = new Random();
-		public static bool _IsGameOver { get; set; }
-		private static int _GameTicks { get; set; }
+		private static readonly Random _rndGenerate = new Random();
+		public static bool IsGameOver { get; set; }
+		private static int GameTicks { get; set; }
 
 		public static void CheckStatus(Player player) {
-			_GameTicks++;
+			GameTicks++;
 
-			if (_GameTicks % player._StatReplenishInterval == 0) {
+			if (GameTicks % player.StatReplenishInterval == 0) {
 				ReplenishStatsOverTime(player);
 			}
 
-			if (player._Effects.Any()) {
-				foreach (IEffect effect in player._Effects.Where(effect => _GameTicks % effect.TickDuration == 0).ToList()) {
+			if (player.Effects.Any()) {
+				foreach (IEffect effect in player.Effects.Where(effect => GameTicks % effect.TickDuration == 0).ToList()) {
 					if (effect is HealingEffect healingEffect) {
 						healingEffect.ProcessHealingRound(player);
 					}
 
-					if (effect is ChangePlayerDamageEffect changePlayerDmgEffect && !player._InCombat && effect.Name.Contains("berserk")) {
+					if (effect is ChangePlayerDamageEffect changePlayerDmgEffect && !player.InCombat && effect.Name.Contains("berserk")) {
 						changePlayerDmgEffect.ProcessChangePlayerDamageRound(player);
 					}
 
 					if (effect is ChangeArmorEffect changeArmorEffect) {
-						if (!player._InCombat && effect.Name.Contains("berserk")) {
+						if (!player.InCombat && effect.Name.Contains("berserk")) {
 							changeArmorEffect.IsEffectExpired = true;
 						}
 
-						if (!player._InCombat) {
+						if (!player.InCombat) {
 							changeArmorEffect.ProcessChangeArmorRound();
 						}
 					}
@@ -64,14 +64,14 @@ namespace DungeonGame.Controllers {
 					}
 
 					if (effect is ChangeMonsterDamageEffect changeMonsterDmgEffect) {
-						if (!player._InCombat) {
+						if (!player.InCombat) {
 							effect.IsEffectExpired = true;
 						}
 
 						changeMonsterDmgEffect.ProcessChangeMonsterDamageRound(player);
 					}
 
-					if (effect is BlockDamageEffect blockDamageEffect && !player._InCombat) {
+					if (effect is BlockDamageEffect blockDamageEffect && !player.InCombat) {
 						blockDamageEffect.ProcessBlockDamageRound();
 					}
 				}
@@ -82,7 +82,7 @@ namespace DungeonGame.Controllers {
 					roomObject => roomObject?.GetType() == typeof(Monster))) {
 					Monster monster = (Monster)roomObject;
 					RemovedExpiredEffectsAsync(monster);
-					if (_GameTicks % monster.StatReplenishInterval == 0 && monster.HitPoints > 0) {
+					if (GameTicks % monster.StatReplenishInterval == 0 && monster.HitPoints > 0) {
 						ReplenishStatsOverTime(monster);
 					}
 
@@ -90,21 +90,15 @@ namespace DungeonGame.Controllers {
 						continue;
 					}
 
-					foreach (IEffect effect in monster.Effects.Where(effect => _GameTicks % effect.TickDuration == 0).ToList()) {
+					foreach (IEffect effect in monster.Effects.Where(effect => GameTicks % effect.TickDuration == 0).ToList()) {
 						if (effect is BurningEffect burningEffect) {
 							burningEffect.ProcessBurningRound(monster);
-						}
-
-						if (effect is BleedingEffect bleedingEffect) {
+						} else if (effect is BleedingEffect bleedingEffect) {
 							bleedingEffect.ProcessBleedingRound(monster);
-						}
-
-						if (effect is StunnedEffect stunnedEffect) {
-							stunnedEffect.ProcessStunnedRound(monster);
-						}
-
-						if (effect is FrozenEffect frozenEffect) {
+						} else if (effect is FrozenEffect frozenEffect) {
 							frozenEffect.ProcessFrozenRound(monster);
+						} else {
+							effect.ProcessRound();
 						}
 					}
 				}
@@ -112,7 +106,7 @@ namespace DungeonGame.Controllers {
 		}
 
 		public static int GetRandomNumber(int lowNum, int highNum) {
-			return RndGenerate.Next(lowNum, highNum + 1);
+			return _rndGenerate.Next(lowNum, highNum + 1);
 		}
 
 		public static int RoundNumber(int number) {
@@ -126,9 +120,9 @@ namespace DungeonGame.Controllers {
 
 		public static async void RemovedExpiredEffectsAsync(Player player) {
 			await Task.Run(() => {
-				foreach (IEffect effect in player._Effects.ToList()) {
+				foreach (IEffect effect in player.Effects.ToList()) {
 					if (effect.IsEffectExpired) {
-						player._Effects.Remove(effect);
+						player.Effects.Remove(effect);
 					}
 				}
 			});
@@ -149,30 +143,30 @@ namespace DungeonGame.Controllers {
 		}
 
 		private static void ReplenishStatsOverTime(Player player) {
-			if (player._InCombat) {
+			if (player.InCombat) {
 				return;
 			}
 
-			if (player._HitPoints < player._MaxHitPoints) {
-				player._HitPoints++;
+			if (player.HitPoints < player.MaxHitPoints) {
+				player.HitPoints++;
 			}
 
-			switch (player._PlayerClass) {
+			switch (player.PlayerClass) {
 				case Player.PlayerClassType.Mage:
-					if (player._ManaPoints < player._MaxManaPoints) {
-						player._ManaPoints++;
+					if (player.ManaPoints < player.MaxManaPoints) {
+						player.ManaPoints++;
 					}
 
 					break;
 				case Player.PlayerClassType.Warrior:
-					if (player._RagePoints < player._MaxRagePoints) {
-						player._RagePoints++;
+					if (player.RagePoints < player.MaxRagePoints) {
+						player.RagePoints++;
 					}
 
 					break;
 				case Player.PlayerClassType.Archer:
-					if (player._ComboPoints < player._MaxComboPoints) {
-						player._ComboPoints++;
+					if (player.ComboPoints < player.MaxComboPoints) {
+						player.ComboPoints++;
 					}
 
 					break;
@@ -260,15 +254,15 @@ namespace DungeonGame.Controllers {
 			OutputController.Display.StoreUserOutput(
 				Settings.FormatAnnounceText(),
 				Settings.FormatDefaultBackground(), "Quitting the game.");
-			player._CanSave = true;
-			_IsGameOver = true;
+			player.CanSave = true;
+			IsGameOver = true;
 			SaveGame(player);
 			return true;
 		}
 
 		public static void SaveGame(Player player) {
 			string outputString;
-			if (player._CanSave) {
+			if (player.CanSave) {
 				JsonSerializer serializerPlayer = new JsonSerializer() {
 					NullValueHandling = NullValueHandling.Ignore,
 					TypeNameHandling = TypeNameHandling.Auto,

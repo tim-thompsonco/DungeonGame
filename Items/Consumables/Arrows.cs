@@ -23,7 +23,7 @@ namespace DungeonGame.Items.Consumables {
 		}
 
 		public void LoadPlayerQuiverWithArrows(Player player) {
-			if (player._PlayerQuiver == null) {
+			if (player.PlayerQuiver == null) {
 				DisplayPlayerHasNoQuiverMessage();
 			} else {
 				LoadQuiverWithArrows(player);
@@ -38,7 +38,7 @@ namespace DungeonGame.Items.Consumables {
 		}
 
 		private void LoadQuiverWithArrows(Player player) {
-			int arrowsToLoadToQuiver = player._PlayerQuiver.MaxQuantity - player._PlayerQuiver.Quantity;
+			int arrowsToLoadToQuiver = player.PlayerQuiver.MaxQuantity - player.PlayerQuiver.Quantity;
 
 			if (Quantity <= arrowsToLoadToQuiver) {
 				LoadQuiverWithAllArrows(player);
@@ -48,12 +48,12 @@ namespace DungeonGame.Items.Consumables {
 		}
 
 		private void LoadQuiverWithAllArrows(Player player) {
-			player._PlayerQuiver.Quantity += Quantity;
+			player.PlayerQuiver.Quantity += Quantity;
 			Quantity = 0;
 		}
 
 		private void LoadQuiverWithSomeArrows(Player player, int arrowsToLoad) {
-			player._PlayerQuiver.Quantity += arrowsToLoad;
+			player.PlayerQuiver.Quantity += arrowsToLoad;
 			Quantity -= arrowsToLoad;
 		}
 	}

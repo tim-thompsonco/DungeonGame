@@ -30,14 +30,14 @@ namespace DungeonGame {
 			Timer globalTimer = new Timer(
 				e => GameController.CheckStatus(player),
 				null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
-			while (!GameController._IsGameOver) {
+			while (!GameController.IsGameOver) {
 				GameController.RemovedExpiredEffectsAsync(player);
 				string[] input = InputController.GetFormattedInput(Console.ReadLine());
 				InputController.ProcessUserInput(player, input, globalTimer);
 				Console.Clear();
 				OutputController.ShowUserOutput(player);
 				OutputController.Display.ClearUserOutput();
-				if (player._HitPoints > 0) {
+				if (player.HitPoints > 0) {
 					continue;
 				}
 				/* If player dies, provide option to continue playing. If there is a saved game, player can reload
@@ -45,11 +45,11 @@ namespace DungeonGame {
 				if (GameController.ContinuePlaying()) {
 					GameController.LoadGame();
 					player = GameController.LoadPlayer();
-					RoomController._Rooms[player._PlayerLocation].LookRoom();
+					RoomController._Rooms[player.PlayerLocation].LookRoom();
 					OutputController.ShowUserOutput(player);
 					OutputController.Display.ClearUserOutput();
 				} else {
-					GameController._IsGameOver = true;
+					GameController.IsGameOver = true;
 					Messages.GameOver();
 					OutputController.Display.RetrieveUserOutput();
 					OutputController.Display.ClearUserOutput();

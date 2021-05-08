@@ -103,10 +103,10 @@ namespace DungeonGame.Rooms {
 				if (monsterName.Last() == inputName || _Monster.Name == inputName ||
 					_Monster.Name.Contains(input.Last()) || _Monster != null) {
 					if (_Monster.HitPoints > 0) {
-						player._InCombat = true;
+						player.InCombat = true;
 						_Monster.InCombat = true;
 						CombatController.StartCombat(player, _Monster);
-						if (player._HitPoints <= 0) {
+						if (player.HitPoints <= 0) {
 							Messages.PlayerDeath();
 						}
 					} else {
@@ -301,7 +301,7 @@ namespace DungeonGame.Rooms {
 			if (monsterName.Last() == inputName || _Monster.Name.Contains(inputName)) {
 				if (_Monster.HitPoints <= 0 && _Monster.WasLooted == false) {
 					int goldLooted = _Monster.Gold;
-					player._Gold += _Monster.Gold;
+					player.Gold += _Monster.Gold;
 					try {
 						_Monster.Gold = 0;
 						string lootGoldString = $"You looted {goldLooted} gold coins from the {_Monster.Name}!";
@@ -312,14 +312,14 @@ namespace DungeonGame.Rooms {
 						while (_Monster.MonsterItems.Count > 0) {
 							int playerWeight = PlayerController.GetInventoryWeight(player);
 							int itemWeight = _Monster.MonsterItems[0].Weight;
-							if (playerWeight + itemWeight > player._MaxCarryWeight) {
+							if (playerWeight + itemWeight > player.MaxCarryWeight) {
 								OutputController.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"You can't carry that much!");
 								return;
 							} else {
-								player._Inventory.Add(_Monster.MonsterItems[0]);
+								player.Inventory.Add(_Monster.MonsterItems[0]);
 							}
 							string lootItemString = $"You looted {_Monster.MonsterItems[0].Name} from the {_Monster.Name}!";
 							OutputController.Display.StoreUserOutput(
@@ -363,7 +363,7 @@ namespace DungeonGame.Rooms {
 
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 			string monsterName = textInfo.ToTitleCase(_Monster.Name);
-			int levelDiff = player._Level - _Monster.Level;
+			int levelDiff = player.Level - _Monster.Level;
 			StringBuilder difficultyStringBuilder = new StringBuilder();
 			difficultyStringBuilder.Append("Difficulty: ");
 			if (levelDiff >= 3) {

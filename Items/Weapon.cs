@@ -62,7 +62,7 @@ namespace DungeonGame.Items {
 			Desc = $"A {Name} that causes damage when you hit stuff with it.";
 		}
 		public Weapon(WeaponType weaponType, bool isRainbowGear, Player player) {
-			_Level = player._Level;
+			_Level = player.Level;
 			IsRainbowGear = isRainbowGear;
 			_WeaponGroup = weaponType;
 			_DamageGroup = DamageType.Physical;
@@ -201,7 +201,7 @@ namespace DungeonGame.Items {
 			return (int)attackDamage;
 		}
 		public void UpdateRainbowStats(Player player) {
-			_Level = player._Level;
+			_Level = player.Level;
 			int randomWeaponDmg = GameController.GetRandomNumber(20, 26);
 			_RegDamage = randomWeaponDmg + ((_Level - 1) * 3);
 			_CritMultiplier = 1.3;

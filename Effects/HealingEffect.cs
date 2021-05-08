@@ -34,10 +34,10 @@ namespace DungeonGame.Effects {
 		}
 
 		private Player HealPlayer(Player player) {
-			if (player._HitPoints + HealOverTimeAmount > player._MaxHitPoints) {
-				player._HitPoints = player._MaxHitPoints;
+			if (player.HitPoints + HealOverTimeAmount > player.MaxHitPoints) {
+				player.HitPoints = player.MaxHitPoints;
 			} else {
-				player._HitPoints += HealOverTimeAmount;
+				player.HitPoints += HealOverTimeAmount;
 			}
 
 			return player;
@@ -55,6 +55,10 @@ namespace DungeonGame.Effects {
 
 		public void SetEffectAsExpired() {
 			IsEffectExpired = true;
+		}
+
+		public void ProcessRound() {
+			throw new System.NotImplementedException();
 		}
 	}
 }

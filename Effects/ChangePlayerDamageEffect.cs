@@ -19,7 +19,7 @@ namespace DungeonGame.Effects {
 		}
 
 		public void ProcessChangePlayerDamageRound(Player player) {
-			if (IsEffectExpired || player._InCombat == false) {
+			if (IsEffectExpired || player.InCombat == false) {
 				return;
 			}
 
@@ -51,6 +51,10 @@ namespace DungeonGame.Effects {
 
 		public int GetUpdatedDamageFromChange(int attackAmount) {
 			return attackAmount + _changeAmount;
+		}
+
+		public void ProcessRound() {
+			throw new NotImplementedException();
 		}
 	}
 }

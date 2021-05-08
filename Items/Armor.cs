@@ -107,7 +107,7 @@ namespace DungeonGame.Items {
 			Desc = $"A {Name}.";
 		}
 		public Armor(ArmorType armorGroup, ArmorSlot armorCategory, bool isRainbowGear, Player player) {
-			Level = player._Level;
+			Level = player.Level;
 			IsRainbowGear = isRainbowGear;
 			ArmorGroup = armorGroup;
 			ArmorCategory = armorCategory;
@@ -394,7 +394,7 @@ namespace DungeonGame.Items {
 			return adjArmorRating;
 		}
 		public void UpdateRainbowStats(Player player) {
-			Level = player._Level;
+			Level = player.Level;
 			// Base armor rating before random attribute or armor type
 			ArmorRating = ArmorCategory switch {
 				ArmorSlot.Back => 1,

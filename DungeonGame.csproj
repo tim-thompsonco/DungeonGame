@@ -54,6 +54,7 @@
     <Compile Include="Effects\ChangeMonsterDamageEffect.cs" />
     <Compile Include="Effects\ChangePlayerDamageEffect.cs" />
     <Compile Include="Effects\ChangeStatEffect.cs" />
+    <Compile Include="Effects\EffectSettings.cs" />
     <Compile Include="Effects\FrozenEffect.cs" />
     <Compile Include="Effects\HealingEffect.cs" />
     <Compile Include="Effects\IEffect.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="Effects\ReflectDamageEffect.cs" />
     <Compile Include="Effects\StatType.cs" />
     <Compile Include="Effects\StunnedEffect.cs" />
+    <Compile Include="Interfaces\IEffectHolder.cs" />
     <Compile Include="Items\Gems\GemLevel.cs" />
     <Compile Include="Items\Gems\GemType.cs" />
     <Compile Include="Quests\IQuestGiver.cs" />
