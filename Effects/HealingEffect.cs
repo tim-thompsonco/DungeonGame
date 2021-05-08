@@ -1,9 +1,11 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Interfaces;
 using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public class HealingEffect : IEffect {
 		public int CurrentRound { get; set; } = 1;
+		public IEffectHolder EffectHolder { get; }
 		public int HealOverTimeAmount { get; }
 		public bool IsEffectExpired { get; set; }
 		public bool IsHarmful { get; }

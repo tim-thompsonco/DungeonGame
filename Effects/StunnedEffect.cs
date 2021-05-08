@@ -1,4 +1,5 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Effects.SettingsObjects;
 using DungeonGame.Interfaces;
 using DungeonGame.Monsters;
 
@@ -13,9 +14,11 @@ namespace DungeonGame.Effects {
 		public int TickDuration { get; } = 1;
 
 		public StunnedEffect(EffectSettings effectSettings) {
+			effectSettings.ValidateSettings();
+
 			EffectHolder = effectSettings.EffectHolder;
 			Name = effectSettings.Name;
-			MaxRound = effectSettings.MaxRound;
+			MaxRound = (int)effectSettings.MaxRound;
 		}
 
 		public void ProcessRound() {

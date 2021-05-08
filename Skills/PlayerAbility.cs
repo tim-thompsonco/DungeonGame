@@ -1,6 +1,7 @@
 using DungeonGame.Controllers;
 using DungeonGame.Coordinates;
 using DungeonGame.Effects;
+using DungeonGame.Effects.SettingsObjects;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 using DungeonGame.Rooms;
@@ -654,8 +655,13 @@ namespace DungeonGame {
 						Settings.FormatDefaultBackground(),
 						bleedString);
 
-					monster.Effects.Add(new BleedingEffect(player.Abilities[index].Name, player.Abilities[index].Offensive._AmountMaxRounds,
-						player.Abilities[index].Offensive._AmountOverTime));
+					EffectOverTimeSettings effectSettings = new EffectOverTimeSettings {
+						AmountOverTime = player.Abilities[index].Offensive._AmountOverTime,
+						EffectHolder = monster,
+						MaxRound = player.Abilities[index].Offensive._AmountMaxRounds,
+						Name = player.Abilities[index].Name
+					};
+					monster.Effects.Add(new BleedingEffect(effectSettings));
 					break;
 				case Offensive.OffensiveType.Fire:
 					string onFireString = $"The {monster.Name} bursts into flame!";

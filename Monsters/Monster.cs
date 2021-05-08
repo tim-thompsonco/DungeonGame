@@ -202,20 +202,20 @@ namespace DungeonGame.Monsters {
 			}
 			if (Abilities != null) {
 				for (int i = 0; i < Abilities.Count; i++) {
-					if (EnergyPoints < Abilities[i]._EnergyCost) {
+					if (EnergyPoints < Abilities[i].EnergyCost) {
 						continue;
 					}
 
-					switch (Abilities[i]._AbilityCategory) {
+					switch (Abilities[i].AbilityCategory) {
 						case MonsterAbility.Ability.PoisonBite:
 						case MonsterAbility.Ability.BloodLeech:
 						case MonsterAbility.Ability.TailWhip:
 							int abilityTotalDamage = 0;
-							if (Abilities[i]._Offensive._AmountOverTime == 0) {
-								abilityTotalDamage = Abilities[i]._Offensive._Amount * 2;
+							if (Abilities[i].Offensive._AmountOverTime == 0) {
+								abilityTotalDamage = Abilities[i].Offensive._Amount * 2;
 							} else {
-								abilityTotalDamage = Abilities[i]._Offensive._Amount + (Abilities[i]._Offensive._AmountOverTime *
-									Abilities[i]._Offensive._AmountMaxRounds);
+								abilityTotalDamage = Abilities[i].Offensive._Amount + (Abilities[i].Offensive._AmountOverTime *
+									Abilities[i].Offensive._AmountMaxRounds);
 							}
 							attackOptions.Add(new
 								AttackOption(AttackType.Ability, abilityTotalDamage, i));
@@ -265,7 +265,7 @@ namespace DungeonGame.Monsters {
 					}
 					break;
 				case AttackType.Ability:
-					switch (Abilities[attackOption.AttackIndex]._AbilityCategory) {
+					switch (Abilities[attackOption.AttackIndex].AbilityCategory) {
 						case MonsterAbility.Ability.PoisonBite:
 						case MonsterAbility.Ability.TailWhip:
 							Abilities[attackOption.AttackIndex].UseOffenseDamageAbility(this, player, attackOption.AttackIndex);

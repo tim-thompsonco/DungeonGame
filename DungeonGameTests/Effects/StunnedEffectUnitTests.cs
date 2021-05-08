@@ -1,5 +1,6 @@
 ﻿using DungeonGame.Controllers;
 using DungeonGame.Effects;
+using DungeonGame.Effects.SettingsObjects;
 using DungeonGame.Monsters;
 using NUnit.Framework;
 

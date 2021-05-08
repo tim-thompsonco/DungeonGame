@@ -1,10 +1,12 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Interfaces;
 using DungeonGame.Players;
 using System;
 
 namespace DungeonGame.Effects {
 	public class ChangePlayerDamageEffect : IEffect {
 		public int CurrentRound { get; set; } = 1;
+		public IEffectHolder EffectHolder { get; }
 		public bool IsEffectExpired { get; set; }
 		public bool IsHarmful { get; }
 		public int MaxRound { get; }

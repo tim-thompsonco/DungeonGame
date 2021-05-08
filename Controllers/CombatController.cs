@@ -215,7 +215,7 @@ namespace DungeonGame.Controllers {
 				}
 
 				if (effect is BleedingEffect bleedingEffect) {
-					bleedingEffect.ProcessBleedingRound(player);
+					bleedingEffect.ProcessRound();
 				}
 
 				if (effect is FrozenEffect frozenEffect) {
@@ -230,8 +230,6 @@ namespace DungeonGame.Controllers {
 			foreach (IEffect effect in monster.Effects) {
 				if (effect is BurningEffect burningEffect) {
 					burningEffect.ProcessBurningRound(monster);
-				} else if (effect is BleedingEffect bleedingEffect) {
-					bleedingEffect.ProcessBleedingRound(monster);
 				} else {
 					effect.ProcessRound();
 				}

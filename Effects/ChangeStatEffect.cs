@@ -1,9 +1,11 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Interfaces;
 using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public partial class ChangeStatEffect : IEffect {
 		public int CurrentRound { get; set; } = 1;
+		public IEffectHolder EffectHolder { get; }
 		public StatType EffectStatType { get; set; }
 		public bool IsEffectExpired { get; set; }
 		public bool IsHarmful { get; }

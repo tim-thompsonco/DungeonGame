@@ -141,16 +141,16 @@ namespace DungeonGameTests {
 			Monster monster = new Monster(3, Monster.MonsterType.Vampire) { HitPoints = 10, MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
 			int abilityIndex = monster.Abilities.FindIndex(
-				f => f._AbilityCategory == MonsterAbility.Ability.BloodLeech);
+				f => f.AbilityCategory == MonsterAbility.Ability.BloodLeech);
 			foreach (IItem item in player.Inventory.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem.Equipped = false;
 			}
 			int monsterHealthBase = monster.HitPoints;
 			monster.Abilities[abilityIndex].UseBloodLeechAbility(monster, player, abilityIndex);
-			int abilityCost = monster.Abilities[abilityIndex]._EnergyCost;
+			int abilityCost = monster.Abilities[abilityIndex].EnergyCost;
 			Assert.AreEqual(monster.MaxEnergyPoints - abilityCost, monster.EnergyPoints);
-			int leechAmount = monster.Abilities[abilityIndex]._Offensive._Amount;
+			int leechAmount = monster.Abilities[abilityIndex].Offensive._Amount;
 			Assert.AreEqual(player.MaxHitPoints - leechAmount, player.HitPoints);
 			Assert.AreEqual(monsterHealthBase + leechAmount, monster.HitPoints);
 			string attackString = $"The {monster.Name} tries to sink its fangs into you and suck your blood!";
@@ -165,18 +165,18 @@ namespace DungeonGameTests {
 			Monster monster = new Monster(3, Monster.MonsterType.Spider) { HitPoints = 50, MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
 			int abilityIndex = monster.Abilities.FindIndex(
-				f => f._AbilityCategory == MonsterAbility.Ability.PoisonBite);
+				f => f.AbilityCategory == MonsterAbility.Ability.PoisonBite);
 			foreach (IItem item in player.Inventory.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem.Equipped = false;
 			}
 			monster.Abilities[abilityIndex].UseOffenseDamageAbility(monster, player, abilityIndex);
-			int abilityCost = monster.Abilities[abilityIndex]._EnergyCost;
+			int abilityCost = monster.Abilities[abilityIndex].EnergyCost;
 			Assert.AreEqual(monster.MaxEnergyPoints - abilityCost, monster.EnergyPoints);
-			int abilityDamage = monster.Abilities[abilityIndex]._Offensive._Amount;
-			int abilityDamageOverTime = monster.Abilities[abilityIndex]._Offensive._AmountOverTime;
-			int abilityCurRounds = monster.Abilities[abilityIndex]._Offensive._AmountCurRounds;
-			int abilityMaxRounds = monster.Abilities[abilityIndex]._Offensive._AmountMaxRounds;
+			int abilityDamage = monster.Abilities[abilityIndex].Offensive._Amount;
+			int abilityDamageOverTime = monster.Abilities[abilityIndex].Offensive._AmountOverTime;
+			int abilityCurRounds = monster.Abilities[abilityIndex].Offensive._AmountCurRounds;
+			int abilityMaxRounds = monster.Abilities[abilityIndex].Offensive._AmountMaxRounds;
 			string attackString = $"The {monster.Name} tries to bite you!";
 			Assert.AreEqual(attackString, OutputController.Display.Output[0][2]);
 			string attackSuccessString = $"The {monster.Name} bites you for {abilityDamage} physical damage.";
@@ -190,7 +190,7 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			BleedingEffect bleedEffect = player.Effects[0] as BleedingEffect;
 			for (int i = 2; i < 5; i++) {
-				bleedEffect.ProcessBleedingRound(player);
+				bleedEffect.ProcessRound();
 				int bleedAmount = bleedEffect.BleedDamageOverTime;
 				string bleedRoundString = $"You bleed for {bleedAmount} physical damage.";
 				Assert.AreEqual(bleedRoundString, OutputController.Display.Output[i - 2][2]);
@@ -209,15 +209,15 @@ namespace DungeonGameTests {
 			Monster monster = new Monster(3, Monster.MonsterType.Dragon);
 			MonsterBuilder.BuildMonster(monster);
 			int abilityIndex = monster.Abilities.FindIndex(
-				f => f._AbilityCategory == MonsterAbility.Ability.TailWhip);
+				f => f.AbilityCategory == MonsterAbility.Ability.TailWhip);
 			foreach (IItem item in player.Inventory.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem.Equipped = false;
 			}
 			monster.Abilities[abilityIndex].UseOffenseDamageAbility(monster, player, abilityIndex);
-			int abilityCost = monster.Abilities[abilityIndex]._EnergyCost;
+			int abilityCost = monster.Abilities[abilityIndex].EnergyCost;
 			Assert.AreEqual(monster.MaxEnergyPoints - abilityCost, monster.EnergyPoints);
-			int attackDamage = monster.Abilities[abilityIndex]._Offensive._Amount;
+			int attackDamage = monster.Abilities[abilityIndex].Offensive._Amount;
 			Assert.AreEqual(player.MaxHitPoints - attackDamage, player.HitPoints);
 			string attackString = $"The {monster.Name} swings its tail at you!";
 			Assert.AreEqual(attackString, OutputController.Display.Output[0][2]);

@@ -1,8 +1,10 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Interfaces;
 
 namespace DungeonGame.Effects {
 	public class ReflectDamageEffect : IEffect {
 		public int CurrentRound { get; set; } = 1;
+		public IEffectHolder EffectHolder { get; }
 		public bool IsEffectExpired { get; set; }
 		public bool IsHarmful { get; }
 		public int MaxRound { get; }

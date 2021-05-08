@@ -132,7 +132,7 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			for (int i = 2; i < 5; i++) {
 				BleedingEffect bleedEffect = monster.Effects[0] as BleedingEffect;
-				bleedEffect.ProcessBleedingRound(monster);
+				bleedEffect.ProcessRound();
 				int bleedAmount = bleedEffect.BleedDamageOverTime;
 				string bleedRoundString = $"The {monster.Name} bleeds for {bleedAmount} physical damage.";
 				Assert.AreEqual(bleedRoundString, OutputController.Display.Output[i - 2][2]);
@@ -288,7 +288,7 @@ namespace DungeonGameTests {
 			OutputController.Display.ClearUserOutput();
 			for (int i = 2; i < 7; i++) {
 				BleedingEffect bleedEffect = monster.Effects[0] as BleedingEffect;
-				bleedEffect.ProcessBleedingRound(monster);
+				bleedEffect.ProcessRound();
 				int bleedAmount = bleedEffect.BleedDamageOverTime;
 				string bleedRoundString = $"The {monster.Name} bleeds for {bleedAmount} physical damage.";
 				Assert.AreEqual(bleedRoundString, OutputController.Display.Output[i - 2][2]);

@@ -1,10 +1,12 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Interfaces;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public class BurningEffect : IEffect {
 		public int CurrentRound { get; set; } = 1;
+		public IEffectHolder EffectHolder { get; }
 		public int FireDamageOverTime { get; }
 		public bool IsEffectExpired { get; set; }
 		public bool IsHarmful { get; } = true;

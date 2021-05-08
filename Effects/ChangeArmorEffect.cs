@@ -1,10 +1,12 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Interfaces;
 using System;
 
 namespace DungeonGame.Effects {
 	public class ChangeArmorEffect : IEffect {
 		public int ChangeArmorAmount { get; }
 		public int CurrentRound { get; set; } = 1;
+		public IEffectHolder EffectHolder { get; }
 		public bool IsEffectExpired { get; set; }
 		public bool IsHarmful { get; }
 		public int MaxRound { get; }
