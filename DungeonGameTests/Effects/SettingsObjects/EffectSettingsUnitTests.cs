@@ -12,15 +12,10 @@ namespace DungeonGameTests.Effects.SettingsObjects {
 				Name = "test"
 			};
 			const string expectedErrorMessage = "EffectSettings: EffectHolder has not been set.";
-			string actualErrorMessage = string.Empty;
 
-			try {
-				effectSettings.ValidateSettings();
-			} catch (Exception ex) {
-				actualErrorMessage = ex.Message;
-			}
+			Exception exception = Assert.Throws<Exception>(() => effectSettings.ValidateSettings());
 
-			Assert.AreEqual(expectedErrorMessage, actualErrorMessage);
+			Assert.AreEqual(expectedErrorMessage, exception.Message);
 		}
 
 		[Test]
@@ -31,15 +26,10 @@ namespace DungeonGameTests.Effects.SettingsObjects {
 				Name = "test"
 			};
 			const string expectedErrorMessage = "EffectSettings: MaxRound has not been set.";
-			string actualErrorMessage = string.Empty;
 
-			try {
-				effectSettings.ValidateSettings();
-			} catch (Exception ex) {
-				actualErrorMessage = ex.Message;
-			}
+			Exception exception = Assert.Throws<Exception>(() => effectSettings.ValidateSettings());
 
-			Assert.AreEqual(expectedErrorMessage, actualErrorMessage);
+			Assert.AreEqual(expectedErrorMessage, exception.Message);
 		}
 
 		[Test]
@@ -50,15 +40,22 @@ namespace DungeonGameTests.Effects.SettingsObjects {
 				MaxRound = 3
 			};
 			const string expectedErrorMessage = "EffectSettings: Name has not been set.";
-			string actualErrorMessage = string.Empty;
 
-			try {
-				effectSettings.ValidateSettings();
-			} catch (Exception ex) {
-				actualErrorMessage = ex.Message;
-			}
+			Exception exception = Assert.Throws<Exception>(() => effectSettings.ValidateSettings());
 
-			Assert.AreEqual(expectedErrorMessage, actualErrorMessage);
+			Assert.AreEqual(expectedErrorMessage, exception.Message);
+		}
+
+		[Test]
+		public void EffectSettingsWithAllSettingsDoesNotThrowException() {
+			Player player = new Player("test", Player.PlayerClassType.Mage);
+			EffectSettings effectSettings = new EffectSettings {
+				EffectHolder = player,
+				MaxRound = 3,
+				Name = "test"
+			};
+
+			Assert.DoesNotThrow(() => effectSettings.ValidateSettings());
 		}
 	}
 }
