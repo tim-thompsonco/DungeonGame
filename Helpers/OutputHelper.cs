@@ -10,8 +10,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace DungeonGame.Controllers {
-	public static class OutputController {
+namespace DungeonGame.Helpers {
+	public static class OutputHelper {
 		public static UserOutput Display = new UserOutput();
 		public static UserOutput EffectDisplay = new UserOutput();
 		public static UserOutput MapDisplay = new UserOutput();
@@ -45,8 +45,8 @@ namespace DungeonGame.Controllers {
 					int mapY = i;
 					int mapZ = playerZ;
 					Coordinate findCoord = new Coordinate(mapX, mapY, mapZ);
-					if (RoomController._Rooms.ContainsKey(findCoord)) {
-						IRoom room = RoomController._Rooms[findCoord];
+					if (RoomHelper._Rooms.ContainsKey(findCoord)) {
+						IRoom room = RoomHelper._Rooms[findCoord];
 						if (room._IsDiscovered) {
 							if (j == startLeftPos) {
 								if (room._Up != null || room._Down != null) {
@@ -256,9 +256,9 @@ namespace DungeonGame.Controllers {
 		}
 
 		public static void ShowUserOutput(Player player, Monster opponent) {
-			PlayerController.DisplayPlayerStats(player);
-			MonsterController.DisplayStats(opponent);
-			RoomController._Rooms[player.PlayerLocation].ShowCommands();
+			PlayerHelper.DisplayPlayerStats(player);
+			MonsterHelper.DisplayStats(opponent);
+			RoomHelper._Rooms[player.PlayerLocation].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = ShowEffects(player);
 			QuestDisplay = ShowQuests(player);
@@ -267,8 +267,8 @@ namespace DungeonGame.Controllers {
 		}
 
 		public static void ShowUserOutput(Player player) {
-			PlayerController.DisplayPlayerStats(player);
-			RoomController._Rooms[player.PlayerLocation].ShowCommands();
+			PlayerHelper.DisplayPlayerStats(player);
+			RoomHelper._Rooms[player.PlayerLocation].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = ShowEffects(player);
 			QuestDisplay = ShowQuests(player);

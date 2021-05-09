@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 using DungeonGame.Monsters;
 
@@ -70,7 +70,7 @@ namespace DungeonGame.Effects {
 		}
 
 		private void DisplayFrozenMessage(string frozenMessage) {
-			OutputController.StoreOnFireMessage(frozenMessage);
+			OutputHelper.StoreOnFireMessage(frozenMessage);
 		}
 
 		private void IncrementCurrentRound() {

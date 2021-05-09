@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Players;
 
 namespace DungeonGame.Items.Consumables {
@@ -31,7 +31,7 @@ namespace DungeonGame.Items.Consumables {
 		}
 
 		private void DisplayPlayerHasNoQuiverMessage() {
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				"You don't have a quiver to reload!");

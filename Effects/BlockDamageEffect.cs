@@ -1,5 +1,5 @@
-﻿using DungeonGame.Controllers;
-using DungeonGame.Effects.SettingsObjects;
+﻿using DungeonGame.Effects.SettingsObjects;
+using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 
 namespace DungeonGame.Effects {
@@ -30,7 +30,7 @@ namespace DungeonGame.Effects {
 		private void DisplayBlockEffectFadingMessage() {
 			const string blockFadeString = "Your block effect is fading away.";
 
-			OutputController.StoreSuccessMessage(blockFadeString);
+			OutputHelper.StoreSuccessMessage(blockFadeString);
 		}
 
 		private void IncrementEffectRoundAndSetAsExpiredIfBlockAmountUsedUp() {
@@ -54,7 +54,7 @@ namespace DungeonGame.Effects {
 		private void DisplayBlockEffectExpiredMessage() {
 			const string blockEndString = "You are no longer blocking damage!";
 
-			OutputController.StoreSuccessMessage(blockEndString);
+			OutputHelper.StoreSuccessMessage(blockEndString);
 		}
 
 		public void ProcessChangeDamageRound(int incomingDamageAmount) {
@@ -77,7 +77,7 @@ namespace DungeonGame.Effects {
 		private void DisplayBlockedDamageMessage(int blockedDamageAmount) {
 			string blockString = $"Your defensive move blocked {blockedDamageAmount} damage!";
 
-			OutputController.StoreSuccessMessage(blockString);
+			OutputHelper.StoreSuccessMessage(blockString);
 		}
 
 		private void DecreaseBlockAmountByIncomingDamage(int incomingDamageAmount) {

@@ -1,6 +1,6 @@
-﻿using DungeonGame.Controllers;
-using DungeonGame.Effects;
+﻿using DungeonGame.Effects;
 using DungeonGame.Effects.SettingsObjects;
+using DungeonGame.Helpers;
 using DungeonGame.Players;
 using NUnit.Framework;
 
@@ -27,7 +27,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void ProcessBlockDamageEffectInCombatRoundWhereDamageLessThanBlockAmountUnitTest() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Warrior);
 			EffectAmountSettings effectAmountSettings = new EffectAmountSettings {
 				Amount = 50,
@@ -41,7 +41,7 @@ namespace DungeonGameTests.Effects {
 
 			blockEffect.ProcessChangeDamageRound(incomingDamage);
 
-			Assert.AreEqual(blockMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(blockMessage, OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual(blockEffect.BlockAmount, 50 - incomingDamage);
 			Assert.AreEqual(2, player.Effects[0].CurrentRound);
 			Assert.AreEqual(false, blockEffect.IsEffectExpired);
@@ -49,7 +49,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void ProcessBlockDamageEffectInCombatRoundWhereDamageIsBlockAmountUnitTest() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Warrior);
 			EffectAmountSettings effectAmountSettings = new EffectAmountSettings {
 				Amount = 50,
@@ -64,8 +64,8 @@ namespace DungeonGameTests.Effects {
 
 			blockEffect.ProcessChangeDamageRound(incomingDamage);
 
-			Assert.AreEqual(blockMessage, OutputController.Display.Output[0][2]);
-			Assert.AreEqual(blockExpiredMessage, OutputController.Display.Output[1][2]);
+			Assert.AreEqual(blockMessage, OutputHelper.Display.Output[0][2]);
+			Assert.AreEqual(blockExpiredMessage, OutputHelper.Display.Output[1][2]);
 			Assert.AreEqual(blockEffect.BlockAmount, 0);
 			Assert.AreEqual(2, player.Effects[0].CurrentRound);
 			Assert.AreEqual(true, blockEffect.IsEffectExpired);
@@ -73,7 +73,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void ProcessBlockDamageEffectInCombatRoundWhereDamageIsMoreThanBlockAmountUnitTest() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Warrior);
 			EffectAmountSettings effectAmountSettings = new EffectAmountSettings {
 				Amount = 50,
@@ -88,8 +88,8 @@ namespace DungeonGameTests.Effects {
 
 			blockEffect.ProcessChangeDamageRound(incomingDamage);
 
-			Assert.AreEqual(blockMessage, OutputController.Display.Output[0][2]);
-			Assert.AreEqual(blockExpiredMessage, OutputController.Display.Output[1][2]);
+			Assert.AreEqual(blockMessage, OutputHelper.Display.Output[0][2]);
+			Assert.AreEqual(blockExpiredMessage, OutputHelper.Display.Output[1][2]);
 			Assert.AreEqual(blockEffect.BlockAmount, 0);
 			Assert.AreEqual(2, player.Effects[0].CurrentRound);
 			Assert.AreEqual(true, blockEffect.IsEffectExpired);
@@ -97,7 +97,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void ProcessBlockDamageEffectOutOfCombatRoundUnitTest() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Warrior);
 			EffectAmountSettings effectAmountSettings = new EffectAmountSettings {
 				Amount = 50,
@@ -110,7 +110,7 @@ namespace DungeonGameTests.Effects {
 
 			blockEffect.ProcessRound();
 
-			Assert.AreEqual(blockFadeMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(blockFadeMessage, OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual(effectAmountSettings.Amount, blockEffect.BlockAmount);
 			Assert.AreEqual(2, player.Effects[0].CurrentRound);
 			Assert.AreEqual(false, blockEffect.IsEffectExpired);

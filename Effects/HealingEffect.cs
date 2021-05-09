@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 using DungeonGame.Players;
 
@@ -48,7 +48,7 @@ namespace DungeonGame.Effects {
 		private void DisplayPlayerHealedMessage() {
 			string healAmtString = $"You have been healed for {HealOverTimeAmount} health.";
 
-			OutputController.StoreSuccessMessage(healAmtString);
+			OutputHelper.StoreSuccessMessage(healAmtString);
 		}
 
 		private void IncrementCurrentRound() {

@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables.Kits;
 using DungeonGame.Items.Consumables.Potions;
@@ -13,12 +13,12 @@ namespace DungeonGame {
 			BuildMonsterGear(monster);
 		}
 		private static void BuildMonsterGear(Monster monster) {
-			int randomGearNum = GameController.GetRandomNumber(1, 10);
+			int randomGearNum = GameHelper.GetRandomNumber(1, 10);
 			switch (monster.MonsterCategory) {
 				case Monster.MonsterType.Skeleton:
 					switch (monster.SkeletonCategory) {
 						case Monster.SkeletonType.Warrior:
-							int randomWeaponNum = GameController.GetRandomNumber(1, 3);
+							int randomWeaponNum = GameHelper.GetRandomNumber(1, 3);
 							monster.MonsterWeapon = randomWeaponNum switch {
 								1 => new Weapon(monster.Level, Weapon.WeaponType.Axe, monster.MonsterCategory),
 								2 => new Weapon(monster.Level, Weapon.WeaponType.OneHandedSword, monster.MonsterCategory),
@@ -119,7 +119,7 @@ namespace DungeonGame {
 				case Monster.MonsterType.Troll:
 					monster.MonsterWeapon = new Weapon(monster.Level, Weapon.WeaponType.Axe, monster.MonsterCategory);
 					BuildMonsterArmor(monster);
-					int randomPotionNum = GameController.GetRandomNumber(1, 6);
+					int randomPotionNum = GameHelper.GetRandomNumber(1, 6);
 
 					PotionStrength potionStrength;
 					if (monster.Level <= 3) {
@@ -172,7 +172,7 @@ namespace DungeonGame {
 			monster.MonsterItems.Add(monster.MonsterQuiver);
 		}
 		private static void BuildMonsterGem(Monster monster) {
-			int randomGemNum = GameController.GetRandomNumber(1, 6);
+			int randomGemNum = GameHelper.GetRandomNumber(1, 6);
 			switch (randomGemNum) {
 				case 1:
 					monster.MonsterItems.Add(new Gem(monster.Level, GemType.Amethyst));
@@ -197,7 +197,7 @@ namespace DungeonGame {
 			}
 		}
 		private static void BuildMonsterKit(Monster monster) {
-			int kitLevelRandomNum = GameController.GetRandomNumber(1, 3);
+			int kitLevelRandomNum = GameHelper.GetRandomNumber(1, 3);
 			KitLevel kitLevel = kitLevelRandomNum switch {
 				1 => KitLevel.Light,
 				2 => KitLevel.Medium,
@@ -205,10 +205,10 @@ namespace DungeonGame {
 				_ => throw new ArgumentOutOfRangeException()
 			};
 
-			int kitRandomNum = GameController.GetRandomNumber(1, 2);
+			int kitRandomNum = GameHelper.GetRandomNumber(1, 2);
 			if (kitRandomNum == 1) {
 				// Create armor kit
-				int kitTypeRandomNum = GameController.GetRandomNumber(1, 3);
+				int kitTypeRandomNum = GameHelper.GetRandomNumber(1, 3);
 				ArmorKit.KitType kitType = kitTypeRandomNum switch {
 					1 => ArmorKit.KitType.Cloth,
 					2 => ArmorKit.KitType.Leather,
@@ -219,7 +219,7 @@ namespace DungeonGame {
 				monster.MonsterItems.Add(new ArmorKit(kitLevel, kitType));
 			} else {
 				// Create weapon kit
-				int kitTypeRandomNum = GameController.GetRandomNumber(1, 2);
+				int kitTypeRandomNum = GameHelper.GetRandomNumber(1, 2);
 				WeaponKit.KitType kitType = kitTypeRandomNum switch {
 					1 => WeaponKit.KitType.Bowstring,
 					2 => WeaponKit.KitType.Grindstone,
@@ -230,7 +230,7 @@ namespace DungeonGame {
 			}
 		}
 		private static void BuildMonsterArmor(Monster monster) {
-			int randomCatNum = GameController.GetRandomNumber(1, 7);
+			int randomCatNum = GameHelper.GetRandomNumber(1, 7);
 			switch (randomCatNum) {
 				case 1:
 					monster.MonsterBackArmor = new Armor(monster.Level, Armor.ArmorSlot.Back) {
@@ -366,7 +366,7 @@ namespace DungeonGame {
 						$"face. Leathery wings spread out on either side of its back as it rises up to its full height and growls at you.";
 					break;
 				case Monster.MonsterType.Elemental:
-					int elementalRandomNumber = GameController.GetRandomNumber(1, 3);
+					int elementalRandomNumber = GameHelper.GetRandomNumber(1, 3);
 					bool elementalType = elementalRandomNumber switch {
 						1 => monster.ElementalCategory == Monster.ElementalType.Fire,
 						2 => monster.ElementalCategory == Monster.ElementalType.Water,

@@ -1,43 +1,43 @@
-using DungeonGame.Controllers;
+using DungeonGame.Helpers;
 
 namespace DungeonGame {
 	public static class Messages {
 		public static void RequestCommand() {
-			OutputController.StoreAnnounceMessage("Your command: ");
+			OutputHelper.StoreAnnounceMessage("Your command: ");
 		}
 
 		public static void PlayerDeath() {
-			OutputController.StoreAnnounceMessage("You have died.");
+			OutputHelper.StoreAnnounceMessage("You have died.");
 		}
 
 		public static void GameOver() {
-			OutputController.StoreAnnounceMessage("Game over.");
+			OutputHelper.StoreAnnounceMessage("Game over.");
 		}
 
 		public static void InvalidCommand() {
-			OutputController.StoreFailureMessage("Not a valid command.");
+			OutputHelper.StoreFailureMessage("Not a valid command.");
 		}
 
 		public static void InvalidDirection() {
-			OutputController.StoreFailureMessage("You can't go that way!");
+			OutputHelper.StoreFailureMessage("You can't go that way!");
 		}
 
 		public static void InvalidVendorSell() {
-			OutputController.StoreFailureMessage("The vendor doesn't want that.");
+			OutputHelper.StoreFailureMessage("The vendor doesn't want that.");
 		}
 
 		public static void ShowGameIntro() {
-			OutputController.StoreFailureMessage(
+			OutputHelper.StoreFailureMessage(
 				"_________ .__                  .__                 __________        .__      ___.                          ");
-			OutputController.StoreFailureMessage(
+			OutputHelper.StoreFailureMessage(
 				"\\_   ___ \\|  |__ _____    _____|__| ____    ____   \\______   \\_____  |__| ____\\_ |__   ______  _  ________  ");
-			OutputController.StoreFailureMessage(
+			OutputHelper.StoreFailureMessage(
 				"/    \\  \\/|  |  \\__  \\  /  ___/  |/    \\  / ___\\   |       _/\\__  \\ |  |/    \\| __ \\ /  _ \\ \\/ \\/ /  ___/  ");
-			OutputController.StoreFailureMessage(
+			OutputHelper.StoreFailureMessage(
 				"\\     \\___|   Y  \\/ __ \\_\\___ \\|  |   |  \\/ /_/  >  |    |   \\ / __ \\|  |   |  \\ \\_\\ (  <_> )     /\\___ \\ ");
-			OutputController.StoreFailureMessage(
+			OutputHelper.StoreFailureMessage(
 				"\\______  /___|  (____  /____  >__|___|  /\\___  /   |____|_  /(____  /__|___|  /___  /\\____/ \\/\\_//____  > ");
-			OutputController.StoreFailureMessage(
+			OutputHelper.StoreFailureMessage(
 				"	\\/     \\/     \\/     \\/        \\//_____/           \\/      \\/        \\/    \\/                  \\/       \n");
 
 			const string gameIntroString =
@@ -52,9 +52,9 @@ namespace DungeonGame {
 
 		private static void SetSingleOutputLineForDisplay(string outputString, int index) {
 			if (outputString.Length - index < Settings.GetGameWidth()) {
-				OutputController.StoreAnnounceMessage(outputString.Substring(index, outputString.Length - index));
+				OutputHelper.StoreAnnounceMessage(outputString.Substring(index, outputString.Length - index));
 			} else {
-				OutputController.StoreAnnounceMessage(outputString.Substring(index, Settings.GetGameWidth()));
+				OutputHelper.StoreAnnounceMessage(outputString.Substring(index, Settings.GetGameWidth()));
 			}
 		}
 

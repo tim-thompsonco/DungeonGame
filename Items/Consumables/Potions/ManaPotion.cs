@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Players;
 
 namespace DungeonGame.Items.Consumables.Potions {
@@ -56,7 +56,7 @@ namespace DungeonGame.Items.Consumables.Potions {
 		}
 
 		public void DisplayDrankPotionMessage() {
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				$"You drank a potion and replenished {ManaAmount} mana.");

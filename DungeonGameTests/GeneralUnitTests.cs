@@ -1,7 +1,7 @@
 using DungeonGame;
-using DungeonGame.Controllers;
 using DungeonGame.Coordinates;
 using DungeonGame.Effects;
+using DungeonGame.Helpers;
 using DungeonGame.Items;
 using DungeonGame.Items.Equipment;
 using DungeonGame.Monsters;
@@ -20,9 +20,9 @@ namespace DungeonGameTests {
 		[Test]
 		public void ValueUnitTests() {
 			// Test RoundNumber method in Helper class
-			Assert.AreEqual(110, GameController.RoundNumber(107));
-			Assert.AreEqual(110, GameController.RoundNumber(105));
-			Assert.AreEqual(100, GameController.RoundNumber(104));
+			Assert.AreEqual(110, GameHelper.RoundNumber(107));
+			Assert.AreEqual(110, GameHelper.RoundNumber(105));
+			Assert.AreEqual(100, GameHelper.RoundNumber(104));
 			/* Test _Monster constructor HP and exp smoothing
 			if values smoothed correctly, % should be 0 */
 			Monster monster = new Monster(1, Monster.MonsterType.Skeleton);
@@ -279,47 +279,47 @@ namespace DungeonGameTests {
 			Player player = new Player("placeholder", Player.PlayerClassType.Mage) { Level = 10 };
 			player.Experience = player.ExperienceToLevel - 1;
 			player.Experience++;
-			PlayerController.LevelUpCheck(player);
+			PlayerHelper.LevelUpCheck(player);
 			Assert.AreEqual(10, player.Level);
 		}
 		[Test]
 		public void CheckStatusUnitTest() {
 			Player player = new Player("placeholder", Player.PlayerClassType.Mage);
-			RoomController._Rooms = new RoomBuilder(
+			RoomHelper._Rooms = new RoomBuilder(
 				100, 5, 0, 4, 0).RetrieveSpawnRooms();
-			GameController.CheckStatus(player);
+			GameHelper.CheckStatus(player);
 			player.Spellbook.Add(new PlayerSpell(
 				"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 1));
 			player.CastSpell("reflect");
 			for (int i = 0; i <= 30; i++) {
-				GameController.CheckStatus(player);
+				GameHelper.CheckStatus(player);
 			}
 		}
 		[Test]
 		public void EffectUserOutputUnitTest() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			Player player = new Player("placeholder", Player.PlayerClassType.Mage);
-			RoomController._Rooms = new Dictionary<Coordinate, IRoom> {
+			RoomHelper._Rooms = new Dictionary<Coordinate, IRoom> {
 				{new Coordinate(1, 1, 1), new DungeonRoom(1, 1)}
 			};
 			player.Spellbook.Add(new PlayerSpell(
 				"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 1));
-			UserOutput defaultEffectOutput = OutputController.ShowEffects(player);
+			UserOutput defaultEffectOutput = OutputHelper.ShowEffects(player);
 			Assert.AreEqual("Player _Effects:", defaultEffectOutput.Output[0][2]);
 			Assert.AreEqual("None.", defaultEffectOutput.Output[1][2]);
 			player.CastSpell("reflect");
-			OutputController.Display.ClearUserOutput();
-			defaultEffectOutput = OutputController.ShowEffects(player);
+			OutputHelper.Display.ClearUserOutput();
+			defaultEffectOutput = OutputHelper.ShowEffects(player);
 			Assert.AreEqual("Player _Effects:", defaultEffectOutput.Output[0][2]);
 			Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
 			Assert.AreEqual("(30 seconds) Reflect", defaultEffectOutput.Output[1][2]);
 			for (int i = 0; i < 10; i++) {
-				GameController.CheckStatus(player);
+				GameHelper.CheckStatus(player);
 			}
 			player.Effects.Add(new BurningEffect("burning", 3, 5));
-			Assert.AreEqual("Your spell reflect is slowly fading away.", OutputController.Display.Output[0][2]);
+			Assert.AreEqual("Your spell reflect is slowly fading away.", OutputHelper.Display.Output[0][2]);
 			player.CastSpell("rejuvenate");
-			defaultEffectOutput = OutputController.ShowEffects(player);
+			defaultEffectOutput = OutputHelper.ShowEffects(player);
 			Assert.AreEqual("Player _Effects:", defaultEffectOutput.Output[0][2]);
 			Assert.AreEqual(Settings.FormatGeneralInfoText(), defaultEffectOutput.Output[1][0]);
 			Assert.AreEqual("(20 seconds) Reflect", defaultEffectOutput.Output[1][2]);
@@ -331,27 +331,27 @@ namespace DungeonGameTests {
 		[Test]
 		public void SaveLoadGameUnitTest() {
 			Player player = new Player("placeholder", Player.PlayerClassType.Mage);
-			GearController.EquipInitialGear(player);
-			OutputController.Display.ClearUserOutput();
-			RoomController._Rooms = new Dictionary<Coordinate, IRoom> {
+			GearHelper.EquipInitialGear(player);
+			OutputHelper.Display.ClearUserOutput();
+			RoomHelper._Rooms = new Dictionary<Coordinate, IRoom> {
 				{new Coordinate(1, 1, 1), new DungeonRoom(1, 1)}
 			};
 			player.CanSave = true;
-			GameController.SaveGame(player);
-			Assert.AreEqual("Your game has been saved.", OutputController.Display.Output[0][2]);
-			OutputController.Display.ClearUserOutput();
-			RoomController._Rooms = null;
-			GameController.LoadGame();
-			player = GameController.LoadPlayer();
+			GameHelper.SaveGame(player);
+			Assert.AreEqual("Your game has been saved.", OutputHelper.Display.Output[0][2]);
+			OutputHelper.Display.ClearUserOutput();
+			RoomHelper._Rooms = null;
+			GameHelper.LoadGame();
+			player = GameHelper.LoadPlayer();
 			Assert.AreEqual("placeholder", player.Name);
-			Assert.NotNull(RoomController._Rooms);
-			Assert.AreEqual("Reloading your saved game.", OutputController.Display.Output[1][2]);
+			Assert.NotNull(RoomHelper._Rooms);
+			Assert.AreEqual("Reloading your saved game.", OutputHelper.Display.Output[1][2]);
 		}
 		[Test]
 		public void MonsterResistanceUnitTest() {
 			Player player = new Player("test", Player.PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
-			GearController.EquipInitialGear(player);
-			OutputController.Display.ClearUserOutput();
+			GearHelper.EquipInitialGear(player);
+			OutputHelper.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
 			foreach (IItem item in monster.MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
@@ -366,7 +366,7 @@ namespace DungeonGameTests {
 			string[] input = new[] { "cast", "lightning" };
 			int spellIndex = player.Spellbook.FindIndex(
 				f => f.SpellCategory == PlayerSpell.SpellType.Lightning);
-			string spellName = InputController.ParseInput(input);
+			string spellName = InputHelper.ParseInput(input);
 			player.CastSpell(monster, spellName);
 			int reducedDamage = (int)(player.Spellbook[spellIndex].Offensive._Amount * resistanceMod);
 			Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - reducedDamage);
@@ -374,8 +374,8 @@ namespace DungeonGameTests {
 		[Test]
 		public void PlayerResistanceUnitTest() {
 			Player player = new Player("test", Player.PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
-			GearController.EquipInitialGear(player);
-			OutputController.Display.ClearUserOutput();
+			GearHelper.EquipInitialGear(player);
+			OutputHelper.Display.ClearUserOutput();
 			Monster monster = new Monster(3, Monster.MonsterType.Elemental);
 			while (monster.ElementalCategory != Monster.ElementalType.Air) {
 				monster = new Monster(3, Monster.MonsterType.Elemental);

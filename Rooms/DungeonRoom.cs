@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Items;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
@@ -44,8 +44,8 @@ namespace DungeonGame.Rooms {
 			_RoomObjects = new List<IName>();
 			Commands = new List<string> { "[I]nventory", "Save", "[Q]uit" };
 			CombatCommands = new List<string> { "[F]ight", "[I]nventory", "Flee" };
-			DungeonLevel = GameController.GetRandomNumber(levelRangeLow, levelRangeHigh);
-			int randomNum = GameController.GetRandomNumber(1, 100);
+			DungeonLevel = GameHelper.GetRandomNumber(levelRangeLow, levelRangeHigh);
+			int randomNum = GameHelper.GetRandomNumber(1, 100);
 			// Reserving numbers 80-100 for chance of room not having a monster
 			if (randomNum <= 16) {
 				// 20% chance of spawning based on cumulative 0.2 * 80
@@ -105,26 +105,26 @@ namespace DungeonGame.Rooms {
 					if (_Monster.HitPoints > 0) {
 						player.InCombat = true;
 						_Monster.InCombat = true;
-						CombatController.StartCombat(player, _Monster);
+						CombatHelper.StartCombat(player, _Monster);
 						if (player.HitPoints <= 0) {
 							Messages.PlayerDeath();
 						}
 					} else {
 						string monsterDeadString = $"The {_Monster.Name} is already dead.";
-						OutputController.Display.StoreUserOutput(
+						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							monsterDeadString);
 					}
 				} else {
 					string noMonsterString = $"There is no {inputName} to attack.";
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						noMonsterString);
 				}
 			} catch (IndexOutOfRangeException) {
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't attack that.");
@@ -167,7 +167,7 @@ namespace DungeonGame.Rooms {
 					sameLineOutput.Add(sb.ToString());
 				}
 			}
-			OutputController.Display.StoreUserOutput(sameLineOutput);
+			OutputHelper.Display.StoreUserOutput(sameLineOutput);
 		}
 		public void ShowDirections() {
 			const string directionList = "Available Directions: ";
@@ -211,56 +211,56 @@ namespace DungeonGame.Rooms {
 				sameLineOutput.Add(Settings.FormatDefaultBackground());
 				sameLineOutput.Add(roomDirs.ToString().Substring(
 					0, Settings.GetGameWidth() - directionList.Length));
-				OutputController.Display.StoreUserOutput(sameLineOutput);
+				OutputHelper.Display.StoreUserOutput(sameLineOutput);
 			} else {
 				sameLineOutput.Add(Settings.FormatInfoText());
 				sameLineOutput.Add(Settings.FormatDefaultBackground());
 				sameLineOutput.Add(roomDirs.ToString());
-				OutputController.Display.StoreUserOutput(sameLineOutput);
+				OutputHelper.Display.StoreUserOutput(sameLineOutput);
 				return;
 			}
 			string remainingRoomDirs = roomDirs.ToString().Substring(Settings.GetGameWidth() - directionList.Length);
 			for (int i = 0; i < remainingRoomDirs.Length; i += Settings.GetGameWidth()) {
 				if (remainingRoomDirs.Length - i < Settings.GetGameWidth()) {
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						remainingRoomDirs.Substring(i, remainingRoomDirs.Length - i));
 					continue;
 				}
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					remainingRoomDirs.Substring(i, Settings.GetGameWidth()));
 			}
 		}
 		public void LookRoom() {
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				Settings.FormatTextBorder());
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatRoomOutputText(),
 				Settings.FormatDefaultBackground(),
 				Name);
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				Settings.FormatTextBorder());
 			for (int i = 0; i < _Desc.Length; i += Settings.GetGameWidth()) {
 				if (_Desc.Length - i < Settings.GetGameWidth()) {
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatRoomOutputText(),
 						Settings.FormatDefaultBackground(),
 						_Desc.Substring(i, _Desc.Length - i));
 					continue;
 				}
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatRoomOutputText(),
 					Settings.FormatDefaultBackground(),
 					_Desc.Substring(i, Settings.GetGameWidth()));
 			}
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				Settings.FormatTextBorder());
@@ -287,7 +287,7 @@ namespace DungeonGame.Rooms {
 				sameLineOutput.Add(Settings.FormatDefaultBackground());
 				sameLineOutput.Add("There is nothing in the room.");
 			}
-			OutputController.Display.StoreUserOutput(sameLineOutput);
+			OutputHelper.Display.StoreUserOutput(sameLineOutput);
 			ShowDirections();
 		}
 		public void LootCorpse(Player player, string[] input) {
@@ -305,15 +305,15 @@ namespace DungeonGame.Rooms {
 					try {
 						_Monster.Gold = 0;
 						string lootGoldString = $"You looted {goldLooted} gold coins from the {_Monster.Name}!";
-						OutputController.Display.StoreUserOutput(
+						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatSuccessOutputText(),
 							Settings.FormatDefaultBackground(),
 							lootGoldString);
 						while (_Monster.MonsterItems.Count > 0) {
-							int playerWeight = PlayerController.GetInventoryWeight(player);
+							int playerWeight = PlayerHelper.GetInventoryWeight(player);
 							int itemWeight = _Monster.MonsterItems[0].Weight;
 							if (playerWeight + itemWeight > player.MaxCarryWeight) {
-								OutputController.Display.StoreUserOutput(
+								OutputHelper.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"You can't carry that much!");
@@ -322,7 +322,7 @@ namespace DungeonGame.Rooms {
 								player.Inventory.Add(_Monster.MonsterItems[0]);
 							}
 							string lootItemString = $"You looted {_Monster.MonsterItems[0].Name} from the {_Monster.Name}!";
-							OutputController.Display.StoreUserOutput(
+							OutputHelper.Display.StoreUserOutput(
 								Settings.FormatSuccessOutputText(),
 								Settings.FormatDefaultBackground(),
 								lootItemString);
@@ -338,19 +338,19 @@ namespace DungeonGame.Rooms {
 					}
 				} else if (_Monster.WasLooted) {
 					string alreadyLootString = $"You already looted {_Monster.Name}!";
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						alreadyLootString);
 				} else {
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						"You cannot loot something that isn't dead!");
 				}
 			} else {
 				string noLootString = $"There is no {inputName} in the room!";
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					noLootString);
@@ -412,18 +412,18 @@ namespace DungeonGame.Rooms {
 			if (monsterName.Last() == inputName || _Monster.Name.Contains(inputName)) {
 				for (int i = 0; i < _Monster.Desc.Length; i += Settings.GetGameWidth()) {
 					if (_Monster.Desc.Length - i < Settings.GetGameWidth()) {
-						OutputController.Display.StoreUserOutput(
+						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatRoomOutputText(),
 							Settings.FormatDefaultBackground(),
 							_Monster.Desc.Substring(i, _Monster.Desc.Length - i));
 						continue;
 					}
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatRoomOutputText(),
 						Settings.FormatDefaultBackground(),
 						_Monster.Desc.Substring(i, Settings.GetGameWidth()));
 				}
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatRoomOutputText(),
 					Settings.FormatDefaultBackground(),
 					CalculateNpcLevelDiff(player));
@@ -431,7 +431,7 @@ namespace DungeonGame.Rooms {
 					Settings.FormatRoomOutputText(),
 					Settings.FormatDefaultBackground(),
 					"It is carrying: "};
-				OutputController.Display.StoreUserOutput(sameLineOutput);
+				OutputHelper.Display.StoreUserOutput(sameLineOutput);
 				TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 				if (_Monster.MonsterItems == null) {
 					return;
@@ -446,11 +446,11 @@ namespace DungeonGame.Rooms {
 					sameLineOutputItem.Add(Settings.FormatRoomOutputText());
 					sameLineOutputItem.Add(Settings.FormatDefaultBackground());
 					sameLineOutputItem.Add(sb.ToString());
-					OutputController.Display.StoreUserOutput(sameLineOutputItem);
+					OutputHelper.Display.StoreUserOutput(sameLineOutputItem);
 				}
 			} else {
 				string noNpcString = $"There is no {inputName} in the room!";
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					noNpcString);

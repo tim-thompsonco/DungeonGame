@@ -1,6 +1,6 @@
-﻿using DungeonGame.Controllers;
-using DungeonGame.Effects;
+﻿using DungeonGame.Effects;
 using DungeonGame.Effects.SettingsObjects;
+using DungeonGame.Helpers;
 using DungeonGame.Monsters;
 using NUnit.Framework;
 
@@ -40,7 +40,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void ProcessStunnedEffectRoundMonsterUnitTest() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
 			EffectSettings effectSettings = new EffectSettings {
 				EffectHolder = monster,
@@ -53,7 +53,7 @@ namespace DungeonGameTests.Effects {
 
 			stunnedEffect.ProcessRound();
 
-			Assert.AreEqual(stunnedMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(stunnedMessage, OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual(2, stunnedEffect.CurrentRound);
 			Assert.AreEqual(false, stunnedEffect.IsEffectExpired);
 		}
@@ -96,7 +96,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void ExpiredBleedingEffectDoesNotAffectMonsterUnitTest() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
 			EffectSettings effectSettings = new EffectSettings {
 				EffectHolder = monster,
@@ -107,7 +107,7 @@ namespace DungeonGameTests.Effects {
 
 			stunnedEffect.ProcessRound();
 
-			Assert.AreEqual(0, OutputController.Display.Output.Count);
+			Assert.AreEqual(0, OutputHelper.Display.Output.Count);
 			Assert.AreEqual(1, stunnedEffect.CurrentRound);
 		}
 	}

@@ -1,7 +1,7 @@
-using DungeonGame.Controllers;
 using DungeonGame.Coordinates;
 using DungeonGame.Effects;
 using DungeonGame.Effects.SettingsObjects;
+using DungeonGame.Helpers;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 using DungeonGame.Rooms;
@@ -167,13 +167,13 @@ namespace DungeonGame {
 		}
 		public static void PowerAuraAbilityInfo(Player player, int index) {
 			string powerAuraString = $"Power Aura Amount: {player.Abilities[index].ChangeAmount._Amount}";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				powerAuraString);
 			string powerAuraInfoString = $"Strength is increased by {player.Abilities[index].ChangeAmount._Amount} for " +
 				$"{player.Abilities[index].ChangeAmount._ChangeMaxRound / 60} minutes.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				powerAuraInfoString);
@@ -183,7 +183,7 @@ namespace DungeonGame {
 			DeductAbilityCost(player, index);
 
 			const string powerAuraString = "You generate a Power Aura around yourself.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				powerAuraString);
@@ -195,7 +195,7 @@ namespace DungeonGame {
 
 			player.Strength += player.Abilities[index].ChangeAmount._Amount;
 
-			PlayerController.CalculatePlayerStats(player);
+			PlayerHelper.CalculatePlayerStats(player);
 
 			player.Effects.Add(new ChangeStatEffect(player.Abilities[index].Name, player.Abilities[index].ChangeAmount._ChangeMaxRound,
 				ChangeStatEffect.StatType.Strength, player.Abilities[index].ChangeAmount._Amount));
@@ -203,13 +203,13 @@ namespace DungeonGame {
 
 		public static void SwiftAuraAbilityInfo(Player player, int index) {
 			string swiftAuraString = $"Swift Aura Amount: {player.Abilities[index].ChangeAmount._Amount}";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				swiftAuraString);
 			string swiftAuraInfoString = $"Dexterity is increased by {player.Abilities[index].ChangeAmount._Amount} for " +
 				$"{player.Abilities[index].ChangeAmount._ChangeMaxRound / 60} minutes.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				swiftAuraInfoString);
@@ -219,7 +219,7 @@ namespace DungeonGame {
 			DeductAbilityCost(player, index);
 
 			const string swiftAuraString = "You generate a Swift Aura around yourself.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				swiftAuraString);
@@ -231,7 +231,7 @@ namespace DungeonGame {
 
 			player.Dexterity += player.Abilities[index].ChangeAmount._Amount;
 
-			PlayerController.CalculatePlayerStats(player);
+			PlayerHelper.CalculatePlayerStats(player);
 
 			player.Effects.Add(new ChangeStatEffect(player.Abilities[index].Name, player.Abilities[index].ChangeAmount._ChangeMaxRound,
 				ChangeStatEffect.StatType.Dexterity, player.Abilities[index].ChangeAmount._Amount));
@@ -239,13 +239,13 @@ namespace DungeonGame {
 
 		public static void WarCryAbilityInfo(Player player, int index) {
 			string warCryString = $"War Cry Amount: {-1 * player.Abilities[index].ChangeAmount._Amount}";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				warCryString);
 			string warCryInfoString = $"Opponent's attacks are decreased by {-1 * player.Abilities[index].ChangeAmount._Amount} for " +
 				$"{player.Abilities[index].ChangeAmount._ChangeMaxRound} rounds.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				warCryInfoString);
@@ -255,7 +255,7 @@ namespace DungeonGame {
 			DeductAbilityCost(player, index);
 
 			const string warCryString = "You shout a War Cry, intimidating your opponent, and decreasing incoming damage.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				warCryString);
@@ -266,19 +266,19 @@ namespace DungeonGame {
 
 		public static void StunAbilityInfo(Player player, int index) {
 			string abilityDmgString = $"Instant Damage: {player.Abilities[index].Stun._DamageAmount}";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				abilityDmgString);
 			string abilityInfoString = $"Stuns opponent for {player.Abilities[index].Stun._StunMaxRounds} rounds, preventing their attacks.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				abilityInfoString);
 		}
 
 		public static void UseStunAbility(Monster monster, Player player, int index) {
-			if (player.PlayerClass == Player.PlayerClassType.Archer && PlayerController.OutOfArrows(player)) {
+			if (player.PlayerClass == Player.PlayerClassType.Archer && PlayerHelper.OutOfArrows(player)) {
 				/* If quiver is empty, player can only do a normal attack, and attack() also checks for
 				 arrow count and informs player that they are out of arrows */
 				player.PhysicalAttack(monster);
@@ -294,7 +294,7 @@ namespace DungeonGame {
 			int abilityDamage = player.Abilities[index].Stun._DamageAmount;
 
 			string attackSuccessString = $"You {player.Abilities[index].Name} the {monster.Name} for {abilityDamage} physical damage.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
@@ -302,7 +302,7 @@ namespace DungeonGame {
 			monster.HitPoints -= abilityDamage;
 
 			string stunString = $"The {monster.Name} is stunned!";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				stunString);
@@ -317,17 +317,17 @@ namespace DungeonGame {
 
 		public static void BerserkAbilityInfo(Player player, int index) {
 			string dmgIncreaseString = $"Damage Increase: {player.Abilities[index].Offensive._Amount}";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				dmgIncreaseString);
 			string armDecreaseString = $"Armor Decrease: {player.Abilities[index].ChangeAmount._Amount}";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				armDecreaseString);
 			string dmgInfoString = $"Damage increased at cost of armor decrease for {player.Abilities[index].ChangeAmount._ChangeMaxRound} rounds";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				dmgInfoString);
@@ -337,7 +337,7 @@ namespace DungeonGame {
 			DeductAbilityCost(player, index);
 
 			const string berserkString = "You go into a berserk rage!";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				berserkString);
@@ -350,16 +350,16 @@ namespace DungeonGame {
 
 		public static void DistanceAbilityInfo(Player player, int index) {
 			string abilityDmgString = $"Instant Damage: {player.Abilities[index].Offensive._Amount}";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				abilityDmgString);
 			string abilityInfoString = $"{player.Abilities[index].Offensive._ChanceToSucceed}% chance to hit monster in attack direction.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				abilityInfoString);
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				"Usage example if monster is in room to north. 'use distance north'");
@@ -417,18 +417,18 @@ namespace DungeonGame {
 			Coordinate findCoord = new Coordinate(targetX, targetY, targetZ);
 			IRoom room;
 			try {
-				room = RoomController._Rooms[findCoord];
+				room = RoomHelper._Rooms[findCoord];
 			} catch (KeyNotFoundException) {
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"You can't attack in that direction!");
 				return;
 			}
-			DungeonRoom opponentRoom = RoomController._Rooms[findCoord] as DungeonRoom;
+			DungeonRoom opponentRoom = RoomHelper._Rooms[findCoord] as DungeonRoom;
 			Monster opponent = opponentRoom?._Monster;
 			if (opponent == null) {
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
 					"There is no monster in that direction to attack!");
@@ -438,10 +438,10 @@ namespace DungeonGame {
 			if (player.PlayerClass == Player.PlayerClassType.Archer) {
 				player.PlayerQuiver.UseArrow();
 			}
-			int successChance = GameController.GetRandomNumber(1, 100);
+			int successChance = GameHelper.GetRandomNumber(1, 100);
 			if (successChance > player.Abilities[index].Offensive._ChanceToSucceed) {
 				string attackString = $"You tried to shoot {opponent.Name} from afar but failed!";
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					attackString);
@@ -449,7 +449,7 @@ namespace DungeonGame {
 				Settings.FormatAttackSuccessText();
 				opponent.HitPoints -= player.Abilities[index].Offensive._Amount;
 				string shootString = $"You successfully shot {opponent.Name} from afar for {player.Abilities[index].Offensive._Amount} damage!";
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					shootString);
@@ -460,13 +460,13 @@ namespace DungeonGame {
 		}
 		public static void DefenseAbilityInfo(Player player, int index) {
 			string abilityDmgString = $"Block Damage: {player.Abilities[index].Defensive._BlockDamage}";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				abilityDmgString);
 			const string blockInfoString =
 				"Block damage will prevent incoming damage from opponent until block damage is used up.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				blockInfoString);
@@ -478,7 +478,7 @@ namespace DungeonGame {
 			int blockAmount = player.Abilities[index].Defensive._BlockDamage;
 
 			string blockString = $"You start blocking your opponent's attacks! You will block {blockAmount} damage.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				blockString);
@@ -493,7 +493,7 @@ namespace DungeonGame {
 
 		public static void BandageAbilityInfo(Player player, int index) {
 			string healAmountString = $"Heal Amount: {player.Abilities[index].Healing._HealAmount}";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healAmountString);
@@ -502,17 +502,17 @@ namespace DungeonGame {
 			}
 
 			string healOverTimeString = $"Heal Over Time: {player.Abilities[index].Healing._HealOverTime}";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healOverTimeString);
 			string healInfoStringCombat = $"Heal over time will restore health for {player.Abilities[index].Healing._HealMaxRounds} rounds in combat.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healInfoStringCombat);
 			string healInfoStringNonCombat = $"Heal over time will restore health {player.Abilities[index].Healing._HealMaxRounds} times every 10 seconds.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				healInfoStringNonCombat);
@@ -524,7 +524,7 @@ namespace DungeonGame {
 			int healAmount = player.Abilities[index].Healing._HealAmount;
 
 			string healString = $"You heal yourself for {healAmount} health.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				healString);
@@ -545,24 +545,24 @@ namespace DungeonGame {
 
 		public static void DisarmAbilityInfo(Player player, int index) {
 			string abilityString = $"{player.Abilities[index].Offensive._Amount}% chance to disarm opponent's weapon.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				abilityString);
 		}
 		public static void UseDisarmAbility(Monster opponent, Player player, int index) {
 			DeductAbilityCost(player, index);
-			int successChance = GameController.GetRandomNumber(1, 100);
+			int successChance = GameHelper.GetRandomNumber(1, 100);
 			if (successChance > player.Abilities[index].Offensive._Amount) {
 				string disarmFailString = $"You tried to disarm {opponent.Name} but failed!";
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatAttackFailText(),
 					Settings.FormatDefaultBackground(),
 					disarmFailString);
 			} else {
 				opponent.MonsterWeapon.Equipped = false;
 				string disarmSuccessString = $"You successfully disarmed {opponent.Name}!";
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatAttackSuccessText(),
 					Settings.FormatDefaultBackground(),
 					disarmSuccessString);
@@ -570,24 +570,24 @@ namespace DungeonGame {
 		}
 		public static void OffenseDamageAbilityInfo(Player player, int index) {
 			string abilityDmgString = $"Instant Damage: {player.Abilities[index].Offensive._Amount}";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				abilityDmgString);
 			if (player.Abilities[index].ArcAbilityCategory == ArcherAbility.Double) {
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"Two arrows are fired which each cause instant damage. Cost and damage are per arrow.");
 			}
 			if (player.Abilities[index].WarAbilityCategory == WarriorAbility.Onslaught) {
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"Two attacks are launched which each cause instant damage. Cost and damage are per attack.");
 			}
 			if (player.Abilities[index].ArcAbilityCategory == ArcherAbility.Ambush) {
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					"A surprise attack is launched, which initiates combat.");
@@ -597,7 +597,7 @@ namespace DungeonGame {
 			}
 
 			string dmgOverTimeString = $"Damage Over Time: {player.Abilities[index].Offensive._AmountOverTime}";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatInfoText(),
 				Settings.FormatDefaultBackground(),
 				dmgOverTimeString);
@@ -606,14 +606,14 @@ namespace DungeonGame {
 					break;
 				case Offensive.OffensiveType.Bleed:
 					string bleedOverTimeString = $"Bleeding damage over time for {player.Abilities[index].Offensive._AmountMaxRounds} rounds.";
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						bleedOverTimeString);
 					break;
 				case Offensive.OffensiveType.Fire:
 					string onFireString = $"Fire damage over time for {player.Abilities[index].Offensive._AmountMaxRounds} rounds.";
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						onFireString);
@@ -624,7 +624,7 @@ namespace DungeonGame {
 		}
 
 		public static void UseOffenseDamageAbility(Monster monster, Player player, int index) {
-			if (player.PlayerClass == Player.PlayerClassType.Archer && PlayerController.OutOfArrows(player)) {
+			if (player.PlayerClass == Player.PlayerClassType.Archer && PlayerHelper.OutOfArrows(player)) {
 				/* If quiver is empty, player can only do a normal attack, and attack() also checks for
 				 arrow count and informs player that they are out of arrows */
 				player.PhysicalAttack(monster);
@@ -637,11 +637,11 @@ namespace DungeonGame {
 				player.PlayerQuiver.UseArrow();
 			}
 
-			int abilityDamage = PlayerController.CalculateAbilityDamage(player, monster, index);
+			int abilityDamage = PlayerHelper.CalculateAbilityDamage(player, monster, index);
 			monster.HitPoints -= abilityDamage;
 
 			string abilitySuccessString = $"Your {player.Abilities[index].Name} hit the {monster.Name} for {abilityDamage} physical damage.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				abilitySuccessString);
@@ -655,7 +655,7 @@ namespace DungeonGame {
 					break;
 				case Offensive.OffensiveType.Bleed:
 					string bleedString = $"The {monster.Name} is bleeding!";
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatAttackSuccessText(),
 						Settings.FormatDefaultBackground(),
 						bleedString);
@@ -670,7 +670,7 @@ namespace DungeonGame {
 					break;
 				case Offensive.OffensiveType.Fire:
 					string onFireString = $"The {monster.Name} bursts into flame!";
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatOnFireText(),
 						Settings.FormatDefaultBackground(),
 						onFireString);

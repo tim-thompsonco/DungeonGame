@@ -1,6 +1,6 @@
-﻿using DungeonGame.Controllers;
-using DungeonGame.Effects;
+﻿using DungeonGame.Effects;
 using DungeonGame.Effects.SettingsObjects;
+using DungeonGame.Helpers;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 using NUnit.Framework;
@@ -40,7 +40,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void ProcessBleedingEffectRoundPlayerUnitTest() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
@@ -55,14 +55,14 @@ namespace DungeonGameTests.Effects {
 			bleedEffect.ProcessRound();
 
 			Assert.AreEqual(player.MaxHitPoints - EffectOverTimeSettings.AmountOverTime, player.HitPoints);
-			Assert.AreEqual(bleedMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(bleedMessage, OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual(2, bleedEffect.CurrentRound);
 			Assert.AreEqual(false, bleedEffect.IsEffectExpired);
 		}
 
 		[Test]
 		public void ProcessBleedingEffectRoundMonsterUnitTest() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
@@ -77,7 +77,7 @@ namespace DungeonGameTests.Effects {
 			bleedEffect.ProcessRound();
 
 			Assert.AreEqual(monster.MaxHitPoints - EffectOverTimeSettings.AmountOverTime, monster.HitPoints);
-			Assert.AreEqual(bleedMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(bleedMessage, OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual(2, bleedEffect.CurrentRound);
 			Assert.AreEqual(false, bleedEffect.IsEffectExpired);
 		}
@@ -164,7 +164,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void ExpiredBleedingEffectDoesNotAffectPlayerUnitTest() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			Player player = new Player("test", Player.PlayerClassType.Mage);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
@@ -179,13 +179,13 @@ namespace DungeonGameTests.Effects {
 			bleedEffect.ProcessRound();
 
 			Assert.AreEqual(player.MaxHitPoints, player.HitPoints);
-			Assert.AreEqual(0, OutputController.Display.Output.Count);
+			Assert.AreEqual(0, OutputHelper.Display.Output.Count);
 			Assert.AreEqual(1, bleedEffect.CurrentRound);
 		}
 
 		[Test]
 		public void ExpiredBleedingEffectDoesNotAffectMonsterUnitTest() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
@@ -200,7 +200,7 @@ namespace DungeonGameTests.Effects {
 			bleedEffect.ProcessRound();
 
 			Assert.AreEqual(monster.MaxHitPoints, monster.HitPoints);
-			Assert.AreEqual(0, OutputController.Display.Output.Count);
+			Assert.AreEqual(0, OutputHelper.Display.Output.Count);
 			Assert.AreEqual(1, bleedEffect.CurrentRound);
 		}
 	}

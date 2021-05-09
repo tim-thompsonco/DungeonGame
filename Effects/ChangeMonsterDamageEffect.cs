@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 using DungeonGame.Players;
 using System;
@@ -44,7 +44,7 @@ namespace DungeonGame.Effects {
 			string changeDmgString = ChangeAmount > 0 ? $"Incoming damage is increased by {changeAmount}." :
 				$"Incoming damage is decreased by {changeAmount}.";
 
-			OutputController.StoreSuccessMessage(changeDmgString);
+			OutputHelper.StoreSuccessMessage(changeDmgString);
 		}
 
 		public void SetEffectAsExpired() {

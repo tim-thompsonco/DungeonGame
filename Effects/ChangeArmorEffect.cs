@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 using System;
 
@@ -43,7 +43,7 @@ namespace DungeonGame.Effects {
 			string changeArmorString = ChangeArmorAmount > 0 ? $"Your armor is increased by {changeAmount}." :
 				$"Your armor is decreased by {changeAmount}.";
 
-			OutputController.StoreSuccessMessage(changeArmorString);
+			OutputHelper.StoreSuccessMessage(changeArmorString);
 		}
 
 		public void SetEffectAsExpired() {

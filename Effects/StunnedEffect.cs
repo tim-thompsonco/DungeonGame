@@ -1,5 +1,5 @@
-﻿using DungeonGame.Controllers;
-using DungeonGame.Effects.SettingsObjects;
+﻿using DungeonGame.Effects.SettingsObjects;
+using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 using DungeonGame.Monsters;
 
@@ -46,7 +46,7 @@ namespace DungeonGame.Effects {
 		private void DisplayStunnedMessage(Monster monster) {
 			string stunnedString = $"The {monster.Name} is stunned and cannot attack.";
 
-			OutputController.StoreAttackSuccessMessage(stunnedString);
+			OutputHelper.StoreAttackSuccessMessage(stunnedString);
 		}
 
 		public void SetEffectAsExpired() {

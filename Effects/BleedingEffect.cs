@@ -1,5 +1,5 @@
-﻿using DungeonGame.Controllers;
-using DungeonGame.Effects.SettingsObjects;
+﻿using DungeonGame.Effects.SettingsObjects;
+using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
@@ -59,7 +59,7 @@ namespace DungeonGame.Effects {
 		}
 
 		private void DisplayBleedMessage(string bleedMessage) {
-			OutputController.StoreOnFireMessage(bleedMessage);
+			OutputHelper.StoreOnFireMessage(bleedMessage);
 		}
 
 		private void IncrementCurrentRound() {

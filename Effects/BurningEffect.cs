@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
@@ -75,7 +75,7 @@ namespace DungeonGame.Effects {
 		}
 
 		private void DisplayBurnMessage(string burnMessage) {
-			OutputController.StoreOnFireMessage(burnMessage);
+			OutputHelper.StoreOnFireMessage(burnMessage);
 		}
 
 		private void IncrementCurrentRound() {

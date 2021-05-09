@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 
 namespace DungeonGame.Effects {
@@ -53,13 +53,13 @@ namespace DungeonGame.Effects {
 		private void DisplayReflectEffectFadingMessage() {
 			const string reflectString = "Your spell reflect is slowly fading away.";
 
-			OutputController.StoreSuccessMessage(reflectString);
+			OutputHelper.StoreSuccessMessage(reflectString);
 		}
 
 		private void DisplayReflectDamageMessage(int reflectedAmount) {
 			string reflectString = $"You reflected {reflectedAmount} damage back at your opponent!";
 
-			OutputController.StoreSuccessMessage(reflectString);
+			OutputHelper.StoreSuccessMessage(reflectString);
 		}
 
 		public void SetEffectAsExpired() {

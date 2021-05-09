@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Items.Equipment;
 using DungeonGame.Players;
 using System;
@@ -37,7 +37,7 @@ namespace DungeonGame.Items {
 		// Constructor to randomly create armor for monsters
 		public Armor(int level, ArmorSlot armorCategory) {
 			Level = level;
-			int randomArmorNum = GameController.GetRandomNumber(1, 3);
+			int randomArmorNum = GameHelper.GetRandomNumber(1, 3);
 			ArmorGroup = randomArmorNum switch {
 				1 => ArmorType.Cloth,
 				2 => ArmorType.Leather,
@@ -64,7 +64,7 @@ namespace DungeonGame.Items {
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			ArmorRating += GameController.GetRandomNumber(2, 4);
+			ArmorRating += GameHelper.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
 			ArmorRating += level - 1;
 			ItemValue = ArmorRating;
@@ -97,7 +97,7 @@ namespace DungeonGame.Items {
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			ArmorRating += GameController.GetRandomNumber(2, 4);
+			ArmorRating += GameHelper.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
 			ArmorRating += (level - 1) * 3;
 			ItemValue = ArmorRating;
@@ -130,7 +130,7 @@ namespace DungeonGame.Items {
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			ArmorRating += GameController.GetRandomNumber(2, 4);
+			ArmorRating += GameHelper.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
 			ArmorRating += (Level - 1) * 3;
 			// Add modifier for rainbow gear to enhance armor rating
@@ -414,7 +414,7 @@ namespace DungeonGame.Items {
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			// Add random attribute to armor rating
-			ArmorRating += GameController.GetRandomNumber(2, 4);
+			ArmorRating += GameHelper.GetRandomNumber(2, 4);
 			// Add level adjustment to armor rating
 			ArmorRating += (Level - 1) * 3;
 			// Add modifier for rainbow gear to enhance armor rating

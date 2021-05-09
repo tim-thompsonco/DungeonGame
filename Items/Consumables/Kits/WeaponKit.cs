@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using System.Globalization;
 
 namespace DungeonGame.Items.Consumables.Kits {
@@ -81,14 +81,14 @@ namespace DungeonGame.Items.Consumables.Kits {
 		}
 
 		private void DisplayAugmentFailMessage(Weapon weapon) {
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				$"You can't upgrade {TextInfo.ToTitleCase(weapon.Name)} with that!");
 		}
 
 		private void DisplayAugmentSuccessMessage(Weapon weapon) {
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				$"You upgraded {TextInfo.ToTitleCase(weapon.Name)} with a weapon kit.");

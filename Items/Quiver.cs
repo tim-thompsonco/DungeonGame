@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 
 namespace DungeonGame.Items {
 	public class Quiver : IItem {
@@ -29,7 +29,7 @@ namespace DungeonGame.Items {
 		public static void DisplayOutOfArrowsMessage() {
 			const string attackFailMessage = "You ran out of arrows! Going hand to hand!";
 
-			OutputController.StoreAttackFailMessage(attackFailMessage);
+			OutputHelper.StoreAttackFailMessage(attackFailMessage);
 		}
 	}
 }

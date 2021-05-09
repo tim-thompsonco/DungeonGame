@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Items;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
@@ -70,7 +70,7 @@ namespace DungeonGame.Rooms {
 				sameLineOutput.Add(Settings.FormatDefaultBackground());
 				sameLineOutput.Add(sb.ToString());
 			}
-			OutputController.Display.StoreUserOutput(sameLineOutput);
+			OutputHelper.Display.StoreUserOutput(sameLineOutput);
 		}
 		public void ShowDirections() {
 			const string directionList = "Available Directions: ";
@@ -114,56 +114,56 @@ namespace DungeonGame.Rooms {
 				sameLineOutput.Add(Settings.FormatDefaultBackground());
 				sameLineOutput.Add(roomDirs.ToString().Substring(
 					0, Settings.GetGameWidth() - directionList.Length));
-				OutputController.Display.StoreUserOutput(sameLineOutput);
+				OutputHelper.Display.StoreUserOutput(sameLineOutput);
 			} else {
 				sameLineOutput.Add(Settings.FormatInfoText());
 				sameLineOutput.Add(Settings.FormatDefaultBackground());
 				sameLineOutput.Add(roomDirs.ToString());
-				OutputController.Display.StoreUserOutput(sameLineOutput);
+				OutputHelper.Display.StoreUserOutput(sameLineOutput);
 				return;
 			}
 			string remainingRoomDirs = roomDirs.ToString().Substring(Settings.GetGameWidth() - directionList.Length);
 			for (int i = 0; i < remainingRoomDirs.Length; i += Settings.GetGameWidth()) {
 				if (remainingRoomDirs.Length - i < Settings.GetGameWidth()) {
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatInfoText(),
 						Settings.FormatDefaultBackground(),
 						remainingRoomDirs.Substring(i, remainingRoomDirs.Length - i));
 					continue;
 				}
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
 					remainingRoomDirs.Substring(i, Settings.GetGameWidth()));
 			}
 		}
 		public void LookRoom() {
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				Settings.FormatTextBorder());
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatFailureOutputText(),
 				Settings.FormatDefaultBackground(),
 				Name);
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				Settings.FormatTextBorder());
 			for (int i = 0; i < _Desc.Length; i += Settings.GetGameWidth()) {
 				if (_Desc.Length - i < Settings.GetGameWidth()) {
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatRoomOutputText(),
 						Settings.FormatDefaultBackground(),
 						_Desc.Substring(i, _Desc.Length - i));
 					continue;
 				}
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatRoomOutputText(),
 					Settings.FormatDefaultBackground(),
 					_Desc.Substring(i, Settings.GetGameWidth()));
 			}
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
 				Settings.FormatDefaultBackground(),
 				Settings.FormatTextBorder());
@@ -191,7 +191,7 @@ namespace DungeonGame.Rooms {
 				sameLineOutput.Add(Settings.FormatDefaultBackground());
 				sameLineOutput.Add("There is nothing in the room.");
 			}
-			OutputController.Display.StoreUserOutput(sameLineOutput);
+			OutputHelper.Display.StoreUserOutput(sameLineOutput);
 			ShowDirections();
 		}
 
@@ -209,13 +209,13 @@ namespace DungeonGame.Rooms {
 				if (vendorName.Last() == inputName || _Vendor.Name == inputName) {
 					for (int i = 0; i < _Vendor.Desc.Length; i += Settings.GetGameWidth()) {
 						if (_Vendor.Desc.Length - i < Settings.GetGameWidth()) {
-							OutputController.Display.StoreUserOutput(
+							OutputHelper.Display.StoreUserOutput(
 								Settings.FormatRoomOutputText(),
 								Settings.FormatDefaultBackground(),
 								_Vendor.Desc.Substring(i, _Vendor.Desc.Length - i));
 							continue;
 						}
-						OutputController.Display.StoreUserOutput(
+						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatRoomOutputText(),
 							Settings.FormatDefaultBackground(),
 							_Vendor.Desc.Substring(i, Settings.GetGameWidth()));
@@ -224,7 +224,7 @@ namespace DungeonGame.Rooms {
 						Settings.FormatRoomOutputText(),
 						Settings.FormatDefaultBackground(),
 						"The vendor is carrying: "};
-					OutputController.Display.StoreUserOutput(sameLineOutput);
+					OutputHelper.Display.StoreUserOutput(sameLineOutput);
 					TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 					foreach (IItem itemForSale in _Vendor.VendorItems) {
 						List<string> sameLineOutputItem = new List<string>();
@@ -235,11 +235,11 @@ namespace DungeonGame.Rooms {
 						sameLineOutputItem.Add(Settings.FormatRoomOutputText());
 						sameLineOutputItem.Add(Settings.FormatDefaultBackground());
 						sameLineOutputItem.Add(sb.ToString());
-						OutputController.Display.StoreUserOutput(sameLineOutputItem);
+						OutputHelper.Display.StoreUserOutput(sameLineOutputItem);
 					}
 				} else {
 					string noVendorString = "There is no " + inputName + " in the room!";
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						noVendorString);
@@ -249,20 +249,20 @@ namespace DungeonGame.Rooms {
 				if (trainerName.Last() == inputName || _Trainer.Name == inputName) {
 					for (int i = 0; i < _Trainer._Desc.Length; i += Settings.GetGameWidth()) {
 						if (_Trainer._Desc.Length - i < Settings.GetGameWidth()) {
-							OutputController.Display.StoreUserOutput(
+							OutputHelper.Display.StoreUserOutput(
 								Settings.FormatRoomOutputText(),
 								Settings.FormatDefaultBackground(),
 								_Trainer._Desc.Substring(i, _Trainer._Desc.Length - i));
 							continue;
 						}
-						OutputController.Display.StoreUserOutput(
+						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatRoomOutputText(),
 							Settings.FormatDefaultBackground(),
 							_Trainer._Desc.Substring(i, Settings.GetGameWidth()));
 					}
 				} else {
 					string noTrainerString = "There is no " + inputName + " in the room!";
-					OutputController.Display.StoreUserOutput(
+					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
 						noTrainerString);

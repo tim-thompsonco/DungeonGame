@@ -3,8 +3,8 @@ using DungeonGame.Players;
 using DungeonGame.Rooms;
 using System.Collections.Generic;
 
-namespace DungeonGame.Controllers {
-	public static class RoomController {
+namespace DungeonGame.Helpers {
+	public static class RoomHelper {
 		public static Dictionary<Coordinate, IRoom> _Rooms { get; set; }
 
 		public static void ChangeRoom(Player player, Coordinate newCoord) {

@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables.Kits;
 using NUnit.Framework;
@@ -40,14 +40,14 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 		[Test]
 		public void GrindstoneKitAugmentAxeSucceeds() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			int baseWeaponItemValue = weapon.ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
 			string displayMessage = $"You upgraded {textInfo.ToTitleCase(weapon.Name)} with a weapon kit.";
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual(true, weaponKit.KitHasBeenUsed);
 			Assert.AreEqual(baseWeaponItemValue + weaponKit.ItemValue, weapon.ItemValue);
 			Assert.AreEqual(baseWeaponDamage + weaponKit.KitAugmentAmount, weapon._RegDamage);
@@ -55,7 +55,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 		[Test]
 		public void GrindstoneKitAugmentBowFails() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			weapon = new Weapon(3, Weapon.WeaponType.Bow);
 			int baseWeaponItemValue = weapon.ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
@@ -63,7 +63,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual(false, weaponKit.KitHasBeenUsed);
 			Assert.AreEqual(baseWeaponItemValue, weapon.ItemValue);
 			Assert.AreEqual(baseWeaponDamage, weapon._RegDamage);
@@ -71,7 +71,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 		[Test]
 		public void BowstringKitAugmentAxeFails() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			weaponKit = new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring);
 			int baseWeaponItemValue = weapon.ItemValue;
 			int baseWeaponDamage = weapon._RegDamage;
@@ -79,7 +79,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual(false, weaponKit.KitHasBeenUsed);
 			Assert.AreEqual(baseWeaponItemValue, weapon.ItemValue);
 			Assert.AreEqual(baseWeaponDamage, weapon._RegDamage);
@@ -87,7 +87,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 		[Test]
 		public void BowstringKitAugmentBowSucceeds() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			weapon = new Weapon(3, Weapon.WeaponType.Bow);
 			weaponKit = new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring);
 			int baseWeaponItemValue = weapon.ItemValue;
@@ -96,7 +96,7 @@ namespace DungeonGameTests.Items.Consumables.Kits {
 
 			weaponKit.AttemptAugmentPlayerWeapon(weapon);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual(true, weaponKit.KitHasBeenUsed);
 			Assert.AreEqual(baseWeaponItemValue + weaponKit.ItemValue, weapon.ItemValue);
 			Assert.AreEqual(baseWeaponDamage + weaponKit.KitAugmentAmount, weapon._RegDamage);

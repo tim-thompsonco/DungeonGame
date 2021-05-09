@@ -1,5 +1,5 @@
-﻿using DungeonGame.Controllers;
-using DungeonGame.Effects;
+﻿using DungeonGame.Effects;
+using DungeonGame.Helpers;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 
@@ -40,7 +40,7 @@ namespace DungeonGame.Spells.MonsterSpells {
 
 			DisplaySpellAttackMessage(monster);
 
-			int spellDamage = CombatController.GetMonsterAttackDamageUpdatedFromPlayerEffects(player, monster, _DamageAmount);
+			int spellDamage = CombatHelper.GetMonsterAttackDamageUpdatedFromPlayerEffects(player, monster, _DamageAmount);
 
 			if (spellDamage > 0) {
 				HitPlayerWithFireball(monster, player, spellDamage);
@@ -59,7 +59,7 @@ namespace DungeonGame.Spells.MonsterSpells {
 				attackString = $"The {monster.Name} casts a fireball and launches it at you!";
 			}
 
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
@@ -82,7 +82,7 @@ namespace DungeonGame.Spells.MonsterSpells {
 		public void DisplaySuccessfulAttackMessage(Monster monster, int spellDamage) {
 			string attackSuccessString = $"The {monster.Name} hits you for {spellDamage} fire damage.";
 
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
@@ -93,7 +93,7 @@ namespace DungeonGame.Spells.MonsterSpells {
 		}
 
 		public void DisplayDamageOverTimeMessage() {
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatOnFireText(),
 				Settings.FormatDefaultBackground(),
 				"You burst into flame!");

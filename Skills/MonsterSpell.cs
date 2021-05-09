@@ -1,5 +1,5 @@
-﻿using DungeonGame.Controllers;
-using DungeonGame.Effects;
+﻿using DungeonGame.Effects;
+using DungeonGame.Helpers;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 using System;
@@ -58,13 +58,13 @@ namespace DungeonGame {
 				attackString = $"The {monster.Name} casts a fireball and launches it at you!";
 			}
 
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
 
-			int fireSpellDamage = MonsterController.CalculateSpellDamage(player, monster, index);
-			fireSpellDamage = CombatController.GetMonsterAttackDamageUpdatedFromPlayerEffects(player, monster, fireSpellDamage);
+			int fireSpellDamage = MonsterHelper.CalculateSpellDamage(player, monster, index);
+			fireSpellDamage = CombatHelper.GetMonsterAttackDamageUpdatedFromPlayerEffects(player, monster, fireSpellDamage);
 
 			if (fireSpellDamage == 0) {
 				return;
@@ -73,14 +73,14 @@ namespace DungeonGame {
 			player.HitPoints -= fireSpellDamage;
 
 			string attackSuccessString = $"The {monster.Name} hits you for {fireSpellDamage} fire damage.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 
 			if (monster.Spellbook[index]._Offensive._AmountOverTime > 0) {
 				const string onFireString = "You burst into flame!";
-				OutputController.Display.StoreUserOutput(
+				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatOnFireText(),
 					Settings.FormatDefaultBackground(),
 					onFireString);
@@ -94,13 +94,13 @@ namespace DungeonGame {
 			monster.EnergyPoints -= monster.Spellbook[index]._EnergyCost;
 
 			string attackString = $"The {monster.Name} conjures up a frostbolt and launches it at you!";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
 
-			int frostSpellDamage = MonsterController.CalculateSpellDamage(player, monster, index);
-			frostSpellDamage = CombatController.GetMonsterAttackDamageUpdatedFromPlayerEffects(player, monster, frostSpellDamage);
+			int frostSpellDamage = MonsterHelper.CalculateSpellDamage(player, monster, index);
+			frostSpellDamage = CombatHelper.GetMonsterAttackDamageUpdatedFromPlayerEffects(player, monster, frostSpellDamage);
 
 			if (frostSpellDamage == 0) {
 				return;
@@ -109,7 +109,7 @@ namespace DungeonGame {
 			player.HitPoints -= frostSpellDamage;
 
 			string attackSuccessString = $"The {monster.Name} hits you for {frostSpellDamage} frost damage.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
@@ -117,7 +117,7 @@ namespace DungeonGame {
 			player.Effects.Add(new FrozenEffect(monster.Spellbook[index]._Name, monster.Spellbook[index]._Offensive._AmountMaxRounds));
 
 			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be increased by 50%!";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				frozenString);
@@ -127,13 +127,13 @@ namespace DungeonGame {
 			monster.EnergyPoints -= monster.Spellbook[index]._EnergyCost;
 
 			string attackString = $"The {monster.Name} casts a bolt of lightning at you!";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackString);
 
-			int arcaneSpellDamage = MonsterController.CalculateSpellDamage(player, monster, index);
-			arcaneSpellDamage = CombatController.GetMonsterAttackDamageUpdatedFromPlayerEffects(player, monster, arcaneSpellDamage);
+			int arcaneSpellDamage = MonsterHelper.CalculateSpellDamage(player, monster, index);
+			arcaneSpellDamage = CombatHelper.GetMonsterAttackDamageUpdatedFromPlayerEffects(player, monster, arcaneSpellDamage);
 
 			if (arcaneSpellDamage == 0) {
 				return;
@@ -142,7 +142,7 @@ namespace DungeonGame {
 			player.HitPoints -= arcaneSpellDamage;
 
 			string attackSuccessString = $"The {monster.Name} hits you for {arcaneSpellDamage} arcane damage.";
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);

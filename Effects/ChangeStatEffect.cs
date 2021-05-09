@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 using DungeonGame.Players;
 
@@ -54,7 +54,7 @@ namespace DungeonGame.Effects {
 				player.Constitution -= _statAmount;
 			}
 
-			PlayerController.CalculatePlayerStats(player);
+			PlayerHelper.CalculatePlayerStats(player);
 		}
 
 		public void ProcessRound() {

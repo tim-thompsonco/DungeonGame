@@ -1,5 +1,5 @@
-using DungeonGame.Controllers;
 using DungeonGame.Coordinates;
+using DungeonGame.Helpers;
 using DungeonGame.Rooms;
 using System;
 using System.Collections.Generic;
@@ -141,7 +141,7 @@ namespace DungeonGame {
 			DungeonRoom newRoom = new DungeonRoom(levelRangeLow, levelRangeHigh);
 			bool roomCreated = false;
 			while (!roomCreated) {
-				int randomNum = GameController.GetRandomNumber(1, 6);
+				int randomNum = GameHelper.GetRandomNumber(1, 6);
 				switch (randomNum) {
 					case 1:
 						if (oldRoom._North == null) {

@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables.Potions;
 using DungeonGame.Players;
@@ -111,13 +111,13 @@ namespace DungeonGameTests.Items.Consumables.Potions {
 
 		[Test]
 		public void PlayerDrinkPotionDisplayMessageTest() {
-			OutputController.Display.ClearUserOutput();
+			OutputHelper.Display.ClearUserOutput();
 			player.Inventory.Add(potion);
 			string displayMessage = $"You drank a potion and increased Constitution by {potion.StatAmount}.";
 
 			potion.DrinkPotion(player);
 
-			Assert.AreEqual(displayMessage, OutputController.Display.Output[0][2]);
+			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
 		}
 	}
 }

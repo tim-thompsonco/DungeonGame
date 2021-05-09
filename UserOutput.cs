@@ -1,4 +1,4 @@
-﻿using DungeonGame.Controllers;
+﻿using DungeonGame.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,7 +68,7 @@ namespace DungeonGame {
 		}
 		public void BuildUserOutput() {
 			// Var i is iterating through each row of output
-			for (int i = 0; i < OutputController.MapDisplay.Output.Count; i++) {
+			for (int i = 0; i < OutputHelper.MapDisplay.Output.Count; i++) {
 				int lineCount = 0;
 				if (i < Output.Count) {
 					for (int c = 2; c < Output[i].Count; c += 3) {
@@ -91,17 +91,17 @@ namespace DungeonGame {
 						bufferStringBuilder.ToString());
 				}
 				// var j is iterating through each column of each row of output
-				for (int j = 0; j < OutputController.MapDisplay.Output[i].Count; j += 3) {
-					Output[i].Add(OutputController.MapDisplay?.Output[i][j]);
-					Output[i].Add(OutputController.MapDisplay?.Output[i][j + 1]);
-					Output[i].Add(OutputController.MapDisplay?.Output[i][j + 2]);
+				for (int j = 0; j < OutputHelper.MapDisplay.Output[i].Count; j += 3) {
+					Output[i].Add(OutputHelper.MapDisplay?.Output[i][j]);
+					Output[i].Add(OutputHelper.MapDisplay?.Output[i][j + 1]);
+					Output[i].Add(OutputHelper.MapDisplay?.Output[i][j + 2]);
 				}
 			}
 			// Var k is iterating through each row of output
 			// Build effect display underneath map display
 			int lc = 0;
-			for (int k = OutputController.MapDisplay.Output.Count;
-				k < OutputController.EffectDisplay.Output.Count + OutputController.MapDisplay.Output.Count; k++) {
+			for (int k = OutputHelper.MapDisplay.Output.Count;
+				k < OutputHelper.EffectDisplay.Output.Count + OutputHelper.MapDisplay.Output.Count; k++) {
 				int lineCount = 0;
 				if (k < Output.Count) {
 					for (int d = 2; d < Output[k].Count; d += 3) {
@@ -124,11 +124,11 @@ namespace DungeonGame {
 						bufferStringBuilder.ToString());
 				}
 				// var l is iterating through each column of each row of output
-				for (int l = 0; l < OutputController.EffectDisplay.Output[lc].Count; l += 3) {
-					Output[k].Add(OutputController.EffectDisplay?.Output[lc][l]);
-					Output[k].Add(OutputController.EffectDisplay?.Output[lc][l + 1]);
-					Output[k].Add(OutputController.EffectDisplay?.Output[lc][l + 2]);
-					if (lc + 1 < OutputController.EffectDisplay.Output.Count) {
+				for (int l = 0; l < OutputHelper.EffectDisplay.Output[lc].Count; l += 3) {
+					Output[k].Add(OutputHelper.EffectDisplay?.Output[lc][l]);
+					Output[k].Add(OutputHelper.EffectDisplay?.Output[lc][l + 1]);
+					Output[k].Add(OutputHelper.EffectDisplay?.Output[lc][l + 2]);
+					if (lc + 1 < OutputHelper.EffectDisplay.Output.Count) {
 						lc++;
 					}
 				}
@@ -136,9 +136,9 @@ namespace DungeonGame {
 			// Var m is iterating through each row of output
 			// Build questlog display underneath effect display
 			lc = 0;
-			for (int m = OutputController.MapDisplay.Output.Count + OutputController.EffectDisplay.Output.Count;
-				m < OutputController.EffectDisplay.Output.Count + OutputController.MapDisplay.Output.Count +
-				OutputController.QuestDisplay.Output.Count; m++) {
+			for (int m = OutputHelper.MapDisplay.Output.Count + OutputHelper.EffectDisplay.Output.Count;
+				m < OutputHelper.EffectDisplay.Output.Count + OutputHelper.MapDisplay.Output.Count +
+				OutputHelper.QuestDisplay.Output.Count; m++) {
 				int lineCount = 0;
 				if (m < Output.Count) {
 					for (int d = 2; d < Output[m].Count; d += 3) {
@@ -161,11 +161,11 @@ namespace DungeonGame {
 						bufferStringBuilder.ToString());
 				}
 				// var n is iterating through each column of each row of output
-				for (int n = 0; n < OutputController.QuestDisplay.Output[lc].Count; n += 3) {
-					Output[m].Add(OutputController.QuestDisplay?.Output[lc][n]);
-					Output[m].Add(OutputController.QuestDisplay?.Output[lc][n + 1]);
-					Output[m].Add(OutputController.QuestDisplay?.Output[lc][n + 2]);
-					if (lc + 1 < OutputController.QuestDisplay.Output.Count) {
+				for (int n = 0; n < OutputHelper.QuestDisplay.Output[lc].Count; n += 3) {
+					Output[m].Add(OutputHelper.QuestDisplay?.Output[lc][n]);
+					Output[m].Add(OutputHelper.QuestDisplay?.Output[lc][n + 1]);
+					Output[m].Add(OutputHelper.QuestDisplay?.Output[lc][n + 2]);
+					if (lc + 1 < OutputHelper.QuestDisplay.Output.Count) {
 						lc++;
 					}
 				}

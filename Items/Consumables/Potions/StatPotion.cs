@@ -1,5 +1,5 @@
-﻿using DungeonGame.Controllers;
-using DungeonGame.Effects;
+﻿using DungeonGame.Effects;
+using DungeonGame.Helpers;
 using DungeonGame.Players;
 
 namespace DungeonGame.Items.Consumables.Potions {
@@ -78,7 +78,7 @@ namespace DungeonGame.Items.Consumables.Potions {
 					break;
 			}
 
-			PlayerController.CalculatePlayerStats(player);
+			PlayerHelper.CalculatePlayerStats(player);
 
 			string effectName = $"{StatPotionType} (+{StatAmount})";
 
@@ -88,7 +88,7 @@ namespace DungeonGame.Items.Consumables.Potions {
 		}
 
 		public void DisplayDrankPotionMessage() {
-			OutputController.Display.StoreUserOutput(
+			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
 				$"You drank a potion and increased {StatPotionType} by {StatAmount}.");
