@@ -151,7 +151,7 @@ namespace DungeonGame.Controllers {
 		}
 
 		public static int GetMonsterAttackDamageUpdatedFromPlayerEffects(Player player, Monster monster, int attackDamage) {
-			foreach (IEffect effect in player.Effects.ToList()) {
+			foreach (IEffect effect in player.Effects.ToList().Where(effect => effect.IsEffectExpired is false)) {
 				if (effect is FrozenEffect frozenEffect) {
 					attackDamage = frozenEffect.GetIncreasedDamageFromFrozen(attackDamage);
 
@@ -164,12 +164,12 @@ namespace DungeonGame.Controllers {
 					changeMonsterDmgEffect.ProcessChangeMonsterDamageRound(player);
 				}
 
-				if (effect is BlockDamageEffect blockDmgEffect) {
+				if (effect is IChangeDamageEffect changeDamageEffect) {
 					int baseSpellDamage = attackDamage;
 
-					attackDamage = blockDmgEffect.GetDecreasedDamageFromBlock(attackDamage);
+					attackDamage = changeDamageEffect.GetChangedDamageFromEffect(attackDamage);
 
-					blockDmgEffect.ProcessBlockDamageRound(baseSpellDamage);
+					changeDamageEffect.ProcessChangeDamageRound(baseSpellDamage);
 				}
 
 				if (effect is ReflectDamageEffect reflectDmgEffect) {

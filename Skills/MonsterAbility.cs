@@ -72,7 +72,7 @@ namespace DungeonGame {
 		}
 
 		private int AdjustAbilityDamageFromPlayerEffects(Player player, Monster monster, int abilityDamage) {
-			foreach (IEffect effect in player.Effects.ToList()) {
+			foreach (IEffect effect in player.Effects.Where(effect => effect.IsEffectExpired is false).ToList()) {
 				if (effect is FrozenEffect frozenEffect) {
 					frozenEffect.ProcessFrozenRound();
 				}
@@ -83,12 +83,12 @@ namespace DungeonGame {
 					changeMonsterDmgEffect.ProcessChangeMonsterDamageRound(player);
 				}
 
-				if (effect is BlockDamageEffect blockDmgEffect) {
+				if (effect is IChangeDamageEffect changeDamageEffect) {
 					int baseAbilityDamage = abilityDamage;
 
-					abilityDamage = blockDmgEffect.GetDecreasedDamageFromBlock(abilityDamage);
+					abilityDamage = changeDamageEffect.GetChangedDamageFromEffect(abilityDamage);
 
-					blockDmgEffect.ProcessBlockDamageRound(baseAbilityDamage);
+					changeDamageEffect.ProcessChangeDamageRound(baseAbilityDamage);
 				}
 
 				if (effect is ReflectDamageEffect reflectDmgEffect) {

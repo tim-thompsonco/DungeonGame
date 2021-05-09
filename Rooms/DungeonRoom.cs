@@ -18,7 +18,7 @@ namespace DungeonGame.Rooms {
 			Intersection,
 			Stairs
 		}
-		public RoomType _RoomCategory { get; set; }
+		public RoomType RoomCategory { get; set; }
 		public bool _IsDiscovered { get; set; }
 		public IRoom _North { get; set; }
 		public IRoom _South { get; set; }
@@ -32,9 +32,9 @@ namespace DungeonGame.Rooms {
 		public IRoom _Down { get; set; }
 		public string Name { get; set; }
 		public string _Desc { get; set; }
-		public int _DungeonLevel { get; set; }
-		public List<string> _Commands { get; set; }
-		public List<string> _CombatCommands { get; set; }
+		public int DungeonLevel { get; set; }
+		public List<string> Commands { get; set; }
+		public List<string> CombatCommands { get; set; }
 		public List<IName> _RoomObjects { get; set; }
 		public Monster _Monster { get; set; }
 
@@ -42,49 +42,49 @@ namespace DungeonGame.Rooms {
 		public DungeonRoom() { }
 		public DungeonRoom(int levelRangeLow, int levelRangeHigh) {
 			_RoomObjects = new List<IName>();
-			_Commands = new List<string> { "[I]nventory", "Save", "[Q]uit" };
-			_CombatCommands = new List<string> { "[F]ight", "[I]nventory", "Flee" };
-			_DungeonLevel = GameController.GetRandomNumber(levelRangeLow, levelRangeHigh);
+			Commands = new List<string> { "[I]nventory", "Save", "[Q]uit" };
+			CombatCommands = new List<string> { "[F]ight", "[I]nventory", "Flee" };
+			DungeonLevel = GameController.GetRandomNumber(levelRangeLow, levelRangeHigh);
 			int randomNum = GameController.GetRandomNumber(1, 100);
 			// Reserving numbers 80-100 for chance of room not having a monster
 			if (randomNum <= 16) {
 				// 20% chance of spawning based on cumulative 0.2 * 80
-				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Zombie);
+				_Monster = new Monster(DungeonLevel, Monster.MonsterType.Zombie);
 				MonsterBuilder.BuildMonster(_Monster);
 				_RoomObjects.Add(_Monster);
 			} else if (randomNum <= 32) {
 				// 20% chance of spawning based on cumulative 0.4 * 80
-				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Skeleton);
+				_Monster = new Monster(DungeonLevel, Monster.MonsterType.Skeleton);
 				MonsterBuilder.BuildMonster(_Monster);
 				_RoomObjects.Add(_Monster);
 			} else if (randomNum <= 40) {
 				// 10% chance of spawning based on cumulative 0.5 * 80
-				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Elemental);
+				_Monster = new Monster(DungeonLevel, Monster.MonsterType.Elemental);
 				MonsterBuilder.BuildMonster(_Monster);
 				_RoomObjects.Add(_Monster);
 			} else if (randomNum <= 48) {
 				// 10% chance of spawning based on cumulative 0.6 * 80
-				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Vampire);
+				_Monster = new Monster(DungeonLevel, Monster.MonsterType.Vampire);
 				MonsterBuilder.BuildMonster(_Monster);
 				_RoomObjects.Add(_Monster);
 			} else if (randomNum <= 60) {
 				// 15% chance of spawning based on cumulative 0.75 * 80
-				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Troll);
+				_Monster = new Monster(DungeonLevel, Monster.MonsterType.Troll);
 				MonsterBuilder.BuildMonster(_Monster);
 				_RoomObjects.Add(_Monster);
 			} else if (randomNum <= 68) {
 				// 10% chance of spawning based on cumulative 0.85 * 80
-				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Demon);
+				_Monster = new Monster(DungeonLevel, Monster.MonsterType.Demon);
 				MonsterBuilder.BuildMonster(_Monster);
 				_RoomObjects.Add(_Monster);
 			} else if (randomNum <= 76) {
 				// 10% chance of spawning based on cumulative 0.95 * 80
-				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Spider);
+				_Monster = new Monster(DungeonLevel, Monster.MonsterType.Spider);
 				MonsterBuilder.BuildMonster(_Monster);
 				_RoomObjects.Add(_Monster);
 			} else if (randomNum <= 80) {
 				// 5% chance of spawning based on cumulative 1 * 80
-				_Monster = new Monster(_DungeonLevel, Monster.MonsterType.Dragon);
+				_Monster = new Monster(DungeonLevel, Monster.MonsterType.Dragon);
 				MonsterBuilder.BuildMonster(_Monster);
 				_RoomObjects.Add(_Monster);
 			}
@@ -134,15 +134,15 @@ namespace DungeonGame.Rooms {
 		public void ShowCommands() {
 			List<string> sameLineOutput = new List<string> {
 			Settings.FormatGeneralInfoText(), Settings.FormatDefaultBackground(), "Available _Commands: "};
-			if (_Monster != null && _Monster.InCombat && _CombatCommands != null) {
-				int objCombatCount = _CombatCommands.Count;
-				foreach (string command in _CombatCommands) {
+			if (_Monster != null && _Monster.InCombat && CombatCommands != null) {
+				int objCombatCount = CombatCommands.Count;
+				foreach (string command in CombatCommands) {
 					StringBuilder sb = new StringBuilder();
 					sb.Append(command);
-					if (_CombatCommands[objCombatCount - 1] != command) {
+					if (CombatCommands[objCombatCount - 1] != command) {
 						sb.Append(", ");
 					}
-					if (_CombatCommands[objCombatCount - 1] == command) {
+					if (CombatCommands[objCombatCount - 1] == command) {
 						sb.Append(".");
 					}
 
@@ -150,15 +150,15 @@ namespace DungeonGame.Rooms {
 					sameLineOutput.Add(Settings.FormatDefaultBackground());
 					sameLineOutput.Add(sb.ToString());
 				}
-			} else if (_Commands != null) {
-				int objCount = _Commands.Count;
-				foreach (string command in _Commands) {
+			} else if (Commands != null) {
+				int objCount = Commands.Count;
+				foreach (string command in Commands) {
 					StringBuilder sb = new StringBuilder();
 					sb.Append(command);
-					if (_Commands[objCount - 1] != command) {
+					if (Commands[objCount - 1] != command) {
 						sb.Append(", ");
 					}
-					if (_Commands[objCount - 1] == command) {
+					if (Commands[objCount - 1] == command) {
 						sb.Append(".");
 					}
 

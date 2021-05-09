@@ -27,13 +27,9 @@ namespace DungeonGame.Controllers {
 				foreach (IEffect effect in player.Effects.Where(effect => GameTicks % effect.TickDuration == 0).ToList()) {
 					if (effect is HealingEffect healingEffect) {
 						healingEffect.ProcessHealingRound(player);
-					}
-
-					if (effect is ChangePlayerDamageEffect changePlayerDmgEffect && !player.InCombat && effect.Name.Contains("berserk")) {
+					} else if (effect is ChangePlayerDamageEffect changePlayerDmgEffect && !player.InCombat && effect.Name.Contains("berserk")) {
 						changePlayerDmgEffect.ProcessChangePlayerDamageRound(player);
-					}
-
-					if (effect is ChangeArmorEffect changeArmorEffect) {
+					} else if (effect is ChangeArmorEffect changeArmorEffect) {
 						if (!player.InCombat && effect.Name.Contains("berserk")) {
 							changeArmorEffect.IsEffectExpired = true;
 						}
@@ -41,38 +37,24 @@ namespace DungeonGame.Controllers {
 						if (!player.InCombat) {
 							changeArmorEffect.ProcessChangeArmorRound();
 						}
-					}
-
-					if (effect is BurningEffect burningEffect) {
+					} else if (effect is BurningEffect burningEffect) {
 						burningEffect.ProcessBurningRound(player);
-					}
-
-					if (effect is BleedingEffect bleedingEffect) {
+					} else if (effect is BleedingEffect bleedingEffect) {
 						bleedingEffect.ProcessRound();
-					}
-
-					if (effect is FrozenEffect frozenEffect) {
+					} else if (effect is FrozenEffect frozenEffect) {
 						frozenEffect.ProcessFrozenRound();
-					}
-
-					if (effect is ReflectDamageEffect reflectDmgEffect) {
+					} else if (effect is ReflectDamageEffect reflectDmgEffect) {
 						reflectDmgEffect.ProcessReflectDamageRound();
-					}
-
-					if (effect is ChangeStatEffect changeStatEffect) {
+					} else if (effect is ChangeStatEffect changeStatEffect) {
 						changeStatEffect.ProcessChangeStatRound(player);
-					}
-
-					if (effect is ChangeMonsterDamageEffect changeMonsterDmgEffect) {
+					} else if (effect is ChangeMonsterDamageEffect changeMonsterDmgEffect) {
 						if (!player.InCombat) {
 							effect.IsEffectExpired = true;
 						}
 
 						changeMonsterDmgEffect.ProcessChangeMonsterDamageRound(player);
-					}
-
-					if (effect is BlockDamageEffect blockDamageEffect && !player.InCombat) {
-						blockDamageEffect.ProcessBlockDamageRound();
+					} else {
+						effect.ProcessRound();
 					}
 				}
 			}

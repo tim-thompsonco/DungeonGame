@@ -247,21 +247,21 @@ namespace DungeonGame {
 			}
 
 			if (room._Up != null || room._Down != null) {
-				room._RoomCategory = DungeonRoom.RoomType.Stairs;
+				room.RoomCategory = DungeonRoom.RoomType.Stairs;
 				return;
 			}
 			switch (directionCount) {
 				case 1:
-					room._RoomCategory = DungeonRoom.RoomType.Corner;
+					room.RoomCategory = DungeonRoom.RoomType.Corner;
 					return;
 				case 2:
-					room._RoomCategory = DungeonRoom.RoomType.Corridor;
+					room.RoomCategory = DungeonRoom.RoomType.Corridor;
 					return;
 				case 3:
-					room._RoomCategory = DungeonRoom.RoomType.Intersection;
+					room.RoomCategory = DungeonRoom.RoomType.Intersection;
 					return;
 				default:
-					room._RoomCategory = DungeonRoom.RoomType.Openspace;
+					room.RoomCategory = DungeonRoom.RoomType.Openspace;
 					break;
 			}
 		}

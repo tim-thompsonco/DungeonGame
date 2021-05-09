@@ -1,8 +1,9 @@
 ﻿using DungeonGame.Controllers;
+using DungeonGame.Effects.SettingsObjects;
 using DungeonGame.Interfaces;
 
 namespace DungeonGame.Effects {
-	public class BlockDamageEffect : IEffect {
+	public class BlockDamageEffect : IEffect, IChangeDamageEffect {
 		public int BlockAmount { get; set; }
 		public int CurrentRound { get; set; } = 1;
 		public IEffectHolder EffectHolder { get; }
@@ -12,44 +13,16 @@ namespace DungeonGame.Effects {
 		public string Name { get; set; }
 		public int TickDuration { get; } = 1;
 
-		public BlockDamageEffect(string name, int blockAmount) {
-			Name = name;
-			BlockAmount = blockAmount;
+		public BlockDamageEffect(EffectAmountSettings effectAmountSettings) {
+			EffectHolder = effectAmountSettings.EffectHolder;
+			Name = effectAmountSettings.Name;
+			BlockAmount = (int)effectAmountSettings.Amount;
 		}
 
-		public void ProcessBlockDamageRound() {
-			if (IsEffectExpired) {
-				return;
-			}
-
+		public void ProcessRound() {
 			DisplayBlockEffectFadingMessage();
 
-			IncrementCurrentRound();
-
-			if (BlockAmount <= 0) {
-				SetEffectAsExpired();
-
-				DisplayBlockEffectExpiredMessage();
-			}
-		}
-
-		public void ProcessBlockDamageRound(int incomingDamageAmount) {
-			if (IsEffectExpired) {
-				return;
-			}
-
-			int blockedDamageAmount = GetBlockReductionAmount(incomingDamageAmount);
-			DisplayBlockedDamageMessage(blockedDamageAmount);
-
-			DecreaseBlockAmountByIncomingDamage(incomingDamageAmount);
-
-			IncrementCurrentRound();
-
-			if (BlockAmount <= 0) {
-				SetEffectAsExpired();
-
-				DisplayBlockEffectExpiredMessage();
-			}
+			IncrementEffectRoundAndSetAsExpiredIfBlockAmountUsedUp();
 		}
 
 		private void DisplayBlockEffectFadingMessage() {
@@ -58,8 +31,37 @@ namespace DungeonGame.Effects {
 			OutputController.StoreSuccessMessage(blockFadeString);
 		}
 
+		private void IncrementEffectRoundAndSetAsExpiredIfBlockAmountUsedUp() {
+			IncrementCurrentRound();
+
+			if (BlockAmount <= 0) {
+				SetEffectAsExpired();
+
+				DisplayBlockEffectExpiredMessage();
+			}
+		}
+
 		private void IncrementCurrentRound() {
 			CurrentRound++;
+		}
+
+		public void SetEffectAsExpired() {
+			IsEffectExpired = true;
+		}
+
+		private void DisplayBlockEffectExpiredMessage() {
+			const string blockEndString = "You are no longer blocking damage!";
+
+			OutputController.StoreSuccessMessage(blockEndString);
+		}
+
+		public void ProcessChangeDamageRound(int incomingDamageAmount) {
+			int blockedDamageAmount = GetBlockReductionAmount(incomingDamageAmount);
+			DisplayBlockedDamageMessage(blockedDamageAmount);
+
+			DecreaseBlockAmountByIncomingDamage(incomingDamageAmount);
+
+			IncrementEffectRoundAndSetAsExpiredIfBlockAmountUsedUp();
 		}
 
 		private int GetBlockReductionAmount(int incomingDamageAmount) {
@@ -84,22 +86,8 @@ namespace DungeonGame.Effects {
 			}
 		}
 
-		public void SetEffectAsExpired() {
-			IsEffectExpired = true;
-		}
-
-		private void DisplayBlockEffectExpiredMessage() {
-			const string blockEndString = "You are no longer blocking damage!";
-
-			OutputController.StoreSuccessMessage(blockEndString);
-		}
-
-		public int GetDecreasedDamageFromBlock(int incomingDamage) {
+		public int GetChangedDamageFromEffect(int incomingDamage) {
 			return incomingDamage - GetBlockReductionAmount(incomingDamage);
-		}
-
-		public void ProcessRound() {
-			throw new System.NotImplementedException();
 		}
 	}
 }

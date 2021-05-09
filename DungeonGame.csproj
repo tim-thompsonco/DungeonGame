@@ -54,6 +54,7 @@
     <Compile Include="Effects\ChangeMonsterDamageEffect.cs" />
     <Compile Include="Effects\ChangePlayerDamageEffect.cs" />
     <Compile Include="Effects\ChangeStatEffect.cs" />
+    <Compile Include="Effects\IChangeDamageEffect.cs" />
     <Compile Include="Effects\SettingsObjects\EffectAmountSettings.cs" />
     <Compile Include="Effects\SettingsObjects\EffectOverTimeSettings.cs" />
     <Compile Include="Effects\SettingsObjects\EffectSettings.cs" />

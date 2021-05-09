@@ -330,7 +330,7 @@ namespace DungeonGame.Monsters {
 
 			int baseAttackAmount = attackAmount;
 
-			foreach (IEffect effect in player.Effects.Where(effect => effect.IsEffectExpired == false)) {
+			foreach (IEffect effect in player.Effects.Where(effect => effect.IsEffectExpired is false).ToList()) {
 				if (effect is FrozenEffect frozenEffect) {
 					attackAmount = frozenEffect.GetIncreasedDamageFromFrozen(attackAmount);
 
@@ -343,12 +343,12 @@ namespace DungeonGame.Monsters {
 					changeMonsterDmgEffect.ProcessChangeMonsterDamageRound(player);
 				}
 
-				if (effect is BlockDamageEffect blockDamageEffect) {
+				if (effect is IChangeDamageEffect changeDamageEffect) {
 					int incomingDamage = attackAmount;
 
-					attackAmount = blockDamageEffect.GetDecreasedDamageFromBlock(incomingDamage);
+					attackAmount = changeDamageEffect.GetChangedDamageFromEffect(incomingDamage);
 
-					blockDamageEffect.ProcessBlockDamageRound(incomingDamage);
+					changeDamageEffect.ProcessChangeDamageRound(incomingDamage);
 				}
 
 				if (effect is ReflectDamageEffect reflectDamageEffect) {

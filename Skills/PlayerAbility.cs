@@ -483,7 +483,12 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				blockString);
 
-			player.Effects.Add(new BlockDamageEffect(player.Abilities[index].Name, blockAmount));
+			EffectAmountSettings effectAmountSettings = new EffectAmountSettings {
+				Amount = blockAmount,
+				EffectHolder = player,
+				Name = player.Abilities[index].Name
+			};
+			player.Effects.Add(new BlockDamageEffect(effectAmountSettings));
 		}
 
 		public static void BandageAbilityInfo(Player player, int index) {
