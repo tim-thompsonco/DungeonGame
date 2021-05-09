@@ -6,12 +6,12 @@ using System;
 namespace DungeonGame.Effects {
 	public class ChangeMonsterDamageEffect : IEffect {
 		public int ChangeAmount { get; }
-		public int CurrentRound { get; set; } = 1;
+		public int CurrentRound { get; private set; } = 1;
 		public IEffectHolder EffectHolder { get; }
 		public bool IsEffectExpired { get; set; }
 		public bool IsHarmful { get; }
 		public int MaxRound { get; }
-		public string Name { get; set; }
+		public string Name { get; }
 		public int TickDuration { get; } = 1;
 
 		public ChangeMonsterDamageEffect(string name, int maxRound, int changeAmount) {

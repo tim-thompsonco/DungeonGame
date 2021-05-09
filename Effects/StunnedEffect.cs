@@ -5,12 +5,12 @@ using DungeonGame.Monsters;
 
 namespace DungeonGame.Effects {
 	public class StunnedEffect : IEffect {
-		public int CurrentRound { get; set; } = 1;
+		public int CurrentRound { get; private set; } = 1;
 		public bool IsEffectExpired { get; set; }
 		public bool IsHarmful { get; } = true;
 		public IEffectHolder EffectHolder { get; }
 		public int MaxRound { get; }
-		public string Name { get; set; }
+		public string Name { get; }
 		public int TickDuration { get; } = 1;
 
 		public StunnedEffect(EffectSettings effectSettings) {

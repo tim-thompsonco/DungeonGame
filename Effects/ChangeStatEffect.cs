@@ -4,13 +4,13 @@ using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public partial class ChangeStatEffect : IEffect {
-		public int CurrentRound { get; set; } = 1;
+		public int CurrentRound { get; private set; } = 1;
 		public IEffectHolder EffectHolder { get; }
-		public StatType EffectStatType { get; set; }
+		public StatType EffectStatType { get; }
 		public bool IsEffectExpired { get; set; }
 		public bool IsHarmful { get; }
 		public int MaxRound { get; }
-		public string Name { get; set; }
+		public string Name { get; }
 		public int TickDuration { get; } = 1;
 		private readonly int _statAmount;
 

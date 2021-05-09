@@ -5,12 +5,12 @@ using System;
 namespace DungeonGame.Effects {
 	public class ChangeArmorEffect : IEffect {
 		public int ChangeArmorAmount { get; }
-		public int CurrentRound { get; set; } = 1;
+		public int CurrentRound { get; private set; } = 1;
 		public IEffectHolder EffectHolder { get; }
 		public bool IsEffectExpired { get; set; }
 		public bool IsHarmful { get; }
 		public int MaxRound { get; }
-		public string Name { get; set; }
+		public string Name { get; }
 		public int TickDuration { get; } = 10;
 
 		public ChangeArmorEffect(string name, int maxRound, int changeArmorAmount) {

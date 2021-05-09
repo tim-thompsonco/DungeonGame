@@ -4,16 +4,18 @@ using DungeonGame.Interfaces;
 
 namespace DungeonGame.Effects {
 	public class BlockDamageEffect : IEffect, IChangeDamageEffect {
-		public int BlockAmount { get; set; }
-		public int CurrentRound { get; set; } = 1;
+		public int BlockAmount { get; private set; }
+		public int CurrentRound { get; private set; } = 1;
 		public IEffectHolder EffectHolder { get; }
 		public bool IsEffectExpired { get; set; }
 		public bool IsHarmful { get; }
 		public int MaxRound { get; } = 3;
-		public string Name { get; set; }
+		public string Name { get; }
 		public int TickDuration { get; } = 1;
 
 		public BlockDamageEffect(EffectAmountSettings effectAmountSettings) {
+			effectAmountSettings.ValidateSettings();
+
 			EffectHolder = effectAmountSettings.EffectHolder;
 			Name = effectAmountSettings.Name;
 			BlockAmount = (int)effectAmountSettings.Amount;

@@ -7,12 +7,12 @@ using DungeonGame.Players;
 namespace DungeonGame.Effects {
 	public class BleedingEffect : IEffect {
 		public int BleedDamageOverTime { get; }
-		public int CurrentRound { get; set; } = 1;
+		public int CurrentRound { get; private set; } = 1;
 		public IEffectHolder EffectHolder { get; }
 		public bool IsEffectExpired { get; set; }
 		public bool IsHarmful { get; } = true;
 		public int MaxRound { get; }
-		public string Name { get; set; }
+		public string Name { get; }
 		public int TickDuration { get; } = 1;
 
 		public BleedingEffect(EffectOverTimeSettings effectSettings) {
