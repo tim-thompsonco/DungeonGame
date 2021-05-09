@@ -4,12 +4,6 @@ using DungeonGame.Players;
 
 namespace DungeonGame.Items.Consumables.Potions {
 	public class StatPotion : IItem, IPotion {
-		public enum StatType {
-			Intelligence,
-			Strength,
-			Dexterity,
-			Constitution
-		}
 		public PotionStrength PotionStrength { get; set; }
 		public string Name { get; set; }
 		public string Desc { get; set; }
@@ -58,7 +52,7 @@ namespace DungeonGame.Items.Consumables.Potions {
 
 		private Player AugmentPlayerStat(Player player) {
 			// Set effectStatCategory to Constitution by default so it is initialized
-			ChangeStatEffect.StatType effectStatCategory = ChangeStatEffect.StatType.Constitution;
+			StatType effectStatCategory = StatType.Constitution;
 
 			switch (StatPotionType) {
 				case StatType.Constitution:
@@ -66,15 +60,15 @@ namespace DungeonGame.Items.Consumables.Potions {
 					break;
 				case StatType.Dexterity:
 					player.Dexterity += StatAmount;
-					effectStatCategory = ChangeStatEffect.StatType.Dexterity;
+					effectStatCategory = StatType.Dexterity;
 					break;
 				case StatType.Intelligence:
 					player.Intelligence += StatAmount;
-					effectStatCategory = ChangeStatEffect.StatType.Intelligence;
+					effectStatCategory = StatType.Intelligence;
 					break;
 				case StatType.Strength:
 					player.Strength += StatAmount;
-					effectStatCategory = ChangeStatEffect.StatType.Strength;
+					effectStatCategory = StatType.Strength;
 					break;
 			}
 

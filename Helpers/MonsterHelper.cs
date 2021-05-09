@@ -38,16 +38,16 @@ namespace DungeonGame.Helpers {
 			return totalArmorRating;
 		}
 		public static int CalculateSpellDamage(Player player, Monster opponent, int index) {
-			if (opponent.Spellbook[index]._DamageGroup == MonsterSpell.DamageType.Physical) {
-				return opponent.Spellbook[index]._Offensive._Amount;
+			if (opponent.Spellbook[index].DamageGroup == DamageType.Physical) {
+				return opponent.Spellbook[index].Offensive.Amount;
 			}
-			double damageReductionPercentage = opponent.Spellbook[index]._DamageGroup switch {
-				MonsterSpell.DamageType.Fire => player.FireResistance / 100.0,
-				MonsterSpell.DamageType.Frost => player.FrostResistance / 100.0,
-				MonsterSpell.DamageType.Arcane => player.ArcaneResistance / 100.0,
+			double damageReductionPercentage = opponent.Spellbook[index].DamageGroup switch {
+				DamageType.Fire => player.FireResistance / 100.0,
+				DamageType.Frost => player.FrostResistance / 100.0,
+				DamageType.Arcane => player.ArcaneResistance / 100.0,
 				_ => 0.0
 			};
-			return (int)(opponent.Spellbook[index]._Offensive._Amount * (1 - damageReductionPercentage));
+			return (int)(opponent.Spellbook[index].Offensive.Amount * (1 - damageReductionPercentage));
 		}
 	}
 }

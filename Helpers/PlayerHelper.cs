@@ -1,8 +1,10 @@
 ﻿using DungeonGame.Effects;
 using DungeonGame.Items;
-using DungeonGame.Items.Consumables;
+using DungeonGame.Items.ArmorObjects;
+using DungeonGame.Items.Consumables.Arrow;
 using DungeonGame.Items.Consumables.Potions;
 using DungeonGame.Items.Equipment;
+using DungeonGame.Items.WeaponObjects;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 using DungeonGame.Rooms;
@@ -19,8 +21,8 @@ namespace DungeonGame.Helpers {
 		}
 		public static void LookAtObject(Player player, string[] input) {
 			string parsedInput = InputHelper.ParseInput(input);
-			IRoom playerRoom = RoomHelper._Rooms[player.PlayerLocation];
-			int roomMatch = playerRoom._RoomObjects.FindIndex(f =>
+			IRoom playerRoom = RoomHelper.Rooms[player.PlayerLocation];
+			int roomMatch = playerRoom.RoomObjects.FindIndex(f =>
 				f.Name.Contains(parsedInput));
 			if (roomMatch != -1) {
 				playerRoom.LookNpc(input, player);
@@ -287,21 +289,21 @@ namespace DungeonGame.Helpers {
 		}
 		public static void CalculatePlayerStats(Player player) {
 			switch (player.PlayerClass) {
-				case Player.PlayerClassType.Mage:
+				case PlayerClassType.Mage:
 					player.MaxManaPoints = player.Intelligence * 10;
 					if (player.ManaPoints > player.MaxManaPoints) {
 						player.ManaPoints = player.MaxManaPoints;
 					}
 
 					break;
-				case Player.PlayerClassType.Warrior:
+				case PlayerClassType.Warrior:
 					player.MaxRagePoints = player.Strength * 10;
 					if (player.RagePoints > player.MaxRagePoints) {
 						player.RagePoints = player.MaxRagePoints;
 					}
 
 					break;
-				case Player.PlayerClassType.Archer:
+				case PlayerClassType.Archer:
 					player.MaxComboPoints = player.Dexterity * 10;
 					if (player.ComboPoints > player.MaxComboPoints) {
 						player.ComboPoints = player.MaxComboPoints;
@@ -339,7 +341,7 @@ namespace DungeonGame.Helpers {
 			}
 			OutputHelper.Display.StoreUserOutput(healLineOutput);
 			switch (player.PlayerClass) {
-				case Player.PlayerClassType.Mage:
+				case PlayerClassType.Mage:
 					string playerManaString = $"Mana: {player.ManaPoints}/{player.MaxManaPoints} ";
 					List<string> manaLineOutput = new List<string>
 					{
@@ -364,7 +366,7 @@ namespace DungeonGame.Helpers {
 					}
 					OutputHelper.Display.StoreUserOutput(manaLineOutput);
 					break;
-				case Player.PlayerClassType.Warrior:
+				case PlayerClassType.Warrior:
 					string playerRageString = $"Rage: {player.RagePoints}/{player.MaxRagePoints} ";
 					List<string> rageLineOutput = new List<string>
 					{
@@ -389,7 +391,7 @@ namespace DungeonGame.Helpers {
 					}
 					OutputHelper.Display.StoreUserOutput(rageLineOutput);
 					break;
-				case Player.PlayerClassType.Archer:
+				case PlayerClassType.Archer:
 					string playerComboString = $"Combo: {player.ComboPoints}/{player.MaxComboPoints} ";
 					List<string> comboLineOutput = new List<string>
 					{
@@ -438,7 +440,7 @@ namespace DungeonGame.Helpers {
 			OutputHelper.Display.StoreUserOutput(expLineOutput);
 			string baseStatsString = $"Str: {player.Strength} Int: {player.Intelligence} Dex: {player.Dexterity} _Level: {player.Level}";
 			StringBuilder statsSb = new StringBuilder(baseStatsString);
-			if (player.PlayerClass == Player.PlayerClassType.Archer) {
+			if (player.PlayerClass == PlayerClassType.Archer) {
 				statsSb.Append($" Arrows: {player.PlayerQuiver?.Quantity}");
 			}
 
@@ -457,7 +459,7 @@ namespace DungeonGame.Helpers {
 				Settings.FormatTextBorder());
 		}
 		public static void ListAbilities(Player player) {
-			if (player.PlayerClass != Player.PlayerClassType.Mage) {
+			if (player.PlayerClass != PlayerClassType.Mage) {
 				TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
@@ -471,7 +473,7 @@ namespace DungeonGame.Helpers {
 						Settings.FormatDefaultBackground(),
 						abilityString);
 				}
-			} else if (player.PlayerClass == Player.PlayerClassType.Mage) {
+			} else if (player.PlayerClass == PlayerClassType.Mage) {
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -484,7 +486,7 @@ namespace DungeonGame.Helpers {
 			}
 		}
 		public static void ListSpells(Player player) {
-			if (player.PlayerClass == Player.PlayerClassType.Mage) {
+			if (player.PlayerClass == PlayerClassType.Mage) {
 				TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -498,7 +500,7 @@ namespace DungeonGame.Helpers {
 						Settings.FormatDefaultBackground(),
 						spellString);
 				}
-			} else if (player.PlayerClass != Player.PlayerClassType.Mage) {
+			} else if (player.PlayerClass != PlayerClassType.Mage) {
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -515,7 +517,7 @@ namespace DungeonGame.Helpers {
 			int index = player.Abilities.FindIndex(
 				f => f.Name == inputName || f.Name.Contains(inputName));
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			if (index != -1 && player.PlayerClass == Player.PlayerClassType.Warrior) {
+			if (index != -1 && player.PlayerClass == PlayerClassType.Warrior) {
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
@@ -531,40 +533,40 @@ namespace DungeonGame.Helpers {
 					Settings.FormatDefaultBackground(),
 					rageCostString);
 				switch (player.Abilities[index].WarAbilityCategory) {
-					case PlayerAbility.WarriorAbility.Slash:
+					case WarriorAbility.Slash:
 						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case PlayerAbility.WarriorAbility.Rend:
+					case WarriorAbility.Rend:
 						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case PlayerAbility.WarriorAbility.Charge:
+					case WarriorAbility.Charge:
 						PlayerAbility.StunAbilityInfo(player, index);
 						break;
-					case PlayerAbility.WarriorAbility.Block:
+					case WarriorAbility.Block:
 						PlayerAbility.DefenseAbilityInfo(player, index);
 						break;
-					case PlayerAbility.WarriorAbility.Berserk:
+					case WarriorAbility.Berserk:
 						PlayerAbility.BerserkAbilityInfo(player, index);
 						break;
-					case PlayerAbility.WarriorAbility.Disarm:
+					case WarriorAbility.Disarm:
 						PlayerAbility.DisarmAbilityInfo(player, index);
 						break;
-					case PlayerAbility.WarriorAbility.Bandage:
+					case WarriorAbility.Bandage:
 						PlayerAbility.BandageAbilityInfo(player, index);
 						break;
-					case PlayerAbility.WarriorAbility.PowerAura:
+					case WarriorAbility.PowerAura:
 						PlayerAbility.PowerAuraAbilityInfo(player, index);
 						break;
-					case PlayerAbility.WarriorAbility.WarCry:
+					case WarriorAbility.WarCry:
 						PlayerAbility.WarCryAbilityInfo(player, index);
 						break;
-					case PlayerAbility.WarriorAbility.Onslaught:
+					case WarriorAbility.Onslaught:
 						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-			} else if (index != -1 && player.PlayerClass == Player.PlayerClassType.Archer) {
+			} else if (index != -1 && player.PlayerClass == PlayerClassType.Archer) {
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
@@ -580,40 +582,40 @@ namespace DungeonGame.Helpers {
 					Settings.FormatDefaultBackground(),
 					comboCostString);
 				switch (player.Abilities[index].ArcAbilityCategory) {
-					case PlayerAbility.ArcherAbility.Distance:
+					case ArcherAbility.Distance:
 						PlayerAbility.DistanceAbilityInfo(player, index);
 						break;
-					case PlayerAbility.ArcherAbility.Gut:
+					case ArcherAbility.Gut:
 						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case PlayerAbility.ArcherAbility.Precise:
+					case ArcherAbility.Precise:
 						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case PlayerAbility.ArcherAbility.Stun:
+					case ArcherAbility.Stun:
 						PlayerAbility.StunAbilityInfo(player, index);
 						break;
-					case PlayerAbility.ArcherAbility.Double:
+					case ArcherAbility.Double:
 						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case PlayerAbility.ArcherAbility.Wound:
+					case ArcherAbility.Wound:
 						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case PlayerAbility.ArcherAbility.Bandage:
+					case ArcherAbility.Bandage:
 						PlayerAbility.BandageAbilityInfo(player, index);
 						break;
-					case PlayerAbility.ArcherAbility.SwiftAura:
+					case ArcherAbility.SwiftAura:
 						PlayerAbility.SwiftAuraAbilityInfo(player, index);
 						break;
-					case PlayerAbility.ArcherAbility.ImmolatingArrow:
+					case ArcherAbility.ImmolatingArrow:
 						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
-					case PlayerAbility.ArcherAbility.Ambush:
+					case ArcherAbility.Ambush:
 						PlayerAbility.OffenseDamageAbilityInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-			} else if (index != -1 && player.PlayerClass == Player.PlayerClassType.Mage) {
+			} else if (index != -1 && player.PlayerClass == PlayerClassType.Mage) {
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -636,7 +638,7 @@ namespace DungeonGame.Helpers {
 			int index = player.Spellbook.FindIndex(f =>
 				f.Name == inputName.ToString() || f.Name == input[1] || f.Name.Contains(inputName.ToString()));
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			if (index != -1 && player.PlayerClass == Player.PlayerClassType.Mage) {
+			if (index != -1 && player.PlayerClass == PlayerClassType.Mage) {
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatInfoText(),
 					Settings.FormatDefaultBackground(),
@@ -652,40 +654,40 @@ namespace DungeonGame.Helpers {
 					Settings.FormatDefaultBackground(),
 					manaCostString);
 				switch (player.Spellbook[index].SpellCategory) {
-					case PlayerSpell.SpellType.Fireball:
+					case SpellType.Fireball:
 						PlayerSpell.FireOffenseSpellInfo(player, index);
 						break;
-					case PlayerSpell.SpellType.Frostbolt:
+					case SpellType.Frostbolt:
 						PlayerSpell.FrostOffenseSpellInfo(player, index);
 						break;
-					case PlayerSpell.SpellType.Lightning:
+					case SpellType.Lightning:
 						PlayerSpell.ArcaneOffenseSpellInfo(player, index);
 						break;
-					case PlayerSpell.SpellType.Heal:
+					case SpellType.Heal:
 						PlayerSpell.HealingSpellInfo(player, index);
 						break;
-					case PlayerSpell.SpellType.Rejuvenate:
+					case SpellType.Rejuvenate:
 						PlayerSpell.HealingSpellInfo(player, index);
 						break;
-					case PlayerSpell.SpellType.Diamondskin:
+					case SpellType.Diamondskin:
 						PlayerSpell.AugmentArmorSpellInfo(player, index);
 						break;
-					case PlayerSpell.SpellType.TownPortal:
+					case SpellType.TownPortal:
 						PlayerSpell.PortalSpellInfo();
 						break;
-					case PlayerSpell.SpellType.Reflect:
+					case SpellType.Reflect:
 						PlayerSpell.ReflectDamageSpellInfo(player, index);
 						break;
-					case PlayerSpell.SpellType.ArcaneIntellect:
+					case SpellType.ArcaneIntellect:
 						PlayerSpell.ArcaneIntellectSpellInfo(player, index);
 						break;
-					case PlayerSpell.SpellType.FrostNova:
+					case SpellType.FrostNova:
 						PlayerSpell.FrostOffenseSpellInfo(player, index);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-			} else if (index != -1 && player.PlayerClass != Player.PlayerClassType.Mage) {
+			} else if (index != -1 && player.PlayerClass != PlayerClassType.Mage) {
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -706,8 +708,8 @@ namespace DungeonGame.Helpers {
 				}
 			}
 			int index = player.QuestLog.FindIndex(f =>
-				f._Name.ToLower() == inputName.ToString() || f._Name.ToLower() == input[1] ||
-				f._Name.ToLower().Contains(inputName.ToString()));
+				f.Name.ToLower() == inputName.ToString() || f.Name.ToLower() == input[1] ||
+				f.Name.ToLower().Contains(inputName.ToString()));
 			if (index != -1) {
 				player.QuestLog[index].ShowQuest();
 			} else {
@@ -718,28 +720,28 @@ namespace DungeonGame.Helpers {
 			}
 		}
 		public static int CalculateAbilityDamage(Player player, Monster opponent, int index) {
-			if (player.Abilities[index].DamageGroup == PlayerAbility.DamageType.Physical) {
-				return player.Abilities[index].Offensive._Amount;
+			if (player.Abilities[index].DamageGroup == DamageType.Physical) {
+				return player.Abilities[index].Offensive.Amount;
 			}
 			double damageReductionPercentage = player.Abilities[index].DamageGroup switch {
-				PlayerAbility.DamageType.Fire => opponent.FireResistance / 100.0,
-				PlayerAbility.DamageType.Frost => opponent.FrostResistance / 100.0,
-				PlayerAbility.DamageType.Arcane => opponent.ArcaneResistance / 100.0,
+				DamageType.Fire => opponent.FireResistance / 100.0,
+				DamageType.Frost => opponent.FrostResistance / 100.0,
+				DamageType.Arcane => opponent.ArcaneResistance / 100.0,
 				_ => 0.0
 			};
-			return (int)(player.Abilities[index].Offensive._Amount * (1 - damageReductionPercentage));
+			return (int)(player.Abilities[index].Offensive.Amount * (1 - damageReductionPercentage));
 		}
 		public static int CalculateSpellDamage(Player player, Monster opponent, int index) {
-			if (player.Spellbook[index].DamageGroup == PlayerSpell.DamageType.Physical) {
-				return player.Spellbook[index].Offensive._Amount;
+			if (player.Spellbook[index].DamageGroup == DamageType.Physical) {
+				return player.Spellbook[index].Offensive.Amount;
 			}
 			double damageReductionPercentage = player.Spellbook[index].DamageGroup switch {
-				PlayerSpell.DamageType.Fire => opponent.FireResistance / 100.0,
-				PlayerSpell.DamageType.Frost => opponent.FrostResistance / 100.0,
-				PlayerSpell.DamageType.Arcane => opponent.ArcaneResistance / 100.0,
+				DamageType.Fire => opponent.FireResistance / 100.0,
+				DamageType.Frost => opponent.FrostResistance / 100.0,
+				DamageType.Arcane => opponent.ArcaneResistance / 100.0,
 				_ => 0.0
 			};
-			return (int)(player.Spellbook[index].Offensive._Amount * (1 - damageReductionPercentage));
+			return (int)(player.Spellbook[index].Offensive.Amount * (1 - damageReductionPercentage));
 		}
 	}
 }

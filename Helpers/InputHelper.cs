@@ -1,6 +1,8 @@
 using DungeonGame.Coordinates;
 using DungeonGame.Items;
+using DungeonGame.Items.ArmorObjects;
 using DungeonGame.Items.Equipment;
+using DungeonGame.Items.WeaponObjects;
 using DungeonGame.Players;
 using DungeonGame.Rooms;
 using System;
@@ -32,7 +34,7 @@ namespace DungeonGame.Helpers {
 			return parsedInput;
 		}
 		public static void ProcessUserInput(Player player, string[] input, Timer globalTimer) {
-			IRoom playerRoom = RoomHelper._Rooms[player.PlayerLocation];
+			IRoom playerRoom = RoomHelper.Rooms[player.PlayerLocation];
 			TownRoom isTownRoom = playerRoom as TownRoom;
 			int playerX = player.PlayerLocation.X;
 			int playerY = player.PlayerLocation.Y;
@@ -53,7 +55,7 @@ namespace DungeonGame.Helpers {
 								} else {
 									input = input.Take(input.Count() - 1).ToArray();
 								}
-								isTownRoom?._Vendor.BuyItem(player, input, quantity);
+								isTownRoom?.Vendor.BuyItem(player, input, quantity);
 							} catch (NullReferenceException) {
 								OutputHelper.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
@@ -81,7 +83,7 @@ namespace DungeonGame.Helpers {
 							Settings.FormatDefaultBackground(),
 							"You don't have that spell.");
 					} catch (NullReferenceException) {
-						if (player.PlayerClass != Player.PlayerClassType.Mage) {
+						if (player.PlayerClass != PlayerClassType.Mage) {
 							OutputHelper.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -91,7 +93,7 @@ namespace DungeonGame.Helpers {
 						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
-							player.PlayerClass != Player.PlayerClassType.Mage
+							player.PlayerClass != PlayerClassType.Mage
 								? "You can't cast spells. You're not a mage!"
 								: "You do not have enough mana to cast that spell!");
 					}
@@ -107,7 +109,7 @@ namespace DungeonGame.Helpers {
 						if (input.Contains("distance")) {
 							player.UseAbility(input);
 						} else if (input.Contains("ambush")) {
-							player.UseAbility(playerRoom._Monster, input);
+							player.UseAbility(playerRoom.Monster, input);
 							playerRoom.AttackOpponent(player, input, globalTimer);
 						} else if (input[1] != null) {
 							player.UseAbility(input);
@@ -124,7 +126,7 @@ namespace DungeonGame.Helpers {
 							Settings.FormatDefaultBackground(),
 							"You don't have that ability.");
 					} catch (NullReferenceException) {
-						if (player.PlayerClass == Player.PlayerClassType.Mage) {
+						if (player.PlayerClass == PlayerClassType.Mage) {
 							OutputHelper.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -132,21 +134,21 @@ namespace DungeonGame.Helpers {
 						}
 					} catch (InvalidOperationException) {
 						switch (player.PlayerClass) {
-							case Player.PlayerClassType.Warrior:
+							case PlayerClassType.Warrior:
 								OutputHelper.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"You do not have enough rage to use that ability!");
 								break;
-							case Player.PlayerClassType.Archer:
+							case PlayerClassType.Archer:
 								OutputHelper.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
-									player.PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow
+									player.PlayerWeapon.WeaponGroup != WeaponType.Bow
 										? "You do not have a bow equipped!"
 										: "You do not have enough combo points to use that ability!");
 								break;
-							case Player.PlayerClassType.Mage:
+							case PlayerClassType.Mage:
 								OutputHelper.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
@@ -247,10 +249,10 @@ namespace DungeonGame.Helpers {
 					try {
 						if (input[1] != null) {
 							try {
-								if (isTownRoom?._Trainer != null) {
-									isTownRoom?._Trainer.CompleteQuest(player, input);
+								if (isTownRoom?.Trainer != null) {
+									isTownRoom?.Trainer.CompleteQuest(player, input);
 								} else {
-									isTownRoom?._Vendor.CompleteQuest(player, input);
+									isTownRoom?.Vendor.CompleteQuest(player, input);
 								}
 							} catch (NullReferenceException) {
 								OutputHelper.Display.StoreUserOutput(
@@ -309,7 +311,7 @@ namespace DungeonGame.Helpers {
 					GameHelper.SaveGame(player);
 					break;
 				case "restore":
-					isTownRoom?._Vendor.RestorePlayer(player);
+					isTownRoom?.Vendor.RestorePlayer(player);
 					break;
 				case "help":
 					Messages.ShowCommandHelp();
@@ -318,7 +320,7 @@ namespace DungeonGame.Helpers {
 					try {
 						if (input[1] != null) {
 							try {
-								isTownRoom?._Vendor.SellItem(player, input);
+								isTownRoom?.Vendor.SellItem(player, input);
 							} catch (NullReferenceException) {
 								OutputHelper.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
@@ -344,11 +346,11 @@ namespace DungeonGame.Helpers {
 										}
 
 										string[] itemNameArray = new[] { input[0], item.Name };
-										isTownRoom._Vendor.RepairItem(player, itemNameArray, true);
+										isTownRoom.Vendor.RepairItem(player, itemNameArray, true);
 									}
 									break;
 								}
-								isTownRoom._Vendor.RepairItem(player, input, false);
+								isTownRoom.Vendor.RepairItem(player, input, false);
 							}
 						}
 					} catch (IndexOutOfRangeException) {
@@ -367,10 +369,10 @@ namespace DungeonGame.Helpers {
 					try {
 						if (input[1] != null) {
 							if (isTownRoom != null) {
-								if (player.PlayerClass == Player.PlayerClassType.Mage) {
-									isTownRoom._Trainer.UpgradeSpell(player, ParseInput(input));
+								if (player.PlayerClass == PlayerClassType.Mage) {
+									isTownRoom.Trainer.UpgradeSpell(player, ParseInput(input));
 								} else {
-									isTownRoom._Trainer.UpgradeAbility(player, ParseInput(input));
+									isTownRoom.Trainer.UpgradeAbility(player, ParseInput(input));
 								}
 							}
 						}
@@ -390,10 +392,10 @@ namespace DungeonGame.Helpers {
 					try {
 						if (input[1] != null) {
 							if (isTownRoom != null) {
-								if (player.PlayerClass == Player.PlayerClassType.Mage) {
-									isTownRoom._Trainer.TrainSpell(player, ParseInput(input));
+								if (player.PlayerClass == PlayerClassType.Mage) {
+									isTownRoom.Trainer.TrainSpell(player, ParseInput(input));
 								} else {
-									isTownRoom._Trainer.TrainAbility(player, ParseInput(input));
+									isTownRoom.Trainer.TrainAbility(player, ParseInput(input));
 								}
 							}
 						}
@@ -411,10 +413,10 @@ namespace DungeonGame.Helpers {
 					break;
 				case "consider":
 					try {
-						if (isTownRoom?._Trainer != null) {
-							isTownRoom._Trainer.OfferQuest(player, input);
+						if (isTownRoom?.Trainer != null) {
+							isTownRoom.Trainer.OfferQuest(player, input);
 						} else {
-							isTownRoom?._Vendor.OfferQuest(player, input);
+							isTownRoom?.Vendor.OfferQuest(player, input);
 						}
 					} catch (IndexOutOfRangeException) {
 						OutputHelper.Display.StoreUserOutput(
@@ -432,7 +434,7 @@ namespace DungeonGame.Helpers {
 					try {
 						if (input[1].Contains("forsale")) {
 							try {
-								isTownRoom?._Vendor.DisplayGearForSale();
+								isTownRoom?.Vendor.DisplayGearForSale();
 							} catch (NullReferenceException) {
 								OutputHelper.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
@@ -442,7 +444,7 @@ namespace DungeonGame.Helpers {
 						}
 						if (input[1].Contains("upgrade")) {
 							try {
-								isTownRoom?._Trainer.DisplayAvailableUpgrades(player);
+								isTownRoom?.Trainer.DisplayAvailableUpgrades(player);
 							} catch (NullReferenceException) {
 								OutputHelper.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
@@ -452,10 +454,10 @@ namespace DungeonGame.Helpers {
 						}
 						if (input[1].Contains("quests")) {
 							try {
-								if (isTownRoom?._Trainer != null) {
-									isTownRoom._Trainer.ShowQuestList(player);
+								if (isTownRoom?.Trainer != null) {
+									isTownRoom.Trainer.ShowQuestList(player);
 								} else {
-									isTownRoom?._Vendor.ShowQuestList(player);
+									isTownRoom?.Vendor.ShowQuestList(player);
 								}
 							} catch (NullReferenceException) {
 								OutputHelper.Display.StoreUserOutput(
@@ -473,7 +475,7 @@ namespace DungeonGame.Helpers {
 					break;
 				case "n":
 				case "north":
-					if (playerRoom._North != null) {
+					if (playerRoom.North != null) {
 						try {
 							Coordinate newCoord = new Coordinate(playerX, playerY + 1, playerZ);
 							RoomHelper.ChangeRoom(player, newCoord);
@@ -486,7 +488,7 @@ namespace DungeonGame.Helpers {
 					break;
 				case "s":
 				case "south":
-					if (playerRoom._South != null) {
+					if (playerRoom.South != null) {
 						try {
 							Coordinate newCoord = new Coordinate(playerX, playerY - 1, playerZ);
 							RoomHelper.ChangeRoom(player, newCoord);
@@ -499,7 +501,7 @@ namespace DungeonGame.Helpers {
 					break;
 				case "e":
 				case "east":
-					if (playerRoom._East != null) {
+					if (playerRoom.East != null) {
 						try {
 							Coordinate newCoord = new Coordinate(playerX + 1, playerY, playerZ);
 							RoomHelper.ChangeRoom(player, newCoord);
@@ -512,7 +514,7 @@ namespace DungeonGame.Helpers {
 					break;
 				case "w":
 				case "west":
-					if (playerRoom._West != null) {
+					if (playerRoom.West != null) {
 						try {
 							Coordinate newCoord = new Coordinate(playerX - 1, playerY, playerZ);
 							RoomHelper.ChangeRoom(player, newCoord);
@@ -525,7 +527,7 @@ namespace DungeonGame.Helpers {
 					break;
 				case "ne":
 				case "northeast":
-					if (playerRoom._NorthEast != null) {
+					if (playerRoom.NorthEast != null) {
 						try {
 							Coordinate newCoord = new Coordinate(playerX + 1, playerY + 1, playerZ);
 							RoomHelper.ChangeRoom(player, newCoord);
@@ -538,7 +540,7 @@ namespace DungeonGame.Helpers {
 					break;
 				case "nw":
 				case "northwest":
-					if (playerRoom._NorthWest != null) {
+					if (playerRoom.NorthWest != null) {
 						try {
 							Coordinate newCoord = new Coordinate(playerX - 1, playerY + 1, playerZ);
 							RoomHelper.ChangeRoom(player, newCoord);
@@ -551,7 +553,7 @@ namespace DungeonGame.Helpers {
 					break;
 				case "se":
 				case "southeast":
-					if (playerRoom._SouthEast != null) {
+					if (playerRoom.SouthEast != null) {
 						try {
 							Coordinate newCoord = new Coordinate(playerX + 1, playerY - 1, playerZ);
 							RoomHelper.ChangeRoom(player, newCoord);
@@ -564,7 +566,7 @@ namespace DungeonGame.Helpers {
 					break;
 				case "sw":
 				case "southwest":
-					if (playerRoom._SouthWest != null) {
+					if (playerRoom.SouthWest != null) {
 						try {
 							Coordinate newCoord = new Coordinate(playerX - 1, playerY - 1, playerZ);
 							RoomHelper.ChangeRoom(player, newCoord);
@@ -577,7 +579,7 @@ namespace DungeonGame.Helpers {
 					break;
 				case "u":
 				case "up":
-					if (playerRoom._Up != null) {
+					if (playerRoom.Up != null) {
 						try {
 							Coordinate newCoord = new Coordinate(playerX, playerY, playerZ + 1);
 							RoomHelper.ChangeRoom(player, newCoord);
@@ -590,7 +592,7 @@ namespace DungeonGame.Helpers {
 					break;
 				case "d":
 				case "down":
-					if (playerRoom._Down != null) {
+					if (playerRoom.Down != null) {
 						try {
 							Coordinate newCoord = new Coordinate(playerX, playerY, playerZ - 1);
 							RoomHelper.ChangeRoom(player, newCoord);

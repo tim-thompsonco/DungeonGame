@@ -45,11 +45,11 @@ namespace DungeonGame.Helpers {
 					int mapY = i;
 					int mapZ = playerZ;
 					Coordinate findCoord = new Coordinate(mapX, mapY, mapZ);
-					if (RoomHelper._Rooms.ContainsKey(findCoord)) {
-						IRoom room = RoomHelper._Rooms[findCoord];
-						if (room._IsDiscovered) {
+					if (RoomHelper.Rooms.ContainsKey(findCoord)) {
+						IRoom room = RoomHelper.Rooms[findCoord];
+						if (room.IsDiscovered) {
 							if (j == startLeftPos) {
-								if (room._Up != null || room._Down != null) {
+								if (room.Up != null || room.Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDefaultBackground()); // Background color
 									sameLineOutput.Add(Settings.GetLeftMapBorderSizeTwo()); // What prints to display
@@ -65,7 +65,7 @@ namespace DungeonGame.Helpers {
 									sameLineOutput.Add(Settings.GetEmptyMapTileSizeTwo()); // What prints to display
 								}
 							} else if (j == endRightPos) {
-								if (room._Up != null || room._Down != null) {
+								if (room.Up != null || room.Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display
@@ -81,7 +81,7 @@ namespace DungeonGame.Helpers {
 									sameLineOutput.Add(Settings.GetRightMapBorderSizeTwo()); // What prints to display
 								}
 							} else if (mapX == playerX && mapY == playerY && mapZ == playerZ) {
-								if (room._Up != null || room._Down != null) {
+								if (room.Up != null || room.Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatPlayerTile()); // Background color
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display
@@ -91,7 +91,7 @@ namespace DungeonGame.Helpers {
 									sameLineOutput.Add(Settings.GetEmptyMapTileSizeTwo()); // What prints to display
 								}
 							} else {
-								if (room._Up != null || room._Down != null) {
+								if (room.Up != null || room.Down != null) {
 									sameLineOutput.Add(Settings.FormatUpDownIndicator()); // Foreground color
 									sameLineOutput.Add(Settings.FormatDiscoveredTile()); // Background color
 									sameLineOutput.Add(Settings.GetUpDownMapTile()); // What prints to display
@@ -157,20 +157,13 @@ namespace DungeonGame.Helpers {
 				"Player _Effects:");
 			int activeEffects = 0;
 			foreach (IEffect effect in player.Effects) {
-				string effectOutput;
-				if (player.InCombat) {
-					if (effect.MaxRound + 1 - effect.CurrentRound > 1) {
-						effectOutput = $"({effect.MaxRound + 1 - effect.CurrentRound} rounds) {_textInfo.ToTitleCase(effect.Name)}";
-					} else {
-						effectOutput = $"({effect.MaxRound + 1 - effect.CurrentRound} round) {_textInfo.ToTitleCase(effect.Name)}";
-					}
-				} else {
-					if (effect.MaxRound + 1 - effect.CurrentRound > 1) {
-						effectOutput = $"({(effect.MaxRound + 1 - effect.CurrentRound) * effect.TickDuration} seconds) {_textInfo.ToTitleCase(effect.Name)}";
-					} else {
-						effectOutput = $"({(effect.MaxRound + 1 - effect.CurrentRound) * effect.TickDuration} second) {_textInfo.ToTitleCase(effect.Name)}";
-					}
-				}
+				string effectOutput = player.InCombat
+					? effect.MaxRound + 1 - effect.CurrentRound > 1
+						? $"({effect.MaxRound + 1 - effect.CurrentRound} rounds) {_textInfo.ToTitleCase(effect.Name)}"
+						: $"({effect.MaxRound + 1 - effect.CurrentRound} round) {_textInfo.ToTitleCase(effect.Name)}"
+					: effect.MaxRound + 1 - effect.CurrentRound > 1
+						? $"({(effect.MaxRound + 1 - effect.CurrentRound) * effect.TickDuration} seconds) {_textInfo.ToTitleCase(effect.Name)}"
+						: $"({(effect.MaxRound + 1 - effect.CurrentRound) * effect.TickDuration} second) {_textInfo.ToTitleCase(effect.Name)}";
 				activeEffects++;
 				if (effect.IsHarmful) {
 					badEffectUserOutput.StoreUserOutput(
@@ -219,14 +212,14 @@ namespace DungeonGame.Helpers {
 				"Player Quests:");
 			int quests = 0;
 			foreach (Quest quest in player.QuestLog) {
-				string questOutput = quest._QuestCategory switch {
-					Quest.QuestType.KillCount => $"{_textInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} monsters)",
-					Quest.QuestType.KillMonster => $"{_textInfo.ToTitleCase(quest._Name)} ({quest._CurrentKills}/{quest._RequiredKills} {quest._MonsterKillType}s)",
-					Quest.QuestType.ClearLevel => $"{_textInfo.ToTitleCase(quest._Name)} (Lvl: {quest._TargetLevel} | {quest._MonstersRemaining} monsters left)",
+				string questOutput = quest.QuestCategory switch {
+					QuestType.KillCount => $"{_textInfo.ToTitleCase(quest.Name)} ({quest.CurrentKills}/{quest.RequiredKills} monsters)",
+					QuestType.KillMonster => $"{_textInfo.ToTitleCase(quest.Name)} ({quest.CurrentKills}/{quest.RequiredKills} {quest.MonsterKillType}s)",
+					QuestType.ClearLevel => $"{_textInfo.ToTitleCase(quest.Name)} (Lvl: {quest.TargetLevel} | {quest.MonstersRemaining} monsters left)",
 					_ => throw new ArgumentOutOfRangeException()
 				};
 				StringBuilder questStringBuilder = new StringBuilder(questOutput);
-				if (quest._QuestCompleted) {
+				if (quest.QuestCompleted) {
 					questStringBuilder.Append(" (Complete)");
 				}
 
@@ -258,7 +251,7 @@ namespace DungeonGame.Helpers {
 		public static void ShowUserOutput(Player player, Monster opponent) {
 			PlayerHelper.DisplayPlayerStats(player);
 			MonsterHelper.DisplayStats(opponent);
-			RoomHelper._Rooms[player.PlayerLocation].ShowCommands();
+			RoomHelper.Rooms[player.PlayerLocation].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = ShowEffects(player);
 			QuestDisplay = ShowQuests(player);
@@ -268,7 +261,7 @@ namespace DungeonGame.Helpers {
 
 		public static void ShowUserOutput(Player player) {
 			PlayerHelper.DisplayPlayerStats(player);
-			RoomHelper._Rooms[player.PlayerLocation].ShowCommands();
+			RoomHelper.Rooms[player.PlayerLocation].ShowCommands();
 			MapDisplay = BuildMap(player, Settings.GetMiniMapHeight(), Settings.GetMiniMapWidth());
 			EffectDisplay = ShowEffects(player);
 			QuestDisplay = ShowQuests(player);

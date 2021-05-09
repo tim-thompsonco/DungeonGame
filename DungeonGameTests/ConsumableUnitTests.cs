@@ -2,8 +2,10 @@
 using DungeonGame.Effects;
 using DungeonGame.Helpers;
 using DungeonGame.Items;
+using DungeonGame.Items.ArmorObjects;
 using DungeonGame.Items.Consumables.Kits;
 using DungeonGame.Items.Consumables.Potions;
+using DungeonGame.Items.WeaponObjects;
 using DungeonGame.Players;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -16,7 +18,7 @@ namespace DungeonGameTests {
 		[Test]
 		public void HealthPotionUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Archer) {
+			Player player = new Player("test", PlayerClassType.Archer) {
 				MaxHitPoints = 100,
 				HitPoints = 10,
 				Inventory = new List<IItem> { new HealthPotion(PotionStrength.Minor) }
@@ -39,7 +41,7 @@ namespace DungeonGameTests {
 		[Test]
 		public void ManaPotionUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage) {
+			Player player = new Player("test", PlayerClassType.Mage) {
 				MaxManaPoints = 100,
 				ManaPoints = 10,
 				Inventory = new List<IItem> { new ManaPotion(PotionStrength.Minor) }
@@ -62,8 +64,8 @@ namespace DungeonGameTests {
 		[Test]
 		public void ConstitutionPotionUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage) {
-				Inventory = new List<IItem> { new StatPotion(PotionStrength.Minor, StatPotion.StatType.Constitution) }
+			Player player = new Player("test", PlayerClassType.Mage) {
+				Inventory = new List<IItem> { new StatPotion(PotionStrength.Minor, StatType.Constitution) }
 			};
 			int potionIndex = player.Inventory.FindIndex(f => f.GetType() == typeof(StatPotion));
 			string[] input = new[] { "drink", "constitution" };
@@ -71,7 +73,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("constitution", potionName);
 			StatPotion potion = player.Inventory[potionIndex] as StatPotion;
 			int statAmount = potion.StatAmount;
-			StatPotion.StatType statType = potion.StatPotionType;
+			StatType statType = potion.StatPotionType;
 			int baseConst = player.Constitution;
 			int baseMaxHitPoints = player.MaxHitPoints;
 			player.AttemptDrinkPotion(InputHelper.ParseInput(input));
@@ -97,8 +99,8 @@ namespace DungeonGameTests {
 		[Test]
 		public void IntelligencePotionUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage) {
-				Inventory = new List<IItem> { new StatPotion(PotionStrength.Minor, StatPotion.StatType.Intelligence) }
+			Player player = new Player("test", PlayerClassType.Mage) {
+				Inventory = new List<IItem> { new StatPotion(PotionStrength.Minor, StatType.Intelligence) }
 			};
 			int potionIndex = player.Inventory.FindIndex(f => f.GetType() == typeof(StatPotion));
 			string[] input = new[] { "drink", "intelligence" };
@@ -106,7 +108,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("intelligence", potionName);
 			StatPotion potion = player.Inventory[potionIndex] as StatPotion;
 			int statAmount = potion.StatAmount;
-			StatPotion.StatType statType = potion.StatPotionType;
+			StatType statType = potion.StatPotionType;
 			int baseInt = player.Intelligence;
 			int? baseMaxManaPoints = player.MaxManaPoints;
 			player.AttemptDrinkPotion(InputHelper.ParseInput(input));
@@ -132,8 +134,8 @@ namespace DungeonGameTests {
 		[Test]
 		public void StrengthPotionUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage) {
-				Inventory = new List<IItem> { new StatPotion(PotionStrength.Minor, StatPotion.StatType.Strength) }
+			Player player = new Player("test", PlayerClassType.Mage) {
+				Inventory = new List<IItem> { new StatPotion(PotionStrength.Minor, StatType.Strength) }
 			};
 			int potionIndex = player.Inventory.FindIndex(f => f.GetType() == typeof(StatPotion));
 			string[] input = new[] { "drink", "strength" };
@@ -141,7 +143,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("strength", potionName);
 			StatPotion potion = player.Inventory[potionIndex] as StatPotion;
 			int statAmount = potion.StatAmount;
-			StatPotion.StatType statType = potion.StatPotionType;
+			StatType statType = potion.StatPotionType;
 			int baseStr = player.Strength;
 			int baseMaxCarryWeight = player.MaxCarryWeight;
 			player.AttemptDrinkPotion(InputHelper.ParseInput(input));
@@ -167,8 +169,8 @@ namespace DungeonGameTests {
 		[Test]
 		public void DexterityPotionUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage) {
-				Inventory = new List<IItem> { new StatPotion(PotionStrength.Minor, StatPotion.StatType.Dexterity) }
+			Player player = new Player("test", PlayerClassType.Mage) {
+				Inventory = new List<IItem> { new StatPotion(PotionStrength.Minor, StatType.Dexterity) }
 			};
 			int potionIndex = player.Inventory.FindIndex(f => f.GetType() == typeof(StatPotion));
 			string[] input = new[] { "drink", "dexterity" };
@@ -176,7 +178,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual("dexterity", potionName);
 			StatPotion potion = player.Inventory[potionIndex] as StatPotion;
 			int statAmount = potion.StatAmount;
-			StatPotion.StatType statType = potion.StatPotionType;
+			StatType statType = potion.StatPotionType;
 			int baseDex = player.Dexterity;
 			double baseDodgeChance = player.DodgeChance;
 			player.AttemptDrinkPotion(InputHelper.ParseInput(input));
@@ -201,8 +203,8 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void ArmorUpgradeKitUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
-			player.Inventory.Add(new ArmorKit(KitLevel.Light, ArmorKit.KitType.Cloth));
+			Player player = new Player("test", PlayerClassType.Mage);
+			player.Inventory.Add(new ArmorKit(KitLevel.Light, ArmorKit.ArmorKitType.Cloth));
 			GearHelper.EquipInitialGear(player);
 			OutputHelper.Display.ClearUserOutput();
 			int armorIndex = player.Inventory.FindIndex(f => f.Name.Contains("cloth"));
@@ -229,7 +231,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(upgradeSuccess, OutputHelper.Display.Output[2][2]);
 			Assert.AreEqual(armorAmount + kitAmount, armor.ArmorRating);
 			Assert.AreEqual(0, player.Inventory.FindAll(item => item is IKit).Count);
-			player.Inventory.Add(new ArmorKit(KitLevel.Light, ArmorKit.KitType.Leather));
+			player.Inventory.Add(new ArmorKit(KitLevel.Light, ArmorKit.ArmorKitType.Leather));
 			kitName = player.Inventory.Find(item => item is ArmorKit).Name;
 			input = new[] { "enhance", armorName, kitName };
 			GearHelper.UseArmorKit(player, input);
@@ -239,8 +241,8 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void WeaponUpgradeKitUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
-			player.Inventory.Add(new WeaponKit(KitLevel.Light, WeaponKit.KitType.Grindstone));
+			Player player = new Player("test", PlayerClassType.Mage);
+			player.Inventory.Add(new WeaponKit(KitLevel.Light, WeaponKit.WeaponKitType.Grindstone));
 			GearHelper.EquipInitialGear(player);
 			OutputHelper.Display.ClearUserOutput();
 			int weaponIndex = player.Inventory.FindIndex(f => f.Name.Contains("dagger"));
@@ -251,7 +253,7 @@ namespace DungeonGameTests {
 			int kitAmount = weaponKit.KitAugmentAmount;
 			string kitName = weaponKit.Name;
 			string[] input = new[] { "enhance", "doesn't exist", kitName };
-			int weaponAmount = weapon._RegDamage;
+			int weaponAmount = weapon.RegDamage;
 			GearHelper.UseWeaponKit(player, input);
 			const string upgradeFail = "What weapon did you want to upgrade?";
 			Assert.AreEqual(upgradeFail, OutputHelper.Display.Output[0][2]);
@@ -265,9 +267,9 @@ namespace DungeonGameTests {
 			GearHelper.UseWeaponKit(player, input);
 			string upgradeSuccess = $"You upgraded {weaponName} with a weapon kit.";
 			Assert.AreEqual(upgradeSuccess, OutputHelper.Display.Output[2][2]);
-			Assert.AreEqual(weaponAmount + kitAmount, weapon._RegDamage);
+			Assert.AreEqual(weaponAmount + kitAmount, weapon.RegDamage);
 			Assert.AreEqual(0, player.Inventory.FindAll(item => item is IKit).Count);
-			player.Inventory.Add(new WeaponKit(KitLevel.Light, WeaponKit.KitType.Bowstring));
+			player.Inventory.Add(new WeaponKit(KitLevel.Light, WeaponKit.WeaponKitType.Bowstring));
 			weaponKit = player.Inventory.Find(item => item is WeaponKit) as WeaponKit;
 			kitName = weaponKit.Name;
 			input = new[] { "enhance", weaponName, kitName };
@@ -275,7 +277,7 @@ namespace DungeonGameTests {
 			string enhanceFail = $"You can't upgrade {weaponName} with that!";
 			Assert.IsNotEmpty(player.Inventory);
 			Assert.AreEqual(enhanceFail, OutputHelper.Display.Output[3][2]);
-			player.Inventory.Add(new Weapon(1, Weapon.WeaponType.Bow));
+			player.Inventory.Add(new Weapon(1, WeaponType.Bow));
 			weapon = player.Inventory.Find(item => item is Weapon && item.Name.ToLower().Contains("bow")) as Weapon;
 			weapon.Equipped = true;
 			weaponName = textInfo.ToTitleCase(weapon.Name);

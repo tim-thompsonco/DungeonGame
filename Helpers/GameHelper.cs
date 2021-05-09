@@ -12,19 +12,19 @@ using System.Threading.Tasks;
 
 namespace DungeonGame.Helpers {
 	public static class GameHelper {
-		private static readonly Random _rndGenerate = new Random();
 		public static bool IsGameOver { get; set; }
-		private static int GameTicks { get; set; }
+		private static readonly Random _rndGenerate = new Random();
+		private static int _gameTicks;
 
 		public static void CheckStatus(Player player) {
-			GameTicks++;
+			_gameTicks++;
 
-			if (GameTicks % player.StatReplenishInterval == 0) {
+			if (_gameTicks % player.StatReplenishInterval == 0) {
 				ReplenishStatsOverTime(player);
 			}
 
 			if (player.Effects.Any()) {
-				foreach (IEffect effect in player.Effects.Where(effect => GameTicks % effect.TickDuration == 0).ToList()) {
+				foreach (IEffect effect in player.Effects.Where(effect => _gameTicks % effect.TickDuration == 0).ToList()) {
 					if (effect is HealingEffect healingEffect) {
 						healingEffect.ProcessHealingRound(player);
 					} else if (effect is ChangePlayerDamageEffect changePlayerDmgEffect && !player.InCombat && effect.Name.Contains("berserk")) {
@@ -59,12 +59,12 @@ namespace DungeonGame.Helpers {
 				}
 			}
 
-			foreach (IRoom room in RoomHelper._Rooms.Values) {
-				foreach (IName roomObject in room._RoomObjects.Where(
+			foreach (IRoom room in RoomHelper.Rooms.Values) {
+				foreach (IName roomObject in room.RoomObjects.Where(
 					roomObject => roomObject?.GetType() == typeof(Monster))) {
 					Monster monster = (Monster)roomObject;
 					RemovedExpiredEffectsAsync(monster);
-					if (GameTicks % monster.StatReplenishInterval == 0 && monster.HitPoints > 0) {
+					if (_gameTicks % monster.StatReplenishInterval == 0 && monster.HitPoints > 0) {
 						ReplenishStatsOverTime(monster);
 					}
 
@@ -72,7 +72,7 @@ namespace DungeonGame.Helpers {
 						continue;
 					}
 
-					foreach (IEffect effect in monster.Effects.Where(effect => GameTicks % effect.TickDuration == 0).ToList()) {
+					foreach (IEffect effect in monster.Effects.Where(effect => _gameTicks % effect.TickDuration == 0).ToList()) {
 						if (effect is BurningEffect burningEffect) {
 							burningEffect.ProcessBurningRound(monster);
 						} else if (effect is FrozenEffect frozenEffect) {
@@ -132,19 +132,19 @@ namespace DungeonGame.Helpers {
 			}
 
 			switch (player.PlayerClass) {
-				case Player.PlayerClassType.Mage:
+				case PlayerClassType.Mage:
 					if (player.ManaPoints < player.MaxManaPoints) {
 						player.ManaPoints++;
 					}
 
 					break;
-				case Player.PlayerClassType.Warrior:
+				case PlayerClassType.Warrior:
 					if (player.RagePoints < player.MaxRagePoints) {
 						player.RagePoints++;
 					}
 
 					break;
-				case Player.PlayerClassType.Archer:
+				case PlayerClassType.Archer:
 					if (player.ComboPoints < player.MaxComboPoints) {
 						player.ComboPoints++;
 					}
@@ -197,7 +197,7 @@ namespace DungeonGame.Helpers {
 					TypeNameHandling = TypeNameHandling.Auto,
 					NullValueHandling = NullValueHandling.Ignore
 				};
-				RoomHelper._Rooms = JsonConvert.DeserializeObject<Dictionary<Coordinate, IRoom>>(File.ReadAllText(
+				RoomHelper.Rooms = JsonConvert.DeserializeObject<Dictionary<Coordinate, IRoom>>(File.ReadAllText(
 					"gamesave.json"), serializerSettings);
 				// Insert blank space before game reload info for formatting
 				OutputHelper.Display.StoreUserOutput(
@@ -215,7 +215,7 @@ namespace DungeonGame.Helpers {
 					"");
 			} catch (FileNotFoundException) {
 				// Create new dungeon
-				RoomHelper._Rooms = new RoomBuilder(200, 10, 0, 4, 0).RetrieveSpawnRooms();
+				RoomHelper.Rooms = new RoomBuilder(200, 10, 0, 4, 0).RetrieveSpawnRooms();
 			}
 		}
 
@@ -263,7 +263,7 @@ namespace DungeonGame.Helpers {
 				serializerRooms.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
 				using (StreamWriter sw = new StreamWriter("gamesave.json"))
 				using (JsonTextWriter writer = new JsonTextWriter(sw)) {
-					serializerRooms.Serialize(writer, RoomHelper._Rooms, typeof(Dictionary<Coordinate, IRoom>));
+					serializerRooms.Serialize(writer, RoomHelper.Rooms, typeof(Dictionary<Coordinate, IRoom>));
 				}
 				outputString = "Your game has been saved.";
 				OutputHelper.Display.StoreUserOutput(

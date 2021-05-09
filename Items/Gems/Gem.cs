@@ -29,11 +29,7 @@
 		private void SetGemName() {
 			// Gem naming format is "<gem type>" for normal gem
 			// Gem naming format is "<gem level> <gem type>" for chipped or dull gems
-			if (_gemLevel == GemLevel.Normal) {
-				Name = _gemType.ToString().ToLower();
-			} else {
-				Name = $"{_gemLevel} {_gemType}".ToLower();
-			}
+			Name = _gemLevel == GemLevel.Normal ? _gemType.ToString().ToLower() : $"{_gemLevel} {_gemType}".ToLower();
 		}
 	}
 }

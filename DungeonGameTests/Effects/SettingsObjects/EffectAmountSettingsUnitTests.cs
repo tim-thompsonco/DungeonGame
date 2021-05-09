@@ -7,7 +7,7 @@ namespace DungeonGameTests.Effects.SettingsObjects {
 	internal class EffectAmountSettingsUnitTests {
 		[Test]
 		public void EffectAmountSettingsMissingAmountThrowsException() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectAmountSettings effectSettings = new EffectAmountSettings {
 				EffectHolder = player,
 				Name = "test"
@@ -34,7 +34,7 @@ namespace DungeonGameTests.Effects.SettingsObjects {
 
 		[Test]
 		public void EffectAmountSettingsMissingNameThrowsException() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectAmountSettings effectSettings = new EffectAmountSettings {
 				Amount = 50,
 				EffectHolder = player,
@@ -48,7 +48,7 @@ namespace DungeonGameTests.Effects.SettingsObjects {
 
 		[Test]
 		public void EffectAmountSettingsWithAllSettingsDoesNotThrowException() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectAmountSettings effectSettings = new EffectAmountSettings {
 				Amount = 50,
 				EffectHolder = player,

@@ -1,38 +1,33 @@
 namespace DungeonGame {
 	public class Offensive {
-		public enum OffensiveType {
-			Normal,
-			Bleed,
-			Fire
-		}
-		public OffensiveType _OffensiveGroup { get; set; }
-		public int _Amount { get; set; }
-		public int? _ChanceToSucceed { get; set; }
-		public int _AmountOverTime { get; set; }
-		public int _AmountCurRounds { get; set; }
-		public int _AmountMaxRounds { get; set; }
+		public OffensiveType OffensiveGroup { get; set; }
+		public int Amount { get; set; }
+		public int? ChanceToSucceed { get; set; }
+		public int AmountOverTime { get; set; }
+		public int AmountCurRounds { get; set; }
+		public int AmountMaxRounds { get; set; }
 
 		// Default constructor for JSON serialization to work since there isn't 1 main constructor
 		public Offensive() { }
 		public Offensive(int amount) {
-			_Amount = amount;
+			Amount = amount;
 		}
 		public Offensive(int amount, int chanceToSucceed) {
-			_Amount = amount;
-			_ChanceToSucceed = chanceToSucceed;
+			Amount = amount;
+			ChanceToSucceed = chanceToSucceed;
 		}
 		public Offensive(int amount, int amountCurRounds, int amountMaxRounds) {
-			_Amount = amount;
-			_AmountCurRounds = amountCurRounds;
-			_AmountMaxRounds = amountMaxRounds;
+			Amount = amount;
+			AmountCurRounds = amountCurRounds;
+			AmountMaxRounds = amountMaxRounds;
 		}
 		public Offensive(int amount, int amountOverTime, int amountCurRounds, int amountMaxRounds,
 			OffensiveType offenseType) {
-			_Amount = amount;
-			_AmountOverTime = amountOverTime;
-			_AmountCurRounds = amountCurRounds;
-			_AmountMaxRounds = amountMaxRounds;
-			_OffensiveGroup = offenseType;
+			Amount = amount;
+			AmountOverTime = amountOverTime;
+			AmountCurRounds = amountCurRounds;
+			AmountMaxRounds = amountMaxRounds;
+			OffensiveGroup = offenseType;
 		}
 	}
 }

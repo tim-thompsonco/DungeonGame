@@ -4,22 +4,8 @@ using DungeonGame.Players;
 using System;
 using System.Text;
 
-namespace DungeonGame.Items {
+namespace DungeonGame.Items.ArmorObjects {
 	public class Armor : IItem, IRainbowGear, IEquipment {
-		public enum ArmorSlot {
-			Head,
-			Back,
-			Chest,
-			Wrist,
-			Hands,
-			Waist,
-			Legs
-		}
-		public enum ArmorType {
-			Cloth,
-			Leather,
-			Plate
-		}
 		public string Name { get; set; }
 		public string Desc { get; set; }
 		public ArmorSlot ArmorCategory { get; set; }

@@ -2,8 +2,8 @@
 
 namespace DungeonGame.Spells {
 	public interface IMonsterOffensiveOverTimeSpell {
-		int _DamageOverTimeAmount { get; }
-		int _MaxDamageRounds { get; }
+		int DamageOverTimeAmount { get; }
+		int MaxDamageRounds { get; }
 
 		void DisplayDamageOverTimeMessage();
 		void AddDamageOverTimeEffect(Player player);

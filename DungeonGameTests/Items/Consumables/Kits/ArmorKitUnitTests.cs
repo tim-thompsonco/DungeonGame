@@ -1,188 +1,188 @@
 ﻿using DungeonGame.Helpers;
-using DungeonGame.Items;
+using DungeonGame.Items.ArmorObjects;
 using DungeonGame.Items.Consumables.Kits;
 using NUnit.Framework;
 using System.Globalization;
 
 namespace DungeonGameTests.Items.Consumables.Kits {
-	class ArmorKitUnitTests {
-		ArmorKit armorKit;
-		Armor armor;
-		readonly TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+	internal class ArmorKitUnitTests {
+		private ArmorKit _armorKit;
+		private Armor _armor;
+		private readonly TextInfo _textInfo = new CultureInfo("en-US", false).TextInfo;
 
 		[SetUp]
 		public void Setup() {
-			armorKit = new ArmorKit(KitLevel.Light, ArmorKit.KitType.Cloth);
-			armor = new Armor(3, Armor.ArmorType.Cloth, Armor.ArmorSlot.Chest);
+			_armorKit = new ArmorKit(KitLevel.Light, ArmorKit.ArmorKitType.Cloth);
+			_armor = new Armor(3, ArmorType.Cloth, ArmorSlot.Chest);
 		}
 
 		[Test]
 		public void LightKitCreationTest() {
-			Assert.AreEqual(1, armorKit.Weight);
-			Assert.AreEqual(1, armorKit.KitAugmentAmount);
-			Assert.AreEqual(false, armorKit.KitHasBeenUsed);
-			Assert.AreEqual(armorKit.KitAugmentAmount * 10, armorKit.ItemValue);
+			Assert.AreEqual(1, _armorKit.Weight);
+			Assert.AreEqual(1, _armorKit.KitAugmentAmount);
+			Assert.AreEqual(false, _armorKit.KitHasBeenUsed);
+			Assert.AreEqual(_armorKit.KitAugmentAmount * 10, _armorKit.ItemValue);
 		}
 
 		[Test]
 		public void MediumKitCreationTest() {
-			armorKit = new ArmorKit(KitLevel.Medium, ArmorKit.KitType.Cloth);
+			_armorKit = new ArmorKit(KitLevel.Medium, ArmorKit.ArmorKitType.Cloth);
 
-			Assert.AreEqual(2, armorKit.KitAugmentAmount);
+			Assert.AreEqual(2, _armorKit.KitAugmentAmount);
 		}
 
 		[Test]
 		public void HeavyKitCreationTest() {
-			armorKit = new ArmorKit(KitLevel.Heavy, ArmorKit.KitType.Cloth);
+			_armorKit = new ArmorKit(KitLevel.Heavy, ArmorKit.ArmorKitType.Cloth);
 
-			Assert.AreEqual(3, armorKit.KitAugmentAmount);
+			Assert.AreEqual(3, _armorKit.KitAugmentAmount);
 		}
 
 		[Test]
 		public void ClothKitAugmentClothSucceeds() {
 			OutputHelper.Display.ClearUserOutput();
-			int baseArmorItemValue = armor.ItemValue;
-			int baseArmorRating = armor.ArmorRating;
-			string displayMessage = $"You upgraded {textInfo.ToTitleCase(armor.Name)} with an armor kit.";
+			int baseArmorItemValue = _armor.ItemValue;
+			int baseArmorRating = _armor.ArmorRating;
+			string displayMessage = $"You upgraded {_textInfo.ToTitleCase(_armor.Name)} with an armor kit.";
 
-			armorKit.AttemptAugmentArmorPlayer(armor);
+			_armorKit.AttemptAugmentArmorPlayer(_armor);
 
 			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
-			Assert.AreEqual(true, armorKit.KitHasBeenUsed);
-			Assert.AreEqual(baseArmorItemValue + armorKit.ItemValue, armor.ItemValue);
-			Assert.AreEqual(baseArmorRating + armorKit.KitAugmentAmount, armor.ArmorRating);
+			Assert.AreEqual(true, _armorKit.KitHasBeenUsed);
+			Assert.AreEqual(baseArmorItemValue + _armorKit.ItemValue, _armor.ItemValue);
+			Assert.AreEqual(baseArmorRating + _armorKit.KitAugmentAmount, _armor.ArmorRating);
 		}
 
 		[Test]
 		public void ClothKitAugmentLeatherFails() {
 			OutputHelper.Display.ClearUserOutput();
-			armor = new Armor(3, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest);
-			int baseArmorItemValue = armor.ItemValue;
-			int baseArmorRating = armor.ArmorRating;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor.Name)} with that!";
+			_armor = new Armor(3, ArmorType.Leather, ArmorSlot.Chest);
+			int baseArmorItemValue = _armor.ItemValue;
+			int baseArmorRating = _armor.ArmorRating;
+			string displayMessage = $"You can't upgrade {_textInfo.ToTitleCase(_armor.Name)} with that!";
 
-			armorKit.AttemptAugmentArmorPlayer(armor);
+			_armorKit.AttemptAugmentArmorPlayer(_armor);
 
 			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
-			Assert.AreEqual(false, armorKit.KitHasBeenUsed);
-			Assert.AreEqual(baseArmorItemValue, armor.ItemValue);
-			Assert.AreEqual(baseArmorRating, armor.ArmorRating);
+			Assert.AreEqual(false, _armorKit.KitHasBeenUsed);
+			Assert.AreEqual(baseArmorItemValue, _armor.ItemValue);
+			Assert.AreEqual(baseArmorRating, _armor.ArmorRating);
 		}
 
 		[Test]
 		public void ClothKitAugmentPlateFails() {
 			OutputHelper.Display.ClearUserOutput();
-			armor = new Armor(3, Armor.ArmorType.Plate, Armor.ArmorSlot.Chest);
-			int baseArmorItemValue = armor.ItemValue;
-			int baseArmorRating = armor.ArmorRating;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor.Name)} with that!";
+			_armor = new Armor(3, ArmorType.Plate, ArmorSlot.Chest);
+			int baseArmorItemValue = _armor.ItemValue;
+			int baseArmorRating = _armor.ArmorRating;
+			string displayMessage = $"You can't upgrade {_textInfo.ToTitleCase(_armor.Name)} with that!";
 
-			armorKit.AttemptAugmentArmorPlayer(armor);
+			_armorKit.AttemptAugmentArmorPlayer(_armor);
 
 			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
-			Assert.AreEqual(false, armorKit.KitHasBeenUsed);
-			Assert.AreEqual(baseArmorItemValue, armor.ItemValue);
-			Assert.AreEqual(baseArmorRating, armor.ArmorRating);
+			Assert.AreEqual(false, _armorKit.KitHasBeenUsed);
+			Assert.AreEqual(baseArmorItemValue, _armor.ItemValue);
+			Assert.AreEqual(baseArmorRating, _armor.ArmorRating);
 		}
 
 		[Test]
 		public void LeatherKitAugmentLeatherSucceeds() {
 			OutputHelper.Display.ClearUserOutput();
-			armorKit = new ArmorKit(KitLevel.Light, ArmorKit.KitType.Leather);
-			armor = new Armor(3, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest);
-			int baseArmorItemValue = armor.ItemValue;
-			int baseArmorRating = armor.ArmorRating;
-			string displayMessage = $"You upgraded {textInfo.ToTitleCase(armor.Name)} with an armor kit.";
+			_armorKit = new ArmorKit(KitLevel.Light, ArmorKit.ArmorKitType.Leather);
+			_armor = new Armor(3, ArmorType.Leather, ArmorSlot.Chest);
+			int baseArmorItemValue = _armor.ItemValue;
+			int baseArmorRating = _armor.ArmorRating;
+			string displayMessage = $"You upgraded {_textInfo.ToTitleCase(_armor.Name)} with an armor kit.";
 
-			armorKit.AttemptAugmentArmorPlayer(armor);
+			_armorKit.AttemptAugmentArmorPlayer(_armor);
 
 			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
-			Assert.AreEqual(true, armorKit.KitHasBeenUsed);
-			Assert.AreEqual(baseArmorItemValue + armorKit.ItemValue, armor.ItemValue);
-			Assert.AreEqual(baseArmorRating + armorKit.KitAugmentAmount, armor.ArmorRating);
+			Assert.AreEqual(true, _armorKit.KitHasBeenUsed);
+			Assert.AreEqual(baseArmorItemValue + _armorKit.ItemValue, _armor.ItemValue);
+			Assert.AreEqual(baseArmorRating + _armorKit.KitAugmentAmount, _armor.ArmorRating);
 		}
 
 		[Test]
 		public void LeatherKitAugmentClothFails() {
 			OutputHelper.Display.ClearUserOutput();
-			armorKit = new ArmorKit(KitLevel.Light, ArmorKit.KitType.Leather);
-			int baseArmorItemValue = armor.ItemValue;
-			int baseArmorRating = armor.ArmorRating;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor.Name)} with that!";
+			_armorKit = new ArmorKit(KitLevel.Light, ArmorKit.ArmorKitType.Leather);
+			int baseArmorItemValue = _armor.ItemValue;
+			int baseArmorRating = _armor.ArmorRating;
+			string displayMessage = $"You can't upgrade {_textInfo.ToTitleCase(_armor.Name)} with that!";
 
-			armorKit.AttemptAugmentArmorPlayer(armor);
+			_armorKit.AttemptAugmentArmorPlayer(_armor);
 
 			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
-			Assert.AreEqual(false, armorKit.KitHasBeenUsed);
-			Assert.AreEqual(baseArmorItemValue, armor.ItemValue);
-			Assert.AreEqual(baseArmorRating, armor.ArmorRating);
+			Assert.AreEqual(false, _armorKit.KitHasBeenUsed);
+			Assert.AreEqual(baseArmorItemValue, _armor.ItemValue);
+			Assert.AreEqual(baseArmorRating, _armor.ArmorRating);
 		}
 
 		[Test]
 		public void LeatherKitAugmentPlateFails() {
 			OutputHelper.Display.ClearUserOutput();
-			armorKit = new ArmorKit(KitLevel.Light, ArmorKit.KitType.Leather);
-			armor = new Armor(3, Armor.ArmorType.Plate, Armor.ArmorSlot.Chest);
-			int baseArmorItemValue = armor.ItemValue;
-			int baseArmorRating = armor.ArmorRating;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor.Name)} with that!";
+			_armorKit = new ArmorKit(KitLevel.Light, ArmorKit.ArmorKitType.Leather);
+			_armor = new Armor(3, ArmorType.Plate, ArmorSlot.Chest);
+			int baseArmorItemValue = _armor.ItemValue;
+			int baseArmorRating = _armor.ArmorRating;
+			string displayMessage = $"You can't upgrade {_textInfo.ToTitleCase(_armor.Name)} with that!";
 
-			armorKit.AttemptAugmentArmorPlayer(armor);
+			_armorKit.AttemptAugmentArmorPlayer(_armor);
 
 			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
-			Assert.AreEqual(false, armorKit.KitHasBeenUsed);
-			Assert.AreEqual(baseArmorItemValue, armor.ItemValue);
-			Assert.AreEqual(baseArmorRating, armor.ArmorRating);
+			Assert.AreEqual(false, _armorKit.KitHasBeenUsed);
+			Assert.AreEqual(baseArmorItemValue, _armor.ItemValue);
+			Assert.AreEqual(baseArmorRating, _armor.ArmorRating);
 		}
 
 		[Test]
 		public void PlateKitAugmentPlateSucceeds() {
 			OutputHelper.Display.ClearUserOutput();
-			armorKit = new ArmorKit(KitLevel.Light, ArmorKit.KitType.Plate);
-			armor = new Armor(3, Armor.ArmorType.Plate, Armor.ArmorSlot.Chest);
-			int baseArmorItemValue = armor.ItemValue;
-			int baseArmorRating = armor.ArmorRating;
-			string displayMessage = $"You upgraded {textInfo.ToTitleCase(armor.Name)} with an armor kit.";
+			_armorKit = new ArmorKit(KitLevel.Light, ArmorKit.ArmorKitType.Plate);
+			_armor = new Armor(3, ArmorType.Plate, ArmorSlot.Chest);
+			int baseArmorItemValue = _armor.ItemValue;
+			int baseArmorRating = _armor.ArmorRating;
+			string displayMessage = $"You upgraded {_textInfo.ToTitleCase(_armor.Name)} with an armor kit.";
 
-			armorKit.AttemptAugmentArmorPlayer(armor);
+			_armorKit.AttemptAugmentArmorPlayer(_armor);
 
 			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
-			Assert.AreEqual(true, armorKit.KitHasBeenUsed);
-			Assert.AreEqual(baseArmorItemValue + armorKit.ItemValue, armor.ItemValue);
-			Assert.AreEqual(baseArmorRating + armorKit.KitAugmentAmount, armor.ArmorRating);
+			Assert.AreEqual(true, _armorKit.KitHasBeenUsed);
+			Assert.AreEqual(baseArmorItemValue + _armorKit.ItemValue, _armor.ItemValue);
+			Assert.AreEqual(baseArmorRating + _armorKit.KitAugmentAmount, _armor.ArmorRating);
 		}
 
 		[Test]
 		public void PlateKitAugmentClothFails() {
 			OutputHelper.Display.ClearUserOutput();
-			armorKit = new ArmorKit(KitLevel.Light, ArmorKit.KitType.Plate);
-			int baseArmorItemValue = armor.ItemValue;
-			int baseArmorRating = armor.ArmorRating;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor.Name)} with that!";
+			_armorKit = new ArmorKit(KitLevel.Light, ArmorKit.ArmorKitType.Plate);
+			int baseArmorItemValue = _armor.ItemValue;
+			int baseArmorRating = _armor.ArmorRating;
+			string displayMessage = $"You can't upgrade {_textInfo.ToTitleCase(_armor.Name)} with that!";
 
-			armorKit.AttemptAugmentArmorPlayer(armor);
+			_armorKit.AttemptAugmentArmorPlayer(_armor);
 
 			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
-			Assert.AreEqual(false, armorKit.KitHasBeenUsed);
-			Assert.AreEqual(baseArmorItemValue, armor.ItemValue);
-			Assert.AreEqual(baseArmorRating, armor.ArmorRating);
+			Assert.AreEqual(false, _armorKit.KitHasBeenUsed);
+			Assert.AreEqual(baseArmorItemValue, _armor.ItemValue);
+			Assert.AreEqual(baseArmorRating, _armor.ArmorRating);
 		}
 
 		[Test]
 		public void PlateKitAugmentLeatherFails() {
 			OutputHelper.Display.ClearUserOutput();
-			armorKit = new ArmorKit(KitLevel.Light, ArmorKit.KitType.Plate);
-			armor = new Armor(3, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest);
-			int baseArmorItemValue = armor.ItemValue;
-			int baseArmorRating = armor.ArmorRating;
-			string displayMessage = $"You can't upgrade {textInfo.ToTitleCase(armor.Name)} with that!";
+			_armorKit = new ArmorKit(KitLevel.Light, ArmorKit.ArmorKitType.Plate);
+			_armor = new Armor(3, ArmorType.Leather, ArmorSlot.Chest);
+			int baseArmorItemValue = _armor.ItemValue;
+			int baseArmorRating = _armor.ArmorRating;
+			string displayMessage = $"You can't upgrade {_textInfo.ToTitleCase(_armor.Name)} with that!";
 
-			armorKit.AttemptAugmentArmorPlayer(armor);
+			_armorKit.AttemptAugmentArmorPlayer(_armor);
 
 			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
-			Assert.AreEqual(false, armorKit.KitHasBeenUsed);
-			Assert.AreEqual(baseArmorItemValue, armor.ItemValue);
-			Assert.AreEqual(baseArmorRating, armor.ArmorRating);
+			Assert.AreEqual(false, _armorKit.KitHasBeenUsed);
+			Assert.AreEqual(baseArmorItemValue, _armor.ItemValue);
+			Assert.AreEqual(baseArmorRating, _armor.ArmorRating);
 		}
 	}
 }

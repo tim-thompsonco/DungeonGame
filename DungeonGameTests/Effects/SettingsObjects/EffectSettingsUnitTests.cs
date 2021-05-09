@@ -20,7 +20,7 @@ namespace DungeonGameTests.Effects.SettingsObjects {
 
 		[Test]
 		public void EffectSettingsMissingMaxRoundThrowsException() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectSettings effectSettings = new EffectSettings {
 				EffectHolder = player,
 				Name = "test"
@@ -34,7 +34,7 @@ namespace DungeonGameTests.Effects.SettingsObjects {
 
 		[Test]
 		public void EffectSettingsMissingNameThrowsException() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectSettings effectSettings = new EffectSettings {
 				EffectHolder = player,
 				MaxRound = 3
@@ -48,7 +48,7 @@ namespace DungeonGameTests.Effects.SettingsObjects {
 
 		[Test]
 		public void EffectSettingsWithAllSettingsDoesNotThrowException() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectSettings effectSettings = new EffectSettings {
 				EffectHolder = player,
 				MaxRound = 3,

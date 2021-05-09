@@ -3,7 +3,9 @@ using DungeonGame.Effects;
 using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 using DungeonGame.Items;
+using DungeonGame.Items.ArmorObjects;
 using DungeonGame.Items.Equipment;
+using DungeonGame.Items.WeaponObjects;
 using DungeonGame.Players;
 using DungeonGame.Quests;
 using System;
@@ -12,26 +14,6 @@ using System.Linq;
 
 namespace DungeonGame.Monsters {
 	public class Monster : IName, IEffectHolder {
-		public enum MonsterType {
-			Skeleton,
-			Zombie,
-			Spider,
-			Demon,
-			Elemental,
-			Vampire,
-			Troll,
-			Dragon
-		}
-		public enum ElementalType {
-			Fire,
-			Air,
-			Water
-		}
-		public enum SkeletonType {
-			Warrior,
-			Archer,
-			Mage
-		}
 		public string Name { get; set; }
 		public string Desc { get; set; }
 		public int Level { get; set; }
@@ -105,8 +87,8 @@ namespace DungeonGame.Monsters {
 							break;
 						case SkeletonType.Mage:
 							Spellbook = new List<MonsterSpell> {
-								new MonsterSpell("frostbolt", 50, MonsterSpell.SpellType.Frostbolt, Level),
-								new MonsterSpell("fireball", 50, MonsterSpell.SpellType.Fireball, Level)};
+								new MonsterSpell("frostbolt", 50, SpellType.Frostbolt, Level),
+								new MonsterSpell("fireball", 50, SpellType.Fireball, Level)};
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -116,11 +98,11 @@ namespace DungeonGame.Monsters {
 					break;
 				case MonsterType.Spider:
 					Abilities = new List<MonsterAbility> {
-						new MonsterAbility("poison bite", 50, MonsterAbility.Ability.PoisonBite, Level)};
+						new MonsterAbility("poison bite", 50, Ability.PoisonBite, Level)};
 					break;
 				case MonsterType.Demon:
 					Spellbook = new List<MonsterSpell> {
-						new MonsterSpell("fireball", 50, MonsterSpell.SpellType.Fireball, Level)};
+						new MonsterSpell("fireball", 50, SpellType.Fireball, Level)};
 					break;
 				case MonsterType.Elemental:
 					int randomNum = GameHelper.GetRandomNumber(1, 3);
@@ -140,25 +122,25 @@ namespace DungeonGame.Monsters {
 					};
 					Spellbook = ElementalCategory switch {
 						ElementalType.Fire => new List<MonsterSpell> {
-								new MonsterSpell("fireball", 50, MonsterSpell.SpellType.Fireball, Level)},
+								new MonsterSpell("fireball", 50, SpellType.Fireball, Level)},
 						ElementalType.Air => new List<MonsterSpell> {
-								new MonsterSpell("lightning", 50, MonsterSpell.SpellType.Lightning, Level)},
+								new MonsterSpell("lightning", 50, SpellType.Lightning, Level)},
 						ElementalType.Water => new List<MonsterSpell> {
-								new MonsterSpell("frostbolt", 50, MonsterSpell.SpellType.Frostbolt, Level)},
+								new MonsterSpell("frostbolt", 50, SpellType.Frostbolt, Level)},
 						_ => throw new ArgumentOutOfRangeException(),
 					};
 					break;
 				case MonsterType.Vampire:
 					Abilities = new List<MonsterAbility> {
-						new MonsterAbility("blood leech", 50, MonsterAbility.Ability.BloodLeech, Level)};
+						new MonsterAbility("blood leech", 50, Ability.BloodLeech, Level)};
 					break;
 				case MonsterType.Troll:
 					break;
 				case MonsterType.Dragon:
 					Abilities = new List<MonsterAbility> {
-						new MonsterAbility("tail whip", 50, MonsterAbility.Ability.TailWhip, Level)};
+						new MonsterAbility("tail whip", 50, Ability.TailWhip, Level)};
 					Spellbook = new List<MonsterSpell> {
-						new MonsterSpell("fire breath", 50, MonsterSpell.SpellType.Fireball, Level)};
+						new MonsterSpell("fire breath", 50, SpellType.Fireball, Level)};
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -170,28 +152,25 @@ namespace DungeonGame.Monsters {
 			if (MonsterWeapon != null && MonsterWeapon.Equipped) {
 				attackOptions.Add(new
 					AttackOption(AttackType.Physical,
-						MonsterWeapon._RegDamage - player.ArmorRating(this), -1));
+						MonsterWeapon.RegDamage - player.ArmorRating(this), -1));
 			} else {
 				attackOptions.Add(new
 					AttackOption(AttackType.Physical, UnarmedAttackDamage, -1));
 			}
 			if (Spellbook != null) {
 				for (int i = 0; i < Spellbook.Count; i++) {
-					if (EnergyPoints < Spellbook[i]._EnergyCost) {
+					if (EnergyPoints < Spellbook[i].EnergyCost) {
 						continue;
 					}
 
-					switch (Spellbook[i]._SpellCategory) {
-						case MonsterSpell.SpellType.Fireball:
-						case MonsterSpell.SpellType.Frostbolt:
-						case MonsterSpell.SpellType.Lightning:
-							int spellTotalDamage = 0;
-							if (Spellbook[i]._Offensive._AmountOverTime == 0) {
-								spellTotalDamage = Spellbook[i]._Offensive._Amount;
-							} else {
-								spellTotalDamage = Spellbook[i]._Offensive._Amount + (Spellbook[i]._Offensive._AmountOverTime *
-									Spellbook[i]._Offensive._AmountMaxRounds);
-							}
+					switch (Spellbook[i].SpellCategory) {
+						case SpellType.Fireball:
+						case SpellType.Frostbolt:
+						case SpellType.Lightning:
+							int spellTotalDamage = Spellbook[i].Offensive.AmountOverTime == 0
+								? Spellbook[i].Offensive.Amount
+								: Spellbook[i].Offensive.Amount + (Spellbook[i].Offensive.AmountOverTime *
+									Spellbook[i].Offensive.AmountMaxRounds);
 							attackOptions.Add(new
 								AttackOption(AttackType.Spell, spellTotalDamage, i));
 							break;
@@ -207,16 +186,13 @@ namespace DungeonGame.Monsters {
 					}
 
 					switch (Abilities[i].AbilityCategory) {
-						case MonsterAbility.Ability.PoisonBite:
-						case MonsterAbility.Ability.BloodLeech:
-						case MonsterAbility.Ability.TailWhip:
-							int abilityTotalDamage = 0;
-							if (Abilities[i].Offensive._AmountOverTime == 0) {
-								abilityTotalDamage = Abilities[i].Offensive._Amount * 2;
-							} else {
-								abilityTotalDamage = Abilities[i].Offensive._Amount + (Abilities[i].Offensive._AmountOverTime *
-									Abilities[i].Offensive._AmountMaxRounds);
-							}
+						case Ability.PoisonBite:
+						case Ability.BloodLeech:
+						case Ability.TailWhip:
+							int abilityTotalDamage = Abilities[i].Offensive.AmountOverTime == 0
+								? Abilities[i].Offensive.Amount * 2
+								: Abilities[i].Offensive.Amount + (Abilities[i].Offensive.AmountOverTime *
+									Abilities[i].Offensive.AmountMaxRounds);
 							attackOptions.Add(new
 								AttackOption(AttackType.Ability, abilityTotalDamage, i));
 							break;
@@ -250,14 +226,14 @@ namespace DungeonGame.Monsters {
 					PhysicalAttack(player);
 					break;
 				case AttackType.Spell:
-					switch (Spellbook[attackOption.AttackIndex]._SpellCategory) {
-						case MonsterSpell.SpellType.Fireball:
+					switch (Spellbook[attackOption.AttackIndex].SpellCategory) {
+						case SpellType.Fireball:
 							Spellbook[attackOption.AttackIndex].CastFireOffense(this, player, attackOption.AttackIndex);
 							break;
-						case MonsterSpell.SpellType.Frostbolt:
+						case SpellType.Frostbolt:
 							Spellbook[attackOption.AttackIndex].CastFrostOffense(this, player, attackOption.AttackIndex);
 							break;
-						case MonsterSpell.SpellType.Lightning:
+						case SpellType.Lightning:
 							Spellbook[attackOption.AttackIndex].CastArcaneOffense(this, player, attackOption.AttackIndex);
 							break;
 						default:
@@ -266,11 +242,11 @@ namespace DungeonGame.Monsters {
 					break;
 				case AttackType.Ability:
 					switch (Abilities[attackOption.AttackIndex].AbilityCategory) {
-						case MonsterAbility.Ability.PoisonBite:
-						case MonsterAbility.Ability.TailWhip:
+						case Ability.PoisonBite:
+						case Ability.TailWhip:
 							Abilities[attackOption.AttackIndex].UseOffenseDamageAbility(this, player, attackOption.AttackIndex);
 							break;
-						case MonsterAbility.Ability.BloodLeech:
+						case Ability.BloodLeech:
 							Abilities[attackOption.AttackIndex].UseBloodLeechAbility(this, player, attackOption.AttackIndex);
 							break;
 						default:
@@ -286,17 +262,17 @@ namespace DungeonGame.Monsters {
 			int attackAmount = 0;
 
 			try {
-				if (MonsterWeapon.Equipped && MonsterWeapon._WeaponGroup != Weapon.WeaponType.Bow) {
+				if (MonsterWeapon.Equipped && MonsterWeapon.WeaponGroup != WeaponType.Bow) {
 					attackAmount += MonsterWeapon.Attack();
 				}
 				if (MonsterWeapon.Equipped &&
-					MonsterWeapon._WeaponGroup == Weapon.WeaponType.Bow &&
+					MonsterWeapon.WeaponGroup == WeaponType.Bow &&
 					MonsterQuiver.HaveArrows()) {
 					MonsterQuiver.UseArrow();
 					attackAmount += MonsterWeapon.Attack();
 				}
 				if (MonsterWeapon.Equipped &&
-					MonsterWeapon._WeaponGroup == Weapon.WeaponType.Bow &&
+					MonsterWeapon.WeaponGroup == WeaponType.Bow &&
 					!MonsterQuiver.HaveArrows()) {
 					attackAmount += UnarmedAttackDamage;
 				}

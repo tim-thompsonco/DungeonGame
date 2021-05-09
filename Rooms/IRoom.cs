@@ -5,20 +5,20 @@ using System.Threading;
 
 namespace DungeonGame.Rooms {
 	public interface IRoom : IName {
-		bool _IsDiscovered { get; set; }
-		IRoom _North { get; set; }
-		IRoom _South { get; set; }
-		IRoom _East { get; set; }
-		IRoom _West { get; set; }
-		IRoom _NorthWest { get; set; }
-		IRoom _SouthWest { get; set; }
-		IRoom _NorthEast { get; set; }
-		IRoom _SouthEast { get; set; }
-		IRoom _Up { get; set; }
-		IRoom _Down { get; set; }
-		string _Desc { get; set; }
-		List<IName> _RoomObjects { get; set; }
-		Monster _Monster { get; set; }
+		bool IsDiscovered { get; set; }
+		IRoom North { get; set; }
+		IRoom South { get; set; }
+		IRoom East { get; set; }
+		IRoom West { get; set; }
+		IRoom NorthWest { get; set; }
+		IRoom SouthWest { get; set; }
+		IRoom NorthEast { get; set; }
+		IRoom SouthEast { get; set; }
+		IRoom Up { get; set; }
+		IRoom Down { get; set; }
+		string Desc { get; set; }
+		List<IName> RoomObjects { get; set; }
+		Monster Monster { get; set; }
 
 		void AttackOpponent(Player player, string[] input, Timer globalTimer);
 		void LootCorpse(Player player, string[] input);

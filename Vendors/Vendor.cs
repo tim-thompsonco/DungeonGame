@@ -1,8 +1,10 @@
 ﻿using DungeonGame.Helpers;
 using DungeonGame.Items;
-using DungeonGame.Items.Consumables;
+using DungeonGame.Items.ArmorObjects;
+using DungeonGame.Items.Consumables.Arrow;
 using DungeonGame.Items.Consumables.Potions;
 using DungeonGame.Items.Equipment;
+using DungeonGame.Items.WeaponObjects;
 using DungeonGame.Players;
 using DungeonGame.Quests;
 using System;
@@ -11,19 +13,13 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace DungeonGame {
+namespace DungeonGame.Vendors {
 	public class Vendor : IQuestGiver {
-		public enum VendorType {
-			Armorer,
-			Weaponsmith,
-			Healer,
-			Shopkeeper
-		}
 		public string Name { get; set; }
 		public string Desc { get; set; }
 		public VendorType VendorCategory { get; set; }
 		public List<IItem> VendorItems { get; set; }
-		public List<Quest> _AvailableQuests { get; set; }
+		public List<Quest> AvailableQuests { get; set; }
 
 		// Default constructor for JSON serialization
 		public Vendor() { }
@@ -35,15 +31,15 @@ namespace DungeonGame {
 			switch (VendorCategory) {
 				case VendorType.Armorer:
 					VendorItems.Add(
-						new Armor(1, Armor.ArmorType.Leather, Armor.ArmorSlot.Head));
+						new Armor(1, ArmorType.Leather, ArmorSlot.Head));
 					VendorItems.Add(
-						new Armor(1, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest));
+						new Armor(1, ArmorType.Leather, ArmorSlot.Chest));
 					VendorItems.Add(
-						new Armor(1, Armor.ArmorType.Leather, Armor.ArmorSlot.Legs));
+						new Armor(1, ArmorType.Leather, ArmorSlot.Legs));
 					break;
 				case VendorType.Weaponsmith:
-					VendorItems.Add(new Weapon(1, Weapon.WeaponType.OneHandedSword));
-					VendorItems.Add(new Arrows("arrows", 15, Arrows.ArrowType.Standard));
+					VendorItems.Add(new Weapon(1, WeaponType.OneHandedSword));
+					VendorItems.Add(new Arrows("arrows", 15, ArrowType.Standard));
 					break;
 				case VendorType.Healer:
 					VendorItems.Add(new HealthPotion(PotionStrength.Minor));
@@ -74,7 +70,7 @@ namespace DungeonGame {
 						itemInfo.Append($" (AR: {isItemArmor.ArmorRating} Cost: {isItemArmor.ItemValue})");
 						break;
 					case Weapon isItemWeapon:
-						itemInfo.Append($" (DMG: {isItemWeapon._RegDamage} CR: {isItemWeapon._CritMultiplier} Cost: {isItemWeapon.ItemValue})");
+						itemInfo.Append($" (DMG: {isItemWeapon.RegDamage} CR: {isItemWeapon.CritMultiplier} Cost: {isItemWeapon.ItemValue})");
 						break;
 					default:
 						if (item.GetType() == typeof(Arrows)) {
@@ -98,13 +94,11 @@ namespace DungeonGame {
 
 			string inputName = InputHelper.ParseInput(userInput);
 			int index = -1;
-			if (VendorCategory == VendorType.Healer) {
-				index = VendorItems.FindIndex(
-					f => f.Name == inputName || f.Name.Contains(inputName));
-			} else {
-				index = VendorItems.FindIndex(
+			index = VendorCategory == VendorType.Healer
+				? VendorItems.FindIndex(
+					f => f.Name == inputName || f.Name.Contains(inputName))
+				: VendorItems.FindIndex(
 					f => f.Name == inputName || f.Name.Contains(userInput.Last()));
-			}
 			if (index == -1) {
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
@@ -190,13 +184,10 @@ namespace DungeonGame {
 					"You don't have that item to sell!");
 				return;
 			}
-			int index;
-			if (multipleItemIndex != -1) {
-				index = multipleItemIndex;
-			} else {
-				index = player.Inventory.FindIndex(
+			int index = multipleItemIndex != -1
+				? multipleItemIndex
+				: player.Inventory.FindIndex(
 					f => f.Name == inputName || f.Name.Contains(inputName));
-			}
 			IItem sellItem;
 			try {
 				sellItem = player.Inventory[index];
@@ -212,7 +203,7 @@ namespace DungeonGame {
 					if (!(sellItem is IEquipment equippableItem && equippableItem.Equipped)) {
 						player.Gold += sellItem switch {
 							Armor armor => (int)(sellItem.ItemValue * (armor.Durability / 100.0)),
-							Weapon weapon => (int)(sellItem.ItemValue * (weapon._Durability / 100.0)),
+							Weapon weapon => (int)(sellItem.ItemValue * (weapon.Durability / 100.0)),
 							_ => sellItem.ItemValue
 						};
 						player.Inventory.RemoveAt(index);
@@ -230,12 +221,10 @@ namespace DungeonGame {
 				}
 			} catch (ArgumentOutOfRangeException) {
 				multipleItemIndex = FindConsumableItemIndex(player, userInput);
-				if (multipleItemIndex != -1) {
-					index = multipleItemIndex;
-				} else {
-					index = player.Inventory.FindIndex(
+				index = multipleItemIndex != -1
+					? multipleItemIndex
+					: player.Inventory.FindIndex(
 						f => f.Name == inputName || f.Name.Contains(inputName));
-				}
 				if (index == -1) {
 					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
@@ -299,11 +288,11 @@ namespace DungeonGame {
 						break;
 					case VendorType.Weaponsmith:
 						if (player.Inventory[index] is Weapon repairWeapon) {
-							int durabilityRepairWeapon = 100 - repairWeapon._Durability;
+							int durabilityRepairWeapon = 100 - repairWeapon.Durability;
 							float repairCostWeapon = repairWeapon.ItemValue * (durabilityRepairWeapon / 100f);
 							if (player.Gold >= repairCostWeapon) {
 								player.Gold -= (int)repairCostWeapon;
-								repairWeapon._Durability = 100;
+								repairWeapon.Durability = 100;
 								string repairWeaponString = $"Your {repairWeapon.Name} has been repaired for {(int)repairCostWeapon} gold.";
 								OutputHelper.Display.StoreUserOutput(
 									Settings.FormatSuccessOutputText(),
@@ -386,68 +375,68 @@ namespace DungeonGame {
 				return;
 			}
 
-			VendorItems.Add(new Arrows("arrows", 15, Arrows.ArrowType.Standard));
+			VendorItems.Add(new Arrows("arrows", 15, ArrowType.Standard));
 		}
 		public void PopulateQuests(Player player) {
-			_AvailableQuests = new List<Quest>();
-			Armor.ArmorType questArmorGroup = player.PlayerClass switch {
-				Player.PlayerClassType.Mage => Armor.ArmorType.Cloth,
-				Player.PlayerClassType.Warrior => Armor.ArmorType.Plate,
-				Player.PlayerClassType.Archer => Armor.ArmorType.Leather,
+			AvailableQuests = new List<Quest>();
+			ArmorType questArmorGroup = player.PlayerClass switch {
+				PlayerClassType.Mage => ArmorType.Cloth,
+				PlayerClassType.Warrior => ArmorType.Plate,
+				PlayerClassType.Archer => ArmorType.Leather,
 				_ => throw new ArgumentOutOfRangeException()
 			};
 			switch (VendorCategory) {
 				case VendorType.Armorer:
-					_AvailableQuests.Add(new Quest(
+					AvailableQuests.Add(new Quest(
 						"Bring The Mallet To Them",
 						"I'm fixing armor for everyone in this town and you wouldn't believe the dents I've banged " +
 						"out from travelers who have gone down into that dungeon. You know what would be great? If someone " +
 						"went down there and put some dents in them for a change. I can't do that myself, I'm not a fighter, " +
 						"but you look like you are. Go get 'em tiger.",
-						Quest.QuestType.KillMonster,
-						new Armor(questArmorGroup, Armor.ArmorSlot.Head, true, player),
+						QuestType.KillMonster,
+						new Armor(questArmorGroup, ArmorSlot.Head, true, player),
 						Name));
-					_AvailableQuests.Add(new Quest(
+					AvailableQuests.Add(new Quest(
 						"A Deadly Encounter",
 						"I've got too much work on my hands because people like you keep going down into that dungeon " +
 						"and come out looking like they got thrown around by something big. Maybe if you go clear out one of " +
 						"those levels, it'll reduce how many people are getting their armor trashed around here, so I can get " +
 						"caught up on my work. If it doesn't help, well you'll get some pretty gear out of it at least.",
-						Quest.QuestType.ClearLevel,
-						new Armor(questArmorGroup, Armor.ArmorSlot.Legs, true, player),
+						QuestType.ClearLevel,
+						new Armor(questArmorGroup, ArmorSlot.Legs, true, player),
 						Name));
 					break;
 				case VendorType.Weaponsmith:
-					_AvailableQuests.Add(new Quest(
+					AvailableQuests.Add(new Quest(
 						"Live And Let Die",
 						"You want me to make you a weapon? A really good weapon that will be really shiny with great " +
 						"stats? Well, nothing is free pal. I'm not going to ask you to go talk to someone standing right next " +
 						"to me, but I will give you a bounty. Go kill a bunch of monsters for me to prove you're worthy of what " +
 						"I can make. Do that and you'll get a hell of a weapon.",
-						Quest.QuestType.KillMonster,
-						new Weapon(Weapon.WeaponType.OneHandedSword, true, player),
+						QuestType.KillMonster,
+						new Weapon(WeaponType.OneHandedSword, true, player),
 						Name));
 					break;
 				case VendorType.Healer:
-					_AvailableQuests.Add(new Quest(
+					AvailableQuests.Add(new Quest(
 						"Stop The Pain",
 						"I can't recall how many travelers like you I've patched up who went down into that dungeon, " +
 						"tangled with the wrong monster, and came back missing a limb covered in blood. There's only so much " +
 						"suffering I can heal. Would you do me a favor? Go kill some of those monsters, so they stop hurting " +
 						"people like you, and I can rest easy for a while because I'm not constantly busy.",
-						Quest.QuestType.ClearLevel,
-						new Armor(questArmorGroup, Armor.ArmorSlot.Wrist, true, player),
+						QuestType.ClearLevel,
+						new Armor(questArmorGroup, ArmorSlot.Wrist, true, player),
 						Name));
 					break;
 				case VendorType.Shopkeeper:
-					_AvailableQuests.Add(new Quest(
+					AvailableQuests.Add(new Quest(
 						"Buyer's Market",
 						"I wish I had more stuff to sell. I'd love to sell you something, but I have nothing to offer. " +
 						"You know what would fix that? If you went and killed some monsters then sold me their gear. I'm not " +
 						"expecting you to buy that stuff, but someone else will, and don't you worry about how much I'm going " +
 						"to mark up that stuff. Help me help you by buying your loot at a, uh, fair price.",
-						Quest.QuestType.KillMonster,
-						new Armor(questArmorGroup, Armor.ArmorSlot.Waist, true, player),
+						QuestType.KillMonster,
+						new Armor(questArmorGroup, ArmorSlot.Waist, true, player),
 						Name));
 					break;
 				default:
@@ -455,7 +444,7 @@ namespace DungeonGame {
 			}
 		}
 		public void ShowQuestList(Player player) {
-			if (_AvailableQuests == null) {
+			if (AvailableQuests == null) {
 				PopulateQuests(player);
 			}
 
@@ -464,11 +453,11 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				"Available Quests:");
 			TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-			foreach (Quest quest in _AvailableQuests) {
+			foreach (Quest quest in AvailableQuests) {
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatGeneralInfoText(),
 					Settings.FormatDefaultBackground(),
-					textInfo.ToTitleCase(quest._Name));
+					textInfo.ToTitleCase(quest.Name));
 			}
 			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatGeneralInfoText(),
@@ -477,10 +466,10 @@ namespace DungeonGame {
 		}
 		public void OfferQuest(Player player, string[] input) {
 			string userInput = InputHelper.ParseInput(input);
-			int questIndex = _AvailableQuests.FindIndex(
-				f => f._Name.ToLower().Contains(userInput));
+			int questIndex = AvailableQuests.FindIndex(
+				f => f.Name.ToLower().Contains(userInput));
 			if (questIndex != -1) {
-				_AvailableQuests[questIndex].ShowQuest();
+				AvailableQuests[questIndex].ShowQuest();
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -495,7 +484,7 @@ namespace DungeonGame {
 					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
-						textInfo.ToTitleCase(_AvailableQuests[questIndex]._Name) + " Consideration:");
+						textInfo.ToTitleCase(AvailableQuests[questIndex].Name) + " Consideration:");
 					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -506,8 +495,8 @@ namespace DungeonGame {
 					questInput = InputHelper.GetFormattedInput(Console.ReadLine());
 				}
 				if (questInput[0] == "y" || questInput[0] == "yes") {
-					player.QuestLog.Add(_AvailableQuests[questIndex]);
-					_AvailableQuests.RemoveAt(questIndex);
+					player.QuestLog.Add(AvailableQuests[questIndex]);
+					AvailableQuests.RemoveAt(questIndex);
 					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
@@ -528,26 +517,26 @@ namespace DungeonGame {
 		public void CompleteQuest(Player player, string[] input) {
 			string userInput = InputHelper.ParseInput(input);
 			int questIndex = player.QuestLog.FindIndex(
-				f => f._Name.ToLower().Contains(userInput));
+				f => f.Name.ToLower().Contains(userInput));
 			Quest quest = player.QuestLog[questIndex];
 			if (questIndex != -1) {
-				if (quest._QuestGiver == Name) {
-					if (quest._QuestCompleted) {
+				if (quest.QuestGiver == Name) {
+					if (quest.QuestCompleted) {
 						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
-							$"Congratulations on finishing {quest._Name}! Here's your reward.");
-						player.Inventory.Add(quest._QuestRewardItem);
+							$"Congratulations on finishing {quest.Name}! Here's your reward.");
+						player.Inventory.Add(quest.QuestRewardItem);
 						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
 							"You have received: ");
-						GearHelper.StoreRainbowGearOutput(GearHelper.GetItemDetails(quest._QuestRewardItem));
-						player.Gold += quest._QuestRewardGold;
+						GearHelper.StoreRainbowGearOutput(GearHelper.GetItemDetails(quest.QuestRewardItem));
+						player.Gold += quest.QuestRewardGold;
 						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatGeneralInfoText(),
 							Settings.FormatDefaultBackground(),
-							$"{quest._QuestRewardGold} gold coins.");
+							$"{quest.QuestRewardGold} gold coins.");
 						player.QuestLog.RemoveAt(questIndex);
 					} else {
 						OutputHelper.Display.StoreUserOutput(
@@ -560,7 +549,7 @@ namespace DungeonGame {
 					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatFailureOutputText(),
 						Settings.FormatDefaultBackground(),
-						$"I didn't give you that quest. {textInfo.ToTitleCase(quest._QuestGiver)} did.");
+						$"I didn't give you that quest. {textInfo.ToTitleCase(quest.QuestGiver)} did.");
 				}
 			} else {
 				OutputHelper.Display.StoreUserOutput(

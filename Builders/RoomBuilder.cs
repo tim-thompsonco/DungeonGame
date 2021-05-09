@@ -1,6 +1,8 @@
 using DungeonGame.Coordinates;
 using DungeonGame.Helpers;
 using DungeonGame.Rooms;
+using DungeonGame.Trainers;
+using DungeonGame.Vendors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +27,8 @@ namespace DungeonGame {
 						Coordinate firstRoomCoord = new Coordinate(startX, startY, startZ - 1);
 						DungeonRoom firstRoom = new DungeonRoom(levelRangeLowForLevel, levelRangeHighForLevel);
 						Coordinate startCoord = new Coordinate(startX, startY, startZ);
-						SpawnedDungeonRooms[startCoord]._Down = firstRoom;
-						firstRoom._Up = SpawnedDungeonRooms[startCoord];
+						SpawnedDungeonRooms[startCoord].Down = firstRoom;
+						firstRoom.Up = SpawnedDungeonRooms[startCoord];
 						SpawnedDungeonRooms.Add(firstRoomCoord, firstRoom);
 						LastRoomCoord = firstRoomCoord;
 						GenerateRoomDirections();
@@ -40,8 +42,8 @@ namespace DungeonGame {
 						Coordinate oldCoord = LastRoomCoord;
 						Coordinate newRoomCoord = new Coordinate(oldCoord.X, oldCoord.Y, oldCoord.Z - 1);
 						DungeonRoom newLevelRoom = new DungeonRoom(levelRangeLowForLevel, levelRangeHighForLevel);
-						oldRoom._Down = newLevelRoom;
-						newLevelRoom._Up = oldRoom;
+						oldRoom.Down = newLevelRoom;
+						newLevelRoom.Up = oldRoom;
 						SpawnedDungeonRooms.Add(newRoomCoord, newLevelRoom);
 						LastRoomCoord = newRoomCoord;
 						continue;
@@ -54,7 +56,7 @@ namespace DungeonGame {
 				room => room.GetType() == typeof(DungeonRoom))) {
 				DetermineDungeonRoomCategory(room as DungeonRoom);
 				room.Name = RoomBuilderHelper.PopulateDungeonRoomName(room);
-				room._Desc = RoomBuilderHelper.PopulateDungeonRoomDesc(room);
+				room.Desc = RoomBuilderHelper.PopulateDungeonRoomDesc(room);
 			}
 		}
 
@@ -67,54 +69,54 @@ namespace DungeonGame {
 			Coordinate coordWest = new Coordinate(LastRoomCoord.X - 1, LastRoomCoord.Y, LastRoomCoord.Z);
 			if (SpawnedDungeonRooms.ContainsKey(coordWest)) {
 				IRoom westRoom = SpawnedDungeonRooms[coordWest];
-				room._West = westRoom;
-				westRoom._East = room;
+				room.West = westRoom;
+				westRoom.East = room;
 			}
 			Coordinate coordNorthWest = new Coordinate(
 				LastRoomCoord.X - 1, LastRoomCoord.Y + 1, LastRoomCoord.Z);
 			if (SpawnedDungeonRooms.ContainsKey(coordNorthWest)) {
 				IRoom northWestRoom = SpawnedDungeonRooms[coordNorthWest];
-				room._NorthWest = northWestRoom;
-				northWestRoom._SouthEast = room;
+				room.NorthWest = northWestRoom;
+				northWestRoom.SouthEast = room;
 			}
 			Coordinate coordNorth = new Coordinate(LastRoomCoord.X, LastRoomCoord.Y + 1, LastRoomCoord.Z);
 			if (SpawnedDungeonRooms.ContainsKey(coordNorth)) {
 				IRoom northRoom = SpawnedDungeonRooms[coordNorth];
-				room._North = northRoom;
-				northRoom._South = room;
+				room.North = northRoom;
+				northRoom.South = room;
 			}
 			Coordinate coordNorthEast = new Coordinate(
 				LastRoomCoord.X + 1, LastRoomCoord.Y + 1, LastRoomCoord.Z);
 			if (SpawnedDungeonRooms.ContainsKey(coordNorthEast)) {
 				IRoom northEastRoom = SpawnedDungeonRooms[coordNorthEast];
-				room._NorthEast = northEastRoom;
-				northEastRoom._SouthWest = room;
+				room.NorthEast = northEastRoom;
+				northEastRoom.SouthWest = room;
 			}
 			Coordinate coordEast = new Coordinate(LastRoomCoord.X + 1, LastRoomCoord.Y, LastRoomCoord.Z);
 			if (SpawnedDungeonRooms.ContainsKey(coordEast)) {
 				IRoom eastRoom = SpawnedDungeonRooms[coordEast];
-				room._East = eastRoom;
-				eastRoom._West = room;
+				room.East = eastRoom;
+				eastRoom.West = room;
 			}
 			Coordinate coordSouthEast = new Coordinate(
 				LastRoomCoord.X + 1, LastRoomCoord.Y - 1, LastRoomCoord.Z);
 			if (SpawnedDungeonRooms.ContainsKey(coordSouthEast)) {
 				IRoom southEastRoom = SpawnedDungeonRooms[coordSouthEast];
-				room._SouthEast = southEastRoom;
-				southEastRoom._NorthWest = room;
+				room.SouthEast = southEastRoom;
+				southEastRoom.NorthWest = room;
 			}
 			Coordinate coordSouth = new Coordinate(LastRoomCoord.X, LastRoomCoord.Y - 1, LastRoomCoord.Z);
 			if (SpawnedDungeonRooms.ContainsKey(coordSouth)) {
 				IRoom southRoom = SpawnedDungeonRooms[coordSouth];
-				room._South = southRoom;
-				southRoom._North = room;
+				room.South = southRoom;
+				southRoom.North = room;
 			}
 			Coordinate coordSouthWest = new Coordinate(
 				LastRoomCoord.X - 1, LastRoomCoord.Y - 1, LastRoomCoord.Z);
 			if (SpawnedDungeonRooms.ContainsKey(coordSouthWest)) {
 				IRoom southWestRoom = SpawnedDungeonRooms[coordSouthWest];
-				room._SouthWest = southWestRoom;
-				southWestRoom._NorthEast = room;
+				room.SouthWest = southWestRoom;
+				southWestRoom.NorthEast = room;
 			}
 		}
 
@@ -123,14 +125,14 @@ namespace DungeonGame {
 			Coordinate coordUp = new Coordinate(LastRoomCoord.X, LastRoomCoord.Y, LastRoomCoord.Z + 1);
 			if (SpawnedDungeonRooms.ContainsKey(coordUp)) {
 				IRoom upRoom = SpawnedDungeonRooms[coordUp];
-				room._Up = upRoom;
-				upRoom._Down = room;
+				room.Up = upRoom;
+				upRoom.Down = room;
 			}
 			Coordinate coordDown = new Coordinate(LastRoomCoord.X, LastRoomCoord.Y, LastRoomCoord.Z - 1);
 			if (SpawnedDungeonRooms.ContainsKey(coordDown)) {
 				IRoom downRoom = SpawnedDungeonRooms[coordDown];
-				room._Down = downRoom;
-				downRoom._Up = room;
+				room.Down = downRoom;
+				downRoom.Up = room;
 			}
 		}
 
@@ -144,60 +146,60 @@ namespace DungeonGame {
 				int randomNum = GameHelper.GetRandomNumber(1, 6);
 				switch (randomNum) {
 					case 1:
-						if (oldRoom._North == null) {
+						if (oldRoom.North == null) {
 							newRoomCoord = new Coordinate(oldCoord.X, oldCoord.Y + 1, oldCoord.Z);
-							oldRoom._North = newRoom;
-							newRoom._South = oldRoom;
+							oldRoom.North = newRoom;
+							newRoom.South = oldRoom;
 							if (!SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
 								roomCreated = true;
 							}
 						}
 						break;
 					case 2:
-						if (oldRoom._NorthEast == null) {
+						if (oldRoom.NorthEast == null) {
 							newRoomCoord = new Coordinate(oldCoord.X + 1, oldCoord.Y + 1, oldCoord.Z);
-							oldRoom._NorthEast = newRoom;
-							newRoom._SouthWest = oldRoom;
+							oldRoom.NorthEast = newRoom;
+							newRoom.SouthWest = oldRoom;
 							if (!SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
 								roomCreated = true;
 							}
 						}
 						break;
 					case 3:
-						if (oldRoom._NorthWest == null) {
+						if (oldRoom.NorthWest == null) {
 							newRoomCoord = new Coordinate(oldCoord.X - 1, oldCoord.Y + 1, oldCoord.Z);
-							oldRoom._NorthWest = newRoom;
-							newRoom._SouthEast = oldRoom;
+							oldRoom.NorthWest = newRoom;
+							newRoom.SouthEast = oldRoom;
 							if (!SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
 								roomCreated = true;
 							}
 						}
 						break;
 					case 4:
-						if (oldRoom._South == null) {
+						if (oldRoom.South == null) {
 							newRoomCoord = new Coordinate(oldCoord.X, oldCoord.Y - 1, oldCoord.Z);
-							oldRoom._South = newRoom;
-							newRoom._North = oldRoom;
+							oldRoom.South = newRoom;
+							newRoom.North = oldRoom;
 							if (!SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
 								roomCreated = true;
 							}
 						}
 						break;
 					case 5:
-						if (oldRoom._SouthEast == null) {
+						if (oldRoom.SouthEast == null) {
 							newRoomCoord = new Coordinate(oldCoord.X + 1, oldCoord.Y - 1, oldCoord.Z);
-							oldRoom._SouthEast = newRoom;
-							newRoom._NorthWest = oldRoom;
+							oldRoom.SouthEast = newRoom;
+							newRoom.NorthWest = oldRoom;
 							if (!SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
 								roomCreated = true;
 							}
 						}
 						break;
 					case 6:
-						if (oldRoom._SouthWest == null) {
+						if (oldRoom.SouthWest == null) {
 							newRoomCoord = new Coordinate(oldCoord.X - 1, oldCoord.Y - 1, oldCoord.Z);
-							oldRoom._SouthWest = newRoom;
-							newRoom._NorthEast = oldRoom;
+							oldRoom.SouthWest = newRoom;
+							newRoom.NorthEast = oldRoom;
 							if (!SpawnedDungeonRooms.ContainsKey(newRoomCoord)) {
 								roomCreated = true;
 							}
@@ -210,35 +212,35 @@ namespace DungeonGame {
 		}
 		private static void DetermineDungeonRoomCategory(DungeonRoom room) {
 			int directionCount = 0;
-			if (room._Up != null) {
+			if (room.Up != null) {
 				directionCount++;
 			}
 
-			if (room._Down != null) {
+			if (room.Down != null) {
 				directionCount++;
 			}
 
-			if (room._North != null) {
+			if (room.North != null) {
 				directionCount++;
 			}
 
-			if (room._NorthEast != null) {
+			if (room.NorthEast != null) {
 				directionCount++;
 			}
 
-			if (room._NorthWest != null) {
+			if (room.NorthWest != null) {
 				directionCount++;
 			}
 
-			if (room._South != null) {
+			if (room.South != null) {
 				directionCount++;
 			}
 
-			if (room._SouthEast != null) {
+			if (room.SouthEast != null) {
 				directionCount++;
 			}
 
-			if (room._SouthWest != null) {
+			if (room.SouthWest != null) {
 				directionCount++;
 			}
 
@@ -246,22 +248,22 @@ namespace DungeonGame {
 				throw new ArgumentOutOfRangeException();
 			}
 
-			if (room._Up != null || room._Down != null) {
-				room.RoomCategory = DungeonRoom.RoomType.Stairs;
+			if (room.Up != null || room.Down != null) {
+				room.RoomCategory = RoomType.Stairs;
 				return;
 			}
 			switch (directionCount) {
 				case 1:
-					room.RoomCategory = DungeonRoom.RoomType.Corner;
+					room.RoomCategory = RoomType.Corner;
 					return;
 				case 2:
-					room.RoomCategory = DungeonRoom.RoomType.Corridor;
+					room.RoomCategory = RoomType.Corridor;
 					return;
 				case 3:
-					room.RoomCategory = DungeonRoom.RoomType.Intersection;
+					room.RoomCategory = RoomType.Intersection;
 					return;
 				default:
-					room.RoomCategory = DungeonRoom.RoomType.Openspace;
+					room.RoomCategory = RoomType.Openspace;
 					break;
 			}
 		}
@@ -283,16 +285,16 @@ namespace DungeonGame {
 			Coordinate oldRoomCoord = newRoomCoord;
 			newRoomCoord = new Coordinate(0, 5, 0);
 			town.Add(newRoomCoord, new TownRoom(name, desc));
-			town[oldRoomCoord]._North = town[newRoomCoord];
-			town[newRoomCoord]._South = town[oldRoomCoord];
+			town[oldRoomCoord].North = town[newRoomCoord];
+			town[newRoomCoord].South = town[oldRoomCoord];
 			desc =
 				"You are walking on a cobblestone path north towards a nearby town. Smoke rises from a few chimneys. Around you " +
 				"is a grassy meadow and behind you is a rocky outcropping with a wooden door set into the rock.";
 			oldRoomCoord = newRoomCoord;
 			newRoomCoord = new Coordinate(0, 6, 0);
 			town.Add(newRoomCoord, new TownRoom(name, desc));
-			town[oldRoomCoord]._North = town[newRoomCoord];
-			town[newRoomCoord]._South = town[oldRoomCoord];
+			town[oldRoomCoord].North = town[newRoomCoord];
+			town[newRoomCoord].South = town[oldRoomCoord];
 			name = "Town Entrance";
 			desc =
 				"You are at the entrance to a small town. To the northeast you hear the clanking of metal on metal from what " +
@@ -301,8 +303,8 @@ namespace DungeonGame {
 			oldRoomCoord = newRoomCoord;
 			newRoomCoord = new Coordinate(0, 7, 0);
 			town.Add(newRoomCoord, new TownRoom(name, desc));
-			town[oldRoomCoord]._North = town[newRoomCoord];
-			town[newRoomCoord]._South = town[oldRoomCoord];
+			town[oldRoomCoord].North = town[newRoomCoord];
+			town[newRoomCoord].South = town[oldRoomCoord];
 			name = "Town - _East";
 			desc =
 				"You are in the east part of the town. In front of you is a small building with a forge and furnace outside and " +
@@ -315,9 +317,9 @@ namespace DungeonGame {
 			oldRoomCoord = newRoomCoord;
 			newRoomCoord = new Coordinate(1, 8, 0);
 			town.Add(newRoomCoord,
-				new TownRoom(name, desc, new Vendor(npcName, npcDesc, Vendor.VendorType.Armorer)));
-			town[oldRoomCoord]._NorthEast = town[newRoomCoord];
-			town[newRoomCoord]._SouthWest = town[oldRoomCoord];
+				new TownRoom(name, desc, new Vendor(npcName, npcDesc, VendorType.Armorer)));
+			town[oldRoomCoord].NorthEast = town[newRoomCoord];
+			town[newRoomCoord].SouthWest = town[oldRoomCoord];
 			desc =
 				"You are in the east part of the town. A large man is in front of a building sharpening a sword against a " +
 				"grindstone. To the south, you can see a small building with a forge and furnace outside. There is another " +
@@ -329,9 +331,9 @@ namespace DungeonGame {
 			oldRoomCoord = newRoomCoord;
 			newRoomCoord = new Coordinate(1, 9, 0);
 			town.Add(newRoomCoord,
-				new TownRoom(name, desc, new Vendor(npcName, npcDesc, Vendor.VendorType.Weaponsmith)));
-			town[oldRoomCoord]._North = town[newRoomCoord];
-			town[newRoomCoord]._South = town[oldRoomCoord];
+				new TownRoom(name, desc, new Vendor(npcName, npcDesc, VendorType.Weaponsmith)));
+			town[oldRoomCoord].North = town[newRoomCoord];
+			town[newRoomCoord].South = town[oldRoomCoord];
 			name = "Town - Center";
 			desc =
 				"You are in the central part of the town. There is a wrinkled old man standing in front of a small hut, his " +
@@ -344,9 +346,9 @@ namespace DungeonGame {
 			oldRoomCoord = newRoomCoord;
 			newRoomCoord = new Coordinate(0, 10, 0);
 			town.Add(newRoomCoord,
-				new TownRoom(name, desc, new Vendor(npcName, npcDesc, Vendor.VendorType.Healer)));
-			town[oldRoomCoord]._NorthWest = town[newRoomCoord];
-			town[newRoomCoord]._SouthEast = town[oldRoomCoord];
+				new TownRoom(name, desc, new Vendor(npcName, npcDesc, VendorType.Healer)));
+			town[oldRoomCoord].NorthWest = town[newRoomCoord];
+			town[newRoomCoord].SouthEast = town[oldRoomCoord];
 			name = "Town - _West";
 			desc =
 				"You are in the west part of the town. A woman stands in front of a building with displays of various items in " +
@@ -359,9 +361,9 @@ namespace DungeonGame {
 			oldRoomCoord = newRoomCoord;
 			newRoomCoord = new Coordinate(-1, 9, 0);
 			town.Add(newRoomCoord,
-				new TownRoom(name, desc, new Vendor(npcName, npcDesc, Vendor.VendorType.Shopkeeper)));
-			town[oldRoomCoord]._SouthWest = town[newRoomCoord];
-			town[newRoomCoord]._NorthEast = town[oldRoomCoord];
+				new TownRoom(name, desc, new Vendor(npcName, npcDesc, VendorType.Shopkeeper)));
+			town[oldRoomCoord].SouthWest = town[newRoomCoord];
+			town[newRoomCoord].NorthEast = town[oldRoomCoord];
 			desc =
 				"You are in the west part of the town. There is a large, wooden building southwest of you with a sign out " +
 				"front that reads 'Training'. Depending on what class you are, it appears that this place might have some " +
@@ -370,10 +372,10 @@ namespace DungeonGame {
 			newRoomCoord = new Coordinate(-1, 8, 0);
 			town.Add(newRoomCoord, new TownRoom(name, desc));
 			Coordinate roomThreeCoord = new Coordinate(0, 7, 0);
-			town[oldRoomCoord]._South = town[newRoomCoord];
-			town[newRoomCoord]._North = town[oldRoomCoord];
-			town[newRoomCoord]._SouthEast = town[roomThreeCoord];
-			town[roomThreeCoord]._NorthWest = town[newRoomCoord];
+			town[oldRoomCoord].South = town[newRoomCoord];
+			town[newRoomCoord].North = town[oldRoomCoord];
+			town[newRoomCoord].SouthEast = town[roomThreeCoord];
+			town[roomThreeCoord].NorthWest = town[newRoomCoord];
 			name = "Training Hall - Entrance";
 			desc =
 				"You are in the entrance of the training hall. To your west is a large room with training dummies and several " +
@@ -384,8 +386,8 @@ namespace DungeonGame {
 			oldRoomCoord = newRoomCoord;
 			newRoomCoord = new Coordinate(-2, 7, 0);
 			town.Add(newRoomCoord, new TownRoom(name, desc));
-			town[oldRoomCoord]._SouthWest = town[newRoomCoord];
-			town[newRoomCoord]._NorthEast = town[oldRoomCoord];
+			town[oldRoomCoord].SouthWest = town[newRoomCoord];
+			town[newRoomCoord].NorthEast = town[oldRoomCoord];
 			name = "Training Hall - Warrior Guild";
 			desc =
 				"You are in a large room with training dummies and several people hitting them with various swords, axes and " +
@@ -401,9 +403,9 @@ namespace DungeonGame {
 			oldRoomCoord = newRoomCoord;
 			newRoomCoord = new Coordinate(-3, 7, 0);
 			town.Add(newRoomCoord,
-				new TownRoom(name, desc, new Trainer(npcName, npcDesc, Trainer.TrainerCategory.Warrior)));
-			town[oldRoomCoord]._West = town[newRoomCoord];
-			town[newRoomCoord]._East = town[oldRoomCoord];
+				new TownRoom(name, desc, new Trainer(npcName, npcDesc, TrainerCategory.Warrior)));
+			town[oldRoomCoord].West = town[newRoomCoord];
+			town[newRoomCoord].East = town[oldRoomCoord];
 			name = "Training Hall - Mage Guild";
 			desc =
 				"You are in a large room with training dummies. The dummies are being charred by a person in a robe casting a " +
@@ -419,9 +421,9 @@ namespace DungeonGame {
 			oldRoomCoord = new Coordinate(-2, 7, 0);
 			newRoomCoord = new Coordinate(-2, 6, 0);
 			town.Add(newRoomCoord,
-				new TownRoom(name, desc, new Trainer(npcName, npcDesc, Trainer.TrainerCategory.Mage)));
-			town[oldRoomCoord]._South = town[newRoomCoord];
-			town[newRoomCoord]._North = town[oldRoomCoord];
+				new TownRoom(name, desc, new Trainer(npcName, npcDesc, TrainerCategory.Mage)));
+			town[oldRoomCoord].South = town[newRoomCoord];
+			town[newRoomCoord].North = town[oldRoomCoord];
 			name = "Training Hall - Archer Guild";
 			desc =
 				"You are in a large room with training dummies. There are numerous arrows sticking out of the dummies and " +
@@ -436,10 +438,10 @@ namespace DungeonGame {
 				"already have. You can <show upgrades> to see the full list of options.";
 			newRoomCoord = new Coordinate(-1, 7, 0);
 			town.Add(newRoomCoord,
-				new TownRoom(name, desc, new Trainer(npcName, npcDesc, Trainer.TrainerCategory.Archer)));
+				new TownRoom(name, desc, new Trainer(npcName, npcDesc, TrainerCategory.Archer)));
 			Coordinate roomNineCoord = new Coordinate(-2, 7, 0);
-			town[roomNineCoord]._East = town[newRoomCoord];
-			town[newRoomCoord]._West = town[roomNineCoord];
+			town[roomNineCoord].East = town[newRoomCoord];
+			town[newRoomCoord].West = town[roomNineCoord];
 			return town;
 		}
 	}

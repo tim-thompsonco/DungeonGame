@@ -1,6 +1,6 @@
 ﻿using DungeonGame.Coordinates;
 using DungeonGame.Effects;
-using DungeonGame.Items;
+using DungeonGame.Items.WeaponObjects;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
 using DungeonGame.Rooms;
@@ -9,8 +9,8 @@ using System.Linq;
 
 namespace DungeonGame.Helpers {
 	public static class CombatHelper {
-		private static string[] Input { get; set; }
-		private static bool FleeSuccess { get; set; }
+		private static string[] _input;
+		private static bool _fleeSuccess;
 
 		public static void StartCombat(Player player, Monster monster) {
 			Console.Clear();
@@ -33,7 +33,7 @@ namespace DungeonGame.Helpers {
 					OutputHelper.ShowUserOutput(player, monster);
 					OutputHelper.Display.ClearUserOutput();
 					// Player will attack, use ability, cast spells, etc. to cause damage
-					Input = InputHelper.GetFormattedInput(Console.ReadLine());
+					_input = InputHelper.GetFormattedInput(Console.ReadLine());
 					Console.Clear();
 					isInputValid = ProcessPlayerInput(player, monster);
 				}
@@ -42,7 +42,7 @@ namespace DungeonGame.Helpers {
 					ProcessPlayerEffects(player);
 				}
 
-				if (FleeSuccess) {
+				if (_fleeSuccess) {
 					return;
 				}
 
@@ -88,57 +88,57 @@ namespace DungeonGame.Helpers {
 					"You have fled combat successfully!");
 				player.InCombat = false;
 				monster.InCombat = false;
-				FleeSuccess = true;
-				IRoom playerRoom = RoomHelper._Rooms[player.PlayerLocation];
+				_fleeSuccess = true;
+				IRoom playerRoom = RoomHelper.Rooms[player.PlayerLocation];
 				int playerX = player.PlayerLocation.X;
 				int playerY = player.PlayerLocation.Y;
 				int playerZ = player.PlayerLocation.Z;
-				if (playerRoom._Up != null) {
+				if (playerRoom.Up != null) {
 					Coordinate newCoord = new Coordinate(playerX, playerY, playerZ + 1);
 					RoomHelper.ChangeRoom(player, newCoord);
 					return;
 				}
-				if (playerRoom._East != null) {
+				if (playerRoom.East != null) {
 					Coordinate newCoord = new Coordinate(playerX + 1, playerY, playerZ);
 					RoomHelper.ChangeRoom(player, newCoord);
 					return;
 				}
-				if (playerRoom._West != null) {
+				if (playerRoom.West != null) {
 					Coordinate newCoord = new Coordinate(playerX - 1, playerY, playerZ);
 					RoomHelper.ChangeRoom(player, newCoord);
 					return;
 				}
-				if (playerRoom._North != null) {
+				if (playerRoom.North != null) {
 					Coordinate newCoord = new Coordinate(playerX, playerY + 1, playerZ);
 					RoomHelper.ChangeRoom(player, newCoord);
 					return;
 				}
-				if (playerRoom._South != null) {
+				if (playerRoom.South != null) {
 					Coordinate newCoord = new Coordinate(playerX, playerY - 1, playerZ);
 					RoomHelper.ChangeRoom(player, newCoord);
 					return;
 				}
-				if (playerRoom._NorthEast != null) {
+				if (playerRoom.NorthEast != null) {
 					Coordinate newCoord = new Coordinate(playerX + 1, playerY + 1, playerZ);
 					RoomHelper.ChangeRoom(player, newCoord);
 					return;
 				}
-				if (playerRoom._NorthWest != null) {
+				if (playerRoom.NorthWest != null) {
 					Coordinate newCoord = new Coordinate(playerX - 1, playerY + 1, playerZ);
 					RoomHelper.ChangeRoom(player, newCoord);
 					return;
 				}
-				if (playerRoom._SouthEast != null) {
+				if (playerRoom.SouthEast != null) {
 					Coordinate newCoord = new Coordinate(playerX + 1, playerY - 1, playerZ);
 					RoomHelper.ChangeRoom(player, newCoord);
 					return;
 				}
-				if (playerRoom._SouthWest != null) {
+				if (playerRoom.SouthWest != null) {
 					Coordinate newCoord = new Coordinate(playerX - 1, playerY - 1, playerZ);
 					RoomHelper.ChangeRoom(player, newCoord);
 					return;
 				}
-				if (playerRoom._Down != null) {
+				if (playerRoom.Down != null) {
 					Coordinate newCoord = new Coordinate(playerX, playerY, playerZ - 1);
 					RoomHelper.ChangeRoom(player, newCoord);
 					return;
@@ -237,7 +237,7 @@ namespace DungeonGame.Helpers {
 		}
 
 		private static bool ProcessPlayerInput(Player player, Monster monster) {
-			switch (Input[0]) {
+			switch (_input[0]) {
 				case "f":
 				case "fight":
 					int attackDamage = player.PhysicalAttack(monster);
@@ -265,8 +265,8 @@ namespace DungeonGame.Helpers {
 					break;
 				case "cast":
 					try {
-						if (Input[1] != null) {
-							string spellName = InputHelper.ParseInput(Input);
+						if (_input[1] != null) {
+							string spellName = InputHelper.ParseInput(_input);
 							player.CastSpell(monster, spellName);
 						}
 					} catch (IndexOutOfRangeException) {
@@ -276,7 +276,7 @@ namespace DungeonGame.Helpers {
 							"You don't have that spell.");
 						return false;
 					} catch (NullReferenceException) {
-						if (player.PlayerClass != Player.PlayerClassType.Mage) {
+						if (player.PlayerClass != PlayerClassType.Mage) {
 							OutputHelper.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -287,7 +287,7 @@ namespace DungeonGame.Helpers {
 						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
-							player.PlayerClass != Player.PlayerClassType.Mage
+							player.PlayerClass != PlayerClassType.Mage
 								? "You can't cast spells. You're not a mage!"
 								: "You do not have enough mana to cast that spell!");
 						return false;
@@ -295,11 +295,11 @@ namespace DungeonGame.Helpers {
 					break;
 				case "use":
 					try {
-						if (Input[1] != null && Input[1] != "bandage") {
-							player.UseAbility(monster, Input);
+						if (_input[1] != null && _input[1] != "bandage") {
+							player.UseAbility(monster, _input);
 						}
-						if (Input[1] != null && Input[1] == "bandage") {
-							player.UseAbility(Input);
+						if (_input[1] != null && _input[1] == "bandage") {
+							player.UseAbility(_input);
 						}
 					} catch (IndexOutOfRangeException) {
 						OutputHelper.Display.StoreUserOutput(
@@ -314,7 +314,7 @@ namespace DungeonGame.Helpers {
 							"You don't have that ability.");
 						return false;
 					} catch (NullReferenceException) {
-						if (player.PlayerClass == Player.PlayerClassType.Mage) {
+						if (player.PlayerClass == PlayerClassType.Mage) {
 							OutputHelper.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -323,23 +323,23 @@ namespace DungeonGame.Helpers {
 						}
 					} catch (InvalidOperationException) {
 						switch (player.PlayerClass) {
-							case Player.PlayerClassType.Mage:
+							case PlayerClassType.Mage:
 								OutputHelper.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"You can't use abilities. You're not a warrior or archer!");
 								break;
-							case Player.PlayerClassType.Warrior:
+							case PlayerClassType.Warrior:
 								OutputHelper.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
 									"You do not have enough rage to use that ability!");
 								break;
-							case Player.PlayerClassType.Archer:
+							case PlayerClassType.Archer:
 								OutputHelper.Display.StoreUserOutput(
 									Settings.FormatFailureOutputText(),
 									Settings.FormatDefaultBackground(),
-									player.PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow
+									player.PlayerWeapon.WeaponGroup != WeaponType.Bow
 										? "You do not have a bow equipped!"
 										: "You do not have enough combo points to use that ability!");
 								break;
@@ -351,14 +351,14 @@ namespace DungeonGame.Helpers {
 					break;
 				case "equip":
 				case "unequip":
-					GearHelper.EquipItem(player, Input);
+					GearHelper.EquipItem(player, _input);
 					break;
 				case "flee":
 					FleeCombat(player, monster);
 					break;
 				case "drink":
-					if (Input.Last() == "potion") {
-						player.AttemptDrinkPotion(InputHelper.ParseInput(Input));
+					if (_input.Last() == "potion") {
+						player.AttemptDrinkPotion(InputHelper.ParseInput(_input));
 					} else {
 						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
@@ -375,7 +375,7 @@ namespace DungeonGame.Helpers {
 					PlayerHelper.ShowInventory(player);
 					return false;
 				case "list":
-					switch (Input[1]) {
+					switch (_input[1]) {
 						case "abilities":
 							try {
 								PlayerHelper.ListAbilities(player);
@@ -402,14 +402,14 @@ namespace DungeonGame.Helpers {
 					return false;
 				case "ability":
 					try {
-						PlayerHelper.AbilityInfo(player, Input);
+						PlayerHelper.AbilityInfo(player, _input);
 					} catch (IndexOutOfRangeException) {
 						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"What ability did you want to know about?");
 					} catch (NullReferenceException) {
-						if (player.PlayerClass == Player.PlayerClassType.Mage) {
+						if (player.PlayerClass == PlayerClassType.Mage) {
 							OutputHelper.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),
@@ -419,14 +419,14 @@ namespace DungeonGame.Helpers {
 					return false;
 				case "spell":
 					try {
-						PlayerHelper.SpellInfo(player, Input);
+						PlayerHelper.SpellInfo(player, _input);
 					} catch (IndexOutOfRangeException) {
 						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatFailureOutputText(),
 							Settings.FormatDefaultBackground(),
 							"What spell did you want to know about?");
 					} catch (NullReferenceException) {
-						if (player.PlayerClass != Player.PlayerClassType.Mage) {
+						if (player.PlayerClass != PlayerClassType.Mage) {
 							OutputHelper.Display.StoreUserOutput(
 								Settings.FormatFailureOutputText(),
 								Settings.FormatDefaultBackground(),

@@ -8,7 +8,7 @@ namespace DungeonGameTests.Effects {
 	internal class BlockDamageEffectUnitTests {
 		[Test]
 		public void PlayerHasBlockDamageEffectUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Warrior);
+			Player player = new Player("test", PlayerClassType.Warrior);
 			EffectAmountSettings effectAmountSettings = new EffectAmountSettings {
 				Amount = 50,
 				EffectHolder = player,
@@ -28,7 +28,7 @@ namespace DungeonGameTests.Effects {
 		[Test]
 		public void ProcessBlockDamageEffectInCombatRoundWhereDamageLessThanBlockAmountUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Warrior);
+			Player player = new Player("test", PlayerClassType.Warrior);
 			EffectAmountSettings effectAmountSettings = new EffectAmountSettings {
 				Amount = 50,
 				EffectHolder = player,
@@ -50,7 +50,7 @@ namespace DungeonGameTests.Effects {
 		[Test]
 		public void ProcessBlockDamageEffectInCombatRoundWhereDamageIsBlockAmountUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Warrior);
+			Player player = new Player("test", PlayerClassType.Warrior);
 			EffectAmountSettings effectAmountSettings = new EffectAmountSettings {
 				Amount = 50,
 				EffectHolder = player,
@@ -74,7 +74,7 @@ namespace DungeonGameTests.Effects {
 		[Test]
 		public void ProcessBlockDamageEffectInCombatRoundWhereDamageIsMoreThanBlockAmountUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Warrior);
+			Player player = new Player("test", PlayerClassType.Warrior);
 			EffectAmountSettings effectAmountSettings = new EffectAmountSettings {
 				Amount = 50,
 				EffectHolder = player,
@@ -98,7 +98,7 @@ namespace DungeonGameTests.Effects {
 		[Test]
 		public void ProcessBlockDamageEffectOutOfCombatRoundUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Warrior);
+			Player player = new Player("test", PlayerClassType.Warrior);
 			EffectAmountSettings effectAmountSettings = new EffectAmountSettings {
 				Amount = 50,
 				EffectHolder = player,

@@ -2,9 +2,9 @@
 using NUnit.Framework;
 
 namespace DungeonGameTests.Items {
-	class QuiverUnitTests {
-		string quiverName;
-		Quiver quiver;
+	internal class QuiverUnitTests {
+		private string quiverName;
+		private Quiver quiver;
 
 		[SetUp]
 		public void Setup() {

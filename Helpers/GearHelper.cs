@@ -1,7 +1,9 @@
 ﻿using DungeonGame.Effects;
 using DungeonGame.Items;
+using DungeonGame.Items.ArmorObjects;
 using DungeonGame.Items.Consumables.Kits;
 using DungeonGame.Items.Equipment;
+using DungeonGame.Items.WeaponObjects;
 using DungeonGame.Players;
 using DungeonGame.Rooms;
 using System;
@@ -21,7 +23,7 @@ namespace DungeonGame.Helpers {
 				EquipArmor(player, (Armor)playerArmor);
 			}
 
-			if (player.PlayerClass == Player.PlayerClassType.Archer) {
+			if (player.PlayerClass == PlayerClassType.Archer) {
 				Quiver quiver = player.Inventory.Find(item => item is Quiver) as Quiver;
 				EquipQuiver(player, quiver);
 			}
@@ -35,7 +37,7 @@ namespace DungeonGame.Helpers {
 					itemInfo.Append($" (AR: {isItemArmor.ArmorRating})");
 					break;
 				case Weapon isItemWeapon:
-					itemInfo.Append($" (DMG: {isItemWeapon._RegDamage} CR: {isItemWeapon._CritMultiplier})");
+					itemInfo.Append($" (DMG: {isItemWeapon.RegDamage} CR: {isItemWeapon.CritMultiplier})");
 					break;
 			}
 			string itemName = textInfo.ToTitleCase(itemInfo.ToString());
@@ -203,7 +205,7 @@ namespace DungeonGame.Helpers {
 			}
 			int itemIndex = player.Inventory.FindIndex(
 				f => f.Name == input[1] || f.Name.Contains(input[1]));
-			IRoom playerRoom = RoomHelper._Rooms[player.PlayerLocation];
+			IRoom playerRoom = RoomHelper.Rooms[player.PlayerLocation];
 			if (itemIndex != -1) {
 				IEquipment equippedItem = player.Inventory[itemIndex] as IEquipment;
 				if (equippedItem.Equipped) {
@@ -213,7 +215,7 @@ namespace DungeonGame.Helpers {
 						"You have to unequip that item first!");
 					return;
 				}
-				playerRoom._RoomObjects.Add(player.Inventory[itemIndex]);
+				playerRoom.RoomObjects.Add(player.Inventory[itemIndex]);
 				string dropInventoryString = $"You dropped {player.Inventory[itemIndex].Name}.";
 				player.Inventory.RemoveAt(itemIndex);
 				OutputHelper.Display.StoreUserOutput(
@@ -225,7 +227,7 @@ namespace DungeonGame.Helpers {
 			itemIndex = player.Inventory.FindIndex(
 				f => f.Name == input[1] || f.Name.Contains(input[1]));
 			if (itemIndex != -1) {
-				playerRoom._RoomObjects.Add(player.Inventory[itemIndex]);
+				playerRoom.RoomObjects.Add(player.Inventory[itemIndex]);
 				string dropInventorytring = $"You dropped {player.Inventory[itemIndex].Name}.";
 				player.Inventory.RemoveAt(itemIndex);
 				OutputHelper.Display.StoreUserOutput(
@@ -247,10 +249,10 @@ namespace DungeonGame.Helpers {
 					"What item did you want to pickup?");
 				return;
 			}
-			IRoom playerRoom = RoomHelper._Rooms[player.PlayerLocation];
-			int itemIndex = playerRoom._RoomObjects.FindIndex(
+			IRoom playerRoom = RoomHelper.Rooms[player.PlayerLocation];
+			int itemIndex = playerRoom.RoomObjects.FindIndex(
 				f => f.Name == input[1] || f.Name.Contains(input[1]));
-			if (!(playerRoom._RoomObjects[itemIndex] is IItem item)) {
+			if (!(playerRoom.RoomObjects[itemIndex] is IItem item)) {
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatFailureOutputText(),
 					Settings.FormatDefaultBackground(),
@@ -272,9 +274,9 @@ namespace DungeonGame.Helpers {
 					"That item is not in the room!");
 				return;
 			}
-			player.Inventory.Add(playerRoom._RoomObjects[itemIndex] as IItem);
-			string pickupItemString = $"You picked up {playerRoom._RoomObjects[itemIndex].Name}.";
-			playerRoom._RoomObjects.RemoveAt(itemIndex);
+			player.Inventory.Add(playerRoom.RoomObjects[itemIndex] as IItem);
+			string pickupItemString = $"You picked up {playerRoom.RoomObjects[itemIndex].Name}.";
+			playerRoom.RoomObjects.RemoveAt(itemIndex);
 			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatSuccessOutputText(),
 				Settings.FormatDefaultBackground(),
@@ -388,7 +390,7 @@ namespace DungeonGame.Helpers {
 			}
 			armor.Equipped = false;
 			switch (armor.ArmorCategory) {
-				case Armor.ArmorSlot.Head:
+				case ArmorSlot.Head:
 					string unequipHeadString = $"You have unequipped {player.PlayerHeadArmor.Name}.";
 					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -396,7 +398,7 @@ namespace DungeonGame.Helpers {
 						unequipHeadString);
 					player.PlayerHeadArmor = null;
 					break;
-				case Armor.ArmorSlot.Back:
+				case ArmorSlot.Back:
 					string unequipBackString = $"You have unequipped {player.PlayerBackArmor.Name}.";
 					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -404,7 +406,7 @@ namespace DungeonGame.Helpers {
 						unequipBackString);
 					player.PlayerBackArmor = null;
 					break;
-				case Armor.ArmorSlot.Chest:
+				case ArmorSlot.Chest:
 					string unequipChestString = $"You have unequipped {player.PlayerChestArmor.Name}.";
 					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -412,7 +414,7 @@ namespace DungeonGame.Helpers {
 						unequipChestString);
 					player.PlayerChestArmor = null;
 					break;
-				case Armor.ArmorSlot.Wrist:
+				case ArmorSlot.Wrist:
 					string unequipWristString = $"You have unequipped {player.PlayerWristArmor.Name}.";
 					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -420,7 +422,7 @@ namespace DungeonGame.Helpers {
 						unequipWristString);
 					player.PlayerWristArmor = null;
 					break;
-				case Armor.ArmorSlot.Waist:
+				case ArmorSlot.Waist:
 					string unequipWaistString = $"You have unequipped {player.PlayerWaistArmor.Name}.";
 					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -428,7 +430,7 @@ namespace DungeonGame.Helpers {
 						unequipWaistString);
 					player.PlayerWaistArmor = null;
 					break;
-				case Armor.ArmorSlot.Legs:
+				case ArmorSlot.Legs:
 					string unequipLegsString = $"You have unequipped {player.PlayerLegsArmor.Name}.";
 					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -436,7 +438,7 @@ namespace DungeonGame.Helpers {
 						unequipLegsString);
 					player.PlayerLegsArmor = null;
 					break;
-				case Armor.ArmorSlot.Hands:
+				case ArmorSlot.Hands:
 					string unequipHandsString = $"You have unequipped {player.PlayerHandsArmor.Name}.";
 					OutputHelper.Display.StoreUserOutput(
 						Settings.FormatSuccessOutputText(),
@@ -458,16 +460,16 @@ namespace DungeonGame.Helpers {
 				return;
 			}
 			// Check to see if player can use weapon, if so, continue, otherwise return output error msg
-			switch (weapon._WeaponGroup) {
-				case Weapon.WeaponType.Dagger when player.CanUseDagger:
+			switch (weapon.WeaponGroup) {
+				case WeaponType.Dagger when player.CanUseDagger:
 					break;
-				case Weapon.WeaponType.OneHandedSword when player.CanUseOneHandedSword:
+				case WeaponType.OneHandedSword when player.CanUseOneHandedSword:
 					break;
-				case Weapon.WeaponType.TwoHandedSword when player.CanUseTwoHandedSword:
+				case WeaponType.TwoHandedSword when player.CanUseTwoHandedSword:
 					break;
-				case Weapon.WeaponType.Axe when player.CanUseAxe:
+				case WeaponType.Axe when player.CanUseAxe:
 					break;
-				case Weapon.WeaponType.Bow when player.CanUseBow:
+				case WeaponType.Bow when player.CanUseBow:
 					break;
 				default:
 					OutputHelper.Display.StoreUserOutput(
@@ -518,11 +520,11 @@ namespace DungeonGame.Helpers {
 			}
 			// Check to see if player can use armor type, if so, continue, otherwise return output error msg
 			switch (armor.ArmorGroup) {
-				case Armor.ArmorType.Cloth when player.CanWearCloth:
+				case ArmorType.Cloth when player.CanWearCloth:
 					break;
-				case Armor.ArmorType.Leather when player.CanWearLeather:
+				case ArmorType.Leather when player.CanWearLeather:
 					break;
-				case Armor.ArmorType.Plate when player.CanWearPlate:
+				case ArmorType.Plate when player.CanWearPlate:
 					break;
 				default:
 					OutputHelper.Display.StoreUserOutput(
@@ -532,7 +534,7 @@ namespace DungeonGame.Helpers {
 					return;
 			}
 			switch (armor.ArmorCategory) {
-				case Armor.ArmorSlot.Head:
+				case ArmorSlot.Head:
 					if (player.PlayerHeadArmor != null && player.PlayerHeadArmor.Equipped) {
 						UnequipArmor(player, player.PlayerHeadArmor);
 					}
@@ -544,7 +546,7 @@ namespace DungeonGame.Helpers {
 						Settings.FormatDefaultBackground(),
 						equipHeadString);
 					break;
-				case Armor.ArmorSlot.Back:
+				case ArmorSlot.Back:
 					if (player.PlayerBackArmor != null && player.PlayerBackArmor.Equipped) {
 						UnequipArmor(player, player.PlayerBackArmor);
 					}
@@ -556,7 +558,7 @@ namespace DungeonGame.Helpers {
 						Settings.FormatDefaultBackground(),
 						equipBackString);
 					break;
-				case Armor.ArmorSlot.Chest:
+				case ArmorSlot.Chest:
 					if (player.PlayerChestArmor != null && player.PlayerChestArmor.Equipped) {
 						UnequipArmor(player, player.PlayerChestArmor);
 					}
@@ -568,7 +570,7 @@ namespace DungeonGame.Helpers {
 						Settings.FormatDefaultBackground(),
 						equipChestString);
 					break;
-				case Armor.ArmorSlot.Wrist:
+				case ArmorSlot.Wrist:
 					if (player.PlayerWristArmor != null && player.PlayerWristArmor.Equipped) {
 						UnequipArmor(player, player.PlayerWristArmor);
 					}
@@ -580,7 +582,7 @@ namespace DungeonGame.Helpers {
 						Settings.FormatDefaultBackground(),
 						equipWristString);
 					break;
-				case Armor.ArmorSlot.Waist:
+				case ArmorSlot.Waist:
 					if (player.PlayerWaistArmor != null && player.PlayerWaistArmor.Equipped) {
 						UnequipArmor(player, player.PlayerWaistArmor);
 					}
@@ -592,7 +594,7 @@ namespace DungeonGame.Helpers {
 						Settings.FormatDefaultBackground(),
 						equipWaistString);
 					break;
-				case Armor.ArmorSlot.Legs:
+				case ArmorSlot.Legs:
 					if (player.PlayerLegsArmor != null && player.PlayerLegsArmor.Equipped) {
 						UnequipArmor(player, player.PlayerLegsArmor);
 					}
@@ -604,7 +606,7 @@ namespace DungeonGame.Helpers {
 						Settings.FormatDefaultBackground(),
 						equipLegsString);
 					break;
-				case Armor.ArmorSlot.Hands:
+				case ArmorSlot.Hands:
 					if (player.PlayerHandsArmor != null && player.PlayerHandsArmor.Equipped) {
 						UnequipArmor(player, player.PlayerHandsArmor);
 					}

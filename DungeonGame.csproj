@@ -64,15 +64,36 @@
     <Compile Include="Effects\IEffect.cs" />
     <Compile Include="Effects\BurningEffect.cs" />
     <Compile Include="Effects\ReflectDamageEffect.cs" />
-    <Compile Include="Effects\StatType.cs" />
+    <Compile Include="Items\ArmorObjects\ArmorSlot.cs" />
+    <Compile Include="Items\ArmorObjects\ArmorType.cs" />
+    <Compile Include="Items\Consumables\Arrow\ArrowType.cs" />
+    <Compile Include="Items\WeaponObjects\DamageType.cs" />
+    <Compile Include="Items\WeaponObjects\WeaponType.cs" />
+    <Compile Include="Monsters\ElementalType.cs" />
+    <Compile Include="Monsters\MonsterType.cs" />
+    <Compile Include="Monsters\SkeletonType.cs" />
+    <Compile Include="Players\PlayerClassType.cs" />
+    <Compile Include="Quests\QuestType.cs" />
+    <Compile Include="Rooms\RoomType.cs" />
+    <Compile Include="Skill Properties\OffensiveType.cs" />
+    <Compile Include="Skills\Ability.cs" />
+    <Compile Include="Skills\ArcherAbility.cs" />
+    <Compile Include="Skills\DamageType.cs" />
+    <Compile Include="Skills\SpellType.cs" />
+    <Compile Include="Skills\WarriorAbility.cs" />
+    <Compile Include="StatType.cs" />
     <Compile Include="Effects\StunnedEffect.cs" />
     <Compile Include="Interfaces\IEffectHolder.cs" />
+    <Compile Include="Items\Consumables\Kits\ArmorKitType.cs" />
+    <Compile Include="Items\Consumables\Kits\KitLevel.cs" />
+    <Compile Include="Items\Consumables\Kits\WeaponKitType.cs" />
+    <Compile Include="Items\Consumables\Potions\PotionStrength.cs" />
     <Compile Include="Items\Gems\GemLevel.cs" />
     <Compile Include="Items\Gems\GemType.cs" />
     <Compile Include="Quests\IQuestGiver.cs" />
     <Compile Include="Interfaces\IRainbowGear.cs" />
-    <Compile Include="Items\Armor.cs" />
-    <Compile Include="Items\Consumables\Arrows.cs" />
+    <Compile Include="Items\ArmorObjects\Armor.cs" />
+    <Compile Include="Items\Consumables\Arrow\Arrows.cs" />
     <Compile Include="Items\Consumables\Potions\IPotion.cs" />
     <Compile Include="Items\Equipment\IEquipment.cs" />
     <Compile Include="Items\IItem.cs" />
@@ -85,7 +106,7 @@
     <Compile Include="Items\Gems\Gem.cs" />
     <Compile Include="Items\Loot.cs" />
     <Compile Include="Items\Quiver.cs" />
-    <Compile Include="Items\Weapon.cs" />
+    <Compile Include="Items\WeaponObjects\Weapon.cs" />
     <Compile Include="Messages.cs" />
     <Compile Include="Quests\Quest.cs" />
     <Compile Include="Settings.cs" />
@@ -99,13 +120,13 @@
     <Compile Include="Skills\MonsterSpell.cs" />
     <Compile Include="Skills\PlayerAbility.cs" />
     <Compile Include="Skills\PlayerSpell.cs" />
-    <Compile Include="Spells\IChanceOfSuccessSpell.cs" />
     <Compile Include="Spells\IMonsterOffensiveOverTimeSpell.cs" />
     <Compile Include="Spells\IMonsterOffensiveSpell.cs" />
     <Compile Include="Spells\MonsterSpells\Fireball.cs" />
-    <Compile Include="Trainer.cs" />
+    <Compile Include="Trainers\Trainer.cs" />
+    <Compile Include="Trainers\TrainerCategory.cs" />
     <Compile Include="UserOutput.cs" />
-    <Compile Include="Vendor.cs" />
+    <Compile Include="Vendors\Vendor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Players\Player.cs" />
@@ -114,6 +135,7 @@
     <Compile Include="IName.cs" />
     <Compile Include="Monsters\Monster.cs" />
     <Compile Include="Rooms\TownRoom.cs" />
+    <Compile Include="Vendors\VendorType.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">

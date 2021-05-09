@@ -1,38 +1,34 @@
 ﻿using DungeonGame.Helpers;
+using DungeonGame.Items.ArmorObjects;
 using System.Globalization;
 
 namespace DungeonGame.Items.Consumables.Kits {
-	public class ArmorKit : IItem, IKit {
-		public enum KitType {
-			Cloth,
-			Leather,
-			Plate
-		}
+	public partial class ArmorKit : IItem, IKit {
 		public string Name { get; set; }
 		public string Desc { get; set; }
 		public int ItemValue { get; set; }
 		public int Weight { get; set; }
 		public bool KitHasBeenUsed { get; set; }
-		public KitLevel ArmorKitLevel { get; }
+		public KitLevel KitLevel { get; }
 		public int KitAugmentAmount { get; set; }
 		public TextInfo TextInfo { get; set; }
-		private readonly KitType ArmorKitType;
+		private readonly ArmorKitType _kitType;
 
-		public ArmorKit(KitLevel kitLevel, KitType kitType) {
-			ArmorKitLevel = kitLevel;
-			ArmorKitType = kitType;
+		public ArmorKit(KitLevel kitLevel, ArmorKitType kitType) {
+			KitLevel = kitLevel;
+			_kitType = kitType;
 			TextInfo = new CultureInfo("en-US", false).TextInfo;
 			Weight = 1;
 			KitAugmentAmount = GetKitAugmentAmount();
 			ItemValue = KitAugmentAmount * 10;
-			Name = $"{kitLevel.ToString().ToLower()} {ArmorKitType.ToString().ToLower()} armor kit";
+			Name = $"{kitLevel.ToString().ToLower()} {_kitType.ToString().ToLower()} armor kit";
 			Desc = $"A single-use {Name} that increases armor rating by {KitAugmentAmount} for one armor item.";
 		}
 
 		public int GetKitAugmentAmount() {
-			if (ArmorKitLevel == KitLevel.Light) {
+			if (KitLevel == KitLevel.Light) {
 				return 1;
-			} else if (ArmorKitLevel == KitLevel.Medium) {
+			} else if (KitLevel == KitLevel.Medium) {
 				return 2;
 			} else {
 				// If kit level is not light or medium, then it is heavy
@@ -54,11 +50,11 @@ namespace DungeonGame.Items.Consumables.Kits {
 		}
 
 		private bool ArmorKitMatchesArmorType(Armor armor) {
-			if (ArmorKitType == KitType.Cloth && armor.ArmorGroup == Armor.ArmorType.Cloth) {
+			if (_kitType == ArmorKitType.Cloth && armor.ArmorGroup == ArmorType.Cloth) {
 				return true;
-			} else if (ArmorKitType == KitType.Leather && armor.ArmorGroup == Armor.ArmorType.Leather) {
+			} else if (_kitType == ArmorKitType.Leather && armor.ArmorGroup == ArmorType.Leather) {
 				return true;
-			} else if (ArmorKitType == KitType.Plate && armor.ArmorGroup == Armor.ArmorType.Plate) {
+			} else if (_kitType == ArmorKitType.Plate && armor.ArmorGroup == ArmorType.Plate) {
 				return true;
 			}
 

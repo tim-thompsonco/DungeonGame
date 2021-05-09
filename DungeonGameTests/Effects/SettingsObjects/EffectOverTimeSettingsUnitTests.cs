@@ -21,7 +21,7 @@ namespace DungeonGameTests.Effects.SettingsObjects {
 
 		[Test]
 		public void EffectOverTimeSettingsMissingMaxRoundThrowsException() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectOverTimeSettings effectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 5,
 				EffectHolder = player,
@@ -36,7 +36,7 @@ namespace DungeonGameTests.Effects.SettingsObjects {
 
 		[Test]
 		public void EffectOverTimeSettingsMissingNameThrowsException() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectOverTimeSettings effectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 5,
 				EffectHolder = player,
@@ -51,7 +51,7 @@ namespace DungeonGameTests.Effects.SettingsObjects {
 
 		[Test]
 		public void EffectOverTimeSettingsMissingAmountOverTimeThrowsException() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectOverTimeSettings effectOverTimeSettings = new EffectOverTimeSettings {
 				EffectHolder = player,
 				MaxRound = 3,
@@ -66,7 +66,7 @@ namespace DungeonGameTests.Effects.SettingsObjects {
 
 		[Test]
 		public void EffectOverTimeSettingsWithAllSettingsDoesNotThrowException() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectOverTimeSettings effectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 5,
 				EffectHolder = player,

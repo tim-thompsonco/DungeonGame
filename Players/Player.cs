@@ -3,8 +3,10 @@ using DungeonGame.Effects;
 using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 using DungeonGame.Items;
-using DungeonGame.Items.Consumables;
+using DungeonGame.Items.ArmorObjects;
+using DungeonGame.Items.Consumables.Arrow;
 using DungeonGame.Items.Consumables.Potions;
+using DungeonGame.Items.WeaponObjects;
 using DungeonGame.Monsters;
 using DungeonGame.Quests;
 using System;
@@ -14,11 +16,6 @@ using System.Text;
 
 namespace DungeonGame.Players {
 	public class Player : IEffectHolder {
-		public enum PlayerClassType {
-			Mage,
-			Warrior,
-			Archer
-		}
 		public string Name { get; set; }
 		public int MaxHitPoints { get; set; }
 		public int HitPoints { get; set; }
@@ -98,25 +95,25 @@ namespace DungeonGame.Players {
 					CanWearCloth = true;
 					CanUseDagger = true;
 					CanUseOneHandedSword = true;
-					Inventory.Add(new Weapon(Level, Weapon.WeaponType.Dagger));
+					Inventory.Add(new Weapon(Level, WeaponType.Dagger));
 					Inventory.Add(new Armor(
-						1, Armor.ArmorType.Cloth, Armor.ArmorSlot.Head));
+						1, ArmorType.Cloth, ArmorSlot.Head));
 					Inventory.Add(new Armor(
-						1, Armor.ArmorType.Cloth, Armor.ArmorSlot.Chest));
+						1, ArmorType.Cloth, ArmorSlot.Chest));
 					Inventory.Add(new Armor(
-						1, Armor.ArmorType.Cloth, Armor.ArmorSlot.Legs));
+						1, ArmorType.Cloth, ArmorSlot.Legs));
 					Spellbook.Add(new PlayerSpell(
-						"fireball", 35, 1, PlayerSpell.SpellType.Fireball, 1));
+						"fireball", 35, 1, SpellType.Fireball, 1));
 					Spellbook.Add(new PlayerSpell(
-						"heal", 25, 1, PlayerSpell.SpellType.Heal, 1));
+						"heal", 25, 1, SpellType.Heal, 1));
 					Spellbook.Add(new PlayerSpell(
-						"diamondskin", 25, 1, PlayerSpell.SpellType.Diamondskin, 1));
+						"diamondskin", 25, 1, SpellType.Diamondskin, 1));
 					Spellbook.Add(new PlayerSpell(
-						"frostbolt", 25, 1, PlayerSpell.SpellType.Frostbolt, 1));
+						"frostbolt", 25, 1, SpellType.Frostbolt, 1));
 					Spellbook.Add(new PlayerSpell(
-						"lightning", 25, 1, PlayerSpell.SpellType.Lightning, 1));
+						"lightning", 25, 1, SpellType.Lightning, 1));
 					Spellbook.Add(new PlayerSpell(
-						"rejuvenate", 25, 1, PlayerSpell.SpellType.Rejuvenate, 1));
+						"rejuvenate", 25, 1, SpellType.Rejuvenate, 1));
 					break;
 				case PlayerClassType.Warrior:
 					for (int i = 0; i < 3; i++) {
@@ -137,25 +134,25 @@ namespace DungeonGame.Players {
 					CanUseBow = true;
 					CanUseOneHandedSword = true;
 					CanUseTwoHandedSword = true;
-					Inventory.Add(new Weapon(Level, Weapon.WeaponType.TwoHandedSword));
+					Inventory.Add(new Weapon(Level, WeaponType.TwoHandedSword));
 					Inventory.Add(new Armor(
-						1, Armor.ArmorType.Plate, Armor.ArmorSlot.Head));
+						1, ArmorType.Plate, ArmorSlot.Head));
 					Inventory.Add(new Armor(
-						1, Armor.ArmorType.Plate, Armor.ArmorSlot.Chest));
+						1, ArmorType.Plate, ArmorSlot.Chest));
 					Inventory.Add(new Armor(
-						1, Armor.ArmorType.Plate, Armor.ArmorSlot.Legs));
+						1, ArmorType.Plate, ArmorSlot.Legs));
 					Abilities.Add(new PlayerAbility(
-						"charge", 25, 1, PlayerAbility.WarriorAbility.Charge, 1));
+						"charge", 25, 1, WarriorAbility.Charge, 1));
 					Abilities.Add(new PlayerAbility(
-						"slash", 40, 1, PlayerAbility.WarriorAbility.Slash, 1));
+						"slash", 40, 1, WarriorAbility.Slash, 1));
 					Abilities.Add(new PlayerAbility(
-						"rend", 25, 1, PlayerAbility.WarriorAbility.Rend, 1));
+						"rend", 25, 1, WarriorAbility.Rend, 1));
 					Abilities.Add(new PlayerAbility(
-						"block", 25, 1, PlayerAbility.WarriorAbility.Block, 1));
+						"block", 25, 1, WarriorAbility.Block, 1));
 					Abilities.Add(new PlayerAbility(
-						"berserk", 40, 1, PlayerAbility.WarriorAbility.Berserk, 1));
+						"berserk", 40, 1, WarriorAbility.Berserk, 1));
 					Abilities.Add(new PlayerAbility(
-						"disarm", 25, 1, PlayerAbility.WarriorAbility.Disarm, 1));
+						"disarm", 25, 1, WarriorAbility.Disarm, 1));
 					break;
 				case PlayerClassType.Archer:
 					for (int i = 0; i < 3; i++) {
@@ -173,26 +170,26 @@ namespace DungeonGame.Players {
 					CanUseBow = true;
 					CanUseDagger = true;
 					CanUseOneHandedSword = true;
-					Inventory.Add(new Weapon(Level, Weapon.WeaponType.Bow));
+					Inventory.Add(new Weapon(Level, WeaponType.Bow));
 					Inventory.Add(new Armor(
-						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Head));
+						1, ArmorType.Leather, ArmorSlot.Head));
 					Inventory.Add(new Armor(
-						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Chest));
+						1, ArmorType.Leather, ArmorSlot.Chest));
 					Inventory.Add(new Armor(
-						1, Armor.ArmorType.Leather, Armor.ArmorSlot.Legs));
+						1, ArmorType.Leather, ArmorSlot.Legs));
 					Inventory.Add(new Quiver("basic quiver", 50, 15));
 					Abilities.Add(new PlayerAbility("precise shot", 40, 1,
-						PlayerAbility.ArcherAbility.Precise, 1));
+						ArcherAbility.Precise, 1));
 					Abilities.Add(new PlayerAbility(
-						"gut shot", 25, 1, PlayerAbility.ArcherAbility.Gut, 1));
+						"gut shot", 25, 1, ArcherAbility.Gut, 1));
 					Abilities.Add(new PlayerAbility(
-						"stun shot", 25, 1, PlayerAbility.ArcherAbility.Stun, 1));
+						"stun shot", 25, 1, ArcherAbility.Stun, 1));
 					Abilities.Add(new PlayerAbility("double shot", 25, 1,
-						PlayerAbility.ArcherAbility.Double, 1));
+						ArcherAbility.Double, 1));
 					Abilities.Add(new PlayerAbility("wound shot", 40, 1,
-						PlayerAbility.ArcherAbility.Wound, 1));
+						ArcherAbility.Wound, 1));
 					Abilities.Add(new PlayerAbility("distance shot", 25, 1,
-						PlayerAbility.ArcherAbility.Distance, 1));
+						ArcherAbility.Distance, 1));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -215,17 +212,17 @@ namespace DungeonGame.Players {
 			int attackAmount = 0;
 
 			try {
-				if (PlayerWeapon.Equipped && PlayerWeapon._WeaponGroup != Weapon.WeaponType.Bow) {
+				if (PlayerWeapon.Equipped && PlayerWeapon.WeaponGroup != WeaponType.Bow) {
 					attackAmount = PlayerWeapon.Attack();
 				}
 				if (PlayerWeapon.Equipped &&
-					PlayerWeapon._WeaponGroup == Weapon.WeaponType.Bow &&
+					PlayerWeapon.WeaponGroup == WeaponType.Bow &&
 					PlayerQuiver.HaveArrows()) {
 					PlayerQuiver.UseArrow();
 					attackAmount = PlayerWeapon.Attack();
 				}
 				if (PlayerWeapon.Equipped &&
-					PlayerWeapon._WeaponGroup == Weapon.WeaponType.Bow &&
+					PlayerWeapon.WeaponGroup == WeaponType.Bow &&
 					!PlayerQuiver.HaveArrows()) {
 					Quiver.DisplayOutOfArrowsMessage();
 					attackAmount = 5;
@@ -299,25 +296,25 @@ namespace DungeonGame.Players {
 				RagePoints >= Abilities[index].RageCost &&
 				PlayerClass == PlayerClassType.Warrior) {
 				switch (Abilities[index].WarAbilityCategory) {
-					case PlayerAbility.WarriorAbility.Slash:
-					case PlayerAbility.WarriorAbility.Rend:
-					case PlayerAbility.WarriorAbility.Charge:
-					case PlayerAbility.WarriorAbility.Block:
-					case PlayerAbility.WarriorAbility.Berserk:
-					case PlayerAbility.WarriorAbility.Disarm:
-					case PlayerAbility.WarriorAbility.Onslaught:
+					case WarriorAbility.Slash:
+					case WarriorAbility.Rend:
+					case WarriorAbility.Charge:
+					case WarriorAbility.Block:
+					case WarriorAbility.Berserk:
+					case WarriorAbility.Disarm:
+					case WarriorAbility.Onslaught:
 						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
 							"You cannot use that ability outside combat!");
 						return;
-					case PlayerAbility.WarriorAbility.Bandage:
+					case WarriorAbility.Bandage:
 						PlayerAbility.UseBandageAbility(this, index);
 						return;
-					case PlayerAbility.WarriorAbility.PowerAura:
+					case WarriorAbility.PowerAura:
 						PlayerAbility.UsePowerAura(this, index);
 						return;
-					case PlayerAbility.WarriorAbility.WarCry:
+					case WarriorAbility.WarCry:
 						PlayerAbility.UseWarCry(this, index);
 						return;
 					default:
@@ -328,29 +325,29 @@ namespace DungeonGame.Players {
 				ComboPoints >= Abilities[index].ComboCost &&
 				PlayerClass == PlayerClassType.Archer) {
 				switch (Abilities[index].ArcAbilityCategory) {
-					case PlayerAbility.ArcherAbility.Distance:
-						if (PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow) {
+					case ArcherAbility.Distance:
+						if (PlayerWeapon?.WeaponGroup != WeaponType.Bow) {
 							throw new InvalidOperationException();
 						}
 
 						string direction = input.Last();
 						PlayerAbility.UseDistanceAbility(this, index, direction);
 						return;
-					case PlayerAbility.ArcherAbility.Gut:
-					case PlayerAbility.ArcherAbility.Precise:
-					case PlayerAbility.ArcherAbility.Stun:
-					case PlayerAbility.ArcherAbility.Double:
-					case PlayerAbility.ArcherAbility.Wound:
-					case PlayerAbility.ArcherAbility.ImmolatingArrow:
+					case ArcherAbility.Gut:
+					case ArcherAbility.Precise:
+					case ArcherAbility.Stun:
+					case ArcherAbility.Double:
+					case ArcherAbility.Wound:
+					case ArcherAbility.ImmolatingArrow:
 						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
 							"You cannot use that ability outside combat!");
 						return;
-					case PlayerAbility.ArcherAbility.Bandage:
+					case ArcherAbility.Bandage:
 						PlayerAbility.UseBandageAbility(this, index);
 						return;
-					case PlayerAbility.ArcherAbility.SwiftAura:
+					case ArcherAbility.SwiftAura:
 						PlayerAbility.UseSwiftAura(this, index);
 						return;
 					default:
@@ -377,34 +374,34 @@ namespace DungeonGame.Players {
 				RagePoints >= Abilities[index].RageCost &&
 				PlayerClass == PlayerClassType.Warrior) {
 				switch (Abilities[index].WarAbilityCategory) {
-					case PlayerAbility.WarriorAbility.Slash:
+					case WarriorAbility.Slash:
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
-					case PlayerAbility.WarriorAbility.Rend:
+					case WarriorAbility.Rend:
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
-					case PlayerAbility.WarriorAbility.Charge:
+					case WarriorAbility.Charge:
 						PlayerAbility.UseStunAbility(opponent, this, index);
 						return;
-					case PlayerAbility.WarriorAbility.Block:
+					case WarriorAbility.Block:
 						PlayerAbility.UseDefenseAbility(this, index);
 						return;
-					case PlayerAbility.WarriorAbility.Berserk:
+					case WarriorAbility.Berserk:
 						PlayerAbility.UseBerserkAbility(this, index);
 						return;
-					case PlayerAbility.WarriorAbility.Disarm:
+					case WarriorAbility.Disarm:
 						PlayerAbility.UseDisarmAbility(opponent, this, index);
 						return;
-					case PlayerAbility.WarriorAbility.Bandage:
+					case WarriorAbility.Bandage:
 						PlayerAbility.UseBandageAbility(this, index);
 						return;
-					case PlayerAbility.WarriorAbility.PowerAura:
+					case WarriorAbility.PowerAura:
 						PlayerAbility.UsePowerAura(this, index);
 						return;
-					case PlayerAbility.WarriorAbility.WarCry:
+					case WarriorAbility.WarCry:
 						PlayerAbility.UseWarCry(this, index);
 						return;
-					case PlayerAbility.WarriorAbility.Onslaught:
+					case WarriorAbility.Onslaught:
 						for (int i = 0; i < 2; i++) {
 							if (RagePoints >= Abilities[index].RageCost) {
 								PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
@@ -424,31 +421,31 @@ namespace DungeonGame.Players {
 				ComboPoints >= Abilities[index].ComboCost &&
 				PlayerClass == PlayerClassType.Archer) {
 				switch (Abilities[index].ArcAbilityCategory) {
-					case PlayerAbility.ArcherAbility.Distance:
+					case ArcherAbility.Distance:
 						return;
-					case PlayerAbility.ArcherAbility.Gut:
-						if (PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow) {
+					case ArcherAbility.Gut:
+						if (PlayerWeapon?.WeaponGroup != WeaponType.Bow) {
 							throw new InvalidOperationException();
 						}
 
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
-					case PlayerAbility.ArcherAbility.Precise:
-						if (PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow) {
+					case ArcherAbility.Precise:
+						if (PlayerWeapon?.WeaponGroup != WeaponType.Bow) {
 							throw new InvalidOperationException();
 						}
 
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
-					case PlayerAbility.ArcherAbility.Stun:
-						if (PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow) {
+					case ArcherAbility.Stun:
+						if (PlayerWeapon?.WeaponGroup != WeaponType.Bow) {
 							throw new InvalidOperationException();
 						}
 
 						PlayerAbility.UseStunAbility(opponent, this, index);
 						return;
-					case PlayerAbility.ArcherAbility.Double:
-						if (PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow) {
+					case ArcherAbility.Double:
+						if (PlayerWeapon?.WeaponGroup != WeaponType.Bow) {
 							throw new InvalidOperationException();
 						}
 
@@ -463,28 +460,28 @@ namespace DungeonGame.Players {
 							}
 						}
 						return;
-					case PlayerAbility.ArcherAbility.Wound:
-						if (PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow) {
+					case ArcherAbility.Wound:
+						if (PlayerWeapon?.WeaponGroup != WeaponType.Bow) {
 							throw new InvalidOperationException();
 						}
 
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
-					case PlayerAbility.ArcherAbility.Bandage:
+					case ArcherAbility.Bandage:
 						PlayerAbility.UseBandageAbility(this, index);
 						return;
-					case PlayerAbility.ArcherAbility.SwiftAura:
+					case ArcherAbility.SwiftAura:
 						PlayerAbility.UseSwiftAura(this, index);
 						return;
-					case PlayerAbility.ArcherAbility.ImmolatingArrow:
-						if (PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow) {
+					case ArcherAbility.ImmolatingArrow:
+						if (PlayerWeapon?.WeaponGroup != WeaponType.Bow) {
 							throw new InvalidOperationException();
 						}
 
 						PlayerAbility.UseOffenseDamageAbility(opponent, this, index);
 						return;
-					case PlayerAbility.ArcherAbility.Ambush:
-						if (PlayerWeapon?._WeaponGroup != Weapon.WeaponType.Bow) {
+					case ArcherAbility.Ambush:
+						if (PlayerWeapon?.WeaponGroup != WeaponType.Bow) {
 							throw new InvalidOperationException();
 						}
 
@@ -512,30 +509,30 @@ namespace DungeonGame.Players {
 				ManaPoints >= Spellbook[index].ManaCost &&
 				PlayerClass == PlayerClassType.Mage) {
 				switch (Spellbook[index].SpellCategory) {
-					case PlayerSpell.SpellType.Heal:
+					case SpellType.Heal:
 						PlayerSpell.CastHealing(this, index);
 						return;
-					case PlayerSpell.SpellType.Rejuvenate:
+					case SpellType.Rejuvenate:
 						PlayerSpell.CastHealing(this, index);
 						return;
-					case PlayerSpell.SpellType.Diamondskin:
+					case SpellType.Diamondskin:
 						PlayerSpell.CastAugmentArmor(this, index);
 						return;
-					case PlayerSpell.SpellType.TownPortal:
+					case SpellType.TownPortal:
 						PlayerSpell.CastTownPortal(this, index);
 						return;
-					case PlayerSpell.SpellType.Reflect:
+					case SpellType.Reflect:
 						PlayerSpell.CastReflectDamage(this, index);
 						return;
-					case PlayerSpell.SpellType.Fireball:
-					case PlayerSpell.SpellType.Frostbolt:
-					case PlayerSpell.SpellType.Lightning:
+					case SpellType.Fireball:
+					case SpellType.Frostbolt:
+					case SpellType.Lightning:
 						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatAttackFailText(),
 							Settings.FormatDefaultBackground(),
 							"You cannot use that spell outside combat!");
 						return;
-					case PlayerSpell.SpellType.ArcaneIntellect:
+					case SpellType.ArcaneIntellect:
 						PlayerSpell.CastArcaneIntellect(this, index);
 						return;
 					default:
@@ -553,37 +550,37 @@ namespace DungeonGame.Players {
 				ManaPoints >= Spellbook[index].ManaCost &&
 				PlayerClass == PlayerClassType.Mage) {
 				switch (Spellbook[index].SpellCategory) {
-					case PlayerSpell.SpellType.Fireball:
+					case SpellType.Fireball:
 						PlayerSpell.CastFireOffense(opponent, this, index);
 						return;
-					case PlayerSpell.SpellType.Frostbolt:
+					case SpellType.Frostbolt:
 						PlayerSpell.CastFrostOffense(opponent, this, index);
 						return;
-					case PlayerSpell.SpellType.Lightning:
+					case SpellType.Lightning:
 						PlayerSpell.CastArcaneOffense(opponent, this, index);
 						return;
-					case PlayerSpell.SpellType.Heal:
+					case SpellType.Heal:
 						PlayerSpell.CastHealing(this, index);
 						return;
-					case PlayerSpell.SpellType.Rejuvenate:
+					case SpellType.Rejuvenate:
 						PlayerSpell.CastHealing(this, index);
 						return;
-					case PlayerSpell.SpellType.Diamondskin:
+					case SpellType.Diamondskin:
 						PlayerSpell.CastAugmentArmor(this, index);
 						return;
-					case PlayerSpell.SpellType.Reflect:
+					case SpellType.Reflect:
 						PlayerSpell.CastReflectDamage(this, index);
 						return;
-					case PlayerSpell.SpellType.TownPortal:
+					case SpellType.TownPortal:
 						OutputHelper.Display.StoreUserOutput(
 							Settings.FormatAttackSuccessText(),
 							Settings.FormatDefaultBackground(),
 							"You cannot cast a portal during combat!");
 						return;
-					case PlayerSpell.SpellType.ArcaneIntellect:
+					case SpellType.ArcaneIntellect:
 						PlayerSpell.CastArcaneIntellect(this, index);
 						return;
-					case PlayerSpell.SpellType.FrostNova:
+					case SpellType.FrostNova:
 						PlayerSpell.CastFrostOffense(opponent, this, index);
 						return;
 					default:

@@ -1,11 +1,8 @@
 ﻿using DungeonGame.Helpers;
 using DungeonGame.Players;
 
-namespace DungeonGame.Items.Consumables {
+namespace DungeonGame.Items.Consumables.Arrow {
 	public class Arrows : IItem {
-		public enum ArrowType {
-			Standard
-		}
 		public ArrowType ArrowCategory { get; set; }
 		public string Name { get; set; }
 		public string Desc { get; set; }

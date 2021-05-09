@@ -6,42 +6,30 @@ using System;
 
 namespace DungeonGame {
 	public class MonsterSpell {
-		public enum DamageType {
-			Physical,
-			Fire,
-			Frost,
-			Arcane
-		}
-		public enum SpellType {
-			Fireball,
-			Frostbolt,
-			Lightning
-		}
-		public string _Name { get; set; }
-		public DamageType? _DamageGroup { get; set; }
-		public SpellType _SpellCategory { get; set; }
-		public Offensive _Offensive { get; set; }
-		public int _EnergyCost { get; set; }
+		public string Name { get; set; }
+		public DamageType? DamageGroup { get; set; }
+		public SpellType SpellCategory { get; set; }
+		public Offensive Offensive { get; set; }
+		public int EnergyCost { get; set; }
 
 		public MonsterSpell(string name, int energyCost, SpellType spellType, int monsterLevel) {
-			_Name = name;
-			_EnergyCost = energyCost;
-			_SpellCategory = spellType;
-			switch (_SpellCategory) {
+			Name = name;
+			EnergyCost = energyCost;
+			SpellCategory = spellType;
+			switch (SpellCategory) {
 				case SpellType.Fireball:
-					_DamageGroup = DamageType.Fire;
-					_Offensive = new Offensive(25 + ((monsterLevel - 1) * 5),
-						5 + ((monsterLevel - 1) * 2), 1, 3,
-						Offensive.OffensiveType.Fire);
+					DamageGroup = DamageType.Fire;
+					Offensive = new Offensive(25 + ((monsterLevel - 1) * 5),
+						5 + ((monsterLevel - 1) * 2), 1, 3, OffensiveType.Fire);
 					break;
 				case SpellType.Frostbolt:
-					_DamageGroup = DamageType.Frost;
-					_Offensive = new Offensive(15 + ((monsterLevel - 1) * 5),
+					DamageGroup = DamageType.Frost;
+					Offensive = new Offensive(15 + ((monsterLevel - 1) * 5),
 						1, 2);
 					break;
 				case SpellType.Lightning:
-					_DamageGroup = DamageType.Arcane;
-					_Offensive = new Offensive(35 + ((monsterLevel - 1) * 5));
+					DamageGroup = DamageType.Arcane;
+					Offensive = new Offensive(35 + ((monsterLevel - 1) * 5));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -49,15 +37,11 @@ namespace DungeonGame {
 		}
 
 		public void CastFireOffense(Monster monster, Player player, int index) {
-			monster.EnergyPoints -= monster.Spellbook[index]._EnergyCost;
+			monster.EnergyPoints -= monster.Spellbook[index].EnergyCost;
 
-			string attackString;
-			if (monster.MonsterCategory == Monster.MonsterType.Dragon) {
-				attackString = $"The {monster.Name} breathes a pillar of fire at you!";
-			} else {
-				attackString = $"The {monster.Name} casts a fireball and launches it at you!";
-			}
-
+			string attackString = monster.MonsterCategory == MonsterType.Dragon
+				? $"The {monster.Name} breathes a pillar of fire at you!"
+				: $"The {monster.Name} casts a fireball and launches it at you!";
 			OutputHelper.Display.StoreUserOutput(
 				Settings.FormatAttackSuccessText(),
 				Settings.FormatDefaultBackground(),
@@ -78,20 +62,20 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 
-			if (monster.Spellbook[index]._Offensive._AmountOverTime > 0) {
+			if (monster.Spellbook[index].Offensive.AmountOverTime > 0) {
 				const string onFireString = "You burst into flame!";
 				OutputHelper.Display.StoreUserOutput(
 					Settings.FormatOnFireText(),
 					Settings.FormatDefaultBackground(),
 					onFireString);
 				player.Effects.Add(
-					new BurningEffect(monster.Spellbook[index]._Name, monster.Spellbook[index]._Offensive._AmountMaxRounds,
-						monster.Spellbook[index]._Offensive._AmountOverTime));
+					new BurningEffect(monster.Spellbook[index].Name, monster.Spellbook[index].Offensive.AmountMaxRounds,
+						monster.Spellbook[index].Offensive.AmountOverTime));
 			}
 		}
 
 		public void CastFrostOffense(Monster monster, Player player, int index) {
-			monster.EnergyPoints -= monster.Spellbook[index]._EnergyCost;
+			monster.EnergyPoints -= monster.Spellbook[index].EnergyCost;
 
 			string attackString = $"The {monster.Name} conjures up a frostbolt and launches it at you!";
 			OutputHelper.Display.StoreUserOutput(
@@ -114,7 +98,7 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 
-			player.Effects.Add(new FrozenEffect(monster.Spellbook[index]._Name, monster.Spellbook[index]._Offensive._AmountMaxRounds));
+			player.Effects.Add(new FrozenEffect(monster.Spellbook[index].Name, monster.Spellbook[index].Offensive.AmountMaxRounds));
 
 			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be increased by 50%!";
 			OutputHelper.Display.StoreUserOutput(
@@ -124,7 +108,7 @@ namespace DungeonGame {
 		}
 
 		public void CastArcaneOffense(Monster monster, Player player, int index) {
-			monster.EnergyPoints -= monster.Spellbook[index]._EnergyCost;
+			monster.EnergyPoints -= monster.Spellbook[index].EnergyCost;
 
 			string attackString = $"The {monster.Name} casts a bolt of lightning at you!";
 			OutputHelper.Display.StoreUserOutput(

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DungeonGame.Quests {
 	public interface IQuestGiver : IName {
-		List<Quest> _AvailableQuests { get; set; }
+		List<Quest> AvailableQuests { get; set; }
 
 		void OfferQuest(Player player, string[] input);
 		void CompleteQuest(Player player, string[] input);

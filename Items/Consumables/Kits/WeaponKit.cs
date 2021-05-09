@@ -1,30 +1,27 @@
 ﻿using DungeonGame.Helpers;
+using DungeonGame.Items.WeaponObjects;
 using System.Globalization;
 
 namespace DungeonGame.Items.Consumables.Kits {
-	public class WeaponKit : IItem, IKit {
-		public enum KitType {
-			Grindstone,
-			Bowstring
-		}
+	public partial class WeaponKit : IItem, IKit {
 		public string Name { get; set; }
 		public string Desc { get; set; }
 		public int ItemValue { get; set; }
 		public int Weight { get; set; }
 		public bool KitHasBeenUsed { get; set; }
 		public KitLevel WeaponKitLevel { get; set; }
-		public KitType WeaponKitType { get; set; }
+		public WeaponKitType KitType { get; set; }
 		public int KitAugmentAmount { get; set; }
 		public TextInfo TextInfo { get; set; }
 
-		public WeaponKit(KitLevel kitLevel, KitType kitType) {
+		public WeaponKit(KitLevel kitLevel, WeaponKitType kitType) {
 			WeaponKitLevel = kitLevel;
-			WeaponKitType = kitType;
+			KitType = kitType;
 			TextInfo = new CultureInfo("en-US", false).TextInfo;
 			Weight = 1;
 			KitAugmentAmount = GetKitAugmentAmount();
 			ItemValue = KitAugmentAmount * 10;
-			Name = $"{kitLevel.ToString().ToLower()} {WeaponKitType.ToString().ToLower()} weapon kit";
+			Name = $"{kitLevel.ToString().ToLower()} {KitType.ToString().ToLower()} weapon kit";
 			Desc = $"A single-use {Name} that increases weapon damage by {KitAugmentAmount} for one weapon item.";
 		}
 
@@ -53,11 +50,11 @@ namespace DungeonGame.Items.Consumables.Kits {
 		}
 
 		private bool WeaponKitMatchesWeaponType(Weapon weapon) {
-			if (WeaponKitType == KitType.Bowstring && weapon._WeaponGroup == Weapon.WeaponType.Bow) {
+			if (KitType == WeaponKitType.Bowstring && weapon.WeaponGroup == WeaponType.Bow) {
 				return true;
 			}
 			// A grindstone can be used on any weapon group except bow
-			else if (WeaponKitType == KitType.Grindstone && weapon._WeaponGroup != Weapon.WeaponType.Bow) {
+			else if (KitType == WeaponKitType.Grindstone && weapon.WeaponGroup != WeaponType.Bow) {
 				return true;
 			}
 
@@ -65,7 +62,7 @@ namespace DungeonGame.Items.Consumables.Kits {
 		}
 
 		private Weapon AugmentWeaponDamage(Weapon weapon) {
-			weapon._RegDamage += KitAugmentAmount;
+			weapon.RegDamage += KitAugmentAmount;
 
 			return weapon;
 		}

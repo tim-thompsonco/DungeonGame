@@ -45,7 +45,7 @@ namespace DungeonGame {
 				if (GameHelper.ContinuePlaying()) {
 					GameHelper.LoadGame();
 					player = GameHelper.LoadPlayer();
-					RoomHelper._Rooms[player.PlayerLocation].LookRoom();
+					RoomHelper.Rooms[player.PlayerLocation].LookRoom();
 					OutputHelper.ShowUserOutput(player);
 					OutputHelper.Display.ClearUserOutput();
 				} else {

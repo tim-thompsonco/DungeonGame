@@ -1,4 +1,5 @@
-﻿using DungeonGame.Helpers;
+﻿using DungeonGame;
+using DungeonGame.Helpers;
 using DungeonGame.Items;
 using DungeonGame.Items.Consumables.Potions;
 using DungeonGame.Players;
@@ -6,116 +7,116 @@ using NUnit.Framework;
 using System.Collections.Generic;
 
 namespace DungeonGameTests.Items.Consumables.Potions {
-	class StatPotionUnitTests {
-		Player player;
-		StatPotion potion;
+	internal class StatPotionUnitTests {
+		private Player _player;
+		private StatPotion _potion;
 
 		[SetUp]
 		public void Setup() {
-			potion = new StatPotion(PotionStrength.Minor, StatPotion.StatType.Constitution);
-			player = new Player("test", Player.PlayerClassType.Archer) {
+			_potion = new StatPotion(PotionStrength.Minor, StatType.Constitution);
+			_player = new Player("test", PlayerClassType.Archer) {
 				Inventory = new List<IItem>()
 			};
 		}
 
 		[Test]
 		public void PotionCreationTest() {
-			Assert.AreEqual(1, potion.Weight);
+			Assert.AreEqual(1, _potion.Weight);
 		}
 
 		[Test]
 		public void MinorPotionCreationTest() {
-			potion = new StatPotion(PotionStrength.Minor, StatPotion.StatType.Constitution);
+			_potion = new StatPotion(PotionStrength.Minor, StatType.Constitution);
 
-			Assert.AreEqual("minor constitution potion", potion.Name);
-			Assert.AreEqual("A minor constitution potion that increases constitution by 5.", potion.Desc);
-			Assert.AreEqual(5, potion.StatAmount);
-			Assert.AreEqual(25, potion.ItemValue);
+			Assert.AreEqual("minor constitution potion", _potion.Name);
+			Assert.AreEqual("A minor constitution potion that increases constitution by 5.", _potion.Desc);
+			Assert.AreEqual(5, _potion.StatAmount);
+			Assert.AreEqual(25, _potion.ItemValue);
 		}
 
 		[Test]
 		public void NormalPotionCreationTest() {
-			potion = new StatPotion(PotionStrength.Normal, StatPotion.StatType.Constitution);
+			_potion = new StatPotion(PotionStrength.Normal, StatType.Constitution);
 
-			Assert.AreEqual("constitution potion", potion.Name);
-			Assert.AreEqual("A constitution potion that increases constitution by 10.", potion.Desc);
-			Assert.AreEqual(10, potion.StatAmount);
-			Assert.AreEqual(50, potion.ItemValue);
+			Assert.AreEqual("constitution potion", _potion.Name);
+			Assert.AreEqual("A constitution potion that increases constitution by 10.", _potion.Desc);
+			Assert.AreEqual(10, _potion.StatAmount);
+			Assert.AreEqual(50, _potion.ItemValue);
 		}
 
 		[Test]
 		public void GreaterPotionCreationTest() {
-			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Constitution);
+			_potion = new StatPotion(PotionStrength.Greater, StatType.Constitution);
 
-			Assert.AreEqual("greater constitution potion", potion.Name);
-			Assert.AreEqual("A greater constitution potion that increases constitution by 15.", potion.Desc);
-			Assert.AreEqual(15, potion.StatAmount);
-			Assert.AreEqual(75, potion.ItemValue);
+			Assert.AreEqual("greater constitution potion", _potion.Name);
+			Assert.AreEqual("A greater constitution potion that increases constitution by 15.", _potion.Desc);
+			Assert.AreEqual(15, _potion.StatAmount);
+			Assert.AreEqual(75, _potion.ItemValue);
 		}
 
 		[Test]
 		public void PlayerDrinkPotionConstitutionTest() {
-			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Constitution);
-			player.Inventory.Add(potion);
-			player.Constitution = 20;
-			int oldPlayerConst = player.Constitution;
+			_potion = new StatPotion(PotionStrength.Greater, StatType.Constitution);
+			_player.Inventory.Add(_potion);
+			_player.Constitution = 20;
+			int oldPlayerConst = _player.Constitution;
 
-			potion.DrinkPotion(player);
+			_potion.DrinkPotion(_player);
 
-			Assert.AreEqual(oldPlayerConst + potion.StatAmount, player.Constitution);
-			Assert.AreEqual(1, player.Effects.Count);
-			Assert.AreEqual(600, player.Effects[0].MaxRound);
+			Assert.AreEqual(oldPlayerConst + _potion.StatAmount, _player.Constitution);
+			Assert.AreEqual(1, _player.Effects.Count);
+			Assert.AreEqual(600, _player.Effects[0].MaxRound);
 		}
 
 		[Test]
 		public void PlayerDrinkPotionDexterityTest() {
-			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Dexterity);
-			player.Inventory.Add(potion);
-			player.Dexterity = 20;
-			int oldPlayerDex = player.Dexterity;
+			_potion = new StatPotion(PotionStrength.Greater, StatType.Dexterity);
+			_player.Inventory.Add(_potion);
+			_player.Dexterity = 20;
+			int oldPlayerDex = _player.Dexterity;
 
-			potion.DrinkPotion(player);
+			_potion.DrinkPotion(_player);
 
-			Assert.AreEqual(oldPlayerDex + potion.StatAmount, player.Dexterity);
-			Assert.AreEqual(1, player.Effects.Count);
-			Assert.AreEqual(600, player.Effects[0].MaxRound);
+			Assert.AreEqual(oldPlayerDex + _potion.StatAmount, _player.Dexterity);
+			Assert.AreEqual(1, _player.Effects.Count);
+			Assert.AreEqual(600, _player.Effects[0].MaxRound);
 		}
 
 		[Test]
 		public void PlayerDrinkPotionIntelligenceTest() {
-			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Intelligence);
-			player.Inventory.Add(potion);
-			player.Intelligence = 20;
-			int oldPlayerInt = player.Intelligence;
+			_potion = new StatPotion(PotionStrength.Greater, StatType.Intelligence);
+			_player.Inventory.Add(_potion);
+			_player.Intelligence = 20;
+			int oldPlayerInt = _player.Intelligence;
 
-			potion.DrinkPotion(player);
+			_potion.DrinkPotion(_player);
 
-			Assert.AreEqual(oldPlayerInt + potion.StatAmount, player.Intelligence);
-			Assert.AreEqual(1, player.Effects.Count);
-			Assert.AreEqual(600, player.Effects[0].MaxRound);
+			Assert.AreEqual(oldPlayerInt + _potion.StatAmount, _player.Intelligence);
+			Assert.AreEqual(1, _player.Effects.Count);
+			Assert.AreEqual(600, _player.Effects[0].MaxRound);
 		}
 
 		[Test]
 		public void PlayerDrinkPotionStrengthTest() {
-			potion = new StatPotion(PotionStrength.Greater, StatPotion.StatType.Strength);
-			player.Inventory.Add(potion);
-			player.Strength = 20;
-			int oldPlayerStr = player.Strength;
+			_potion = new StatPotion(PotionStrength.Greater, StatType.Strength);
+			_player.Inventory.Add(_potion);
+			_player.Strength = 20;
+			int oldPlayerStr = _player.Strength;
 
-			potion.DrinkPotion(player);
+			_potion.DrinkPotion(_player);
 
-			Assert.AreEqual(oldPlayerStr + potion.StatAmount, player.Strength);
-			Assert.AreEqual(1, player.Effects.Count);
-			Assert.AreEqual(600, player.Effects[0].MaxRound);
+			Assert.AreEqual(oldPlayerStr + _potion.StatAmount, _player.Strength);
+			Assert.AreEqual(1, _player.Effects.Count);
+			Assert.AreEqual(600, _player.Effects[0].MaxRound);
 		}
 
 		[Test]
 		public void PlayerDrinkPotionDisplayMessageTest() {
 			OutputHelper.Display.ClearUserOutput();
-			player.Inventory.Add(potion);
-			string displayMessage = $"You drank a potion and increased Constitution by {potion.StatAmount}.";
+			_player.Inventory.Add(_potion);
+			string displayMessage = $"You drank a potion and increased Constitution by {_potion.StatAmount}.";
 
-			potion.DrinkPotion(player);
+			_potion.DrinkPotion(_player);
 
 			Assert.AreEqual(displayMessage, OutputHelper.Display.Output[0][2]);
 		}

@@ -14,15 +14,15 @@ namespace DungeonGameTests {
 	public class SpellUnitTests {
 		[Test]
 		public void FireballSpellUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100, InCombat = true };
+			Player player = new Player("test", PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100, InCombat = true };
 			GearHelper.EquipInitialGear(player);
 			OutputHelper.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 50, MaxHitPoints = 100, FireResistance = 0 };
+			Monster monster = new Monster(3, MonsterType.Demon) { HitPoints = 50, MaxHitPoints = 100, FireResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
-			player.PlayerWeapon._CritMultiplier = 1; // Remove crit chance to remove "noise" in test
+			player.PlayerWeapon.CritMultiplier = 1; // Remove crit chance to remove "noise" in test
 			string[] inputInfo = new[] { "spell", "fireball" };
 			int spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == PlayerSpell.SpellType.Fireball);
+				f => f.SpellCategory == SpellType.Fireball);
 			PlayerHelper.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Fireball", OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHelper.Display.Output[1][2]);
@@ -39,7 +39,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(player.MaxManaPoints - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
 			Assert.AreEqual(25, monster.HitPoints);
 			Assert.AreEqual(3, monster.Effects[0].MaxRound);
-			Assert.AreEqual($"You hit the {monster.Name} for {player.Spellbook[spellIndex].Offensive._Amount} fire damage.",
+			Assert.AreEqual($"You hit the {monster.Name} for {player.Spellbook[spellIndex].Offensive.Amount} fire damage.",
 				OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual($"The {monster.Name} bursts into flame!",
 				OutputHelper.Display.Output[1][2]);
@@ -58,10 +58,10 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void FrostboltSpellUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
+			Player player = new Player("test", PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
 			GearHelper.EquipInitialGear(player);
 			OutputHelper.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100, FrostResistance = 0 };
+			Monster monster = new Monster(3, MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100, FrostResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
 			foreach (IItem item in monster.MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
@@ -69,7 +69,7 @@ namespace DungeonGameTests {
 			}
 			string[] inputInfo = new[] { "spell", "frostbolt" };
 			int spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == PlayerSpell.SpellType.Frostbolt);
+				f => f.SpellCategory == SpellType.Frostbolt);
 			PlayerHelper.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Frostbolt", OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHelper.Display.Output[1][2]);
@@ -83,14 +83,14 @@ namespace DungeonGameTests {
 			string[] input = new[] { "cast", "frostbolt" };
 			string spellName = InputHelper.ParseInput(input);
 			Assert.AreEqual("frostbolt", spellName);
-			player.PlayerWeapon._Durability = 100;
+			player.PlayerWeapon.Durability = 100;
 			double baseDamage = player.PhysicalAttack(monster);
 			player.CastSpell(monster, spellName);
 			Assert.AreEqual(player.MaxManaPoints - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
 			Assert.AreEqual(85, monster.HitPoints);
 			Assert.AreEqual(1, monster.Effects[0].CurrentRound);
 			Assert.AreEqual(2, monster.Effects[0].MaxRound);
-			string attackString = $"You hit the {monster.Name} for {player.Spellbook[spellIndex].Offensive._Amount} frost damage.";
+			string attackString = $"You hit the {monster.Name} for {player.Spellbook[spellIndex].Offensive.Amount} frost damage.";
 			Assert.AreEqual(attackString, OutputHelper.Display.Output[0][2]);
 			string frozenString = $"The {monster.Name} is frozen. Physical, frost and arcane damage to it will be increased by 50%!";
 			Assert.AreEqual(frozenString, OutputHelper.Display.Output[1][2]);
@@ -103,7 +103,7 @@ namespace DungeonGameTests {
 				frozenEffect.ProcessFrozenRound(monster);
 				Assert.AreEqual(i, monster.Effects[0].CurrentRound);
 				Assert.AreEqual(frozenString, OutputHelper.Display.Output[i][2]);
-				player.PlayerWeapon._Durability = 100;
+				player.PlayerWeapon.Durability = 100;
 				double frozenDamage = player.PhysicalAttack(monster);
 				monster.HitPoints -= (int)frozenDamage;
 				totalBaseDamage += baseDamage;
@@ -119,10 +119,10 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void LightningSpellUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
+			Player player = new Player("test", PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
 			GearHelper.EquipInitialGear(player);
 			OutputHelper.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100, ArcaneResistance = 0 };
+			Monster monster = new Monster(3, MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100, ArcaneResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
 			foreach (IItem item in monster.MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
@@ -130,7 +130,7 @@ namespace DungeonGameTests {
 			}
 			string[] inputInfo = new[] { "spell", "lightning" };
 			int spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == PlayerSpell.SpellType.Lightning);
+				f => f.SpellCategory == SpellType.Lightning);
 			PlayerHelper.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Lightning", OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHelper.Display.Output[1][2]);
@@ -139,22 +139,22 @@ namespace DungeonGameTests {
 			string[] input = new[] { "cast", "lightning" };
 			string spellName = InputHelper.ParseInput(input);
 			Assert.AreEqual("lightning", spellName);
-			player.PlayerWeapon._Durability = 100;
+			player.PlayerWeapon.Durability = 100;
 			player.CastSpell(monster, spellName);
 			Assert.AreEqual(player.MaxManaPoints - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
-			int arcaneSpellDamage = player.Spellbook[spellIndex].Offensive._Amount;
+			int arcaneSpellDamage = player.Spellbook[spellIndex].Offensive.Amount;
 			Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - arcaneSpellDamage);
 			string attackSuccessString = $"You hit the {monster.Name} for {arcaneSpellDamage} arcane damage.";
 			Assert.AreEqual(attackSuccessString, OutputHelper.Display.Output[4][2]);
 		}
 		[Test]
 		public void HealSpellUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100, MaxHitPoints = 100, HitPoints = 50 };
+			Player player = new Player("test", PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100, MaxHitPoints = 100, HitPoints = 50 };
 			GearHelper.EquipInitialGear(player);
 			OutputHelper.Display.ClearUserOutput();
 			string[] inputInfo = new[] { "spell", "heal" };
 			int spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == PlayerSpell.SpellType.Heal);
+				f => f.SpellCategory == SpellType.Heal);
 			PlayerHelper.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Heal", OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHelper.Display.Output[1][2]);
@@ -165,13 +165,13 @@ namespace DungeonGameTests {
 			Assert.AreEqual("heal", spellName);
 			player.CastSpell(spellName);
 			Assert.AreEqual(player.MaxManaPoints - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
-			string healString = $"You heal yourself for {player.Spellbook[spellIndex].Healing._HealAmount} health.";
+			string healString = $"You heal yourself for {player.Spellbook[spellIndex].Healing.HealAmount} health.";
 			Assert.AreEqual(healString, OutputHelper.Display.Output[4][2]);
 			Assert.AreEqual(player.MaxHitPoints, player.HitPoints);
 		}
 		[Test]
 		public void RejuvenateSpellUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage) {
+			Player player = new Player("test", PlayerClassType.Mage) {
 				MaxManaPoints = 100,
 				ManaPoints = 100,
 				MaxHitPoints = 100,
@@ -181,14 +181,14 @@ namespace DungeonGameTests {
 			OutputHelper.Display.ClearUserOutput();
 			string[] inputInfo = new[] { "spell", "rejuvenate" };
 			int spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == PlayerSpell.SpellType.Rejuvenate);
+				f => f.SpellCategory == SpellType.Rejuvenate);
 			PlayerHelper.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Rejuvenate", OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHelper.Display.Output[1][2]);
 			Assert.AreEqual("Mana Cost: 25", OutputHelper.Display.Output[2][2]);
 			Assert.AreEqual("Heal Amount: 20", OutputHelper.Display.Output[3][2]);
 			Assert.AreEqual("Heal Over Time: 10", OutputHelper.Display.Output[4][2]);
-			string healInfoString = $"Heal over time will restore health for {player.Spellbook[spellIndex].Healing._HealMaxRounds} rounds.";
+			string healInfoString = $"Heal over time will restore health for {player.Spellbook[spellIndex].Healing.HealMaxRounds} rounds.";
 			Assert.AreEqual(healInfoString, OutputHelper.Display.Output[5][2]);
 			OutputHelper.Display.ClearUserOutput();
 			string[] input = new[] { "cast", "rejuvenate" };
@@ -197,7 +197,7 @@ namespace DungeonGameTests {
 			player.CastSpell(spellName);
 			Assert.AreEqual(player.MaxManaPoints - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
 			Assert.AreEqual(70, player.HitPoints);
-			string healString = $"You heal yourself for {player.Spellbook[spellIndex].Healing._HealAmount} health.";
+			string healString = $"You heal yourself for {player.Spellbook[spellIndex].Healing.HealAmount} health.";
 			Assert.AreEqual(healString, OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual(true, player.Effects[0] is HealingEffect);
 			HealingEffect healEffect = player.Effects[0] as HealingEffect;
@@ -214,18 +214,18 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void DiamondskinSpellUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
+			Player player = new Player("test", PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
 			GearHelper.EquipInitialGear(player);
 			OutputHelper.Display.ClearUserOutput();
 			string[] inputInfo = new[] { "spell", "diamondskin" };
 			int spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == PlayerSpell.SpellType.Diamondskin);
+				f => f.SpellCategory == SpellType.Diamondskin);
 			PlayerHelper.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Diamondskin", OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHelper.Display.Output[1][2]);
 			Assert.AreEqual("Mana Cost: 25", OutputHelper.Display.Output[2][2]);
 			Assert.AreEqual("Augment Armor Amount: 25", OutputHelper.Display.Output[3][2]);
-			string augmentInfoString = $"Armor will be augmented for {player.Spellbook[spellIndex].ChangeAmount._ChangeMaxRound} rounds.";
+			string augmentInfoString = $"Armor will be augmented for {player.Spellbook[spellIndex].ChangeAmount.ChangeMaxRound} rounds.";
 			Assert.AreEqual(augmentInfoString, OutputHelper.Display.Output[4][2]);
 			string[] input = new[] { "cast", "diamondskin" };
 			string spellName = InputHelper.ParseInput(input);
@@ -234,7 +234,7 @@ namespace DungeonGameTests {
 			player.InCombat = true;
 			player.CastSpell(spellName);
 			Assert.AreEqual(player.MaxManaPoints - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
-			string augmentString = $"You augmented your armor by {player.Spellbook[spellIndex].ChangeAmount._Amount} with {player.Spellbook[spellIndex].Name}.";
+			string augmentString = $"You augmented your armor by {player.Spellbook[spellIndex].ChangeAmount.Amount} with {player.Spellbook[spellIndex].Name}.";
 			Assert.AreEqual(augmentString, OutputHelper.Display.Output[5][2]);
 			OutputHelper.Display.ClearUserOutput();
 			Assert.AreEqual(true, player.Effects.Any());
@@ -255,13 +255,13 @@ namespace DungeonGameTests {
 		public void TownPortalSpellUnitTest() {
 			/* Town Portal should change location of player to where portal is set to, which is 0, 7, 0, town entrance */
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
-			RoomHelper._Rooms = new RoomBuilder(100, 5, 0, 4, 0).RetrieveSpawnRooms();
+			Player player = new Player("test", PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
+			RoomHelper.Rooms = new RoomBuilder(100, 5, 0, 4, 0).RetrieveSpawnRooms();
 			player.Spellbook.Add(new PlayerSpell(
-				"town portal", 100, 1, PlayerSpell.SpellType.TownPortal, 2));
+				"town portal", 100, 1, SpellType.TownPortal, 2));
 			string[] inputInfo = new[] { "spell", "town", "portal" };
 			int spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == PlayerSpell.SpellType.TownPortal);
+				f => f.SpellCategory == SpellType.TownPortal);
 			PlayerHelper.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Town Portal", OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHelper.Display.Output[1][2]);
@@ -286,25 +286,25 @@ namespace DungeonGameTests {
 		[Test]
 		public void ReflectDamageSpellUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
-			Monster monster = new Monster(3, Monster.MonsterType.Zombie) { HitPoints = 100, MaxHitPoints = 100 };
+			Player player = new Player("test", PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
+			Monster monster = new Monster(3, MonsterType.Zombie) { HitPoints = 100, MaxHitPoints = 100 };
 			MonsterBuilder.BuildMonster(monster);
 			foreach (IItem item in monster.MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem.Equipped = false;
 			}
 			player.Spellbook.Add(new PlayerSpell(
-				"reflect", 100, 1, PlayerSpell.SpellType.Reflect, 4));
+				"reflect", 100, 1, SpellType.Reflect, 4));
 			string[] inputInfo = new[] { "spell", "reflect" };
 			int spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == PlayerSpell.SpellType.Reflect);
+				f => f.SpellCategory == SpellType.Reflect);
 			PlayerHelper.SpellInfo(player, inputInfo);
 			Assert.AreEqual("Reflect", OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHelper.Display.Output[1][2]);
 			Assert.AreEqual("Mana Cost: 100", OutputHelper.Display.Output[2][2]);
 			Assert.AreEqual("Reflect Damage Amount: 25", OutputHelper.Display.Output[3][2]);
-			string reflectInfoString = $"Damage up to {player.Spellbook[spellIndex].ChangeAmount._Amount} will be reflected for " +
-				$"{player.Spellbook[spellIndex].ChangeAmount._ChangeMaxRound} rounds.";
+			string reflectInfoString = $"Damage up to {player.Spellbook[spellIndex].ChangeAmount.Amount} will be reflected for " +
+				$"{player.Spellbook[spellIndex].ChangeAmount.ChangeMaxRound} rounds.";
 			Assert.AreEqual(reflectInfoString, OutputHelper.Display.Output[4][2]);
 			string[] input = new[] { "cast", "reflect" };
 			string spellName = InputHelper.ParseInput(input);
@@ -336,9 +336,9 @@ namespace DungeonGameTests {
 		[Test]
 		public void ArcaneIntellectSpellUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage) { MaxManaPoints = 150, ManaPoints = 150 };
+			Player player = new Player("test", PlayerClassType.Mage) { MaxManaPoints = 150, ManaPoints = 150 };
 			player.Spellbook.Add(new PlayerSpell(
-				"arcane intellect", 150, 1, PlayerSpell.SpellType.ArcaneIntellect, 6));
+				"arcane intellect", 150, 1, SpellType.ArcaneIntellect, 6));
 			string[] infoInput = new[] { "spell", "arcane", "intellect" };
 			PlayerHelper.SpellInfo(player, infoInput);
 			Assert.AreEqual("Arcane Intellect", OutputHelper.Display.Output[0][2]);
@@ -352,17 +352,17 @@ namespace DungeonGameTests {
 			int? baseMana = player.ManaPoints;
 			int? baseMaxMana = player.MaxManaPoints;
 			int spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == PlayerSpell.SpellType.ArcaneIntellect);
+				f => f.SpellCategory == SpellType.ArcaneIntellect);
 			string[] input = new[] { "cast", "arcane", "intellect" };
 			string spellName = InputHelper.ParseInput(input);
 			Assert.AreEqual("arcane intellect", spellName);
 			player.CastSpell(spellName);
 			Assert.AreEqual(baseMaxMana - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
-			Assert.AreEqual(player.Intelligence, baseInt + player.Spellbook[spellIndex].ChangeAmount._Amount);
+			Assert.AreEqual(player.Intelligence, baseInt + player.Spellbook[spellIndex].ChangeAmount.Amount);
 			Assert.AreEqual(
 				baseMana - player.Spellbook[spellIndex].ManaCost, player.ManaPoints);
 			Assert.AreEqual(
-				baseMaxMana + (player.Spellbook[spellIndex].ChangeAmount._Amount * 10), player.MaxManaPoints);
+				baseMaxMana + (player.Spellbook[spellIndex].ChangeAmount.Amount * 10), player.MaxManaPoints);
 			Assert.AreEqual("You cast Arcane Intellect on yourself.", OutputHelper.Display.Output[0][2]);
 			ChangeStatEffect changeStatEffect = player.Effects[0] as ChangeStatEffect;
 			for (int i = 0; i < 10; i++) {
@@ -388,38 +388,38 @@ namespace DungeonGameTests {
 		}
 		[Test]
 		public void FrostNovaSpellUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
+			Player player = new Player("test", PlayerClassType.Mage) { MaxManaPoints = 100, ManaPoints = 100 };
 			player.Spellbook.Add(new PlayerSpell(
-				"frost nova", 40, 1, PlayerSpell.SpellType.FrostNova, 8));
+				"frost nova", 40, 1, SpellType.FrostNova, 8));
 			GearHelper.EquipInitialGear(player);
 			OutputHelper.Display.ClearUserOutput();
-			Monster monster = new Monster(3, Monster.MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100, FrostResistance = 0 };
+			Monster monster = new Monster(3, MonsterType.Demon) { HitPoints = 100, MaxHitPoints = 100, FrostResistance = 0 };
 			MonsterBuilder.BuildMonster(monster);
 			foreach (IItem item in monster.MonsterItems.Where(item => item is IEquipment eItem && eItem.Equipped)) {
 				IEquipment eItem = item as IEquipment;
 				eItem.Equipped = false;
 			}
 			int spellIndex = player.Spellbook.FindIndex(
-				f => f.SpellCategory == PlayerSpell.SpellType.FrostNova);
+				f => f.SpellCategory == SpellType.FrostNova);
 			string[] infoInput = new[] { "spell", "frost", "nova" };
 			PlayerHelper.SpellInfo(player, infoInput);
 			Assert.AreEqual("Frost Nova", OutputHelper.Display.Output[0][2]);
 			Assert.AreEqual("Rank: 1", OutputHelper.Display.Output[1][2]);
 			Assert.AreEqual("Mana Cost: 40", OutputHelper.Display.Output[2][2]);
 			Assert.AreEqual("Instant Damage: 15", OutputHelper.Display.Output[3][2]);
-			Assert.AreEqual($"Frost damage will freeze opponent for {player.Spellbook[spellIndex].Offensive._AmountMaxRounds} rounds.",
+			Assert.AreEqual($"Frost damage will freeze opponent for {player.Spellbook[spellIndex].Offensive.AmountMaxRounds} rounds.",
 				OutputHelper.Display.Output[4][2]);
 			Assert.AreEqual("Frozen opponents take 1.5x physical, arcane and frost damage.",
 				OutputHelper.Display.Output[5][2]);
-			Assert.AreEqual($"Opponent will be stunned for {player.Spellbook[spellIndex].Offensive._AmountMaxRounds} rounds.",
+			Assert.AreEqual($"Opponent will be stunned for {player.Spellbook[spellIndex].Offensive.AmountMaxRounds} rounds.",
 				OutputHelper.Display.Output[6][2]);
 			string[] input = new[] { "cast", "frost", "nova" };
 			string spellName = InputHelper.ParseInput(input);
 			Assert.AreEqual("frost nova", spellName);
-			player.PlayerWeapon._Durability = 100;
+			player.PlayerWeapon.Durability = 100;
 			double baseDamage = player.PhysicalAttack(monster);
 			player.CastSpell(monster, spellName);
-			string attackSuccessString = $"You hit the {monster.Name} for {player.Spellbook[spellIndex].Offensive._Amount} frost damage.";
+			string attackSuccessString = $"You hit the {monster.Name} for {player.Spellbook[spellIndex].Offensive.Amount} frost damage.";
 			Assert.AreEqual(attackSuccessString, OutputHelper.Display.Output[7][2]);
 			string frozenString = $"The {monster.Name} is frozen. Physical, frost and arcane damage to it will be increased by 50%!";
 			Assert.AreEqual(frozenString, OutputHelper.Display.Output[8][2]);
@@ -446,7 +446,7 @@ namespace DungeonGameTests {
 				Assert.AreEqual(stunnedRoundString, OutputHelper.Display.Output[0][2]);
 				Assert.AreEqual(true, monster.IsStunned);
 				Assert.AreEqual(i, monster.Effects[stunIndex].CurrentRound);
-				player.PlayerWeapon._Durability = 100;
+				player.PlayerWeapon.Durability = 100;
 				double frozenDamage = player.PhysicalAttack(monster);
 				Assert.AreEqual(i, monster.Effects[frostIndex].CurrentRound);
 				string frozenRoundString = $"The {monster.Name} is frozen. Physical, frost and arcane damage to it will be increased by 50%!";

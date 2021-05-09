@@ -8,7 +8,7 @@ namespace DungeonGameTests.Effects {
 	internal class StunnedEffectUnitTests {
 		[Test]
 		public void CreateStunnedEffectUnitTest() {
-			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
+			Monster monster = new Monster(5, MonsterType.Skeleton);
 			EffectSettings effectSettings = new EffectSettings {
 				EffectHolder = monster,
 				Name = "stunned test",
@@ -25,7 +25,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void MonsterHasStunnedEffectUnitTest() {
-			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
+			Monster monster = new Monster(5, MonsterType.Skeleton);
 			EffectSettings effectSettings = new EffectSettings {
 				EffectHolder = monster,
 				Name = "stunned test",
@@ -41,7 +41,7 @@ namespace DungeonGameTests.Effects {
 		[Test]
 		public void ProcessStunnedEffectRoundMonsterUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
+			Monster monster = new Monster(5, MonsterType.Skeleton);
 			EffectSettings effectSettings = new EffectSettings {
 				EffectHolder = monster,
 				Name = "stunned test",
@@ -60,7 +60,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void MonsterStunnedEffectDoesNotExpireWhenCurrentRoundEqualsMaxRoundUnitTest() {
-			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
+			Monster monster = new Monster(5, MonsterType.Skeleton);
 			EffectSettings effectSettings = new EffectSettings {
 				EffectHolder = monster,
 				Name = "stunned test",
@@ -78,7 +78,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void MonsterStunnedEffectExpiresWhenCurrentRoundGreaterThanMaxRoundUnitTest() {
-			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
+			Monster monster = new Monster(5, MonsterType.Skeleton);
 			EffectSettings effectSettings = new EffectSettings {
 				EffectHolder = monster,
 				Name = "stunned test",
@@ -97,7 +97,7 @@ namespace DungeonGameTests.Effects {
 		[Test]
 		public void ExpiredBleedingEffectDoesNotAffectMonsterUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
+			Monster monster = new Monster(5, MonsterType.Skeleton);
 			EffectSettings effectSettings = new EffectSettings {
 				EffectHolder = monster,
 				Name = "stunned test",

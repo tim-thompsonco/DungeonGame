@@ -6,14 +6,14 @@ using NUnit.Framework;
 using System.Collections.Generic;
 
 namespace DungeonGameTests.Items.Consumables.Potions {
-	class ManaPotionUnitTests {
-		Player player;
-		ManaPotion potion;
+	internal class ManaPotionUnitTests {
+		private Player player;
+		private ManaPotion potion;
 
 		[SetUp]
 		public void Setup() {
 			potion = new ManaPotion(PotionStrength.Minor);
-			player = new Player("test", Player.PlayerClassType.Mage) {
+			player = new Player("test", PlayerClassType.Mage) {
 				Inventory = new List<IItem>()
 			};
 		}

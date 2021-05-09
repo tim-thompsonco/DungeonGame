@@ -62,7 +62,7 @@ namespace DungeonGame {
 					OutputHelper.Display.ClearUserOutput();
 					switch (playerClass) {
 						case "Archer":
-							Player playerArcher = new Player(playerName, Player.PlayerClassType.Archer);
+							Player playerArcher = new Player(playerName, PlayerClassType.Archer);
 							const string archerString =
 								"You have selected Archer. You can 'use' an ability, for example " +
 								"'use gut', if you have an ability named gut shot in your abilities. To see " +
@@ -85,7 +85,7 @@ namespace DungeonGame {
 							}
 							return playerArcher;
 						case "Mage":
-							Player playerMage = new Player(playerName, Player.PlayerClassType.Mage);
+							Player playerMage = new Player(playerName, PlayerClassType.Mage);
 							const string mageString =
 								"You have selected Mage. You can 'cast' a spell, for example " +
 								"'cast fireball', if you have a spell named fireball in your spellbook. To see " +
@@ -106,7 +106,7 @@ namespace DungeonGame {
 							}
 							return playerMage;
 						case "Warrior":
-							Player playerWarrior = new Player(playerName, Player.PlayerClassType.Warrior);
+							Player playerWarrior = new Player(playerName, PlayerClassType.Warrior);
 							const string warriorString =
 								"You have selected Warrior. You can 'use' an ability, for example " +
 								"'use charge', if you have an ability named charge in your abilities. To see " +

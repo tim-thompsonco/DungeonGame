@@ -9,7 +9,7 @@ namespace DungeonGameTests.Effects {
 	internal class BleedingEffectUnitTests {
 		[Test]
 		public void PlayerHasBleedingEffectUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
 				EffectHolder = player,
@@ -25,7 +25,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void MonsterHasBleedingEffectUnitTest() {
-			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
+			Monster monster = new Monster(5, MonsterType.Skeleton);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
 				EffectHolder = monster,
@@ -41,7 +41,7 @@ namespace DungeonGameTests.Effects {
 		[Test]
 		public void ProcessBleedingEffectRoundPlayerUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
 				EffectHolder = player,
@@ -63,7 +63,7 @@ namespace DungeonGameTests.Effects {
 		[Test]
 		public void ProcessBleedingEffectRoundMonsterUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
+			Monster monster = new Monster(5, MonsterType.Skeleton);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
 				EffectHolder = monster,
@@ -84,7 +84,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void PlayerBleedingEffectDoesNotExpireWhenCurrentRoundEqualsMaxRoundUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
 				EffectHolder = player,
@@ -104,7 +104,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void MonsterBleedingEffectDoesNotExpireWhenCurrentRoundEqualsMaxRoundUnitTest() {
-			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
+			Monster monster = new Monster(5, MonsterType.Skeleton);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
 				EffectHolder = monster,
@@ -124,7 +124,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void PlayerBleedingEffectExpiresWhenCurrentRoundGreaterThanMaxRoundUnitTest() {
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
 				EffectHolder = player,
@@ -144,7 +144,7 @@ namespace DungeonGameTests.Effects {
 
 		[Test]
 		public void MonsterBleedingEffectExpiresWhenCurrentRoundGreaterThanMaxRoundUnitTest() {
-			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
+			Monster monster = new Monster(5, MonsterType.Skeleton);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
 				EffectHolder = monster,
@@ -165,7 +165,7 @@ namespace DungeonGameTests.Effects {
 		[Test]
 		public void ExpiredBleedingEffectDoesNotAffectPlayerUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Player player = new Player("test", Player.PlayerClassType.Mage);
+			Player player = new Player("test", PlayerClassType.Mage);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
 				EffectHolder = player,
@@ -186,7 +186,7 @@ namespace DungeonGameTests.Effects {
 		[Test]
 		public void ExpiredBleedingEffectDoesNotAffectMonsterUnitTest() {
 			OutputHelper.Display.ClearUserOutput();
-			Monster monster = new Monster(5, Monster.MonsterType.Skeleton);
+			Monster monster = new Monster(5, MonsterType.Skeleton);
 			EffectOverTimeSettings EffectOverTimeSettings = new EffectOverTimeSettings {
 				AmountOverTime = 20,
 				EffectHolder = monster,
