@@ -5,6 +5,7 @@ namespace DungeonGame.Effects.SettingsObjects {
 	public class EffectAmountSettings : IEffectSettings {
 		public int? Amount { get; set; }
 		public IEffectHolder EffectHolder { get; set; }
+		public int MaxRound { get; set; } = 3;
 		public string Name { get; set; }
 
 		public void ValidateSettings() {

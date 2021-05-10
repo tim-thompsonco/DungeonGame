@@ -157,9 +157,13 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				reflectString);
 
-			player.Effects.Add(
-				new ReflectDamageEffect(player.Spellbook[index].Name, player.Spellbook[index].ChangeAmount.ChangeMaxRound,
-					player.Spellbook[index].ChangeAmount.Amount));
+			EffectAmountSettings effectAmountSettings = new EffectAmountSettings {
+				Amount = player.Spellbook[index].ChangeAmount.Amount,
+				EffectHolder = player,
+				MaxRound = player.Spellbook[index].ChangeAmount.ChangeMaxRound,
+				Name = player.Spellbook[index].Name
+			};
+			player.Effects.Add(new ReflectDamageEffect(effectAmountSettings));
 		}
 
 		public static void FrostOffenseSpellInfo(Player player, int index) {

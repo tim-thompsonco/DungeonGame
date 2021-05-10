@@ -80,14 +80,6 @@ namespace DungeonGame {
 					changeDamageEffect.ProcessChangeDamageRound(baseAbilityDamage);
 				}
 
-				if (effect is ReflectDamageEffect reflectDmgEffect) {
-					int baseSpellDamage = abilityDamage;
-
-					abilityDamage = reflectDmgEffect.GetReflectedDamageAmount(abilityDamage);
-
-					reflectDmgEffect.ProcessReflectDamageRound(baseSpellDamage);
-				}
-
 				if (abilityDamage <= 0) {
 					string effectAbsorbString = $"Your {effect.Name} absorbed all of {monster.Name}'s attack!";
 					OutputHelper.Display.StoreUserOutput(

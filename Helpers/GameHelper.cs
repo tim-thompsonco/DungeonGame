@@ -43,8 +43,6 @@ namespace DungeonGame.Helpers {
 						bleedingEffect.ProcessRound();
 					} else if (effect is FrozenEffect frozenEffect) {
 						frozenEffect.ProcessFrozenRound();
-					} else if (effect is ReflectDamageEffect reflectDmgEffect) {
-						reflectDmgEffect.ProcessReflectDamageRound();
 					} else if (effect is ChangeStatEffect changeStatEffect) {
 						changeStatEffect.ProcessChangeStatRound(player);
 					} else if (effect is ChangeMonsterDamageEffect changeMonsterDmgEffect) {

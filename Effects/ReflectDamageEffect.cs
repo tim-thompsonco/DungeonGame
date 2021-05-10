@@ -1,8 +1,9 @@
-﻿using DungeonGame.Helpers;
+﻿using DungeonGame.Effects.SettingsObjects;
+using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 
 namespace DungeonGame.Effects {
-	public class ReflectDamageEffect : IEffect {
+	public class ReflectDamageEffect : IEffect, IChangeDamageEffect {
 		public int CurrentRound { get; private set; } = 1;
 		public IEffectHolder EffectHolder { get; }
 		public bool IsEffectExpired { get; set; }
@@ -12,34 +13,28 @@ namespace DungeonGame.Effects {
 		public int ReflectDamageAmount { get; }
 		public int TickDuration { get; } = 10;
 
-		public ReflectDamageEffect(string name, int maxRound, int reflectDamageAmount) {
-			Name = name;
-			MaxRound = maxRound;
-			ReflectDamageAmount = reflectDamageAmount;
+		public ReflectDamageEffect(EffectAmountSettings effectAmountSettings) {
+			effectAmountSettings.ValidateSettings();
+
+			Name = effectAmountSettings.Name;
+			MaxRound = effectAmountSettings.MaxRound;
+			ReflectDamageAmount = (int)effectAmountSettings.Amount;
 		}
 
-		public void ProcessReflectDamageRound() {
-			if (IsEffectExpired) {
-				return;
-			}
-
-			IncrementCurrentRound();
-
+		public void ProcessRound() {
 			DisplayReflectEffectFadingMessage();
 
-			if (CurrentRound > MaxRound) {
-				SetEffectAsExpired();
-			}
+			IncrementEffectRoundAndSetAsExpiredIfNecessary();
 		}
 
-		public void ProcessReflectDamageRound(int reflectedAmount) {
-			if (IsEffectExpired) {
-				return;
-			}
+		private void DisplayReflectEffectFadingMessage() {
+			const string reflectString = "Your spell reflect is slowly fading away.";
 
+			OutputHelper.StoreSuccessMessage(reflectString);
+		}
+
+		private void IncrementEffectRoundAndSetAsExpiredIfNecessary() {
 			IncrementCurrentRound();
-
-			DisplayReflectDamageMessage(reflectedAmount);
 
 			if (CurrentRound > MaxRound) {
 				SetEffectAsExpired();
@@ -50,10 +45,14 @@ namespace DungeonGame.Effects {
 			CurrentRound++;
 		}
 
-		private void DisplayReflectEffectFadingMessage() {
-			const string reflectString = "Your spell reflect is slowly fading away.";
+		public void SetEffectAsExpired() {
+			IsEffectExpired = true;
+		}
 
-			OutputHelper.StoreSuccessMessage(reflectString);
+		public void ProcessChangeDamageRound(int incomingDamageAmount) {
+			DisplayReflectDamageMessage(incomingDamageAmount);
+
+			IncrementEffectRoundAndSetAsExpiredIfNecessary();
 		}
 
 		private void DisplayReflectDamageMessage(int reflectedAmount) {
@@ -62,20 +61,12 @@ namespace DungeonGame.Effects {
 			OutputHelper.StoreSuccessMessage(reflectString);
 		}
 
-		public void SetEffectAsExpired() {
-			IsEffectExpired = true;
-		}
-
-		public int GetReflectedDamageAmount(int incomingDamage) {
+		public int GetChangedDamageFromEffect(int incomingDamage) {
 			if (ReflectDamageAmount < incomingDamage) {
 				return ReflectDamageAmount;
-			} else {
-				return incomingDamage;
 			}
-		}
 
-		public void ProcessRound() {
-			throw new System.NotImplementedException();
+			return incomingDamage;
 		}
 	}
 }

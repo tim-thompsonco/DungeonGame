@@ -324,7 +324,7 @@ namespace DungeonGameTests {
 				Assert.AreEqual(true, reflectAmount <= reflectDmgEffect.ReflectDamageAmount);
 				monster.HitPoints -= reflectAmount;
 				Assert.AreEqual(monster.HitPoints, monster.MaxHitPoints - (reflectAmount * (i - 1)));
-				reflectDmgEffect.ProcessReflectDamageRound(reflectAmount);
+				reflectDmgEffect.ProcessChangeDamageRound(reflectAmount);
 				Assert.AreEqual(
 					$"You reflected {reflectAmount} damage back at your opponent!",
 					OutputHelper.Display.Output[i - 2][2]);

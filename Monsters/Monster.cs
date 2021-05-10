@@ -327,16 +327,6 @@ namespace DungeonGame.Monsters {
 					changeDamageEffect.ProcessChangeDamageRound(incomingDamage);
 				}
 
-				if (effect is ReflectDamageEffect reflectDamageEffect) {
-					int reflectAmount = reflectDamageEffect.GetReflectedDamageAmount(attackAmount);
-
-					HitPoints -= reflectAmount;
-
-					reflectDamageEffect.ProcessReflectDamageRound(reflectAmount);
-
-					attackAmount -= reflectAmount;
-				}
-
 				if (baseAttackAmount > attackAmount && attackAmount - player.ArmorRating(this) <= 0) {
 					string effectAbsorbString = $"Your {effect.Name} absorbed all of {Name}'s attack!";
 					OutputHelper.Display.StoreUserOutput(
