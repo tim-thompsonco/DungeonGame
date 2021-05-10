@@ -16,6 +16,7 @@ namespace DungeonGame.Effects {
 		public ReflectDamageEffect(EffectAmountSettings effectAmountSettings) {
 			effectAmountSettings.ValidateSettings();
 
+			EffectHolder = effectAmountSettings.EffectHolder;
 			Name = effectAmountSettings.Name;
 			MaxRound = effectAmountSettings.MaxRound;
 			ReflectDamageAmount = (int)effectAmountSettings.Amount;
