@@ -4,11 +4,7 @@
 
 <p>Update 5/7/21: This was my first project which I started in November 2019. The majority of the code does not currently reflect how I write code, but I am focusing on this project again, for practice in refactoring old legacy code. The game itself runs fine, but for current code quality examples, please review either recent commits or the Effects class files since those have already been refactored.</p>
 
-<div><img src="gameintro.png"></div>
-
-<div><img src="gamegui.png"></div>
-
-<div><img src="gamecombat.png"></div>
+https://user-images.githubusercontent.com/45145621/117673103-b452b880-b167-11eb-818a-765c4c73cfdc.mp4
 
 <h2>Game Commands</h2>
 
