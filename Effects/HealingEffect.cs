@@ -24,13 +24,9 @@ namespace DungeonGame.Effects {
 		}
 
 		public void ProcessRound() {
-			if (IsEffectExpired) {
-				return;
-			}
+			int healedAmount = HealPlayerAndReturnHealedAmount();
 
-			HealPlayer();
-
-			DisplayPlayerHealedMessage();
+			DisplayPlayerHealedMessage(healedAmount);
 
 			IncrementCurrentRound();
 
@@ -39,18 +35,23 @@ namespace DungeonGame.Effects {
 			}
 		}
 
-		private void HealPlayer() {
+		private int HealPlayerAndReturnHealedAmount() {
 			Player player = EffectHolder as Player;
+			int healedAmount;
 
 			if (player.HitPoints + HealOverTimeAmount > player.MaxHitPoints) {
+				healedAmount = player.MaxHitPoints - player.HitPoints;
 				player.HitPoints = player.MaxHitPoints;
 			} else {
+				healedAmount = HealOverTimeAmount;
 				player.HitPoints += HealOverTimeAmount;
 			}
+
+			return healedAmount;
 		}
 
-		private void DisplayPlayerHealedMessage() {
-			string healAmtString = $"You have been healed for {HealOverTimeAmount} health.";
+		private void DisplayPlayerHealedMessage(int healedAmount) {
+			string healAmtString = $"You have been healed for {healedAmount} health.";
 
 			OutputHelper.StoreSuccessMessage(healAmtString);
 		}
