@@ -20,6 +20,7 @@ namespace DungeonGameTests.Effects {
 			player.Effects.Add(bleedEffect);
 
 			Assert.AreEqual(1, player.Effects.Count);
+			Assert.AreEqual(EffectOverTimeSettings.Name, bleedEffect.Name);
 			Assert.AreEqual(true, player.Effects[0] is BleedingEffect);
 		}
 
