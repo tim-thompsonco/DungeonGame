@@ -509,8 +509,13 @@ namespace DungeonGame {
 				return;
 			}
 
-			player.Effects.Add(new HealingEffect(player.Abilities[index].Name, player.Abilities[index].Healing.HealMaxRounds,
-				player.Abilities[index].Healing.HealOverTime));
+			EffectOverTimeSettings effectOverTimeSettings = new EffectOverTimeSettings {
+				AmountOverTime = player.Abilities[index].Healing.HealOverTime,
+				EffectHolder = player,
+				MaxRound = player.Abilities[index].Healing.HealMaxRounds,
+				Name = player.Abilities[index].Name
+			};
+			player.Effects.Add(new HealingEffect(effectOverTimeSettings));
 		}
 
 		public static void DisarmAbilityInfo(Player player, int index) {

@@ -202,7 +202,7 @@ namespace DungeonGameTests {
 			Assert.AreEqual(true, player.Effects[0] is HealingEffect);
 			HealingEffect healEffect = player.Effects[0] as HealingEffect;
 			for (int i = 2; i < 5; i++) {
-				healEffect.ProcessHealingRound(player);
+				healEffect.ProcessRound();
 				string healAmtString = $"You have been healed for {healEffect.HealOverTimeAmount} health.";
 				Assert.AreEqual(i, player.Effects[0].CurrentRound);
 				Assert.AreEqual(healAmtString, OutputHelper.Display.Output[i - 1][2]);

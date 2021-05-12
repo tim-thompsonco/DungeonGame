@@ -1,4 +1,5 @@
-﻿using DungeonGame.Helpers;
+﻿using DungeonGame.Effects.SettingsObjects;
+using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 using DungeonGame.Players;
 
@@ -13,18 +14,21 @@ namespace DungeonGame.Effects {
 		public string Name { get; }
 		public int TickDuration { get; } = 10;
 
-		public HealingEffect(string name, int maxRound, int healOverTimeAmount) {
-			Name = name;
-			MaxRound = maxRound;
-			HealOverTimeAmount = healOverTimeAmount;
+		public HealingEffect(EffectOverTimeSettings effectOverTimeSettings) {
+			effectOverTimeSettings.ValidateSettings();
+
+			EffectHolder = effectOverTimeSettings.EffectHolder;
+			Name = effectOverTimeSettings.Name;
+			MaxRound = (int)effectOverTimeSettings.MaxRound;
+			HealOverTimeAmount = (int)effectOverTimeSettings.AmountOverTime;
 		}
 
-		public void ProcessHealingRound(Player player) {
+		public void ProcessRound() {
 			if (IsEffectExpired) {
 				return;
 			}
 
-			HealPlayer(player);
+			HealPlayer();
 
 			DisplayPlayerHealedMessage();
 
@@ -35,14 +39,14 @@ namespace DungeonGame.Effects {
 			}
 		}
 
-		private Player HealPlayer(Player player) {
+		private void HealPlayer() {
+			Player player = EffectHolder as Player;
+
 			if (player.HitPoints + HealOverTimeAmount > player.MaxHitPoints) {
 				player.HitPoints = player.MaxHitPoints;
 			} else {
 				player.HitPoints += HealOverTimeAmount;
 			}
-
-			return player;
 		}
 
 		private void DisplayPlayerHealedMessage() {
@@ -57,10 +61,6 @@ namespace DungeonGame.Effects {
 
 		public void SetEffectAsExpired() {
 			IsEffectExpired = true;
-		}
-
-		public void ProcessRound() {
-			throw new System.NotImplementedException();
 		}
 	}
 }

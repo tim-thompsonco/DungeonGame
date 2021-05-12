@@ -389,7 +389,7 @@ namespace DungeonGameTests {
 			OutputHelper.Display.ClearUserOutput();
 			for (int i = 2; i < 5; i++) {
 				HealingEffect healEffect = player.Effects[0] as HealingEffect;
-				healEffect.ProcessHealingRound(player);
+				healEffect.ProcessRound();
 				int healOverTimeAmt = healEffect.HealOverTimeAmount;
 				string healAmtString = $"You have been healed for {healOverTimeAmt} health.";
 				Assert.AreEqual(i, player.Effects[0].CurrentRound);

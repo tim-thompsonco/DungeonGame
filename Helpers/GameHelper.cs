@@ -25,9 +25,7 @@ namespace DungeonGame.Helpers {
 
 			if (player.Effects.Any()) {
 				foreach (IEffect effect in player.Effects.Where(effect => _gameTicks % effect.TickDuration == 0).ToList()) {
-					if (effect is HealingEffect healingEffect) {
-						healingEffect.ProcessHealingRound(player);
-					} else if (effect is ChangePlayerDamageEffect changePlayerDmgEffect && !player.InCombat && effect.Name.Contains("berserk")) {
+					if (effect is ChangePlayerDamageEffect changePlayerDmgEffect && !player.InCombat && effect.Name.Contains("berserk")) {
 						changePlayerDmgEffect.ProcessChangePlayerDamageRound(player);
 					} else if (effect is ChangeArmorEffect changeArmorEffect) {
 						if (!player.InCombat && effect.Name.Contains("berserk")) {
@@ -39,8 +37,6 @@ namespace DungeonGame.Helpers {
 						}
 					} else if (effect is BurningEffect burningEffect) {
 						burningEffect.ProcessBurningRound(player);
-					} else if (effect is BleedingEffect bleedingEffect) {
-						bleedingEffect.ProcessRound();
 					} else if (effect is FrozenEffect frozenEffect) {
 						frozenEffect.ProcessFrozenRound();
 					} else if (effect is ChangeStatEffect changeStatEffect) {

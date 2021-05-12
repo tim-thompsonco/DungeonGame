@@ -190,28 +190,16 @@ namespace DungeonGame.Helpers {
 			GameHelper.RemovedExpiredEffectsAsync(player);
 
 			foreach (IEffect effect in player.Effects) {
-				if (effect is HealingEffect healingEffect) {
-					healingEffect.ProcessHealingRound(player);
-				}
-
 				if (effect is ChangePlayerDamageEffect changePlayerDmgEffect) {
 					changePlayerDmgEffect.ProcessChangePlayerDamageRound(player);
-				}
-
-				if (effect is ChangeArmorEffect changeArmorEffect) {
+				} else if (effect is ChangeArmorEffect changeArmorEffect) {
 					changeArmorEffect.ProcessChangeArmorRound();
-				}
-
-				if (effect is BurningEffect burningEffect) {
+				} else if (effect is BurningEffect burningEffect) {
 					burningEffect.ProcessBurningRound(player);
-				}
-
-				if (effect is BleedingEffect bleedingEffect) {
-					bleedingEffect.ProcessRound();
-				}
-
-				if (effect is FrozenEffect frozenEffect) {
+				} else if (effect is FrozenEffect frozenEffect) {
 					frozenEffect.ProcessFrozenRound();
+				} else {
+					effect.ProcessRound();
 				}
 			}
 		}

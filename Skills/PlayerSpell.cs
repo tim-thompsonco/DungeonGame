@@ -357,8 +357,13 @@ namespace DungeonGame {
 				return;
 			}
 
-			player.Effects.Add(new HealingEffect(player.Spellbook[index].Name, player.Spellbook[index].Healing.HealMaxRounds,
-				player.Spellbook[index].Healing.HealOverTime));
+			EffectOverTimeSettings effectOverTimeSettings = new EffectOverTimeSettings {
+				AmountOverTime = player.Spellbook[index].Healing.HealOverTime,
+				EffectHolder = player,
+				MaxRound = player.Spellbook[index].Healing.HealMaxRounds,
+				Name = player.Spellbook[index].Name
+			};
+			player.Effects.Add(new HealingEffect(effectOverTimeSettings));
 		}
 
 		public static void PortalSpellInfo() {
