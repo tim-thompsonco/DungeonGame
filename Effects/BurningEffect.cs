@@ -24,6 +24,10 @@ namespace DungeonGame.Effects {
 		}
 
 		public void ProcessRound() {
+			if (IsEffectExpired) {
+				return;
+			}
+
 			DecreaseHealthFromBurnDamage();
 
 			string burnMessage = GetBurnMessage();
