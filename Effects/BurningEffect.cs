@@ -1,7 +1,7 @@
-﻿using DungeonGame.Helpers;
+﻿using DungeonGame.Effects.SettingsObjects;
+using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 using DungeonGame.Monsters;
-using DungeonGame.Players;
 
 namespace DungeonGame.Effects {
 	public class BurningEffect : IEffect {
@@ -14,35 +14,17 @@ namespace DungeonGame.Effects {
 		public string Name { get; }
 		public int TickDuration { get; } = 10;
 
-		public BurningEffect(string name, int maxRound, int fireDamageOverTime) {
-			Name = name;
-			MaxRound = maxRound;
-			FireDamageOverTime = fireDamageOverTime;
+		public BurningEffect(EffectOverTimeSettings effectOverTimeSettings) {
+			effectOverTimeSettings.ValidateSettings();
+
+			EffectHolder = effectOverTimeSettings.EffectHolder;
+			FireDamageOverTime = (int)effectOverTimeSettings.AmountOverTime;
+			MaxRound = (int)effectOverTimeSettings.MaxRound;
+			Name = effectOverTimeSettings.Name;
 		}
 
-		public void ProcessBurningRound(Monster monster) {
-			if (IsEffectExpired) {
-				return;
-			}
-
-			DecreaseHealthFromBurnDamage(monster);
-
-			string burnMessage = GetBurnMessage(monster);
-			DisplayBurnMessage(burnMessage);
-
-			IncrementCurrentRound();
-
-			if (CurrentRound > MaxRound) {
-				SetEffectAsExpired();
-			}
-		}
-
-		public void ProcessBurningRound(Player player) {
-			if (IsEffectExpired) {
-				return;
-			}
-
-			DecreaseHealthFromBurnDamage(player);
+		public void ProcessRound() {
+			DecreaseHealthFromBurnDamage();
 
 			string burnMessage = GetBurnMessage();
 			DisplayBurnMessage(burnMessage);
@@ -54,23 +36,15 @@ namespace DungeonGame.Effects {
 			}
 		}
 
-		private Monster DecreaseHealthFromBurnDamage(Monster monster) {
-			monster.HitPoints -= FireDamageOverTime;
-
-			return monster;
-		}
-
-		private Player DecreaseHealthFromBurnDamage(Player player) {
-			player.HitPoints -= FireDamageOverTime;
-
-			return player;
-		}
-
-		private string GetBurnMessage(Monster monster) {
-			return $"The {monster.Name} burns for {FireDamageOverTime} fire damage.";
+		private void DecreaseHealthFromBurnDamage() {
+			EffectHolder.HitPoints -= FireDamageOverTime;
 		}
 
 		private string GetBurnMessage() {
+			if (EffectHolder is Monster monster) {
+				return $"The {monster.Name} burns for {FireDamageOverTime} fire damage.";
+			}
+
 			return $"You burn for {FireDamageOverTime} fire damage.";
 		}
 
@@ -84,10 +58,6 @@ namespace DungeonGame.Effects {
 
 		public void SetEffectAsExpired() {
 			IsEffectExpired = true;
-		}
-
-		public void ProcessRound() {
-			throw new System.NotImplementedException();
 		}
 	}
 }

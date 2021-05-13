@@ -650,8 +650,13 @@ namespace DungeonGame {
 						Settings.FormatDefaultBackground(),
 						onFireString);
 
-					monster.Effects.Add(new BurningEffect(player.Abilities[index].Name, player.Abilities[index].Offensive.AmountMaxRounds,
-						player.Abilities[index].Offensive.AmountOverTime));
+					EffectOverTimeSettings effectOverTimeSettings = new EffectOverTimeSettings {
+						AmountOverTime = player.Abilities[index].Offensive.AmountOverTime,
+						EffectHolder = monster,
+						MaxRound = player.Abilities[index].Offensive.AmountMaxRounds,
+						Name = player.Abilities[index].Name
+					};
+					monster.Effects.Add(new BurningEffect(effectOverTimeSettings));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

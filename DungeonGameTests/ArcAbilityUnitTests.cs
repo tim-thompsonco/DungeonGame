@@ -477,7 +477,7 @@ namespace DungeonGameTests {
 			BurningEffect burnEffect = monster.Effects[0] as BurningEffect;
 			for (int i = 0; i < 3; i++) {
 				int baseHitPoints = monster.HitPoints;
-				burnEffect.ProcessBurningRound(monster);
+				burnEffect.ProcessRound();
 				Assert.AreEqual(i + 2, monster.Effects[0].CurrentRound);
 				Assert.AreEqual(monster.HitPoints, baseHitPoints - burnEffect.FireDamageOverTime);
 				string burnString = $"The {monster.Name} burns for {burnEffect.FireDamageOverTime} fire damage.";

@@ -1,6 +1,7 @@
 using DungeonGame;
 using DungeonGame.Coordinates;
 using DungeonGame.Effects;
+using DungeonGame.Effects.SettingsObjects;
 using DungeonGame.Helpers;
 using DungeonGame.Items;
 using DungeonGame.Items.ArmorObjects;
@@ -318,7 +319,13 @@ namespace DungeonGameTests {
 			for (int i = 0; i < 10; i++) {
 				GameHelper.CheckStatus(player);
 			}
-			player.Effects.Add(new BurningEffect("burning", 3, 5));
+			EffectOverTimeSettings effectOverTimeSettings = new EffectOverTimeSettings {
+				AmountOverTime = 5,
+				EffectHolder = player,
+				MaxRound = 3,
+				Name = "burning"
+			};
+			player.Effects.Add(new BurningEffect(effectOverTimeSettings));
 			Assert.AreEqual("Your spell reflect is slowly fading away.", OutputHelper.Display.Output[0][2]);
 			player.CastSpell("rejuvenate");
 			defaultEffectOutput = OutputHelper.ShowEffects(player);

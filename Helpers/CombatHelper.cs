@@ -194,8 +194,6 @@ namespace DungeonGame.Helpers {
 					changePlayerDmgEffect.ProcessChangePlayerDamageRound(player);
 				} else if (effect is ChangeArmorEffect changeArmorEffect) {
 					changeArmorEffect.ProcessChangeArmorRound();
-				} else if (effect is BurningEffect burningEffect) {
-					burningEffect.ProcessBurningRound(player);
 				} else if (effect is FrozenEffect frozenEffect) {
 					frozenEffect.ProcessFrozenRound();
 				} else {
@@ -208,11 +206,7 @@ namespace DungeonGame.Helpers {
 			GameHelper.RemovedExpiredEffectsAsync(monster);
 
 			foreach (IEffect effect in monster.Effects) {
-				if (effect is BurningEffect burningEffect) {
-					burningEffect.ProcessBurningRound(monster);
-				} else {
-					effect.ProcessRound();
-				}
+				effect.ProcessRound();
 			}
 		}
 

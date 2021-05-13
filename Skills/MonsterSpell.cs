@@ -1,4 +1,5 @@
 ﻿using DungeonGame.Effects;
+using DungeonGame.Effects.SettingsObjects;
 using DungeonGame.Helpers;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
@@ -68,9 +69,14 @@ namespace DungeonGame {
 					Settings.FormatOnFireText(),
 					Settings.FormatDefaultBackground(),
 					onFireString);
-				player.Effects.Add(
-					new BurningEffect(monster.Spellbook[index].Name, monster.Spellbook[index].Offensive.AmountMaxRounds,
-						monster.Spellbook[index].Offensive.AmountOverTime));
+
+				EffectOverTimeSettings effectOverTimeSettings = new EffectOverTimeSettings {
+					AmountOverTime = monster.Spellbook[index].Offensive.AmountOverTime,
+					EffectHolder = player,
+					MaxRound = monster.Spellbook[index].Offensive.AmountMaxRounds,
+					Name = monster.Spellbook[index].Name
+				};
+				player.Effects.Add(new BurningEffect(effectOverTimeSettings));
 			}
 		}
 

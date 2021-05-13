@@ -282,8 +282,13 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				onFireString);
 
-			monster.Effects.Add(new BurningEffect(player.Spellbook[index].Name, player.Spellbook[index].Offensive.AmountMaxRounds,
-				player.Spellbook[index].Offensive.AmountOverTime));
+			EffectOverTimeSettings effectOverTimeSettings = new EffectOverTimeSettings {
+				AmountOverTime = player.Spellbook[index].Offensive.AmountOverTime,
+				EffectHolder = monster,
+				MaxRound = player.Spellbook[index].Offensive.AmountMaxRounds,
+				Name = player.Spellbook[index].Name
+			};
+			monster.Effects.Add(new BurningEffect(effectOverTimeSettings));
 		}
 
 		public static void ArcaneOffenseSpellInfo(Player player, int index) {

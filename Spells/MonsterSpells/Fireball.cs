@@ -1,4 +1,5 @@
 ﻿using DungeonGame.Effects;
+using DungeonGame.Effects.SettingsObjects;
 using DungeonGame.Helpers;
 using DungeonGame.Monsters;
 using DungeonGame.Players;
@@ -85,7 +86,13 @@ namespace DungeonGame.Spells.MonsterSpells {
 		}
 
 		public void AddDamageOverTimeEffect(Player player) {
-			player.Effects.Add(new BurningEffect(Name, MaxDamageRounds, DamageOverTimeAmount));
+			EffectOverTimeSettings effectOverTimeSettings = new EffectOverTimeSettings {
+				AmountOverTime = DamageOverTimeAmount,
+				EffectHolder = player,
+				MaxRound = MaxDamageRounds,
+				Name = Name
+			};
+			player.Effects.Add(new BurningEffect(effectOverTimeSettings));
 		}
 
 		public void DisplayDamageOverTimeMessage() {

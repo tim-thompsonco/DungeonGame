@@ -35,8 +35,6 @@ namespace DungeonGame.Helpers {
 						if (!player.InCombat) {
 							changeArmorEffect.ProcessChangeArmorRound();
 						}
-					} else if (effect is BurningEffect burningEffect) {
-						burningEffect.ProcessBurningRound(player);
 					} else if (effect is FrozenEffect frozenEffect) {
 						frozenEffect.ProcessFrozenRound();
 					} else if (effect is ChangeStatEffect changeStatEffect) {
@@ -67,9 +65,7 @@ namespace DungeonGame.Helpers {
 					}
 
 					foreach (IEffect effect in monster.Effects.Where(effect => _gameTicks % effect.TickDuration == 0).ToList()) {
-						if (effect is BurningEffect burningEffect) {
-							burningEffect.ProcessBurningRound(monster);
-						} else if (effect is FrozenEffect frozenEffect) {
+						if (effect is FrozenEffect frozenEffect) {
 							frozenEffect.ProcessFrozenRound(monster);
 						} else {
 							effect.ProcessRound();

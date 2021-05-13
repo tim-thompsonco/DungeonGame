@@ -45,7 +45,7 @@ namespace DungeonGameTests {
 				OutputHelper.Display.Output[1][2]);
 			BurningEffect burnEffect = monster.Effects[0] as BurningEffect;
 			for (int i = 2; i < 5; i++) {
-				burnEffect.ProcessBurningRound(monster);
+				burnEffect.ProcessRound();
 				Assert.AreEqual(
 					$"The {monster.Name} burns for {burnEffect.FireDamageOverTime} fire damage.",
 					OutputHelper.Display.Output[i][2]);

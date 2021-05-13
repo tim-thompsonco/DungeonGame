@@ -50,7 +50,7 @@ namespace DungeonGameTests {
 			int burnDamage = monster.Spellbook[spellIndex].Offensive.AmountOverTime;
 			BurningEffect burnEffect = player.Effects[0] as BurningEffect;
 			for (int i = 2; i < 5; i++) {
-				burnEffect.ProcessBurningRound(player);
+				burnEffect.ProcessRound();
 				string burnString = $"You burn for {burnDamage} fire damage.";
 				Assert.AreEqual(burnString, OutputHelper.Display.Output[i + 1][2]);
 				Assert.AreEqual(i, player.Effects[0].CurrentRound);
@@ -254,7 +254,7 @@ namespace DungeonGameTests {
 			int burnDamage = monster.Spellbook[spellIndex].Offensive.AmountOverTime;
 			BurningEffect burnEffect = player.Effects[0] as BurningEffect;
 			for (int i = 2; i < 5; i++) {
-				burnEffect.ProcessBurningRound(player);
+				burnEffect.ProcessRound();
 				string burnString = $"You burn for {burnDamage} fire damage.";
 				Assert.AreEqual(burnString, OutputHelper.Display.Output[i + 1][2]);
 				Assert.AreEqual(i, player.Effects[0].CurrentRound);
