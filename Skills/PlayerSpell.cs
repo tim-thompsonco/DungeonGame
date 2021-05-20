@@ -5,6 +5,7 @@ using DungeonGame.Monsters;
 using DungeonGame.Players;
 using DungeonGame.Rooms;
 using System;
+using System.Linq;
 
 namespace DungeonGame {
 	public class PlayerSpell {
@@ -199,7 +200,7 @@ namespace DungeonGame {
 			int frostSpellDamage = PlayerHelper.CalculateSpellDamage(player, monster, index);
 
 			foreach (FrozenEffect effect in monster.Effects) {
-				effect.ProcessFrozenRound(monster);
+				effect.ProcessRound();
 				effect.IsEffectExpired = true;
 			}
 
@@ -211,7 +212,12 @@ namespace DungeonGame {
 
 			monster.HitPoints -= frostSpellDamage;
 
-			monster.Effects.Add(new FrozenEffect(player.Spellbook[index].Name, player.Spellbook[index].Offensive.AmountMaxRounds));
+			EffectSettings frozenEffectSettings = new EffectSettings {
+				EffectHolder = monster,
+				MaxRound = player.Spellbook[index].Offensive.AmountMaxRounds,
+				Name = player.Spellbook[index].Name
+			};
+			monster.Effects.Add(new FrozenEffect(frozenEffectSettings));
 
 			string frozenString = $"The {monster.Name} is frozen. Physical, frost and arcane damage to it will be increased by 50%!";
 			OutputHelper.Display.StoreUserOutput(
@@ -260,7 +266,7 @@ namespace DungeonGame {
 
 			foreach (FrozenEffect effect in monster.Effects) {
 				fireSpellDamage = effect.GetIncreasedDamageFromFrozen(fireSpellDamage);
-				effect.ProcessFrozenRound(monster);
+				effect.ProcessRound();
 				effect.IsEffectExpired = true;
 			}
 
@@ -304,9 +310,9 @@ namespace DungeonGame {
 
 			int arcaneSpellDamage = PlayerHelper.CalculateSpellDamage(player, monster, index);
 
-			foreach (FrozenEffect effect in monster.Effects) {
+			foreach (FrozenEffect effect in monster.Effects.Where(eff => eff.IsEffectExpired is false)) {
 				arcaneSpellDamage = effect.GetIncreasedDamageFromFrozen(arcaneSpellDamage);
-				effect.ProcessFrozenRound(monster);
+				effect.ProcessRound();
 				effect.IsEffectExpired = true;
 			}
 

@@ -310,7 +310,7 @@ namespace DungeonGame.Monsters {
 				if (effect is FrozenEffect frozenEffect) {
 					attackAmount = frozenEffect.GetIncreasedDamageFromFrozen(attackAmount);
 
-					frozenEffect.ProcessFrozenRound();
+					frozenEffect.ProcessRound();
 				}
 
 				if (effect is ChangeMonsterDamageEffect changeMonsterDmgEffect) {

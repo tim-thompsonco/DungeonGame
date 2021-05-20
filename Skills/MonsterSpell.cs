@@ -104,7 +104,12 @@ namespace DungeonGame {
 				Settings.FormatDefaultBackground(),
 				attackSuccessString);
 
-			player.Effects.Add(new FrozenEffect(monster.Spellbook[index].Name, monster.Spellbook[index].Offensive.AmountMaxRounds));
+			EffectSettings frozenEffectSettings = new EffectSettings {
+				EffectHolder = player,
+				MaxRound = monster.Spellbook[index].Offensive.AmountMaxRounds,
+				Name = monster.Spellbook[index].Name
+			};
+			player.Effects.Add(new FrozenEffect(frozenEffectSettings));
 
 			const string frozenString = "You are frozen. Physical, frost and arcane damage to you will be increased by 50%!";
 			OutputHelper.Display.StoreUserOutput(

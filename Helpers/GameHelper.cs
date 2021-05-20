@@ -24,7 +24,8 @@ namespace DungeonGame.Helpers {
 			}
 
 			if (player.Effects.Any()) {
-				foreach (IEffect effect in player.Effects.Where(effect => _gameTicks % effect.TickDuration == 0).ToList()) {
+				foreach (IEffect effect in player.Effects.Where(
+					effect => _gameTicks % effect.TickDuration == 0 && effect.IsEffectExpired is false).ToList()) {
 					if (effect is ChangePlayerDamageEffect changePlayerDmgEffect && !player.InCombat && effect.Name.Contains("berserk")) {
 						changePlayerDmgEffect.ProcessChangePlayerDamageRound(player);
 					} else if (effect is ChangeArmorEffect changeArmorEffect) {
@@ -35,8 +36,6 @@ namespace DungeonGame.Helpers {
 						if (!player.InCombat) {
 							changeArmorEffect.ProcessChangeArmorRound();
 						}
-					} else if (effect is FrozenEffect frozenEffect) {
-						frozenEffect.ProcessFrozenRound();
 					} else if (effect is ChangeStatEffect changeStatEffect) {
 						changeStatEffect.ProcessChangeStatRound(player);
 					} else if (effect is ChangeMonsterDamageEffect changeMonsterDmgEffect) {
@@ -64,12 +63,9 @@ namespace DungeonGame.Helpers {
 						continue;
 					}
 
-					foreach (IEffect effect in monster.Effects.Where(effect => _gameTicks % effect.TickDuration == 0).ToList()) {
-						if (effect is FrozenEffect frozenEffect) {
-							frozenEffect.ProcessFrozenRound(monster);
-						} else {
-							effect.ProcessRound();
-						}
+					foreach (IEffect effect in monster.Effects.Where(
+						effect => _gameTicks % effect.TickDuration == 0 && effect.IsEffectExpired is false).ToList()) {
+						effect.ProcessRound();
 					}
 				}
 			}

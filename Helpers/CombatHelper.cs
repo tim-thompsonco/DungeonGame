@@ -155,7 +155,7 @@ namespace DungeonGame.Helpers {
 				if (effect is FrozenEffect frozenEffect) {
 					attackDamage = frozenEffect.GetIncreasedDamageFromFrozen(attackDamage);
 
-					frozenEffect.ProcessFrozenRound();
+					frozenEffect.ProcessRound();
 				}
 
 				if (effect is ChangeMonsterDamageEffect changeMonsterDmgEffect) {
@@ -189,13 +189,11 @@ namespace DungeonGame.Helpers {
 		private static void ProcessPlayerEffects(Player player) {
 			GameHelper.RemovedExpiredEffectsAsync(player);
 
-			foreach (IEffect effect in player.Effects) {
+			foreach (IEffect effect in player.Effects.Where(effect => effect.IsEffectExpired is false)) {
 				if (effect is ChangePlayerDamageEffect changePlayerDmgEffect) {
 					changePlayerDmgEffect.ProcessChangePlayerDamageRound(player);
 				} else if (effect is ChangeArmorEffect changeArmorEffect) {
 					changeArmorEffect.ProcessChangeArmorRound();
-				} else if (effect is FrozenEffect frozenEffect) {
-					frozenEffect.ProcessFrozenRound();
 				} else {
 					effect.ProcessRound();
 				}

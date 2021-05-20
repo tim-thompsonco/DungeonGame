@@ -63,7 +63,7 @@ namespace DungeonGame {
 		private int AdjustAbilityDamageFromPlayerEffects(Player player, Monster monster, int abilityDamage) {
 			foreach (IEffect effect in player.Effects.Where(effect => effect.IsEffectExpired is false).ToList()) {
 				if (effect is FrozenEffect frozenEffect) {
-					frozenEffect.ProcessFrozenRound();
+					frozenEffect.ProcessRound();
 				}
 
 				if (effect is ChangeMonsterDamageEffect changeMonsterDmgEffect) {

@@ -1,4 +1,5 @@
-﻿using DungeonGame.Helpers;
+﻿using DungeonGame.Effects.SettingsObjects;
+using DungeonGame.Helpers;
 using DungeonGame.Interfaces;
 using DungeonGame.Monsters;
 
@@ -13,40 +14,15 @@ namespace DungeonGame.Effects {
 		public string Name { get; }
 		public int TickDuration { get; } = 1;
 
-		public FrozenEffect(string name, int maxRound) {
-			Name = name;
-			MaxRound = maxRound;
+		public FrozenEffect(EffectSettings effectSettings) {
+			effectSettings.ValidateSettings();
+
+			EffectHolder = effectSettings.EffectHolder;
+			MaxRound = (int)effectSettings.MaxRound;
+			Name = effectSettings.Name;
 		}
 
-		public int GetIncreasedDamageFromFrozen(int damage) {
-			if (IsEffectExpired) {
-				return damage;
-
-			}
-
-			return (int)(damage * EffectMultiplier);
-		}
-
-		public void ProcessFrozenRound(Monster monster) {
-			if (IsEffectExpired) {
-				return;
-			}
-
-			string frozenMessage = GetFrozenMessage(monster);
-			DisplayFrozenMessage(frozenMessage);
-
-			IncrementCurrentRound();
-
-			if (CurrentRound > MaxRound) {
-				SetEffectAsExpired();
-			}
-		}
-
-		public void ProcessFrozenRound() {
-			if (IsEffectExpired) {
-				return;
-			}
-
+		public void ProcessRound() {
 			string frozenMessage = GetFrozenMessage();
 			DisplayFrozenMessage(frozenMessage);
 
@@ -57,16 +33,15 @@ namespace DungeonGame.Effects {
 			}
 		}
 
-		private string GetFrozenMessage(Monster monster) {
-			int percentIncrease = (int)((EffectMultiplier - 1) * 100);
-
-			return $"The {monster.Name} is frozen. Physical, frost and arcane damage to it will be increased by {percentIncrease}%!";
-		}
-
 		private string GetFrozenMessage() {
 			int percentIncrease = (int)((EffectMultiplier - 1) * 100);
 
-			return $"You are frozen. Physical, frost and arcane damage to you will be increased by {percentIncrease}%!";
+			if (EffectHolder is Monster monster) {
+				return $"The {monster.Name} is frozen. Physical, frost and arcane damage to it will be increased by" +
+					$" {percentIncrease}%!";
+			} else {
+				return $"You are frozen. Physical, frost and arcane damage to you will be increased by {percentIncrease}%!";
+			}
 		}
 
 		private void DisplayFrozenMessage(string frozenMessage) {
@@ -81,8 +56,8 @@ namespace DungeonGame.Effects {
 			IsEffectExpired = true;
 		}
 
-		public void ProcessRound() {
-			throw new System.NotImplementedException();
+		public int GetIncreasedDamageFromFrozen(int damage) {
+			return (int)(damage * EffectMultiplier);
 		}
 	}
 }

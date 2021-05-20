@@ -100,7 +100,7 @@ namespace DungeonGameTests {
 			double totalFrozenDamage = 0.0;
 			double multiplier = frozenEffect.EffectMultiplier;
 			for (int i = 2; i < 4; i++) {
-				frozenEffect.ProcessFrozenRound(monster);
+				frozenEffect.ProcessRound();
 				Assert.AreEqual(i, monster.Effects[0].CurrentRound);
 				Assert.AreEqual(frozenString, OutputHelper.Display.Output[i][2]);
 				player.PlayerWeapon.Durability = 100;
@@ -441,7 +441,7 @@ namespace DungeonGameTests {
 			for (int i = 2; i < 4; i++) {
 				OutputHelper.Display.ClearUserOutput();
 				stunnedEffect.ProcessRound();
-				frozenEffect.ProcessFrozenRound(monster);
+				frozenEffect.ProcessRound();
 				string stunnedRoundString = $"The {monster.Name} is stunned and cannot attack.";
 				Assert.AreEqual(stunnedRoundString, OutputHelper.Display.Output[0][2]);
 				Assert.AreEqual(true, monster.IsStunned);
